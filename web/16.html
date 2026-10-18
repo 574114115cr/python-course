@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 16 · 下载真实数据</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="16">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 16 · 下载真实数据</h1>
+  <a class="ppt" href="ppt/u/16.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="84" data-to="87"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u16"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/16.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s15"><span class="k">大纲</span><span class="v">课程大纲课件 p15</span></a><a href="bank.html#u16"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-真实数据长什么样-去哪下载">2.1 真实数据长什么样，去哪下载</a>
+<a class="lv3" href="#2-2-csv-三件套读表头">2.2 CSV：三件套读表头</a>
+<a class="lv3" href="#2-3-datetime-把字符串变成日期">2.3 datetime：把字符串变成日期 ★</a>
+<a class="lv3" href="#2-4-缺失值-真实数据的第一课">2.4 缺失值：真实数据的第一课</a>
+<a class="lv3" href="#2-5-画温度图-plot-fill_between">2.5 画温度图：plot + fill_between</a>
+<a class="lv3" href="#2-6-geojson-带地理位置的-json">2.6 GeoJSON：带地理位置的 JSON</a>
+<a class="lv3" href="#2-7-plotly-画全球地震散点图">2.7 Plotly 画全球地震散点图</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-造一份教材同款-csv-并打印表头">示例 1：造一份教材同款 CSV，并打印表头</a>
+<a class="lv3" href="#示例-2-datetime-解析与格式化">示例 2：datetime 解析与格式化</a>
+<a class="lv3" href="#示例-3-提取数据并处理缺失值-死亡谷风格">示例 3：提取数据并处理缺失值（死亡谷风格）</a>
+<a class="lv3" href="#示例-4-matplotlib-画温度区间图">示例 4：matplotlib 画温度区间图</a>
+<a class="lv3" href="#示例-5-plotly-画全球地震散点图">示例 5：plotly 画全球地震散点图</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-16-1">参考答案 16-1</a>
+<a class="lv3" href="#参考答案-16-2">参考答案 16-2</a>
+<a class="lv3" href="#参考答案-16-3">参考答案 16-3</a>
+<a class="lv3" href="#参考答案-16-4">参考答案 16-4</a>
+<a class="lv3" href="#参考答案-16-5">参考答案 16-5</a>
+<a class="lv3" href="#参考答案-16-6">参考答案 16-6</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-把-coordinates-1-当成经度-经纬度写反">错误 1：★ 把 coordinates[1] 当成经度（经纬度写反）</a>
+<a class="lv3" href="#错误-2-硬编码列号-row-4">错误 2：★ 硬编码列号 row[4]</a>
+<a class="lv3" href="#错误-3-strptime-格式码和字符串不匹配">错误 3：strptime 格式码和字符串不匹配</a>
+<a class="lv3" href="#错误-4-把-append-写进-try-块">错误 4：把 append 写进 try 块</a>
+<a class="lv3" href="#错误-5-plt-show-在无图形界面的环境卡住">错误 5：plt.show() 在无图形界面的环境卡住</a>
+<a class="lv3" href="#错误-6-细节两件套-样式名和-csv-参数">错误 6：细节两件套——样式名和 CSV 参数</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-16-下载真实数据">单元 16：下载真实数据</h1>
+<blockquote>
+<p>对应教材第 16 章「下载数据」
+阶段 2 · 项目 2：数据可视化
+本单元目标：<strong>把网上的真实数据（CSV 气温表 + GeoJSON 地震数据）下载下来、洗干净，画成一张会说事的图</strong></p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>用 <code>csv</code> 模块读取真实气温 CSV：打印表头、用 <code>enumerate</code> 定位 DATE/TMAX/TMIN 列，而不是凭记忆硬编码列号。</li>
+<li>用 <code>datetime.strptime("2021-07-01", "%Y-%m-%d")</code> 把日期字符串解析成日期对象，并说明 matplotlib 为什么需要它。</li>
+<li>处理真实数据的三个坑：缺失值（用 <code>try/except ValueError</code> 跳过并打印警告）、编码、表头列序变化。</li>
+<li>用 <code>ax.plot()</code> + <code>ax.fill_between()</code> 画出最高/最低气温区间带，并用 <code>savefig()</code> 把图存成文件。</li>
+<li>看懂 GeoJSON 的结构，从 <code>features</code> 里提取 <code>properties.mag</code> 和 <code>geometry.coordinates</code>，牢记 <code>coordinates[0]</code> 是经度、<code>coordinates[1]</code> 是纬度。</li>
+<li>用 <code>plotly.express.scatter_geo()</code> 画出全球地震散点图，说清 <code>size</code>、<code>color</code>、<code>color_continuous_scale</code>、<code>hover_name</code> 各控制什么。</li>
+<li>说出教材配套数据文件的下载地址，以及 USGS 实时地震数据 feed 的网址。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-真实数据长什么样-去哪下载">2.1 真实数据长什么样，去哪下载</h3>
+<p>前 15 个单元里，数据都是你自己写死的：<code>scores = [92, 78, 65]</code>——干净、整齐、随叫随到。从这一章开始，数据要从<strong>真实世界</strong>拿：</p>
+<table>
+<thead>
+<tr>
+<th>特点</th>
+<th>玩具数据</th>
+<th>真实数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数量</td>
+<td>三五条</td>
+<td>几千上万行</td>
+</tr>
+<tr>
+<td>质量</td>
+<td>永远完整</td>
+<td>有缺失、有异常</td>
+</tr>
+<tr>
+<td>格式</td>
+<td>你定的</td>
+<td>别人定的，随时会变</td>
+</tr>
+</tbody>
+</table>
+<p>类比：玩具数据像<strong>食堂里切好装盘的菜</strong>；真实数据像<strong>刚从菜地摘回来的菜</strong>——带着泥、有烂叶、大小不一。程序员的重要工作之一就是「洗菜」，本章就是教你洗菜。</p>
+<p>本章处理两种最常见的真实数据格式：<strong>CSV</strong>（逗号分隔的表格，Excel 能直接打开）和 <strong>GeoJSON</strong>（带地理信息的 JSON，地震台网和地图服务的标准格式）。</p>
+<p><strong>教材数据去哪了。</strong> 第 16 章的代码会读这几个文件：</p>
+<pre><code class="language-text"><span class="cl">示例</span>weather_data/sitka_weather_2021_simple.csv     # 锡特卡机场 2021 年气温
+weather_data/death_valley_2021_simple.csv      # 死亡谷 2021 年气温（有缺失值）
+eq_data/eq_data_1_day_m1.geojson               # USGS：一天内 M1 以上地震
+eq_data/eq_data_30_day_m1.geojson              # USGS：30 天内 M1 以上地震
+</code></pre>
+<p>它们不在本仓库里（文件大，而且每年更新），要去教材配套资源站 https://ehmatthes.github.io/pcc_3e/ 打包下载，解压后把 <code>chapter_16</code> 里的 <code>weather_data</code> 和 <code>eq_data</code> 两个文件夹复制到你的项目目录。本讲义的所有示例都<strong>不依赖</strong>这些文件——先自己造小数据练手，拿到真数据后改个文件名就能用。</p>
+<p><strong>数据的真正来源。</strong> 气象数据来自美国 NOAA（国家海洋和大气管理局）的观测站网络；地震数据来自美国地质调查局（USGS），有<strong>实时 feed</strong>，可以自己下载最新数据：</p>
+<pre><code class="language-text"><span class="cl">示例</span>USGS 地震数据 feed 列表页：
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
+
+「过去一天、M1 以上」对应的实时数据：
+https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojson
+</code></pre>
+<p>把第二个网址在浏览器里打开，看到的就是教材里 <code>eq_data_1_day_m1.geojson</code> 的「新鲜版」。<strong>教材数据是快照，你自己下载的永远是最新的</strong>——这就是「下载真实数据」的真正含义。</p>
+<h3 id="2-2-csv-三件套读表头">2.2 CSV：三件套读表头</h3>
+<p>教材的读取套路是「三件套」：<code>Path.read_text()</code> 读出全部文本 → <code>splitlines()</code> 切成行列表 → <code>csv.reader()</code> 逐行解析。真实 CSV 长这样（sitka 文件的前几行）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>"STATION","NAME","DATE","TAVG","TMAX","TMIN"
+"USW00025333","SITKA AIRPORT, AK US","2021-01-01",,"44","40"
+"USW00025333","SITKA AIRPORT, AK US","2021-01-02",,"44","35"
+</code></pre>
+<p>三个细节：每行一条记录、逗号分隔；<strong>字段带引号</strong>，但 <code>csv.reader</code> 会自动去掉；TAVG 那一列是<strong>空的</strong>（<code>,,</code>）——这就是后面要处理的缺失值。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="c1"># 造一个小 CSV 代替教材数据（拿到真数据后换成 sitka_weather_2021_simple.csv）</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"demo_weather.csv"</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+    <span class="s1">'"STATION","NAME","DATE","TAVG","TMAX","TMIN"</span><span class="se">\n</span><span class="s1">'</span>
+    <span class="s1">'"USW00025333","SITKA AIRPORT, AK US","2021-01-01",,"44","40"</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span>
+    <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="n">header_row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>      <span class="c1"># 取出第一行（表头），reader 里剩下的就是数据</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">header_row</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+
+<span class="c1"># 正确姿势：先按列名找列号，再用变量取数据</span>
+<span class="n">column_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">header_row</span><span class="p">)}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"DATE 在第"</span><span class="p">,</span> <span class="n">column_index</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">],</span> <span class="s2">"列"</span><span class="p">)</span>
+</code></pre>
+<p><strong>为什么先取表头？</strong> 表头告诉你每列是什么，但<strong>列的顺序不保证</strong>——今天 DATE 在第 2 列，明年 NOAA 调整格式可能就跑到第 3 列。所以教材反复强调：<strong>不要凭记忆写 <code>row[2]</code>，先用 <code>enumerate</code> 把列名和序号打出来，确认之后再写。</strong> 硬编码列号的程序，数据源一更新就会安静地取错列，或者干脆 <code>IndexError</code>。</p>
+<h3 id="2-3-datetime-把字符串变成日期">2.3 datetime：把字符串变成日期 ★</h3>
+<p>这是本章最实用的新技能。CSV 里读出来的 <code>"2021-07-01"</code> 是<strong>字符串</strong>：没法做日期运算，matplotlib 也会把它当成普通文字，x 轴上 365 个标签挤成一团黑条。</p>
+<p><code>datetime.strptime()</code> 负责「解析」——把符合某个格式的字符串转成日期对象：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">first_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">"2021-07-01"</span><span class="p">,</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">first_date</span><span class="p">)</span>               <span class="c1"># 2021-07-01 00:00:00</span>
+</code></pre>
+<p>第二个参数是<strong>格式说明书</strong>。最常用的格式码：</p>
+<table>
+<thead>
+<tr>
+<th>格式码</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%Y</code></td>
+<td>四位年份</td>
+<td>2021</td>
+</tr>
+<tr>
+<td><code>%m</code></td>
+<td>两位月份</td>
+<td>07</td>
+</tr>
+<tr>
+<td><code>%d</code></td>
+<td>两位日期</td>
+<td>01</td>
+</tr>
+<tr>
+<td><code>%H</code></td>
+<td>小时（24 小时制）</td>
+<td>14</td>
+</tr>
+<tr>
+<td><code>%M</code></td>
+<td>分钟</td>
+<td>30</td>
+</tr>
+<tr>
+<td><code>%S</code></td>
+<td>秒</td>
+<td>05</td>
+</tr>
+<tr>
+<td><code>%B</code></td>
+<td>月份全称</td>
+<td>July</td>
+</tr>
+<tr>
+<td><code>%A</code></td>
+<td>星期全称</td>
+<td>Thursday</td>
+</tr>
+</tbody>
+</table>
+<p><strong>记忆口诀</strong>：<code>p</code> 是 <strong>parse（解析）</strong>，字符串 → 日期对象；反过来 <code>f</code> 是 <strong>format（格式）</strong>，日期对象 → 字符串：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">moment</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">"2021-07-01 14:30"</span><span class="p">,</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">moment</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y年%m月</span><span class="si">%d</span><span class="s2">日 %H:%M"</span><span class="p">))</span>    <span class="c1"># 2021年07月01日 14:30</span>
+</code></pre>
+<p>这里难在哪？<strong>格式码必须和字符串严格对应</strong>。字符串里是连字符，格式码里也要有；字符串是 <code>2021/07/01</code> 而格式码写 <code>%Y-%m-%d</code>，就会抛 <code>ValueError</code>。卡住很正常——把字符串和格式码并排盯着看，一个字符一个字符对。</p>
+<p>好消息是：matplotlib 认识日期对象。x 轴传日期对象进去，它会自动按月份、季度分布刻度，横轴立刻清爽——这就是「在图中添加日期」一节的全部秘密。</p>
+<h3 id="2-4-缺失值-真实数据的第一课">2.4 缺失值：真实数据的第一课</h3>
+<p>死亡谷的数据里有几天<strong>没测最高温</strong>，CSV 里对应字段是空的。<code>int("")</code> 会抛 <code>ValueError</code>，不处理程序直接崩。教材的处理模式值得逐行读懂（下面用 <code>rows</code> 模拟从 CSV 读出来的数据行）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="s2">"2021-01-01"</span><span class="p">,</span> <span class="s2">"71"</span><span class="p">,</span> <span class="s2">"51"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="s2">"2021-03-05"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">],</span>   <span class="c1"># 这天缺数据</span>
+<span class="p">]</span>
+
+<span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing data for </span><span class="si">{</span><span class="n">current_date</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_date</span><span class="p">)</span>
+        <span class="n">highs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">lows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span><span class="p">)</span>
+</code></pre>
+<p>三个要点：</p>
+<ol>
+<li><strong><code>try</code> 只包住可能出错的两行转换</strong>——<code>strptime</code> 放在外面，日期格式是稳定的，真正的风险是空值。</li>
+<li><strong><code>else</code> 是灵魂</strong>：转换成功才把三个值分别 append。如果写在 <code>try</code> 里面，某天只有 TMAX 缺失时三个列表就可能错位——不等长，画图时直接报错。</li>
+<li><strong>警告要打印出来</strong>：<code>print(f"Missing data for {current_date}")</code> 让你知道「图上的缺口是数据缺失，不是代码 bug」。静默跳过的数据是不可信的。</li>
+</ol>
+<p>类比：<code>try/except</code> 在这里是<strong>筛子</strong>——烂叶子（空值）漏出去，好菜进篮子。但筛子要留记录，否则你不知道漏掉了多少。</p>
+<h3 id="2-5-画温度图-plot-fill_between">2.5 画温度图：plot + fill_between</h3>
+<p>数据洗干净了，画图只要几行（下面用内联小数据演示，真实项目里三个列表从 CSV 读出来）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">highs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+<span class="n">lows</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span> <span class="o">-</span> <span class="mi">7</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">highs</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>       <span class="c1"># 好看的内置样式（版本说明见下）</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">lows</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">()</span>                 <span class="c1"># 日期标签自动倾斜，防止重叠</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"演示温度图.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+</code></pre>
+<ul>
+<li><code>alpha</code> 是<strong>透明度</strong>（0 全透明 ~ 1 全不透明）。两条线都半透明，重叠处颜色更深，信息不互相遮挡。</li>
+<li><code>fill_between</code> 把两条线之间的区域涂上颜色——<strong>温度区间带</strong>。一眼看出「这天的温差大不大」，比两根孤零零的线信息量大得多。</li>
+<li><code>fig.autofmt_xdate()</code> 让日期标签斜着排，365 天也不糊成一团。</li>
+</ul>
+<p>绘图库的安装（本单元和下一单元都要用）：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 安装绘图库（只需装一次）</span>
+pip<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>plotly
+</code></pre>
+<blockquote>
+<p><strong>版本说明（教材未涉及，补充）</strong>：<code>plt.style.use("seaborn-v0_8")</code> 的样式名带 <code>-v0_8</code> 后缀，是 matplotlib 0.13 之后的写法；老教程写 <code>"seaborn"</code>，新版会报 <code>ValueError</code>。样式只是皮肤，删掉这行完全不影响绘图。</p>
+</blockquote>
+<p>教材里用 <code>plt.show()</code> 弹窗显示图形。本讲义的示例统一用 <code>plt.savefig("文件名.png")</code> 把图<strong>存成文件</strong>——服务器、远程环境、没有图形界面的地方也能跑，而且图能反复看、能贴进笔记。两者画出来的图完全一样。</p>
+<h3 id="2-6-geojson-带地理位置的-json">2.6 GeoJSON：带地理位置的 JSON</h3>
+<p>JSON 你在单元 9 学过，GeoJSON 就是 JSON 的一个「行业规范」：专门表示地理要素。地震数据长这样（已删减）：</p>
+<pre><code class="language-json"><span class="cl">JSON</span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FeatureCollection"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USGS Magnitude 1.0+ Earthquakes, Past Day"</span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"features"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Feature"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"mag"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.6</span><span class="p">,</span><span class="w"> </span><span class="nt">"place"</span><span class="p">:</span><span class="w"> </span><span class="s2">"63km SE of Pondosa, CA"</span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"geometry"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Point"</span><span class="p">,</span><span class="w"> </span><span class="nt">"coordinates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">-120.62</span><span class="p">,</span><span class="w"> </span><span class="mf">41.13</span><span class="p">,</span><span class="w"> </span><span class="mf">3.2</span><span class="p">]},</span>
+<span class="w">      </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"nc733"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+<p>结构拆解（这张图建议刻在脑子里）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>GeoJSON 文件
+├── type: "FeatureCollection"        ← 这是个要素集合
+├── metadata: {...}                  ← 数据是谁生成的、什么时候
+└── features: [ ... ]                ← 重点！列表，每个元素是一次地震
+    ├── [0]
+    │   ├── properties: {...}        ← 震级 mag、地点 place 都在这
+    │   └── geometry: {...}          ← 坐标 coordinates 在这
+    │       └── coordinates: [经度, 纬度, 深度]
+    └── [1] ...
+</code></pre>
+<p>取数据的路线和 JSON 一模一样——<strong>一层层字典取值</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># 造一个 mini GeoJSON 代替教材数据</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"demo_eq.geojson"</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"FeatureCollection"</span><span class="p">,</span>
+    <span class="s2">"features"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+                  <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"mag"</span><span class="p">:</span> <span class="mf">1.6</span><span class="p">},</span>
+                  <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span>
+                               <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">120.62</span><span class="p">,</span> <span class="mf">41.13</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">]}}],</span>
+<span class="p">}),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+<span class="n">all_eq_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
+<span class="n">all_eq_dicts</span> <span class="o">=</span> <span class="n">all_eq_data</span><span class="p">[</span><span class="s2">"features"</span><span class="p">]</span>           <span class="c1"># 拿到地震列表</span>
+
+<span class="k">for</span> <span class="n">eq_dict</span> <span class="ow">in</span> <span class="n">all_eq_dicts</span><span class="p">:</span>
+    <span class="n">mag</span> <span class="o">=</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"mag"</span><span class="p">]</span>           <span class="c1"># 震级</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># 经度</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 纬度</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"M </span><span class="si">{</span><span class="n">mag</span><span class="si">}</span><span class="s2">  lon=</span><span class="si">{</span><span class="n">lon</span><span class="si">}</span><span class="s2">  lat=</span><span class="si">{</span><span class="n">lat</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p><strong>★ 经纬度顺序是中国新手的高频错误，必须单独强调：</strong></p>
+<p>GeoJSON 的 <code>coordinates</code> 是 <code>[经度, 纬度, 深度]</code>——<strong>经度在前，纬度在后</strong>。这和「先说纬度」的日常习惯正好相反，也和 Plotly 函数参数 <code>lat=..., lon=...</code> 的书写顺序相反。类比：就像快递单上的「城市, 街道」——GeoJSON 要求先写城市（经度，东西方向），再写街道（纬度，南北方向），写反了包裹就送到地球另一边。<code>coordinates[0]</code> 是<strong>经度</strong>（北京约 116），<code>coordinates[1]</code> 是<strong>纬度</strong>（北京约 40）。</p>
+<p>写反的后果最恶劣：<strong>不报错，只是静默地错</strong>。所有点都跑到镜像位置（比如中国跑到大西洋里去），图看着像那么回事，其实就是错的。<strong>每次写 coordinates 都默念一遍：先 lon 后 lat。</strong></p>
+<h3 id="2-7-plotly-画全球地震散点图">2.7 Plotly 画全球地震散点图</h3>
+<p>数据到手（三个列表：<code>mags</code>、<code>lons</code>、<code>lats</code>），画图是 <code>plotly.express</code> 的主场：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+
+<span class="c1"># 内联小数据演示（真实项目里换成从 GeoJSON 提取的三个列表）</span>
+<span class="n">lats</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">mags</span> <span class="o">=</span> <span class="p">[</span><span class="mf">19.3</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">156.5</span><span class="p">,</span> <span class="mf">142.8</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.8</span><span class="p">,</span> <span class="mf">6.1</span><span class="p">]</span>
+<span class="n">eq_titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"M 5.8 - Hawaii"</span><span class="p">,</span> <span class="s2">"M 6.1 - Japan"</span><span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_geo</span><span class="p">(</span>
+    <span class="n">lat</span><span class="o">=</span><span class="n">lats</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">lons</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">mags</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Global Earthquakes"</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">mags</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">"Viridis"</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"color"</span><span class="p">:</span> <span class="s2">"Magnitude"</span><span class="p">},</span>
+    <span class="n">projection</span><span class="o">=</span><span class="s2">"natural earth"</span><span class="p">,</span>
+    <span class="n">hover_name</span><span class="o">=</span><span class="n">eq_titles</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"全球地震.html"</span><span class="p">)</span>      <span class="c1"># 保存成可交互网页</span>
+</code></pre>
+<p>参数一个一个说：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lat</code> / <code>lon</code></td>
+<td>每个点的位置</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td>点的大小——传震级列表，大地震点就大</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>点的颜色映射——同样传震级</td>
+</tr>
+<tr>
+<td><code>color_continuous_scale</code></td>
+<td>渐变色方案，<code>"Viridis"</code> 是教材用的（还有 <code>"Inferno"</code>、<code>"Plasma"</code>、<code>"Blues"</code> 等）</td>
+</tr>
+<tr>
+<td><code>projection</code></td>
+<td>地图投影方式，<code>"natural earth"</code> 是常见的世界地图样式</td>
+</tr>
+<tr>
+<td><code>hover_name</code></td>
+<td>鼠标悬停时显示的标题列表</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td>图例的名字</td>
+</tr>
+</tbody>
+</table>
+<p><code>fig.show()</code> 会在浏览器里打开交互图；本讲义用 <code>fig.write_html("xxx.html")</code> 存成文件，双击打开效果一样，还能直接发给别人。</p>
+<p><strong>指定数据的另一种方式。</strong> <code>px.scatter_geo()</code> 是「快捷函数」，一条龙服务；Plotly 也支持用 <code>graph_objects</code> 显式地指定数据，自己搭：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+
+<span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">mags</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">156.5</span><span class="p">,</span> <span class="mf">142.8</span><span class="p">],</span> <span class="p">[</span><span class="mf">19.3</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">],</span> <span class="p">[</span><span class="mf">5.8</span><span class="p">,</span> <span class="mf">6.1</span><span class="p">]</span>
+<span class="n">eq_titles</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"M 5.8 - Hawaii"</span><span class="p">,</span> <span class="s2">"M 6.1 - Japan"</span><span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span>
+        <span class="n">lon</span><span class="o">=</span><span class="n">lons</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="n">lats</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">eq_titles</span><span class="p">,</span>
+        <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span> <span class="o">*</span> <span class="n">mag</span> <span class="k">for</span> <span class="n">mag</span> <span class="ow">in</span> <span class="n">mags</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">mags</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_geos</span><span class="p">(</span><span class="n">projection_type</span><span class="o">=</span><span class="s2">"natural earth"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"dict方式演示.html"</span><span class="p">)</span>
+</code></pre>
+<p>快捷函数帮你把常用配置打包好了；显式写法自由度更高（比如 <code>marker</code> 里能同时精细控制尺寸、颜色、描边）。入门阶段用 <code>px</code> 就够了，知道还有另一种方式，是为了以后看到别人的代码不陌生。</p>
+<blockquote>
+<p><strong>补充说明（教材未涉及）</strong>：如果运行 <code>px.xxx()</code> 报 <code>NotImplementedError: Pandas installation is required</code>，说明 plotly 没带上 pandas，<code>pip install pandas</code> 即可——<code>plotly.express</code> 内部用 pandas 处理数据。</p>
+</blockquote>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-造一份教材同款-csv-并打印表头">示例 1：造一份教材同款 CSV，并打印表头</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># make_weather_csv.py —— 生成 mini 版气温 CSV，练习读表头</span>
+<span class="c1"># 跑完可以删掉生成的 weather_data 文件夹</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># ===== 1. 造一份和教材 sitka_weather_2021_simple.csv 同格式的小文件 =====</span>
+<span class="c1"># 表头六列：STATION, NAME, DATE, TAVG, TMAX, TMIN；TAVG 故意留空模拟缺失</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"STATION"</span><span class="p">,</span> <span class="s2">"NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"TAVG"</span><span class="p">,</span> <span class="s2">"TMAX"</span><span class="p">,</span> <span class="s2">"TMIN"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USW00025333"</span><span class="p">,</span> <span class="s2">"SITKA AIRPORT, AK US"</span><span class="p">,</span> <span class="s2">"2021-01-01"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"44"</span><span class="p">,</span> <span class="s2">"40"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USW00025333"</span><span class="p">,</span> <span class="s2">"SITKA AIRPORT, AK US"</span><span class="p">,</span> <span class="s2">"2021-01-02"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"44"</span><span class="p">,</span> <span class="s2">"35"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USW00025333"</span><span class="p">,</span> <span class="s2">"SITKA AIRPORT, AK US"</span><span class="p">,</span> <span class="s2">"2021-01-03"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"43"</span><span class="p">,</span> <span class="s2">"36"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USW00025333"</span><span class="p">,</span> <span class="s2">"SITKA AIRPORT, AK US"</span><span class="p">,</span> <span class="s2">"2021-01-04"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"45"</span><span class="p">,</span> <span class="s2">"39"</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"weather_data"</span><span class="p">)</span>
+<span class="n">data_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>            <span class="c1"># 文件夹不存在就创建</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="s2">"sitka_weather_2021_simple.csv"</span>
+
+<span class="c1"># newline="" 是 csv 模块的标准要求，防止 Windows 上多出空行</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已生成 </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 教材同款读法：read_text -&gt; splitlines -&gt; csv.reader =====</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="n">header_row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>                <span class="c1"># 取出表头，reader 剩下的是数据</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 表头（列号: 列名）---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">header_row</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 列: </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 用列名找列号，而不是硬编码 =====</span>
+<span class="n">column_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">header_row</span><span class="p">)}</span>
+<span class="n">date_i</span> <span class="o">=</span> <span class="n">column_index</span><span class="p">[</span><span class="s2">"DATE"</span><span class="p">]</span>
+<span class="n">high_i</span> <span class="o">=</span> <span class="n">column_index</span><span class="p">[</span><span class="s2">"TMAX"</span><span class="p">]</span>
+<span class="n">low_i</span> <span class="o">=</span> <span class="n">column_index</span><span class="p">[</span><span class="s2">"TMIN"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">DATE 在第 </span><span class="si">{</span><span class="n">date_i</span><span class="si">}</span><span class="s2"> 列，TMAX 在第 </span><span class="si">{</span><span class="n">high_i</span><span class="si">}</span><span class="s2"> 列，TMIN 在第 </span><span class="si">{</span><span class="n">low_i</span><span class="si">}</span><span class="s2"> 列"</span><span class="p">)</span>
+
+<span class="c1"># ===== 4. 按名字取数，就算以后列顺序变了也不会错 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 按列名取数据 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">date_i</span><span class="p">]</span><span class="si">}</span><span class="s2">: 最高 </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">high_i</span><span class="p">]</span><span class="si">}</span><span class="s2">, 最低 </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">low_i</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-2-datetime-解析与格式化">示例 2：datetime 解析与格式化</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># datetime_demo.py —— strptime / strftime 练习</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="c1"># ===== 1. strptime：字符串 -&gt; 日期对象（parse 解析）=====</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"2021-07-01"</span><span class="p">,</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"2021/07/01"</span><span class="p">,</span> <span class="s2">"%Y/%m/</span><span class="si">%d</span><span class="s2">"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"2021-07-01 14:30:05"</span><span class="p">,</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"July 1, 2021"</span><span class="p">,</span> <span class="s2">"%B </span><span class="si">%d</span><span class="s2">, %Y"</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- strptime 解析 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+    <span class="n">date_obj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">text</span><span class="si">!r:</span><span class="s2">24</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">fmt</span><span class="si">!r:</span><span class="s2">22</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">date_obj</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 格式码必须和字符串严格匹配，否则 ValueError =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 格式不匹配会怎样 ---"</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">"2021-07-01"</span><span class="p">,</span> <span class="s2">"%Y/%m/</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 字符串是 -，格式写 /</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"解析失败："</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. strftime：日期对象 -&gt; 字符串（format 格式化）=====</span>
+<span class="n">first_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s2">"2021-07-01"</span><span class="p">,</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- strftime 格式化 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">first_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y年%m月</span><span class="si">%d</span><span class="s2">日"</span><span class="p">))</span>            <span class="c1"># 2021年07月01日</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">first_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%B"</span><span class="p">))</span>                      <span class="c1"># July（月份名）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">first_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%A"</span><span class="p">))</span>                      <span class="c1"># Thursday（星期名）</span>
+
+<span class="c1"># ===== 4. 日期对象能做算术，字符串不能 =====</span>
+<span class="n">tomorrow</span> <span class="o">=</span> <span class="n">first_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">first_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> 往后 30 天是 </span><span class="si">{</span><span class="n">tomorrow</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"字符串直接相加:"</span><span class="p">,</span> <span class="s2">"2021-07-01"</span> <span class="o">+</span> <span class="s2">"30"</span><span class="p">)</span>          <span class="c1"># 2021-07-0130，没有意义</span>
+</code></pre>
+<h3 id="示例-3-提取数据并处理缺失值-死亡谷风格">示例 3：提取数据并处理缺失值（死亡谷风格）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># extract_with_missing.py —— try/except 处理缺失值</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># ===== 1. 造一份"有缺失"的死亡谷风格 CSV =====</span>
+<span class="c1"># 表头：STATION, NAME, DATE, TMAX, TMIN, TOBS</span>
+<span class="c1"># 故意让 2021-03-05 这天的 TMAX/TMIN 缺失</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"STATION"</span><span class="p">,</span> <span class="s2">"NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"TMAX"</span><span class="p">,</span> <span class="s2">"TMIN"</span><span class="p">,</span> <span class="s2">"TOBS"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="s2">"2021-01-01"</span><span class="p">,</span> <span class="s2">"71"</span><span class="p">,</span> <span class="s2">"51"</span><span class="p">,</span> <span class="s2">"56"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="s2">"2021-01-02"</span><span class="p">,</span> <span class="s2">"69"</span><span class="p">,</span> <span class="s2">"48"</span><span class="p">,</span> <span class="s2">"52"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="s2">"2021-03-05"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="s2">"2021-01-03"</span><span class="p">,</span> <span class="s2">"74"</span><span class="p">,</span> <span class="s2">"53"</span><span class="p">,</span> <span class="s2">"58"</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"death_valley_2021_simple.csv"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 教材同款：提取 + 缺失值处理 =====</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="n">header_row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"表头:"</span><span class="p">,</span> <span class="n">header_row</span><span class="p">)</span>       <span class="c1"># 先打印表头找列号（好习惯）</span>
+
+<span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">missing_days</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="c1"># 空字符串转 int 会抛 ValueError：这一天没测到数据</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing data for </span><span class="si">{</span><span class="n">current_date</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">missing_days</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># 只有两个值都转换成功，才一起收进三个列表</span>
+        <span class="c1"># 保证 dates/highs/lows 永远等长、一一对应</span>
+        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_date</span><span class="p">)</span>
+        <span class="n">highs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">lows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">共 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="si">}</span><span class="s2"> 天有效数据，跳过 </span><span class="si">{</span><span class="n">missing_days</span><span class="si">}</span><span class="s2"> 天缺失数据"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"三个列表等长吗？dates=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="si">}</span><span class="s2">, highs=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">highs</span><span class="p">)</span><span class="si">}</span><span class="s2">, lows=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">lows</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 为什么 else 不能省？ =====</span>
+<span class="c1"># 如果把 append 写进 try：遇到 TMAX 缺失的这天，</span>
+<span class="c1"># high = int("") 先抛异常，而 dates 已经在异常前 append 过了</span>
+<span class="c1"># 结果 dates 比 highs 长 -&gt; 画图时报错或整列错位</span>
+
+<span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>        <span class="c1"># 清理</span>
+</code></pre>
+<h3 id="示例-4-matplotlib-画温度区间图">示例 4：matplotlib 画温度区间图</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># plot_temperatures.py —— plot + fill_between 画温度区间带</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>        <span class="c1"># 固定随机种子，每次运行生成的数据一样</span>
+
+<span class="c1"># ===== 1. 准备数据：生成 30 天气温样本（2021 年 7 月）=====</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"weather_data/sample_july.csv"</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">"STATION"</span><span class="p">,</span> <span class="s2">"NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"TAVG"</span><span class="p">,</span> <span class="s2">"TMAX"</span><span class="p">,</span> <span class="s2">"TMIN"</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">31</span><span class="p">):</span>
+        <span class="c1"># 模拟气温：最高 15~22 之间波动，最低 = 最高 - 5~9</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">22</span><span class="p">)</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">"USW00025333"</span><span class="p">,</span> <span class="s2">"SITKA AIRPORT, AK US"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"2021-07-</span><span class="si">{</span><span class="n">day</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">low</span><span class="p">]</span>
+        <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已生成 </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 读数据：日期字符串用 strptime 转成日期对象 =====</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>           <span class="c1"># 跳过表头</span>
+
+<span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+    <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">))</span>
+    <span class="n">highs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+    <span class="n">lows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+
+<span class="c1"># ===== 3. 画图 =====</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>         <span class="c1"># 皮肤；这行删掉也能跑</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"High"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">lows</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Low"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Daily High and Low Temperatures - July 2021"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Temperature (C)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>                            <span class="c1"># 显示图例</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">()</span>                    <span class="c1"># 日期标签倾斜，防止重叠</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"温度区间图.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"图片已保存为 温度区间图.png"</span><span class="p">)</span>
+
+<span class="c1"># 教材里这一步是 plt.show()，会弹出窗口；</span>
+<span class="c1"># savefig 存成文件，画出来的图完全一样，无图形界面的环境也能跑</span>
+</code></pre>
+<h3 id="示例-5-plotly-画全球地震散点图">示例 5：plotly 画全球地震散点图</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># eq_world_map.py —— plotly 散点地图</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 生成 12 条模拟地震（结构和 USGS GeoJSON 一致）=====</span>
+<span class="c1"># 真实项目里把这一步换成 path.read_text() 读下载的 geojson 文件</span>
+<span class="c1"># 地震带中心（经度, 纬度）：夏威夷、日本、秘鲁、阿拉斯加、巴新</span>
+<span class="n">BELTS</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">156.5</span><span class="p">,</span> <span class="mf">19.3</span><span class="p">),</span> <span class="p">(</span><span class="mf">142.8</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">74.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">14.6</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">176.7</span><span class="p">,</span> <span class="mf">51.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">147.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">)]</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">13</span><span class="p">):</span>
+    <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">BELTS</span><span class="p">)</span>
+    <span class="n">mag</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.8</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"mag"</span><span class="p">:</span> <span class="n">mag</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"M </span><span class="si">{</span><span class="n">mag</span><span class="si">}</span><span class="s2"> - simulated quake #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span>
+        <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span>
+                     <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">lon0</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+                                     <span class="nb">round</span><span class="p">(</span><span class="n">lat0</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+                                     <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="mi">1</span><span class="p">)]},</span>
+        <span class="s2">"id"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"sim</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="p">})</span>
+
+<span class="n">eq_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"FeatureCollection"</span><span class="p">,</span>
+           <span class="s2">"metadata"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Simulated M1+ Earthquakes, Past 30 Days"</span><span class="p">,</span> <span class="s2">"count"</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+           <span class="s2">"features"</span><span class="p">:</span> <span class="n">features</span><span class="p">}</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"eq_data_30_day_m1.geojson"</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">eq_data</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 提取三个列表 =====</span>
+<span class="n">all_eq_dicts</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))[</span><span class="s2">"features"</span><span class="p">]</span>
+
+<span class="n">mags</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">eq_titles</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">eq_dict</span> <span class="ow">in</span> <span class="n">all_eq_dicts</span><span class="p">:</span>
+    <span class="n">mags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eq_dict</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"mag"</span><span class="p">])</span>
+    <span class="n">lons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># 经度</span>
+    <span class="n">lats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>   <span class="c1"># 纬度</span>
+    <span class="n">eq_titles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eq_dict</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"title"</span><span class="p">])</span>
+
+<span class="c1"># ===== 3. 画图 =====</span>
+<span class="n">title</span> <span class="o">=</span> <span class="s2">"Global Earthquakes"</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_geo</span><span class="p">(</span>
+    <span class="n">lat</span><span class="o">=</span><span class="n">lats</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">lons</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">mags</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">mags</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">"Viridis"</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"color"</span><span class="p">:</span> <span class="s2">"Magnitude"</span><span class="p">},</span>
+    <span class="n">projection</span><span class="o">=</span><span class="s2">"natural earth"</span><span class="p">,</span>
+    <span class="n">hover_name</span><span class="o">=</span><span class="n">eq_titles</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"全球地震散点图.html"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"已生成 全球地震散点图.html，用浏览器打开即可交互查看"</span><span class="p">)</span>
+
+<span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>        <span class="c1"># 清理</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 16-1【表头定位器】</strong>
+写 <code>header_locator.py</code>：
+1. 生成一份 CSV：表头 <code>["城市", "日期", "最高温", "最低温"]</code>，5 行数据（同一城市 5 天，日期形如 <code>2021-07-01</code>）
+2. 读取文件，用 <code>enumerate</code> 打印「列号: 列名」
+3. 写函数 <code>find_column(header, name)</code>：输入表头列表和列名，返回列号；找不到返回 <code>-1</code>
+4. 用找到的列号提取数据，按 <code>2021-07-01 北京 最高 35 最低 26</code> 的格式打印
+5. <strong>验收</strong>：把表头顺序打乱成 <code>["日期", "城市", "最低温", "最高温"]</code> 再跑一遍，结果依然正确——因为你是按名字找列，不是硬编码</p>
+<p><strong>练习 16-2【日期格式转换器】</strong>
+写 <code>date_converter.py</code>：
+1. 函数 <code>parse_date(text)</code>：依次尝试 <code>"%Y-%m-%d"</code>、<code>"%Y/%m/%d"</code>、<code>"%Y年%m月%d日"</code> 三种格式解析
+2. 成功返回 <code>(True, 日期对象)</code>，三种都失败返回 <code>(False, None)</code>
+3. 主程序用 <code>for</code> 测试：<code>"2021-07-01"</code>、<code>"2021/07/01"</code>、<code>"2021年7月1日"</code>、<code>"07-01-2021"</code>、<code>"乱七八糟"</code>
+4. 解析成功的再用 <code>strftime</code> 输出成 <code>2021年07月01日 星期四</code>（提示：<code>%A</code> 的输出和系统语言有关，想稳定可以用 <code>weekday()</code> 自己映射）
+5. <strong>验收</strong>：前三个成功、后两个失败且程序不崩溃；能说清失败分别败在哪个字符上</p>
+<p><strong>练习 16-3【缺失值统计员】</strong>
+写 <code>missing_stats.py</code>，生成 20 天气温数据（随机指定 3 天缺 TMAX）：
+1. 统计并打印：总行数、有效天数、缺失天数
+2. 把所有缺失数据的日期收集到列表，最后统一打印
+3. 计算有效数据的平均最高温，保留 1 位小数
+4. <strong>验收</strong>：<code>dates</code>/<code>highs</code>/<code>lows</code> 三个列表长度相等；缺失日期一个不漏</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 16-4【死亡谷全年温度图】</strong>
+写 <code>death_valley_year.py</code>，完整走一遍「读数据 → 洗数据 → 画图」：
+1. 生成 365 天死亡谷风格数据（2021 年全年，模拟出夏热冬暖，随机让约 5% 的天数缺 TMAX/TMIN）
+2. 用 <code>try/except ValueError</code> + <code>else</code> 处理缺失值，缺失的日期打印警告
+3. 画图：红色半透明最高温线 + 蓝色半透明最低温线 + <code>fill_between</code> 区间带，日期标签自动倾斜
+4. <code>savefig("死亡谷2021.png")</code>，标题里写上有效天数，例如 <code>Death Valley 2021 (347 valid days)</code>
+5. <strong>验收</strong>：程序不崩；三个列表等长；打开 png 能看到清晰的区间带</p>
+<p><strong>练习 16-5【地震数据探索器】</strong>
+写 <code>eq_explorer.py</code>：
+1. 生成 10 条模拟地震 GeoJSON（震级 0.5~5.5，坐标分布在几个不同区域，含 <code>mag</code> 和 <code>title</code>）
+2. 读出 <code>features</code>，提取每条地震的 <code>mag</code>、<code>title</code>、<code>coordinates</code>
+3. 打印「震级最大的 3 次地震」（标题 + 震级）
+4. 统计：M1 以下几次、M1（含）到 M3 几次、M3（含）以上几次
+5. 对每条地震打印 <code>lon</code> / <code>lat</code> 并自检：<code>-180&lt;=lon&lt;=180</code> 且 <code>-90&lt;=lat&lt;=90</code>，越界的打印「坐标可疑！」
+6. <strong>验收</strong>：统计数字和生成的数据对得上；能脱口说出 <code>coordinates[0]</code> 和 <code>[1]</code> 分别是什么</p>
+<p><strong>练习 16-6【可交互地震地图】</strong>
+写 <code>eq_map_final.py</code>：
+1. 生成 20 条模拟地震数据（<code>properties</code> 带 <code>mag</code> 和 <code>title</code>，<code>geometry.coordinates</code> 三个元素）
+2. 用 <code>px.scatter_geo</code> 画图：<code>size</code> 和 <code>color</code> 都用震级，<code>color_continuous_scale="Inferno"</code>，<code>projection="natural earth"</code>，<code>hover_name=title</code>
+3. 用 <code>fig.update_layout</code> 把标题改成 <code>Recent Global Earthquakes (M1+)</code>
+4. <code>fig.write_html("我的地震图.html")</code>，用浏览器打开确认悬停正常
+5. <strong>验收</strong>：点越大、颜色越亮代表震级越高；悬停显示地震标题；把 <code>color_continuous_scale</code> 换成 <code>"Blues"</code> 再跑一次，说出两幅图的差别</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-16-1">参考答案 16-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># header_locator.py —— 按列名找列号，不硬编码</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">HEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"城市"</span><span class="p">,</span> <span class="s2">"日期"</span><span class="p">,</span> <span class="s2">"最高温"</span><span class="p">,</span> <span class="s2">"最低温"</span><span class="p">]</span>
+<span class="n">ROWS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"北京"</span><span class="p">,</span> <span class="s2">"2021-07-01"</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">26</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"北京"</span><span class="p">,</span> <span class="s2">"2021-07-02"</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"北京"</span><span class="p">,</span> <span class="s2">"2021-07-03"</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">27</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"北京"</span><span class="p">,</span> <span class="s2">"2021-07-04"</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">24</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"北京"</span><span class="p">,</span> <span class="s2">"2021-07-05"</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"cities.csv"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">HEADER</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">ROWS</span><span class="p">)</span>
+
+<span class="c1"># ===== 读取 =====</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="n">header_row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 表头（列号: 列名）---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">header_row</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_column</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""按列名找列号；找不到返回 -1。"""</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">column_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">header</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">column_name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">index</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="n">city_i</span> <span class="o">=</span> <span class="n">find_column</span><span class="p">(</span><span class="n">header_row</span><span class="p">,</span> <span class="s2">"城市"</span><span class="p">)</span>
+<span class="n">date_i</span> <span class="o">=</span> <span class="n">find_column</span><span class="p">(</span><span class="n">header_row</span><span class="p">,</span> <span class="s2">"日期"</span><span class="p">)</span>
+<span class="n">high_i</span> <span class="o">=</span> <span class="n">find_column</span><span class="p">(</span><span class="n">header_row</span><span class="p">,</span> <span class="s2">"最高温"</span><span class="p">)</span>
+<span class="n">low_i</span> <span class="o">=</span> <span class="n">find_column</span><span class="p">(</span><span class="n">header_row</span><span class="p">,</span> <span class="s2">"最低温"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">找到的列号: 城市=</span><span class="si">{</span><span class="n">city_i</span><span class="si">}</span><span class="s2">, 日期=</span><span class="si">{</span><span class="n">date_i</span><span class="si">}</span><span class="s2">, 最高温=</span><span class="si">{</span><span class="n">high_i</span><span class="si">}</span><span class="s2">, 最低温=</span><span class="si">{</span><span class="n">low_i</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"不存在的'湿度'列: </span><span class="si">{</span><span class="n">find_column</span><span class="p">(</span><span class="n">header_row</span><span class="p">,</span><span class="w"> </span><span class="s1">'湿度'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 数据 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">date_i</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">city_i</span><span class="p">]</span><span class="si">}</span><span class="s2"> 最高 </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">high_i</span><span class="p">]</span><span class="si">}</span><span class="s2"> 最低 </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">low_i</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 把 HEADER 的顺序打乱再跑，结果依然正确 —— 这就是按名字找列的意义</span>
+<span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+</code></pre>
+<h3 id="参考答案-16-2">参考答案 16-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># date_converter.py —— 多格式日期解析</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">FORMATS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"%Y/%m/</span><span class="si">%d</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"%Y年%m月</span><span class="si">%d</span><span class="s2">日"</span><span class="p">]</span>
+<span class="n">WEEKDAYS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"星期一"</span><span class="p">,</span> <span class="s2">"星期二"</span><span class="p">,</span> <span class="s2">"星期三"</span><span class="p">,</span> <span class="s2">"星期四"</span><span class="p">,</span> <span class="s2">"星期五"</span><span class="p">,</span> <span class="s2">"星期六"</span><span class="p">,</span> <span class="s2">"星期日"</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_date</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""依次尝试多种格式解析日期。</span>
+
+<span class="sd">    成功返回 (True, 日期对象)，全部失败返回 (False, None)。</span>
+<span class="sd">    """</span>
+    <span class="k">for</span> <span class="n">fmt</span> <span class="ow">in</span> <span class="n">FORMATS</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">fmt</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">continue</span>                     <span class="c1"># 这种格式不行，换下一种</span>
+    <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span>
+
+<span class="n">test_inputs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"2021-07-01"</span><span class="p">,</span> <span class="s2">"2021/07/01"</span><span class="p">,</span> <span class="s2">"2021年7月1日"</span><span class="p">,</span> <span class="s2">"07-01-2021"</span><span class="p">,</span> <span class="s2">"乱七八糟"</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">test_inputs</span><span class="p">:</span>
+    <span class="n">ok</span><span class="p">,</span> <span class="n">date_obj</span> <span class="o">=</span> <span class="n">parse_date</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
+        <span class="n">weekday</span> <span class="o">=</span> <span class="n">WEEKDAYS</span><span class="p">[</span><span class="n">date_obj</span><span class="o">.</span><span class="n">weekday</span><span class="p">()]</span>      <span class="c1"># weekday(): 周一=0</span>
+        <span class="n">pretty</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">date_obj</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2">年</span><span class="si">{</span><span class="n">date_obj</span><span class="o">.</span><span class="n">month</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">月</span><span class="si">{</span><span class="n">date_obj</span><span class="o">.</span><span class="n">day</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">日 </span><span class="si">{</span><span class="n">weekday</span><span class="si">}</span><span class="s2">"</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">text</span><span class="si">!r:</span><span class="s2">12</span><span class="si">}</span><span class="s2"> -&gt; 解析成功: </span><span class="si">{</span><span class="n">date_obj</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">, 格式化: </span><span class="si">{</span><span class="n">pretty</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">text</span><span class="si">!r:</span><span class="s2">12</span><span class="si">}</span><span class="s2"> -&gt; 解析失败（三种格式都不匹配）"</span><span class="p">)</span>
+
+<span class="c1"># 失败原因分析：</span>
+<span class="c1"># "07-01-2021"：格式要求年份在前，它把 07 当年份、01 当月、2021 当日 -&gt; 日越界</span>
+<span class="c1"># "乱七八糟"：没有数字，三种格式全部 ValueError</span>
+</code></pre>
+<h3 id="参考答案-16-3">参考答案 16-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># missing_stats.py —— 缺失值统计</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 生成 20 天数据，随机挑 3 天缺 TMAX =====</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">missing_offsets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>     <span class="c1"># 随机 3 天缺数据</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">"STATION"</span><span class="p">,</span> <span class="s2">"NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"TMAX"</span><span class="p">,</span> <span class="s2">"TMIN"</span><span class="p">]]</span>
+<span class="k">for</span> <span class="n">offset</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">date_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">offset</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">missing_offsets</span><span class="p">:</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="n">date_text</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">46</span><span class="p">)</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="n">date_text</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">low</span><span class="p">])</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"dv_sample.csv"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 读取 + 统计 =====</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+
+<span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="n">missing_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">missing_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_date</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_date</span><span class="p">)</span>
+        <span class="n">highs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">lows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总行数: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">missing_list</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"有效天数: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"缺失天数: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_list</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"缺失的日期: </span><span class="si">{</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">'%Y-%m-</span><span class="si">%d</span><span class="s1">'</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">missing_list</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">average_high</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">highs</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">highs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"有效数据平均最高温: </span><span class="si">{</span><span class="n">average_high</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"三个列表等长: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">highs</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">lows</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+</code></pre>
+<h3 id="参考答案-16-4">参考答案 16-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># death_valley_year.py —— 全年温度图：读数据 -&gt; 洗数据 -&gt; 画图</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2021</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 生成 365 天死亡谷风格数据 =====</span>
+<span class="c1"># 用正弦曲线造"夏热冬暖"的基准温度，再加随机波动；约 5% 的天数缺数据</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">"STATION"</span><span class="p">,</span> <span class="s2">"NAME"</span><span class="p">,</span> <span class="s2">"DATE"</span><span class="p">,</span> <span class="s2">"TMAX"</span><span class="p">,</span> <span class="s2">"TMIN"</span><span class="p">]]</span>
+
+<span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">365</span><span class="p">):</span>
+    <span class="n">date_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">day</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">day</span> <span class="o">-</span> <span class="mi">200</span><span class="p">)</span> <span class="o">/</span> <span class="mi">365</span><span class="p">)</span>   <span class="c1"># 40（夏）~ 20（冬）</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">low</span> <span class="o">=</span> <span class="n">high</span> <span class="o">-</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>                                   <span class="c1"># 5% 概率缺数据</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="n">date_text</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s2">"USC00042319"</span><span class="p">,</span> <span class="s2">"DEATH VALLEY, CA US"</span><span class="p">,</span> <span class="n">date_text</span><span class="p">,</span> <span class="n">high</span><span class="p">,</span> <span class="n">low</span><span class="p">])</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"weather_data/death_valley_2021_full.csv"</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已生成 </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 读取 + 缺失值处理 =====</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+
+<span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing data for </span><span class="si">{</span><span class="n">current_date</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_date</span><span class="p">)</span>
+        <span class="n">highs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">lows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"有效天数: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">highs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">lows</span><span class="p">),</span> <span class="s2">"三个列表不等长，肯定有 bug"</span>
+
+<span class="c1"># ===== 3. 画图 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"High"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">lows</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Low"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Death Valley 2021 (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dates</span><span class="p">)</span><span class="si">}</span><span class="s2"> valid days)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Temperature (F)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">autofmt_xdate</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"死亡谷2021.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"图片已保存为 死亡谷2021.png"</span><span class="p">)</span>
+
+<span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>        <span class="c1"># 清理</span>
+</code></pre>
+<h3 id="参考答案-16-5">参考答案 16-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># eq_explorer.py —— 地震数据探索</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 生成 10 条模拟地震（结构和 USGS GeoJSON 一致）=====</span>
+<span class="c1"># 地震带中心（经度, 纬度）：夏威夷、日本、秘鲁、阿拉斯加、巴新</span>
+<span class="n">BELTS</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">156.5</span><span class="p">,</span> <span class="mf">19.3</span><span class="p">),</span> <span class="p">(</span><span class="mf">142.8</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">74.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">14.6</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">176.7</span><span class="p">,</span> <span class="mf">51.8</span><span class="p">),</span> <span class="p">(</span><span class="mf">147.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">)]</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+    <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">BELTS</span><span class="p">)</span>
+    <span class="n">mag</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+        <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"mag"</span><span class="p">:</span> <span class="n">mag</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"M </span><span class="si">{</span><span class="n">mag</span><span class="si">}</span><span class="s2"> - simulated quake #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">},</span>
+        <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span>
+                     <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">lon0</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+                                     <span class="nb">round</span><span class="p">(</span><span class="n">lat0</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span>
+                                     <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="mi">1</span><span class="p">)]},</span>
+        <span class="s2">"id"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"sim</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="p">})</span>
+
+<span class="c1"># 真实项目里是：all_eq_dicts = json.loads(path.read_text())["features"]</span>
+<span class="n">all_eq_dicts</span> <span class="o">=</span> <span class="n">features</span>
+
+<span class="c1"># ===== 2. 提取数据 =====</span>
+<span class="n">quakes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">eq_dict</span> <span class="ow">in</span> <span class="n">all_eq_dicts</span><span class="p">:</span>
+    <span class="n">quakes</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"mag"</span><span class="p">:</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"mag"</span><span class="p">],</span>
+        <span class="s2">"title"</span><span class="p">:</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"title"</span><span class="p">],</span>
+        <span class="s2">"lon"</span><span class="p">:</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s2">"lat"</span><span class="p">:</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">})</span>
+
+<span class="c1"># ===== 3. 震级最大的 3 次 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 震级最大的 3 次地震 ---"</span><span class="p">)</span>
+<span class="n">top3</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">quakes</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="n">q</span><span class="p">[</span><span class="s2">"mag"</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">quake</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">top3</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">quake</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="s2"> (M </span><span class="si">{</span><span class="n">quake</span><span class="p">[</span><span class="s1">'mag'</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+
+<span class="c1"># ===== 4. 按震级分组统计 =====</span>
+<span class="n">below_1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quakes</span> <span class="k">if</span> <span class="n">q</span><span class="p">[</span><span class="s2">"mag"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">mid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quakes</span> <span class="k">if</span> <span class="mf">1.0</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">[</span><span class="s2">"mag"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="n">above_3</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quakes</span> <span class="k">if</span> <span class="n">q</span><span class="p">[</span><span class="s2">"mag"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">M1 以下: </span><span class="si">{</span><span class="n">below_1</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"M1（含）~M3: </span><span class="si">{</span><span class="n">mid</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"M3（含）以上: </span><span class="si">{</span><span class="n">above_3</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"合计: </span><span class="si">{</span><span class="n">below_1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">above_3</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+
+<span class="c1"># ===== 5. 坐标自检 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 坐标自检 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">quake</span> <span class="ow">in</span> <span class="n">quakes</span><span class="p">:</span>
+    <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">quake</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">],</span> <span class="n">quake</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="o">-</span><span class="mi">180</span> <span class="o">&lt;=</span> <span class="n">lon</span> <span class="o">&lt;=</span> <span class="mi">180</span> <span class="ow">and</span> <span class="o">-</span><span class="mi">90</span> <span class="o">&lt;=</span> <span class="n">lat</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">"合法"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">"坐标可疑！"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">quake</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="s2">: lon=</span><span class="si">{</span><span class="n">lon</span><span class="si">}</span><span class="s2">, lat=</span><span class="si">{</span><span class="n">lat</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-16-6">参考答案 16-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># eq_map_final.py —— 可交互地震地图</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">66</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 生成 20 条模拟地震 =====</span>
+<span class="n">BELTS</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mf">156.5</span><span class="p">,</span> <span class="mf">19.3</span><span class="p">),</span> <span class="p">(</span><span class="mf">142.8</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">74.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">14.6</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">176.7</span><span class="p">,</span> <span class="mf">51.8</span><span class="p">),</span>
+         <span class="p">(</span><span class="mf">147.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">118.2</span><span class="p">,</span> <span class="mf">34.1</span><span class="p">)]</span>
+
+<span class="n">mags</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">eq_titles</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span>
+    <span class="n">lon0</span><span class="p">,</span> <span class="n">lat0</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">BELTS</span><span class="p">)</span>
+    <span class="n">mag</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">mags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span>
+    <span class="n">lons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">lon0</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>    <span class="c1"># 经度</span>
+    <span class="n">lats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">lat0</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>    <span class="c1"># 纬度</span>
+    <span class="n">eq_titles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"M </span><span class="si">{</span><span class="n">mag</span><span class="si">}</span><span class="s2"> - simulated quake #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 真实项目里这三个列表从 geojson 文件提取：</span>
+<span class="c1"># all_eq_dicts = json.loads(path.read_text(encoding="utf-8"))["features"]</span>
+
+<span class="c1"># ===== 2. 画图 =====</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_geo</span><span class="p">(</span>
+    <span class="n">lat</span><span class="o">=</span><span class="n">lats</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">lons</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">mags</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">mags</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">"Inferno"</span><span class="p">,</span>     <span class="c1"># 试试换成 "Blues" 对比效果</span>
+    <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"color"</span><span class="p">:</span> <span class="s2">"Magnitude"</span><span class="p">},</span>
+    <span class="n">projection</span><span class="o">=</span><span class="s2">"natural earth"</span><span class="p">,</span>
+    <span class="n">hover_name</span><span class="o">=</span><span class="n">eq_titles</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Recent Global Earthquakes (M1+)"</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"我的地震图.html"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"已生成 我的地震图.html，浏览器打开后把鼠标悬停在点上看看"</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-把-coordinates-1-当成经度-经纬度写反">错误 1：★ 把 <code>coordinates[1]</code> 当成经度（经纬度写反）</h3>
+<p>GeoJSON 的坐标是 <code>[经度, 纬度, 深度]</code>。写成 <code>lat = coordinates[0]</code>、<code>lon = coordinates[1]</code>，程序不报错，但所有点跑到镜像位置。自检方法：纬度绝对值不应超过 90。每次写完 coordinates，默念「先 lon 后 lat」。</p>
+<h3 id="错误-2-硬编码列号-row-4">错误 2：★ 硬编码列号 <code>row[4]</code></h3>
+<p>数据源一更新（列顺序变了、多了几列），程序要么 <code>IndexError</code>，要么安静地取错列。正确做法：先 <code>enumerate</code> 打印表头，按列名建字典 <code>{name: index}</code>，再取数。</p>
+<h3 id="错误-3-strptime-格式码和字符串不匹配">错误 3：<code>strptime</code> 格式码和字符串不匹配</h3>
+<p><code>"2021-07-01"</code> 配 <code>"%Y/%m/%d"</code>、<code>"2021/7/1"</code> 配 <code>"%Y-%m-%d"</code>（少前导零也麻烦），都会抛 <code>ValueError: time data ... does not match format</code>。排查方法：把字符串和格式码并排写在纸上，一个字符一个字符对。</p>
+<h3 id="错误-4-把-append-写进-try-块">错误 4：把 <code>append</code> 写进 <code>try</code> 块</h3>
+<p>某天 TMAX 缺失时，<code>int("")</code> 抛异常，但异常前的 <code>dates.append</code> 已经执行，<code>lows</code> 也可能转换成功——三个列表错位，画图时报一个看不懂的错，或者更糟：画出一张安静的错图。记住：append 放 <code>else</code>，保证「要么三个都进，要么都不进」。</p>
+<h3 id="错误-5-plt-show-在无图形界面的环境卡住">错误 5：<code>plt.show()</code> 在无图形界面的环境卡住</h3>
+<p>远程服务器、WSL、某些 IDE 里 <code>plt.show()</code> 会报错或让程序挂起。本讲义统一用 <code>plt.savefig("图.png", dpi=150, bbox_inches="tight")</code> 存文件，哪里都能跑。教材未涉及，补充说明。</p>
+<h3 id="错误-6-细节两件套-样式名和-csv-参数">错误 6：细节两件套——样式名和 CSV 参数</h3>
+<p><code>plt.style.use("seaborn")</code> 在新版 matplotlib 会报 <code>ValueError</code>，要写 <code>"seaborn-v0_8"</code>（样式只是皮肤，删掉也行）；写 CSV 忘加 <code>newline=""</code> 会在 Windows 上多出空行，忘加 <code>encoding="utf-8"</code> 中文可能变乱码。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：读取 CSV 时，为什么教材不直接写 <code>row[4]</code> 取最高温，而要先用 <code>enumerate</code> 打印表头？</p>
+<blockquote>
+<p><strong>要点</strong>：真实数据的列顺序不保证。今天 DATE 在第 2 列，数据源一更新可能跑到第 3 列。硬编码列号的程序会安静地取错列或直接 <code>IndexError</code>。先用 <code>enumerate</code> 建立「列名 → 列号」的映射再取数，数据怎么变都不会错。这是处理外部数据的基本修养：<strong>永远不要信任你没验证过的数据结构。</strong></p>
+</blockquote>
+<p><strong>2. 判断题</strong>：GeoJSON 的 <code>coordinates</code> 是 <code>[纬度, 经度, 深度]</code>。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。是 <code>[经度, 纬度, 深度]</code>——经度在前。<code>coordinates[0]</code> 是 lon（东西向，±180 内），<code>coordinates[1]</code> 是 lat（南北向，±90 内）。这个错误不报错、只静默地错，是最危险的一类 bug。自检：纬度超过 90 就一定写反了。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：<code>datetime.strptime("2021-07-01", "%Y-%m-%d")</code> 和 <code>.strftime("%Y年%m月%d日")</code> 分别在做什么？格式码和字符串不匹配会怎样？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>strptime</code> 是 parse（解析）：字符串 → 日期对象，第二个参数是「格式说明书」；不匹配抛 <code>ValueError</code>。<code>strftime</code> 是 format（格式化）：日期对象 → 字符串，格式码描述「想要什么样的输出」，一般不抛错，只会得到不符合预期的输出。记忆：p=parse 解析，f=format 格式化。</p>
+</blockquote>
+<p><strong>4. 改错题</strong>：下面两段代码各有一处错误，先自己找，再看解析。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">all_eq_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"features"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"mag"</span><span class="p">:</span> <span class="mf">1.6</span><span class="p">},</span>
+                             <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">120.62</span><span class="p">,</span> <span class="mf">41.13</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">]}}]}</span>
+<span class="n">all_eq_dicts</span> <span class="o">=</span> <span class="n">all_eq_data</span><span class="p">[</span><span class="s2">"features"</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">eq_dict</span> <span class="ow">in</span> <span class="n">all_eq_dicts</span><span class="p">:</span>
+    <span class="n">mag</span> <span class="o">=</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"mag"</span><span class="p">]</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">eq_dict</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">"DV"</span><span class="p">,</span> <span class="s2">"2021-01-01"</span><span class="p">,</span> <span class="s2">"71"</span><span class="p">,</span> <span class="s2">"51"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"DV"</span><span class="p">,</span> <span class="s2">"2021-03-05"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">""</span><span class="p">]]</span>               <span class="c1"># 这天缺数据</span>
+
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_date</span><span class="p">)</span>
+        <span class="n">highs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+        <span class="n">lows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Missing data for </span><span class="si">{</span><span class="n">current_date</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dates</span><span class="p">,</span> <span class="n">highs</span><span class="p">,</span> <span class="n">lows</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：第一处：<code>coordinates[1]</code> 是纬度、<code>coordinates[0]</code> 是经度，两行写反了。后果是所有地震点跑到镜像位置，不报错但图完全错。第二处有两个问题——三个 <code>append</code> 写在了 <code>try</code> 里面，且三个列表在循环体内被反复重置。遇到 TMAX 缺失的这天，<code>int("")</code> 抛异常，但异常前的 <code>dates.append</code> 已经执行——三个列表长度不一致，画图时报错或错位。正确做法：列表放到循环外初始化，append 放 <code>else</code>，保证「要么三个都进，要么都不进」。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>except ValueError</code> 里为什么不能只写 <code>pass</code>？缺失值处理里 <code>else</code> 分支保证了什么？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>pass</code> 是「安静地吞掉」——你不知道哪些天缺了数据、缺了多少，图上的缺口无法解释，还可能掩盖真正的 bug。教材打印 <code>Missing data for {date}</code>，让数据缺口可见、可核对。<code>else</code> 分支保证只有<strong>所有转换都成功</strong>才把三个值分别收进三个列表，维持 <code>dates</code>/<code>highs</code>/<code>lows</code> 严格等长、一一对应。</p>
+</blockquote>
+<p><strong>6. 简答题</strong>：教材配套数据文件去哪里下载？想拿「此时此刻」真实的地震数据，访问哪个 URL？</p>
+<blockquote>
+<p><strong>要点</strong>：教材第 3 版的源码和数据文件在配套资源站 https://ehmatthes.github.io/pcc_3e/ 打包下载，把 <code>chapter_16</code> 里的 <code>weather_data</code>、<code>eq_data</code> 文件夹复制到项目目录即可。实时地震数据在 USGS：列表页 https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php ，「过去一天 M1 以上」对应 https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojson 。教材数据是快照，feed 下载的永远最新。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能写出「read_text → splitlines → csv.reader」三件套，并说清每一步在干什么</li>
+<li>[ ] 会用 <code>enumerate</code> 打印表头、按列名建「列名 → 列号」字典，不硬编码列号</li>
+<li>[ ] 能默写 <code>datetime.strptime(row[2], "%Y-%m-%d")</code>，并说清 <code>strptime</code> 和 <code>strftime</code> 的区别</li>
+<li>[ ] 能写出带 <code>try/except ValueError</code> + <code>else</code> 的缺失值处理，并解释 <code>else</code> 为什么不能省</li>
+<li>[ ] 能画出 <code>plot</code> + <code>fill_between</code> 温度区间图并存成 png</li>
+<li>[ ] 能画出 GeoJSON 结构树，脱口说出 <code>coordinates[0]</code> 是经度、<code>[1]</code> 是纬度</li>
+<li>[ ] 能用 <code>px.scatter_geo</code> 画出带 <code>size</code>/<code>color</code>/<code>hover_name</code> 的全球地震散点图</li>
+<li>[ ] 练习 16-1、16-4、16-6 已跑通</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 17「使用 API 与 Plotly」讲换一种方式拿数据——不再下载文件，而是直接调用网上的「数据接口」（API）。你会用 <code>requests</code> 向 GitHub 和 Hacker News 发请求，认识状态码和速率限制，把返回的 JSON 画成更漂亮的交互图。本单元处理「文件里的数据」，下一单元处理「网上的数据」，合起来才是完整的数据获取能力。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="15.html"><small>← 上一单元</small><b>单元 15 · Matplotlib生成数据</b></a><div class="spot"><a class="pn" href="ppt/u/16.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s15"><small>课程大纲课件</small><b>阶段总览 p15 →</b></a></div><a class="pn nx" href="17.html"><small>下一单元 →</small><b>单元 17 · 使用API与Plotly</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

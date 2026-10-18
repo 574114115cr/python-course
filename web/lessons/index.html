@@ -1,0 +1,2322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>课程目录 · 111 节课</title>
+<meta name="theme-color" content="#1f5fa8">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#e08a15;--p3bg:#fdf3e2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.7}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px 80px}
+.top{position:sticky;top:0;z-index:40;background:rgba(246,248,251,.95);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line)}
+.top-in{max-width:1160px;margin:0 auto;padding:0 24px;height:58px;display:flex;align-items:center;gap:16px}
+.top h1{font-size:16px;margin:0;font-weight:700;flex:1}
+.back{font-size:13.5px;color:var(--muted)}
+
+.hero{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 30px;
+background:linear-gradient(135deg,#1f5fa8 0%,#0e9b78 100%);padding:44px 46px;color:#fff}
+.hero::after{content:'';position:absolute;right:-80px;bottom:-130px;width:400px;height:400px;
+border-radius:50%;background:rgba(255,255,255,.08)}
+.hero>*{position:relative;z-index:1}
+.hero .bdg{display:inline-block;background:var(--p3);border-radius:6px;padding:5px 14px;
+font-size:12.5px;font-weight:700;letter-spacing:1.5px;margin-bottom:18px}
+.hero h1{font-size:38px;margin:0 0 12px;line-height:1.25}
+.hero p{font-size:16px;color:#dcebf7;margin:0 0 26px;max-width:660px}
+.st{display:flex;gap:40px;flex-wrap:wrap}
+.st b{display:block;font-size:30px;font-weight:700;line-height:1.2}
+.st span{font-size:12.5px;color:#b9d5ea}
+
+.pg{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding:16px 20px;
+background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap:wrap}
+.pg b{font-size:14px;color:var(--muted);font-weight:600}
+.pg .tr{flex:1;min-width:180px;height:8px;background:#e8edf3;border-radius:8px;overflow:hidden}
+.pg .tr i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p2));width:0;transition:width .25s}
+.pg .ct{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+h2{font-size:21px;margin:36px 0 6px;display:flex;align-items:center;gap:10px}
+h2 i{width:9px;height:9px;border-radius:50%;background:var(--p1);display:block}
+.sub{font-size:13.5px;color:var(--muted);margin:0 0 18px}
+
+.ug{margin-bottom:26px}
+.ug-h{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}
+.ug-n{width:32px;height:32px;border-radius:8px;background:var(--p1);color:#fff;
+display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.ug-h h3{margin:0;font-size:17px}
+.ug-ls{display:flex;gap:7px;flex-wrap:wrap}
+.ug-l{font-size:12px;font-weight:700;color:var(--p1);background:#fff;
+border:1px solid var(--line);border-radius:6px;padding:3px 9px;text-decoration:none;
+white-space:nowrap}
+.ug-l:hover{background:var(--p1bg);border-color:var(--p1);text-decoration:none}
+.ug-m{font-size:12.5px;color:var(--muted);margin-left:auto}
+.lg{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.lc{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:16px 18px;transition:border-color .15s}
+.lc:hover{border-color:var(--p1);box-shadow:0 2px 12px rgba(31,95,168,.08)}
+.lc.done{border-color:#b8e0d0;background:#f8fcfa}
+.lc-h{display:flex;gap:12px;align-items:flex-start;margin-bottom:11px}
+.lc-n{width:36px;height:36px;border-radius:9px;background:var(--p1bg);color:var(--p1);
+display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:700;flex-shrink:0}
+.lc.done .lc-n{background:var(--p2bg);color:var(--p2)}
+.lc-h h4{margin:0 0 3px;font-size:15.5px;line-height:1.4}
+.lc-h p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+.lc-w{font-size:11.5px;color:var(--muted);font-weight:600;background:#f1f4f8;
+padding:3px 9px;border-radius:20px;flex-shrink:0}
+.lc-f{font-size:12.5px;color:#40566b;line-height:1.6;margin-top:5px}
+.lc-f b{color:var(--p2);font-weight:700}
+
+/* 阶段分隔条 */
+.stage-sep{display:flex;align-items:center;gap:14px;margin:44px 0 18px;padding:16px 20px;
+background:linear-gradient(90deg,var(--p1bg),#f8fafc);border:1px solid var(--line);
+border-left:4px solid var(--p1);border-radius:0 12px 12px 0}
+.stage-sep .ss-no{background:var(--p1);color:#fff;font-size:12px;font-weight:700;
+padding:4px 12px;border-radius:20px;white-space:nowrap}
+.stage-sep h2{margin:0;font-size:19px;color:var(--text)}
+.stage-sep .ss-m{margin-left:auto;font-size:12.5px;color:var(--muted);white-space:nowrap}
+
+/* 单元快捷跳转 */
+.ujump{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.ujump a{padding:5px 12px;border:1px solid var(--line);border-radius:16px;background:var(--card);
+font-size:12px;color:var(--muted);text-decoration:none}
+.ujump a:hover{border-color:var(--p1);color:var(--p1);background:var(--p1bg)}
+
+/* 搜索与筛选 */
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.tools .q{flex:1;min-width:240px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;
+font-size:13.5px;font-family:inherit;background:var(--card);color:var(--text)}
+.tools .q:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+.tools .fl{display:flex;gap:6px}
+.tools .fb{padding:7px 14px;border:1px solid var(--line);border-radius:20px;background:var(--card);
+font-size:12.5px;color:var(--muted);cursor:pointer;font-family:inherit}
+.tools .fb:hover{border-color:var(--p1);color:var(--p1)}
+.tools .fb.on{background:var(--p1);border-color:var(--p1);color:#fff}
+.tools .cnt{font-size:12px;color:var(--muted);white-space:nowrap}
+.pg .resume{padding:7px 15px;border-radius:20px;background:var(--p1);color:#fff;
+font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
+.pg .resume:hover{background:#1a5296}
+.pg .resume.all-done{background:var(--p2)}
+
+/* 卡片：链接占主体，完成按钮独立，点链接只跳转不标记 */
+.lc{position:relative}
+.lc-a{display:block;color:inherit;text-decoration:none}
+.lc-ck{margin-top:11px;padding:6px 14px;border:1px solid var(--line);border-radius:8px;
+background:#fff;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;width:100%}
+.lc-ck:hover{border-color:var(--p2);color:var(--p2)}
+.lc-ck.on{background:var(--p2bg);border-color:#b8e0d0;color:var(--p2);font-weight:600}
+
+.tip{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;
+margin-top:34px;display:flex;gap:14px;align-items:flex-start}
+.tip i{width:4px;align-self:stretch;background:var(--p3);border-radius:2px;flex-shrink:0}
+.tip h4{margin:0 0 8px;font-size:16px}
+.tip ul{margin:0;padding-left:20px;font-size:14px;color:#40566b}
+.tip li{margin:5px 0}
+footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-size:13px;color:var(--muted)}
+@media print{
+  .tools,.top{display:none!important}
+  body{background:#fff}
+  .hero{padding:20px 0}
+  .lc{break-inside:avoid;border-color:#ccc}
+  .lc-ck{display:none!important}
+  a{color:#000;text-decoration:none}
+}
+@page{margin:14mm}
+
+@media(max-width:700px){.wrap{padding:0 14px 60px}.hero{padding:30px 22px}.hero h1{font-size:27px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 学习主页</a>
+  <h1>课程目录 · 111 节课</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/index.html">课程课件 23 页</a>
+</div></div>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="bdg">每次课 90 分钟 · 共 111 节</span>
+    <h1>一节一节地上<br>而不是一章一章地啃</h1>
+    <p>每个单元按 90 分钟课节切开，四段都有内容：
+       <b>复盘 10</b> 回顾上一节要点 · <b>讲解 30</b> 知识点与示例 ·
+       <b>实操 40</b> 跟着敲不许看答案 · <b>讲评 20</b> 对照自查你刚写的代码。
+       每节还带明确目标、课后作业和一句话总结。</p>
+    <div class="st">
+      <div><b>111</b><span>节课</span></div>
+      <div><b>22</b><span>个单元</span></div>
+      <div><b>13</b><span>周</span></div>
+      <div><b>1</b><span>节课一个产出</span></div>
+    </div>
+  </header>
+
+  <div class="pg">
+    <b>学习进度</b>
+    <div class="tr"><i id="tr"></i></div>
+    <span class="ct" id="ct">0 / 111 节</span>
+    <a class="resume" id="resume" href="01.html">继续学习 →</a>
+  </div>
+
+  <h2><i></i>全部课程</h2>
+  <p class="sub">按单元分组，点任意一节课进入。完成一节课后点卡片上的「标记完成」。
+     搜索支持课节标题、学习目标和小节标题（试试「parametrize」「切片」「get()」）。</p>
+
+  <div class="ujump">
+    <a href="#u0">单元 0</a><a href="#u1">单元 1</a><a href="#u2">单元 2</a><a href="#u3">单元 3</a><a href="#u4">单元 4</a><a href="#u5">单元 5</a><a href="#u6">单元 6</a><a href="#u7">单元 7</a><a href="#u8">单元 8</a><a href="#u9">单元 9</a><a href="#u10">单元 10</a><a href="#u11">单元 11</a><a href="#u12">单元 12</a><a href="#u13">单元 13</a><a href="#u14">单元 14</a><a href="#u15">单元 15</a><a href="#u16">单元 16</a><a href="#u17">单元 17</a><a href="#u18">单元 18</a><a href="#u19">单元 19</a><a href="#u20">单元 20</a><a href="#u21">单元 21</a>
+  </div>
+
+  <div class="tools">
+    <input class="q" type="search" id="q" placeholder="搜课程标题或目标，如：继承 / 异常 / 函数"
+           aria-label="搜索课程">
+    <div class="fl" id="fl">
+      <button class="fb on" data-f="all">全部</button>
+      <button class="fb" data-f="todo">未完成</button>
+      <button class="fb" data-f="done">已完成</button>
+    </div>
+    <span class="cnt" id="cnt"></span>
+  </div>
+
+  <div class="stage-sep" id="s1"><span class="ss-no">阶段 1</span><h2>阶段 1 · 语法基础（教材第 1–11 章）</h2><span class="ss-m">12 个单元 · 64 节课</span></div>
+      <div class="ug" id="u0">
+        <div class="ug-h">
+          <span class="ug-n">0</span>
+          <h3>环境与工具链</h3>
+          <span class="ug-m">5 节 · W0</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../00.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/00.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="1" data-t="装好 Python 与 VS Code 知道解释器是什么，能新建并运行第一个脚本 一、学习目标 二、核心知识点讲解 2.1 Python 解释器：写的是&quot;食材&quot;，跑的是&quot;厨师&quot; 2.2 终端（命令行）：和解释器对话的窗口 2.3 VS Code + Python 扩展：写代码的写字板">
+          <a class="lc-a" href="01.html">
+          <div class="lc-h">
+            <span class="lc-n">01</span>
+            <div style="flex:1;min-width:0">
+              <h4>装好 Python 与 VS Code</h4>
+              <p>知道解释器是什么，能新建并运行第一个脚本</p>
+            </div>
+            <span class="lc-w">W0</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 跟着敲：新建 hello.py 并运行 …</div>
+          <div class="lc-f"><b>作业</b> 装好环境并跑通 hello.py</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="1"
+                  aria-label="标记第 1 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="2" data-t="第一个报错与 Git 拍快照 会读 traceback；能用 git 给代码拍快照并恢复 2.4 第一个报错：报错是你的朋友 2.5 Git：给代码拍快照">
+          <a class="lc-a" href="02.html">
+          <div class="lc-h">
+            <span class="lc-n">02</span>
+            <div style="flex:1;min-width:0">
+              <h4>第一个报错与 Git 拍快照</h4>
+              <p>会读 traceback；能用 git 给代码拍快照并恢复</p>
+            </div>
+            <span class="lc-w">W0</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 故意触发 3 种报错并读懂 traceback …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 0-1 ~ 0-5</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="2"
+                  aria-label="标记第 2 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="3" data-t="目录结构、print 与注释 掌握 print 的 sep / end、f-string 与注释规范 2.6 建议的目录结构 三、可运行代码示例 示例 1：第一个脚本 示例 2：先写后跑的顺序演示（体会&quot;从上到下&quot;） 示例 3：用变量做一次简单计算 示例 4：认识 print 的分隔符与注释 示例 5：用 f-string 把变量嵌进文字里 示例 6：初识类型与打印类型 示例 7：一次常见的报错长什么样">
+          <a class="lc-a" href="03.html">
+          <div class="lc-h">
+            <span class="lc-n">03</span>
+            <div style="flex:1;min-width:0">
+              <h4>目录结构、print 与注释</h4>
+              <p>掌握 print 的 sep / end、f-string 与注释规范</p>
+            </div>
+            <span class="lc-w">W0</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 修改示例 4 的 sep 和 end，观察输出变化 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档 0-6 ~ 0-8</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="3"
+                  aria-label="标记第 3 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="4" data-t="动手实战与答案讲评 独立完成单元 0 全部练习，并能对照答案自查 四、动手练习 基础档 进阶档 五、参考答案 参考答案 0-2 参考答案 0-3（两种写法） 参考答案 0-4 参考答案 0-5 参考答案 0-6 参考答案 0-7 参考答案 0-8（命令序列说明）">
+          <a class="lc-a" href="04.html">
+          <div class="lc-h">
+            <span class="lc-n">04</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 0 全部练习，并能对照答案自查</p>
+            </div>
+            <span class="lc-w">W0</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 20 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：可运行的 hello.py + 首次 git 提交</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="4"
+                  aria-label="标记第 4 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="5" data-t="单元 0 验收复盘 确认环境、终端、Git、目录结构四项都掌握 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="05.html">
+          <div class="lc-h">
+            <span class="lc-n">05</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 0 验收复盘</h4>
+              <p>确认环境、终端、Git、目录结构四项都掌握</p>
+            </div>
+            <span class="lc-w">W0</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="5"
+                  aria-label="标记第 5 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u1">
+        <div class="ug-h">
+          <span class="ug-n">1</span>
+          <h3>变量与简单数据类型</h3>
+          <span class="ug-m">4 节 · W1</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../01.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/01.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="6" data-t="变量、命名与第一段文字 能写出符合 PEP 8 的变量名，理解「变量是贴了标签的盒子」 一、学习目标 二、核心知识点讲解 2.1 变量：一个贴了标签的盒子 2.2 命名规则：为什么 my-var 和 2var 不行 2.3 字符串 str：带引号的文字">
+          <a class="lc-a" href="06.html">
+          <div class="lc-h">
+            <span class="lc-n">06</span>
+            <div style="flex:1;min-width:0">
+              <h4>变量、命名与第一段文字</h4>
+              <p>能写出符合 PEP 8 的变量名，理解「变量是贴了标签的盒子」</p>
+            </div>
+            <span class="lc-w">W1</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场判断 10 个变量名哪些合法 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 1-1 ~ 1-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="6"
+                  aria-label="标记第 6 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="7" data-t="字符串、数值、布尔与类型转换 熟练使用 str 方法与四则运算，掌握 int / float / bool 转换规则 2.4 整数 int 与浮点数 float 2.5 布尔值 bool：只有两个取值 2.6 类型转换：把一种类型的标签换成另一种 三、可运行代码示例 示例 1：四种类型与 type() 示例 2：变量重新赋值与命名规范 示例 3：字符串常用方法 示例 4：类型转换 示例 5：f-string 格式化输出 示例 6：多行字符串与转义 示例 7：注释的正确写法">
+          <a class="lc-a" href="07.html">
+          <div class="lc-h">
+            <span class="lc-n">07</span>
+            <div style="flex:1;min-width:0">
+              <h4>字符串、数值、布尔与类型转换</h4>
+              <p>熟练使用 str 方法与四则运算，掌握 int / float / bool 转换规则</p>
+            </div>
+            <span class="lc-w">W1</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 对同一字符串连续调用三种方法并打印每步结果 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 1-3 ~ 1-4</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="7"
+                  aria-label="标记第 7 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="8" data-t="动手实战与答案讲评 独立完成单元 1 练习，能解释类型转换的报错原因 四、动手练习 基础档 进阶档 五、参考答案 参考答案 1-1 参考答案 1-2 参考答案 1-3 参考答案 1-4 参考答案 1-5 参考答案 1-6 参考答案 1-7 参考答案 1-8">
+          <a class="lc-a" href="08.html">
+          <div class="lc-h">
+            <span class="lc-n">08</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 1 练习，能解释类型转换的报错原因</p>
+            </div>
+            <span class="lc-w">W1</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 25 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 完成进阶档 1-5 ~ 1-8 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="8"
+                  aria-label="标记第 8 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="9" data-t="单元 1 验收复盘 确认四种类型、命名规范、类型转换都过关 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="09.html">
+          <div class="lc-h">
+            <span class="lc-n">09</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 1 验收复盘</h4>
+              <p>确认四种类型、命名规范、类型转换都过关</p>
+            </div>
+            <span class="lc-w">W1</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="9"
+                  aria-label="标记第 9 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u2">
+        <div class="ug-h">
+          <span class="ug-n">2</span>
+          <h3>列表简介</h3>
+          <span class="ug-m">4 节 · W2</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../02.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/02.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="10" data-t="列表是什么、索引为什么从 0 开始 理解「一排抽屉」模型，牢记索引从 0 开始与负索引 一、学习目标 二、核心知识点讲解 2.1 列表：一个名字，一排抽屉 2.2 索引从 0 开始：为什么不是从 1 开始 2.3 列表是可变的：能直接改">
+          <a class="lc-a" href="10.html">
+          <div class="lc-h">
+            <span class="lc-n">10</span>
+            <div style="flex:1;min-width:0">
+              <h4>列表是什么、索引为什么从 0 开始</h4>
+              <p>理解「一排抽屉」模型，牢记索引从 0 开始与负索引</p>
+            </div>
+            <span class="lc-w">W2</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 画一个列表并标出每个元素的下标 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 2-1 ~ 2-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="10"
+                  aria-label="标记第 10 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="11" data-t="增删改查、引用共享与排序 掌握五个增删改方法；理解引用共享——本单元最反直觉的一课 2.4 增删改方法：五个主力 2.5 .remove() 与 .pop()：一个删&quot;值&quot;，一个删&quot;位置&quot; 2.6 引用共享：最反直觉的一课 三、可运行代码示例 示例 1：创建列表与基本访问 示例 2：修改元素（列表可变的体现） 示例 3：添加元素 示例 4：删除元素 示例 5：引用共享与浅拷贝 示例 6：排序与反转（列表自带的小工具）">
+          <a class="lc-a" href="11.html">
+          <div class="lc-h">
+            <span class="lc-n">11</span>
+            <div style="flex:1;min-width:0">
+              <h4>增删改查、引用共享与排序</h4>
+              <p>掌握五个增删改方法；理解引用共享——本单元最反直觉的一课</p>
+            </div>
+            <span class="lc-w">W2</span>
+          </div>
+          <div class="lc-f"><b>实操</b> ★ 现场演示 a = b[:] 与 a = b 的区别 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档 2-3 ~ 2-8</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="11"
+                  aria-label="标记第 11 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="12" data-t="动手实战与答案讲评 独立完成单元 2 练习，能预测任意列表操作的结果 四、动手练习 基础档 进阶档 五、参考答案 参考答案 2-1 参考答案 2-2 参考答案 2-3 参考答案 2-4 参考答案 2-5 参考答案 2-6 参考答案 2-7 参考答案 2-8">
+          <a class="lc-a" href="12.html">
+          <div class="lc-h">
+            <span class="lc-n">12</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 2 练习，能预测任意列表操作的结果</p>
+            </div>
+            <span class="lc-w">W2</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 25 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：能增删改查排序的清单脚本</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="12"
+                  aria-label="标记第 12 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="13" data-t="单元 2 验收复盘 确认增删改查、引用共享、排序都过关 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="13.html">
+          <div class="lc-h">
+            <span class="lc-n">13</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 2 验收复盘</h4>
+              <p>确认增删改查、引用共享、排序都过关</p>
+            </div>
+            <span class="lc-w">W2</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="13"
+                  aria-label="标记第 13 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u3">
+        <div class="ug-h">
+          <span class="ug-n">3</span>
+          <h3>操作列表</h3>
+          <span class="ug-m">5 节 · W3</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../03.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/03.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="14" data-t="for 循环：把重复交给机器 会用 for 遍历列表，避开常见缩进错误 一、学习目标 二、核心知识点讲解 2.1 for 循环：把重复交给机器 2.2 range()：造出一串数字">
+          <a class="lc-a" href="14.html">
+          <div class="lc-h">
+            <span class="lc-n">14</span>
+            <div style="flex:1;min-width:0">
+              <h4>for 循环：把重复交给机器</h4>
+              <p>会用 for 遍历列表，避开常见缩进错误</p>
+            </div>
+            <span class="lc-w">W3</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 故意写四种缩进错误并当场读懂报错 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习基础档</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="14"
+                  aria-label="标记第 14 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="15" data-t="range() 与列表推导式 掌握 range 的各种形式，能用推导式一行搞定筛选 2.3 循环的常见搭档 2.4 列表推导式：一行搞定筛选">
+          <a class="lc-a" href="15.html">
+          <div class="lc-h">
+            <span class="lc-n">15</span>
+            <div style="flex:1;min-width:0">
+              <h4>range() 与列表推导式</h4>
+              <p>掌握 range 的各种形式，能用推导式一行搞定筛选</p>
+            </div>
+            <span class="lc-w">W3</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 预测 range(2,10,3) 的结果再验证 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="15"
+                  aria-label="标记第 15 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="16" data-t="切片、元组与 PEP 8 排版 掌握切片三个参数与元组的不可变性，能按 PEP 8 排版 2.5 切片：一次取出一段 2.6 元组：用括号表示&quot;不可修改&quot; 2.7 PEP 8：让代码能被人读 三、可运行代码示例 示例 1：for 循环基础 示例 2：range 的四种形式 示例 3：常见循环搭档 示例 4：列表推导式 示例 5：切片 示例 6：元组 示例 7：PEP 8 排版示范">
+          <a class="lc-a" href="16.html">
+          <div class="lc-h">
+            <span class="lc-n">16</span>
+            <div style="flex:1;min-width:0">
+              <h4>切片、元组与 PEP 8 排版</h4>
+              <p>掌握切片三个参数与元组的不可变性，能按 PEP 8 排版</p>
+            </div>
+            <span class="lc-w">W3</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 用切片取出字符串后 5 个字符 …</div>
+          <div class="lc-f"><b>作业</b> 完成题库 L1-5、L1-6</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="16"
+                  aria-label="标记第 16 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="17" data-t="动手实战与答案讲评 独立完成单元 3 练习，巩固循环、推导式与元组 四、动手练习 基础档 进阶档 五、参考答案 参考答案 3-1 参考答案 3-2 参考答案 3-3 参考答案 3-4 参考答案 3-5 参考答案 3-6 参考答案 3-7 参考答案 3-8">
+          <a class="lc-a" href="17.html">
+          <div class="lc-h">
+            <span class="lc-n">17</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 3 练习，巩固循环、推导式与元组</p>
+            </div>
+            <span class="lc-w">W3</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手项目 3.4–3.8 忘记密码清单 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="17"
+                  aria-label="标记第 17 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="18" data-t="单元 3 验收复盘 确认循环、range、推导式、切片、元组都过关 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="18.html">
+          <div class="lc-h">
+            <span class="lc-n">18</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 3 验收复盘</h4>
+              <p>确认循环、range、推导式、切片、元组都过关</p>
+            </div>
+            <span class="lc-w">W3</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="18"
+                  aria-label="标记第 18 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u4">
+        <div class="ug-h">
+          <span class="ug-n">4</span>
+          <h3>if 语句</h3>
+          <span class="ug-m">4 节 · W4</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../04.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/04.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="19" data-t="条件测试与比较运算 掌握六个比较运算符和 in / not in 一、学习目标 二、核心知识点讲解 2.1 条件测试：一个只能回答是/否的问题 2.2 六个比较运算符">
+          <a class="lc-a" href="19.html">
+          <div class="lc-h">
+            <span class="lc-n">19</span>
+            <div style="flex:1;min-width:0">
+              <h4>条件测试与比较运算</h4>
+              <p>掌握六个比较运算符和 in / not in</p>
+            </div>
+            <span class="lc-w">W4</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场预测 8 个表达式的 True/False 再验证 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 4-1 ~ 4-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="19"
+                  aria-label="标记第 19 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="20" data-t="三分支结构与逻辑运算符 掌握 if / elif / else 与 and / or / not，理解顺序为什么重要 2.3 三分支结构：if / elif / else 2.4 逻辑运算符：把条件组合起来">
+          <a class="lc-a" href="20.html">
+          <div class="lc-h">
+            <span class="lc-n">20</span>
+            <div style="flex:1;min-width:0">
+              <h4>三分支结构与逻辑运算符</h4>
+              <p>掌握 if / elif / else 与 and / or / not，理解顺序为什么重要</p>
+            </div>
+            <span class="lc-w">W4</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 写一个票价分级程序，故意把条件顺序写反看结果 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 4-3 ~ 4-5</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="20"
+                  aria-label="标记第 20 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="21" data-t="链式比较、is 与条件表达式 能用链式比较、== 与 is、条件表达式写出更干净的判断 2.5 链式比较：Python 的贴心语法 2.6 == 还是 is？ 2.7 条件表达式：把 5 行压成 1 行 三、可运行代码示例 示例 1：if 单分支 示例 2：if / elif / else 三分支 示例 3：顺序的重要性 示例 4：逻辑运算符与短路求值 示例 5：链式比较与字符串比较 示例 6：== 与 is 的区别 示例 7：条件表达式与嵌套">
+          <a class="lc-a" href="21.html">
+          <div class="lc-h">
+            <span class="lc-n">21</span>
+            <div style="flex:1;min-width:0">
+              <h4>链式比较、is 与条件表达式</h4>
+              <p>能用链式比较、== 与 is、条件表达式写出更干净的判断</p>
+            </div>
+            <span class="lc-w">W4</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把嵌套 if 改成 elif 链和条件表达式两种写法</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档 4-6 ~ 4-8</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="21"
+                  aria-label="标记第 21 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="22" data-t="动手实战、答案与验收 独立完成单元 4 练习，确认条件判断全部过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 4-1 参考答案 4-2 参考答案 4-3 参考答案 4-4 参考答案 4-5 参考答案 4-6 参考答案 4-7 参考答案 4-8 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="22.html">
+          <div class="lc-h">
+            <span class="lc-n">22</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战、答案与验收</h4>
+              <p>独立完成单元 4 练习，确认条件判断全部过关</p>
+            </div>
+            <span class="lc-w">W4</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 25 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：3 个条件判断小程序 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="22"
+                  aria-label="标记第 22 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u5">
+        <div class="ug-h">
+          <span class="ug-n">5</span>
+          <h3>字典</h3>
+          <span class="ug-m">5 节 · W5</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../05.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/05.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="23" data-t="字典：按名字找数据 理解「列表按位置找、字典按名字找」，掌握键值对增删改 一、学习目标 二、核心知识点讲解 2.1 列表按位置找，字典按名字找 2.2 键值对：key → value 2.3 新增 vs 修改：同一行代码，两种含义">
+          <a class="lc-a" href="23.html">
+          <div class="lc-h">
+            <span class="lc-n">23</span>
+            <div style="flex:1;min-width:0">
+              <h4>字典：按名字找数据</h4>
+              <p>理解「列表按位置找、字典按名字找」，掌握键值对增删改</p>
+            </div>
+            <span class="lc-w">W5</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场把一个列表版数据改成字典版 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 5-1 ~ 5-3</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="23"
+                  aria-label="标记第 23 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="24" data-t="三种遍历与 get() 安全取值 掌握 items / keys / values 三种遍历，知道 get() 为什么不崩 2.4 三种遍历方式 2.5 .get()：不 crash 的取值方式">
+          <a class="lc-a" href="24.html">
+          <div class="lc-h">
+            <span class="lc-n">24</span>
+            <div style="flex:1;min-width:0">
+              <h4>三种遍历与 get() 安全取值</h4>
+              <p>掌握 items / keys / values 三种遍历，知道 get() 为什么不崩</p>
+            </div>
+            <span class="lc-w">W5</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 对同一字典用三种方式遍历并比较输出 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 5-4 ~ 5-6</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="24"
+                  aria-label="标记第 24 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="25" data-t="遍历时修改与嵌套结构 能处理嵌套结构，为后面学 JSON 打基础 2.6 遍历时能修改字典吗 2.7 嵌套结构：字典的真正威力 三、可运行代码示例 示例 1：创建与基本访问 示例 2：新增、修改、删除 示例 3：三种遍历方式 示例 4：get() 安全取值 示例 5：遍历与修改的正确姿势 示例 6：嵌套字典与综合提取 示例 7：字典的常用&quot;全家桶&quot;方法">
+          <a class="lc-a" href="25.html">
+          <div class="lc-h">
+            <span class="lc-n">25</span>
+            <div style="flex:1;min-width:0">
+              <h4>遍历时修改与嵌套结构</h4>
+              <p>能处理嵌套结构，为后面学 JSON 打基础</p>
+            </div>
+            <span class="lc-w">W5</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场把三层嵌套数据一层层打印出来 …</div>
+          <div class="lc-f"><b>作业</b> 动手项目 6.1–6.3 生日调查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="25"
+                  aria-label="标记第 25 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="26" data-t="动手实战与答案讲评 独立完成单元 5 练习，能熟练遍历嵌套数据 四、动手练习 基础档 进阶档 五、参考答案 参考答案 5-1 参考答案 5-2 参考答案 5-3 参考答案 5-4 参考答案 5-5 参考答案 5-6 参考答案 5-7">
+          <a class="lc-a" href="26.html">
+          <div class="lc-h">
+            <span class="lc-n">26</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 5 练习，能熟练遍历嵌套数据</p>
+            </div>
+            <span class="lc-w">W5</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：三种嵌套结构各一组</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="26"
+                  aria-label="标记第 26 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="27" data-t="单元 5 验收复盘 确认字典增删改查、三种遍历、嵌套都过关 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="27.html">
+          <div class="lc-h">
+            <span class="lc-n">27</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 5 验收复盘</h4>
+              <p>确认字典增删改查、三种遍历、嵌套都过关</p>
+            </div>
+            <span class="lc-w">W5</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="27"
+                  aria-label="标记第 27 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u6">
+        <div class="ug-h">
+          <span class="ug-n">6</span>
+          <h3>用户输入与 while 循环</h3>
+          <span class="ug-m">5 节 · W6</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../06.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/06.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="28" data-t="input() 的铁律与 for/while 之争 牢记「拿回来的永远是字符串」，知道什么时候该用 while 一、学习目标 二、核心知识点讲解 2.1 input() 的铁律：拿回来的永远是字符串 2.2 for 还是 while：怎么选">
+          <a class="lc-a" href="28.html">
+          <div class="lc-h">
+            <span class="lc-n">28</span>
+            <div style="flex:1;min-width:0">
+              <h4>input() 的铁律与 for/while 之争</h4>
+              <p>牢记「拿回来的永远是字符串」，知道什么时候该用 while</p>
+            </div>
+            <span class="lc-w">W6</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 故意不写 int() 体会类型陷阱 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 6-1 ~ 6-3</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="28"
+                  aria-label="标记第 28 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="29" data-t="break / continue / while-else 掌握 break、continue 与 while...else 的执行时机 2.3 while 的核心：条件先行 2.4 break 与 continue">
+          <a class="lc-a" href="29.html">
+          <div class="lc-h">
+            <span class="lc-n">29</span>
+            <div style="flex:1;min-width:0">
+              <h4>break / continue / while-else</h4>
+              <p>掌握 break、continue 与 while...else 的执行时机</p>
+            </div>
+            <span class="lc-w">W6</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 写一个只接受正数的输入循环，故意输入字母看是否崩 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 6-4 ~ 6-6</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="29"
+                  aria-label="标记第 29 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="30" data-t="交互程序的骨架与收尾 能组装出「提示 → 输入 → 校验 → 处理」的完整交互程序 2.5 while ... else：循环&quot;没被打断&quot;时执行 2.6 交互程序的骨架 三、可运行代码示例 示例 1：input 的类型陷阱与三步模板 示例 2：while 基本循环 示例 3：break 与 continue 示例 4：while ... else 示例 5：标志位 flag 示例 6：交互式程序骨架 示例 7：倒计时与死循环的自救">
+          <a class="lc-a" href="30.html">
+          <div class="lc-h">
+            <span class="lc-n">30</span>
+            <div style="flex:1;min-width:0">
+              <h4>交互程序的骨架与收尾</h4>
+              <p>能组装出「提示 → 输入 → 校验 → 处理」的完整交互程序</p>
+            </div>
+            <span class="lc-w">W6</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场把 input + int + if + while 组装成一个完整程序</div>
+          <div class="lc-f"><b>作业</b> 动手项目 7.5–7.9 投票统计 + 7.10 收银机</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="30"
+                  aria-label="标记第 30 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="31" data-t="动手实战与答案讲评 独立完成单元 6 练习，能写带校验的交互循环 四、动手练习 基础档 进阶档 五、参考答案 参考答案 6-1 参考答案 6-2 参考答案 6-3 参考答案 6-4 参考答案 6-5 参考答案 6-6 参考答案 6-7 参考答案 6-8">
+          <a class="lc-a" href="31.html">
+          <div class="lc-h">
+            <span class="lc-n">31</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 6 练习，能写带校验的交互循环</p>
+            </div>
+            <span class="lc-w">W6</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：带输入校验的投票统计</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="31"
+                  aria-label="标记第 31 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="32" data-t="单元 6 验收复盘 确认 input 转换、循环控制、交互骨架都过关 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="32.html">
+          <div class="lc-h">
+            <span class="lc-n">32</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 6 验收复盘</h4>
+              <p>确认 input 转换、循环控制、交互骨架都过关</p>
+            </div>
+            <span class="lc-w">W6</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="32"
+                  aria-label="标记第 32 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u7">
+        <div class="ug-h">
+          <span class="ug-n">7</span>
+          <h3>函数</h3>
+          <span class="ug-m">7 节 · W7、W7–W8</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../07.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/07.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="33" data-t="定义函数与 return 理解函数是「给一段代码起名字」，知道 return 才是真正的输出 一、学习目标 二、核心知识点讲解 2.1 函数：给一段代码起个名字 2.2 return：把结果&quot;递出窗口&quot;">
+          <a class="lc-a" href="33.html">
+          <div class="lc-h">
+            <span class="lc-n">33</span>
+            <div style="flex:1;min-width:0">
+              <h4>定义函数与 return</h4>
+              <p>理解函数是「给一段代码起名字」，知道 return 才是真正的输出</p>
+            </div>
+            <span class="lc-w">W7</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把一段 10 行重复代码抽成一个函数 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 7-1 ~ 7-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="33"
+                  aria-label="标记第 33 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="34" data-t="三种参数写法与★ 参数传递的副本语义 掌握位置 / 关键字 / 默认值三种写法；理解传列表会改到原列表 2.3 三种参数写法 2.4 ★ 参数传递的副本语义（本单元最重要的概念）">
+          <a class="lc-a" href="34.html">
+          <div class="lc-h">
+            <span class="lc-n">34</span>
+            <div style="flex:1;min-width:0">
+              <h4>三种参数写法与★ 参数传递的副本语义</h4>
+              <p>掌握位置 / 关键字 / 默认值三种写法；理解传列表会改到原列表</p>
+            </div>
+            <span class="lc-w">W7</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 同一函数用三种方式调用并比较 …</div>
+          <div class="lc-f"><b>作业</b> 完成题库 L3-3（改与不改）</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="34"
+                  aria-label="标记第 34 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="35" data-t="作用域与函数是一等公民 理解局部与全局，知道函数能赋值给变量、能传进别的函数 2.5 作用域：谁能看见谁 2.6 函数是&quot;一等公民&quot;">
+          <a class="lc-a" href="35.html">
+          <div class="lc-h">
+            <span class="lc-n">35</span>
+            <div style="flex:1;min-width:0">
+              <h4>作用域与函数是一等公民</h4>
+              <p>理解局部与全局，知道函数能赋值给变量、能传进别的函数</p>
+            </div>
+            <span class="lc-w">W7–W8</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场触发一次 NameError …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 7-3 ~ 7-4</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="35"
+                  aria-label="标记第 35 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="36" data-t="七个示例串讲与拆模块 把课堂示例改成自己的模块，理解导入的四种写法 三、可运行代码示例 示例 1：定义与调用函数 示例 2：return 与 None 示例 3：三种参数写法 示例 4：★ 参数传递的副本语义 示例 5：作用域与 global 示例 6：函数是一等公民 示例 7：默认参数的可变对象陷阱">
+          <a class="lc-a" href="36.html">
+          <div class="lc-h">
+            <span class="lc-n">36</span>
+            <div style="flex:1;min-width:0">
+              <h4>七个示例串讲与拆模块</h4>
+              <p>把课堂示例改成自己的模块，理解导入的四种写法</p>
+            </div>
+            <span class="lc-w">W7–W8</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把三个函数拆到两个模块里并 import …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档 7-5 ~ 7-8</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="36"
+                  aria-label="标记第 36 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="37" data-t="动手实战与答案讲评 独立完成单元 7 练习，掌握用函数重构代码 四、动手练习 基础档 进阶档 五、参考答案 参考答案 7-1 参考答案 7-2 参考答案 7-3 参考答案 7-4 参考答案 7-5 参考答案 7-6 参考答案 7-7 参考答案 7-8">
+          <a class="lc-a" href="37.html">
+          <div class="lc-h">
+            <span class="lc-n">37</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 7 练习，掌握用函数重构代码</p>
+            </div>
+            <span class="lc-w">W7–W8</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 动手项目 8.1–8.3 魔方消息 + 8.4–8.6 星际争霸 + 8.7 鸡尾酒 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="37"
+                  aria-label="标记第 37 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="38" data-t="★ 六个常见错误逐条自查 能对照错误清单逐条自查，把函数相关的坑全部避开 六、常见错误清单（务必逐条自查） 错误 1：忘记写冒号，或缩进错误 错误 2：★ 函数修改列表，会改到原列表 错误 3：默认参数用了可变对象 错误 4：忘记 return，函数等于白写 错误 5：参数顺序或数量不对 错误 6：局部变量遮蔽全局变量">
+          <a class="lc-a" href="38.html">
+          <div class="lc-h">
+            <span class="lc-n">38</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 六个常见错误逐条自查</h4>
+              <p>能对照错误清单逐条自查，把函数相关的坑全部避开</p>
+            </div>
+            <span class="lc-w">W7–W8</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条现场制造并修复 6 个错误 …</div>
+          <div class="lc-f"><b>作业</b> 把 6 个错误各写一个最小复现</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="38"
+                  aria-label="标记第 38 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="39" data-t="单元 7 验收复盘 确认函数定义、参数、返回值、作用域、导入都过关 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="39.html">
+          <div class="lc-h">
+            <span class="lc-n">39</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 7 验收复盘</h4>
+              <p>确认函数定义、参数、返回值、作用域、导入都过关</p>
+            </div>
+            <span class="lc-w">W7–W8</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="39"
+                  aria-label="标记第 39 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u8">
+        <div class="ug-h">
+          <span class="ug-n">8</span>
+          <h3>类</h3>
+          <span class="ug-m">7 节 · W10、W9</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../08.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/08.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="40" data-t="类、实例与 self 理解类是从「一堆变量」到「一类事物」，说清 self 指向谁 一、学习目标 二、核心知识点讲解 2.1 类：从&quot;一堆变量&quot;到&quot;一类事物&quot; 2.2 self：整个 Python 面向对象的核心">
+          <a class="lc-a" href="40.html">
+          <div class="lc-h">
+            <span class="lc-n">40</span>
+            <div style="flex:1;min-width:0">
+              <h4>类、实例与 self</h4>
+              <p>理解类是从「一堆变量」到「一类事物」，说清 self 指向谁</p>
+            </div>
+            <span class="lc-w">W9</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场判断 self 是什么：实例本身，不是类 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 8-1</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="40"
+                  aria-label="标记第 40 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="41" data-t="__init__、属性方法与 __str__ 掌握对象的出生证明，能用 __str__ 让对象打印得可读 2.3 __init__：对象的出生证明 2.4 属性 vs 方法 2.5 __str__：让对象能被读懂地打印">
+          <a class="lc-a" href="41.html">
+          <div class="lc-h">
+            <span class="lc-n">41</span>
+            <div style="flex:1;min-width:0">
+              <h4>__init__、属性方法与 __str__</h4>
+              <p>掌握对象的出生证明，能用 __str__ 让对象打印得可读</p>
+            </div>
+            <span class="lc-w">W9</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 给类加 __str__ 前后各打印一次比较效果 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 8-2 ~ 8-3</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="41"
+                  aria-label="标记第 41 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="42" data-t="继承与方法重写 会用 super().__init__()，理解重写与多态 2.6 继承：不重复造轮子 2.7 方法重写与多态">
+          <a class="lc-a" href="42.html">
+          <div class="lc-h">
+            <span class="lc-n">42</span>
+            <div style="flex:1;min-width:0">
+              <h4>继承与方法重写</h4>
+              <p>会用 super().__init__()，理解重写与多态</p>
+            </div>
+            <span class="lc-w">W10</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场演示子类忘记 super() 会怎样 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 8-4 ~ 8-6</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="42"
+                  aria-label="标记第 42 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="43" data-t="类的组合与示例串讲 能用组合代替继承，理解何时该用组合、何时该用继承 三、可运行代码示例 示例 1：定义类与 __init__ 示例 2：self 到底是什么 示例 3：__str__ 与属性方法对比 示例 4：类属性与实例属性 示例 5：继承 示例 6：方法重写与多态 示例 7：类的组合与实际项目结构">
+          <a class="lc-a" href="43.html">
+          <div class="lc-h">
+            <span class="lc-n">43</span>
+            <div style="flex:1;min-width:0">
+              <h4>类的组合与示例串讲</h4>
+              <p>能用组合代替继承，理解何时该用组合、何时该用继承</p>
+            </div>
+            <span class="lc-w">W10</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把三个类改成组合结构 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档 8-7 ~ 8-8</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="43"
+                  aria-label="标记第 43 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="44" data-t="动手实战与答案讲评 独立完成单元 8 练习，能自己设计一个类 四、动手练习 基础档 进阶档 五、参考答案 参考答案 8-1 参考答案 8-2 参考答案 8-3 参考答案 8-4 参考答案 8-5 参考答案 8-6 参考答案 8-7 参考答案 8-8">
+          <a class="lc-a" href="44.html">
+          <div class="lc-h">
+            <span class="lc-n">44</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战与答案讲评</h4>
+              <p>独立完成单元 8 练习，能自己设计一个类</p>
+            </div>
+            <span class="lc-w">W10</span>
+          </div>
+          <div class="lc-f"><b>实操</b> ★ 现场自建 3 个类：学生记录 / 购物车 / 银行账户 …</div>
+          <div class="lc-f"><b>作业</b> 完成题库 L4 全部 + 单元 8 进阶档 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="44"
+                  aria-label="标记第 44 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="45" data-t="★ 六个常见错误逐条自查 能对照错误清单逐条自查，把类相关的坑全部避开 六、常见错误清单（务必逐条自查） 错误 1：★ 方法忘记写 self 错误 2：方法定义时忘了第一个参数 self 错误 3：忘记冒号或缩进（和函数一样，但更隐蔽） 错误 4：属性名和方法名重名 错误 5：__init__ 里赋值目标写错（赋值给了参数，不是属性） 错误 6：子类忘了调 super().__init__()">
+          <a class="lc-a" href="45.html">
+          <div class="lc-h">
+            <span class="lc-n">45</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 六个常见错误逐条自查</h4>
+              <p>能对照错误清单逐条自查，把类相关的坑全部避开</p>
+            </div>
+            <span class="lc-w">W10</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条现场制造并修复 6 个错误 …</div>
+          <div class="lc-f"><b>作业</b> 把 6 个错误各写一个最小复现</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="45"
+                  aria-label="标记第 45 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="46" data-t="单元 8 验收复盘 确认类、实例、继承、重写、组合都过关 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="46.html">
+          <div class="lc-h">
+            <span class="lc-n">46</span>
+            <div style="flex:1;min-width:0">
+              <h4>单元 8 验收复盘</h4>
+              <p>确认类、实例、继承、重写、组合都过关</p>
+            </div>
+            <span class="lc-w">W10</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条打勾验收自测 …</div>
+          <div class="lc-f"><b>作业</b> 完成本单元小结与产出检查</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="46"
+                  aria-label="标记第 46 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u9">
+        <div class="ug-h">
+          <span class="ug-n">9</span>
+          <h3>文件与异常</h3>
+          <span class="ug-m">5 节 · W11</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../09.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/09.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="47" data-t="open() 与三种模式 掌握 r / w / a 三种模式，理解变量活不过程序结束 一、学习目标 二、核心知识点讲解 2.1 为什么需要文件：变量活不过程序结束 2.2 open() 与三种模式 2.3 with open(...)：不只是语法糖">
+          <a class="lc-a" href="47.html">
+          <div class="lc-h">
+            <span class="lc-n">47</span>
+            <div style="flex:1;min-width:0">
+              <h4>open() 与三种模式</h4>
+              <p>掌握 r / w / a 三种模式，理解变量活不过程序结束</p>
+            </div>
+            <span class="lc-w">W11</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场演示 r / w / a 三种模式的效果 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 9-1 ~ 9-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="47"
+                  aria-label="标记第 47 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="48" data-t="with 语句与四种读取方式 掌握 with 的真实作用与read / readline / readlines 的区别 2.4 四种读取方式 2.5 写文件">
+          <a class="lc-a" href="48.html">
+          <div class="lc-h">
+            <span class="lc-n">48</span>
+            <div style="flex:1;min-width:0">
+              <h4>with 语句与四种读取方式</h4>
+              <p>掌握 with 的真实作用与read / readline / readlines 的区别</p>
+            </div>
+            <span class="lc-w">W11</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 故意不写 with，让程序中途崩溃观察文件句柄泄漏 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 9-3</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="48"
+                  aria-label="标记第 48 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="49" data-t="写文件与异常处理 掌握写文件与 try / except / else / finally，知道 else 的真正用法 2.6 异常：让程序优雅地摔倒而不是死掉 2.7 异常处理的实用模式">
+          <a class="lc-a" href="49.html">
+          <div class="lc-h">
+            <span class="lc-n">49</span>
+            <div style="flex:1;min-width:0">
+              <h4>写文件与异常处理</h4>
+              <p>掌握写文件与 try / except / else / finally，知道 else 的真正用法</p>
+            </div>
+            <span class="lc-w">W11</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 故意触发 ValueError 和 FileNotFoundError 并处理 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 9-4 ~ 9-6</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="49"
+                  aria-label="标记第 49 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="50" data-t="JSON / CSV 与持久化实战 能用 JSON 让数据被记住，理解它和嵌套结构的关系 2.8 JSON：让数据能被记住 2.9 CSV：读写表格 三、可运行代码示例 示例 1：with open 读写 示例 2：三种模式的区别 示例 3：四种读取方式 示例 4：异常处理 示例 5：异常处理的实用模式 示例 6：JSON 示例 7：CSV">
+          <a class="lc-a" href="50.html">
+          <div class="lc-h">
+            <span class="lc-n">50</span>
+            <div style="flex:1;min-width:0">
+              <h4>JSON / CSV 与持久化实战</h4>
+              <p>能用 JSON 让数据被记住，理解它和嵌套结构的关系</p>
+            </div>
+            <span class="lc-w">W11</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把嵌套字典存成 JSON 再读回来 …</div>
+          <div class="lc-f"><b>作业</b> 动手项目 10.1–10.13 学习笔记管理</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="50"
+                  aria-label="标记第 50 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="51" data-t="动手实战、答案与验收 独立完成单元 9 练习，确认文件与异常都过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 9-1 参考答案 9-2 参考答案 9-3 参考答案 9-4 参考答案 9-5 参考答案 9-6 参考答案 9-7 参考答案 9-8 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="51.html">
+          <div class="lc-h">
+            <span class="lc-n">51</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战、答案与验收</h4>
+              <p>独立完成单元 9 练习，确认文件与异常都过关</p>
+            </div>
+            <span class="lc-w">W11</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：能存到 JSON 的学习笔记程序 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="51"
+                  aria-label="标记第 51 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u10">
+        <div class="ug-h">
+          <span class="ug-n">10</span>
+          <h3>测试代码</h3>
+          <span class="ug-m">5 节 · W12</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../10.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/10.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="52" data-t="为什么需要测试与三条命名规则 理解 Bug 分两种，自动化测试的价值在改代码之前 一、学习目标 二、核心知识点讲解 2.1 为什么需要测试：Bug 有两种 2.2 自动化测试的价值 2.3 三条硬性命名规则">
+          <a class="lc-a" href="52.html">
+          <div class="lc-h">
+            <span class="lc-n">52</span>
+            <div style="flex:1;min-width:0">
+              <h4>为什么需要测试与三条命名规则</h4>
+              <p>理解 Bug 分两种，自动化测试的价值在改代码之前</p>
+            </div>
+            <span class="lc-w">W12</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 先故意写一个错函数，看没有测试时能撑多久 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 10-1 ~ 10-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="52"
+                  aria-label="标记第 52 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="53" data-t="assert 与测试用例设计 会用 assert 描述「应该是什么」，掌握正常 + 边界两种用例 2.4 assert：用代码描述&quot;应该是什么&quot; 2.5 测试与被测代码必须分离 2.6 测试用例的设计：正常 + 边界">
+          <a class="lc-a" href="53.html">
+          <div class="lc-h">
+            <span class="lc-n">53</span>
+            <div style="flex:1;min-width:0">
+              <h4>assert 与测试用例设计</h4>
+              <p>会用 assert 描述「应该是什么」，掌握正常 + 边界两种用例</p>
+            </div>
+            <span class="lc-w">W12</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 给一个函数写 3 条测试：正常 / 边界 / 异常 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 10-3 ~ 10-5</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="53"
+                  aria-label="标记第 53 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="54" data-t="parametrize、测试类与运行命令 会用 parametrize 一次测多组数据，掌握测试类与常用命令 2.7 parametrize：一次测很多组数据 2.8 运行 pytest 的常用命令">
+          <a class="lc-a" href="54.html">
+          <div class="lc-h">
+            <span class="lc-n">54</span>
+            <div style="flex:1;min-width:0">
+              <h4>parametrize、测试类与运行命令</h4>
+              <p>会用 parametrize 一次测多组数据，掌握测试类与常用命令</p>
+            </div>
+            <span class="lc-w">W12</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把 5 条相似测试合并成一条 parametrize …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习 10-6 ~ 10-8</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="54"
+                  aria-label="标记第 54 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="55" data-t="测试夹具与示例串讲 理解夹具解决什么问题，能读懂 pytest 的输出报告 三、可运行代码示例 示例 1：安装与验证 示例 2：第一个被测模块与测试 示例 3：断言消息与常见断言 示例 4：测试类 示例 5：参数化测试 示例 6：测试夹具（简单版） 示例 7：读懂 pytest 的输出">
+          <a class="lc-a" href="55.html">
+          <div class="lc-h">
+            <span class="lc-n">55</span>
+            <div style="flex:1;min-width:0">
+              <h4>测试夹具与示例串讲</h4>
+              <p>理解夹具解决什么问题，能读懂 pytest 的输出报告</p>
+            </div>
+            <span class="lc-w">W12</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 对照示例讲清测试夹具的用途 …</div>
+          <div class="lc-f"><b>作业</b> 给单元 7/8/9 写过的代码补测试（共 8 条以上）</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="55"
+                  aria-label="标记第 55 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="56" data-t="动手实战、答案与验收 独立完成单元 10 练习，能为函数写出完整测试套件 四、动手练习 基础档 进阶档 五、参考答案 参考答案 10-1 参考答案 10-2 参考答案 10-3 参考答案 10-4 参考答案 10-5 参考答案 10-6 参考答案 10-7 参考答案 10-8 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="56.html">
+          <div class="lc-h">
+            <span class="lc-n">56</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战、答案与验收</h4>
+              <p>独立完成单元 10 练习，能为函数写出完整测试套件</p>
+            </div>
+            <span class="lc-w">W12</span>
+          </div>
+          <div class="lc-f"><b>实操</b> ★ 动手项目 11.1–11.3 投票分析器测试 …</div>
+          <div class="lc-f"><b>作业</b> 产出：pytest 套件 ≥10 条 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="56"
+                  aria-label="标记第 56 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u11">
+        <div class="ug-h">
+          <span class="ug-n">11</span>
+          <h3>阶段 1 总复习 + 关卡验收</h3>
+          <span class="ug-m">8 节 · W13</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../11.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/11.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="57" data-t="知识串讲与能力地图 把 11 章串成一条线，能说出每个知识点解决什么问题 一、学习目标 二、核心知识点讲解 2.1 前 11 章的能力地图 2.2 六个&quot;选什么&quot;的高频决策">
+          <a class="lc-a" href="57.html">
+          <div class="lc-h">
+            <span class="lc-n">57</span>
+            <div style="flex:1;min-width:0">
+              <h4>知识串讲与能力地图</h4>
+              <p>把 11 章串成一条线，能说出每个知识点解决什么问题</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 画一张从变量到类的知识图谱 …</div>
+          <div class="lc-f"><b>作业</b> 完成单元 11 动手练习基础档</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="57"
+                  aria-label="标记第 57 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="58" data-t="排错思路与项目骨架 掌握读 traceback 的方法，能把模糊需求拆成步骤和函数 2.3 一个完整项目的骨架 2.4 排错思路（最实用的一节） 2.5 阶段 1 的能力边界">
+          <a class="lc-a" href="58.html">
+          <div class="lc-h">
+            <span class="lc-n">58</span>
+            <div style="flex:1;min-width:0">
+              <h4>排错思路与项目骨架</h4>
+              <p>掌握读 traceback 的方法，能把模糊需求拆成步骤和函数</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场给一段含 3 个 bug 的脚本限时 15 分钟修复 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手练习进阶档 11-1 ~ 11-2</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="58"
+                  aria-label="标记第 58 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="59" data-t="四个复习示例串讲 把类、文件异常、pytest 三块复习串成可运行的完整程序 三、可运行代码示例 示例 1：知识自查清单（可运行的版本） 示例 2：类 + 继承的完整复习 示例 3：文件 + 异常完整复习 示例 4：pytest 复习（可直接运行的测试文件）">
+          <a class="lc-a" href="59.html">
+          <div class="lc-h">
+            <span class="lc-n">59</span>
+            <div style="flex:1;min-width:0">
+              <h4>四个复习示例串讲</h4>
+              <p>把类、文件异常、pytest 三块复习串成可运行的完整程序</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 对照示例跑通四个复习程序 …</div>
+          <div class="lc-f"><b>作业</b> 把四个复习程序各改一个需求</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="59"
+                  aria-label="标记第 59 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="60" data-t="★ 综合项目 1：待办管理器 独立写出一个可增删改查并能存盘的待办管理器 四、动手练习 基础档 进阶档 五、参考答案 参考答案 11-1（知识自查答案） 参考答案 11-2（综合项目 1：待办管理器完整实现）">
+          <a class="lc-a" href="60.html">
+          <div class="lc-h">
+            <span class="lc-n">60</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 综合项目 1：待办管理器</h4>
+              <p>独立写出一个可增删改查并能存盘的待办管理器</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 先限时 40 分钟自己写，再看参考答案对照 …</div>
+          <div class="lc-f"><b>作业</b> 完成综合项目 1 并写 3 条测试</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="60"
+                  aria-label="标记第 60 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="61" data-t="★ 综合项目 2：成绩分析器 独立写出一个能统计平均分、最高分并画图的成绩分析器 参考答案 11-3（综合项目 2：成绩分析器完整实现） 参考答案 11-3 的测试文件">
+          <a class="lc-a" href="61.html">
+          <div class="lc-h">
+            <span class="lc-n">61</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 综合项目 2：成绩分析器</h4>
+              <p>独立写出一个能统计平均分、最高分并画图的成绩分析器</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 先限时 40 分钟自己写，再看参考答案对照 …</div>
+          <div class="lc-f"><b>作业</b> 完成综合项目 2 及其测试文件</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="61"
+                  aria-label="标记第 61 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="62" data-t="★ 综合项目 3：文本统计工具 独立写出一个能统计词频并输出报告的文本工具 参考答案 11-4（综合项目 3：文本统计工具完整实现） 参考答案 11-4 的测试文件">
+          <a class="lc-a" href="62.html">
+          <div class="lc-h">
+            <span class="lc-n">62</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 综合项目 3：文本统计工具</h4>
+              <p>独立写出一个能统计词频并输出报告的文本工具</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 先限时 40 分钟自己写，再看参考答案对照</div>
+          <div class="lc-f"><b>作业</b> 完成综合项目 3 及其测试文件</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="62"
+                  aria-label="标记第 62 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="63" data-t="★ 关卡 1 现场测评 限时 2 小时完成四条硬指标，证明能独立动手 六、关卡 1 验收标准（四条硬指标） ✅ 验收 1：手写猜数字游戏 ✅ 验收 2：手写一个含继承的类 ✅ 验收 3：用 pytest 写 3 条测试并全部通过 ✅ 验收 4：修复 IndentationError / NameError">
+          <a class="lc-a" href="63.html">
+          <div class="lc-h">
+            <span class="lc-n">63</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 关卡 1 现场测评</h4>
+              <p>限时 2 小时完成四条硬指标，证明能独立动手</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场测评，全程不查资料，2 小时</div>
+          <div class="lc-f"><b>作业</b> 关卡 1 四项逐条自测</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="63"
+                  aria-label="标记第 63 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="64" data-t="结业检查与下一阶段 确认四条验收是否全通过，明确阶段 1 的能力边界与下一步 七、本单元验收自测（综合 10 题） 八、结业检查与下一阶段 完成情况自查 如果四条验收全部通过 如果某条没通过">
+          <a class="lc-a" href="64.html">
+          <div class="lc-h">
+            <span class="lc-n">64</span>
+            <div style="flex:1;min-width:0">
+              <h4>结业检查与下一阶段</h4>
+              <p>确认四条验收是否全通过，明确阶段 1 的能力边界与下一步</p>
+            </div>
+            <span class="lc-w">W13</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 对照四条硬指标逐条打勾 …</div>
+          <div class="lc-f"><b>作业</b> 完成综合自测 10 题 · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="64"
+                  aria-label="标记第 64 节课完成">标记完成</button>
+        </div></div>
+      </div><div class="stage-sep" id="s2"><span class="ss-no">阶段 2</span><h2>阶段 2 · 项目实践（教材第 12–20 章）</h2><span class="ss-m">10 个单元 · 47 节课</span></div>
+      <div class="ug" id="u12">
+        <div class="ug-h">
+          <span class="ug-n">12</span>
+          <h3>Pygame 起步与飞船驾驶</h3>
+          <span class="ug-m">5 节 · W14、W14–W15、W15</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../12.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/12.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="65" data-t="项目规划与安装 Pygame 知道为什么一个游戏要拆成三个文件；装好 Pygame 并跑出第一个窗口 一、学习目标 二、核心知识点讲解 2.1 规划项目：为什么一个游戏要拆成三个文件 2.2 安装 Pygame 与一个重要的环境提醒">
+          <a class="lc-a" href="65.html">
+          <div class="lc-h">
+            <span class="lc-n">65</span>
+            <div style="flex:1;min-width:0">
+              <h4>项目规划与安装 Pygame</h4>
+              <p>知道为什么一个游戏要拆成三个文件；装好 Pygame 并跑出第一个窗口</p>
+            </div>
+            <span class="lc-w">W14</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 跑通 SDL_VIDEODRIVER=dummy 验证环境 …</div>
+          <div class="lc-f"><b>作业</b> 建立 alien_invasion 仓库并首次 commit · 另有 1 项</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="65"
+                  aria-label="标记第 65 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="66" data-t="主循环、帧率与事件驱动 理解 `while True` 主循环的四步；知道帧率为什么必须锁；看懂事件驱动模型 2.3 游戏主循环：while True 里的四步 2.4 帧率：为什么你的游戏在别人电脑上会「加速」 2.5 事件驱动：游戏像一个前台接待">
+          <a class="lc-a" href="66.html">
+          <div class="lc-h">
+            <span class="lc-n">66</span>
+            <div style="flex:1;min-width:0">
+              <h4>主循环、帧率与事件驱动</h4>
+              <p>理解 `while True` 主循环的四步；知道帧率为什么必须锁；看懂事件驱动模型</p>
+            </div>
+            <span class="lc-w">W14</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 手画主循环四步并对照代码 …</div>
+          <div class="lc-f"><b>作业</b> 产出：一个会响应按键和退出的窗口</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="66"
+                  aria-label="标记第 66 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="67" data-t="Settings 类与屏幕矩形 把所有会变的数值集中到 Settings；理解 screen_rect 的作用 2.6 Settings 类：把「会变的数值」集中管理 2.7 screen_rect：让飞船知道自己「站在哪」">
+          <a class="lc-a" href="67.html">
+          <div class="lc-h">
+            <span class="lc-n">67</span>
+            <div style="flex:1;min-width:0">
+              <h4>Settings 类与屏幕矩形</h4>
+              <p>把所有会变的数值集中到 Settings；理解 screen_rect 的作用</p>
+            </div>
+            <span class="lc-w">W14</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把散落各处的数字全搬进 Settings …</div>
+          <div class="lc-f"><b>作业</b> 产出：settings.py 定稿</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="67"
+                  aria-label="标记第 67 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="68" data-t="驾驶飞船：标志位与边界 用 moving_right 标志位实现持续移动；用 screen_rect 限制活动范围 2.8 驾驶飞船：moving_right 标志位与持续移动 2.9 重构 _check_events() 和 _update_screen()：让主循环保持「薄」">
+          <a class="lc-a" href="68.html">
+          <div class="lc-h">
+            <span class="lc-n">68</span>
+            <div style="flex:1;min-width:0">
+              <h4>驾驶飞船：标志位与边界</h4>
+              <p>用 moving_right 标志位实现持续移动；用 screen_rect 限制活动范围</p>
+            </div>
+            <span class="lc-w">W14–W15</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场实现左右移动（不许看答案） …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 12.6 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="68"
+                  aria-label="标记第 68 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="69" data-t="重构、错误自查与验收 把主循环里的逻辑下沉到 `_check_events()` / `_update_screen()`；逐条自查常见错误 三、可运行代码示例 示例 1：settings.py——把会变的数值集中管理 示例 2：alien_invasion.py——最小窗口骨架 示例 3：event_observer.py——亲眼看看「事件队列」里有什么 示例 4：ship.py——飞船类（12.6 节完成时） 示例 5：alien_invasion.py——完整版（可驾驶的飞船） 示例 6：frame_rate_demo.py——不打开窗口，看懂帧率 四、动手练习 基础档 进阶档 五、参考答案 参考答案 12-1 参考答案 12-2 参考答案 12-3 参考答案 12-4 参考答案 12-5 参考答案 12-6 六、常见错误清单 错误 1：★ 忘了 import sys 就调用 sys.exit() 错误 2：忘了调用 pygame.event.get() 错误 3：在 KEYDOWN 里直接改位置，而不是置标志位 错误 4：rect.x 是整数，小数速度被取整 错误 5：忘了在 KEYUP 里把标志位置回 False 错误 6：moving_right 和 moving_left 写成 elif 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="69.html">
+          <div class="lc-h">
+            <span class="lc-n">69</span>
+            <div style="flex:1;min-width:0">
+              <h4>重构、错误自查与验收</h4>
+              <p>把主循环里的逻辑下沉到 `_check_events()` / `_update_screen()`；逐条自查常见错误</p>
+            </div>
+            <span class="lc-w">W15</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把主循环拆成两个方法 …</div>
+          <div class="lc-f"><b>作业</b> 产出：能驾驶、能退出的 alien_invasion 雏形</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="69"
+                  aria-label="标记第 69 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u13">
+        <div class="ug-h">
+          <span class="ug-n">13</span>
+          <h3>射击与外星舰队</h3>
+          <span class="ug-m">5 节 · W15、W15–W16、W16</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../13.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/13.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="70" data-t="编组 Group 与精灵 Sprite 说清 Group 和普通 list 的三点差别；理解为什么 Pygame 用编组而不是列表 一、学习目标 二、核心知识点讲解 2.1 项目回顾：现在的代码里有什么（13.1） 2.2 编组 Group 与精灵 Sprite：为什么不用普通列表 ★">
+          <a class="lc-a" href="70.html">
+          <div class="lc-h">
+            <span class="lc-n">70</span>
+            <div style="flex:1;min-width:0">
+              <h4>编组 Group 与精灵 Sprite</h4>
+              <p>说清 Group 和普通 list 的三点差别；理解为什么 Pygame 用编组而不是列表</p>
+            </div>
+            <span class="lc-w">W15</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 用纯 Python 演示 Group 的 add/update/remove 行为 …</div>
+          <div class="lc-f"><b>作业</b> 完成练习 13-1【编组基本功】</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="70"
+                  aria-label="标记第 70 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="71" data-t="射击：Bullet 类与开火 能创建 Bullet 类、把子弹存进编组、限制子弹数量 2.3 射击：Bullet 类与开火（12.8） 2.4 创建第一个外星人（13.2）">
+          <a class="lc-a" href="71.html">
+          <div class="lc-h">
+            <span class="lc-n">71</span>
+            <div style="flex:1;min-width:0">
+              <h4>射击：Bullet 类与开火</h4>
+              <p>能创建 Bullet 类、把子弹存进编组、限制子弹数量</p>
+            </div>
+            <span class="lc-w">W15–W16</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现 Bullet 类并让它能向上飞 …</div>
+          <div class="lc-f"><b>作业</b> 完成练习 13-2【复现并修复「漏删」bug】</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="71"
+                  aria-label="标记第 71 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="72" data-t="外星舰队与整体移动 能生成多行外星舰队；用 fleet_direction 让整队移动、触边下移并反向 2.5 创建外星舰队（13.3） 2.6 让外星舰队移动（13.4）">
+          <a class="lc-a" href="72.html">
+          <div class="lc-h">
+            <span class="lc-n">72</span>
+            <div style="flex:1;min-width:0">
+              <h4>外星舰队与整体移动</h4>
+              <p>能生成多行外星舰队；用 fleet_direction 让整队移动、触边下移并反向</p>
+            </div>
+            <span class="lc-w">W16</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场写 `_create_fleet()` 并重构 …</div>
+          <div class="lc-f"><b>作业</b> 完成练习 13-3【边缘检测】</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="72"
+                  aria-label="标记第 72 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="73" data-t="碰撞检测与游戏结束 用 groupcollide 击落外星人；检测飞船被撞与外星人触底，正确结束游戏 2.7 碰撞检测与游戏结束（13.5–13.7） 三、可运行代码示例 示例 1：settings.py——新增子弹、外星人、舰队三组设置 示例 2：group_demo.py——不打开窗口，把编组的核心行为演示一遍 示例 3：bullet.py——子弹类（可直接运行自测） 示例 4：alien.py——外星人类（可直接运行自测） 示例 5：配套的两个小文件（game_stats.py 和改版 ship.py） 示例 6：alien_invasion.py——完整版（13 章终态）">
+          <a class="lc-a" href="73.html">
+          <div class="lc-h">
+            <span class="lc-n">73</span>
+            <div style="flex:1;min-width:0">
+              <h4>碰撞检测与游戏结束</h4>
+              <p>用 groupcollide 击落外星人；检测飞船被撞与外星人触底，正确结束游戏</p>
+            </div>
+            <span class="lc-w">W16</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现击落与加分 …</div>
+          <div class="lc-f"><b>作业</b> 完成练习 13-5【三条命的完整流程】</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="73"
+                  aria-label="标记第 73 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="74" data-t="实战、答案与验收复盘 独立完成单元 13 练习，能讲清每处遍历删除的写法 四、动手练习 基础档 进阶档 五、参考答案 参考答案 13-1 参考答案 13-2 参考答案 13-3 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="74.html">
+          <div class="lc-h">
+            <span class="lc-n">74</span>
+            <div style="flex:1;min-width:0">
+              <h4>实战、答案与验收复盘</h4>
+              <p>独立完成单元 13 练习，能讲清每处遍历删除的写法</p>
+            </div>
+            <span class="lc-w">W16</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：完整可玩的外星人入侵（能射、能得分、能结束）</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="74"
+                  aria-label="标记第 74 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u14">
+        <div class="ug-h">
+          <span class="ug-n">14</span>
+          <h3>Play 按钮与记分</h3>
+          <span class="ug-m">4 节 · W16–W17、W17</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../14.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/14.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="75" data-t="游戏状态机与 Button 类 把游戏做成 inactive / active / game over 三态；理解 font.render 才能显示文字 一、学习目标 二、核心知识点讲解 2.1 游戏状态机：从「一启动就玩」到「有开始界面」 2.2 Button 类：Pygame 的文字不是「画」出来的">
+          <a class="lc-a" href="75.html">
+          <div class="lc-h">
+            <span class="lc-n">75</span>
+            <div style="flex:1;min-width:0">
+              <h4>游戏状态机与 Button 类</h4>
+              <p>把游戏做成 inactive / active / game over 三态；理解 font.render 才能显示文字</p>
+            </div>
+            <span class="lc-w">W16–W17</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场写 Button 类并让它响应点击 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 14.1 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="75"
+                  aria-label="标记第 75 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="76" data-t="记分牌与数据格式化 用 prep_* 方法把数据渲染成图像；掌握 round 和千分位格式化 2.3 点下 Play 之后：开始、重置、非活动与隐藏光标 2.4 记分牌：数据与显示分离、格式化与最高分">
+          <a class="lc-a" href="76.html">
+          <div class="lc-h">
+            <span class="lc-n">76</span>
+            <div style="flex:1;min-width:0">
+              <h4>记分牌与数据格式化</h4>
+              <p>用 prep_* 方法把数据渲染成图像；掌握 round 和千分位格式化</p>
+            </div>
+            <span class="lc-w">W17</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现 prep_score 与 prep_high_score …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 14.3 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="76"
+                  aria-label="标记第 76 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="77" data-t="动态难度与余下飞船数 理解 speedup_scale / score_scale 与 initialize_dynamic_settings 的配合 2.5 动态难度：speedup_scale 与 score_scale 2.6 余下的飞船数：Group + Ship 的复用">
+          <a class="lc-a" href="77.html">
+          <div class="lc-h">
+            <span class="lc-n">77</span>
+            <div style="flex:1;min-width:0">
+              <h4>动态难度与余下飞船数</h4>
+              <p>理解 speedup_scale / score_scale 与 initialize_dynamic_settings 的配合</p>
+            </div>
+            <span class="lc-w">W17</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现 increase_speed 并观察难度曲线 …</div>
+          <div class="lc-f"><b>作业</b> 完成动手项目：最高分做 JSON 持久化</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="77"
+                  aria-label="标记第 77 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="78" data-t="实战、答案与自查 独立完成单元 14 练习，逐条自查常见错误 三、可运行代码示例 示例 1：完整的 Button 类 + 点击判定 示例 2：动态难度——initialize_dynamic_settings 与 increase_speed 示例 3：Scoreboard 的「准备图像」模式 示例 4：游戏状态机完整演示 示例 5：余下的飞船数——Group + Ship 复用 四、动手练习 基础档 进阶档 五、参考答案 参考答案 14-1 参考答案 14-2 参考答案 14-3 参考答案 14-4 六、常见错误清单（务必逐条自查） 错误 1：★ 改了 score 忘了 prep_score() 错误 2：★ 把 high_score = 0 写进了 reset_stats() 错误 3：font.render() 参数写错 错误 4：Button 里存错了对象 错误 5：increase_speed() 里 alien_points 忘了 int() 错误 6：点 Play 没加 not game_active 条件 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="78.html">
+          <div class="lc-h">
+            <span class="lc-n">78</span>
+            <div style="flex:1;min-width:0">
+              <h4>实战、答案与自查</h4>
+              <p>独立完成单元 14 练习，逐条自查常见错误</p>
+            </div>
+            <span class="lc-w">W17</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：带 Play 按钮与完整记分牌的外星人入侵</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="78"
+                  aria-label="标记第 78 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u15">
+        <div class="ug-h">
+          <span class="ug-n">15</span>
+          <h3>Matplotlib 生成数据</h3>
+          <span class="ug-m">5 节 · W18、W18–W19、W19</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../15.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/15.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="79" data-t="Matplotlib 入门与折线图 会用 `fig, ax = plt.subplots()` 画折线图；知道为什么该用面向对象写法 一、学习目标 二、核心知识点讲解 2.1 选型：静态图还是交互图 2.2 面向对象：fig, ax = plt.subplots() ★">
+          <a class="lc-a" href="79.html">
+          <div class="lc-h">
+            <span class="lc-n">79</span>
+            <div style="flex:1;min-width:0">
+              <h4>Matplotlib 入门与折线图</h4>
+              <p>会用 `fig, ax = plt.subplots()` 画折线图；知道为什么该用面向对象写法</p>
+            </div>
+            <span class="lc-w">W18</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 画出第一条折线图并加标签 …</div>
+          <div class="lc-f"><b>作业</b> 装好 matplotlib 并画出第一张图</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="79"
+                  aria-label="标记第 79 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="80" data-t="散点图与自动计算数据 掌握 scatter 的 s / c 两件套；会生成随机数据 2.3 折线图细节：线宽、标签、样式 2.4 散点图三件套：s=、c=、cmap=">
+          <a class="lc-a" href="80.html">
+          <div class="lc-h">
+            <span class="lc-n">80</span>
+            <div style="flex:1;min-width:0">
+              <h4>散点图与自动计算数据</h4>
+              <p>掌握 scatter 的 s / c 两件套；会生成随机数据</p>
+            </div>
+            <span class="lc-w">W18</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 画一张散点图并设置点大小 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 15.2.4–15.2.6 动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="80"
+                  aria-label="标记第 80 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="81" data-t="★ 校正绘图、刻度与颜色映射 会用 `axis()` 留边距（最高频的坑）；会定制刻度、颜色与颜色映射 2.5 ★ 校正绘图：给坐标轴留边距 2.6 随机游走：RandomWalk 类 2.7 Plotly 掷骰子：Die 类">
+          <a class="lc-a" href="81.html">
+          <div class="lc-h">
+            <span class="lc-n">81</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 校正绘图、刻度与颜色映射</h4>
+              <p>会用 `axis()` 留边距（最高频的坑）；会定制刻度、颜色与颜色映射</p>
+            </div>
+            <span class="lc-w">W18–W19</span>
+          </div>
+          <div class="lc-f"><b>实操</b> ★ 现场演示不调 axis() 时点被裁掉 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 15.2.7–15.2.10 动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="81"
+                  aria-label="标记第 81 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="82" data-t="随机游走 RandomWalk 类 能写 RandomWalk 类并模拟多次游走；理解 fill_walk 拒绝原地不动的逻辑 三、可运行代码示例 示例 1：折线图三连（默认 → 加粗改标签 → 换内置样式） 示例 2：散点图三件套 + 绘制一系列点 示例 3：★ 校正绘图与定制刻度（新手最高频的坑） 示例 4：RandomWalk 类（画一次 + 模拟多次） 示例 5：Die 类 + 两个骰子 + 两种面数对比">
+          <a class="lc-a" href="82.html">
+          <div class="lc-h">
+            <span class="lc-n">82</span>
+            <div style="flex:1;min-width:0">
+              <h4>随机游走 RandomWalk 类</h4>
+              <p>能写 RandomWalk 类并模拟多次游走；理解 fill_walk 拒绝原地不动的逻辑</p>
+            </div>
+            <span class="lc-w">W19</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现 fill_walk 并画一条路径 …</div>
+          <div class="lc-f"><b>作业</b> 产出：随机游走图脚本</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="82"
+                  aria-label="标记第 82 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="83" data-t="Plotly 掷骰子与动手实战 会用 Plotly 的 Die 类与 px.bar 画直方图；能比较两个骰子的分布 四、动手练习 基础档 进阶档 五、参考答案 参考答案 15-1 参考答案 15-2 参考答案 15-3 参考答案 15-4 参考答案 15-5 参考答案 15-6 六、常见错误清单（务必逐条自查） 错误 1：★ 忘记校正绘图，点被边框切掉 错误 2：★ fill_walk() 里把 and 写成 or 错误 3：c= 传了数字却忘了 cmap= 错误 4：set_xticklabels 不配 set_xticks 错误 5：样式名写老版本，报 ValueError: style &#x27;seaborn&#x27; is not in available styles 错误 6：matplotlib.use(&quot;Agg&quot;) 写在 import matplotlib.pyplot 之后 错误 7：忘了 assert sum(frequencies) == len(results) range(1, die.num_sides + 1) 少写 + 1，最后一个面的频次永远是 0，图上少一根柱子，程序一声不吭。凡「按类别统计」都该加这行断言。 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="83.html">
+          <div class="lc-h">
+            <span class="lc-n">83</span>
+            <div style="flex:1;min-width:0">
+              <h4>Plotly 掷骰子与动手实战</h4>
+              <p>会用 Plotly 的 Die 类与 px.bar 画直方图；能比较两个骰子的分布</p>
+            </div>
+            <span class="lc-w">W19</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现 Die 类并掷 1000 次 …</div>
+          <div class="lc-f"><b>作业</b> 产出：掷骰子分布图（可交互 HTML）</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="83"
+                  aria-label="标记第 83 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u16">
+        <div class="ug-h">
+          <span class="ug-n">16</span>
+          <h3>下载真实数据</h3>
+          <span class="ug-m">4 节 · W19–W20、W20、W20–W21</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../16.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/16.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="84" data-t="CSV 与 datetime 会用 csv 模块读表头与数据；会用 strptime 把字符串变日期 一、学习目标 二、核心知识点讲解 2.1 真实数据长什么样，去哪下载 2.2 CSV：三件套读表头">
+          <a class="lc-a" href="84.html">
+          <div class="lc-h">
+            <span class="lc-n">84</span>
+            <div style="flex:1;min-width:0">
+              <h4>CSV 与 datetime</h4>
+              <p>会用 csv 模块读表头与数据；会用 strptime 把字符串变日期</p>
+            </div>
+            <span class="lc-w">W19–W20</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 打印表头及其位置并解释为什么不能硬编码列号 …</div>
+          <div class="lc-f"><b>作业</b> 下载教材配套 CSV 数据并跑通第一个例子</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="84"
+                  aria-label="标记第 84 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="85" data-t="缺失值与温度图 知道真实数据的三个坑；会用 try/except 处理缺失值 2.3 datetime：把字符串变成日期 ★ 2.4 缺失值：真实数据的第一课 2.5 画温度图：plot + fill_between">
+          <a class="lc-a" href="85.html">
+          <div class="lc-h">
+            <span class="lc-n">85</span>
+            <div style="flex:1;min-width:0">
+              <h4>缺失值与温度图</h4>
+              <p>知道真实数据的三个坑；会用 try/except 处理缺失值</p>
+            </div>
+            <span class="lc-w">W20</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把缺失那行去掉，看图变形 …</div>
+          <div class="lc-f"><b>作业</b> 完成练习：给自己的城市画一个月气温图</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="85"
+                  aria-label="标记第 85 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="86" data-t="GeoJSON 与地震散点图 读懂 GeoJSON 结构；用 scatter_geo 画全球散点图 2.6 GeoJSON：带地理位置的 JSON 2.7 Plotly 画全球地震散点图">
+          <a class="lc-a" href="86.html">
+          <div class="lc-h">
+            <span class="lc-n">86</span>
+            <div style="flex:1;min-width:0">
+              <h4>GeoJSON 与地震散点图</h4>
+              <p>读懂 GeoJSON 结构；用 scatter_geo 画全球散点图</p>
+            </div>
+            <span class="lc-w">W20</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 打印第一条地震的 mag 与 coordinates …</div>
+          <div class="lc-f"><b>作业</b> 去 USGS 下载最新一天数据重画</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="86"
+                  aria-label="标记第 86 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="87" data-t="实战、答案与验收复盘 独立完成单元 16 练习，处理真实脏数据 三、可运行代码示例 示例 1：造一份教材同款 CSV，并打印表头 示例 2：datetime 解析与格式化 示例 3：提取数据并处理缺失值（死亡谷风格） 示例 4：matplotlib 画温度区间图 示例 5：plotly 画全球地震散点图 四、动手练习 基础档 进阶档 五、参考答案 参考答案 16-1 参考答案 16-2 参考答案 16-3 参考答案 16-4 参考答案 16-5 参考答案 16-6 六、常见错误清单（务必逐条自查） 错误 1：★ 把 coordinates[1] 当成经度（经纬度写反） 错误 2：★ 硬编码列号 row[4] 错误 3：strptime 格式码和字符串不匹配 错误 4：把 append 写进 try 块 错误 5：plt.show() 在无图形界面的环境卡住 错误 6：细节两件套——样式名和 CSV 参数 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="87.html">
+          <div class="lc-h">
+            <span class="lc-n">87</span>
+            <div style="flex:1;min-width:0">
+              <h4>实战、答案与验收复盘</h4>
+              <p>独立完成单元 16 练习，处理真实脏数据</p>
+            </div>
+            <span class="lc-w">W20–W21</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 30 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：气温图 + 全球地震散点图</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="87"
+                  aria-label="标记第 87 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u17">
+        <div class="ug-h">
+          <span class="ug-n">17</span>
+          <h3>使用 API 与 Plotly</h3>
+          <span class="ug-m">4 节 · W21、W21–W22、W22</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../17.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/17.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="88" data-t="API 概念与 Requests 理解 API 是什么；会用 requests.get 并检查 status_code、用 .json() 拿字典 一、学习目标 二、核心知识点讲解 2.1 API 是什么：餐厅服务员的类比 2.2 requests.get() 与响应对象：先看 status_code ★ 2.3 .json()：把响应体变成字典 ★">
+          <a class="lc-a" href="88.html">
+          <div class="lc-h">
+            <span class="lc-n">88</span>
+            <div style="flex:1;min-width:0">
+              <h4>API 概念与 Requests</h4>
+              <p>理解 API 是什么；会用 requests.get 并检查 status_code、用 .json() 拿字典</p>
+            </div>
+            <span class="lc-w">W21</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 发一次请求并打印 status_code 与响应前 200 字符 …</div>
+          <div class="lc-f"><b>作业</b> 装好 requests 并跑通第一个 API 调用</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="88"
+                  aria-label="标记第 88 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="89" data-t="GitHub API 与速率限制 会调 GitHub search API 提取仓库信息；知道未认证每小时 60 次的限制 2.4 GitHub search API：请求头与速率限制 ★ 2.5 Plotly 可视化仓库：悬停提示与颜色">
+          <a class="lc-a" href="89.html">
+          <div class="lc-h">
+            <span class="lc-n">89</span>
+            <div style="flex:1;min-width:0">
+              <h4>GitHub API 与速率限制</h4>
+              <p>会调 GitHub search API 提取仓库信息；知道未认证每小时 60 次的限制</p>
+            </div>
+            <span class="lc-w">W21–W22</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 提取前 5 个热门仓库的 name / stars / url …</div>
+          <div class="lc-f"><b>作业</b> 给自己常看的语言拉一份 TOP 20 仓库</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="89"
+                  aria-label="标记第 89 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="90" data-t="Plotly 可视化与可点击链接 会用 px.bar 可视化；会用 customdata + hovertemplate 做可点击链接 2.6 ★ 可单击链接：custom_data 与 hovertemplate 2.7 Hacker News API：先拿列表、再取详情的两段式调用 三、可运行代码示例 示例 1：认识 API 网址的结构 + 第一次调用 示例 2：处理响应字典——提取平行列表 示例 3：速率限制守门员 + 缓存响应 示例 4：Plotly 条形图——悬停提示、颜色、可点击链接 示例 5：Hacker News 两段式调用">
+          <a class="lc-a" href="90.html">
+          <div class="lc-h">
+            <span class="lc-n">90</span>
+            <div style="flex:1;min-width:0">
+              <h4>Plotly 可视化与可点击链接</h4>
+              <p>会用 px.bar 可视化；会用 customdata + hovertemplate 做可点击链接</p>
+            </div>
+            <span class="lc-w">W22</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 画出仓库条形图并加悬停内容 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 17.2 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="90"
+                  aria-label="标记第 90 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="91" data-t="Hacker News API 与动手实战 掌握「先拿列表再取详情」的两段式调用；给 API 调用加容错 四、动手练习 基础档 进阶档 五、参考答案 参考答案 17-1 参考答案 17-2 参考答案 17-3 参考答案 17-4 六、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="91.html">
+          <div class="lc-h">
+            <span class="lc-n">91</span>
+            <div style="flex:1;min-width:0">
+              <h4>Hacker News API 与动手实战</h4>
+              <p>掌握「先拿列表再取详情」的两段式调用；给 API 调用加容错</p>
+            </div>
+            <span class="lc-w">W22</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现 Hacker News 抓取 …</div>
+          <div class="lc-f"><b>作业</b> 产出：能拉 GitHub 数据并出交互图的脚本</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="91"
+                  aria-label="标记第 91 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u18">
+        <div class="ug-h">
+          <span class="ug-n">18</span>
+          <h3>Django 入门</h3>
+          <span class="ug-m">6 节 · W22–W23、W23、W23–W24、W24</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../18.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/18.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="92" data-t="★ 虚拟环境与 Django 项目 说清为什么必须用虚拟环境；能建项目、跑起来、看清目录结构 一、学习目标 二、核心知识点讲解 2.1 虚拟环境：给每个项目一间独立的「工具间」★ 2.2 Django 的三个层次：项目、应用程序、MVT ★">
+          <a class="lc-a" href="92.html">
+          <div class="lc-h">
+            <span class="lc-n">92</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 虚拟环境与 Django 项目</h4>
+              <p>说清为什么必须用虚拟环境；能建项目、跑起来、看清目录结构</p>
+            </div>
+            <span class="lc-w">W22–W23</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 建 ll_env 并激活，确认命令行出现 (ll_env) …</div>
+          <div class="lc-f"><b>作业</b> 产出：能跑起来的空 Django 项目</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="92"
+                  aria-label="标记第 92 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="93" data-t="★ 应用、模型与迁移三步曲 定义 Topic / Entry 模型；掌握「改模型 → makemigrations → migrate」三步 2.3 模型 → 迁移 → 数据库：改数据的「三步曲」★ 2.4 一对多：Topic 和 Entry 的外键 ★">
+          <a class="lc-a" href="93.html">
+          <div class="lc-h">
+            <span class="lc-n">93</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 应用、模型与迁移三步曲</h4>
+              <p>定义 Topic / Entry 模型；掌握「改模型 → makemigrations → migrate」三步</p>
+            </div>
+            <span class="lc-w">W23</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 改一次模型跑一遍三步曲 …</div>
+          <div class="lc-f"><b>作业</b> 产出：能进管理后台看到 Topic 和 Entry</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="93"
+                  aria-label="标记第 93 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="94" data-t="★ 一次请求的旅程：URL → 视图 → 模板 能画完整请求链路图；会映射 URL、写视图、渲染模板 2.5 一次请求的旅程：URL → 视图 → 模板 ★">
+          <a class="lc-a" href="94.html">
+          <div class="lc-h">
+            <span class="lc-n">94</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 一次请求的旅程：URL → 视图 → 模板</h4>
+              <p>能画完整请求链路图；会映射 URL、写视图、渲染模板</p>
+            </div>
+            <span class="lc-w">W23–W24</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 现场加一条 URL 并访问它 …</div>
+          <div class="lc-f"><b>作业</b> 产出：一张自己画的请求链路图</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="94"
+                  aria-label="标记第 94 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="95" data-t="模板语法与模板继承 会用 `{{ }}`、`{% for %}`、`{% url %}`；会用 base.html 做模板继承 2.6 模板语法：{{ }}、{% for %} 与 {% url %}">
+          <a class="lc-a" href="95.html">
+          <div class="lc-h">
+            <span class="lc-n">95</span>
+            <div style="flex:1;min-width:0">
+              <h4>模板语法与模板继承</h4>
+              <p>会用 `{{ }}`、`{% for %}`、`{% url %}`；会用 base.html 做模板继承</p>
+            </div>
+            <span class="lc-w">W24</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 把重复的导航栏抽进 base.html …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 18.4 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="95"
+                  aria-label="标记第 95 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="96" data-t="Django shell 与 404 会用 shell 直接查数据库；理解 get_object_or_404 的意义 2.7 模板继承与 404：别每个页面重复写导航栏 ★ 三、可运行代码示例 示例 1：用纯 Python 看懂外键和级联删除 示例 2：用纯 Python 模拟「URL → 视图 → 模板」请求链路 示例 3：用纯 Python 模拟模板继承 示例 4：learning_logs/models.py（项目文件，完整版） 示例 5：learning_logs/admin.py 与 Django shell 查数据 示例 6：两个 urls.py（项目文件，完整版） 示例 7：learning_logs/views.py（项目文件，完整版） 示例 8：四份模板（项目文件，完整版）">
+          <a class="lc-a" href="96.html">
+          <div class="lc-h">
+            <span class="lc-n">96</span>
+            <div style="flex:1;min-width:0">
+              <h4>Django shell 与 404</h4>
+              <p>会用 shell 直接查数据库；理解 get_object_or_404 的意义</p>
+            </div>
+            <span class="lc-w">W24</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 用 shell 造三条 Entry …</div>
+          <div class="lc-f"><b>作业</b> 产出：能浏览主题与条目的本地网站</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="96"
+                  aria-label="标记第 96 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="97" data-t="实战、答案与验收复盘 独立完成单元 18 练习，画得出项目结构图 四、动手练习 基础档 进阶档 五、参考答案 参考答案 18-1 参考答案 18-2 参考答案 18-3 参考答案 18-4 参考答案 18-5 六、常见错误清单（务必逐条自查） 错误 1：★ 忘了激活虚拟环境 错误 2：★ 搞混 learning_log/、ll_project/、learning_logs/ 错误 3：改了 models.py 不迁移 错误 4：新 app 忘了在 INSTALLED_APPS 登记 错误 5：startproject 末尾忘了写句点 错误 6：模板里 {% url %} 写错 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="97.html">
+          <div class="lc-h">
+            <span class="lc-n">97</span>
+            <div style="flex:1;min-width:0">
+              <h4>实战、答案与验收复盘</h4>
+              <p>独立完成单元 18 练习，画得出项目结构图</p>
+            </div>
+            <span class="lc-w">W24</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 40 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：学习笔记本地网站</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="97"
+                  aria-label="标记第 97 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u19">
+        <div class="ug-h">
+          <span class="ug-n">19</span>
+          <h3>用户账户</h3>
+          <span class="ug-m">5 节 · W25、W25–W26、W26</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../19.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/19.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="98" data-t="表单与数据归属三段式 会用 ModelForm；掌握 `is_valid → save(commit=False) → 补 owner → save` 一、学习目标 二、核心知识点讲解 2.1 表单与 ModelForm：把模型变成表单的捷径 2.2 三段式与数据归属：commit=False 的经典手法 ★">
+          <a class="lc-a" href="98.html">
+          <div class="lc-h">
+            <span class="lc-n">98</span>
+            <div style="flex:1;min-width:0">
+              <h4>表单与数据归属三段式</h4>
+              <p>会用 ModelForm；掌握 `is_valid → save(commit=False) → 补 owner → save`</p>
+            </div>
+            <span class="lc-w">W25</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现一个 ModelForm 并渲染它 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 19.1 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="98"
+                  aria-label="标记第 98 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="99" data-t="登录、注销与注册三件套 会用 Django 自带的 auth 视图；会写注册页 2.3 request.user：每个请求自带的「当前用户」 2.4 登录、注销、注册三件套">
+          <a class="lc-a" href="99.html">
+          <div class="lc-h">
+            <span class="lc-n">99</span>
+            <div style="flex:1;min-width:0">
+              <h4>登录、注销与注册三件套</h4>
+              <p>会用 Django 自带的 auth 视图；会写注册页</p>
+            </div>
+            <span class="lc-w">W25</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现登录与注销并测试 …</div>
+          <div class="lc-f"><b>作业</b> 产出：能注册登录的网站</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="99"
+                  aria-label="标记第 99 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="100" data-t="★ @login_required 与数据隔离红线 会用装饰器限制访问；理解 `filter(owner=request.user)` 为什么不能写 all() 2.5 @login_required：视图的门卫 ★ 2.6 数据隔离的安全红线 ★★★">
+          <a class="lc-a" href="100.html">
+          <div class="lc-h">
+            <span class="lc-n">100</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ @login_required 与数据隔离红线</h4>
+              <p>会用装饰器限制访问；理解 `filter(owner=request.user)` 为什么不能写 all()</p>
+            </div>
+            <span class="lc-w">W25–W26</span>
+          </div>
+          <div class="lc-f"><b>实操</b> ★ 现场把 filter 改成 all()，用两个账号看数据串了 …</div>
+          <div class="lc-f"><b>作业</b> 产出：数据按用户隔离的网站</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="100"
+                  aria-label="标记第 100 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="101" data-t="edit_entry 的双重保护 会同时校验条目所属主题与主题所属用户 2.7 edit_entry 的双重保护 三、可运行代码示例 示例 1：用纯 Python 看懂「字段白名单」 示例 2：用纯 Python 看懂 request.user 示例 3：用纯 Python 模拟 @login_required 门禁 示例 4：用纯 Python 看懂数据隔离 示例 5：learning_logs/forms.py（项目文件，完整版） 示例 6：learning_logs/views.py（项目文件，第 19 章完成版） 示例 7：accounts 应用与项目配置（项目文件，完整版） 示例 8：账户相关模板（项目文件，完整版）">
+          <a class="lc-a" href="101.html">
+          <div class="lc-h">
+            <span class="lc-n">101</span>
+            <div style="flex:1;min-width:0">
+              <h4>edit_entry 的双重保护</h4>
+              <p>会同时校验条目所属主题与主题所属用户</p>
+            </div>
+            <span class="lc-w">W26</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 实现双重校验 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 19.3 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="101"
+                  aria-label="标记第 101 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="102" data-t="动手实战、答案与验收复盘 独立完成单元 19 练习，守住数据隔离红线 四、动手练习 基础档 进阶档 五、参考答案 参考答案 19-1 参考答案 19-2 参考答案 19-3 参考答案 19-4 参考答案 19-5 参考答案 19-6 六、常见错误清单（务必逐条自查） 错误 1：★ 视图里用 .all()，忘了按用户过滤 错误 2：★ fields 白名单里写了 owner 错误 3：忘了写 @login_required 错误 4：save(commit=False) 之后忘了 save() 错误 5：登录模板放错位置 错误 6：edit_entry 只查了条目，没查主题归属 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="102.html">
+          <div class="lc-h">
+            <span class="lc-n">102</span>
+            <div style="flex:1;min-width:0">
+              <h4>动手实战、答案与验收复盘</h4>
+              <p>独立完成单元 19 练习，守住数据隔离红线</p>
+            </div>
+            <span class="lc-w">W26</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 限时 40 分钟独立完成基础档 …</div>
+          <div class="lc-f"><b>作业</b> 产出：带注册登录的完整学习笔记</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="102"
+                  aria-label="标记第 102 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u20">
+        <div class="ug-h">
+          <span class="ug-n">20</span>
+          <h3>样式与部署</h3>
+          <span class="ug-m">5 节 · W26–W27、W27、W27–W28、W28</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../20.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/20.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="103" data-t="django-bootstrap5 与页面改造 会用 `{% bootstrap_form %}` 自动渲染表单；会改 base.html 与各页面 一、学习目标 二、核心知识点讲解 2.1 django-bootstrap5：一行代码让表单变漂亮（对应教材 20.1） 2.2 改造「学习笔记」的界面（对应教材 20.1 各小节）">
+          <a class="lc-a" href="103.html">
+          <div class="lc-h">
+            <span class="lc-n">103</span>
+            <div style="flex:1;min-width:0">
+              <h4>django-bootstrap5 与页面改造</h4>
+              <p>会用 `{% bootstrap_form %}` 自动渲染表单；会改 base.html 与各页面</p>
+            </div>
+            <span class="lc-w">W26–W27</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 装上 django-bootstrap5 并渲染表单 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 20.1 全部动手练</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="103"
+                  aria-label="标记第 103 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="104" data-t="部署是什么与 requirements.txt 理解部署的目标；知道云环境靠 requirements.txt 重建依赖 2.3 部署是什么：从「只有你能跑」到「谁都能访问」（对应教材 20.2） 2.4 requirements.txt：云环境的采购清单（对应教材 20.2）">
+          <a class="lc-a" href="104.html">
+          <div class="lc-h">
+            <span class="lc-n">104</span>
+            <div style="flex:1;min-width:0">
+              <h4>部署是什么与 requirements.txt</h4>
+              <p>理解部署的目标；知道云环境靠 requirements.txt 重建依赖</p>
+            </div>
+            <span class="lc-w">W27</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 用 pip freeze 生成 requirements.txt …</div>
+          <div class="lc-f"><b>作业</b> 产出：requirements.txt 与 .platform 配置文件</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="104"
+                  aria-label="标记第 104 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="105" data-t="★ platformshconfig 与本地线上双环境 理解同一份代码怎么知道自己在本地还是在云上；会改 settings.py 2.5 三个配置文件：一个描述应用，一个描述路由（对应教材 20.2） 2.6 platformshconfig：一份代码怎么知道自己在哪（对应教材 20.2）">
+          <a class="lc-a" href="105.html">
+          <div class="lc-h">
+            <span class="lc-n">105</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ platformshconfig 与本地线上双环境</h4>
+              <p>理解同一份代码怎么知道自己在本地还是在云上；会改 settings.py</p>
+            </div>
+            <span class="lc-w">W27</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 写 `if os.getenv(&#x27;PLATFORM_APPLICATION&#x27;)` 判断分支 …</div>
+          <div class="lc-f"><b>作业</b> 完成教材 20.2 的配置部分</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="105"
+                  aria-label="标记第 105 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="106" data-t="★ 三大部署坑 记住 ALLOWED_HOSTS / collectstatic / DEBUG 三个坑；能逐条排查 2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2） 2.8 定制错误页面与「继续开发」（对应教材 20.2） 三、可运行代码示例 示例 1：同一份代码，两个环境（config_switcher.py） 示例 2：给 requirements.txt 做入职体检（requirements_tools.py） 示例 3：400 Bad Request 是怎么来的（host_check.py） 示例 4：collectstatic 到底在搬什么（static_collector.py） 示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py）">
+          <a class="lc-a" href="106.html">
+          <div class="lc-h">
+            <span class="lc-n">106</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 三大部署坑</h4>
+              <p>记住 ALLOWED_HOSTS / collectstatic / DEBUG 三个坑；能逐条排查</p>
+            </div>
+            <span class="lc-w">W27–W28</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 故意不改 ALLOWED_HOSTS 看 400 …</div>
+          <div class="lc-f"><b>作业</b> 按上线检查清单逐条过一遍</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="106"
+                  aria-label="标记第 106 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="107" data-t="部署上线、错误页与实战 真正把网站推到公网；会定制 404/500 错误页 四、动手练习 基础档 进阶档 五、参考答案 参考答案 20-1（换装后的关键模板） 参考答案 20-2（配置文件全套） 参考答案 20-3（故障诊断） 参考答案 20-4（本地模拟双环境） 参考答案 20-5（定制错误页 + 本地验证） 参考答案 20-6（检查清单增强版） 六、常见错误清单（务必逐条自查） 错误 1：★ ALLOWED_HOSTS 没加平台域名，线上 400 错误 2：忘了注册 django_bootstrap5，模板报 Invalid block tag 错误 3：DEBUG 关了却没收静态文件，白脸页面 错误 4：requirements.txt 漏了 gunicorn 或 psycopg2 错误 5：.gitignore 缺失，虚拟环境和本地数据库被推上云 错误 6：新文件忘了 git add，推送后线上缺东西 七、本单元验收自测 本单元小结与产出检查">
+          <a class="lc-a" href="107.html">
+          <div class="lc-h">
+            <span class="lc-n">107</span>
+            <div style="flex:1;min-width:0">
+              <h4>部署上线、错误页与实战</h4>
+              <p>真正把网站推到公网；会定制 404/500 错误页</p>
+            </div>
+            <span class="lc-w">W28</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 走完 Platform.sh 全流程 …</div>
+          <div class="lc-f"><b>作业</b> 产出：公网可访问的学习笔记 + 定制错误页</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="107"
+                  aria-label="标记第 107 节课完成">标记完成</button>
+        </div></div>
+      </div>
+      <div class="ug" id="u21">
+        <div class="ug-h">
+          <span class="ug-n">21</span>
+          <h3>阶段 2 综合 + 关卡 2 验收</h3>
+          <span class="ug-m">4 节 · W28、W28–W29、W29</span>
+          <span class="ug-ls">
+            <a class="ug-l" href="../21.html">讲义</a>
+            <a class="ug-l" href="../ppt/u/21.html">课件</a>
+          </span>
+        </div>
+        <div class="lg">
+        <div class="lc" data-no="108" data-t="工程流程回顾与技术地图 掌握「读需求 → 拆解 → 查文档 → 编码 → 提交 → README → 重构」七步流程 一、学习目标 二、核心知识点讲解 2.1 三个项目的工程流程回顾 2.2 三个项目的技术地图">
+          <a class="lc-a" href="108.html">
+          <div class="lc-h">
+            <span class="lc-n">108</span>
+            <div style="flex:1;min-width:0">
+              <h4>工程流程回顾与技术地图</h4>
+              <p>掌握「读需求 → 拆解 → 查文档 → 编码 → 提交 → README → 重构」七步流程</p>
+            </div>
+            <span class="lc-w">W28</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 用七步流程复盘自己这三个项目各走了哪几步 …</div>
+          <div class="lc-f"><b>作业</b> 产出：三项目的工程流程自查表</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="108"
+                  aria-label="标记第 108 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="109" data-t="能力跃迁与工程问题速查 说清从脚本到项目的跃迁；会用 requirements.txt / .gitignore / 环境变量 2.3 阶段 1 → 阶段 2 的能力跃迁 2.4 常见工程问题速查">
+          <a class="lc-a" href="109.html">
+          <div class="lc-h">
+            <span class="lc-n">109</span>
+            <div style="flex:1;min-width:0">
+              <h4>能力跃迁与工程问题速查</h4>
+              <p>说清从脚本到项目的跃迁；会用 requirements.txt / .gitignore / 环境变量</p>
+            </div>
+            <span class="lc-w">W28–W29</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 给三个项目各跑一次「工程件体检」 …</div>
+          <div class="lc-f"><b>作业</b> 产出：三个项目的 README + requirements.txt</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="109"
+                  aria-label="标记第 109 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="110" data-t="★ 关卡 2 五项逐条自测 限时自测五条硬指标，明确哪条没过、怎么补 2.5 关卡 2 的五条硬指标 2.6 下一步方向选择 三、可运行代码示例 示例 1：项目目录体检脚本（project_doctor.py） 示例 2：requirements.txt 自动生成（make_requirements.py） 示例 3：代码规模与圈复杂度提示（code_metrics.py） 示例 4：统一日志配置模板（logging_setup.py） 示例 5：陌生项目结构速读（explorer.py）">
+          <a class="lc-a" href="110.html">
+          <div class="lc-h">
+            <span class="lc-n">110</span>
+            <div style="flex:1;min-width:0">
+              <h4>★ 关卡 2 五项逐条自测</h4>
+              <p>限时自测五条硬指标，明确哪条没过、怎么补</p>
+            </div>
+            <span class="lc-w">W29</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 逐条自测并记录结果 …</div>
+          <div class="lc-f"><b>作业</b> 关卡 2 五项逐条自测</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="110"
+                  aria-label="标记第 110 节课完成">标记完成</button>
+        </div>
+        <div class="lc" data-no="111" data-t="综合项目与阶段 2 收尾 任选一个综合项目做完，形成阶段 2 的收尾产出 四、动手练习 基础档 进阶档 五、参考答案 参考答案 21-1（三个项目的工程件） 参考答案 21-2（pytest 测试，可直接运行） 参考答案 21-3（重构冲刺前后对比） 参考答案 21-4（陌生项目定位 bug 的完整过程） 综合项目（3 个自选，做一个就够） 六、常见错误清单（务必逐条自查） 错误 1：★ 没有 .gitignore 就 git add .，虚拟环境和数据库进了仓库 错误 2：pip freeze 在全局环境执行，清单长到没法看 错误 3：★ 测试全是抄教材的，自己一条没写 错误 4：把 SECRET_KEY 硬编码在 settings.py 里，还推上了公开仓库 错误 5：代码里全是魔法数字，改一个参数要翻 8 个文件 错误 6：所有代码堆在一个文件里，两千行 七、本单元验收自测 八、关卡 2 验收标准（五条硬指标） ✅ 硬指标 1：三个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt ✅ 硬指标 2：「学习笔记」已部署上线，公网可访问，错误页已定制 ✅ 硬指标 3：能用自己的函数写出 pytest 测试并跑过（不是抄教材的） ✅ 硬指标 4：接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug ✅ 硬指标 5：能说清每个项目「解决了什么问题、还能怎么扩展」 本单元小结与产出检查">
+          <a class="lc-a" href="111.html">
+          <div class="lc-h">
+            <span class="lc-n">111</span>
+            <div style="flex:1;min-width:0">
+              <h4>综合项目与阶段 2 收尾</h4>
+              <p>任选一个综合项目做完，形成阶段 2 的收尾产出</p>
+            </div>
+            <span class="lc-w">W29</span>
+          </div>
+          <div class="lc-f"><b>实操</b> 任选 A/B/C 之一定题并开工 …</div>
+          <div class="lc-f"><b>作业</b> 产出：一个可展示的综合项目 + 阶段 1 学习总结</div>
+          </a>
+          <button class="lc-ck" type="button" data-no="111"
+                  aria-label="标记第 111 节课完成">标记完成</button>
+        </div></div>
+      </div>
+
+  <div class="tip"><i></i><div>
+    <h4>怎么用这套课</h4>
+    <ul>
+      <li><b>不要跳课。</b>上一节的作业没做完就别开下一节，否则后面全是补课。</li>
+      <li><b>实操环节必须动手敲。</b>看懂不等于会写，从空文件敲出来才算。</li>
+      <li><b>卡住超过一周就降难度。</b>回到题库对应档位重做，别硬啃。</li>
+      <li>每节课都能从底部跳回单元完整讲义或题库，需要查细节时随时回看。</li>
+      <li><b>讲评环节不要跳过。</b>那 20 分钟是给你自己检查代码的，对照每一条问句过一遍，
+          比多写一小时更有用。</li>
+    </ul>
+  </div></div>
+
+  <footer>
+    依据《Python 编程：从入门到实践（第 3 版）》中文版上篇第 1–11 章 · 12 单元切分为 111 节课
+  </footer>
+</div>
+
+<script>
+var K='lesson-done-v1', TOTAL=111;
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function doneCount(){var o=getAll();return Object.keys(o).filter(function(k){return o[k];}).length;}
+var FILTER='all', QUERY='';
+
+function render(){  // 进度条、数字、继续学习入口
+  var n=doneCount(), o=getAll();
+  document.getElementById('tr').style.width=(n/TOTAL*100)+'%';
+  document.getElementById('ct').textContent=n+' / '+TOTAL+' 节';
+  var rs=document.getElementById('resume');
+  if(rs){
+    var next=0;
+    for(var i=1;i<=TOTAL;i++){ if(!o[String(i)]){ next=i; break; } }
+    if(next===0){
+      rs.textContent='全部完成 ✓'; rs.classList.add('all-done');
+      rs.href='index.html';
+    } else {
+      rs.textContent='继续学习：第 '+next+' 节 →';
+      rs.href=(next<10?'0':'')+next+'.html';
+    }
+  }
+}
+
+function paint(){  // 卡片完成态 + 搜索 + 筛选
+  var o=getAll();
+  var cards=document.querySelectorAll('.lc');
+  var shown=0;
+  cards.forEach(function(el){
+    var no=el.dataset.no, isDone=!!o[no];
+    el.classList.toggle('done', isDone);
+    var ck=el.querySelector('.lc-ck');
+    if(ck){ ck.textContent=isDone?'已完成 ✓':'标记完成'; ck.classList.toggle('on', isDone); }
+    // 搜索
+    var okQ = !QUERY || (el.dataset.t||'').toLowerCase().indexOf(QUERY)>=0;
+    // 筛选
+    var okF = FILTER==='all' || (FILTER==='done'? isDone : !isDone);
+    var vis = okQ && okF;
+    el.style.display = vis ? '' : 'none';
+    if(vis) shown++;
+    // 单元分组整组隐藏
+    var grp=el.closest('.ug');
+    if(grp){
+      var anyVis=false;
+      grp.querySelectorAll('.lc').forEach(function(c){ if(c.style.display!=='none') anyVis=true; });
+      grp.style.display = anyVis ? '' : 'none';
+    }
+  });
+  document.getElementById('cnt').textContent = shown ? '显示 '+shown+' / '+TOTAL+' 节' : '没有匹配的课程';
+}
+
+function apply(){ render(); paint(); }
+
+document.getElementById('q').addEventListener('input', function(e){
+  QUERY=e.target.value.trim().toLowerCase(); paint();
+});
+
+document.getElementById('fl').addEventListener('click', function(e){
+  var b=e.target.closest('.fb'); if(!b) return;
+  FILTER=b.dataset.f;
+  this.querySelectorAll('.fb').forEach(function(x){ x.classList.toggle('on', x===b); });
+  paint();
+});
+
+// 完成标记：只认按钮，点击卡片本身仅跳转，不再误标完成
+document.querySelectorAll('.lc-ck').forEach(function(btn){
+  btn.addEventListener('click', function(e){
+    e.preventDefault(); e.stopPropagation();
+    var no=btn.dataset.no, o=getAll();
+    o[no]=!o[no];
+    try{localStorage.setItem(K,JSON.stringify(o));}catch(err){}
+    apply();
+  });
+});
+
+apply();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

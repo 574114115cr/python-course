@@ -1,0 +1,116 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>每周一次的课，90 分钟怎么花</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            固定四段式。零基础最怕的是「听懂了就以为会了」，所以实操时长必须压过讲解时长
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 152, width: '1152px', height: 440,
+        flexDirection: 'row', gap: 14,
+    }}>
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderTop: '4px solid #1F5FA8',
+            borderRadius: 12, padding: 22, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 56, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>10</Text>
+                <Text style={{ fontSize: 19, fontWeight: 'bold', color: '#16232E' }}>复盘</Text>
+                <Text style={{ fontSize: 13, color: '#8A9AAA' }}>分钟</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', gap: 9 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    上次作业逐题讲评，投屏三份典型答案对比。上次遗留的错误当场改对，
+                    不接受「我看懂了」当过关。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    同一个题至少给两种写法，当场讲清哪种更该用。
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderTop: '4px solid #1F5FA8',
+            borderRadius: 12, padding: 22, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 56, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>30</Text>
+                <Text style={{ fontSize: 19, fontWeight: 'bold', color: '#16232E' }}>讲解</Text>
+                <Text style={{ fontSize: 13, color: '#8A9AAA' }}>分钟</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', gap: 9 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    本单元核心知识点，边讲边在编辑器里敲一遍。
+                    每讲完一个概念，立刻问一句「这个能出什么错」。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    讲解不超过 10 分钟就必须让学员自己敲一次。
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderTop: '4px solid #0E9B78',
+            borderRadius: 12, padding: 22, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 56, fontWeight: 'bold', color: '#0E9B78', lineHeight: 1 }}>40</Text>
+                <Text style={{ fontSize: 19, fontWeight: 'bold', color: '#16232E' }}>现场实操</Text>
+                <Text style={{ fontSize: 13, color: '#8A9AAA' }}>分钟 · 本节最长</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', gap: 9 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    教师故意敲错，展示报错怎么读。学员同步敲，禁止看答案。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    每 10 分钟必须确认所有人都跑出了预期输出。
+                    报错信息留在屏幕上，不要擦掉。
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderTop: '4px solid #0E9B78',
+            borderRadius: 12, padding: 22, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 56, fontWeight: 'bold', color: '#0E9B78', lineHeight: 1 }}>20</Text>
+                <Text style={{ fontSize: 19, fontWeight: 'bold', color: '#16232E' }}>讲评</Text>
+                <Text style={{ fontSize: 13, color: '#8A9AAA' }}>分钟</Text>
+            </Box>
+            <Box style={{ flexDirection: 'column', gap: 9 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    三份作业投屏对比，讲清差异在哪。
+                    布置作业时必须说清楚验收标准是什么。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    作业量：基础 3 题 + 进阶 3 题 + 动手项目 1 个。
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 612, width: '1152px', height: 52,
+        background: '#EEF5FB', borderRadius: 8, flexDirection: 'row',
+        alignItems: 'center', padding: '0 22px', gap: 14,
+    }}>
+        <Box style={{ width: 8, height: 8, borderRadius: 4, background: '#E08A15' }} />
+        <Text style={{ fontSize: 17, color: '#1F5FA8', fontWeight: 'bold' }}>原则</Text>
+        <Text style={{ fontSize: 17, color: '#3A4A58' }}>
+            实操 40 分钟必须大于讲解 30 分钟。讲得多不等于学得多，跑出输出才算。
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>04 / 23</Text>
+    </Box>
+</Slide>

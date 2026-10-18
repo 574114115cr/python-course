@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 51 节 · 动手实战、答案与验收</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="51">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 51/111 节 · 动手实战、答案与验收</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/09.html#s10" title="本课节对应的课件">本课课件 u9·p10</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-9-1">参考答案 9-1</a>
+<a class="lv3" href="#参考答案-9-2">参考答案 9-2</a>
+<a class="lv3" href="#参考答案-9-3">参考答案 9-3</a>
+<a class="lv3" href="#参考答案-9-4">参考答案 9-4</a>
+<a class="lv3" href="#参考答案-9-5">参考答案 9-5</a>
+<a class="lv3" href="#参考答案-9-6">参考答案 9-6</a>
+<a class="lv3" href="#参考答案-9-7">参考答案 9-7</a>
+<a class="lv3" href="#参考答案-9-8">参考答案 9-8</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 9</h4>
+      <a class="ppt-thumb" href="../ppt/u/09.html#s10">
+        <img loading="lazy" src="../ppt/u/09/slide-10.webp" alt="本课节课件">
+        <span class="cap"><b>单元 9 · p10</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../09.html"><span class="k">讲义</span>
+          <span class="v">单元 9 · 文件与异常</span></a>
+        <a href="../ppt/u/09.html#s10"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u9"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u9"><span class="k">题库</span>
+          <span class="v">本单元 6 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 51 节 / 111</span>
+        <span class="kwk">W11</span>
+        <span class="ku">单元 9 · 文件与异常</span>
+      </div>
+      <h1>动手实战、答案与验收</h1>
+      <p class="goal">独立完成单元 9 练习，确认文件与异常都过关</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 50 节 · JSON / CSV 与持久化实战</h3><ul><li>JSON 与 Python 的对应：<code>json.dump / load</code> 读写文件，<code>json.dumps / loads</code> 转字符串。</li><li>存中文要加 <code>ensure_ascii=False</code>，否则中文会变成 <code>\uXXXX</code> 一串码。</li><li>CSV 用 <code>csv.writer / reader</code>，比手写逗号拼接可靠（能自动处理引号和逗号）。</li><li>上节作业：学习笔记管理 10.1–10.13 做了吗？</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>限时 30 分钟独立完成基础档</li><li>逐题对照答案并打勾验收自测</li></ol>
+    </div>
+
+    <h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 9-1【记事本程序】</strong>
+写 <code>notepad.py</code>：
+1. 用 <code>with open(..., "a")</code> 追加一行到 <code>notes.txt</code>
+2. 用 <code>with open(..., "r")</code> 读取全部内容并显示
+3. 统计文件里有多少行（提示：把内容按 <code>\n</code> 分割，或用 <code>f.readlines()</code>）
+4. <strong>重点</strong>：分别用 <code>"w"</code> 和 <code>"a"</code> 试一次，观察结果有什么不同，写下你的结论</p>
+<p><strong>练习 9-2【四种读取方式对比】</strong>
+创建一个 <code>four.txt</code>，内容是四行，每行一个姓名。
+分别用 <code>.read()</code>、<code>.readline()</code>（调两次）、<code>.readlines()</code>、<code>for</code> 循环四种方式读取，输出每种方式拿到的<strong>结果类型</strong>和<strong>内容</strong>，然后写出它们的关系：
+- <code>.read()</code> 的结果类型是 <code>_</code>，<code>.readlines()</code> 的结果是 <code>_</code>
+- <code>.readlines()</code> 得到的列表，和 <code>for line in f</code> 逐行读到的内容，两者是什么关系？</p>
+<p><strong>练习 9-3【数字转换保护】</strong>
+写 <code>safe_int(text)</code> 函数：
+- 用 <code>try/except ValueError</code> 把字符串转成整数
+- 成功返回整数，失败返回 <code>None</code>
+测试：<code>"123"</code> → <code>123</code>；<code>"abc"</code> → <code>None</code>；<code>"12.5"</code> → <code>None</code>；<code>""</code> → <code>None</code>
+要求：不要用 <code>.isdigit()</code>，必须用 try/except（理解它的价值）。</p>
+<p><strong>练习 9-4【成绩文件统计】</strong>
+写一个程序，把 5 个学生的成绩（姓名 + 成绩）<strong>写进</strong> <code>scores.txt</code>，然后<strong>读出来</strong>并：
+1. 显示全部内容
+2. 计算平均分（注意读回来的都是字符串，要转换）
+3. 找出最高分学生
+4. 统计及格人数（≥60）</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 9-5【JSON 配置文件】</strong>
+写一个 <code>settings.json</code> 的读写程序：
+1. 创建/覆盖一个 JSON 文件，包含 <code>{"theme": "dark", "font_size": 14, "autosave": true, "languages": ["python", "english"]}</code>
+2. 读出来并修改 <code>font_size</code> 为 16
+3. 把修改后的内容<strong>写回文件</strong>
+4. 再次读取，验证修改已保存
+要求：所有写 JSON 的地方都要加 <code>ensure_ascii=False</code> 和 <code>indent=2</code>。</p>
+<p><strong>练习 9-6【CSV 成绩管理】</strong>
+写 <code>score_manager.py</code>，管理一个 CSV 成绩单文件 <code>scores.csv</code>：
+1. <code>init_file()</code>：创建文件并写入表头 <code>["姓名", "数学", "英语", "总分"]</code>
+2. <code>add_student(name, math, english)</code>：追加一行，总分自动计算
+3. <code>read_all()</code>：返回所有学生数据（用 <code>DictReader</code>）
+4. <code>class_average()</code>：返回全班数学平均分
+5. <code>ranking()</code>：返回按总分降序排好的学生列表
+6. <code>delete_student(name)</code>：删除指定学生（读出 → 过滤 → 重写文件）</p>
+<p><strong>练习 9-7【健壮的用户交互】</strong>
+写一个健壮的输入程序，要求：
+1. 读取一个 1–100 的整数，用 <code>while</code> + <code>try/except</code> 保证拿到有效值
+2. 再读取一个正数（float），同样用 try/except 保护
+3. 处理这两种异常：
+   - <code>ValueError</code>：输入不是数字
+   - <code>KeyboardInterrupt</code>：用户按 Ctrl+C —— <strong>必须让程序能正常退出</strong>，不能被吞掉
+4. 用 <code>else</code> 子句输出"输入成功"
+5. 用 <code>finally</code> 输出"程序结束"</p>
+<p><strong>练习 9-8【综合：待办事项管理器】</strong>
+这是本单元的综合练习，把文件、异常、类、列表全部用上。
+要求写 <code>todo.py</code>，包含：
+1. <code>Task</code> 类：属性 <code>title</code>、<code>done</code>、<code>priority</code>；方法 <code>complete()</code>、<code>__str__</code>
+2. <code>TodoManager</code> 类：
+   - <code>load()</code>：从 <code>tasks.json</code> 读取任务（文件不存在时<strong>不报错</strong>，返回空列表）
+   - <code>save()</code>：把任务保存到 <code>tasks.json</code>
+   - <code>add(title, priority)</code>：添加任务
+   - <code>complete(title)</code>：标记完成
+   - <code>list_all(show_done=True)</code>：列出任务（可按优先级排序）
+   - <code>delete(title)</code>：删除任务
+3. 所有文件操作都要用 <code>with</code> 和 <code>try/except</code>，保证任何情况下程序都不会崩溃
+4. 测试：添加 3 个任务 → 保存 → 重新加载 → 验证数据完整</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-9-1">参考答案 9-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># notepad.py —— 记事本：追加与读取</span>
+
+<span class="n">NOTES_FILE</span> <span class="o">=</span> <span class="s2">"notes.txt"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_note</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用 'a' 模式追加一行，不会覆盖原有内容。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>      <span class="c1"># write 不会自动换行，必须自己加 \n</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_all_notes</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""读取全部内容。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_lines</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""统计行数。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># 方式A：读成列表再数</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_all_with_loop</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""用 for 循环逐行读，也能数行数（大文件推荐）。"""</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">count</span>
+
+
+<span class="c1"># ===== 测试 =====</span>
+<span class="c1"># 先清空文件</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>                  <span class="c1"># w 模式清空文件</span>
+
+<span class="n">add_note</span><span class="p">(</span><span class="s2">"第一条：学习文件读写"</span><span class="p">)</span>
+<span class="n">add_note</span><span class="p">(</span><span class="s2">"第二条：理解 with 语句"</span><span class="p">)</span>
+<span class="n">add_note</span><span class="p">(</span><span class="s2">"第三条：掌握 try/except"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 全部内容 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">read_all_notes</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总行数：</span><span class="si">{</span><span class="n">count_lines</span><span class="p">()</span><span class="si">}</span><span class="s2">（readlines 方式）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总行数：</span><span class="si">{</span><span class="n">read_all_with_loop</span><span class="p">()</span><span class="si">}</span><span class="s2">（for 循环方式）"</span><span class="p">)</span>
+
+<span class="c1"># ===== r / w / a 三种模式对比实验 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 模式对比实验 ==="</span><span class="p">)</span>
+
+<span class="n">add_note</span><span class="p">(</span><span class="s2">"第四条：模式对比"</span><span class="p">)</span>
+
+<span class="c1"># 错误示范：想追加却用了 w，原数据全没了</span>
+<span class="c1"># add_note 内部用的是 a，这里手动用 w 演示危害</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">before</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"用 w 之前：</span><span class="si">{</span><span class="n">before</span><span class="si">}</span><span class="s2"> 行"</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"只有这一行</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>      <span class="c1"># w 模式清空并重写！</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">NOTES_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">after</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"用 w 之后：</span><span class="si">{</span><span class="n">after</span><span class="si">}</span><span class="s2"> 行"</span><span class="p">)</span>
+
+<span class="c1"># 结论：</span>
+<span class="c1"># 'r' 读取，文件不存在会报 FileNotFoundError</span>
+<span class="c1"># 'w' 写入，文件不存在则创建，存在则【清空】</span>
+<span class="c1"># 'a' 追加，文件不存在则创建，存在则在末尾添加</span>
+<span class="c1"># 所以"只想追加内容"时必须用 'a'，用 'w' 会无声地丢失原有数据</span>
+</code></pre>
+<h3 id="参考答案-9-2">参考答案 9-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># read_ways.py —— 四种读取方式的关系</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">"four.txt"</span>
+
+<span class="c1"># 创建测试文件</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"小明</span><span class="se">\n</span><span class="s2">小红</span><span class="se">\n</span><span class="s2">小刚</span><span class="se">\n</span><span class="s2">小丽</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== ① read()：返回一个字符串 =====</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"① read()      -&gt; 类型 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">，值 </span><span class="si">{</span><span class="n">content</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== ② readline()：每调用一次读一行，返回字符串 =====</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">line1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="n">line2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"② readline() 第一次 -&gt; </span><span class="si">{</span><span class="n">line1</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"② readline() 第二次 -&gt; </span><span class="si">{</span><span class="n">line2</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   注意：每行末尾都带</span><span class="se">\\</span><span class="s2">n 换行符，需要 strip() 才干净"</span><span class="p">)</span>
+
+<span class="c1"># ===== ③ readlines()：返回列表 =====</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">③ readlines() -&gt; 类型 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">，值 </span><span class="si">{</span><span class="n">lines</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   列表长度：</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== ④ for 循环逐行读（推荐处理大文件）=====</span>
+<span class="n">collected</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">collected</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">④ for 循环    -&gt; 收集到 </span><span class="si">{</span><span class="n">collected</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   与 readlines() 结果相同：</span><span class="si">{</span><span class="n">collected</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">lines</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 关系总结 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 关系总结 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1. read() 返回 str，readlines() 返回 list"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2. for line in f 收集起来的结果 == readlines() 的结果"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"3. read() 把整个文件当成一个大字符串（含 </span><span class="se">\\</span><span class="s2">n）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"4. readline() 每次只前进一行，是'流式'读取"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"5. 文件大时 read() 可能内存爆，readlines() 也是，for 循环最安全"</span><span class="p">)</span>
+
+<span class="c1"># 更安全的逐行处理（不把所有行都存起来）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 逐行处理，不存列表 ==="</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>          <span class="c1"># strip() 去掉换行符</span>
+        <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   第</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 行：</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># 这种方式不管文件多大，内存里始终只有一行</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-9-3">参考答案 9-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># safe_int.py —— 用 try/except 保护类型转换</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_int</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把字符串安全地转成整数。</span>
+
+<span class="sd">    成功返回整数，失败返回 None。</span>
+<span class="sd">    """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="c1"># int() 在无法转换时抛出 ValueError</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1"># 测试各种输入</span>
+<span class="n">test_cases</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"123"</span><span class="p">,</span> <span class="s2">"abc"</span><span class="p">,</span> <span class="s2">"12.5"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"  42  "</span><span class="p">,</span> <span class="s2">"-17"</span><span class="p">,</span> <span class="s2">"1e5"</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'输入'</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}{</span><span class="s1">'repr'</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}{</span><span class="s1">'结果'</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">36</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">test_cases</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">safe_int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">text</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}{</span><span class="n">text</span><span class="si">!r:</span><span class="s2">&lt;12</span><span class="si">}{</span><span class="n">result</span><span class="si">!r:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">结果分析："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'"123"   -&gt; 123    成功'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'"  42  " -&gt; 42     成功（int 会自动忽略首尾空白）'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'"-17"   -&gt; -17    成功（负数也行）'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'"abc"   -&gt; None   ValueError：不是合法整数'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'"12.5"  -&gt; None   ValueError：带小数点的字符串不能直接转 int'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'""      -&gt; None   ValueError：空字符串无法转换'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'"1e5"   -&gt; None   ValueError：科学计数法要先 float 再 int'</span><span class="p">)</span>
+
+<span class="c1"># ===== 对比：如果不用 try/except =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 不用 try 的后果 ==="</span><span class="p">)</span>
+<span class="c1"># print(int("abc"))    # ValueError: invalid literal for int() with base 10: 'abc'</span>
+<span class="c1"># 程序会直接崩溃终止，后面所有代码都不执行</span>
+<span class="c1"># try/except 的价值：把"崩溃"变成"返回一个可处理的失败标记"</span>
+
+<span class="c1"># ===== 进阶：需要区分失败原因时用 else =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_with_reason</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""成功时同时返回结果和说明，失败时说明原因。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"转换失败：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="s2">"转换成功"</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 用 else 区分成功与失败 ==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"88"</span><span class="p">,</span> <span class="s2">"abc"</span><span class="p">]:</span>
+    <span class="n">value</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">convert_with_reason</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">text</span><span class="si">!r}</span><span class="s2"> -&gt; value=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-9-4">参考答案 9-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># score_file.py —— 读写成绩文件并统计</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">"scores.txt"</span>
+
+<span class="c1"># ===== 写入成绩 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_scores</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把成绩数据写进文件（覆盖模式）。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已写入 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条成绩"</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 读取成绩 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_scores</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""读回成绩列表，返回 [(姓名, 成绩), ...]。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="c1"># 去掉换行符</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>                <span class="c1"># 跳过空行</span>
+            <span class="n">name</span><span class="p">,</span> <span class="n">score_text</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+            <span class="c1"># 关键：读回来的是字符串，必须转成数字才能计算</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">score_text</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="c1"># ===== 统计 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""计算平均分、最高分、及格人数。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">score</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="n">highest_name</span><span class="p">,</span> <span class="n">highest_score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">passed</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">60</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"总人数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+        <span class="s2">"平均分"</span><span class="p">:</span> <span class="n">average</span><span class="p">,</span>
+        <span class="s2">"最高分"</span><span class="p">:</span> <span class="n">highest_name</span><span class="p">,</span>
+        <span class="s2">"最高分值"</span><span class="p">:</span> <span class="n">highest_score</span><span class="p">,</span>
+        <span class="s2">"及格人数"</span><span class="p">:</span> <span class="n">passed</span><span class="p">,</span>
+        <span class="s2">"及格率"</span><span class="p">:</span> <span class="n">passed</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># ===== 主流程 =====</span>
+<span class="c1"># 1）显示原始文件内容</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"姓名,成绩</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">scores_data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">92</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"小红"</span><span class="p">,</span> <span class="mi">78</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"小刚"</span><span class="p">,</span> <span class="mi">65</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"小丽"</span><span class="p">,</span> <span class="mi">88</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"小强"</span><span class="p">,</span> <span class="mi">55</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">write_scores</span><span class="p">(</span><span class="n">scores_data</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 文件原始内容 ---"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+
+<span class="c1"># 2）读回来分析</span>
+<span class="n">loaded</span> <span class="o">=</span> <span class="n">read_scores</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"读回来的数据：</span><span class="si">{</span><span class="n">loaded</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">stats</span> <span class="o">=</span> <span class="n">analyze</span><span class="p">(</span><span class="n">loaded</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 统计分析 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-9-5">参考答案 9-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># settings_json.py —— 用 JSON 做配置文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">"settings.json"</span>
+
+<span class="n">DEFAULT_SETTINGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"theme"</span><span class="p">:</span> <span class="s2">"dark"</span><span class="p">,</span>
+    <span class="s2">"font_size"</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="s2">"autosave"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">"languages"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"python"</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">],</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_settings</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""读取配置文件，不存在时返回默认配置。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> 不存在，返回默认配置"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> 内容不是合法 JSON，返回默认配置"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DEFAULT_SETTINGS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">save_settings</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""保存配置到文件。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># ensure_ascii=False 保证中文可读，indent=2 让人也能看</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已保存到 </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 主流程 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 1. 首次读取（文件不存在）==="</span><span class="p">)</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="n">load_settings</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  读取结果：</span><span class="si">{</span><span class="n">settings</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 2. 修改并保存 ==="</span><span class="p">)</span>
+<span class="n">settings</span><span class="p">[</span><span class="s2">"font_size"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">16</span>                    <span class="c1"># 修改字号</span>
+<span class="n">settings</span><span class="p">[</span><span class="s2">"languages"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"japanese"</span><span class="p">)</span>     <span class="c1"># 往列表里追加语言</span>
+<span class="n">settings</span><span class="p">[</span><span class="s2">"last_modified"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"2026-10-14"</span>      <span class="c1"># 新增一个键</span>
+<span class="n">save_settings</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 3. 文件里的实际内容 ==="</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 4. 重新读取，验证修改已保存 ==="</span><span class="p">)</span>
+<span class="n">settings2</span> <span class="o">=</span> <span class="n">load_settings</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  font_size = </span><span class="si">{</span><span class="n">settings2</span><span class="p">[</span><span class="s1">'font_size'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>           <span class="c1"># 16  修改生效了</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  languages = </span><span class="si">{</span><span class="n">settings2</span><span class="p">[</span><span class="s1">'languages'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>            <span class="c1"># 包含新加的 japanese</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  last_modified = </span><span class="si">{</span><span class="n">settings2</span><span class="p">[</span><span class="s1">'last_modified'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># 新键也保存了</span>
+
+<span class="c1"># ===== 两个必须记住的参数 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 为什么必须加这两个参数 ==="</span><span class="p">)</span>
+<span class="n">demo</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"名称"</span><span class="p">:</span> <span class="s2">"测试"</span><span class="p">,</span> <span class="s2">"值"</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  不加 ensure_ascii=False："</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">demo</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  加了 ensure_ascii=False："</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">demo</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  =&gt; 不加的话中文变成 </span><span class="se">\\</span><span class="s2">uXXXX，既不可读也占更多空间"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  不加 indent："</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">demo</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  加了 indent=2："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">demo</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  =&gt; indent 让文件内容人也能看懂，方便手动检查和修改"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-9-6">参考答案 9-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># score_manager.py —— CSV 成绩管理系统</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s2">"scores.csv"</span>
+<span class="n">FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"姓名"</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">,</span> <span class="s2">"英语"</span><span class="p">,</span> <span class="s2">"总分"</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">init_file</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""创建文件并写入表头（覆盖已有文件）。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已初始化 </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_student</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="n">english</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""追加一名学生，总分自动计算。"""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">math</span> <span class="o">+</span> <span class="n">english</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="n">english</span><span class="p">,</span> <span class="n">total</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已添加：</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">（总分 </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_all</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回所有学生数据（字典列表），文件不存在时返回空列表。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> 不存在，返回空列表"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">class_average</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回某科目的班级平均分。"""</span>
+    <span class="n">students</span> <span class="o">=</span> <span class="n">read_all</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">students</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">subject</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">students</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">students</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ranking</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回按总分降序排好的学生列表。"""</span>
+    <span class="n">students</span> <span class="o">=</span> <span class="n">read_all</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">students</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"总分"</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_student</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""删除指定学生：读出 -&gt; 过滤 -&gt; 重写文件。"""</span>
+    <span class="n">students</span> <span class="o">=</span> <span class="n">read_all</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">students</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="s2">"姓名"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">name</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">students</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  未找到学生 </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># 重写整个文件</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">FIELDS</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">remaining</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+                <span class="n">student</span><span class="p">[</span><span class="s2">"姓名"</span><span class="p">],</span>
+                <span class="n">student</span><span class="p">[</span><span class="s2">"数学"</span><span class="p">],</span>
+                <span class="n">student</span><span class="p">[</span><span class="s2">"英语"</span><span class="p">],</span>
+                <span class="n">student</span><span class="p">[</span><span class="s2">"总分"</span><span class="p">],</span>
+            <span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已删除 </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">，剩余 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span><span class="si">}</span><span class="s2"> 人"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show_all</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""格式化显示所有学生。"""</span>
+    <span class="n">students</span> <span class="o">=</span> <span class="n">read_all</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">students</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  （暂无数据）"</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="s1">'姓名'</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}{</span><span class="s1">'数学'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}{</span><span class="s1">'英语'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}{</span><span class="s1">'总分'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span> <span class="o">+</span> <span class="s2">"-"</span> <span class="o">*</span> <span class="mi">32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">student</span><span class="p">[</span><span class="s1">'姓名'</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}{</span><span class="n">student</span><span class="p">[</span><span class="s1">'数学'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">"</span>
+              <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">student</span><span class="p">[</span><span class="s1">'英语'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}{</span><span class="n">student</span><span class="p">[</span><span class="s1">'总分'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 测试 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 初始化 ==="</span><span class="p">)</span>
+<span class="n">init_file</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 添加学生 ==="</span><span class="p">)</span>
+<span class="n">add_student</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">88</span><span class="p">)</span>
+<span class="n">add_student</span><span class="p">(</span><span class="s2">"小红"</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">95</span><span class="p">)</span>
+<span class="n">add_student</span><span class="p">(</span><span class="s2">"小刚"</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
+<span class="n">add_student</span><span class="p">(</span><span class="s2">"小丽"</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">91</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 全部学生 ==="</span><span class="p">)</span>
+<span class="n">show_all</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 班级平均分 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  数学平均分：</span><span class="si">{</span><span class="n">class_average</span><span class="p">(</span><span class="s1">'数学'</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  英语平均分：</span><span class="si">{</span><span class="n">class_average</span><span class="p">(</span><span class="s1">'英语'</span><span class="p">)</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 排名（按总分降序）==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">student</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ranking</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">student</span><span class="p">[</span><span class="s1">'姓名'</span><span class="p">]</span><span class="si">}</span><span class="s2">，总分 </span><span class="si">{</span><span class="n">student</span><span class="p">[</span><span class="s1">'总分'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 删除学生 ==="</span><span class="p">)</span>
+<span class="n">delete_student</span><span class="p">(</span><span class="s2">"小红"</span><span class="p">)</span>
+<span class="n">show_all</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== CSV 文件的原始内容 ==="</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="c1"># 清理</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-9-7">参考答案 9-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># robust_input.py —— 健壮的用户输入处理</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 读取 1-100 的整数 ==="</span><span class="p">)</span>
+
+<span class="n">MAX_ATTEMPTS</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">while</span> <span class="n">attempts</span> <span class="o">&lt;</span> <span class="n">MAX_ATTEMPTS</span><span class="p">:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入 1-100 的整数："</span><span class="p">)</span>
+    <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  '</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s2">' 不是有效整数：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># else 块：只有转换成功才会执行</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  转换成功：</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"✓ 数字在有效范围内：</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> 不在 1-100 范围内，请重新输入"</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  （第 </span><span class="si">{</span><span class="n">attempts</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">MAX_ATTEMPTS</span><span class="si">}</span><span class="s2"> 次尝试结束）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 读取一个正数（float）==="</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入一个正数："</span><span class="p">)</span>
+        <span class="n">price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  '</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s2">' 不是有效数字：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="c1"># 关键：明确捕获 Ctrl+C，并优雅退出。</span>
+        <span class="c1"># 这体现了"不要用裸 except"的价值 —— 裸 except 会把</span>
+        <span class="c1"># KeyboardInterrupt 一起吞掉，导致 Ctrl+C 完全失效。</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">检测到 Ctrl+C，正在退出..."</span><span class="p">)</span>
+        <span class="k">raise</span>           <span class="c1"># 重新抛出，让程序正常结束</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">price</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"✓ 有效正数：</span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2"> 不是正数，请重新输入"</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  （本次输入处理完毕）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 程序结束 ==="</span><span class="p">)</span>
+
+<span class="c1"># ===== 为什么必须单独处理 KeyboardInterrupt =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">三个重要认识：</span>
+
+<span class="s2">1. ValueError 说明"用户数据格式不对"，是预期内的，</span>
+<span class="s2">   应该处理掉，让用户重试。</span>
+
+<span class="s2">2. KeyboardInterrupt 说明"用户想中止程序"，</span>
+<span class="s2">   不应该被当成错误处理掉，而应该尊重用户意图，</span>
+<span class="s2">   让程序正常结束。裸 except 会把它一起吞掉，</span>
+<span class="s2">   造成"按 Ctrl+C 没反应"的严重问题。</span>
+
+<span class="s2">3. else 块的价值：把"业务逻辑"和"错误处理"分开，</span>
+<span class="s2">   try 里只放可能出错的最小代码，else 里放成功后的逻辑，</span>
+<span class="s2">   代码读起来非常清晰。</span>
+<span class="s2">"""</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-9-8">参考答案 9-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># todo.py —— 待办事项管理器（综合练习）</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">TASKS_FILE</span> <span class="o">=</span> <span class="s2">"tasks.json"</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""一个待办任务。"""</span>
+    <span class="n">PRIORITY_ORDER</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"高"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"中"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"低"</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="s2">"中"</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="n">done</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""标记为已完成。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""转成字典，用于 JSON 序列化。"""</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"title"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s2">"priority"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
+            <span class="s2">"done"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""从字典还原成 Task 对象（反向操作）。"""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span>
+            <span class="n">priority</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"priority"</span><span class="p">,</span> <span class="s2">"中"</span><span class="p">),</span>
+            <span class="n">done</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mark</span> <span class="o">=</span> <span class="s2">"[已完成]"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="k">else</span> <span class="s2">"[待办]"</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">mark</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">（优先级：</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="si">}</span><span class="s2">）"</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TodoManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""待办事项管理器。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">TASKS_FILE</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+    <span class="c1"># ===== 文件读写 =====</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""从 JSON 文件加载任务。文件不存在或损坏都不报错。"""</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">Task</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已加载 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个任务"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2"> 不存在，从空列表开始"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2"> 内容损坏，从空列表开始"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  读取失败：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""把所有任务保存到 JSON 文件。"""</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">]</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已保存 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个任务到 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  保存失败：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># ===== 任务操作 =====</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="s2">"中"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""添加一个任务。"""</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">title</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  任务 '</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">' 已存在，跳过"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Task</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">priority</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已添加：</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""标记指定任务为已完成。"""</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="n">title</span><span class="p">:</span>
+                <span class="n">task</span><span class="o">.</span><span class="n">complete</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已完成：</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  未找到任务：</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""删除指定任务。"""</span>
+        <span class="n">original_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">title</span> <span class="o">!=</span> <span class="n">title</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">original_count</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  已删除：</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  未找到任务：</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_done</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""列出任务，可选择是否显示已完成的。"""</span>
+        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">task</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span>
+            <span class="k">if</span> <span class="n">show_done</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span>
+        <span class="p">]</span>
+        <span class="c1"># 按优先级排序：高 -&gt; 中 -&gt; 低</span>
+        <span class="n">visible</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">Task</span><span class="o">.</span><span class="n">PRIORITY_ORDER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"  （没有任务）"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  共 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个任务："</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">visible</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">visible</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""统计任务数量。"""</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">done</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"总数"</span><span class="p">:</span> <span class="n">total</span><span class="p">,</span>
+            <span class="s2">"已完成"</span><span class="p">:</span> <span class="n">done</span><span class="p">,</span>
+            <span class="s2">"待办"</span><span class="p">:</span> <span class="n">total</span> <span class="o">-</span> <span class="n">done</span><span class="p">,</span>
+            <span class="s2">"完成率"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">done</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%"</span> <span class="k">if</span> <span class="n">total</span> <span class="k">else</span> <span class="s2">"0%"</span><span class="p">,</span>
+        <span class="p">}</span>
+
+
+<span class="c1"># ===== 测试 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 1. 创建管理器（文件不存在）==="</span><span class="p">)</span>
+<span class="n">manager</span> <span class="o">=</span> <span class="n">TodoManager</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 2. 添加任务 ==="</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"写单元 9 讲义"</span><span class="p">,</span> <span class="s2">"高"</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"复习异常处理"</span><span class="p">,</span> <span class="s2">"中"</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"整理学习笔记"</span><span class="p">,</span> <span class="s2">"低"</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"写单元 9 讲义"</span><span class="p">,</span> <span class="s2">"高"</span><span class="p">)</span>      <span class="c1"># 故意重复，应该被拒绝</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 3. 标记完成 ==="</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="s2">"复习异常处理"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 4. 列出所有任务 ==="</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">list_all</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 5. 统计信息 ==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 6. 保存到文件 ==="</span><span class="p">)</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 7. JSON 文件内容 ==="</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TASKS_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 8. 重新加载，验证数据完整性 ==="</span><span class="p">)</span>
+<span class="c1"># 关键：新建一个管理器，它会自动从文件读回数据</span>
+<span class="n">manager2</span> <span class="o">=</span> <span class="n">TodoManager</span><span class="p">()</span>
+<span class="n">manager2</span><span class="o">.</span><span class="n">list_all</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 9. 验证：修改后再次保存，跨会话保持 ==="</span><span class="p">)</span>
+<span class="n">manager2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"开始单元 10：测试代码"</span><span class="p">,</span> <span class="s2">"高"</span><span class="p">)</span>
+<span class="n">manager2</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+<span class="n">manager3</span> <span class="o">=</span> <span class="n">TodoManager</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">第三次加载后的任务列表："</span><span class="p">)</span>
+<span class="n">manager3</span><span class="o">.</span><span class="n">list_all</span><span class="p">()</span>
+
+<span class="c1"># ===== 清理 =====</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">TASKS_FILE</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">TASKS_FILE</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">已清理临时文件 </span><span class="si">{</span><span class="n">TASKS_FILE</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"test.txt"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"第一行</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"test.txt"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"第二行</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"test.txt"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</code></pre>
+<p>输出什么？</p>
+<blockquote>
+<p><strong>要点</strong>：只输出 <code>第二行</code>。第二次用 <code>"w"</code> 模式打开文件时，文件被<strong>清空</strong>，所以第一次写入的"第一行"被彻底丢弃。<code>"w"</code> 是"清空后重写"，不是"写进去"。如果想在末尾追加必须用 <code>"a"</code>。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：<code>with open(...)</code> 的两个主要好处是什么？为什么 <code>f.read()</code> 的内容要存到变量里再用？</p>
+<blockquote>
+<p><strong>要点</strong>：① 进入 <code>with</code> 块时打开文件，<strong>离开块时自动关闭</strong>，而且即使块内代码抛异常也保证会关闭（普通写法忘了 <code>close()</code> 会泄漏文件句柄）。② 出块后 <code>f</code> 本身失效（访问会报 <code>ValueError: I/O operation on closed file</code>）。所以必须在块内把内容读进 <code>content</code> 这样的变量，出了块用 <code>content</code>。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：写 <code>try: ... except:</code> （不带任何异常类型）是可以的推荐做法。</p>
+<blockquote>
+<p><strong>要点</strong>：错误，应该尽量避免。裸 <code>except:</code> 会捕获一切异常，包括 <code>KeyboardInterrupt</code>（导致 Ctrl+C 失效）和 <code>SystemExit</code>，还会静默吞掉真正的代码 bug（<code>NameError</code>、<code>TypeError</code> 等），让问题在别处才暴露，排查成本极高。正确做法是明确指定类型，如 <code>except ValueError:</code> 或 <code>except (ValueError, KeyError):</code>。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：为什么读写文件时几乎总要写 <code>encoding="utf-8"</code>？CSV 的 <code>newline=""</code> 又是为了什么？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>encoding="utf-8"</code> 是为了保证中文正确读写。不指定时 Python 会用操作系统默认编码（Windows 上是 GBK/cp936），会导致中文写出乱码，或读取时报 <code>UnicodeDecodeError</code>。<code>newline=""</code> 是 <code>csv</code> 模块的标准要求：不写它，在 Windows 上 Python 会在 <code>\r\n</code> 之间再插入一个 <code>\n</code>，导致文件里出现空行。CSV 文件推荐搭配 <code>encoding="utf-8-sig"</code>，这样 Excel 打开时中文不乱码。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：JSON 和 Python 的类型是怎么对应的？<code>json.dumps(data)</code> 不加 <code>ensure_ascii=False</code> 会有什么现象？</p>
+<blockquote>
+<p><strong>要点</strong>：对应关系是 <code>object → dict</code>、<code>array → list</code>、<code>string → str</code>、<code>number → int/float</code>、<code>true/false → True/False</code>、<code>null → None</code>。不加 <code>ensure_ascii=False</code> 时，中文字符会被转义成 <code>\u5c0f\u660e</code> 这样的形式——程序能正常读回，但人完全看不懂，文件体积也更大。注意 JSON 用<strong>小写</strong> <code>true/false/null</code>，与 Python 的 <code>True/False/None</code> 不同。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能默写 <code>with open("x.txt", "a", encoding="utf-8") as f:</code> 并说清每个参数的作用</li>
+<li>[ ] 能说出 <code>r</code>/<code>w</code>/<code>a</code> 三种模式在"文件不存在"和"文件已存在"时的行为差异</li>
+<li>[ ] 能按数据规模选择合适的读取方式（<code>read</code> vs 逐行 <code>for</code>）</li>
+<li>[ ] 能写出 <code>try/except/else/finally</code> 四段结构，并说明各段何时执行</li>
+<li>[ ] 知道为什么不能写裸 <code>except:</code></li>
+<li>[ ] 能用 <code>json.dump</code> / <code>json.load</code> 和 <code>csv.writer</code> / <code>csv.DictReader</code> 读写文件</li>
+<li>[ ] 练习 9-6、9-8 已跑通</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 10 讲测试代码——用 <code>pytest</code> 给自己的函数写自动化测试。你会安装 pytest、认识"断言"、写测试函数与测试类、用 <code>assert</code> 描述"应该是什么"，并学会用 <code>-v</code> 和 <code>-k</code> 控制测试输出。写完这一步，你就具备了单元 11 关卡 1 的第 3 条验收能力：<strong>给自己的代码写测试并让它通过</strong>。</p>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>产出：能存到 JSON 的学习笔记程序</li><li>完成本单元小结与产出检查</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>学习笔记能存能读吗？重启程序数据还在吗？</li><li>存的时候崩了，是磁盘问题还是数据结构里有不能序列化的东西？</li><li>单元 9 五条验收，逐条过了吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>文件与异常让程序从「跑完就忘」变成「有记忆」。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../09.html">查看单元 9 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="50.html"><small>← 上一节</small><b>第 50 节 · JSON / CSV 与持久化实战</b></a><a class="pn nx" id="nextLink" href="52.html"><small>下一节 →</small><b>第 52 节 · 为什么需要测试与三条命名规则</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

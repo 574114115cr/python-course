@@ -1,0 +1,1620 @@
+{
+ "0": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 0 · 环境与工具链",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 1,
+   "title": "装好 Python 与 VS Code"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 1,
+   "title": "装好 Python 与 VS Code"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 2,
+   "title": "第一个报错与 Git 拍快照"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 2,
+   "title": "第一个报错与 Git 拍快照"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 3,
+   "title": "目录结构、print 与注释"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 3,
+   "title": "目录结构、print 与注释"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 4,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 4,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 5,
+   "title": "单元 0 验收复盘"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 5,
+   "title": "单元 0 验收复盘"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 0 · 小结"
+  }
+ ],
+ "1": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 1 · 变量与简单数据类型",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 6,
+   "title": "变量、命名与第一段文字"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 6,
+   "title": "变量、命名与第一段文字"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 7,
+   "title": "字符串、数值、布尔与类型转换"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 7,
+   "title": "字符串、数值、布尔与类型转换"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 8,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 8,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 9,
+   "title": "单元 1 验收复盘"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 9,
+   "title": "单元 1 验收复盘"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 1 · 小结"
+  }
+ ],
+ "2": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 2 · 列表简介",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 10,
+   "title": "列表是什么、索引为什么从 0 开始"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 10,
+   "title": "列表是什么、索引为什么从 0 开始"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 11,
+   "title": "增删改查、引用共享与排序"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 11,
+   "title": "增删改查、引用共享与排序"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 12,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 12,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 13,
+   "title": "单元 2 验收复盘"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 13,
+   "title": "单元 2 验收复盘"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 2 · 小结"
+  }
+ ],
+ "3": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 3 · 操作列表",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 14,
+   "title": "for 循环：把重复交给机器"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 14,
+   "title": "for 循环：把重复交给机器"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 15,
+   "title": "range() 与列表推导式"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 15,
+   "title": "range() 与列表推导式"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 16,
+   "title": "切片、元组与 PEP 8 排版"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 16,
+   "title": "切片、元组与 PEP 8 排版"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 17,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 17,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 18,
+   "title": "单元 3 验收复盘"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 18,
+   "title": "单元 3 验收复盘"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 3 · 小结"
+  }
+ ],
+ "4": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 4 · if 语句",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 19,
+   "title": "条件测试与比较运算"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 19,
+   "title": "条件测试与比较运算"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 20,
+   "title": "三分支结构与逻辑运算符"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 20,
+   "title": "三分支结构与逻辑运算符"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 21,
+   "title": "链式比较、is 与条件表达式"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 21,
+   "title": "链式比较、is 与条件表达式"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 22,
+   "title": "动手实战、答案与验收"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 22,
+   "title": "动手实战、答案与验收"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 4 · 小结"
+  }
+ ],
+ "5": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 5 · 字典",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 23,
+   "title": "字典：按名字找数据"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 23,
+   "title": "字典：按名字找数据"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 24,
+   "title": "三种遍历与 get() 安全取值"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 24,
+   "title": "三种遍历与 get() 安全取值"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 25,
+   "title": "遍历时修改与嵌套结构"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 25,
+   "title": "遍历时修改与嵌套结构"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 26,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 26,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 27,
+   "title": "单元 5 验收复盘"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 27,
+   "title": "单元 5 验收复盘"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 5 · 小结"
+  }
+ ],
+ "6": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 6 · 用户输入与 while 循环",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 28,
+   "title": "input() 的铁律与 for/while 之争"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 28,
+   "title": "input() 的铁律与 for/while 之争"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 29,
+   "title": "break / continue / while-else"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 29,
+   "title": "break / continue / while-else"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 30,
+   "title": "交互程序的骨架与收尾"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 30,
+   "title": "交互程序的骨架与收尾"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 31,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 31,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 32,
+   "title": "单元 6 验收复盘"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 32,
+   "title": "单元 6 验收复盘"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 6 · 小结"
+  }
+ ],
+ "7": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 7 · 函数",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 33,
+   "title": "定义函数与 return"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 33,
+   "title": "定义函数与 return"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 34,
+   "title": "三种参数写法与★ 参数传递的副本语义"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 34,
+   "title": "三种参数写法与★ 参数传递的副本语义"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 35,
+   "title": "作用域与函数是一等公民"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 35,
+   "title": "作用域与函数是一等公民"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 36,
+   "title": "七个示例串讲与拆模块"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 36,
+   "title": "七个示例串讲与拆模块"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 37,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 37,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 12,
+   "kind": "lesson",
+   "no": 38,
+   "title": "★ 六个常见错误逐条自查"
+  },
+  {
+   "slide": 13,
+   "kind": "points",
+   "no": 38,
+   "title": "★ 六个常见错误逐条自查"
+  },
+  {
+   "slide": 14,
+   "kind": "lesson",
+   "no": 39,
+   "title": "单元 7 验收复盘"
+  },
+  {
+   "slide": 15,
+   "kind": "points",
+   "no": 39,
+   "title": "单元 7 验收复盘"
+  },
+  {
+   "slide": 16,
+   "kind": "summary",
+   "title": "单元 7 · 小结"
+  }
+ ],
+ "8": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 8 · 类",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 40,
+   "title": "类、实例与 self"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 40,
+   "title": "类、实例与 self"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 41,
+   "title": "__init__、属性方法与 __str__"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 41,
+   "title": "__init__、属性方法与 __str__"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 42,
+   "title": "继承与方法重写"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 42,
+   "title": "继承与方法重写"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 43,
+   "title": "类的组合与示例串讲"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 43,
+   "title": "类的组合与示例串讲"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 44,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 44,
+   "title": "动手实战与答案讲评"
+  },
+  {
+   "slide": 12,
+   "kind": "lesson",
+   "no": 45,
+   "title": "★ 六个常见错误逐条自查"
+  },
+  {
+   "slide": 13,
+   "kind": "points",
+   "no": 45,
+   "title": "★ 六个常见错误逐条自查"
+  },
+  {
+   "slide": 14,
+   "kind": "lesson",
+   "no": 46,
+   "title": "单元 8 验收复盘"
+  },
+  {
+   "slide": 15,
+   "kind": "points",
+   "no": 46,
+   "title": "单元 8 验收复盘"
+  },
+  {
+   "slide": 16,
+   "kind": "summary",
+   "title": "单元 8 · 小结"
+  }
+ ],
+ "9": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 9 · 文件与异常",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 47,
+   "title": "open() 与三种模式"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 47,
+   "title": "open() 与三种模式"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 48,
+   "title": "with 语句与四种读取方式"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 48,
+   "title": "with 语句与四种读取方式"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 49,
+   "title": "写文件与异常处理"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 49,
+   "title": "写文件与异常处理"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 50,
+   "title": "JSON / CSV 与持久化实战"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 50,
+   "title": "JSON / CSV 与持久化实战"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 51,
+   "title": "动手实战、答案与验收"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 51,
+   "title": "动手实战、答案与验收"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 9 · 小结"
+  }
+ ],
+ "10": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 10 · 测试代码",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 52,
+   "title": "为什么需要测试与三条命名规则"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 52,
+   "title": "为什么需要测试与三条命名规则"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 53,
+   "title": "assert 与测试用例设计"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 53,
+   "title": "assert 与测试用例设计"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 54,
+   "title": "parametrize、测试类与运行命令"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 54,
+   "title": "parametrize、测试类与运行命令"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 55,
+   "title": "测试夹具与示例串讲"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 55,
+   "title": "测试夹具与示例串讲"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 56,
+   "title": "动手实战、答案与验收"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 56,
+   "title": "动手实战、答案与验收"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 10 · 小结"
+  }
+ ],
+ "11": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 11 · 阶段 1 总复习 + 关卡验收",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 57,
+   "title": "知识串讲与能力地图"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 57,
+   "title": "知识串讲与能力地图"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 58,
+   "title": "排错思路与项目骨架"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 58,
+   "title": "排错思路与项目骨架"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 59,
+   "title": "四个复习示例串讲"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 59,
+   "title": "四个复习示例串讲"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 60,
+   "title": "★ 综合项目 1：待办管理器"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 60,
+   "title": "★ 综合项目 1：待办管理器"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 61,
+   "title": "★ 综合项目 2：成绩分析器"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 61,
+   "title": "★ 综合项目 2：成绩分析器"
+  },
+  {
+   "slide": 12,
+   "kind": "lesson",
+   "no": 62,
+   "title": "★ 综合项目 3：文本统计工具"
+  },
+  {
+   "slide": 13,
+   "kind": "points",
+   "no": 62,
+   "title": "★ 综合项目 3：文本统计工具"
+  },
+  {
+   "slide": 14,
+   "kind": "lesson",
+   "no": 63,
+   "title": "★ 关卡 1 现场测评"
+  },
+  {
+   "slide": 15,
+   "kind": "points",
+   "no": 63,
+   "title": "★ 关卡 1 现场测评"
+  },
+  {
+   "slide": 16,
+   "kind": "lesson",
+   "no": 64,
+   "title": "结业检查与下一阶段"
+  },
+  {
+   "slide": 17,
+   "kind": "points",
+   "no": 64,
+   "title": "结业检查与下一阶段"
+  },
+  {
+   "slide": 18,
+   "kind": "summary",
+   "title": "单元 11 · 小结"
+  }
+ ],
+ "12": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 12 · Pygame 起步与飞船驾驶",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 65,
+   "title": "项目规划与安装 Pygame"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 65,
+   "title": "项目规划与安装 Pygame"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 66,
+   "title": "主循环、帧率与事件驱动"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 66,
+   "title": "主循环、帧率与事件驱动"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 67,
+   "title": "Settings 类与屏幕矩形"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 67,
+   "title": "Settings 类与屏幕矩形"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 68,
+   "title": "驾驶飞船：标志位与边界"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 68,
+   "title": "驾驶飞船：标志位与边界"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 69,
+   "title": "重构、错误自查与验收"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 69,
+   "title": "重构、错误自查与验收"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 12 · 小结"
+  }
+ ],
+ "13": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 13 · 射击与外星舰队",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 70,
+   "title": "编组 Group 与精灵 Sprite"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 70,
+   "title": "编组 Group 与精灵 Sprite"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 71,
+   "title": "射击：Bullet 类与开火"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 71,
+   "title": "射击：Bullet 类与开火"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 72,
+   "title": "外星舰队与整体移动"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 72,
+   "title": "外星舰队与整体移动"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 73,
+   "title": "碰撞检测与游戏结束"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 73,
+   "title": "碰撞检测与游戏结束"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 74,
+   "title": "实战、答案与验收复盘"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 74,
+   "title": "实战、答案与验收复盘"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 13 · 小结"
+  }
+ ],
+ "14": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 14 · Play 按钮与记分",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 75,
+   "title": "游戏状态机与 Button 类"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 75,
+   "title": "游戏状态机与 Button 类"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 76,
+   "title": "记分牌与数据格式化"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 76,
+   "title": "记分牌与数据格式化"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 77,
+   "title": "动态难度与余下飞船数"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 77,
+   "title": "动态难度与余下飞船数"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 78,
+   "title": "实战、答案与自查"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 78,
+   "title": "实战、答案与自查"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 14 · 小结"
+  }
+ ],
+ "15": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 15 · Matplotlib 生成数据",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 79,
+   "title": "Matplotlib 入门与折线图"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 79,
+   "title": "Matplotlib 入门与折线图"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 80,
+   "title": "散点图与自动计算数据"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 80,
+   "title": "散点图与自动计算数据"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 81,
+   "title": "★ 校正绘图、刻度与颜色映射"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 81,
+   "title": "★ 校正绘图、刻度与颜色映射"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 82,
+   "title": "随机游走 RandomWalk 类"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 82,
+   "title": "随机游走 RandomWalk 类"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 83,
+   "title": "Plotly 掷骰子与动手实战"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 83,
+   "title": "Plotly 掷骰子与动手实战"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 15 · 小结"
+  }
+ ],
+ "16": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 16 · 下载真实数据",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 84,
+   "title": "CSV 与 datetime"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 84,
+   "title": "CSV 与 datetime"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 85,
+   "title": "缺失值与温度图"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 85,
+   "title": "缺失值与温度图"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 86,
+   "title": "GeoJSON 与地震散点图"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 86,
+   "title": "GeoJSON 与地震散点图"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 87,
+   "title": "实战、答案与验收复盘"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 87,
+   "title": "实战、答案与验收复盘"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 16 · 小结"
+  }
+ ],
+ "17": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 17 · 使用 API 与 Plotly",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 88,
+   "title": "API 概念与 Requests"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 88,
+   "title": "API 概念与 Requests"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 89,
+   "title": "GitHub API 与速率限制"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 89,
+   "title": "GitHub API 与速率限制"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 90,
+   "title": "Plotly 可视化与可点击链接"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 90,
+   "title": "Plotly 可视化与可点击链接"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 91,
+   "title": "Hacker News API 与动手实战"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 91,
+   "title": "Hacker News API 与动手实战"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 17 · 小结"
+  }
+ ],
+ "18": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 18 · Django 入门",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 92,
+   "title": "★ 虚拟环境与 Django 项目"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 92,
+   "title": "★ 虚拟环境与 Django 项目"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 93,
+   "title": "★ 应用、模型与迁移三步曲"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 93,
+   "title": "★ 应用、模型与迁移三步曲"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 94,
+   "title": "★ 一次请求的旅程：URL → 视图 → 模板"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 94,
+   "title": "★ 一次请求的旅程：URL → 视图 → 模板"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 95,
+   "title": "模板语法与模板继承"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 95,
+   "title": "模板语法与模板继承"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 96,
+   "title": "Django shell 与 404"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 96,
+   "title": "Django shell 与 404"
+  },
+  {
+   "slide": 12,
+   "kind": "lesson",
+   "no": 97,
+   "title": "实战、答案与验收复盘"
+  },
+  {
+   "slide": 13,
+   "kind": "points",
+   "no": 97,
+   "title": "实战、答案与验收复盘"
+  },
+  {
+   "slide": 14,
+   "kind": "summary",
+   "title": "单元 18 · 小结"
+  }
+ ],
+ "19": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 19 · 用户账户",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 98,
+   "title": "表单与数据归属三段式"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 98,
+   "title": "表单与数据归属三段式"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 99,
+   "title": "登录、注销与注册三件套"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 99,
+   "title": "登录、注销与注册三件套"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 100,
+   "title": "★ @login_required 与数据隔离红线"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 100,
+   "title": "★ @login_required 与数据隔离红线"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 101,
+   "title": "edit_entry 的双重保护"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 101,
+   "title": "edit_entry 的双重保护"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 102,
+   "title": "动手实战、答案与验收复盘"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 102,
+   "title": "动手实战、答案与验收复盘"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 19 · 小结"
+  }
+ ],
+ "20": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 20 · 样式与部署",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 103,
+   "title": "django-bootstrap5 与页面改造"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 103,
+   "title": "django-bootstrap5 与页面改造"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 104,
+   "title": "部署是什么与 requirements.txt"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 104,
+   "title": "部署是什么与 requirements.txt"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 105,
+   "title": "★ platformshconfig 与本地线上双环境"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 105,
+   "title": "★ platformshconfig 与本地线上双环境"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 106,
+   "title": "★ 三大部署坑"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 106,
+   "title": "★ 三大部署坑"
+  },
+  {
+   "slide": 10,
+   "kind": "lesson",
+   "no": 107,
+   "title": "部署上线、错误页与实战"
+  },
+  {
+   "slide": 11,
+   "kind": "points",
+   "no": 107,
+   "title": "部署上线、错误页与实战"
+  },
+  {
+   "slide": 12,
+   "kind": "summary",
+   "title": "单元 20 · 小结"
+  }
+ ],
+ "21": [
+  {
+   "slide": 1,
+   "kind": "cover",
+   "title": "单元 21 · 阶段 2 综合 + 关卡 2 验收",
+   "lessons": []
+  },
+  {
+   "slide": 2,
+   "kind": "lesson",
+   "no": 108,
+   "title": "工程流程回顾与技术地图"
+  },
+  {
+   "slide": 3,
+   "kind": "points",
+   "no": 108,
+   "title": "工程流程回顾与技术地图"
+  },
+  {
+   "slide": 4,
+   "kind": "lesson",
+   "no": 109,
+   "title": "能力跃迁与工程问题速查"
+  },
+  {
+   "slide": 5,
+   "kind": "points",
+   "no": 109,
+   "title": "能力跃迁与工程问题速查"
+  },
+  {
+   "slide": 6,
+   "kind": "lesson",
+   "no": 110,
+   "title": "★ 关卡 2 五项逐条自测"
+  },
+  {
+   "slide": 7,
+   "kind": "points",
+   "no": 110,
+   "title": "★ 关卡 2 五项逐条自测"
+  },
+  {
+   "slide": 8,
+   "kind": "lesson",
+   "no": 111,
+   "title": "综合项目与阶段 2 收尾"
+  },
+  {
+   "slide": 9,
+   "kind": "points",
+   "no": 111,
+   "title": "综合项目与阶段 2 收尾"
+  },
+  {
+   "slide": 10,
+   "kind": "summary",
+   "title": "单元 21 · 小结"
+  }
+ ]
+}

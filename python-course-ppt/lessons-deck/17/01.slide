@@ -1,0 +1,17 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '150px', background: '#1F5FA8' }} />
+    <Box style={{ position: 'absolute', left: 64, top: 34, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#BFD9F2', letterSpacing: 2 }}>阶段 2 · 单元 17</Text>
+        <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#FFFFFF', marginTop: 6 }}>使用 API 与 Plotly</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 64, top: 168, width: '1152px', height: 470 }}>
+        <svg width='1152' height='470' viewBox='0 0 1152 470'>
+            <text x='0' y='18' fontSize='15' fontWeight='bold' fill='#16232E' fontFamily='Microsoft YaHei'>本单元共 4 节课</text>
+            <rect x='0' y='196' width='1152' height='38' rx='7' fill='#FFFFFF' /><text x='16' y='221' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 88 节</text><text x='96' y='221' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>API 概念与 Requests</text><text x='1080' y='221' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W21</text><rect x='0' y='238' width='1152' height='38' rx='7' fill='#F2F7FD' /><text x='16' y='263' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 89 节</text><text x='96' y='263' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>GitHub API 与速率限制</text><text x='1080' y='263' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W21</text><rect x='0' y='280' width='1152' height='38' rx='7' fill='#FFFFFF' /><text x='16' y='305' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 90 节</text><text x='96' y='305' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>Plotly 可视化与可点击链接</text><text x='1080' y='305' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W21</text><rect x='0' y='322' width='1152' height='38' rx='7' fill='#F2F7FD' /><text x='16' y='347' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 91 节</text><text x='96' y='347' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>Hacker News API 与动手实战</text><text x='1080' y='347' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W21</text>
+        </svg>
+    </Box>
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 13, color: '#8A9AAA' }}>Python 讲授课件 · 逐节版</Text>
+        <Text style={{ fontSize: 13, color: '#8A9AAA' }}>单元 17 · 封面</Text>
+    </Box>
+</Slide>

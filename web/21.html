@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 21 · 阶段2综合与关卡2</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="21">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 21 · 阶段2综合与关卡2</h1>
+  <a class="ppt" href="ppt/u/21.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="108" data-to="111"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u21"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/21.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s18"><span class="k">大纲</span><span class="v">课程大纲课件 p18</span></a><a href="bank.html#u21"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-三个项目的工程流程回顾">2.1 三个项目的工程流程回顾</a>
+<a class="lv3" href="#2-2-三个项目的技术地图">2.2 三个项目的技术地图</a>
+<a class="lv3" href="#2-3-阶段-1-阶段-2-的能力跃迁">2.3 阶段 1 → 阶段 2 的能力跃迁</a>
+<a class="lv3" href="#2-4-常见工程问题速查">2.4 常见工程问题速查</a>
+<a class="lv3" href="#2-5-关卡-2-的五条硬指标">2.5 关卡 2 的五条硬指标</a>
+<a class="lv3" href="#2-6-下一步方向选择">2.6 下一步方向选择</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-项目目录体检脚本-project_doctor-py">示例 1：项目目录体检脚本（project_doctor.py）</a>
+<a class="lv3" href="#示例-2-requirements-txt-自动生成-make_requirem">示例 2：requirements.txt 自动生成（make_requirements.py）</a>
+<a class="lv3" href="#示例-3-代码规模与圈复杂度提示-code_metrics-py">示例 3：代码规模与圈复杂度提示（code_metrics.py）</a>
+<a class="lv3" href="#示例-4-统一日志配置模板-logging_setup-py">示例 4：统一日志配置模板（logging_setup.py）</a>
+<a class="lv3" href="#示例-5-陌生项目结构速读-explorer-py">示例 5：陌生项目结构速读（explorer.py）</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-21-1-三个项目的工程件">参考答案 21-1（三个项目的工程件）</a>
+<a class="lv3" href="#参考答案-21-2-pytest-测试-可直接运行">参考答案 21-2（pytest 测试，可直接运行）</a>
+<a class="lv3" href="#参考答案-21-3-重构冲刺前后对比">参考答案 21-3（重构冲刺前后对比）</a>
+<a class="lv3" href="#参考答案-21-4-陌生项目定位-bug-的完整过程">参考答案 21-4（陌生项目定位 bug 的完整过程）</a>
+<a class="lv3" href="#综合项目-3-个自选-做一个就够">综合项目（3 个自选，做一个就够）</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-没有-gitignore-就-git-add-虚拟环境和数据库进了仓库">错误 1：★ 没有 .gitignore 就 git add .，虚拟环境和数据库进了仓库</a>
+<a class="lv3" href="#错误-2-pip-freeze-在全局环境执行-清单长到没法看">错误 2：pip freeze 在全局环境执行，清单长到没法看</a>
+<a class="lv3" href="#错误-3-测试全是抄教材的-自己一条没写">错误 3：★ 测试全是抄教材的，自己一条没写</a>
+<a class="lv3" href="#错误-4-把-secret_key-硬编码在-settings-py-里-还推上">错误 4：把 SECRET_KEY 硬编码在 settings.py 里，还推上了公开仓库</a>
+<a class="lv3" href="#错误-5-代码里全是魔法数字-改一个参数要翻-8-个文件">错误 5：代码里全是魔法数字，改一个参数要翻 8 个文件</a>
+<a class="lv3" href="#错误-6-所有代码堆在一个文件里-两千行">错误 6：所有代码堆在一个文件里，两千行</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#八-关卡-2-验收标准-五条硬指标">八、关卡 2 验收标准（五条硬指标）</a>
+<a class="lv3" href="#硬指标-1-三个项目全部跑通-且已推到公开仓库-每个都有-readme-requ">✅ 硬指标 1：三个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt</a>
+<a class="lv3" href="#硬指标-2-学习笔记-已部署上线-公网可访问-错误页已定制">✅ 硬指标 2：「学习笔记」已部署上线，公网可访问，错误页已定制</a>
+<a class="lv3" href="#硬指标-3-能用自己的函数写出-pytest-测试并跑过-不是抄教材的">✅ 硬指标 3：能用自己的函数写出 pytest 测试并跑过（不是抄教材的）</a>
+<a class="lv3" href="#硬指标-4-接手一个没写过的-500-行-python-项目-能读懂结构并定位一">✅ 硬指标 4：接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</a>
+<a class="lv3" href="#硬指标-5-能说清每个项目-解决了什么问题-还能怎么扩展">✅ 硬指标 5：能说清每个项目「解决了什么问题、还能怎么扩展」</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-21-阶段-2-综合与关卡-2-验收">单元 21：阶段 2 综合与关卡 2 验收</h1>
+<blockquote>
+<p>对应教材第 12–20 章（三期项目）的收官复习 · 无对应教材新章节
+阶段 2 · 收官单元：把三个项目按工程流程收口，并迎接关卡 2 验收
+本单元目标：<strong>把三个项目收口成「别人能跑、别人能读、别人能改」的工程，并通过关卡 2 五条硬指标</strong></p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>完整复述做项目的七步工程流程，并解释它为什么比「跟着敲一遍」重要得多。</li>
+<li>画出三个项目的技术地图：每个项目用了什么技术、解决了什么问题。</li>
+<li>说清阶段 1 → 阶段 2 的能力跃迁，并用「单文件不超 300 行、配置与逻辑分离」检查自己的代码。</li>
+<li>独立处理四个高频工程问题：依赖锁定、密钥不入库、数据库备份、读懂一个陌生项目。</li>
+<li>用<strong>自己的</strong>函数写出 pytest 测试并跑通，并给三个项目补齐 README、requirements.txt、.gitignore。</li>
+<li>对照关卡 2 五条硬指标逐条自测，明确说出自己还差哪一条、接下来补什么。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-三个项目的工程流程回顾">2.1 三个项目的工程流程回顾</h3>
+<p>三个项目长得完全不同（游戏、可视化脚本、Web 应用），但流程是同一条：</p>
+<pre><code class="language-text"><span class="cl">示例</span>① 读需求         搞清楚"要解决什么问题"，不是"要写什么函数"
+      ↓
+② 自己先拆解    ★ 别急着抄。列出：需要哪些数据、哪些模块、哪些类
+      ↓            拿不准的地方先记下来，别边写边想
+③ 查官方文档    只查你卡住的那一个点，不要通读整本文档
+      ↓
+④ 编码           一次只实现一个功能，跑通了再做下一个
+      ↓
+⑤ git 提交       每完成一个能跑的功能就提交一次，说明写清做了什么
+      ↓
+⑥ 写 README      别人（或三个月后的你）怎么把这个项目跑起来
+      ↓
+⑦ 重构           功能对了之后代码还乱，就拆文件、抽函数、补注释
+</code></pre>
+<p>★ <strong>为什么这条流程比「跟着敲完」重要 10 倍</strong>：跟着敲完，你得到的是<strong>一个能跑的程序</strong>；走完这条流程，你得到的是<strong>一个能被接手、能被部署、能被修改的程序</strong>。举个场景：三个月后你忘了当初为什么把 <code>while True</code> 改成 <code>while running</code>。走完 ⑤⑥，git 提交说明会告诉你「为了加暂停功能，把事件循环改成可中断的」；只跟着敲，400 行代码摆在那儿你只能重读一遍。<strong>项目不是一次性的代码，是一份持续被修改的资产。</strong></p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>常见翻车</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 读需求</td>
+<td>一上手就写代码，写完发现做的不是题目要的</td>
+<td>用一句话写出「输入是什么、输出是什么」</td>
+</tr>
+<tr>
+<td>② 自己先拆解</td>
+<td>跳过这步直接抄，抄完不知道每行为什么这么写</td>
+<td>先列数据来源 / 模块清单 / 类清单</td>
+</tr>
+<tr>
+<td>③ 查文档</td>
+<td>通读官方文档前三章，越读越乱</td>
+<td>只查卡住的那一个 API：搜函数名 → 看参数 → 跑最小例子</td>
+</tr>
+<tr>
+<td>④ 编码</td>
+<td>一次写 300 行再调试</td>
+<td>一次一个功能，跑通了再往下</td>
+</tr>
+<tr>
+<td>⑤ git 提交</td>
+<td>一次提交 800 行，说明写「update」</td>
+<td>小步提交，说明写成「Added pause on P key」</td>
+</tr>
+<tr>
+<td>⑥ 写 README</td>
+<td>只写项目简介，不写怎么跑</td>
+<td>必含三段：这是什么 / 怎么装依赖 / 怎么运行</td>
+</tr>
+<tr>
+<td>⑦ 重构</td>
+<td>跳过这步，代码能跑但没人敢改</td>
+<td>见 2.3 节的两条硬标准</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-三个项目的技术地图">2.2 三个项目的技术地图</h3>
+<p>这张表回答的是：<strong>我这两个阶段到底学到了什么、这些东西各自解决了什么问题。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>项目 1：外星人入侵</th>
+<th>项目 2：数据可视化</th>
+<th>项目 3：学习笔记（Django）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>核心技术</strong></td>
+<td>Pygame 事件循环 + 精灵编组 <code>Group</code></td>
+<td>matplotlib + Plotly + requests</td>
+<td>Django 的 MVT + ORM + 认证</td>
+</tr>
+<tr>
+<td><strong>关键 API</strong></td>
+<td><code>pygame.event.get()</code>、<code>pygame.sprite.Group()</code></td>
+<td><code>matplotlib.pyplot</code>、<code>plotly.graph_objects</code></td>
+<td><code>startproject</code>、<code>Model</code>、<code>makemigrations</code>、<code>LoginView</code></td>
+</tr>
+<tr>
+<td><strong>数据结构</strong></td>
+<td>类继承链（<code>Ship</code>/<code>Alien</code>/<code>Bullet</code> ← <code>Sprite</code>）+ 编组</td>
+<td>字典套列表、列表套字典（地震数据）</td>
+<td>模型实例、查询集 <code>QuerySet</code></td>
+</tr>
+<tr>
+<td><strong>数据来源</strong></td>
+<td>无（数据在代码里）</td>
+<td>CSV（sitka_weather）+ GeoJSON（USGS 地震）</td>
+<td>SQLite → PostgreSQL（Platform.sh 云上）</td>
+</tr>
+<tr>
+<td><strong>第三方依赖</strong></td>
+<td><code>pygame</code></td>
+<td><code>matplotlib</code>、<code>plotly</code>、<code>requests</code></td>
+<td><code>django</code>、<code>django-bootstrap5</code>、<code>platformshconfig</code>、<code>gunicorn</code>、<code>psycopg2</code></td>
+</tr>
+<tr>
+<td><strong>测试与部署</strong></td>
+<td>测纯逻辑函数；本地跑，不用部署</td>
+<td>测数据处理函数；本地产图，不用部署</td>
+<td>测视图与模型；<strong>必须部署</strong>：Platform.sh + 三个 yaml + 双环境配置</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-text"><span class="cl">示例</span>项目 1 练的是「事件驱动」：  程序不按顺序跑，而是"等事件 → 处理 → 再等"
+项目 2 练的是「数据流动」：  数据从哪来 → 清洗 → 变形 → 可视化 → 讲结论
+项目 3 练的是「工程交付」：  有状态、有并发用户、有安全要求、要 7×24 在线
+</code></pre>
+<p>★ 读陌生代码时这张表就是「地图」：先猜项目属于哪一类，再去找对应的那一行技术。看代码里有 <code>pygame.event.get()</code> 就知道是事件驱动；看到 <code>class Model</code> 就知道是 Django。<strong>先分类，再细读，效率差十倍。</strong></p>
+<h3 id="2-3-阶段-1-阶段-2-的能力跃迁">2.3 阶段 1 → 阶段 2 的能力跃迁</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>阶段 1</th>
+<th>阶段 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>代码规模</td>
+<td>单文件几十到几百行</td>
+<td>多文件、几百到上千行</td>
+</tr>
+<tr>
+<td>文件数</td>
+<td>1 个 <code>.py</code></td>
+<td>目录 + 多模块 + 配置 + 模板</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td>只有标准库</td>
+<td>第三方库（pygame / matplotlib / Django）</td>
+</tr>
+<tr>
+<td>依赖管理</td>
+<td>不用管</td>
+<td><code>requirements.txt</code> 必须锁版本</td>
+</tr>
+<tr>
+<td>数据存放</td>
+<td>JSON / CSV 文件</td>
+<td>SQLite → PostgreSQL，带迁移</td>
+</tr>
+<tr>
+<td>别人能跑吗</td>
+<td>给你代码你也许能跑</td>
+<td>有 README 和 requirements，别人 5 分钟跑起来</td>
+</tr>
+</tbody>
+</table>
+<p><strong>标准一：单文件不超过 300 行。</strong> 超了按「谁在调用它」拆：</p>
+<pre><code class="language-text"><span class="cl">示例</span>alien_invasion.py  400 行  →拆成↓
+├── settings.py            所有常量（颜色、数量、速度）
+├── ship.py                Ship 类
+├── alien.py               Alien 类
+├── bullet.py              Bullet 类
+├── game_functions.py      update() / check_keydown() / fire_bullet() 等纯逻辑
+└── main() 留在 alien_invasion.py 里，只负责"组装"
+</code></pre>
+<p>拆完有个<strong>意外的好处</strong>：<code>game_functions.py</code> 里全是纯逻辑、不碰 pygame 屏幕，<strong>这些函数能直接写 pytest 测试了</strong>（测的时候根本不用开窗口）。这就是「逻辑与 I/O 分离」的实际收益。</p>
+<p><strong>标准二：配置与逻辑分离。</strong> 判据很简单：<strong>代码里出现一个"魔法数字"或"魔法字符串"，就应该考虑搬到配置文件里。</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 反面：逻辑和配置糊在一起</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_ship</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">Ship</span><span class="p">(</span><span class="mi">57</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"images/ship.bmp"</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="c1">#                      ↑多少   ↑多少        ↑路径           ↑速度</span>
+    <span class="c1">#                     改一次要动函数体，改坏了不知道是谁的锅</span>
+
+<span class="c1"># 正面：配置抽到 settings.py，逻辑文件只管用</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">SHIP_START_X</span><span class="p">,</span> <span class="n">SHIP_START_Y</span><span class="p">,</span> <span class="n">SHIP_IMAGE</span><span class="p">,</span> <span class="n">SHIP_SPEED</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">create_ship</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">Ship</span><span class="p">(</span><span class="n">SHIP_START_X</span><span class="p">,</span> <span class="n">SHIP_START_Y</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">SHIP_IMAGE</span><span class="p">),</span> <span class="n">SHIP_SPEED</span><span class="p">)</span>
+</code></pre>
+<p>Django 侧更彻底：<code>ll_project/settings.py</code> 是纯配置，<code>models.py</code> / <code>views.py</code> 是纯逻辑。单元 20 追加 Platform.sh 配置时，<strong>逻辑一行都没动</strong>——这就是分离带来的安全感。</p>
+<h3 id="2-4-常见工程问题速查">2.4 常见工程问题速查</h3>
+<p>这一节是「查手册」性质的，卡住时回来翻。</p>
+<p><strong>问题一：依赖怎么锁？</strong> 在虚拟环境里执行 <code>pip freeze &gt; requirements.txt</code>，别人拿到项目后 <code>pip install -r requirements.txt</code> 重建环境。三条纪律：① <strong>只在虚拟环境里 <code>pip freeze</code></strong>，否则会把系统全局的包也冻进去；② <strong>必须带 <code>==</code> 版本号</strong>，不带就是「装最新版」，半年后可能装到不兼容的大版本；③ <strong>间接依赖也留着</strong>（asgiref、sqlparse 是 Django 带进来的）。</p>
+<p><strong>问题二：密钥怎么不提交？</strong> 一行口令：<strong>密钥只从环境变量读，永远不写进代码。</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="c1"># 正确：代码里没有密钥本身，值从环境变量来</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"DJANGO_SECRET_KEY"</span><span class="p">]</span>
+
+<span class="c1"># 错误：密钥躺在代码里，推到公开仓库谁都能拿到</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s2">"django-insecure-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c"</span>
+</code></pre>
+<p>配套三步：① <code>.gitignore</code> 忽略 <code>.env</code>、<code>settings_local.py</code>；② 仓库里放 <code>.env.example</code>，<strong>只写键名不写值</strong>；③ 密钥已经推出去了怎么办？<strong>立刻去平台后台重置旧密钥</strong>——删记录没用，旧值已在别人的克隆里。Django 的 <code>SECRET_KEY</code> 泄露，攻击者能伪造 <code>sessionid</code> cookie 冒充任意用户。</p>
+<p><strong>问题三：数据库怎么备份？</strong> SQLite 就是一个文件，<code>sqlite3 db.sqlite3 .backup backup.db</code> 或直接复制走就是备份；PostgreSQL 用 <code>pg_dump &gt; backup.sql</code> 导出、<code>psql &lt; backup.sql</code> 恢复。Django 侧更省事：<code>manage.py dumpdata &gt; data.json</code> / <code>loaddata data.json</code>。三个要点：① <strong>备份要定期</strong>；② <strong>异地存一份</strong>，同一台机器上的副本在磁盘坏掉时一起没；③ <strong>定期演练恢复</strong>，没验证过的备份等于没有备份。</p>
+<p><strong>问题四：怎么读一个没写过的项目？</strong> 五步，顺序别乱：</p>
+<pre><code class="language-text"><span class="cl">示例</span>第 1 步  看目录树          哪些是入口？哪些是配置？哪些是测试？
+第 2 步  读 README         它自称解决什么问题？怎么跑？
+第 3 步  读依赖清单        requirements.txt 告诉你用了什么库
+第 4 步  找入口再往外读    main.py / manage.py → 调用的函数 → 函数定义
+第 5 步  grep 搜关键字     搜函数名/类名，找到全部使用点
+</code></pre>
+<p>第 5 步的具体命令（在项目根目录执行）：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"def update"</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.py"</span><span class="w"> </span>.<span class="w">      </span><span class="c1"># 找函数在哪定义、哪被调用</span>
+grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"Group()"</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.py"</span><span class="w"> </span>.<span class="w">        </span><span class="c1"># 找精灵编组在哪用</span>
+grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"SECRET_KEY"</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.py"</span><span class="w"> </span>.<span class="w">     </span><span class="c1"># 找密钥相关代码</span>
+grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"class .*Model"</span><span class="w"> </span>--include<span class="o">=</span><span class="s2">"*.py"</span><span class="w"> </span>.<span class="w">  </span><span class="c1"># 找 Django 模型</span>
+</code></pre>
+<p><strong>为什么顺序重要</strong>：从头读到尾是新手读代码最慢的方式——你会同时看到常量、工具函数、类、业务逻辑，全都混在一起。先建「地图」再进细节，才不会迷路。示例 5 会给一个能把前四步自动做掉的脚本。</p>
+<h3 id="2-5-关卡-2-的五条硬指标">2.5 关卡 2 的五条硬指标</h3>
+<p>先讲「为什么是这五条」，第八节再展开验收细则。五条分别对应五种能力：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>指标</th>
+<th>考的是</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>三个项目全部跑通、推到公开仓库，各有 README + requirements.txt</td>
+<td><strong>可交付</strong>：别人拿到能跑起来</td>
+</tr>
+<tr>
+<td>2</td>
+<td>「学习笔记」已部署上线，公网可访问，错误页已定制</td>
+<td><strong>能上线</strong>：处理过真实环境的坑</td>
+</tr>
+<tr>
+<td>3</td>
+<td>能用自己的函数写出 pytest 测试并跑过（不是抄教材的）</td>
+<td><strong>可验证</strong>：不靠肉眼保证质量</td>
+</tr>
+<tr>
+<td>4</td>
+<td>接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</td>
+<td><strong>可阅读</strong>：能维护别人的代码</td>
+</tr>
+<tr>
+<td>5</td>
+<td>能说清每个项目「解决了什么问题、还能怎么扩展」</td>
+<td><strong>有判断力</strong>：知道东西值不值、往哪走</td>
+</tr>
+</tbody>
+</table>
+<p>★ <strong>为什么第 5 条也算硬指标</strong>：前四条「做过」就能证明，只有第 5 条考「想清楚」。有人照抄教程做出三个项目然后寸步难行，也有人做出三个项目且清楚下一步加什么。<strong>区别不在做过多少，在有没有判断。</strong> 面试和实际工作里后者才真正值钱。</p>
+<p>常见状态与补法：项目能跑但没推仓库 → 练习 21-1；推了但没 README → 必含「是什么 / 怎么装 / 怎么跑」三段；「学习笔记」只在本地跑 → 回单元 20；测试全是抄教材的 → 练习 21-2；看别人的代码就慌 → 按 2.4 五步 + 示例 5 练；说不出能怎么扩展 → 每个项目写三句「未来想法」。</p>
+<h3 id="2-6-下一步方向选择">2.6 下一步方向选择</h3>
+<p>阶段 2 到此结束，接下来不必全都学。<strong>选一条主攻，其余当备用。</strong></p>
+<table>
+<thead>
+<tr>
+<th>想深挖</th>
+<th>先学什么</th>
+<th>为什么先学它</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Web 后端</strong></td>
+<td>Django REST Framework（把「学习笔记」的数据变成 JSON API），再看点前端基础</td>
+<td>你已有 MVT + ORM + 认证的底子，加一层「给程序调用的接口」是最自然的延伸</td>
+</tr>
+<tr>
+<td><strong>数据分析</strong></td>
+<td>pandas（读 CSV、处理缺失值、分组聚合）、numpy，再把项目 2 的图升级成交互式的</td>
+<td>项目 2 用了 matplotlib，但数据清洗靠手写循环，pandas 几行就能搞定</td>
+</tr>
+<tr>
+<td><strong>自动化与爬虫</strong></td>
+<td><code>requests</code> 进阶（会话、超时、重试）、<code>beautifulsoup4</code>、<code>schedule</code>；<strong>先读目标站点的 <code>robots.txt</code></strong></td>
+<td>本质是「让程序替你重复做取数+处理」；<code>requests</code> 项目 2 已用过，起点不低</td>
+</tr>
+<tr>
+<td><strong>测试与工程化</strong></td>
+<td>pytest 的 fixture / 参数化进阶、<code>unittest.mock</code> 打桩、<code>black</code> 格式化、<code>ruff</code> 检查、CI（GitHub Actions 跑测试）</td>
+<td>关卡 2 第 3、4 条就靠这条撑起来；也是「会写代码」和「会交付软件」的分界线</td>
+</tr>
+</tbody>
+</table>
+<p><strong>怎么选</strong>：① 做项目时最常卡在哪一步？卡在数据处理 → 数据方向。② 想让别人用我的东西吗？想 → Web 方向。③ 受不了「不知道别人代码在干什么」的时刻吗？受不了 → 先攻工程化。<strong>共同的第一步</strong>：不管选哪条，先把三个项目里<strong>你最想改的那个</strong>改到你自己满意。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<p>本单元的例子全部只用标准库（<code>ast</code>、<code>pathlib</code>、<code>logging</code>），<strong>不需要装 pygame / Django / matplotlib</strong>，任何机器上直接跑。写文件的例子都写在 <code>data/</code> 目录下，跑完整个删掉。</p>
+<h3 id="示例-1-项目目录体检脚本-project_doctor-py">示例 1：项目目录体检脚本（project_doctor.py）</h3>
+<p>对应 2.4 的「工程件齐全」检查。放在项目根目录跑一遍，就知道缺什么。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># project_doctor.py —— 检查一个项目该有的工程件是否齐全</span>
+<span class="c1"># 用法：python project_doctor.py [项目根目录，默认为当前目录]</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">REQUIRED</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"README.md"</span><span class="p">,</span> <span class="s2">"requirements.txt"</span><span class="p">,</span> <span class="s2">".gitignore"</span><span class="p">]</span>
+<span class="n">IGNORE_KEYWORDS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"__pycache__"</span><span class="p">,</span> <span class="s2">"venv"</span><span class="p">,</span> <span class="s2">"db.sqlite3"</span><span class="p">]</span>
+<span class="n">SECRET_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"SECRET_KEY"</span><span class="p">,</span> <span class="s2">"PASSWORD"</span><span class="p">,</span> <span class="s2">"API_KEY"</span><span class="p">,</span> <span class="s2">"TOKEN"</span><span class="p">]</span>
+<span class="n">SKIP_DIRS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".git"</span><span class="p">,</span> <span class="s2">"__pycache__"</span><span class="p">,</span> <span class="s2">"venv"</span><span class="p">,</span> <span class="s2">".venv"</span><span class="p">,</span> <span class="s2">"env"</span><span class="p">,</span> <span class="s2">"node_modules"</span><span class="p">}</span>
+<span class="n">FILE_LIMIT</span> <span class="o">=</span> <span class="mi">300</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""读文件；不存在或编码不对就返回空字符串。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_requirements</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""依赖清单有没有锁版本。返回 None 表示通过。"""</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements.txt"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">"requirements.txt 不存在"</span>
+    <span class="n">unpinned</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="s2">"=="</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ln</span><span class="p">]</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"有 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unpinned</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个依赖没锁版本，例如：</span><span class="si">{</span><span class="n">unpinned</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">unpinned</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_gitignore</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">""".gitignore 有没有覆盖关键条目。"""</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">".gitignore"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">".gitignore 不存在"</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">IGNORE_KEYWORDS</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">".gitignore 缺少：</span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">missing</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""跑完全部检查并打印报告，返回问题总数。"""</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.py"</span><span class="p">)</span>
+             <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">part</span> <span class="ow">in</span> <span class="n">SKIP_DIRS</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">parts</span><span class="p">)]</span>
+    <span class="n">problems</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"体检对象：</span><span class="si">{</span><span class="n">root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">【必备工程件】"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">REQUIRED</span><span class="p">:</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="s1">'OK'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'缺'</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">problems</span> <span class="o">+=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【内容检查】"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"依赖清单"</span><span class="p">,</span> <span class="n">check_requirements</span><span class="p">(</span><span class="n">root</span><span class="p">)),</span>
+                          <span class="p">(</span><span class="s2">"忽略清单"</span><span class="p">,</span> <span class="n">check_gitignore</span><span class="p">(</span><span class="n">root</span><span class="p">))]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="s1">'OK'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'问题'</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">"</span>
+              <span class="o">+</span> <span class="p">(</span><span class="s2">"检查通过"</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"：</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+        <span class="n">problems</span> <span class="o">+=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【代码扫描】（共 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个 .py 文件）"</span><span class="p">)</span>
+    <span class="c1"># 扫硬编码密钥：排除从环境变量读的、名单字面量、没赋值的行</span>
+    <span class="n">secrets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">line</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SECRET_NAMES</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="s2">"os.environ"</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">"getenv"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="s2">"="</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">"["</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">"{"</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+                <span class="n">secrets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">lineno</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">long_files</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">（</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">read_text</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span><span class="si">}</span><span class="s2"> 行）"</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">files</span>
+                  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">read_text</span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">FILE_LIMIT</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">found</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"硬编码密钥检查"</span><span class="p">,</span> <span class="n">secrets</span><span class="p">),</span>
+                         <span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">FILE_LIMIT</span><span class="si">}</span><span class="s2"> 行检查"</span><span class="p">,</span> <span class="n">long_files</span><span class="p">)]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="s1">'OK'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'问题'</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">"</span>
+              <span class="o">+</span> <span class="p">(</span><span class="s2">""</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"：</span><span class="si">{</span><span class="n">found</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+        <span class="n">problems</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"共发现 </span><span class="si">{</span><span class="n">problems</span><span class="si">}</span><span class="s2"> 个必须修的问题。"</span> <span class="k">if</span> <span class="n">problems</span>
+          <span class="k">else</span> <span class="s2">"体检通过：工程件齐全，可以推仓库 / 部署了。"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">problems</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">report</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"."</span><span class="p">))</span>
+</code></pre>
+<h3 id="示例-2-requirements-txt-自动生成-make_requirem">示例 2：requirements.txt 自动生成（make_requirements.py）</h3>
+<p>思路：扫项目里所有 <code>import</code> 语句，把「Python 自带的」剔掉，剩下的就是第三方依赖。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># make_requirements.py —— 扫描 import 语句，列出项目用到的第三方包</span>
+<span class="c1"># 用法：python make_requirements.py [项目根目录]</span>
+<span class="c1"># 局限：它只猜「需要哪些包」，版本号要用 pip freeze 补上</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sysconfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># import 名和 PyPI 包名不一致的映射（最常踩的几个）</span>
+<span class="n">ALIASES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"PIL"</span><span class="p">:</span> <span class="s2">"Pillow"</span><span class="p">,</span> <span class="s2">"cv2"</span><span class="p">:</span> <span class="s2">"opencv-python"</span><span class="p">,</span>
+           <span class="s2">"sklearn"</span><span class="p">:</span> <span class="s2">"scikit-learn"</span><span class="p">,</span> <span class="s2">"bs4"</span><span class="p">:</span> <span class="s2">"beautifulsoup4"</span><span class="p">,</span>
+           <span class="s2">"yaml"</span><span class="p">:</span> <span class="s2">"PyYAML"</span><span class="p">,</span> <span class="s2">"django_bootstrap5"</span><span class="p">:</span> <span class="s2">"django-bootstrap5"</span><span class="p">}</span>
+<span class="n">INDIRECT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"setuptools"</span><span class="p">,</span> <span class="s2">"pip"</span><span class="p">,</span> <span class="s2">"wheel"</span><span class="p">}</span>
+<span class="n">SKIP_DIRS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".git"</span><span class="p">,</span> <span class="s2">"__pycache__"</span><span class="p">,</span> <span class="s2">"venv"</span><span class="p">,</span> <span class="s2">".venv"</span><span class="p">,</span> <span class="s2">"env"</span><span class="p">,</span>
+             <span class="s2">"node_modules"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">,</span> <span class="s2">"tests"</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">known_names</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""标准库 + 内置模块 + 已知别名，都是"不用写进 requirements"的。"""</span>
+    <span class="n">stdlib</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sysconfig</span><span class="o">.</span><span class="n">get_paths</span><span class="p">()[</span><span class="s2">"stdlib"</span><span class="p">])</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">stdlib</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.py"</span><span class="p">)}</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">builtin_module_names</span><span class="p">)</span>
+    <span class="n">names</span> <span class="o">|=</span> <span class="p">{</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">stdlib</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span>
+              <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="s2">"__init__.py"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="n">names</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">ALIASES</span><span class="p">)</span> <span class="o">|</span> <span class="n">INDIRECT</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">collect_imports</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">known</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""遍历所有 .py 文件，返回 {顶层模块名: [出现位置]}（已滤掉标准库和本地模块）。"""</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.py"</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">part</span> <span class="ow">in</span> <span class="n">SKIP_DIRS</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tree</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="ne">SyntaxError</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Import</span><span class="p">):</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">names</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">ImportFrom</span><span class="p">):</span>
+                <span class="c1"># level &gt; 0 是相对导入，属项目内部模块，不算依赖</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+                         <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">module</span> <span class="k">else</span> <span class="p">[])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">found</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">n</span><span class="p">:</span> <span class="n">p</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">found</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">.py"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">n</span> <span class="o">/</span> <span class="s2">"__init__.py"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span>
+    <span class="n">imports</span> <span class="o">=</span> <span class="n">collect_imports</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">known_names</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"在 </span><span class="si">{</span><span class="n">root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="s2"> 中发现 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">imports</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个第三方依赖："</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">imports</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">ALIASES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2"> ← </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imports</span><span class="p">[</span><span class="n">name</span><span class="p">][:</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">下一步：在虚拟环境里执行 pip freeze，核对版本号后写成"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"        包名==版本号  的形式写进 requirements.txt。"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+<h3 id="示例-3-代码规模与圈复杂度提示-code_metrics-py">示例 3：代码规模与圈复杂度提示（code_metrics.py）</h3>
+<p>对应 2.3 节的「单文件不超 300 行」。用 <code>ast</code> 静态统计，<strong>不导入你的项目</strong>，所以不会有副作用。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># code_metrics.py —— 统计文件行数、函数长度和圈复杂度近似值</span>
+<span class="c1"># 用法：python code_metrics.py [项目根目录]</span>
+<span class="c1"># 只用标准库，不会导入你的项目代码</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">SKIP_DIRS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".git"</span><span class="p">,</span> <span class="s2">"__pycache__"</span><span class="p">,</span> <span class="s2">"venv"</span><span class="p">,</span> <span class="s2">".venv"</span><span class="p">,</span> <span class="s2">"env"</span><span class="p">,</span> <span class="s2">"node_modules"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">}</span>
+<span class="n">FILE_LIMIT</span><span class="p">,</span> <span class="n">FUNC_LIMIT</span><span class="p">,</span> <span class="n">COMPLEXITY_LIMIT</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">8</span>
+<span class="n">BRANCH_NODES</span> <span class="o">=</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">If</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">IfExp</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">While</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">For</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFor</span><span class="p">,</span>
+                <span class="n">ast</span><span class="o">.</span><span class="n">ExceptHandler</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">With</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncWith</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Assert</span><span class="p">,</span>
+                <span class="n">ast</span><span class="o">.</span><span class="n">comprehension</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_decisions</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""数一遍「会改变控制流」的节点数量，作为圈复杂度的近似。"""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">BRANCH_NODES</span><span class="p">):</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">BoolOp</span><span class="p">):</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># a and b：每多一项 +1</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">Match</span><span class="p">):</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">cases</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""解析一个文件，返回 {文件, 总行数, 函数列表}（按复杂度降序）。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"文件"</span><span class="p">:</span> <span class="n">filename</span><span class="p">,</span> <span class="s2">"总行数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()),</span> <span class="s2">"函数"</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">SyntaxError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">"错误"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">tree</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">FunctionDef</span><span class="p">,</span> <span class="n">ast</span><span class="o">.</span><span class="n">AsyncFunctionDef</span><span class="p">)):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">lineno</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">"end_lineno"</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">"函数"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">"名字"</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">"行号"</span><span class="p">:</span> <span class="n">start</span><span class="p">,</span> <span class="s2">"长度"</span><span class="p">:</span> <span class="n">length</span><span class="p">,</span>
+                <span class="s2">"复杂度"</span><span class="p">:</span> <span class="n">count_decisions</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">})</span>   <span class="c1"># 圈复杂度 = 决策点 + 1</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">"函数"</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="p">[</span><span class="s2">"复杂度"</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""扫描并打印报告，返回值得重构的处数。"""</span>
+    <span class="n">reports</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.py"</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">part</span> <span class="ow">in</span> <span class="n">SKIP_DIRS</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reports</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">analyze_source</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span>
+                                          <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span>
+        <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">reports</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2"> 下没找到 .py 文件"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"共 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">reports</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个文件、</span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">'总行数'</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reports</span><span class="p">)</span><span class="si">}</span><span class="s2"> 行、"</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">'函数'</span><span class="p">])</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">reports</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个函数</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">problems</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"【超过 </span><span class="si">{</span><span class="n">FILE_LIMIT</span><span class="si">}</span><span class="s2"> 行的文件（建议拆分）】"</span><span class="p">)</span>
+    <span class="n">big</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reports</span> <span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s2">"总行数"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">FILE_LIMIT</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">big</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">"总行数"</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">'文件'</span><span class="p">]</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s1">'总行数'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 行"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">big</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  无"</span><span class="p">)</span>
+    <span class="n">problems</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">big</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【复杂度最高的 5 个函数】"</span><span class="p">)</span>
+    <span class="n">all_funcs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r</span><span class="p">[</span><span class="s2">"文件"</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reports</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s2">"函数"</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">func</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_funcs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">"复杂度"</span><span class="p">],</span>
+                                 <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]:</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="p">(</span><span class="s2">" ← 超标"</span> <span class="k">if</span> <span class="n">func</span><span class="p">[</span><span class="s2">"复杂度"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">COMPLEXITY_LIMIT</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="p">(</span><span class="s2">" ← 太长"</span> <span class="k">if</span> <span class="n">func</span><span class="p">[</span><span class="s2">"长度"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">FUNC_LIMIT</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  复杂度</span><span class="si">{</span><span class="n">func</span><span class="p">[</span><span class="s1">'复杂度'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;3</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">func</span><span class="p">[</span><span class="s1">'长度'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> 行  "</span>
+              <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">func</span><span class="p">[</span><span class="s1">'名字'</span><span class="p">]</span><span class="si">}</span><span class="s2">()  (</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">func</span><span class="p">[</span><span class="s1">'行号'</span><span class="p">]</span><span class="si">}</span><span class="s2">)</span><span class="si">{</span><span class="n">flag</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="n">problems</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">共 </span><span class="si">{</span><span class="n">problems</span><span class="si">}</span><span class="s2"> 处值得重构。先挑「复杂度最高」的那个函数下手。"</span>
+          <span class="k">if</span> <span class="n">problems</span> <span class="k">else</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">全部在阈值以内，规模控制得不错。"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">problems</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">report</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"."</span><span class="p">))</span>
+</code></pre>
+<h3 id="示例-4-统一日志配置模板-logging_setup-py">示例 4：统一日志配置模板（logging_setup.py）</h3>
+<p>三个项目都缺一个东西：<strong>出问题时能回头查</strong>。<code>print</code> 只适合调试，正式项目要写日志。这个模板可以直接抄进任何项目。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># logging_setup.py —— 项目通用的日志配置模板</span>
+<span class="c1"># 用法：from logging_setup import setup_logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging.handlers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">LOG_FORMAT</span> <span class="o">=</span> <span class="s2">"</span><span class="si">%(asctime)s</span><span class="s2"> | </span><span class="si">%(levelname)-7s</span><span class="s2"> | </span><span class="si">%(name)-12s</span><span class="s2"> | </span><span class="si">%(message)s</span><span class="s2">"</span>
+<span class="n">DATE_FORMAT</span> <span class="o">=</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_logging</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"my_project"</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">,</span> <span class="n">log_file</span><span class="o">=</span><span class="s2">"data/app.log"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""配置并返回一个 logger。</span>
+
+<span class="sd">    装两个 handler：① RotatingFileHandler 写文件，单文件超 1MB 就轮换、最多留 3 份，</span>
+<span class="sd">    防止日志把磁盘写满；② StreamHandler 让终端也能看到，方便开发。</span>
+<span class="sd">    """</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>      <span class="c1"># 重复调用时先清空，否则日志会打印好几遍</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">level</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>     <span class="c1"># 不冒泡到 root，避免重复输出</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">LOG_FORMAT</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">log_file</span><span class="p">)</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">RotatingFileHandler</span><span class="p">(</span>
+                        <span class="n">path</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                        <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()):</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">logger</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""最小可跑演示：建 logger → 记三条不同级别的日志。"""</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">setup_logging</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"demo"</span><span class="p">,</span> <span class="n">log_file</span><span class="o">=</span><span class="s2">"data/app.log"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"程序启动"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"这是一条警告：磁盘占用偏高"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"这是一条错误：连不上数据库"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"程序正常结束，日志已写入 data/app.log"</span><span class="p">)</span>
+    <span class="c1"># 跑完可以删掉 data/ 目录</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+<h3 id="示例-5-陌生项目结构速读-explorer-py">示例 5：陌生项目结构速读（explorer.py）</h3>
+<p>把 2.4 节的第 2–4 步做成一个脚本：标出每个文件的角色、读依赖清单、给出建议阅读顺序。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># explorer.py —— 30 秒速读一个陌生项目</span>
+<span class="c1"># 用法：python explorer.py [项目根目录]</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">SKIP_DIRS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".git"</span><span class="p">,</span> <span class="s2">"__pycache__"</span><span class="p">,</span> <span class="s2">"venv"</span><span class="p">,</span> <span class="s2">".venv"</span><span class="p">,</span> <span class="s2">"env"</span><span class="p">,</span> <span class="s2">"node_modules"</span><span class="p">,</span>
+             <span class="s2">".idea"</span><span class="p">,</span> <span class="s2">".vscode"</span><span class="p">,</span> <span class="s2">"static"</span><span class="p">,</span> <span class="s2">"migrations"</span><span class="p">}</span>
+<span class="n">TEXT_SUFFIXES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".py"</span><span class="p">,</span> <span class="s2">".txt"</span><span class="p">,</span> <span class="s2">".md"</span><span class="p">,</span> <span class="s2">".cfg"</span><span class="p">,</span> <span class="s2">".toml"</span><span class="p">,</span> <span class="s2">".yaml"</span><span class="p">,</span> <span class="s2">".yml"</span><span class="p">,</span>
+                 <span class="s2">".json"</span><span class="p">,</span> <span class="s2">".ini"</span><span class="p">,</span> <span class="s2">".env"</span><span class="p">}</span>
+<span class="n">ENTRY_MARKERS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'if __name__ == "__main__"'</span><span class="p">,</span> <span class="s2">"def main("</span><span class="p">)</span>
+<span class="n">READ_ORDER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"项目说明"</span><span class="p">,</span> <span class="s2">"依赖清单"</span><span class="p">,</span> <span class="s2">"★ 程序入口"</span><span class="p">,</span> <span class="s2">"★ Django 入口"</span><span class="p">,</span>
+              <span class="s2">"配置文件"</span><span class="p">,</span> <span class="s2">"业务逻辑"</span><span class="p">,</span> <span class="s2">"测试"</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""读文件；编码不对就返回空字符串。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">UnicodeDecodeError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">guess_role</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""根据文件名和内容猜这个文件的角色。"""</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"manage.py"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"★ Django 入口"</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"settings.py"</span><span class="p">,</span> <span class="s2">"config.py"</span><span class="p">,</span> <span class="s2">".env"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"配置文件"</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"requirements.txt"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"依赖清单"</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"test_"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"tests"</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"测试"</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"readme"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"项目说明"</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">m</span> <span class="ow">in</span> <span class="n">source</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">ENTRY_MARKERS</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"★ 程序入口"</span>
+    <span class="k">return</span> <span class="s2">"业务逻辑"</span> <span class="k">if</span> <span class="s2">"def "</span> <span class="ow">in</span> <span class="n">source</span> <span class="ow">or</span> <span class="s2">"class "</span> <span class="ow">in</span> <span class="n">source</span> <span class="k">else</span> <span class="s2">"数据/其他"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scan_files</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""★ 第 2–4 步：所有源码文件按角色归类，并打印依赖清单。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【文件角色】"</span><span class="p">)</span>
+    <span class="n">roles</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">or</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TEXT_SUFFIXES</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">part</span> <span class="ow">in</span> <span class="n">SKIP_DIRS</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"/"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rel</span> <span class="o">==</span> <span class="s2">"requirements.txt"</span><span class="p">:</span>
+            <span class="k">continue</span>                      <span class="c1"># 依赖清单单独打印</span>
+        <span class="n">roles</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">guess_role</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">read_text</span><span class="p">(</span><span class="n">path</span><span class="p">)),</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rel</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">roles</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">："</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">roles</span><span class="p">[</span><span class="n">role</span><span class="p">][:</span><span class="mi">8</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【依赖清单】"</span><span class="p">)</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">read_text</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">ln</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">ln</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ln</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">))</span>
+          <span class="ow">or</span> <span class="s2">"  没有 requirements.txt —— 这本身就是一个工程问题"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">roles</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/unknown_project"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"目录不存在：</span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2">（可以先随便传一个已有目录试试）"</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"速读目标：</span><span class="si">{</span><span class="n">root</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">roles</span> <span class="o">=</span> <span class="n">scan_files</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">【建议阅读顺序】"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">READ_ORDER</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">roles</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="n">roles</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 21-1【给三个项目补齐工程件】</strong>
+为外星人入侵、数据可视化、学习笔记各补齐缺失的工程件。要求：① 每个项目根目录有 <code>README.md</code>（必含三段：这是什么 / 怎么装依赖 / 怎么运行，附一段运行输出示例）；② 有 <code>requirements.txt</code>，由 <code>pip freeze &gt; requirements.txt</code> 生成且依赖都锁了版本；③ 有 <code>.gitignore</code>，至少忽略 <code>__pycache__/</code>、虚拟环境目录、<code>.env</code>；④ 三个项目都 <code>git init</code> 过并推到公开仓库。<strong>验收点</strong>：跑一遍示例 1 的 <code>project_doctor.py</code>，问题数为 0；把任意一个仓库 clone 到<strong>另一台机器</strong>，照 README 能跑起来——关卡 2 第 1 条就过了。</p>
+<p><strong>练习 21-2【给自己的函数写 pytest 测试】</strong>
+不许抄教材里现成的测试。挑三个项目里各一个<strong>纯逻辑函数</strong>（不碰屏幕、不碰数据库的），各写 2 条 pytest 测试。要求：① 文件名 <code>test_xxx.py</code>、函数名 <code>test_xxx</code>；② 每条测试断言<strong>具体数值</strong>（不是 <code>assert result is not None</code>）；③ 至少覆盖一条边界情况（0、空列表、非法输入）；④ <code>pytest -v</code> 输出全绿。<strong>验收点</strong>：能逐条说清「这条测试在防哪种 bug」。项目里没有纯逻辑函数的话，先按 2.3 标准一拆文件。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 21-3【重构冲刺】</strong>
+任选一个项目（推荐外星人入侵，<code>alien_invasion.py</code> 通常最大），做一次 60 分钟的重构冲刺。要求：① 用示例 3 跑出基线（重构前的总行数、最长函数、最高复杂度）；② 按「谁调用它」拆文件，<strong>每个新文件不超过 300 行</strong>；③ 把魔法数字/路径抽到 <code>settings.py</code>；④ 拆完后功能必须和重构前完全一样；⑤ 再跑一次示例 3，对比前后数据。<strong>验收点</strong>：能说清「重构后代码行数变多」的原因（拆文件会多出 import 和模块文档字符串，这是正常的；可维护性提升不以行数下降衡量）。</p>
+<p><strong>练习 21-4【接手一个陌生项目】</strong>
+找一个真实的开源 Python 项目（200–800 行、3 个以上文件），按 2.4 的五步读它，并完成：① 画出目录树 + 每个文件角色的清单；② 找到程序入口，从入口往下追三层调用关系；③ 找到一个你认为是 bug 的地方，写出复现步骤并用 <code># INTENTIONALLY-BROKEN</code> 标出来；④ 如果上游有 issue 区，说明你的问题是不是已知问题。<strong>验收点</strong>：能用 5 分钟向别人口述这个项目「干什么、怎么跑、入口在哪、你发现的 bug 在哪一行」。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-21-1-三个项目的工程件">参考答案 21-1（三个项目的工程件）</h3>
+<p>外星人入侵项目的 README（另两个项目按同样结构写）：</p>
+<pre><code class="language-markdown"><span class="cl">markdown</span><span class="gh"># 外星人入侵（Alien Invasion）</span>
+
+用 Pygame 实现的打飞机小游戏：驾驶飞船射击外星舰队，外星人横向移动并不断下压，
+撞到玩家或撞到底部就损失一艘飞船，游戏结束。
+
+<span class="gs">**怎么装依赖**</span>：需要 Python 3.12，执行 pip install -r requirements.txt（依赖：pygame）。
+
+<span class="gs">**怎么运行**</span>：执行 python alien_invasion.py。
+<span class="k">-</span><span class="w"> </span>← → 左右移动，↓ 加速，空格 开火，P 暂停，Q 退出
+
+<span class="gs">**项目结构**</span>
+<span class="k">-</span><span class="w"> </span>alien_invasion.py —— 组装：创建窗口、编组、主循环
+<span class="k">-</span><span class="w"> </span>settings.py —— 全部常量（颜色、数量、速度）
+<span class="k">-</span><span class="w"> </span>ship.py / alien.py / bullet.py —— 三个精灵类
+<span class="k">-</span><span class="w"> </span>game_functions.py —— 纯逻辑函数（update / check_keydown 等，可直接测试）
+
+<span class="gs">**测试**</span>：执行 pytest -v，11 条测试全部通过。
+</code></pre>
+<p>三个项目的 <code>requirements.txt</code>（形态示例，实际以你机器上 <code>pip freeze</code> 的输出为准）与通用 <code>.gitignore</code>：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="c1"># requirements.txt —— 外星人入侵</span>
+<span class="na">pygame</span><span class="o">=</span><span class="s">=2.6.0</span>
+
+<span class="c1"># requirements.txt —— 数据可视化</span>
+<span class="na">matplotlib</span><span class="o">=</span><span class="s">=3.9.0</span>
+<span class="na">plotly</span><span class="o">=</span><span class="s">=5.22.0</span>
+<span class="na">requests</span><span class="o">=</span><span class="s">=2.32.3</span>
+
+<span class="c1"># requirements.txt —— 学习笔记（本地依赖）</span>
+<span class="na">asgiref</span><span class="o">=</span><span class="s">=3.8.1</span>
+<span class="na">Django</span><span class="o">=</span><span class="s">=5.0.2</span>
+<span class="na">django-bootstrap5</span><span class="o">=</span><span class="s">=23.11</span>
+<span class="na">sqlparse</span><span class="o">=</span><span class="s">=0.4.2</span>
+<span class="c1"># 线上专用依赖另放 requirements_remote.txt：gunicorn、psycopg2</span>
+
+<span class="c1"># .gitignore（三个项目通用）</span>
+<span class="na">__pycache__/</span>
+<span class="na">*.py[cod]</span>
+<span class="na">venv/</span>
+<span class="na">.venv/</span>
+<span class="na">env/</span>
+<span class="na">ll_env/</span>
+<span class="na">.env</span>
+<span class="na">*.sqlite3</span>
+<span class="na">db.sqlite3</span>
+<span class="na">data/</span>
+<span class="na">.pytest_cache/</span>
+<span class="na">.DS_Store</span>
+</code></pre>
+<p>体检脚本在这个项目上的输出示例：</p>
+<pre><code class="language-text"><span class="cl">示例</span>体检对象：D:/projects/alien_invasion
+
+【必备工程件】
+  [OK] 项目说明：README.md
+  [OK] 依赖清单：requirements.txt
+  [OK] 忽略清单：.gitignore
+
+【内容检查】
+  [OK] 依赖清单检查通过
+  [OK] 忽略清单检查通过
+
+【代码扫描】（共 6 个 .py 文件）
+  [OK] 硬编码密钥检查
+  [OK] 300 行检查
+
+体检通过：工程件齐全，可以推仓库 / 部署了。
+</code></pre>
+<h3 id="参考答案-21-2-pytest-测试-可直接运行">参考答案 21-2（pytest 测试，可直接运行）</h3>
+<p>以「外星人入侵」里 <code>game_functions.py</code> 的三个纯逻辑函数为例：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_game_functions.py —— 关卡 2 第 3 条的验收材料：自己写的测试</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">game_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_collision</span><span class="p">,</span> <span class="n">check_ship_limit</span><span class="p">,</span> <span class="n">update_score</span>
+
+
+<span class="c1"># ===== 一个只提供 colliderect 的替身，够测试用了 =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FakeRect</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">colliderect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">w</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">h</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">far_apart</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""飞船和外星人相距很远，谁也碰不到谁。"""</span>
+    <span class="k">return</span> <span class="n">FakeRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">FakeRect</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestCheckShipLimit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""正常：还有 2 艘。"""</span>
+        <span class="k">assert</span> <span class="n">check_ship_limit</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_zero_ships_means_game_over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 边界：0 艘必须返回 0，调用方据此结束游戏。"""</span>
+        <span class="k">assert</span> <span class="n">check_ship_limit</span><span class="p">([])</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"ships,expected"</span><span class="p">,</span> <span class="p">[([],</span> <span class="mi">0</span><span class="p">),</span> <span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">3</span><span class="p">)])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_parametrized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ships</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""参数化：一次测多个输入。"""</span>
+        <span class="k">assert</span> <span class="n">check_ship_limit</span><span class="p">(</span><span class="n">ships</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestCheckCollision</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_ship_hits_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""飞船和外星人位置重叠 → 碰撞。"""</span>
+        <span class="k">assert</span> <span class="n">check_collision</span><span class="p">(</span><span class="n">FakeRect</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+                              <span class="n">FakeRect</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">[])</span> <span class="ow">is</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_bullet_hits_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 飞船没撞到，但子弹撞到了 → 也算碰撞。"""</span>
+        <span class="n">ship</span><span class="p">,</span> <span class="n">alien</span> <span class="o">=</span> <span class="n">far_apart</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">check_collision</span><span class="p">(</span><span class="n">ship</span><span class="p">,</span> <span class="n">alien</span><span class="p">,</span> <span class="p">[</span><span class="n">FakeRect</span><span class="p">(</span><span class="mi">510</span><span class="p">,</span> <span class="mi">510</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span> <span class="ow">is</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_no_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""谁都没碰到 → 不碰撞。"""</span>
+        <span class="n">ship</span><span class="p">,</span> <span class="n">alien</span> <span class="o">=</span> <span class="n">far_apart</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">check_collision</span><span class="p">(</span><span class="n">ship</span><span class="p">,</span> <span class="n">alien</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestUpdateScore</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_one_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 断言具体数值：1 个外星人 = 10 分。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_none_hit_adds_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""边界：没击落任何外星人，分数不变。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">30</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_custom_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""改成每只 20 分。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">points_per_alien</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> <span class="o">==</span> <span class="mi">40</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_negative_score_is_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 业务约定：分数可以减（踩到外星人扣分），不是 bug。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">5</span>
+</code></pre>
+<p>运行结果必须全绿：</p>
+<pre><code class="language-text"><span class="cl">示例</span>$ pytest -v
+============================= test session starts ==============================
+collected 11 items
+
+test_game_functions.py::TestCheckShipLimit::test_normal PASSED        [  9%]
+test_game_functions.py::TestCheckShipLimit::test_zero_ships_means_game_over PASSED [18%]
+...
+============================= 11 passed in 0.24s ==============================
+</code></pre>
+<h3 id="参考答案-21-3-重构冲刺前后对比">参考答案 21-3（重构冲刺前后对比）</h3>
+<p>以 <code>alien_invasion.py</code> 为例（数据形态示例，实际以你的项目为准）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>重构前（python code_metrics.py alien_invasion）
+  共 1 个文件、412 行、9 个函数
+  【超过 300 行的文件】
+    alien_invasion.py：412 行
+  【复杂度最高的 5 个函数】
+     9  168 行  run_game()      (alien_invasion.py:38) ← 超标 ← 太长
+     7   54 行  update()        (alien_invasion.py:210)
+     5   31 行  reset_game()    (alien_invasion.py:280)
+  共 4 处值得重构。
+
+重构后
+  共 6 个文件、486 行、14 个函数
+  【超过 300 行的文件】
+    无
+  【复杂度最高的 5 个函数】
+     6   38 行  update()        (game_functions.py:12)
+     5   29 行  spawn_alien()   (game_functions.py:55)
+     4   24 行  reset_game()    (alien_invasion.py:44)
+  共 1 处值得重构（update 可以再拆）。
+</code></pre>
+<p><strong>关于「行数反而变多了」</strong>：从 412 行变成 486 行，但分布从「一个巨型文件」变成「6 个都小于 300 行的文件」，最长函数从 168 行降到 38 行。<strong>行数增加是拆分的正常成本</strong>（每个新文件要写 import 和模块文档字符串），换来的是：① 任何一个文件都能一口气读完；② <code>game_functions.py</code> 里的纯逻辑能直接写测试；③ 改 <code>settings.py</code> 的常量不会碰到游戏逻辑。拆分后 <code>alien_invasion.py</code> 只剩组装职责（约 80 行）：<code>run_game()</code> 里只有「创建窗口 → 建三个编组 → while 循环里查事件、调 <code>update_*</code> 函数、<code>draw()</code> 绘制、<code>pygame.display.flip()</code>」这一串骨架，所有细节都委托给了 <code>game_functions</code> 里的纯逻辑函数。<strong>判断标准是：入口文件里如果出现了具体的碰撞坐标、速度数值，说明拆分没做干净。</strong></p>
+<h3 id="参考答案-21-4-陌生项目定位-bug-的完整过程">参考答案 21-4（陌生项目定位 bug 的完整过程）</h3>
+<p>定位 bug 的标准动作。假设读到一个这样的小游戏片段：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># buggy_code.py —— INTENTIONALLY-BROKEN 演示用：4 处 bug，请自己发现</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_keydown</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ship</span><span class="p">,</span> <span class="n">bullets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""处理按键。"""</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_q</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>                      <span class="c1"># bug 1：用了 sys.exit() 但没 import sys</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+        <span class="n">bullets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Bullet</span><span class="p">(</span><span class="n">ship</span><span class="p">))</span>       <span class="c1"># bug 2：Bullet 类没定义、也没导入</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+        <span class="n">ship</span><span class="o">.</span><span class="n">moving_right</span> <span class="o">=</span> <span class="kc">False</span>       <span class="c1"># bug 3：按右键反而停下，应该 = True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">update_aliens</span><span class="p">(</span><span class="n">aliens</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""让整个舰队横向移动。"""</span>
+    <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+        <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>            <span class="c1"># bug 4：只是定义了函数内的局部变量</span>
+</code></pre>
+<p><strong>定位过程（这四步就是关卡 2 第 4 条的答案）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>做法</th>
+<th>对上面代码的发现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 分类</td>
+<td>看 import 和目录：用了 pygame，属于「事件驱动的图形程序」</td>
+<td>搜 <code>if __name__</code> 找到入口 <code>run_game()</code></td>
+</tr>
+<tr>
+<td>② 静态看</td>
+<td>从入口往下追三层：<code>run_game</code> → <code>check_keydown</code> / <code>update_aliens</code></td>
+<td>找到两个可疑函数</td>
+</tr>
+<tr>
+<td>③ 读报错</td>
+<td>看 traceback 的<strong>最后一行</strong>（异常类型）和<strong>第一行 File "…", line N</strong></td>
+<td><code>NameError: name 'sys' is not defined</code>（bug 1）→ 定位到具体行</td>
+</tr>
+<tr>
+<td>④ 判断是不是 bug</td>
+<td>对着「代码想表达的意思」逐行对照</td>
+<td>bug 2/3/4 静态就能看出来</td>
+</tr>
+</tbody>
+</table>
+<p><strong>修复要点</strong>：bug 1、2 补上 <code>import sys</code> 和 <code>from bullet import Bullet</code>；bug 3 把 <code>ship.moving_right = False</code> 改成 <code>True</code>；bug 4 把 <code>update_aliens</code> 改成接收一个 <code>game_state</code> 字典参数，写 <code>game_state["active"] = False</code>，让状态改动作用到调用方可见的对象上。</p>
+<p>★ bug 4 最值得记住：<code>game_active = False</code> 只在函数内创建了一个<strong>局部变量</strong>，函数一返回就没了，调用方的状态一点没变。这和阶段 1 里 <code>self.count = count</code> 是同一个家族的问题——<strong>赋值只是给一个名字绑定对象，能不能影响别人，取决于这个名字的作用域。</strong></p>
+<h3 id="综合项目-3-个自选-做一个就够">综合项目（3 个自选，做一个就够）</h3>
+<p><strong>A · 个人数据看板</strong>
+选一个你真关心的数据源（天气、豆瓣读书 top、GitHub 趋势、自己的记账 CSV 都行）。要求：① 数据从 API 或 CSV 取，<strong>不允许硬编码数据</strong>；② 用 matplotlib 或 Plotly 至少出 2 张图（趋势图 + 对比图）；③ 出图前先 <code>print</code> 出关键统计量，<strong>图要能支持一个结论</strong>；④ 整条链路封装成 <code>python dashboard.py</code> 一条命令可重跑；⑤ 取数失败要 <code>try/except</code> 给出友好提示；⑥ README 写清「这个看板回答什么问题」。<strong>加分</strong>：加一个 <code>report.txt</code>，自动写出「三个数字 + 一句话结论」。</p>
+<p><strong>B · 待办网站（把阶段 1 的命令行待办管理器升级成 Django 版）</strong>
+阶段 1 你写过命令行待办管理器（练习 11-2），现在把它搬到浏览器。要求：① 建虚拟环境，<code>startproject</code> 建项目、<code>startapp</code> 建应用，<strong>锁 requirements.txt</strong>；② 模型：任务（标题、完成状态、优先级、创建时间）、分类；③ 用 <code>ModelForm</code> 做增删改查，模板继承 base.html；④ 用 <code>LoginView</code> 做登录，并像单元 19 那样<strong>按用户过滤</strong>任务列表；⑤ 用 django-bootstrap5 美化；⑥ 部署到 Platform.sh，<strong>定制 404/500 页</strong>；⑦ 至少 3 条 pytest 测试（模型方法 + 一个视图）。<strong>验收点</strong>：把网址发给别人，他能注册、登录、建任务，且<strong>看不到你的任务</strong>。</p>
+<p><strong>C · 小游戏增强版（给外星人入侵加三个功能）</strong>
+① <strong>最高分持久化</strong>——用 JSON 存 <code>high_score</code>，游戏结束时更新（路径常量放 <code>settings.py</code>）；② <strong>音效</strong>——用 <code>pygame.mixer</code> 在开火和游戏结束时播音效，加 <code>enable_sound</code> 开关（音效文件找不到时优雅降级，不能崩）；③ <strong>暂停/继续</strong>——按 <code>P</code> 切换状态（需要把主循环改成可中断的 while 条件）。<strong>必做</strong>：把三个纯逻辑函数抽到独立模块，并写 <strong>3 条 pytest 测试</strong>覆盖它们（<code>load_high_score</code> / <code>update_high_score</code> / 暂停状态切换），用 <code>tmp_path</code> 夹具，不在项目目录留下文件。<strong>验收点</strong>：<code>pytest -v</code> 里这 3 条测试是你自己写的，全绿。</p>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-没有-gitignore-就-git-add-虚拟环境和数据库进了仓库">错误 1：★ 没有 .gitignore 就 <code>git add .</code>，虚拟环境和数据库进了仓库</h3>
+<p><strong>现象</strong>：<code>git push</code> 传了 400MB。<strong>原因</strong>：没有 <code>.gitignore</code>，<code>git add .</code> 把一切都加进去了。<strong>修复</strong>：补写 <code>.gitignore</code>，再 <code>git rm -r --cached ll_env</code> 把已跟踪文件撤出索引（只删索引，不删本地文件），然后提交。</p>
+<h3 id="错误-2-pip-freeze-在全局环境执行-清单长到没法看">错误 2：<code>pip freeze</code> 在全局环境执行，清单长到没法看</h3>
+<p><strong>现象</strong>：requirements.txt 有 80 行，大部分是本项目没用到的包。<strong>原因</strong>：没建虚拟环境就 <code>pip freeze</code>，冻的是全局环境。<strong>修复</strong>：<code>python -m venv venv</code> → 激活 → 只装项目需要的包 → <code>pip freeze &gt; requirements.txt</code>。</p>
+<h3 id="错误-3-测试全是抄教材的-自己一条没写">错误 3：★ 测试全是抄教材的，自己一条没写</h3>
+<p><strong>现象</strong>：关卡 2 第 3 条过不了。<strong>原因</strong>：<code>test_game_functions.py</code> 里全是照抄的用例，没有一条针对你自己写的代码。<strong>修复</strong>：挑 3 个自己的纯逻辑函数，各写 2 条断言具体数值的测试（练习 21-2）。<strong>判断标准</strong>：关掉讲义后还能写出来，才算真的会。</p>
+<h3 id="错误-4-把-secret_key-硬编码在-settings-py-里-还推上">错误 4：把 SECRET_KEY 硬编码在 settings.py 里，还推上了公开仓库</h3>
+<p><strong>现象</strong>：仓库公开后被人 issue 提醒。<strong>原因</strong>：<code>SECRET_KEY = "django-insecure-…"</code> 直接写在代码里。<strong>修复</strong>：改成 <code>os.environ["DJANGO_SECRET_KEY"]</code>，<strong>立刻去平台后台重置旧密钥</strong>（删记录没用，克隆里已经有了），把 <code>.env</code> 加进 <code>.gitignore</code>、提交 <code>.env.example</code> 说明要配哪些变量。</p>
+<h3 id="错误-5-代码里全是魔法数字-改一个参数要翻-8-个文件">错误 5：代码里全是魔法数字，改一个参数要翻 8 个文件</h3>
+<p><strong>现象</strong>：「敌人快一点」这个需求改了半小时。<strong>原因</strong>：<code>alien.rect.top += 1</code> 这种数字散落在各处。<strong>修复</strong>：按 2.3 标准二抽到 <code>settings.py</code>，用有名字的常量替换；改完再搜一遍那个数字，确认没有漏网。</p>
+<h3 id="错误-6-所有代码堆在一个文件里-两千行">错误 6：所有代码堆在一个文件里，两千行</h3>
+<p><strong>现象</strong>：想加个功能要读 500 行才敢动手；pytest 一导入就把 pygame 窗口开起来了。<strong>原因</strong>：没拆文件（2.3 标准一）。<strong>修复</strong>：按「谁调用它」拆，<strong>先把纯逻辑挑出来——这一步顺带就解决了测试要开窗口的问题</strong>。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 判断题</strong>：跟着教材把三个项目完整敲了一遍，就算「具备独立做项目的能力」了。</p>
+<blockquote>
+<p><strong>要点</strong>：<strong>错误</strong>，也是最需要警惕的自我感觉。跟着敲得到的是<strong>能跑的代码</strong>；独立做项目需要的是<strong>能交付、能维护、能被接手</strong>的工程——判断标准就是关卡 2 那五条。三个项目敲完但一条硬指标没过，只能算「完成了教材」。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：为什么 <code>requirements.txt</code> 里每个依赖都要写 <code>==</code> 版本号？什么时候可以不写？</p>
+<blockquote>
+<p><strong>要点</strong>：因为部署环境是一台全新的机器，只能靠清单重建；不带版本号就是「装最新版」，大版本升级可能带不兼容改动，半年后重建环境直接启动失败。可以不写的情况只有一种：<strong>这个包只在你本地开发环境用</strong>（如 <code>platformshconfig</code>、本地 <code>gunicorn</code>），但即使这种也建议写清，注释说明理由。</p>
+</blockquote>
+<p><strong>3. 改错题</strong>：下面这段想把「最高分」从 JSON 文件读出来，错在哪里？该怎么改？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># high_score_buggy.py —— INTENTIONALLY-BROKEN 演示用：改错题</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">HIGH_SCORE_FILE</span> <span class="o">=</span> <span class="s2">"data/high_score.json"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_high_score</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">HIGH_SCORE_FILE</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>      <span class="c1"># 第一次运行时文件还不存在，会直接崩</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="s2">"score"</span><span class="p">]</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：三个问题。① <strong>没处理文件不存在</strong>：第一次运行 <code>FileNotFoundError</code> 直接崩，游戏开不了；修法是 <code>try/except FileNotFoundError</code> 返回默认值 0。② <strong>没指定 <code>encoding="utf-8"</code></strong>：Windows 默认按 GBK 打开，含中文时抛 <code>UnicodeDecodeError</code>。③ <strong>路径硬编码</strong>：按 2.3 标准二应放进 <code>settings.py</code>。建议另补 <code>except json.JSONDecodeError</code> 处理文件被写坏的情况。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：接手一个 500 行的陌生项目，你的前三步分别做什么？为什么不能从头读到尾？</p>
+<blockquote>
+<p><strong>要点</strong>：① <strong>画目录树 + 标文件角色</strong>（入口 / 配置 / 测试 / 业务逻辑 / 数据），<code>python explorer.py 项目路径</code> 可自动完成；② <strong>读 README 和 requirements.txt</strong>，知道它解决什么问题、用了什么库；③ <strong>从入口往下追三层调用关系</strong>（<code>__main__</code> → <code>main()</code> → 它调用的函数 → 被调用函数的定义）。从头读到尾会把常量、工具函数、类、业务逻辑混着看，读完记不住也拼不出全貌——<strong>先建地图再进细节，是读代码的第一原则</strong>。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>print()</code> 和 <code>logging</code> 有什么区别？为什么正式项目要用后者？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>print</code> 无条件打到标准输出，没有时间戳、没有级别、不能按级别开关、不能按文件分类、出错后不留痕。<code>logging</code> 有级别（DEBUG/INFO/WARNING/ERROR）、有格式（时间+级别+模块+内容）、可同时输出到终端和文件（<code>RotatingFileHandler</code> 自动轮换防写满磁盘）。用 logging 的真正价值是：<strong>出问题时能回头查「那一刻发生了什么」</strong>。模板见示例 4。</p>
+</blockquote>
+<hr>
+<h2 id="八-关卡-2-验收标准-五条硬指标">八、关卡 2 验收标准（五条硬指标）</h2>
+<blockquote>
+<p>这五条对应学习路线图与主页上的「关卡 2 · 判定『能独立做项目』」。<strong>五条全部达标</strong>，说明你已经从「会写代码的人」变成「能交付软件的人」。</p>
+</blockquote>
+<h3 id="硬指标-1-三个项目全部跑通-且已推到公开仓库-每个都有-readme-requ">✅ 硬指标 1：三个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt</h3>
+<p><strong>怎么算达标</strong>：三个仓库链接都拿到了；每个仓库首页能看到 README；每个仓库里有 <code>requirements.txt</code> 且依赖都带 <code>==</code>；把任意一个仓库 clone 到<strong>另一台机器</strong>，照 README 能跑起来。<strong>怎么验证</strong>：跑一遍示例 1 的 <code>project_doctor.py</code>，问题数为 0。<strong>没过怎么办</strong>：README 照参考答案 21-1 的三段结构写；requirements.txt 在虚拟环境里重新 <code>pip freeze &gt; requirements.txt</code>；仓库还没有就 <code>git init</code> → <code>git add .</code> → <code>git commit</code> → 建远程仓库 → <code>git push</code>。</p>
+<h3 id="硬指标-2-学习笔记-已部署上线-公网可访问-错误页已定制">✅ 硬指标 2：「学习笔记」已部署上线，公网可访问，错误页已定制</h3>
+<p><strong>怎么算达标</strong>：<code>platform url</code> 给出的网址在<strong>手机流量</strong>（不是同一个 WiFi）下能打开；访问不存在的网址返回你定制的 404 页；服务器出错时 500 页也是定制的，不是 Django 调试页。<strong>怎么验证</strong>：重点测首页、<code>/不存在/</code>、<code>/accounts/login/</code> 三个 URL。<strong>没过怎么办</strong>：回单元 20，按 2.7 节三大坑（<code>ALLOWED_HOSTS</code>、<code>collectstatic</code>、<code>DEBUG</code>）逐项排查，改完 <code>git commit</code> + <code>platform push</code>。<strong>注意</strong>：定制错误页只在 <code>DEBUG = False</code> 时生效，本地默认看不到。</p>
+<h3 id="硬指标-3-能用自己的函数写出-pytest-测试并跑过-不是抄教材的">✅ 硬指标 3：能用<strong>自己的</strong>函数写出 pytest 测试并跑过（不是抄教材的）</h3>
+<p><strong>怎么算达标</strong>：≥ 3 条测试针对你自己项目里的纯逻辑函数；每条断言具体数值；至少一条覆盖边界（0 / 空 / 非法输入）；<code>pytest -v</code> 全绿。<strong>怎么验证</strong>：关掉讲义和教材，只留项目代码和 pytest，问自己：<strong>这三条测试的断言值我能自己算出来吗？</strong> 算不出来就是抄的。<strong>没过怎么办</strong>：先按 2.3 标准一把纯逻辑从「界面/数据库代码」里拆出来（这是前提），再照参考答案 21-2 写。记住：文件名和函数名都要 <code>test_</code> 前缀，命名不对 pytest 显示 <code>collected 0 items</code> 而<strong>不报错</strong>。</p>
+<h3 id="硬指标-4-接手一个没写过的-500-行-python-项目-能读懂结构并定位一">✅ 硬指标 4：接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</h3>
+<p><strong>怎么算达标</strong>：能在 30 分钟内画出结构图、指出入口、找到至少一处 bug（或明确的改进点）并说明理由；能判断项目属于哪一类（脚本 / 事件驱动 / 数据处理 / Web）。<strong>怎么验证</strong>：按 2.4 的五步走一遍，用 <code>grep -rn</code> 搜关键字。<strong>没过怎么办</strong>：<strong>找不到入口</strong>就搜 <code>if __name__</code>；<strong>读不懂逻辑</strong>就画调用图（grep 搜函数名看谁调用谁）；<strong>不敢确定是 bug</strong>就看上游有没有 open 的 issue。</p>
+<h3 id="硬指标-5-能说清每个项目-解决了什么问题-还能怎么扩展">✅ 硬指标 5：能说清每个项目「解决了什么问题、还能怎么扩展」</h3>
+<p><strong>怎么算达标</strong>：对三个项目各能回答两问——① 它解决什么真实问题（不是「练了 xxx API」）；② 至少说得出三条扩展方向，<strong>并能说明每条要动哪几个文件</strong>。<strong>怎么验证</strong>：录一段 3 分钟口述，或写进每个项目 README 的「未来想法」一节。<strong>没过怎么办</strong>：这题问的是<strong>判断力</strong>，只能自己想。万能模板（以数据看板为例）：① 数据源换更细的粒度；② 加一个导出报告的功能；③ 每天定时跑并把结果推给你。<strong>能说出「要动哪几个文件」，就说明你真懂它的结构。</strong></p>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能不看讲义完整复述做项目的七步流程，并说出它为什么比「跟着敲一遍」重要</li>
+<li>[ ] 能填出三个项目的技术地图（Pygame 编组 / matplotlib+Plotly+API / Django MVT+ORM+认证+Platform.sh 部署），并说出每个项目解决了什么问题</li>
+<li>[ ] 用 <code>project_doctor.py</code>、<code>code_metrics.py</code>、<code>explorer.py</code> 三个脚本体检过自己的项目</li>
+<li>[ ] 三个项目都有了 README.md + requirements.txt + .gitignore + 测试文件，并推到了公开仓库</li>
+<li>[ ] 「学习笔记」已部署上线，公网能访问，404/500 是定制页</li>
+<li>[ ] 能用自己的纯逻辑函数写出 ≥3 条 pytest 测试并跑绿（断言具体数值，含边界用例）</li>
+<li>[ ] 能说清每个项目「解决了什么问题、还能怎么扩展」，并按 2.6 节选定了下一步方向</li>
+</ul>
+<p><strong>下一单元预告</strong>：阶段 2 到此结束，<strong>关卡 2 五条硬指标全部达标即毕业</strong>。接下来进入<strong>阶段 3 · 工程能力补齐</strong>（教材刻意不讲，但决定你是"会写代码的人"还是"会交付软件的人"）：虚拟环境与依赖管理的系统打法、Git 分支与合并、断点调试与读 traceback、代码组织与重构（单文件 ≤300 行、配置与逻辑分离、类型注解入门）、读文档的正确姿势，以及按兴趣挑一条深造路线（FastAPI/Flask · pandas · 爬虫 · 算法与 LeetCode）。<strong>先按 2.6 节选定主攻方向。</strong></p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="20.html"><small>← 上一单元</small><b>单元 20 · 样式与部署</b></a><div class="spot"><a class="pn" href="ppt/u/21.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s18"><small>课程大纲课件</small><b>阶段总览 p18 →</b></a></div></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

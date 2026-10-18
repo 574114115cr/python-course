@@ -1,0 +1,118 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>12 个单元全景</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            每周一个单元，横轴是周次，颜色从入门蓝过渡到关卡橙
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 148, width: '1152px', height: 300 }}>
+        <svg width='1152' height='300' viewBox='0 0 1152 300'>
+            <rect x='0' y='238' width='1152' height='4' rx='2' fill='#D8E3EE' />
+
+            <rect x='12' y='150' width='88' height='92' rx='8' fill='#0E9B78' />
+            <text x='56' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>0</text>
+            <text x='56' y='212' fontSize='13' fill='#D7F0E7' textAnchor='middle' fontFamily='Inter'>环境</text>
+            <text x='56' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W0</text>
+
+            <rect x='108' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='152' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>1</text>
+            <text x='152' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>变量</text>
+            <text x='152' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W1</text>
+
+            <rect x='204' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='248' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>2</text>
+            <text x='248' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>列表</text>
+            <text x='248' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W2</text>
+
+            <rect x='300' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='344' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>3</text>
+            <text x='344' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>循环</text>
+            <text x='344' y='272' fontSize='13' fill='#D9820F' fontWeight='bold' textAnchor='middle' fontFamily='Inter'>W3 难</text>
+
+            <rect x='396' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='440' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>4</text>
+            <text x='440' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>if</text>
+            <text x='440' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W4</text>
+
+            <rect x='492' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='536' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>5</text>
+            <text x='536' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>字典</text>
+            <text x='536' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W5</text>
+
+            <rect x='588' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='632' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>6</text>
+            <text x='632' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>while</text>
+            <text x='632' y='272' fontSize='13' fill='#D9820F' fontWeight='bold' textAnchor='middle' fontFamily='Inter'>W6 难</text>
+
+            <rect x='684' y='110' width='88' height='132' rx='8' fill='#2F7BC8' />
+            <text x='728' y='150' fontSize='34' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>7</text>
+            <text x='728' y='180' fontSize='13' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>函数</text>
+            <text x='728' y='200' fontSize='12' fill='#BBD6EA' textAnchor='middle' fontFamily='Inter'>分水岭</text>
+            <text x='728' y='272' fontSize='13' fill='#D9820F' fontWeight='bold' textAnchor='middle' fontFamily='Inter'>W7-8</text>
+
+            <rect x='780' y='110' width='88' height='132' rx='8' fill='#2F7BC8' />
+            <text x='824' y='150' fontSize='34' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>8</text>
+            <text x='824' y='180' fontSize='13' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>类</text>
+            <text x='824' y='200' fontSize='12' fill='#BBD6EA' textAnchor='middle' fontFamily='Inter'>最劝退</text>
+            <text x='824' y='272' fontSize='13' fill='#D9820F' fontWeight='bold' textAnchor='middle' fontFamily='Inter'>W9-10</text>
+
+            <rect x='876' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='920' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>9</text>
+            <text x='920' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>文件</text>
+            <text x='920' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W11</text>
+
+            <rect x='972' y='150' width='88' height='92' rx='8' fill='#1F5FA8' />
+            <text x='1016' y='184' fontSize='30' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>10</text>
+            <text x='1016' y='212' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>测试</text>
+            <text x='1016' y='272' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>W12</text>
+
+            <rect x='1068' y='110' width='84' height='132' rx='8' fill='#E08A15' />
+            <text x='1110' y='150' fontSize='34' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>11</text>
+            <text x='1110' y='180' fontSize='13' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>复习</text>
+            <text x='1110' y='200' fontSize='12' fill='#FCEBD0' textAnchor='middle' fontFamily='Inter'>关卡</text>
+            <text x='1110' y='272' fontSize='13' fill='#D9820F' fontWeight='bold' textAnchor='middle' fontFamily='Inter'>W13</text>
+
+            <path d='M690 78 L 778 78' stroke='#E08A15' strokeWidth='2' fill='none' />
+            <path d='M876 78 L 964 78' stroke='#E08A15' strokeWidth='2' fill='none' />
+        </svg>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 470, width: '1152px', height: 172,
+        flexDirection: 'row', gap: 16,
+    }}>
+        <Box style={{
+            flex: 1.2, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 20, flexDirection: 'column', gap: 10,
+        }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1F5FA8' }}>难度走势</Text>
+            <Text style={{ fontSize: 16, color: '#5A6B7A', lineHeight: 1.65 }}>
+                单元 0–2 是地基，语法简单但决定习惯。单元 3、6、7、8 是四个陡坡，柱子被拉高就是这个意思。
+                单元 7 函数是分水岭：从这里开始，代码不再是「从上往下写」，而是「拆成可复用的块」。
+            </Text>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#EEF5FB', borderRadius: 12, padding: 20,
+            flexDirection: 'column', gap: 10, justifyContent: 'space-between',
+        }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1F5FA8' }}>教材对应</Text>
+            <Text style={{ fontSize: 16, color: '#3A4A58', lineHeight: 1.65 }}>
+                单元 1–10 一一对应上篇第 1–11 章；单元 0 对应附录 A（安装）、B（VS Code）、D（Git）。
+                第 11–20 章属于阶段 2 项目篇，本课程不含。
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–1 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>03 / 17</Text>
+    </Box>
+</Slide>

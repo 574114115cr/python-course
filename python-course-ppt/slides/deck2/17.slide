@@ -1,0 +1,102 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>阶段 2 的统一工程流程</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            三个项目都走同一条七步流程。这条流程比「跟着教程敲完」重要 10 倍——它决定你能不能独立做下一个项目
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 138, width: '1152px', height: 250 }}>
+        <svg width='1152' height='250' viewBox='0 0 1152 250'>
+            <rect x='0' y='30' width='152' height='86' rx='10' fill='#1F5FA8' />
+            <text fontFamily='Microsoft YaHei' x='76' y='62' fontSize='14' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>① 读需求</text>
+            <text fontFamily='Microsoft YaHei' x='76' y='86' fontSize='11.5' fill='#CFE2F5' textAnchor='middle'>这个程序要做什么</text>
+            <text fontFamily='Microsoft YaHei' x='76' y='106' fontSize='11.5' fill='#CFE2F5' textAnchor='middle'>完成的标准是什么</text>
+
+            <path d='M160 73 L 182 73' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+            <path d='M174 67 L 182 73 L 174 79' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+
+            <rect x='190' y='30' width='152' height='86' rx='10' fill='#2F7BC8' />
+            <text fontFamily='Microsoft YaHei' x='266' y='62' fontSize='14' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>② 自己先拆解</text>
+            <text fontFamily='Microsoft YaHei' x='266' y='86' fontSize='11.5' fill='#EAF3FC' textAnchor='middle'>写成几个文件</text>
+            <text fontFamily='Microsoft YaHei' x='266' y='106' fontSize='11.5' fill='#EAF3FC' textAnchor='middle' >★ 别急着抄教材</text>
+
+            <path d='M350 73 L 372 73' stroke='#2F7BC8' strokeWidth='3' fill='none' />
+            <path d='M364 67 L 372 73 L 364 79' stroke='#2F7BC8' strokeWidth='3' fill='none' />
+
+            <rect x='380' y='30' width='152' height='86' rx='10' fill='#2F7BC8' />
+            <text fontFamily='Microsoft YaHei' x='456' y='62' fontSize='14' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>③ 查官方文档</text>
+            <text fontFamily='Microsoft YaHei' x='456' y='86' fontSize='11.5' fill='#EAF3FC' textAnchor='middle'>参数记不清就查</text>
+            <text fontFamily='Microsoft YaHei' x='456' y='106' fontSize='11.5' fill='#EAF3FC' textAnchor='middle'>不要猜、不要试错</text>
+
+            <path d='M540 73 L 562 73' stroke='#2F7BC8' strokeWidth='3' fill='none' />
+            <path d='M554 67 L 562 73 L 554 79' stroke='#2F7BC8' strokeWidth='3' fill='none' />
+
+            <rect x='570' y='30' width='152' height='86' rx='10' fill='#0E9B78' />
+            <text fontFamily='Microsoft YaHei' x='646' y='62' fontSize='14' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>④ 编码</text>
+            <text fontFamily='Microsoft YaHei' x='646' y='86' fontSize='11.5' fill='#D7F0E7' textAnchor='middle'>小步跑通再往下</text>
+            <text fontFamily='Microsoft YaHei' x='646' y='106' fontSize='11.5' fill='#D7F0E7' textAnchor='middle'>每步都能看到输出</text>
+
+            <path d='M730 73 L 752 73' stroke='#0E9B78' strokeWidth='3' fill='none' />
+            <path d='M744 67 L 752 73 L 744 79' stroke='#0E9B78' strokeWidth='3' fill='none' />
+
+            <rect x='760' y='30' width='152' height='86' rx='10' fill='#0E9B78' />
+            <text fontFamily='Microsoft YaHei' x='836' y='62' fontSize='14' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>⑤ git 提交</text>
+            <text fontFamily='Microsoft YaHei' x='836' y='86' fontSize='11.5' fill='#D7F0E7' textAnchor='middle'>每完成一小节一次</text>
+            <text fontFamily='Microsoft YaHei' x='836' y='106' fontSize='11.5' fill='#D7F0E7' textAnchor='middle'>提交信息说清做了什么</text>
+
+            <path d='M920 73 L 942 73' stroke='#E08A15' strokeWidth='3' fill='none' />
+            <path d='M934 67 L 942 73 L 934 79' stroke='#E08A15' strokeWidth='3' fill='none' />
+
+            <rect x='950' y='30' width='202' height='86' rx='10' fill='#E08A15' />
+            <text fontFamily='Microsoft YaHei' x='1051' y='62' fontSize='14' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>⑥ README ⑦ 重构</text>
+            <text fontFamily='Microsoft YaHei' x='1051' y='86' fontSize='11.5' fill='#FDF0DC' textAnchor='middle'>写清怎么装、怎么跑</text>
+            <text fontFamily='Microsoft YaHei' x='1051' y='106' fontSize='11.5' fill='#FDF0DC' textAnchor='middle'>超 300 行就拆模块</text>
+
+            <text fontFamily='Microsoft YaHei' x='0' y='158' fontSize='15' fontWeight='bold' fill='#16232E'>每个项目必须交付的四件套</text>
+
+            <rect x='0' y='176' width='272' height='62' rx='9' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='136' y='202' fontSize='14' fontWeight='bold' fill='#1F5FA8' textAnchor='middle'>公开 git 仓库</text>
+            <text fontFamily='Microsoft YaHei' x='136' y='224' fontSize='12' fill='#5A6B7A' textAnchor='middle'>要有实质提交历史</text>
+
+            <rect x='294' y='176' width='272' height='62' rx='9' fill='#EEF5FB' />
+            <text x='430' y='202' fontSize='14' fontWeight='bold' fill='#1F5FA8' textAnchor='middle' fontFamily='Inter'>README</text>
+            <text fontFamily='Microsoft YaHei' x='430' y='224' fontSize='12' fill='#5A6B7A' textAnchor='middle'>怎么装、怎么跑、做了什么</text>
+
+            <rect x='588' y='176' width='272' height='62' rx='9' fill='#EEF5FB' />
+            <text x='724' y='202' fontSize='14' fontWeight='bold' fill='#1F5FA8' textAnchor='middle' fontFamily='Inter'>requirements.txt</text>
+            <text fontFamily='Microsoft YaHei' x='724' y='224' fontSize='12' fill='#5A6B7A' textAnchor='middle'>别人能重建你的环境</text>
+
+            <rect x='882' y='176' width='270' height='62' rx='9' fill='#FDF3E2' />
+            <text fontFamily='Microsoft YaHei' x='1017' y='202' fontSize='14' fontWeight='bold' fill='#E08A15' textAnchor='middle'>pytest 测试</text>
+            <text fontFamily='Microsoft YaHei' x='1017' y='224' fontSize='12' fill='#8A6A2A' textAnchor='middle'>至少覆盖纯逻辑函数</text>
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 412, width: '1152px', height: 196, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1F5FA8' }}>第 ② 步为什么最重要</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.75 }}>
+                教材把代码都写好了，直接抄最快。但抄完你只会做「这一个」项目。
+                <b>先自己拆 40 分钟，再看教材</b>——这 40 分钟练的是把需求拆成模块的能力，
+                它是关卡 2 第 4 条（读陌生 500 行项目）唯一能靠练出来的路径。
+            </Text>
+        </Box>
+        <Box style={{ flex: 1.15, background: '#FDF3E2', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E08A15' }}>阶段 2 附加的三条纪律</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.8 }}>
+                ① 单文件不超过 <b>300 行</b>，超了就拆<br />
+                ② 密钥、密码一律走环境变量 + .gitignore，<b>提交过就等于泄露</b><br />
+                ③ 每个项目结束前跑一次「工程件体检」：README / requirements / .gitignore / 测试是否齐全
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>17 / 23</Text>
+    </Box>
+</Slide>

@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 78 节 · 实战、答案与自查</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="78">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 78/111 节 · 实战、答案与自查</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/14.html#s8" title="本课节对应的课件">本课课件 u14·p8</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-完整的-button-类-点击判定">示例 1：完整的 Button 类 + 点击判定</a>
+<a class="lv3" href="#示例-2-动态难度-initialize_dynamic_settings-与-">示例 2：动态难度——initialize_dynamic_settings 与 increase_speed</a>
+<a class="lv3" href="#示例-3-scoreboard-的-准备图像-模式">示例 3：Scoreboard 的「准备图像」模式</a>
+<a class="lv3" href="#示例-4-游戏状态机完整演示">示例 4：游戏状态机完整演示</a>
+<a class="lv3" href="#示例-5-余下的飞船数-group-ship-复用">示例 5：余下的飞船数——Group + Ship 复用</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-14-1">参考答案 14-1</a>
+<a class="lv3" href="#参考答案-14-2">参考答案 14-2</a>
+<a class="lv3" href="#参考答案-14-3">参考答案 14-3</a>
+<a class="lv3" href="#参考答案-14-4">参考答案 14-4</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-改了-score-忘了-prep_score">错误 1：★ 改了 score 忘了 prep_score()</a>
+<a class="lv3" href="#错误-2-把-high_score-0-写进了-reset_stats">错误 2：★ 把 high_score = 0 写进了 reset_stats()</a>
+<a class="lv3" href="#错误-3-font-render-参数写错">错误 3：font.render() 参数写错</a>
+<a class="lv3" href="#错误-4-button-里存错了对象">错误 4：Button 里存错了对象</a>
+<a class="lv3" href="#错误-5-increase_speed-里-alien_points-忘了-in">错误 5：increase_speed() 里 alien_points 忘了 int()</a>
+<a class="lv3" href="#错误-6-点-play-没加-not-game_active-条件">错误 6：点 Play 没加 not game_active 条件</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 14</h4>
+      <a class="ppt-thumb" href="../ppt/u/14.html#s8">
+        <img loading="lazy" src="../ppt/u/14/slide-08.webp" alt="本课节课件">
+        <span class="cap"><b>单元 14 · p8</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../14.html"><span class="k">讲义</span>
+          <span class="v">单元 14 · Play 按钮与记分</span></a>
+        <a href="../ppt/u/14.html#s8"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u14"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u14"><span class="k">题库</span>
+          <span class="v">本单元 3 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 78 节 / 111</span>
+        <span class="kwk">W17</span>
+        <span class="ku">单元 14 · Play 按钮与记分</span>
+      </div>
+      <h1>实战、答案与自查</h1>
+      <p class="goal">独立完成单元 14 练习，逐条自查常见错误</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 77 节 · 动态难度与余下飞船数</h3><ul><li><code>speedup_scale</code> 用来调各类速度、<code>score_scale</code> 用来调加分倍率；两个都在 <code>initialize_dynamic_settings()</code> 里初始化。</li><li>动态难度的正确流程：<code>increase_speed()</code> 先改 scale 再调用 initialize；顺序反了会让这局的设置被立刻重置。</li><li>显示余下飞船数可以复用 <code>Ship</code> 类，只是换成小图像、放进另一个 Group——类的复用。</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>限时 30 分钟独立完成基础档</li><li>逐条演示六、里的每个错误</li></ol>
+    </div>
+
+    <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<blockquote>
+<p>运行前提：<code>pip install pygame</code>。示例 1/3/4/5 用 <code>SDL_VIDEODRIVER=dummy</code> 做了「假显示驱动」，没有显示器也能跑、不弹窗；<strong>在你自己电脑上删掉开头两行 <code>os.environ.setdefault(...)</code>，真实窗口就会弹出来</strong>。另外 pygame 启动时会打印两行欢迎信息（<code>pygame 2.6.1 ...</code> / <code>Hello from the pygame community</code>），属正常现象，下面的预期输出省略了它们。</p>
+</blockquote>
+<h3 id="示例-1-完整的-button-类-点击判定">示例 1：完整的 Button 类 + 点击判定</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># button_demo.py —— Button 类完整实现，演示居中、绘制、点击判定</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">,</span> <span class="s2">"dummy"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Button</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""居中的矩形按钮，自己渲染文字、自己绘制自己。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prep_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prep_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="n">msg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_image_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_image_rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg_image_rect</span><span class="p">)</span>
+
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">600</span><span class="p">,</span> <span class="mi">400</span><span class="p">))</span>
+<span class="n">button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="s2">"Play"</span><span class="p">)</span>
+
+<span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">))</span>
+<span class="n">button</span><span class="o">.</span><span class="n">draw_button</span><span class="p">()</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="s2">"button_demo.png"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"按钮矩形：</span><span class="si">{</span><span class="n">button</span><span class="o">.</span><span class="n">rect</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"按钮中心：</span><span class="si">{</span><span class="n">button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="si">}</span><span class="s2">，屏幕中心：</span><span class="si">{</span><span class="n">button</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">center</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"文字图像类型：</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">button</span><span class="o">.</span><span class="n">msg_image</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">（render 的产物，不是字符串）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 点击判定 collidepoint ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">210</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">200</span><span class="p">)]:</span>
+    <span class="n">hit</span> <span class="o">=</span> <span class="n">button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"鼠标在 </span><span class="si">{</span><span class="n">pos</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="s1">'点中了按钮'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">hit</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'没点到'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+<span class="c1"># 跑完可以删掉 button_demo.png</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>按钮矩形：&lt;rect(200, 175, 200, 50)&gt;
+按钮中心：(300, 200)，屏幕中心：(300, 200)
+文字图像类型：Surface（render 的产物，不是字符串）
+
+--- 点击判定 collidepoint ---
+鼠标在 (300, 200)：点中了按钮
+鼠标在 (300, 210)：点中了按钮
+鼠标在 (10, 10)：没点到
+鼠标在 (400, 200)：没点到
+</code></pre>
+<blockquote>
+<p><code>rect(200, 175, 200, 50)</code> 是「左 200、上 175、宽 200、高 50」，右边缘 399、下边缘 224。<code>(399, 199)</code> 在边缘上算命中，<code>(400, 200)</code> 差 1 像素算没命中——矩形判定就是这么精确。打开 <code>button_demo.png</code> 能看到真正画出来的按钮。</p>
+</blockquote>
+<h3 id="示例-2-动态难度-initialize_dynamic_settings-与-">示例 2：动态难度——initialize_dynamic_settings 与 increase_speed</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dynamic_settings.py —— Settings 的"难度控制"部分 + 得分格式化</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">format_score</span><span class="p">(</span><span class="n">score</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""舍入到十位 + 千分位。"""</span>
+    <span class="k">return</span> <span class="s2">"</span><span class="si">{:,}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speedup_scale</span> <span class="o">=</span> <span class="mf">1.1</span>     <span class="c1"># 每升一级，速度 ×1.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_scale</span> <span class="o">=</span> <span class="mf">1.5</span>       <span class="c1"># 每升一级，外星人分值 ×1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_dynamic_settings</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_dynamic_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""随游戏重置的动态设置，点 Play 时调用。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_speed</span> <span class="o">=</span> <span class="mf">1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullet_speed</span> <span class="o">=</span> <span class="mf">3.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_speed</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">=</span> <span class="mi">50</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">increase_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""外星人编队被清空后调用：提速 + 加分。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_speed</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedup_scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullet_speed</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedup_scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_speed</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speedup_scale</span>
+        <span class="c1"># int() 截断小数：50 ×1.5 = 75.0，再 ×1.5 = 112.5 -&gt; 112</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_scale</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 得分格式化：round(x, -1) + 千分位 ==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1230</span><span class="p">,</span> <span class="mi">1234567</span><span class="p">,</span> <span class="mi">999999990</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  stats.score = </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">  -&gt;  屏幕显示: </span><span class="si">{</span><span class="n">format_score</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 难度曲线：每级调用一次 increase_speed ==="</span><span class="p">)</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'等级'</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="s1">'alien_speed'</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}{</span><span class="s1">'bullet_speed'</span><span class="si">:</span><span class="s2">&gt;15</span><span class="si">}{</span><span class="s1">'alien_points'</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">1</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_speed</span><span class="si">:</span><span class="s2">&gt;14.2f</span><span class="si">}{</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_speed</span><span class="si">:</span><span class="s2">&gt;15.2f</span><span class="si">}</span><span class="s2">"</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">increase_speed</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">level</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}{</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_speed</span><span class="si">:</span><span class="s2">&gt;14.2f</span><span class="si">}{</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_speed</span><span class="si">:</span><span class="s2">&gt;15.2f</span><span class="si">}</span><span class="s2">"</span>
+          <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span><span class="si">:</span><span class="s2">&gt;14</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">settings</span><span class="o">.</span><span class="n">initialize_dynamic_settings</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">重置后：alien_speed=</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_speed</span><span class="si">}</span><span class="s2">，"</span>
+      <span class="sa">f</span><span class="s2">"alien_points=</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span><span class="si">}</span><span class="s2">（点 Play 再来一局）"</span><span class="p">)</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 得分格式化：round(x, -1) + 千分位 ===
+  stats.score =          0  -&gt;  屏幕显示: 0
+  stats.score =         50  -&gt;  屏幕显示: 50
+  stats.score =       1230  -&gt;  屏幕显示: 1,230
+  stats.score =    1234567  -&gt;  屏幕显示: 1,234,570
+  stats.score =   999999990  -&gt;  屏幕显示: 999,999,990
+
+=== 难度曲线：每级调用一次 increase_speed ===
+ 等级   alien_speed  bullet_speed  alien_points
+--------------------------------------------------
+   1          1.00          3.00            50
+   2          1.10          3.30            75
+   3          1.21          3.63           112
+   4          1.33          3.99           168
+   5          1.46          4.39           252
+   6          1.61          4.83           378
+   7          1.77          5.31           567
+   8          1.95          5.85           850
+   9          2.14          6.43          1275
+  10          2.36          7.07          1912
+
+重置后：alien_speed=1.0，alien_points=50（点 Play 再来一局）
+</code></pre>
+<blockquote>
+<p>注意 <code>round(1234567, -1)</code> 是 <strong>1234570</strong>（离 70 更近），不是 1234560；正好在中间时（如 15）Python 用「四舍六入五成双」，游戏里感知不到。速度按 1.1 的幂「先温和后陡峭」，分值越往后每级涨得越多（850 → 1275 → 1912）——「高风险高回报」的正反馈，就是玩家停不下来的原因。</p>
+</blockquote>
+<h3 id="示例-3-scoreboard-的-准备图像-模式">示例 3：Scoreboard 的「准备图像」模式</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># scoreboard_demo.py —— 数据与显示分离：prep_* 模式</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">,</span> <span class="s2">"dummy"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_limit</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">=</span> <span class="mi">50</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""score/level/ships_left 每局重置，high_score 不清零。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Scoreboard</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""把 stats 里的数据翻译成屏幕上的图像。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">stats</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">stats</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prep_score</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prep_high_score</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prep_level</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""舍入到十位 + 千分位。"""</span>
+        <span class="k">return</span> <span class="s2">"</span><span class="si">{:,}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">prep_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bg_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_rect</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">right</span> <span class="o">-</span> <span class="mi">20</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_rect</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mi">20</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">prep_high_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bg_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_score_image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score_rect</span><span class="o">.</span><span class="n">centerx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">centerx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score_rect</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mi">20</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">prep_level</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">level</span><span class="p">),</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bg_color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_rect</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_rect</span><span class="o">.</span><span class="n">right</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_rect</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">+</span> <span class="mi">10</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_high_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prep_high_score</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">rect</span> <span class="ow">in</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">score_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_rect</span><span class="p">),</span>
+                            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high_score_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_score_rect</span><span class="p">),</span>
+                            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">level_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_rect</span><span class="p">)]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">rect</span><span class="p">)</span>
+
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">600</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+<span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">GameStats</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">sb</span> <span class="o">=</span> <span class="n">Scoreboard</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 刚开局 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  得分: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">  最高分: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="si">}</span><span class="s2">  等级: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">level</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 击落 2 只外星人：数据 +100，然后 prep_score() ==="</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">prep_score</span><span class="p">()</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">check_high_score</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  得分: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">  最高分: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="si">}</span><span class="s2">（新纪录诞生）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 忘了 prep 会怎样：只改数据，不重新渲染 ==="</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">1000000</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  stats.score 已经变成 </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">，但屏幕上还是旧图像（显示 100）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  =&gt; 数据归数据，显示归显示，桥梁是 prep_*()！"</span><span class="p">)</span>
+
+<span class="n">sb</span><span class="o">.</span><span class="n">prep_score</span><span class="p">()</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">check_high_score</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  补上 prep_score() 后，屏幕显示: </span><span class="si">{</span><span class="n">sb</span><span class="o">.</span><span class="n">_format</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 重置：再来一局 ==="</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">prep_score</span><span class="p">()</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">prep_level</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  score=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">, level=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">level</span><span class="si">}</span><span class="s2">（都重置了）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  high_score=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="si">}</span><span class="s2">（没有清零！跨局记忆）"</span><span class="p">)</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 刚开局 ===
+  得分: 0  最高分: 0  等级: 1
+
+=== 击落 2 只外星人：数据 +100，然后 prep_score() ===
+  得分: 100  最高分: 100（新纪录诞生）
+
+★ 忘了 prep 会怎样：只改数据，不重新渲染 ===
+  stats.score 已经变成 1000100，但屏幕上还是旧图像（显示 100）
+  =&gt; 数据归数据，显示归显示，桥梁是 prep_*()！
+  补上 prep_score() 后，屏幕显示: 1,000,100
+
+=== 重置：再来一局 ===
+  score=0, level=1（都重置了）
+  high_score=1000100（没有清零！跨局记忆）
+</code></pre>
+<blockquote>
+<p>中间那段「忘了 prep」是本示例的灵魂。注意 <code>show_score()</code> 用「(图像, 矩形)」列表循环贴图——数据准备好之后，绘制就是无脑贴图。</p>
+</blockquote>
+<h3 id="示例-4-游戏状态机完整演示">示例 4：游戏状态机完整演示</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># state_machine_demo.py —— inactive &lt;-&gt; active 的完整状态转换</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">,</span> <span class="s2">"dummy"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_limit</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speedup_scale</span> <span class="o">=</span> <span class="mf">1.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_scale</span> <span class="o">=</span> <span class="mf">1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_dynamic_settings</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_dynamic_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_speed</span> <span class="o">=</span> <span class="mf">1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">=</span> <span class="mi">50</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Game</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""迷你状态机游戏：点 Play 开始，被撞 3 次结束，可重开。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">GameStats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+        <span class="c1"># 按钮就是一个 Rect：屏幕正中的 200x50 矩形</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_play_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mouse_pos</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""点 Play 且游戏未激活 -&gt; 开始新的一局。"""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">mouse_pos</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">initialize_dynamic_settings</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"  -&gt; 游戏开始！game_active = True，光标已隐藏"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ship_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  -&gt; 飞船被撞！剩余 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span><span class="si">}</span><span class="s2"> 条命"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"  -&gt; 命用完了，game_active = False，光标恢复显示"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_play_button</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_q</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"SCORE: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 未激活：画一个绿底"Play"按钮</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_rect</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"Play"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">button_rect</span><span class="o">.</span><span class="n">center</span><span class="p">))</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"游戏启动：game_active = False，等待玩家点 Play</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="c1"># dummy 驱动收不到真实事件，预排 30 帧做演示；</span>
+        <span class="c1"># 在你自己电脑上删掉 setdefault 两行，就能用真鼠标真键盘玩。</span>
+        <span class="n">plan</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"click"</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">250</span><span class="p">)),</span>   <span class="c1"># 点 Play（按钮中心）</span>
+            <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s2">"click"</span><span class="p">,</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)),</span>     <span class="c1"># 点空白处（不该有反应）</span>
+            <span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="s2">"hit"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s2">"hit"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="s2">"hit"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>           <span class="c1"># 撞三次 -&gt; game over</span>
+            <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="s2">"click"</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">250</span><span class="p">)),</span>   <span class="c1"># 再点 Play -&gt; 重开</span>
+        <span class="p">]</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">while</span> <span class="n">running</span> <span class="ow">and</span> <span class="n">frame</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">when</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">plan</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">frame</span> <span class="o">==</span> <span class="n">when</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">"click"</span><span class="p">:</span>
+                        <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span>
+                            <span class="n">pygame</span><span class="o">.</span><span class="n">MOUSEBUTTONDOWN</span><span class="p">,</span>
+                            <span class="p">{</span><span class="s2">"pos"</span><span class="p">:</span> <span class="n">arg</span><span class="p">,</span> <span class="s2">"button"</span><span class="p">:</span> <span class="mi">1</span><span class="p">}))</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[第 </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> 帧] 模拟鼠标点击 </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">what</span> <span class="o">==</span> <span class="s2">"hit"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[第 </span><span class="si">{</span><span class="n">frame</span><span class="si">}</span><span class="s2"> 帧] 模拟一次撞击"</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_ship_hit</span><span class="p">()</span>
+            <span class="n">running</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_events</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_screen</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+            <span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">游戏循环结束：最终得分 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">，"</span>
+              <span class="sa">f</span><span class="s2">"最高分 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">Game</span><span class="p">()</span><span class="o">.</span><span class="n">run_game</span><span class="p">()</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="na">游戏启动：game_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False，等待玩家点 Play</span>
+
+<span class="na">[第 10 帧] 模拟鼠标点击 (400, 250)</span>
+<span class="w">  </span><span class="na">-&gt; 游戏开始！game_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True，光标已隐藏</span>
+<span class="na">[第 12 帧] 模拟鼠标点击 (50, 50)</span>
+<span class="na">[第 14 帧] 模拟一次撞击</span>
+<span class="w">  </span><span class="na">-&gt; 飞船被撞！剩余 2 条命</span>
+<span class="na">[第 16 帧] 模拟一次撞击</span>
+<span class="w">  </span><span class="na">-&gt; 飞船被撞！剩余 1 条命</span>
+<span class="na">[第 18 帧] 模拟一次撞击</span>
+<span class="w">  </span><span class="na">-&gt; 飞船被撞！剩余 0 条命</span>
+<span class="w">  </span><span class="na">-&gt; 命用完了，game_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False，光标恢复显示</span>
+<span class="na">[第 20 帧] 模拟鼠标点击 (400, 250)</span>
+<span class="w">  </span><span class="na">-&gt; 游戏开始！game_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True，光标已隐藏</span>
+
+<span class="na">游戏循环结束：最终得分 500，最高分 500</span>
+</code></pre>
+<blockquote>
+<p>重点观察三件事：① 第 12 帧点空白处<strong>没有任何反应</strong>（<code>collidepoint</code> 没命中）；② 游戏结束后再点 Play <strong>又能重开</strong>，分数从 0 重算；③ <code>game_active</code> 走完 False → True → False → True 一整圈，就是 2.1 节那张状态图在真实跑。这里按钮用裸 <code>Rect</code> 代替 <code>Button</code> 类，是为了聚焦状态转换——真实项目里换成 <code>self.play_button.rect</code> 即可。</p>
+</blockquote>
+<h3 id="示例-5-余下的飞船数-group-ship-复用">示例 5：余下的飞船数——Group + Ship 复用</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ships_demo.py —— 用 Group + Ship 在左上角画"剩余命数"图标</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">,</span> <span class="s2">"dummy"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Ship</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""简化版飞船：只有 rect 和一张纯色图像（用法和教材 Ship 一样）。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># 真实项目里这里是 pygame.image.load("images/ship.bmp")</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="mi">40</span><span class="p">,</span> <span class="mi">24</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Scoreboard</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">ships_left</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prep_ships</span><span class="p">(</span><span class="n">ships_left</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">prep_ships</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ships_left</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""把剩余命数画成左上角一排小飞船图标。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">ship_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ships_left</span><span class="p">):</span>
+            <span class="n">ship</span> <span class="o">=</span> <span class="n">Ship</span><span class="p">()</span>
+            <span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">ship_number</span> <span class="o">*</span> <span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>   <span class="c1"># 用图片宽度当间距</span>
+            <span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ships</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">ship</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_ships</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
+
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">400</span><span class="p">,</span> <span class="mi">120</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">lives</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span>
+    <span class="n">sb</span> <span class="o">=</span> <span class="n">Scoreboard</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">lives</span><span class="p">)</span>
+    <span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">))</span>
+    <span class="n">sb</span><span class="o">.</span><span class="n">show_ships</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">lives</span><span class="si">}</span><span class="s2"> 条命：Group 里有 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">sb</span><span class="o">.</span><span class="n">ships</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个图标，"</span>
+          <span class="sa">f</span><span class="s2">"x 坐标 </span><span class="si">{</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">sb</span><span class="o">.</span><span class="n">ships</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>3 条命：Group 里有 3 个图标，x 坐标 [10, 50, 90]
+2 条命：Group 里有 2 个图标，x 坐标 [10, 50]
+0 条命：Group 里有 0 个图标，x 坐标 []
+</code></pre>
+<blockquote>
+<p>每次 <code>prep_ships()</code> 都 <code>Group()</code> 重建：命数会变，旧编组里装着旧数量的图标，必须整个扔掉重来。空编组 <code>draw()</code> 也不报错，只是什么都不画。<strong>借 Ship 的长相，用 Group 的管理</strong>——这就是复用。</p>
+</blockquote>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 14-1【按钮定位函数】</strong>
+写一个 <code>place_rect(rect, screen_rect, position)</code> 函数：根据 <code>position</code>（<code>"center"</code> / <code>"bottom_right"</code> / <code>"top_left"</code>）把 <code>rect</code> 摆到 <code>screen_rect</code> 的对应位置（四周留 20 像素边距），无法识别的位置抛 <code>ValueError</code>。
+1. 用 <code>pygame.Rect</code> 造一个屏幕矩形和三个按钮矩形，分别摆到三个位置并打印 <code>rect</code>
+2. 验证每个按钮的中心命中自己、不命中别人
+3. 思考：为什么把定位逻辑抽成独立函数，比在 <code>Button.__init__</code> 里写三个 <code>if</code> 更容易扩展？
+验收点：三个 rect 位置各不相同；<code>collidepoint</code> 判定全部正确。</p>
+<p><strong>练习 14-2【GameStats 的生命周期】</strong>
+写 <code>GameStats</code> 类（参考示例 3）：
+1. 构造时 <code>game_active = False</code>、<code>high_score = 0</code>，并调用 <code>reset_stats()</code>
+2. <code>reset_stats()</code> 只重置 <code>ships_left</code>、<code>score</code>、<code>level</code>
+3. 测试：构造 → 模拟玩游戏（<code>score=3000, level=4, ships_left=1, game_active=True</code>，并更新最高分）→ 调用 <code>reset_stats()</code> → 用 <code>assert</code> 验证 <code>score==0</code>、<code>level==1</code>、<code>ships_left==ship_limit</code>、<code>game_active is True</code>、<code>high_score==3000</code>
+验收点：所有 assert 通过；能列出「归 reset_stats 管的三个属性」和「不归它管的两个属性」。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 14-3【Play 按钮的显隐与光标】</strong>
+改造示例 4：
+1. 只在 inactive 时画 Play 按钮，游戏开始后按钮从屏幕消失
+2. 游戏结束后按钮重新出现，并额外渲染一行「Game Over」
+3. 验证 <code>pygame.mouse.set_visible()</code> 与 <code>game_active</code> 严格同步
+4. <strong>坑点测试</strong>：故意注释掉结束时的 <code>set_visible(True)</code>，写下「找不到光标」是什么体验
+验收点：按钮显隐与状态严格同步；能说出为什么两个 <code>set_visible</code> 必须成对。</p>
+<p><strong>练习 14-4【最高分持久化】（教材未涉及，补充说明：练习性质的增强）</strong>
+教材第 14 章的最高分只存在内存里，程序一关就丢。用单元 9 学的 JSON 把它留下来：
+1. <code>load_high_score()</code>：从 <code>high_score.json</code> 读取最高分，文件不存在或损坏返回 0
+2. <code>save_high_score(score)</code>：写入 <code>high_score.json</code>（<code>ensure_ascii=False</code>）
+3. 改造 <code>GameStats.__init__</code>：<code>self.high_score = load_high_score()</code>
+4. <code>check_high_score()</code> 里诞生新纪录时调用 <code>save_high_score()</code>
+5. 测试：跑一局拿 500 分 → 退出 → 重新运行 → 验证 <code>high_score</code> 还是 500（把最后的清理代码注释掉再跑两次）
+验收点：重启后最高分保留；文件内容是合法 JSON。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-14-1">参考答案 14-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># place_rect.py —— 按钮定位函数</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">,</span> <span class="s2">"dummy"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">place_rect</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">screen_rect</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把 rect 摆到 screen_rect 的对应位置，四周留 20 像素边距。"""</span>
+    <span class="k">if</span> <span class="n">position</span> <span class="o">==</span> <span class="s2">"center"</span><span class="p">:</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">center</span>
+    <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="s2">"bottom_right"</span><span class="p">:</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">right</span> <span class="o">-</span> <span class="mi">20</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">-</span> <span class="mi">20</span>
+    <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="s2">"top_left"</span><span class="p">:</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="n">rect</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"未知位置: </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rect</span>
+
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">screen_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+
+<span class="n">play</span> <span class="o">=</span> <span class="n">place_rect</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">screen_rect</span><span class="p">,</span> <span class="s2">"center"</span><span class="p">)</span>
+<span class="n">quit_btn</span> <span class="o">=</span> <span class="n">place_rect</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">screen_rect</span><span class="p">,</span> <span class="s2">"bottom_right"</span><span class="p">)</span>
+<span class="n">help_btn</span> <span class="o">=</span> <span class="n">place_rect</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">screen_rect</span><span class="p">,</span> <span class="s2">"top_left"</span><span class="p">)</span>
+
+<span class="n">buttons</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"Play"</span><span class="p">,</span> <span class="n">play</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Quit"</span><span class="p">,</span> <span class="n">quit_btn</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Help"</span><span class="p">,</span> <span class="n">help_btn</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">rect</span> <span class="ow">in</span> <span class="n">buttons</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: rect=</span><span class="si">{</span><span class="n">rect</span><span class="si">}</span><span class="s2">, 中心=</span><span class="si">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 点击判定 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">rect</span> <span class="ow">in</span> <span class="n">buttons</span><span class="p">:</span>
+    <span class="n">hit_self</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+    <span class="n">others</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">buttons</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">rect</span><span class="p">]</span>
+    <span class="n">hit_other</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">others</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  点 </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> 中心：命中自己=</span><span class="si">{</span><span class="n">hit_self</span><span class="si">}</span><span class="s2">，误伤别人=</span><span class="si">{</span><span class="n">hit_other</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 无法识别的位置必须报错</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">place_rect</span><span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">screen_rect</span><span class="p">,</span> <span class="s2">"middle"</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">错误处理正常：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>Play: rect=&lt;rect(300, 275, 200, 50)&gt;, 中心=(400, 300)
+Quit: rect=&lt;rect(580, 530, 200, 50)&gt;, 中心=(680, 555)
+Help: rect=&lt;rect(20, 20, 200, 50)&gt;, 中心=(120, 45)
+
+--- 点击判定 ---
+  点 Play 中心：命中自己=True，误伤别人=False
+  点 Quit 中心：命中自己=True，误伤别人=False
+  点 Help 中心：命中自己=True，误伤别人=False
+
+错误处理正常：未知位置: middle
+</code></pre>
+<blockquote>
+<p>把定位逻辑抽成独立函数后，<code>Button</code> 构造时只要调 <code>place_rect(self.rect, self.screen_rect, position)</code> 一行；以后想加新位置，只改函数不动类——这就是「把会变的部分隔离出来」。</p>
+</blockquote>
+<h3 id="参考答案-14-2">参考答案 14-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># stats_lifecycle.py —— GameStats 的生命周期：谁归 reset_stats 管</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_limit</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""只重置'一局内部'的数据。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">GameStats</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 构造完成 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  score=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">, level=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">level</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"ships_left=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span><span class="si">}</span><span class="s2">, high_score=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"game_active=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 模拟玩了一局：3000 分，4 级，剩 1 条命 ==="</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">3000</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="p">:</span>      <span class="c1"># 模拟 check_high_score</span>
+    <span class="n">stats</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">score</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== reset_stats() 之后 ==="</span><span class="p">)</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  score=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="si">}</span><span class="s2">, level=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">level</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"ships_left=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span><span class="si">}</span><span class="s2">, high_score=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">high_score</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"game_active=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 断言验收 ==="</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"score 应该归零"</span>
+<span class="k">assert</span> <span class="n">stats</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"level 应该归 1"</span>
+<span class="k">assert</span> <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">==</span> <span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span><span class="p">,</span> <span class="s2">"命数应该回满"</span>
+<span class="k">assert</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"game_active 不归 reset_stats 管！"</span>
+<span class="k">assert</span> <span class="n">stats</span><span class="o">.</span><span class="n">high_score</span> <span class="o">==</span> <span class="mi">3000</span><span class="p">,</span> <span class="s2">"最高分是跨局记忆，不能清零！"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  全部通过"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  归 reset_stats 管：ships_left / score / level"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  不归它管：high_score（跨局）和 game_active（事件驱动）"</span><span class="p">)</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 构造完成 ===
+  score=0, level=1, ships_left=3, high_score=0, game_active=False
+
+=== 模拟玩了一局：3000 分，4 级，剩 1 条命 ===
+
+=== reset_stats() 之后 ===
+  score=0, level=1, ships_left=3, high_score=3000, game_active=True
+
+=== 断言验收 ===
+  全部通过
+  归 reset_stats 管：ships_left / score / level
+  不归它管：high_score（跨局）和 game_active（事件驱动）
+</code></pre>
+<h3 id="参考答案-14-3">参考答案 14-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># play_button_visibility.py —— Play 按钮显隐与光标切换</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">,</span> <span class="s2">"dummy"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Button</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span> <span class="o">=</span> <span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="n">msg</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_color</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span>
+            <span class="n">center</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Stats</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+<span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+<span class="n">play_button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="s2">"Play"</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">Stats</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">update_screen</span><span class="p">():</span>
+    <span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+        <span class="c1"># 未激活才画按钮；游戏结束后再画一行 Game Over</span>
+        <span class="n">play_button</span><span class="o">.</span><span class="n">draw_button</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_over_happened</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"Game Over"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">135</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">320</span><span class="p">))</span>
+    <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+
+
+<span class="c1"># 光标状态与 game_active 严格同步</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="ow">not</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"启动：game_active=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">，"</span>
+      <span class="sa">f</span><span class="s2">"光标可见=</span><span class="si">{</span><span class="ow">not</span><span class="w"> </span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="ow">not</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"开始：game_active=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">，"</span>
+      <span class="sa">f</span><span class="s2">"光标可见=</span><span class="si">{</span><span class="ow">not</span><span class="w"> </span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">stats</span><span class="o">.</span><span class="n">game_over_happened</span> <span class="o">=</span> <span class="kc">True</span>      <span class="c1"># 标记这一局结束过</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="ow">not</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"结束：game_active=</span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">，"</span>
+      <span class="sa">f</span><span class="s2">"光标可见=</span><span class="si">{</span><span class="ow">not</span><span class="w"> </span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">update_screen</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 坑点测试 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"如果把结束时的 set_visible(True) 注释掉："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  游戏结束了，屏幕上只剩 Play 按钮，但鼠标光标凭空消失。"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  玩家：'我光标呢？？' 只能凭记忆盲点 Play，体验极差。"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  所以 set_visible 必须成对：True（等待）&lt;-&gt; False（游戏中）。"</span><span class="p">)</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre>
+<p><strong>预期输出</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>启动：game_active=False，光标可见=True
+开始：game_active=True，光标可见=False
+结束：game_active=False，光标可见=True
+
+=== 坑点测试 ===
+如果把结束时的 set_visible(True) 注释掉：
+  游戏结束了，屏幕上只剩 Play 按钮，但鼠标光标凭空消失。
+  玩家：'我光标呢？？' 只能凭记忆盲点 Play，体验极差。
+  所以 set_visible 必须成对：True（等待）&lt;-&gt; False（游戏中）。
+</code></pre>
+<blockquote>
+<p>注意 <code>update_screen()</code> 的写法：按钮只在 <code>not game_active</code> 时画，游戏一开始就从屏幕上消失；<code>game_over_happened</code> 是给 <code>Stats</code> 动态加的属性（真实项目里应该写进 <code>__init__</code>，这里为了演示简洁直接挂上去）。</p>
+</blockquote>
+<h3 id="参考答案-14-4">参考答案 14-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># high_score_persist.py —— 用 JSON 把最高分写进文件（教材未涉及，补充实现）</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">HIGH_SCORE_FILE</span> <span class="o">=</span> <span class="s2">"high_score.json"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_high_score</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""从文件读取最高分，文件不存在或损坏都返回 0。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">HIGH_SCORE_FILE</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"high_score"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">HIGH_SCORE_FILE</span><span class="si">}</span><span class="s2"> 不存在，最高分从 0 开始"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">HIGH_SCORE_FILE</span><span class="si">}</span><span class="s2"> 内容损坏，最高分从 0 开始"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">save_high_score</span><span class="p">(</span><span class="n">score</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把最高分写进文件。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">HIGH_SCORE_FILE</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">({</span><span class="s2">"high_score"</span><span class="p">:</span> <span class="n">score</span><span class="p">},</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  最高分 </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2"> 已保存到 </span><span class="si">{</span><span class="n">HIGH_SCORE_FILE</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 模拟一次完整的游戏生命周期 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 1. 程序启动：读取最高分 ==="</span><span class="p">)</span>
+<span class="n">high_score</span> <span class="o">=</span> <span class="n">load_high_score</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  当前最高分：</span><span class="si">{</span><span class="n">high_score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 2. 玩了一局，得到 500 分 ==="</span><span class="p">)</span>
+<span class="n">score</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">high_score</span><span class="p">:</span>
+    <span class="n">high_score</span> <span class="o">=</span> <span class="n">score</span>
+    <span class="n">save_high_score</span><span class="p">(</span><span class="n">high_score</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 3. 模拟重启程序：再次读取 ==="</span><span class="p">)</span>
+<span class="n">high_score_2</span> <span class="o">=</span> <span class="n">load_high_score</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  重启后最高分：</span><span class="si">{</span><span class="n">high_score_2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">high_score_2</span> <span class="o">==</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">"最高分应该跨进程保留！"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  断言通过：关机重开，纪录还在"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 4. 新的一局分数更低，不更新纪录 ==="</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">high_score_2</span><span class="p">:</span>
+    <span class="n">high_score_2</span> <span class="o">=</span> <span class="n">score</span>
+    <span class="n">save_high_score</span><span class="p">(</span><span class="n">high_score_2</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  300 &lt; </span><span class="si">{</span><span class="n">high_score_2</span><span class="si">}</span><span class="s2">，纪录保持 </span><span class="si">{</span><span class="n">high_score_2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 清理（想体验"重启保留"，把下面两行注释掉再跑两次）</span>
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">HIGH_SCORE_FILE</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">HIGH_SCORE_FILE</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">已清理 </span><span class="si">{</span><span class="n">HIGH_SCORE_FILE</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p><strong>预期输出</strong>（首次运行）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 1. 程序启动：读取最高分 ===
+  high_score.json 不存在，最高分从 0 开始
+  当前最高分：0
+
+=== 2. 玩了一局，得到 500 分 ===
+  最高分 500 已保存到 high_score.json
+
+=== 3. 模拟重启程序：再次读取 ===
+  重启后最高分：500
+  断言通过：关机重开，纪录还在
+
+=== 4. 新的一局分数更低，不更新纪录 ===
+  300 &lt; 500，纪录保持 500
+
+已清理 high_score.json
+</code></pre>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-改了-score-忘了-prep_score">错误 1：★ 改了 score 忘了 prep_score()</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span>
+<span class="c1"># 忘了 self.sb.prep_score()</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>print(stats.score)</code> 明明在涨，屏幕上永远显示旧数字。
+<strong>处方</strong>：记住公式——<strong>数据变，prep 调用</strong>。<code>score</code> → <code>prep_score()</code>，<code>high_score</code> → <code>prep_high_score()</code>，<code>level</code> → <code>prep_level()</code>，<code>ships_left</code> → <code>prep_ships()</code>。</p>
+<h3 id="错误-2-把-high_score-0-写进了-reset_stats">错误 2：★ 把 high_score = 0 写进了 reset_stats()</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="mi">0</span>        <span class="c1"># 大错特错！</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：<code>high_score</code> 只在 <code>GameStats.__init__</code> 里初始化一次；要持久化就连同文件读取一起放那里。</p>
+<h3 id="错误-3-font-render-参数写错">错误 3：font.render() 参数写错</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_color</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：<code>render(text, antialias, color, background=None)</code> 四个参数各有其位：<strong>文字、抗锯齿（True/False）、前景色、（背景色可省）</strong>。</p>
+<h3 id="错误-4-button-里存错了对象">错误 4：Button 里存错了对象</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>   <span class="c1"># AttributeError！</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：写 <code>self.screen = ai_game.screen</code> 和 <code>self.screen_rect = ai_game.screen.get_rect()</code>，两个 <code>ai_game.screen</code> 一个都不能省——<code>get_rect()</code> 是 Surface 的方法。</p>
+<h3 id="错误-5-increase_speed-里-alien_points-忘了-in">错误 5：increase_speed() 里 alien_points 忘了 int()</h3>
+<p><strong>症状</strong>：玩到第 3 级，得分变成 112.5，屏幕显示「112.5 分」。
+<strong>处方</strong>：<code>self.alien_points = int(self.alien_points * self.score_scale)</code>，<code>int()</code> 是保险丝。</p>
+<h3 id="错误-6-点-play-没加-not-game_active-条件">错误 6：点 Play 没加 not game_active 条件</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">play_button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">mouse_pos</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：游戏中手滑点了一下屏幕正中间，分数等级全部清零，玩家想砸键盘。
+<strong>处方</strong>：<code>if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:</code>——「点了按钮」和「游戏没在运行」两个条件同时满足才生效。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：为什么 Pygame 里不能直接「画文字」？<code>_prep_msg()</code> 做了什么？如果游戏运行期间要把按钮文字从 Play 改成 Resume，代码该怎么写？</p>
+<blockquote>
+<p><strong>要点</strong>：Pygame 只能操作 Surface（图像），文字必须先用 <code>font.render(text, True, text_color, bg_color)</code> 渲染成一张 Surface，再 <code>blit()</code> 到屏幕上——这就是 <code>_prep_msg()</code> 做的事：渲染文字图像 + 把图像矩形和按钮矩形居中对齐。文字要变，不能只改字符串，必须<strong>重新调用 <code>_prep_msg()</code> 生成新的 <code>msg_image</code></strong>，否则屏幕上还是旧照片。这正是「数据与显示分离」的体现。</p>
+</blockquote>
+<p><strong>2. 判断题</strong>：<code>reset_stats()</code> 应该负责把 <code>high_score</code> 也清零，因为「重置就是要全部归零」。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。<code>reset_stats()</code> 管理「一局内部的数据」（<code>ships_left</code>、<code>score</code>、<code>level</code>），<code>high_score</code> 是「跨局记忆」，生命周期是整个程序运行期间（要持久化还要跨进程）。同理 <code>game_active</code> 也不归 <code>reset_stats()</code> 管——它由「点 Play」和「命耗尽」两个事件驱动。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：<code>round(1234567, -1)</code> 和 <code>"{:,}".format(1234570)</code> 的结果分别是什么？为什么先舍入再加千分位，顺序反过来行不行？</p>
+<blockquote>
+<p><strong>要点</strong>：分别是 <code>1234570</code> 和 <code>'1,234,570'</code>。先舍入到十位让显示短、齐整（个位永远是 0，没有信息量），再加千分位让人一眼看清数量级。反过来<strong>不行</strong>——<code>"{:,}".format(1234567)</code> 得到的是字符串 <code>'1,234,567'</code>，字符串没法 <code>round()</code>。教材的顺序是「数值上舍入 → 转字符串 → 加逗号」，不能乱。</p>
+</blockquote>
+<p><strong>4. 改错题</strong>：下面代码击落外星人后，<code>print(stats.score)</code> 是对的，但屏幕上得分永远不变。只补两行修好它。</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">if</span> <span class="n">collisions</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">aliens</span> <span class="ow">in</span> <span class="n">collisions</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">)</span>
+    <span class="c1"># 屏幕上得分不更新</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<blockquote>
+<p><strong>要点</strong>：缺 <code>self.sb.prep_score()</code> 和 <code>self.sb.check_high_score()</code>。修正后：</p>
+</blockquote>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">if</span> <span class="n">collisions</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">aliens</span> <span class="ow">in</span> <span class="n">collisions</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sb</span><span class="o">.</span><span class="n">prep_score</span><span class="p">()</span>          <span class="c1"># 数据变了，图像要重做</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sb</span><span class="o">.</span><span class="n">check_high_score</span><span class="p">()</span>    <span class="c1"># 顺手检查新纪录</span>
+</code></pre>
+<blockquote>
+<p>深层原因：<code>stats.score</code> 是数据，<code>score_image</code> 是图像，<code>prep_score()</code> 是两者之间唯一的桥。（这两行是项目里的片段，直接粘到 <code>alien_invasion.py</code> 的 <code>_update_bullets()</code> 里用。）</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>speedup_scale</code> 和 <code>score_scale</code> 分别控制什么？为什么 <code>alien_points</code> 要 <code>int()</code>？为什么 <code>initialize_dynamic_settings()</code> 和 <code>increase_speed()</code> 必须拆成两个方法？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>speedup_scale</code>（1.1）同时缩放 <code>ship_speed</code> / <code>bullet_speed</code> / <code>alien_speed</code>，让整体节奏越来越快；<code>score_scale</code>（1.5）缩放 <code>alien_points</code>，让高风险对应高回报。<code>int()</code> 是因为 <code>50 * 1.5 = 75.0</code> 是 float，继续乘会出现 <code>112.5</code> 这样的小数分，显示难看。拆两个方法是因为「取初始值」和「往上加」是两个不同时机：点 Play 重置时调 <code>initialize_dynamic_settings()</code>，清空一波外星人升级时调 <code>increase_speed()</code>；不拆的话重置点要重复抄一遍所有初始值，容易漏。</p>
+</blockquote>
+<p><strong>6. 简答题</strong>：<code>prep_ships()</code> 为什么用 <code>Group</code> 装一整排 <code>Ship</code> 对象表示剩余命数？为什么每次都要重建 <code>Group</code>？</p>
+<blockquote>
+<p><strong>要点</strong>：用 <code>Group</code> + <code>Ship</code> 是「复用」：不为小图标单独造类，直接借飞船的长相和管理方式，<code>self.ships.draw(screen)</code> 一行画完，将来要统一更新、检测碰撞也有现成方法（<code>update()</code>、<code>groupcollide()</code>）。每次重建 <code>self.ships = Group()</code> 是因为命数会变，旧编组里装着旧数量的图标，必须整个扔掉重来；往旧编组里增增减减会出现「旧图标没清干净」的 bug。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能画出 inactive / active 状态转换图，并说清 <code>game_active</code> 是唯一的总开关</li>
+<li>[ ] 能默写 <code>Button</code> 类，并解释 <code>font.render()</code> 为什么返回 Surface 而不是「文字」</li>
+<li>[ ] 能默写 <code>prep_score()</code> / <code>prep_high_score()</code> / <code>prep_level()</code> / <code>prep_ships()</code> 的骨架，说清「数据 → 渲染 → 定位」三步</li>
+<li>[ ] 能写出 <code>round(score, -1)</code> + <code>"{:,}".format()</code> 的得分格式化，并解释 <code>-1</code> 的含义</li>
+<li>[ ] 能列出 <code>reset_stats()</code> 管的三个属性和不管的两个属性（<code>high_score</code>、<code>game_active</code>）</li>
+<li>[ ] 能解释 <code>speedup_scale</code> / <code>score_scale</code> 的作用，以及 <code>alien_points</code> 为什么 <code>int()</code></li>
+<li>[ ] 练习 14-2、14-4（或 14-3）已跑通</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 15 换赛道，进入<strong>项目 2：数据可视化</strong>。你要安装 matplotlib 和 plotly，学会用代码把数字变成图——先画折线图和散点图，再写一个「随机游走」类模拟花粉颗粒的运动轨迹，最后用掷骰子的统计结果画直方图。如果说项目 1 教你「事件驱动」，项目 2 就教你「数据驱动」——同一套 Python 语法，完全不同的世界观。</p>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>★ 产出：带 Play 按钮与完整记分牌的外星人入侵</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>难度会随击落外星人变高吗？还是会失控？</li><li>重开一局，速度和分数倍率都复位了吗？</li><li>余下飞船数用几个图标表示？减去一个了吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>动态难度靠 scale 统一管理；initialize 与 increase 的调用顺序不能反。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../14.html">查看单元 14 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="77.html"><small>← 上一节</small><b>第 77 节 · 动态难度与余下飞船数</b></a><a class="pn nx" id="nextLink" href="79.html"><small>下一节 →</small><b>第 79 节 · Matplotlib 入门与折线图</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

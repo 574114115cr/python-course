@@ -1,0 +1,56 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px', background: '#16232E' }} />
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '400px', background: 'linear-gradient(135deg, #1F5FA8 0%, #0E9B78 100%)', opacity: 0.55 }} />
+    <Box style={{ position: 'absolute', left: 0, top: 380, width: '1280px', height: '4px', background: '#E08A15' }} />
+
+    <Box style={{ position: 'absolute', left: 120, top: 148, width: '1040px', flexDirection: 'column', gap: 26 }}>
+        <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 1.35, textAlign: 'center' }}>
+            今天就把环境装好，把 hello.py 敲出来
+        </Text>
+        <Text style={{ fontSize: 21, color: '#C9DEEE', lineHeight: 1.7, textAlign: 'center' }}>
+            路线图、课表、12 份讲义、52 道题库，都已经备好。<br />
+            剩下的只有一件事：从单元 0 的第一个下午开始。
+        </Text>
+
+        <Box style={{ flexDirection: 'row', gap: 18, marginTop: 12, justifyContent: 'center' }}>
+            <Box style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 12, padding: '20px 26px', width: 330, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#8FB4D8', fontWeight: 'bold' }}>配套材料</Text>
+                <Text style={{ fontSize: 15, color: '#E4EEF7', lineHeight: 1.75 }}>
+                    python-learning-roadmap.html<br />
+                    python-course-syllabus.html<br />
+                    course/ 12 份单元讲义<br />
+                    exercises/ 分阶题库 52 题
+                </Text>
+            </Box>
+
+            <Box style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 12, padding: '20px 26px', width: 330, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#8FB4D8', fontWeight: 'bold' }}>第一个单元做什么</Text>
+                <Text style={{ fontSize: 15, color: '#E4EEF7', lineHeight: 1.75 }}>
+                    装 Python + VS Code 扩展<br />
+                    跑通 hello.py<br />
+                    git init 并完成首次提交<br />
+                    建好三个练习目录
+                </Text>
+            </Box>
+
+            <Box style={{ background: '#E08A15', borderRadius: 12, padding: '20px 26px', width: 330, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#FDF0DC', fontWeight: 'bold' }}>记住这一句</Text>
+                <Text style={{ fontSize: 17, color: '#FFFFFF', lineHeight: 1.75 }}>
+                    看完不算会，敲出来才算。<br />
+                    报错不是失败，是教程。
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 120, bottom: 48, width: '1040px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#7C93A8' }}>依据《Python 编程：从入门到实践（第 3 版）》中文版上篇第 1–11 章</Text>
+        <Text style={{ fontSize: 14, color: '#7C93A8' }}>17 / 17</Text>
+    </Box>
+</Slide>

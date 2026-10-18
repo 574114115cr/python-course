@@ -1,0 +1,91 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+            <Box style={{ background: '#0E9B78', borderRadius: 5, padding: '4px 12px' }}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>项目一</Text>
+            </Box>
+            <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>外星人入侵 · 单元 12–14</Text>
+        </Box>
+        <Text style={{ fontSize: 18, color: '#5A6B7A' }}>
+            教材第 12–14 章 · 5 周 · 你写的第一个多文件、带状态、有输赢的完整程序
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 140, width: '1152px', height: 300 }}>
+        <svg width='1152' height='300' viewBox='0 0 1152 300'>
+            <text fontFamily='Microsoft YaHei' x='0' y='18' fontSize='15' fontWeight='bold' fill='#16232E'>程序结构：四个文件，各管一件事</text>
+
+            <rect x='0' y='34' width='212' height='96' rx='10' fill='#1F5FA8' />
+            <text x='106' y='66' fontSize='16' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>alien_invasion.py</text>
+            <text fontFamily='Microsoft YaHei' x='106' y='90' fontSize='12.5' fill='#CFE2F5' textAnchor='middle'>主循环 · 事件的入口</text>
+            <text fontFamily='Microsoft YaHei' x='106' y='112' fontSize='12.5' fill='#CFE2F5' textAnchor='middle'>监听 → 更新 → 绘制 → 锁帧</text>
+
+            <rect x='238' y='34' width='212' height='96' rx='10' fill='#2F7BC8' />
+            <text x='344' y='66' fontSize='16' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>settings.py</text>
+            <text fontFamily='Microsoft YaHei' x='344' y='90' fontSize='12.5' fill='#EAF3FC' textAnchor='middle'>会变的数值集中管理</text>
+            <text fontFamily='Microsoft YaHei' x='344' y='112' fontSize='12.5' fill='#EAF3FC' textAnchor='middle'>速度 · 颜色 · 屏幕尺寸</text>
+
+            <rect x='476' y='34' width='212' height='96' rx='10' fill='#2F7BC8' />
+            <text x='582' y='66' fontSize='16' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>ship.py / bullet.py</text>
+            <text fontFamily='Microsoft YaHei' x='582' y='90' fontSize='12.5' fill='#EAF3FC' textAnchor='middle'>飞船与子弹（精灵类）</text>
+            <text x='582' y='112' fontSize='12.5' fill='#EAF3FC' textAnchor='middle' fontFamily='Inter'>image + rect + update</text>
+
+            <rect x='714' y='34' width='212' height='96' rx='10' fill='#0E9B78' />
+            <text x='820' y='66' fontSize='16' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>alien.py</text>
+            <text fontFamily='Microsoft YaHei' x='820' y='90' fontSize='12.5' fill='#D7F0E7' textAnchor='middle'>外星人 + 整队移动</text>
+            <text fontFamily='Microsoft YaHei' x='820' y='112' fontSize='12.5' fill='#D7F0E7' textAnchor='middle'>fleet_direction 方向标志</text>
+
+            <rect x='950' y='34' width='202' height='96' rx='10' fill='#16232E' />
+            <text x='1051' y='66' fontSize='16' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>game_stats.py</text>
+            <text fontFamily='Microsoft YaHei' x='1051' y='90' fontSize='12.5' fill='#A8C4DE' textAnchor='middle'>游戏状态与分数</text>
+            <text x='1051' y='112' fontSize='12.5' fill='#A8C4DE' textAnchor='middle' fontFamily='Inter'>inactive / active / over</text>
+
+            <text fontFamily='Microsoft YaHei' x='0' y='172' fontSize='15' fontWeight='bold' fill='#16232E'>三节课的学习曲线</text>
+
+            <path d='M18 210 L 1120 210' stroke='#D8E3EE' strokeWidth='2' fill='none' />
+
+            <circle cx='120' cy='210' r='13' fill='#1F5FA8' />
+            <text fontFamily='Microsoft YaHei' x='120' y='250' fontSize='14.5' fontWeight='bold' fill='#1F5FA8' textAnchor='middle'>单元 12</text>
+            <text fontFamily='Microsoft YaHei' x='120' y='273' fontSize='12.5' fill='#5A6B7A' textAnchor='middle'>窗口 + 飞船能开能停</text>
+
+            <circle cx='520' cy='210' r='13' fill='#0E9B78' />
+            <text fontFamily='Microsoft YaHei' x='520' y='250' fontSize='14.5' fontWeight='bold' fill='#0E9B78' textAnchor='middle'>单元 13</text>
+            <text fontFamily='Microsoft YaHei' x='520' y='273' fontSize='12.5' fill='#5A6B7A' textAnchor='middle'>子弹 + 舰队 + 碰撞 + 胜负</text>
+
+            <circle cx='920' cy='210' r='13' fill='#E08A15' />
+            <text fontFamily='Microsoft YaHei' x='920' y='250' fontSize='14.5' fontWeight='bold' fill='#E08A15' textAnchor='middle'>单元 14</text>
+            <text fontFamily='Microsoft YaHei' x='920' y='273' fontSize='12.5' fill='#5A6B7A' textAnchor='middle'>Play 按钮 + 记分 + 动态难度</text>
+
+            <path d='M320 210 L 400 210' stroke='#D8E3EE' strokeWidth='2' fill='none' />
+            <path d='M720 210 L 800 210' stroke='#D8E3EE' strokeWidth='2' fill='none' />
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 456, width: '1152px', height: 192, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ flex: 1.35, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1F5FA8' }}>这个项目真正教你的</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.75 }}>
+                <b>事件驱动</b>：程序不等你，它一直在跑，只在事件发生时响应。<br />
+                <b>精灵编组 Group</b>：不是一个一个管对象，而是一批一批管。<br />
+                <b>遍历时不能删</b>：必须遍历 .copy()、删原件——和阶段 1「遍历字典不能删键」是同一条红线。
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FDF3E2', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E08A15' }}>最容易卡住的三处</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.8 }}>
+                ① 编组 ≠ 列表，pop() 行为不同<br />
+                ② 边缘检测用 == 会漏判<br />
+                ③ groupcollide 两个 True 设错<br />
+                <b>这三处讲义里都有「故意写错」的示例</b>
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>14 / 23</Text>
+    </Box>
+</Slide>

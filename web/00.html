@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 0 · 环境与工具</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="0">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 0 · 环境与工具</h1>
+  <a class="ppt" href="ppt/u/00.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="1" data-to="5"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u0"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/00.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s4"><span class="k">大纲</span><span class="v">课程大纲课件 p4</span></a><a href="bank.html#u0"><span class="k">题库</span><span class="v">本单元 1 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-python-解释器-写的是-食材-跑的是-厨师">2.1 Python 解释器：写的是&quot;食材&quot;，跑的是&quot;厨师&quot;</a>
+<a class="lv3" href="#2-2-终端-命令行-和解释器对话的窗口">2.2 终端（命令行）：和解释器对话的窗口</a>
+<a class="lv3" href="#2-3-vs-code-python-扩展-写代码的写字板">2.3 VS Code + Python 扩展：写代码的写字板</a>
+<a class="lv3" href="#2-4-第一个报错-报错是你的朋友">2.4 第一个报错：报错是你的朋友</a>
+<a class="lv3" href="#2-5-git-给代码拍快照">2.5 Git：给代码拍快照</a>
+<a class="lv3" href="#2-6-建议的目录结构">2.6 建议的目录结构</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-第一个脚本">示例 1：第一个脚本</a>
+<a class="lv3" href="#示例-2-先写后跑的顺序演示-体会-从上到下">示例 2：先写后跑的顺序演示（体会&quot;从上到下&quot;）</a>
+<a class="lv3" href="#示例-3-用变量做一次简单计算">示例 3：用变量做一次简单计算</a>
+<a class="lv3" href="#示例-4-认识-print-的分隔符与注释">示例 4：认识 print 的分隔符与注释</a>
+<a class="lv3" href="#示例-5-用-f-string-把变量嵌进文字里">示例 5：用 f-string 把变量嵌进文字里</a>
+<a class="lv3" href="#示例-6-初识类型与打印类型">示例 6：初识类型与打印类型</a>
+<a class="lv3" href="#示例-7-一次常见的报错长什么样">示例 7：一次常见的报错长什么样</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-0-2">参考答案 0-2</a>
+<a class="lv3" href="#参考答案-0-3-两种写法">参考答案 0-3（两种写法）</a>
+<a class="lv3" href="#参考答案-0-4">参考答案 0-4</a>
+<a class="lv3" href="#参考答案-0-5">参考答案 0-5</a>
+<a class="lv3" href="#参考答案-0-6">参考答案 0-6</a>
+<a class="lv3" href="#参考答案-0-7">参考答案 0-7</a>
+<a class="lv3" href="#参考答案-0-8-命令序列说明">参考答案 0-8（命令序列说明）</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-0-环境搭建与工具链">单元 0：环境搭建与工具链</h1>
+<blockquote>
+<p>对应教材附录 A（安装 Python）、附录 B（VS Code）、附录 C（排错）、附录 D（Git）<br>
+阶段 0 · 只花一个下午，但跳过它后面每一步都会疼</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>在自己的电脑上安装 Python 3.12 或更高版本，并在终端里用 <code>python --version</code> 验证成功。</li>
+<li>安装并配置 VS Code + Python 扩展，能用「运行」按钮或快捷键执行一个 <code>.py</code> 文件。</li>
+<li>独立创建一个项目目录，写出并运行人生第一个 <code>hello.py</code>，并能读懂最简单的报错信息。</li>
+<li>用 <code>git init / add / commit / log</code> 建立自己的第一个版本仓库，并配置好 <code>.gitignore</code>。</li>
+<li>说清「终端 / 编辑器 / 解释器」三者的区别，知道自己的代码最终由谁执行。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-python-解释器-写的是-食材-跑的是-厨师">2.1 Python 解释器：写的是"食材"，跑的是"厨师"</h3>
+<p>Python 是一门<strong>解释型语言</strong>。你写的 <code>.py</code> 文件只是纯文本（叫"源代码"），机器本身并不认识它。真正把文本变成机器能执行的动作，需要一个叫 <strong>Python 解释器</strong> 的程序来完成。</p>
+<p>生活化类比：你写了一张菜谱（<code>.py</code> 文件），但菜谱不会自己变成菜。必须有厨师（解释器）照着做，才能端上桌（输出结果）。所以"运行 Python 代码"这件事，物理上必然是：<strong>某台机器上的某个解释器程序，读取你的文本文件，逐行执行</strong>。</p>
+<p>理解这一点，你就明白了为什么安装 Python 是第一步——没有厨师，菜谱就是废纸。</p>
+<h3 id="2-2-终端-命令行-和解释器对话的窗口">2.2 终端（命令行）：和解释器对话的窗口</h3>
+<p><strong>终端</strong>（Windows 上叫 PowerShell 或命令提示符，macOS/Linux 上叫 Terminal）是一个可以输入文字的地方。你在里面输入 <code>python hello.py</code>，回车，解释器就会去读取并执行那个文件。</p>
+<p>初学者最常见的困惑是"我怎么确认自己装好了？"——标准动作是打开终端，输入：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>python<span class="w"> </span>--version
+</code></pre>
+<p>如果屏幕回你一行 <code>Python 3.12.x</code>，说明解释器已经装好并且在 PATH 里能找到。如果报 <code>'python' 不是内部或外部命令</code>，几乎一定是安装时<strong>没有勾选 "Add Python to PATH"</strong>。这个勾选项的作用，就是告诉 Windows"以后我在任何目录里敲 python，都去那个安装位置找它"。</p>
+<p>另外两个你会立刻用到的命令：</p>
+<ul>
+<li><code>cd 文件夹名</code> —— 进入某个目录（change directory）</li>
+<li><code>dir</code>（Windows）或 <code>ls</code>（macOS/Linux）—— 列出当前目录里有什么</li>
+</ul>
+<h3 id="2-3-vs-code-python-扩展-写代码的写字板">2.3 VS Code + Python 扩展：写代码的写字板</h3>
+<p><strong>编辑器</strong>不是解释器，它只是"写字板"。VS Code 负责让你写代码更舒服：语法高亮（关键字变色）、自动缩进、括号补全、侧边栏文件树。</p>
+<p>装上微软官方的 <strong>Python 扩展</strong>（Python by Microsoft）之后，VS Code 额外获得：</p>
+<ul>
+<li>右上角的 ▶ 播放按钮，一键运行当前文件</li>
+<li>智能提示：打了一半的函数名，会自动补全并显示参数说明</li>
+<li>错误提示：你在当前文件还没运行之前，就能看到红波浪线告诉你哪里写错了</li>
+</ul>
+<p>记住这个分工：<strong>编辑器负责"写"，解释器负责"跑"，终端负责"把两者连起来"。</strong></p>
+<h3 id="2-4-第一个报错-报错是你的朋友">2.4 第一个报错：报错是你的朋友</h3>
+<p>几乎每个人第一天都会遇到这个：</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="nb">print</span><span class="p">(</span><span class="s2">"Hello, Python!"</span>   <span class="c1"># ← 结尾少了一个右括号</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>运行后会得到：</p>
+<pre><code class="text"><span class="cl">报错信息</span>  File "hello.py", line 1
+    print("Hello, Python!"
+                                ^
+SyntaxError: '(' was never closed
+</code></pre>
+<p>读报错只需看三行信息：</p>
+<ul>
+<li><strong><code>File "hello.py", line 1</code></strong> —— 哪个文件、第几行</li>
+<li><strong>那行代码 + 一个 <code>^</code> 箭头</strong> —— 箭头指着的就是问题所在</li>
+<li><strong><code>SyntaxError: '(' was never closed</code></strong> —— 人类语言的错误原因</li>
+</ul>
+<p>中文意思是：<code>语法错误：左括号对应的右括号从来没被写出来</code>。</p>
+<p>对应教材附录 C 的排错思路：<strong>先看行号 → 再看箭头 → 最后读错误类型</strong>。</p>
+<h3 id="2-5-git-给代码拍快照">2.5 Git：给代码拍快照</h3>
+<p>Git 是一个<strong>版本控制系统</strong>，作用是给你的代码拍快照。写崩了可以回到任何一个快照。</p>
+<p>四个必须先掌握的指令：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>生活化含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git init</code></td>
+<td>在这个文件夹里放一个"快照仓库"，从此开始记录</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>现在有哪些改动？哪些已经收进仓库了？</td>
+</tr>
+<tr>
+<td><code>git add 文件名</code></td>
+<td>挑几件改动放进"待提交篮子"</td>
+</tr>
+<tr>
+<td><code>git commit -m "说明"</code></td>
+<td>给这批改动盖章存档，写清这次干了什么</td>
+</tr>
+<tr>
+<td><code>git log</code></td>
+<td>翻看历史存档记录</td>
+</tr>
+</tbody>
+</table>
+<p><code>.gitignore</code> 则是一份"永远别记录这些"的清单，比如虚拟环境、缓存、<code>__pycache__</code>。它不是 Python 特有的，GitHub 官方提供了各语言模板，Python 项目里常见的几行是：</p>
+<pre><code class="text"><span class="cl">.gitignore</span><span class="na">__pycache__/</span>
+<span class="na">*.pyc</span>
+<span class="na">.venv/</span>
+</code></pre>
+<h3 id="2-6-建议的目录结构">2.6 建议的目录结构</h3>
+<p>从第一天起就养成"一个项目一个文件夹"的习惯，单元 10 开始你会立刻感谢自己：</p>
+<pre><code class="text"><span class="cl">目录结构</span><span class="na">my_project/</span>
+<span class="na">├── .gitignore</span>
+<span class="na">├── README.md</span>
+<span class="na">├── venv/              ← 虚拟环境（可随时删掉重建，不要手动改）</span>
+<span class="na">├── main.py            ← 主程序入口</span>
+<span class="na">├── data/</span>
+<span class="na">│   └── sample.txt     ← 数据文件放这里</span>
+<span class="na">└── tests/</span>
+<span class="w">    </span><span class="na">└── test_main.py   ← 测试代码放这里（单元 10 会用）</span>
+</code></pre>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-第一个脚本">示例 1：第一个脚本</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># hello.py —— 这是你的第一个 Python 程序</span>
+<span class="c1"># 井号 # 开头的内容叫"注释"，Python 会忽略它，用给人看</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Hello, Python!"</span><span class="p">)</span>   <span class="c1"># print() 把括号里的内容显示到屏幕上</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"我是零基础学习者"</span><span class="p">)</span>   <span class="c1"># 中文一样可以直接写</span>
+<span class="nb">print</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span>              <span class="c1"># 表达式也可以直接交给 print，Python 会先算出 5</span>
+</code></pre>
+<h3 id="示例-2-先写后跑的顺序演示-体会-从上到下">示例 2：先写后跑的顺序演示（体会"从上到下"）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># order_demo.py —— Python 严格从上往下逐行执行</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一步：准备开始"</span><span class="p">)</span>     <span class="c1"># 第 1 行最先打印</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小明"</span>                <span class="c1"># 第 3 行：把"小明"这个名字存进变量 name</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第二步：变量已赋值，name ="</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>   <span class="c1"># 第 4 行：这里才能用 name</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第三步：程序结束"</span><span class="p">)</span>     <span class="c1"># 最后一行</span>
+</code></pre>
+<p>注意：如果把 <code>print("第二步...", name)</code> 挪到 <code>name = "小明"</code> <strong>之前</strong>，程序就会报 <code>NameError: name 'name' is not defined</code>。</p>
+<h3 id="示例-3-用变量做一次简单计算">示例 3：用变量做一次简单计算</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># calc_demo.py —— 认识变量赋值和基本运算</span>
+
+<span class="c1"># 变量名 = 值，等号叫"赋值号"，把右边的东西交给左边的名字</span>
+<span class="n">price</span> <span class="o">=</span> <span class="mf">35.5</span>        <span class="c1"># 一个小数：单价 35.5 元</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">3</span>           <span class="c1"># 一个整数：买了 3 个</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">count</span>   <span class="c1"># * 是乘法</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"单价："</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="s2">"元"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"数量："</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="s2">"个"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"总价："</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="s2">"元"</span><span class="p">)</span>
+
+<span class="c1"># 变量可以被重新赋值，像一个可以反复贴标签的盒子</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">-</span> <span class="mi">5</span>   <span class="c1"># 抹掉零头，给 5 元优惠</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"优惠后总价："</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="s2">"元"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-4-认识-print-的分隔符与注释">示例 4：认识 print 的分隔符与注释</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># print_demo.py —— print 的三个实用参数</span>
+
+<span class="c1"># sep 指定"用什么把多个值隔开"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">,</span> <span class="s2">"橘子"</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"、"</span><span class="p">)</span>
+<span class="c1"># 输出：苹果、香蕉、橘子</span>
+
+<span class="c1"># end 指定"这一行结束之后接什么"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"正在加载"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"..."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"完成"</span><span class="p">)</span>
+<span class="c1"># 输出：正在加载...完成（中间没有换行）</span>
+
+<span class="c1"># 注释的三种写法</span>
+<span class="c1"># 1）井号写在代码后面，前面要有两个空格才符合 PEP8</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 这是行尾注释</span>
+
+<span class="c1"># 2）单独成行的注释</span>
+<span class="c1"># 这一整行都是说明文字</span>
+
+<span class="c1"># 3）用三引号写"文档字符串"，常放在文件或函数开头</span>
+<span class="sd">"""</span>
+<span class="sd">这是模块级文档字符串。</span>
+<span class="sd">说明这个文件是干什么的。</span>
+<span class="sd">"""</span>
+</code></pre>
+<h3 id="示例-5-用-f-string-把变量嵌进文字里">示例 5：用 f-string 把变量嵌进文字里</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fstring_demo.py —— 格式化字符串，最常用的"拼句子"方式</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小红"</span>
+<span class="n">score</span> <span class="o">=</span> <span class="mf">92.567</span>
+
+<span class="c1"># 普通做法：靠逗号隔开，输出会有多余空格</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"同学"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"成绩"</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+
+<span class="c1"># f-string 做法：大写 f 前缀，花括号里直接写变量名</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"同学</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">成绩</span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 想控制小数位数，就在花括号里写 :.2f（保留两位小数）</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"同学</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">成绩</span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 字符串里的对齐和补零也能做</span>
+<span class="n">num</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"编号：</span><span class="si">{</span><span class="n">num</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>      <span class="c1"># 03d 表示至少 3 位，不够前面补零 → 007</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"右对齐：</span><span class="si">{</span><span class="s1">'hi'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>     <span class="c1"># &gt;8 表示靠右，占 8 个字符宽度</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"左对齐：</span><span class="si">{</span><span class="s1">'hi'</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>     <span class="c1"># &lt;8 表示靠左</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"居中对齐：</span><span class="si">{</span><span class="s1">'hi'</span><span class="si">:</span><span class="s2">^8</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>  <span class="c1"># ^8 表示居中</span>
+</code></pre>
+<h3 id="示例-6-初识类型与打印类型">示例 6：初识类型与打印类型</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># type_demo.py —— 认识 Python 的基本数据类型</span>
+
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span><span class="c1"># 整数 int</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>        <span class="c1"># 小数 float</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小明"</span><span class="c1"># 字符串 str</span>
+<span class="n">is_student</span> <span class="o">=</span> <span class="kc">True</span>    <span class="c1"># 布尔值 bool（只有 True 和 False，首字母必须大写）</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">age</span><span class="p">),</span> <span class="n">age</span><span class="p">)</span>         <span class="c1"># &lt;class 'int'&gt; 18</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">height</span><span class="p">),</span> <span class="n">height</span><span class="p">)</span>   <span class="c1"># &lt;class 'float'&gt; 1.75</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span>       <span class="c1"># &lt;class 'str'&gt; 小明</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">is_student</span><span class="p">))</span>       <span class="c1"># &lt;class 'bool'&gt;</span>
+
+<span class="c1"># type() 返回的是"类型"，数据才是真正存的东西</span>
+<span class="c1"># 类比：type() 告诉你容器是什么，变量里装的是内容</span>
+</code></pre>
+<h3 id="示例-7-一次常见的报错长什么样">示例 7：一次常见的报错长什么样</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="nb">print</span><span class="p">(</span><span class="s2">"这一行是正确的"</span><span class="p">)</span>
+
+<span class="c1"># 下面这行少了一个右括号，是最常见的错误</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"这一行少括号"</span>
+<span class="c1"># 正确写法应该是：print("这一行少括号")</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>运行结果：</p>
+<pre><code class="text"><span class="cl">报错信息</span>  File "error_demo.py", line 6
+    print("这一行少括号"
+SyntaxError: '(' was never closed
+</code></pre>
+<p>对照看三行：<code>line 6</code> 告诉你第几行；<code>^</code> 指向缺右括号的位置；<code>SyntaxError</code> 告诉你"语法不对，Python 连读都读不下去"。</p>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<blockquote>
+<p>全部题目都可以保存成 <code>.py</code> 文件直接运行。标注 🌐 的题目需要你手动在终端输入内容（<code>input()</code>）。</p>
+</blockquote>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 0-1【环境验证】</strong><br>
+在终端里执行 <code>python --version</code>，把输出的一整行文字原样抄下来。然后执行 <code>python -c "print('命令行直接执行')"</code>，把输出抄下来。<br>
+要求：确认输出的版本号 ≥ 3.12，并能说出 <code>-c</code> 参数的作用。</p>
+<p><strong>练习 0-2【第一个变量】</strong><br>
+写一个 <code>me.py</code>，定义四个变量：<code>name</code>（存你的名字字符串）、<code>age</code>（存你的年龄整数）、<code>height</code>（存你的身高小数）、<code>hobby</code>（存你的爱好字符串），然后用一行 <code>print()</code> 分别打印出每个变量的名字和值（形如 <code>name: 小明</code>）。<br>
+输出示例：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">name</span><span class="p">:</span> <span class="n">小明</span>
+<span class="n">age</span><span class="p">:</span> <span class="mi">18</span>
+<span class="n">height</span><span class="p">:</span> <span class="mf">1.75</span>
+<span class="n">hobby</span><span class="p">:</span> <span class="n">篮球</span>
+</code></pre>
+<p><strong>练习 0-3【f-string 自我介绍】</strong><br>
+接着上一题，改写成<strong>用一行 <code>print()</code></strong> 输出完整自我介绍，必须用 f-string。<br>
+输出示例：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">我叫小明</span><span class="err">，</span><span class="n">今年</span> <span class="mi">18</span> <span class="n">岁</span><span class="err">，</span><span class="n">身高</span> <span class="mf">1.75</span> <span class="n">米</span><span class="err">，</span><span class="n">我喜欢篮球</span><span class="err">。</span>
+</code></pre>
+<p><strong>练习 0-4【类型辨认】</strong><br>
+写 <code>types.py</code>，创建 5 个变量，让它们分别是 int、float、str、str、bool 类型，然后用 <code>for</code> 之前还不存在的知识——直接写 5 行 <code>print(type(变量名), 变量名)</code> 把类型和值都打出来。不允许使用 <code>for</code> 循环（那是单元 3 的内容）。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 0-5🌐【第一个交互程序】</strong><br>
+写 <code>ask_name.py</code>：用 <code>input()</code> 提示用户输入姓名和年龄，然后用 f-string 输出一句话。注意：<code>input()</code> 拿回来的<strong>永远是字符串</strong>，所以年龄需要用 <code>int()</code> 转成整数才能做加法。<br>
+测试方式：在终端运行后输入 <code>小明</code> 回车，输入 <code>18</code> 回车。<br>
+输出示例：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">你叫</span> <span class="n">小明</span><span class="err">，</span><span class="n">你今年</span> <span class="mi">18</span> <span class="n">岁</span><span class="err">，</span><span class="n">明年就</span> <span class="mi">19</span> <span class="n">岁了</span><span class="err">。</span>
+</code></pre>
+<p><strong>练习 0-6【批量注释与规范】</strong><br>
+新建 <code>practice.py</code>，完成：</p>
+<ol>
+<li>文件第一行写一行注释，说明文件用途</li>
+<li>定义三个有意义的变量（不要用 <code>a</code>、<code>b</code>、<code>x</code> 这种名字）</li>
+<li>每行赋值语句<strong>行尾</strong>加一个注释，说明这个变量存的是什么</li>
+<li>文件末尾加一个三引号文档字符串，写一句总结</li>
+<li>运行验证输出正确</li>
+</ol>
+<p><strong>练习 0-7【错误修复】</strong><br>
+下面这段代码有 <strong>3 个错误</strong>，请复制到 <code>fix_me.py</code> 并修好，让它能正确输出 <code>1 加 2 等于 3</code>：</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="nb">print</span><span class="p">(</span><span class="s2">"1 加 2 等于 3"</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1 加 2 等于"</span><span class="p">,</span> <span class="n">x</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>要求：说明每一处错误属于哪一类（括号不匹配 / 语法错误）。</p>
+<p><strong>练习 0-8【Git 首次提交】</strong><br>
+在终端完成下面 5 步，并把每一步的输出记录下来：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>mkdir<span class="w"> </span>my_first_project
+<span class="nb">cd</span><span class="w"> </span>my_first_project
+python<span class="w"> </span>hello.py<span class="w">  </span><span class="c1"># 或者直接把你练习 0-3 的代码存成 hello.py</span>
+git<span class="w"> </span>init
+git<span class="w"> </span>status
+git<span class="w"> </span>add<span class="w"> </span>hello.py
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"第一个提交：hello 世界"</span>
+git<span class="w"> </span>log
+</code></pre>
+<p>要求：① 仓库根目录生成一个 <code>.git</code> 文件夹；② <code>git log</code> 能看到你那条提交记录（含哈希值、时间和说明）；③ 截图或复制保存输出作为本单元的作业凭证。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-0-2">参考答案 0-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># me.py —— 认识变量与四种基本类型</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小明"</span>      <span class="c1"># str：字符串，用引号包起来的文字</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span>           <span class="c1"># int：整数，不带小数点</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>      <span class="c1"># float：小数，带小数点</span>
+<span class="n">hobby</span> <span class="o">=</span> <span class="s2">"篮球"</span>     <span class="c1"># str：文字也可以是中文</span>
+
+<span class="c1"># 逐个打印变量的名字和值</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"name:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"age:"</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"height:"</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"hobby:"</span><span class="p">,</span> <span class="n">hobby</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-0-3-两种写法">参考答案 0-3（两种写法）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># intro.py —— 用 f-string 输出自我介绍</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小明"</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>
+<span class="n">hobby</span> <span class="o">=</span> <span class="s2">"篮球"</span>
+
+<span class="c1"># 写法一：f-string（推荐，格式最自由）</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"我叫</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">，今年 </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2"> 岁，身高 </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> 米，我喜欢</span><span class="si">{</span><span class="n">hobby</span><span class="si">}</span><span class="s2">。"</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 写法二：不用 f-string，用逗号分隔（数字前后会自动加空格）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"我叫"</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"，今年"</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="s2">"岁，身高"</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="s2">"米，我喜欢"</span><span class="p">,</span> <span class="n">hobby</span><span class="p">,</span> <span class="s2">"。"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-0-4">参考答案 0-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># types.py —— 认识五种类型的判断</span>
+
+<span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>          <span class="c1"># int</span>
+<span class="n">price</span> <span class="o">=</span> <span class="mf">19.9</span>        <span class="c1"># float</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"李四"</span>       <span class="c1"># str</span>
+<span class="n">city</span> <span class="o">=</span> <span class="s2">"杭州"</span>       <span class="c1"># str</span>
+<span class="n">is_vip</span> <span class="o">=</span> <span class="kc">False</span>      <span class="c1"># bool</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">count</span><span class="p">)</span>        <span class="c1"># &lt;class 'int'&gt; 10</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">price</span><span class="p">),</span> <span class="n">price</span><span class="p">)</span>        <span class="c1"># &lt;class 'float'&gt; 19.9</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">name</span><span class="p">)</span>          <span class="c1"># &lt;class 'str'&gt; 李四</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">city</span><span class="p">),</span> <span class="n">city</span><span class="p">)</span>          <span class="c1"># &lt;class 'str'&gt; 杭州</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">is_vip</span><span class="p">),</span> <span class="n">is_vip</span><span class="p">)</span>      <span class="c1"># &lt;class 'bool'&gt; False</span>
+</code></pre>
+<h3 id="参考答案-0-5">参考答案 0-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ask_name.py —— 第一个交互程序</span>
+
+<span class="c1"># input() 会暂停等待用户键盘输入，拿回来的结果永远是 str</span>
+<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的名字："</span><span class="p">)</span>
+<span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的年龄："</span><span class="p">))</span>   <span class="c1"># 用 int() 把字符串转成整数</span>
+
+<span class="c1"># 加 1 得到明年的年龄</span>
+<span class="n">next_age</span> <span class="o">=</span> <span class="n">age</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="c1"># 用 f-string 把变量嵌进句子里</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你叫 </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">，你今年 </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2"> 岁，明年就 </span><span class="si">{</span><span class="n">next_age</span><span class="si">}</span><span class="s2"> 岁了。"</span><span class="p">)</span>
+</code></pre>
+<p>如果用户输入的是 <code>abc</code>，<code>int("abc")</code> 会报 <code>ValueError</code>，这是正常的，单元 9 会教你怎么处理它。</p>
+<h3 id="参考答案-0-6">参考答案 0-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># practice.py —— 规范的变量命名与注释写法</span>
+
+<span class="c1"># 这个文件用于练习"给变量起有意义的名字"</span>
+
+<span class="n">student_name</span> <span class="o">=</span> <span class="s2">"王小美"</span>          <span class="c1"># 存学生的姓名（字符串）</span>
+<span class="n">student_age</span> <span class="o">=</span> <span class="mi">20</span><span class="c1"># 存学生的年龄（整数）</span>
+<span class="n">enrollment_year</span> <span class="o">=</span> <span class="mi">2024</span>  <span class="c1"># 存入学年份（整数）</span>
+
+<span class="c1"># 三条输出，分别展示三个变量</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"学生姓名："</span><span class="p">,</span> <span class="n">student_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"学生年龄："</span><span class="p">,</span> <span class="n">student_age</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"入学年份："</span><span class="p">,</span> <span class="n">enrollment_year</span><span class="p">)</span>
+
+<span class="c1"># 汇总三个变量，说明这个文件演示了什么</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"演示了如何用有意义的变量名加注释来记录学生信息。"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-0-7">参考答案 0-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fix_me.py —— 修复后的正确版本</span>
+<span class="c1"># 原代码有 3 个错误：两处右括号缺失（SyntaxError），一处靠报错才能发现</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1 加 2 等于 3"</span><span class="p">)</span>   <span class="c1"># 错误 1：结尾少了右括号 -&gt; SyntaxError</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span>               <span class="c1"># 这一行本身是对的</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1 加 2 等于"</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>  <span class="c1"># 错误 2：结尾少了右括号 -&gt; SyntaxError</span>
+
+<span class="c1"># 顺带说明：Python 中 x 这个名字必须在使用它之前就已经被赋值，</span>
+<span class="c1"># 如果把 print 移到 x = 1 + 2 之前，就会报 NameError。</span>
+<span class="c1"># 这属于"使用顺序"问题，不是语法问题。</span>
+</code></pre>
+<h3 id="参考答案-0-8-命令序列说明">参考答案 0-8（命令序列说明）</h3>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># === Git 首次提交完整流程（Windows PowerShell / Git Bash 通用）===</span>
+
+<span class="c1"># 1. 创建并进入项目目录</span>
+mkdir<span class="w"> </span>my_first_project
+<span class="nb">cd</span><span class="w"> </span>my_first_project
+
+<span class="c1"># 2. 把练习代码存进来（这里假设你已经保存了 hello.py）</span>
+
+<span class="c1"># 3. 初始化仓库 —— 这一步让 Git 开始记录这个文件夹</span>
+git<span class="w"> </span>init
+
+<span class="c1"># 4. 查看状态 —— 确认哪些文件被识别到了</span>
+git<span class="w"> </span>status
+
+<span class="c1"># 5. 把文件放进暂存区 —— "挑出来准备存档"</span>
+git<span class="w"> </span>add<span class="w"> </span>hello.py
+
+<span class="c1"># 6. 提交 —— 盖章存档，-m 后面是这次改动的说明</span>
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"第一个提交：hello 世界"</span>
+
+<span class="c1"># 7. 查看历史 —— 确认存档成功</span>
+git<span class="w"> </span>log
+</code></pre>
+<p>如果第 6 步报 <code>Please tell me who you are</code>，说明 Git 不知道你是谁，需要先设置一次身份（这只会做一次）：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">"你的名字"</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">"你的邮箱@example.com"</span>
+</code></pre>
+<p><code>.gitignore</code> 的推荐内容：</p>
+<pre><code class="text"><span class="cl">.gitignore</span><span class="na">__pycache__/</span>
+<span class="na">*.pyc</span>
+<span class="na">.venv/</span>
+<span class="na">venv/</span>
+<span class="na">.DS_Store</span>
+</code></pre>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 判断题</strong>：<code>print("Hi")</code> 这行代码能直接双击 <code>.py</code> 文件就看到输出吗？</p>
+<blockquote>
+<p><strong>要点</strong>：不能。双击是用操作系统默认方式打开文本文件，不是执行。要看到输出必须用解释器运行：在 VS Code 里点 ▶，或在终端里输入 <code>python 文件名.py</code>。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：终端提示 <code>'python' 不是内部或外部命令</code>，最可能的原因是什么？该怎么解决？</p>
+<blockquote>
+<p><strong>要点</strong>：安装 Python 时没有勾选 "Add Python to PATH"，系统不知道去哪儿找解释器。解决办法：重新运行安装包 → 勾选该选项 → 或手动把 Python 安装目录加进系统环境变量 PATH，然后重开终端。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：<code>git commit -m "更新"</code> 和 <code>git add file.py</code> 可以交换顺序吗？</p>
+<blockquote>
+<p><strong>要点</strong>：不可以。<code>add</code> 是"把改动放进暂存区"，<code>commit</code> 是"把暂存区里的内容存档"。必须先 <code>add</code> 再 <code>commit</code>，否则 <code>commit</code> 会提示 nothing to commit（因为暂存区是空的）。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：这段代码会输出什么？为什么？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="s2">"A"</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"B"</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：输出两行 <code>A</code>、<code>B</code>。因为 Python 从上往下逐行执行：<code>x = 10</code> 本身不产生任何输出，只有两个 <code>print()</code> 会打印东西。（如果把 <code>print("B")</code> 改成 <code>print(x)</code> 并挪到赋值之前，就会报 <code>NameError</code>——这正是"先赋值后使用"的意义。）</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>.gitignore</code> 是干什么的？如果没有它，提交可能出现什么问题？</p>
+<blockquote>
+<p><strong>要点</strong>：它是一份"永远不要记录"的清单，通常放虚拟环境（<code>venv/</code>）、Python 缓存（<code>__pycache__/</code>、<code>*.pyc</code>）等。缺少它时，虚拟环境里成千上万个文件会被一起提交，仓库体积暴涨、提交记录被噪音淹没，且不同电脑的缓存文件会造成大量无意义差异。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<p>学完本单元，你手上应该有：</p>
+<ul>
+<li>[ ] 一个能正常工作的 Python 3.12+ 安装</li>
+<li>[ ] 一个配好 Python 扩展的 VS Code</li>
+<li>[ ] 一个跑通过的 <code>hello.py</code></li>
+<li>[ ] 一个用 <code>git init</code> 初始化、<code>git log</code> 能查到的仓库</li>
+<li>[ ] 一份 <code>me.py</code> 和一份 <code>intro.py</code> 的练习代码</li>
+<li>[ ] 修复后的 <code>fix_me.py</code></li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 1 讲变量与简单数据类型——你会正式认识 str、int、float、bool 四种类型的全部转换规则（<code>str()</code> / <code>int()</code> / <code>float()</code> / <code>bool()</code>），以及字符串最常用的方法：<code>.upper()</code>、<code>.lower()</code>、<code>.title()</code>、<code>.strip()</code> 和 f-string 格式化。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><div class="spot"><a class="pn" href="ppt/u/00.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s4"><small>课程大纲课件</small><b>阶段总览 p4 →</b></a></div><a class="pn nx" href="01.html"><small>下一单元 →</small><b>单元 1 · 变量与数据类型</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

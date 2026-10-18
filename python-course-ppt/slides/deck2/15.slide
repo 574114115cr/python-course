@@ -1,0 +1,97 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+            <Box style={{ background: '#2F7BC8', borderRadius: 5, padding: '4px 12px' }}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>项目二</Text>
+            </Box>
+            <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>数据可视化 · 单元 15–17</Text>
+        </Box>
+        <Text style={{ fontSize: 18, color: '#5A6B7A' }}>
+            教材第 15–17 章 · 4 周 · 从「自己造数据」走到「从真实世界取数据并画出来」
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 140, width: '1152px', height: 268 }}>
+        <svg width='1152' height='268' viewBox='0 0 1152 268'>
+            <rect x='0' y='0' width='370' height='120' rx='10' fill='#2F7BC8' />
+            <text fontFamily='Microsoft YaHei' x='20' y='32' fontSize='16' fontWeight='bold' fill='#FFFFFF'>单元 15 · 自己造数据</text>
+            <text fontFamily='Microsoft YaHei' x='20' y='58' fontSize='13' fill='#EAF3FC'>matplotlib 折线图 / 散点图</text>
+            <text fontFamily='Microsoft YaHei' x='20' y='80' fontSize='13' fill='#EAF3FC'>随机游走 · Plotly 掷骰子</text>
+            <text fontFamily='Microsoft YaHei' x='20' y='104' fontSize='12.5' fill='#BFD9F2'>第 15 章</text>
+
+            <rect x='391' y='0' width='370' height='120' rx='10' fill='#2F7BC8' />
+            <text fontFamily='Microsoft YaHei' x='411' y='32' fontSize='16' fontWeight='bold' fill='#FFFFFF'>单元 16 · 下载真实数据</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='58' fontSize='13' fill='#EAF3FC'>CSV 气温图 · GeoJSON 地震散点</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='80' fontSize='13' fill='#EAF3FC'>datetime · 缺失值 · 地图</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='104' fontSize='12.5' fill='#BFD9F2'>第 16 章</text>
+
+            <rect x='782' y='0' width='370' height='120' rx='10' fill='#0E9B78' />
+            <text fontFamily='Microsoft YaHei' x='802' y='32' fontSize='16' fontWeight='bold' fill='#FFFFFF'>单元 17 · 调用 API</text>
+            <text fontFamily='Microsoft YaHei' x='802' y='58' fontSize='13' fill='#D7F0E7'>requests 取 GitHub / HN 数据</text>
+            <text fontFamily='Microsoft YaHei' x='802' y='80' fontSize='13' fill='#D7F0E7'>速率限制 · Plotly 交互图</text>
+            <text fontFamily='Microsoft YaHei' x='802' y='104' fontSize='12.5' fill='#B9E4D5'>第 17 章</text>
+
+            <text fontFamily='Microsoft YaHei' x='0' y='158' fontSize='15' fontWeight='bold' fill='#16232E'>一条数据处理的完整链路</text>
+
+            <rect x='0' y='176' width='212' height='78' rx='9' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='106' y='204' fontSize='14.5' fontWeight='bold' fill='#1F5FA8' textAnchor='middle'>① 取数</text>
+            <text x='106' y='228' fontSize='12.5' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>CSV / JSON / API</text>
+
+            <path d='M220 215 L 240 215' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+            <path d='M232 209 L 240 215 L 232 221' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+
+            <rect x='248' y='176' width='212' height='78' rx='9' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='354' y='204' fontSize='14.5' fontWeight='bold' fill='#1F5FA8' textAnchor='middle'>② 清洗</text>
+            <text fontFamily='Microsoft YaHei' x='354' y='228' fontSize='12.5' fill='#5A6B7A' textAnchor='middle'>缺失值 · 类型转换 · 日期</text>
+
+            <path d='M468 215 L 488 215' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+            <path d='M480 209 L 488 215 L 480 221' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+
+            <rect x='496' y='176' width='212' height='78' rx='9' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='602' y='204' fontSize='14.5' fontWeight='bold' fill='#1F5FA8' textAnchor='middle'>③ 分析</text>
+            <text fontFamily='Microsoft YaHei' x='602' y='228' fontSize='12.5' fill='#5A6B7A' textAnchor='middle'>取字段 · 算极值 · 排序</text>
+
+            <path d='M716 215 L 736 215' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+            <path d='M728 209 L 736 215 L 728 221' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+
+            <rect x='744' y='176' width='212' height='78' rx='9' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='850' y='204' fontSize='14.5' fontWeight='bold' fill='#1F5FA8' textAnchor='middle'>④ 呈现</text>
+            <text fontFamily='Microsoft YaHei' x='850' y='228' fontSize='12.5' fill='#5A6B7A' textAnchor='middle'>静态 PNG / 交互 HTML</text>
+
+            <path d='M964 215 L 984 215' stroke='#E08A15' strokeWidth='3' fill='none' />
+            <path d='M976 209 L 984 215 L 976 221' stroke='#E08A15' strokeWidth='3' fill='none' />
+
+            <rect x='992' y='176' width='160' height='78' rx='9' fill='#FDF3E2' />
+            <text fontFamily='Microsoft YaHei' x='1072' y='204' fontSize='14.5' fontWeight='bold' fill='#E08A15' textAnchor='middle'>⑤ 结论</text>
+            <text fontFamily='Microsoft YaHei' x='1072' y='228' fontSize='12.5' fill='#8A6A2A' textAnchor='middle'>这张图说明了什么</text>
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 424, width: '1152px', height: 192, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1F5FA8' }}>这个项目真正教你的</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.75 }}>
+                <b>真实数据是脏的</b>：会缺值、会换列序、编码会不听话。<br />
+                <b>选型意识</b>：静态图用 matplotlib，可交互图用 Plotly。<br />
+                <b>API 是数据来源</b>：有配额（每小时 60 次）、会失败，必须处理。
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FDF3E2', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E08A15' }}>最容易卡住的三处</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.8 }}>
+                ① 不调 <code style={{ fontSize: 13 }}>ax.axis()</code> 导致点被裁掉<br />
+                ② GeoJSON 经纬度写反（[0] 是经度）<br />
+                ③ 表头列号写死，换数据就错<br />
+                <b>① 是 matplotlib 新手最高频的坑</b>
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>15 / 23</Text>
+    </Box>
+</Slide>

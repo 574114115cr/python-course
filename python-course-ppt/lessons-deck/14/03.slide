@@ -1,0 +1,16 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 64, top: 36, width: '1152px', flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <Box style={{ background: '#0E9B78', borderRadius: 5, padding: '3px 11px' }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>第 75 节</Text>
+        </Box>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#16232E' }}>核心知识点</Text>
+        <Text style={{ fontSize: 15, color: '#5A6B7A', marginTop: 10 }}>· 游戏状态机与 Button 类</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px' }}>
+        <svg width='1280' height='720' viewBox='0 0 1280 720'>
+            <rect x='64' y='96' width='548' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='64' y='96' width='548' height='4' rx='2' fill='#1F5FA8' /><text x='82' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>2.1 游戏状态机：从「一启动就玩」到「有开始界面」</text><text x='82' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· inactive：刚启动或上一局结束，屏幕上只有 Play 按钮，飞船不动、外星人不生成。</text><text x='82' y='197.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· active：点过 Play，一切正常运转。</text><text x='82' y='226.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 教材没有单独的 game_over 变量——「game over」就是「active 又变回 inac…</text><rect x='668' y='96' width='548' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='668' y='96' width='548' height='4' rx='2' fill='#1F5FA8' /><text x='686' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>2.2 Button 类：Pygame 的文字不是「画」出…</text><text x='686' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 按钮为什么要自己持有 screen 和 screen_rect？ 因为它要自己画自己（draw_but…</text><text x='686' y='197.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· _prep_msg() 只在构造时调用一次：文字不变，每帧重渲染纯属浪费。</text><text x='686' y='226.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· render() 的 True 是抗锯齿，写 False 就是马赛克字；参数顺序是「文字、抗锯齿</text><text x='686' y='245.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>、前景…</text><rect x='64' y='574' width='1152' height='66' rx='12' fill='#EEF5FB' /><text x='84' y='616' fontSize='14' fill='#243444' textAnchor='start' fontFamily='Microsoft YaHei'>看不懂的地方先回讲义对应小节读一遍，再回来对着这页复述一次——能讲出来才算真懂。</text>
+            <text x='64' y='684' fontSize='13' fill='#8A9AAA' fontFamily='Microsoft YaHei'>Python 讲授课件 · 逐节版</text>
+            <text x='1216' y='684' fontSize='13' fill='#8A9AAA' textAnchor='end' fontFamily='Microsoft YaHei'>单元 14 · 第 75 节</text>
+        </svg>
+    </Box>
+</Slide>

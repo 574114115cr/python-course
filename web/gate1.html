@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关卡 1 · 阶段 1 · 四条硬指标</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e08a15'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3E★%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e8f6f1;--p3:#e08a15;--p3bg:#fdf3e2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);line-height:1.75;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
+overflow-wrap:anywhere}
+a{color:var(--p1);text-decoration:none}a:hover{text-decoration:underline}
+code{background:#eef2f7;border-radius:4px;padding:1px 5px;font-size:.92em;
+font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+pre{background:#f7f9fc;border:1px solid var(--line);border-radius:9px;padding:12px 14px;
+overflow:auto;position:relative;margin:10px 0}
+pre code{background:none;padding:0;font-size:13px;line-height:1.62}
+.cl{position:absolute;top:6px;right:10px;font-size:11px;color:#8a9aaa;background:#fff;
+border:1px solid var(--line);border-radius:5px;padding:1px 7px}
+.top{position:sticky;top:0;z-index:40;background:rgba(246,248,251,.96);
+backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1000px;margin:0 auto;padding:0 22px;height:58px;display:flex;
+align-items:center;gap:14px}
+.back{font-size:13.5px;color:var(--muted);white-space:nowrap}
+.top-in h1{font-size:16px;margin:0;font-weight:700}
+.sp{flex:1}
+.btn{font-size:12.5px;font-weight:600;color:var(--p1);background:#fff;
+border:1px solid var(--line);border-radius:7px;padding:5px 11px}
+
+.hero{max-width:1000px;margin:22px auto 0;padding:0 22px}
+.hero h2{font-size:26px;margin:0 0 6px}
+.hero p{margin:0;color:var(--muted);font-size:14.5px}
+.prog{max-width:1000px;margin:16px auto 0;padding:0 22px;display:flex;gap:14px;
+align-items:center}
+.track{flex:1;height:9px;background:#e6ecf3;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--p1),var(--p2));
+border-radius:99px;transition:width .2s}
+.pnum{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;
+color:var(--p1);white-space:nowrap}
+
+.wrap{max-width:1000px;margin:16px auto 70px;padding:0 22px;display:flex;
+flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+padding:18px 20px}
+.card.ok{border-color:#bfe3d6;background:#fbfefd}
+.ch{display:flex;align-items:flex-start;gap:12px}
+.cn{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--p1);
+color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;
+justify-content:center;margin-top:3px}
+.card.ok .cn{background:var(--p2)}
+.ch h3{font-size:17px;margin:0;line-height:1.5}
+.ck{display:flex;gap:10px;align-items:flex-start;margin:9px 0;font-size:14px;
+cursor:pointer;padding:7px 10px;border-radius:8px;background:#f7f9fc;
+border:1px solid transparent}
+.ck:hover{background:#eef4fb}
+.ck input{width:17px;height:17px;margin-top:4px;accent-color:var(--p2);cursor:pointer;
+flex:0 0 auto}
+.ck.on{background:var(--p2bg);border-color:#c8e8dc}
+.ck.on span{color:#3b6b5c}
+.det{margin:10px 0 0;border-top:1px dashed var(--line);padding-top:8px}
+.det summary{cursor:pointer;font-size:13.5px;font-weight:700;color:var(--p1);
+list-style:none}
+.det summary::-webkit-details-marker{display:none}
+.det summary::before{content:"▸ ";font-size:12px}
+.det[open] summary::before{content:"▾ "}
+.fld{display:flex;gap:10px;margin:8px 0;font-size:14px;align-items:baseline}
+.fld b{flex:0 0 84px;font-size:12.5px;color:#fff;background:var(--p1);
+border-radius:5px;text-align:center;padding:2px 0;font-weight:700}
+.fld.warn b{background:var(--p3)}
+.fld.ok b{background:var(--p2)}
+.fld p{margin:0}
+
+.after{max-width:1000px;margin:0 auto 60px;padding:0 22px;display:grid;
+grid-template-columns:1fr 1fr;gap:14px}
+.box{border-radius:14px;padding:16px 18px;border:1px solid var(--line);background:#fff}
+.box h4{margin:0 0 6px;font-size:15px}
+.box p{margin:0;font-size:13.5px;color:var(--muted)}
+.box.pass{background:var(--p2bg);border-color:#c8e8dc}
+.box.fail{background:var(--p3bg);border-color:#f0d8a8}
+
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+@media(max-width:720px){.after{grid-template-columns:1fr}.top-in{height:auto;padding:10px 14px;
+flex-wrap:wrap;gap:8px}.hero,.prog,.wrap,.after{padding:0 14px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>关卡 1 · 阶段 1 · 四条硬指标</h1>
+  <span class="sp"></span>
+  <a class="btn" href="11.html">单元 11 讲义</a>
+  <a class="btn" href="lessons/63.html">第 63 节课节</a>
+  <a class="btn" href="bank.html">题库</a>
+</div></div>
+
+<div class="hero">
+  <h2>关卡 1 · 阶段 1 · 四条硬指标</h2>
+  <p>合上资料，2 小时内逐条自测。四条全部达标 = 具备「能独立做小项目」的基础。</p>
+</div>
+
+<div class="prog">
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <span class="pnum" id="pnum">已达标 0 / 19 条</span>
+</div>
+
+<main class="wrap">
+<section class="card">
+  <div class="ch"><span class="cn">1</span><h3>手写猜数字游戏</h3></div>
+  <div class="bd"><p><strong>要求</strong>：合上所有资料，<strong>10 分钟内</strong>独立写出一个可运行的猜数字游戏。</p>
+<p><strong>必须包含</strong>：</p>
+<ul>
+<li><code>random.randint(1, 100)</code> 生成随机数</li>
+<li><code>while</code> 循环持续接收猜测</li>
+<li><code>if</code> 判断大了/小了/对了</li>
+<li>猜对后用 <code>break</code> 跳出并输出猜测次数</li>
+</ul></div>
+  <details class='det'><summary>参考实现（先自己写，写完再对照）</summary><pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 关卡验收 1：猜数字游戏</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">secret</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"我想了一个 1-100 的数字，猜猜是几？"</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的猜测（q 退出）："</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">raw</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"q"</span><span class="p">,</span> <span class="s2">"quit"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"游戏结束，答案是 </span><span class="si">{</span><span class="n">secret</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">break</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">guess</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"请输入有效数字"</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">guess</span> <span class="o">&lt;</span> <span class="n">secret</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"太小了，再大一点"</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">guess</span> <span class="o">&gt;</span> <span class="n">secret</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"太大了，再小一点"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"恭喜猜对了！答案是 </span><span class="si">{</span><span class="n">secret</span><span class="si">}</span><span class="s2">，你一共猜了 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+        <span class="k">break</span>
+</code></pre></details>
+  <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-1-0"><span>能一次运行成功，没有语法错误</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-1-1"><span>输入非数字不会崩溃</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-1-2"><span>能通过输入 <code>q</code> 退出</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-1-3"><span>猜测次数统计正确</span></label></div>
+</section><section class="card">
+  <div class="ch"><span class="cn">2</span><h3>手写一个含继承的类</h3></div>
+  <div class="bd"><p><strong>要求</strong>：独立设计一个<strong>至少三层</strong>的类结构（用到继承和 <code>super()</code>），并能说明每个类的职责。</p></div>
+  <details class='det'><summary>参考实现（先自己写，写完再对照）</summary><pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 关卡验收 2：含继承的三层类设计</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Vehicle</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""交通工具基类。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">（</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">，</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="si">}</span><span class="s2"> 元）"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""基类的通用描述，子类可以重写。"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"这是一辆 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Car</span><span class="p">(</span><span class="n">Vehicle</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""汽车。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">fuel_consumption</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fuel_consumption</span> <span class="o">=</span> <span class="n">fuel_consumption</span>    <span class="c1"># 每百公里耗油量</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fuel_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">price_per_liter</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""计算行驶指定距离的油费。"""</span>
+        <span class="n">liters</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuel_consumption</span>
+        <span class="k">return</span> <span class="n">liters</span> <span class="o">*</span> <span class="n">price_per_liter</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ElectricCar</span><span class="p">(</span><span class="n">Car</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""电动汽车 —— 继承 Car，但重写相关方法。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">battery_capacity</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">fuel_consumption</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">battery_capacity</span> <span class="o">=</span> <span class="n">battery_capacity</span>      <span class="c1"># 电池容量 kWh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="mi">100</span>                             <span class="c1"># 剩余电量百分比</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fuel_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">price_per_liter</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 重写：电动车不用油，用电。"""</span>
+        <span class="n">electricity_per_100km</span> <span class="o">=</span> <span class="mi">15</span>                   <span class="c1"># 百公里耗电 15 度</span>
+        <span class="n">kwh</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">electricity_per_100km</span>
+        <span class="k">return</span> <span class="n">kwh</span> <span class="o">*</span> <span class="mf">0.6</span>                             <span class="c1"># 电价 0.6 元/度</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 重写：用父类信息 + 自己的信息。"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="si">}</span><span class="s2">，纯电动，电池 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">battery_capacity</span><span class="si">}</span><span class="s2"> kWh"</span>
+
+
+<span class="c1"># ===== 测试 =====</span>
+<span class="n">vehicles</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Car</span><span class="p">(</span><span class="s2">"燃油轿车"</span><span class="p">,</span> <span class="mi">120000</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">),</span>
+    <span class="n">ElectricCar</span><span class="p">(</span><span class="s2">"特斯拉 Model 3"</span><span class="p">,</span> <span class="mi">280000</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+    <span class="n">Car</span><span class="p">(</span><span class="s2">"越野车"</span><span class="p">,</span> <span class="mi">260000</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 多态：同一段代码调用 describe() ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 费用对比（同一段代码，行为不同）---"</span><span class="p">)</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vehicles</span><span class="p">:</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">fuel_cost</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">：行驶 </span><span class="si">{</span><span class="n">distance</span><span class="si">}</span><span class="s2"> 公里，成本 </span><span class="si">{</span><span class="n">cost</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 验证继承关系 ---"</span><span class="p">)</span>
+<span class="n">ec</span> <span class="o">=</span> <span class="n">ElectricCar</span><span class="p">(</span><span class="s2">"测试"</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"是 Car 的实例吗：</span><span class="si">{</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ec</span><span class="p">,</span><span class="w"> </span><span class="n">Car</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"是 Vehicle 的实例吗：</span><span class="si">{</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">ec</span><span class="p">,</span><span class="w"> </span><span class="n">Vehicle</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"继承自：</span><span class="si">{</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="vm">__name__</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="n">ec</span><span class="p">)</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"重写的方法：ElectricCar.fuel_cost 是 Car.fuel_cost 吗？"</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ElectricCar</span><span class="o">.</span><span class="n">fuel_cost</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">Car</span><span class="o">.</span><span class="n">fuel_cost</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></details>
+  <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-2-0"><span>至少三层（基类 + 两个子类）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-1"><span>子类的 <code>__init__</code> 调用了 <code>super().__init__()</code></span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-2"><span>至少一个方法被重写，且重写后行为确实不同</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-3"><span>能用 <code>isinstance</code> 验证继承关系</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-4"><span>能说明「为什么用继承而不是复制粘贴」</span></label></div>
+</section><section class="card">
+  <div class="ch"><span class="cn">3</span><h3>用 pytest 写 3 条测试并全部通过</h3></div>
+  <div class="bd"><p><strong>要求</strong>：给上面验收 2 的类（或你自己写的任何函数）写 <strong>3 条测试</strong>，用 <code>pytest</code> 运行并<strong>全部通过</strong>。</p></div>
+  <details class='det'><summary>参考实现（先自己写，写完再对照）</summary><pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_vehicle.py —— 关卡验收 3：给验收 2 的类写测试</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">vehicle</span><span class="w"> </span><span class="kn">import</span> <span class="n">Car</span><span class="p">,</span> <span class="n">ElectricCar</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestCar</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试汽车类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_fuel_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""正常情况：300 公里、7.5L/100km、油价 8 元。"""</span>
+        <span class="n">car</span> <span class="o">=</span> <span class="n">Car</span><span class="p">(</span><span class="s2">"测试车"</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
+        <span class="c1"># 300/100 * 7.5 = 22.5 升，22.5 * 8 = 180 元</span>
+        <span class="k">assert</span> <span class="n">car</span><span class="o">.</span><span class="n">fuel_cost</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="o">==</span> <span class="mf">180.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_zero_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 边界：不走就不花钱。"""</span>
+        <span class="n">car</span> <span class="o">=</span> <span class="n">Car</span><span class="p">(</span><span class="s2">"测试车"</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">car</span><span class="o">.</span><span class="n">fuel_cost</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestElectricCar</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试电动汽车类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_inherits_from_car</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 验证继承关系。"""</span>
+        <span class="n">ec</span> <span class="o">=</span> <span class="n">ElectricCar</span><span class="p">(</span><span class="s2">"测试电动车"</span><span class="p">,</span> <span class="mi">200000</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ec</span><span class="p">,</span> <span class="n">Car</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_fuel_cost_is_overridden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 验证方法重写：电动车不走油费逻辑。"""</span>
+        <span class="n">car</span> <span class="o">=</span> <span class="n">Car</span><span class="p">(</span><span class="s2">"燃油车"</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
+        <span class="n">ec</span> <span class="o">=</span> <span class="n">ElectricCar</span><span class="p">(</span><span class="s2">"电动车"</span><span class="p">,</span> <span class="mi">200000</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+
+        <span class="c1"># 同样跑 300 公里，电动车成本应该远低于燃油车</span>
+        <span class="n">car_cost</span> <span class="o">=</span> <span class="n">car</span><span class="o">.</span><span class="n">fuel_cost</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+        <span class="n">electric_cost</span> <span class="o">=</span> <span class="n">ec</span><span class="o">.</span><span class="n">fuel_cost</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">electric_cost</span> <span class="o">==</span> <span class="mf">27.0</span>      <span class="c1"># 300/100*15*0.6 = 27</span>
+        <span class="k">assert</span> <span class="n">electric_cost</span> <span class="o">&lt;</span> <span class="n">car_cost</span>
+</code></pre>
+<p><strong>运行结果必须是这样</strong>：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="err">$</span> <span class="n">pytest</span> <span class="o">-</span><span class="n">v</span>
+<span class="o">=============================</span> <span class="n">test</span> <span class="n">session</span> <span class="n">starts</span> <span class="o">==============================</span>
+<span class="n">collected</span> <span class="mi">4</span> <span class="n">items</span>
+
+<span class="n">test_vehicle</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">TestCar</span><span class="p">::</span><span class="n">test_fuel_cost</span> <span class="n">PASSED</span>                     <span class="p">[</span> <span class="mi">25</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_vehicle</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">TestCar</span><span class="p">::</span><span class="n">test_zero_distance</span> <span class="n">PASSED</span>                 <span class="p">[</span> <span class="mi">50</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_vehicle</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">TestElectricCar</span><span class="p">::</span><span class="n">test_inherits_from_car</span> <span class="n">PASSED</span>     <span class="p">[</span> <span class="mi">75</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_vehicle</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">TestElectricCar</span><span class="p">::</span><span class="n">test_fuel_cost_is_overridden</span> <span class="n">PASSED</span> <span class="p">[</span><span class="mi">100</span><span class="o">%</span><span class="p">]</span>
+
+<span class="o">=============================</span> <span class="mi">4</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.31</span><span class="n">s</span> <span class="o">=============================</span>
+</code></pre></details>
+  <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-3-0"><span>文件名 <code>test_xxx.py</code>、函数名 <code>test_xxx</code>（不写 <code>test_</code> 就不会被执行）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-1"><span>测试里断言了<strong>具体数值</strong>，不是只断言 <code>not None</code></span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-2"><span>至少有一条测试覆盖<strong>边界情况</strong>（0、空、异常输入）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-3"><span><code>pytest -v</code> 输出显示全部 passed</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-4"><span>能解释每条测试在验证什么</span></label></div>
+</section><section class="card">
+  <div class="ch"><span class="cn">4</span><h3>修复 IndentationError / NameError</h3></div>
+  <div class="bd"><p><strong>要求</strong>：拿到一段 <strong>30 行左右、含 3 个错误</strong>的脚本，在 <strong>10 分钟内</strong>读懂并修复，让它正确运行。</p>
+<p><strong>待修复的脚本</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># broken_script.py —— INTENTIONALLY-BROKEN 这段有 3 个错误，请修复</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_statistics</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""计算一组数字的统计信息。"""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">number</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="n">count</span>
+    <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"总和"</span><span class="p">:</span> <span class="n">total</span><span class="p">,</span>
+        <span class="s2">"个数"</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+        <span class="s2">"平均"</span><span class="p">:</span> <span class="n">average</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">print_report</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""打印统计信息。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"===== 统计报告 ====="</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">91</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">calculate_statistics</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<span class="n">print_report</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre>
+<p><strong>三个错误</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>错误</th>
+<th>类型</th>
+<th>修复</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>def calculate_statistics(numbers)</code> 缺冒号</td>
+<td><code>SyntaxError</code></td>
+<td>末尾加 <code>:</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>def print_report(stats)</code> 缺冒号</td>
+<td><code>SyntaxError</code></td>
+<td>末尾加 <code>:</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>字典字面量末尾缺逗号 <code>}</code> 前是 <code>},</code> 换行后 <code>}</code></td>
+<td><code>SyntaxError</code></td>
+<td>实际是 <code>maximum</code>/<code>minimum</code> 算了但没放进字典</td>
+</tr>
+</tbody>
+</table>
+<p><strong>修复后的正确版本</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fixed_script.py —— 修复后的版本</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_statistics</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""计算一组数字的统计信息。"""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">number</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="n">count</span>
+    <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">minimum</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"总和"</span><span class="p">:</span> <span class="n">total</span><span class="p">,</span>
+        <span class="s2">"个数"</span><span class="p">:</span> <span class="n">count</span><span class="p">,</span>
+        <span class="s2">"平均"</span><span class="p">:</span> <span class="n">average</span><span class="p">,</span>
+        <span class="s2">"最大"</span><span class="p">:</span> <span class="n">maximum</span><span class="p">,</span>      <span class="c1"># ← 修复：错误 3，这两个值算出来却没放进字典</span>
+        <span class="s2">"最小"</span><span class="p">:</span> <span class="n">minimum</span><span class="p">,</span>      <span class="c1"># ← 修复</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">print_report</span><span class="p">(</span><span class="n">stats</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""打印统计信息。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"===== 统计报告 ====="</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">stats</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">91</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">calculate_statistics</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+<span class="n">print_report</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre>
+<p><strong>期望输出</strong>：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="o">=====</span> <span class="n">统计报告</span> <span class="o">=====</span>
+<span class="n">总和</span><span class="p">:</span> <span class="mi">184</span>
+<span class="n">个数</span><span class="p">:</span> <span class="mi">6</span>
+<span class="n">平均</span><span class="p">:</span> <span class="mf">30.67</span>
+<span class="n">最大</span><span class="p">:</span> <span class="mi">91</span>
+<span class="n">最小</span><span class="p">:</span> <span class="mi">3</span>
+</code></pre>
+<p><strong>修复后，追加一个 NameError 的练习</strong>：</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">average</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">/</span> <span class="n">lenght</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>   <span class="c1"># 错误：lenght 拼错了，应为 len</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>报错信息：</p>
+<pre><code class="text"><span class="cl">报错信息</span>NameError: name 'lenght' is not defined
+</code></pre>
+<p>修复：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">average</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>      <span class="c1"># 改成 len</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">)</span>      <span class="c1"># 输出 2.0</span>
+</code></pre></div>
+  
+  <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-4-0"><span>能不看答案就找出 3 个错误</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-1"><span>修复后能正确输出期望结果</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-2"><span>能说出每个错误的<strong>类型</strong>（SyntaxError / IndentationError / NameError）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-3"><span>能解释"先赋值后使用"这条规则</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-4"><span>能举出自己写代码时遇到过的同类错误</span></label></div>
+</section>
+</main>
+
+<div class="after">
+  <div class="box pass">
+    <h4>全部达标后</h4>
+    <p>四条全绿后进单元 12，开始用 pygame 写游戏。<br><a href="12.html">进入阶段 2 · 外星人入侵 →</a></p>
+  </div>
+  <div class="box fail">
+    <h4>有条没过怎么办</h4>
+    <p>别往下走。回到对应单元把那一条练到能闭卷复现，再回来重测——关卡的意义就是拦住
+       「差不多会了」。<a href="../python-learning-roadmap.html">看路线图定位是哪一环</a></p>
+  </div>
+</div>
+
+<script>
+var KEY='gate1-v1';
+function read(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+var st=read();
+var boxes=[].slice.call(document.querySelectorAll('.ck input'));
+
+function paint(){
+  var n=0;
+  boxes.forEach(function(b){
+    var on=!!st[b.dataset.k];
+    b.checked=on;
+    b.closest('.ck').classList.toggle('on',on);
+    if(on) n++;
+  });
+  document.getElementById('fill').style.width=(boxes.length?n/boxes.length*100:0)+'%';
+  document.getElementById('pnum').textContent='已达标 '+n+' / '+boxes.length+' 条';
+  // 整卡达标：该卡下所有勾都打上
+  document.querySelectorAll('.card').forEach(function(c){
+    var all=[].slice.call(c.querySelectorAll('.ck input'));
+    var ok=all.length && all.every(function(b){return b.checked});
+    c.classList.toggle('ok',!!ok);
+  });
+}
+boxes.forEach(function(b){
+  b.addEventListener('change',function(){
+    if(this.checked) st[this.dataset.k]=1; else delete st[this.dataset.k];
+    try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}
+    paint();
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+paint();
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

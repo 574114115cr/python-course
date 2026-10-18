@@ -1,0 +1,8 @@
+{
+  "appId": "cn.pylearn.course",
+  "appName": "Python 学习课程",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

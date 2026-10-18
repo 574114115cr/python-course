@@ -1,0 +1,87 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '136px', background: '#16232E' }} />
+    <Box style={{ position: 'absolute', left: 64, top: 34, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#FFFFFF' }}>常见卡点与对策</Text>
+        <Text style={{ fontSize: 17, color: '#A8C4DE', marginTop: 8 }}>
+            这六处是零基础学员 90% 会卡住的地方，提前告知比事后补救有效得多
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 160, width: '1152px', height: 440, flexDirection: 'row', gap: 14 }}>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#E08A15' }}>第 4–7 章</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>列表 → if → while，语法密度陡增，缩进错误开始变多</Text>
+            <Box style={{ flex: 1, background: '#EEF5FB', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA', fontWeight: 'bold' }}>对策</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', lineHeight: 1.6 }}>动手练重做一遍，同一道题写三遍直到不用想</Text>
+            </Box>
+        </Box>
+
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#E08A15' }}>第 8 章 函数</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>抽象思维跳跃，卡在「不知道该拆成几个函数」</Text>
+            <Box style={{ flex: 1, background: '#EEF5FB', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA', fontWeight: 'bold' }}>对策</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', lineHeight: 1.6 }}>先抄教材 3 个例子，再逐个改需求，最后自己拆</Text>
+            </Box>
+        </Box>
+
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#E08A15' }}>第 9 章 类</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>零基础最劝退的一章，直觉上是「凭空造东西」</Text>
+            <Box style={{ flex: 1, background: '#EEF5FB', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA', fontWeight: 'bold' }}>对策</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', lineHeight: 1.6 }}>允许慢 2 周，造学生 / 购物车 / 账户三个真实类</Text>
+            </Box>
+        </Box>
+
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F5FA8' }}>第 10 章 文件</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>编码报错、路径找不到、JSON 格式写错</Text>
+            <Box style={{ flex: 1, background: '#EEF5FB', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA', fontWeight: 'bold' }}>对策</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', lineHeight: 1.6 }}>全程用 pathlib + with + utf-8，从第一行就写对</Text>
+            </Box>
+        </Box>
+
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F5FA8' }}>第 11 章 pytest</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>装不上、找不到 pytest、不知道测什么</Text>
+            <Box style={{ flex: 1, background: '#EEF5FB', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA', fontWeight: 'bold' }}>对策</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', lineHeight: 1.6 }}>单元 0 就建虚拟环境，只测自己写过的小函数</Text>
+            </Box>
+        </Box>
+
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#D1394B' }}>学不下去</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>战线太长看不到进展，积极性断崖</Text>
+            <Box style={{ flex: 1, background: '#FDEEF0', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#A85C68', fontWeight: 'bold' }}>对策</Text>
+                <Text style={{ fontSize: 15, color: '#A8323F', lineHeight: 1.6 }}>切回短任务，只做一个 20 行的小程序，两天内见效</Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 606, width: '1152px', height: 62,
+        background: '#EEF5FB', borderRadius: 10, flexDirection: 'row',
+        alignItems: 'center', padding: '0 24px', gap: 16,
+    }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1F5FA8' }}>通用原则</Text>
+        <Text style={{ fontSize: 16, color: '#3A4A58' }}>
+            任何一章卡住超过两周，先降难度而不是硬啃：降级到 L3 题库对应档位，重做一遍再来。
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>20 / 23</Text>
+    </Box>
+</Slide>

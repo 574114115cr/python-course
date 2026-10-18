@@ -1,0 +1,100 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+            <Box style={{ background: '#E08A15', borderRadius: 5, padding: '4px 12px' }}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>关卡 2</Text>
+            </Box>
+            <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>判定「能独立做项目」</Text>
+        </Box>
+        <Text style={{ fontSize: 18, color: '#5A6B7A' }}>
+            五项硬指标，全部达标才算走完阶段 2。某一项没过，只补那一项并重测，不要整体重学
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 140, width: '1152px', height: 172, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ width: '373px', background: '#FFFFFF', borderTop: '4px solid #E08A15', borderRadius: 12, padding: 16, flexDirection: 'column', gap: 6 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#E08A15' }}>01</Text>
+                <Text style={{ fontSize: 15.5, fontWeight: 'bold', color: '#16232E' }}>三个项目全部跑通</Text>
+            </Box>
+            <Text style={{ fontSize: 13.5, color: '#3A4A58', lineHeight: 1.7 }}>
+                且已推到公开仓库，每个都有 <b>README + requirements.txt</b>。
+                仓库里要有真实的提交历史，不是一次性传上去。
+            </Text>
+        </Box>
+
+        <Box style={{ width: '373px', background: '#FFFFFF', borderTop: '4px solid #E08A15', borderRadius: 12, padding: 16, flexDirection: 'column', gap: 6 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#E08A15' }}>02</Text>
+                <Text style={{ fontSize: 15.5, fontWeight: 'bold', color: '#16232E' }}>学习笔记已上线</Text>
+            </Box>
+            <Text style={{ fontSize: 13.5, color: '#3A4A58', lineHeight: 1.7 }}>
+                <b>公网可访问</b>，错误页已定制。把网址发给一个人，让他注册并加一条笔记——
+                别人能用，才算真的部署成功。
+            </Text>
+        </Box>
+
+        <Box style={{ width: '373px', background: '#FFFFFF', borderTop: '4px solid #1F5FA8', borderRadius: 12, padding: 16, flexDirection: 'column', gap: 6 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#1F5FA8' }}>03</Text>
+                <Text style={{ fontSize: 15.5, fontWeight: 'bold', color: '#16232E' }}>能自己写测试</Text>
+            </Box>
+            <Text style={{ fontSize: 13.5, color: '#3A4A58', lineHeight: 1.7 }}>
+                能用自己的函数写出 pytest 测试并跑过——<b>不是抄教材的</b>。
+                至少覆盖正常、边界、异常三种情况。
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 320, width: '1152px', height: 176, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ width: '373px', background: '#FFFFFF', borderTop: '4px solid #1F5FA8', borderRadius: 12, padding: 16, flexDirection: 'column', gap: 6 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#1F5FA8' }}>04</Text>
+                <Text style={{ fontSize: 15.5, fontWeight: 'bold', color: '#16232E' }}>读得懂陌生项目</Text>
+            </Box>
+            <Text style={{ fontSize: 13.5, color: '#3A4A58', lineHeight: 1.7 }}>
+                接手一个<b>没写过的 500 行 Python 项目</b>，能读懂结构并定位一个 bug。
+                这条最难，也最能说明问题。
+            </Text>
+        </Box>
+
+        <Box style={{ width: '373px', background: '#FFFFFF', borderTop: '4px solid #0E9B78', borderRadius: 12, padding: 16, flexDirection: 'column', gap: 6 }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#0E9B78' }}>05</Text>
+                <Text style={{ fontSize: 15.5, fontWeight: 'bold', color: '#16232E' }}>说清「还能怎么扩展」</Text>
+            </Box>
+            <Text style={{ fontSize: 13.5, color: '#3A4A58', lineHeight: 1.7 }}>
+                能说清每个项目<b>解决了什么问题、还能怎么扩展</b>。
+                这条考的是反思能力，不是背结论。
+            </Text>
+        </Box>
+
+        <Box style={{ width: '373px', background: '#FDF3E2', borderRadius: 12, padding: 16, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 15.5, fontWeight: 'bold', color: '#E08A15' }}>5 / 5 全达标之后</Text>
+            <Text style={{ fontSize: 13.5, color: '#3A4A58', lineHeight: 1.75 }}>
+                可以选方向继续深造：<br />
+                Web（Django REST / 前端）<br />
+                数据（pandas / numpy）<br />
+                自动化与爬虫 · 测试与工程化
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 504, width: '1152px', height: 130,
+        background: '#16232E', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#FFFFFF' }}>关卡 1 与关卡 2 的区别</Text>
+        <Text style={{ fontSize: 14.5, color: '#A8C4DE', lineHeight: 1.8 }}>
+            关卡 1 考的是「你会不会写」——闭卷、限时、手写。<br />
+            关卡 2 考的是「你做没做出来」——不看你能背多少 API，只看你能不能独立把东西做出来并交出去。
+            所以它没有闭卷考试，答案就是你的三个仓库和一个线上网址。
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>18 / 23</Text>
+    </Box>
+</Slide>

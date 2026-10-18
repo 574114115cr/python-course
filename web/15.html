@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 15 · Matplotlib生成数据</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="15">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 15 · Matplotlib生成数据</h1>
+  <a class="ppt" href="ppt/u/15.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="79" data-to="83"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u15"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/15.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s15"><span class="k">大纲</span><span class="v">课程大纲课件 p15</span></a><a href="bank.html#u15"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-选型-静态图还是交互图">2.1 选型：静态图还是交互图</a>
+<a class="lv3" href="#2-2-面向对象-fig-ax-plt-subplots">2.2 面向对象：fig, ax = plt.subplots() ★</a>
+<a class="lv3" href="#2-3-折线图细节-线宽-标签-样式">2.3 折线图细节：线宽、标签、样式</a>
+<a class="lv3" href="#2-4-散点图三件套-s-c-cmap">2.4 散点图三件套：s=、c=、cmap=</a>
+<a class="lv3" href="#2-5-校正绘图-给坐标轴留边距">2.5 ★ 校正绘图：给坐标轴留边距</a>
+<a class="lv3" href="#2-6-随机游走-randomwalk-类">2.6 随机游走：RandomWalk 类</a>
+<a class="lv3" href="#2-7-plotly-掷骰子-die-类">2.7 Plotly 掷骰子：Die 类</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-折线图三连-默认-加粗改标签-换内置样式">示例 1：折线图三连（默认 → 加粗改标签 → 换内置样式）</a>
+<a class="lv3" href="#示例-2-散点图三件套-绘制一系列点">示例 2：散点图三件套 + 绘制一系列点</a>
+<a class="lv3" href="#示例-3-校正绘图与定制刻度-新手最高频的坑">示例 3：★ 校正绘图与定制刻度（新手最高频的坑）</a>
+<a class="lv3" href="#示例-4-randomwalk-类-画一次-模拟多次">示例 4：RandomWalk 类（画一次 + 模拟多次）</a>
+<a class="lv3" href="#示例-5-die-类-两个骰子-两种面数对比">示例 5：Die 类 + 两个骰子 + 两种面数对比</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-15-1">参考答案 15-1</a>
+<a class="lv3" href="#参考答案-15-2">参考答案 15-2</a>
+<a class="lv3" href="#参考答案-15-3">参考答案 15-3</a>
+<a class="lv3" href="#参考答案-15-4">参考答案 15-4</a>
+<a class="lv3" href="#参考答案-15-5">参考答案 15-5</a>
+<a class="lv3" href="#参考答案-15-6">参考答案 15-6</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-忘记校正绘图-点被边框切掉">错误 1：★ 忘记校正绘图，点被边框切掉</a>
+<a class="lv3" href="#错误-2-fill_walk-里把-and-写成-or">错误 2：★ fill_walk() 里把 and 写成 or</a>
+<a class="lv3" href="#错误-3-c-传了数字却忘了-cmap">错误 3：c= 传了数字却忘了 cmap=</a>
+<a class="lv3" href="#错误-4-set_xticklabels-不配-set_xticks">错误 4：set_xticklabels 不配 set_xticks</a>
+<a class="lv3" href="#错误-5-样式名写老版本-报-valueerror-style-seaborn-">错误 5：样式名写老版本，报 ValueError: style &#x27;seaborn&#x27; is not in available styles</a>
+<a class="lv3" href="#错误-6-matplotlib-use-agg-写在-import-matplo">错误 6：matplotlib.use(&quot;Agg&quot;) 写在 import matplotlib.pyplot 之后</a>
+<a class="lv3" href="#错误-7-忘了-assert-sum-frequencies-len-resul">错误 7：忘了 assert sum(frequencies) == len(results)</a>
+<a class="lv2" href="#range-1-die-num_sides-1-少写-1-最后一个面的频次永远是">range(1, die.num_sides + 1) 少写 + 1，最后一个面的频次永远是 0，图上少一根柱子，程序一声不吭。凡「按类别统计」都该加这行断言。</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-15-matplotlib-生成数据">单元 15：Matplotlib 生成数据</h1>
+<blockquote>
+<p>对应教材第 15 章「生成数据」
+阶段 2 · 项目 2：数据可视化
+本单元目标：<strong>用代码生成数据并画出第一张图——既会用 Matplotlib 存静态图，也知道什么时候该换成可交互的 Plotly</strong></p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>说清 Matplotlib 和 Plotly 的分工：什么时候要静态 PNG，什么时候要可交互 HTML，并据此选库。</li>
+<li>用推荐写法 <code>fig, ax = plt.subplots()</code> 建图，并解释它为什么优于 <code>plt.plot()</code> 那种过程式写法。</li>
+<li>画折线图并调细节：<code>linewidth=</code> 加粗、<code>labels=</code>、<code>title=</code>、<code>plt.style.use()</code> 换内置样式。</li>
+<li>用 <code>scatter()</code> 画散点图，并同时用上 <code>s=</code>（点大小）、<code>c=</code>（颜色）、<code>cmap=</code>（颜色映射）三件套。</li>
+<li><strong>用 <code>ax.axis([xmin, xmax, ymin, ymax])</code> 给坐标轴留边距</strong>，不让点贴在边框上被裁掉，并用 <code>set_xticks()</code> / <code>set_xticklabels()</code> 定制刻度。</li>
+<li>写出 <code>RandomWalk</code> 类，理解 <code>fill_walk()</code> 里「拒绝原地不动」为什么必须写 <code>and</code> 而不是 <code>or</code>，会用 <code>random.seed()</code> 让结果可复现。</li>
+<li>写出 <code>Die</code> 类用 Plotly 模拟掷骰子，用 <code>results.count(value)</code> 统计频次、<code>px.bar()</code> 画分布图，并解释两个面数不同的骰子叠加后分布为什么更均匀。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-选型-静态图还是交互图">2.1 选型：静态图还是交互图</h3>
+<p>写下第一行 <code>import</code> 前先答：<strong>这张图给谁看？</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>用什么</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写进报告、论文，要能打印</td>
+<td><strong>matplotlib</strong></td>
+<td>存成 PNG，像素确定，到处能贴</td>
+</tr>
+<tr>
+<td>发给同事，想拖动、悬停看数值</td>
+<td><strong>Plotly</strong></td>
+<td>存成 HTML，浏览器里能交互</td>
+</tr>
+<tr>
+<td>做网站前端图表</td>
+<td><strong>Plotly</strong></td>
+<td>自带 JS，鼠标一动有反馈</td>
+</tr>
+</tbody>
+</table>
+<p>类比：<strong>matplotlib 像印在纸上的图</strong>——定稿不变、能复印；<strong>Plotly 像挂墙的电子展板</strong>——观众能凑近看，但要通电和场地。</p>
+<p><strong>安装</strong>：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib<span class="w"> </span>plotly
+</code></pre>
+<p><strong>★ 无图形界面的环境怎么办。</strong> 服务器、WSL、某些 IDE 里没屏幕，<code>plt.show()</code> 会报 <code>UserWarning: Matplotlib is currently using agg</code>，或让程序挂住。本讲义示例统一用 <code>fig.savefig("xx.png")</code> 存文件。若连保存也要静默，在<strong>导入 pyplot 之前</strong>加 <code>matplotlib.use("Agg")</code>（教材未涉及，补充），写反会报错。</p>
+<h3 id="2-2-面向对象-fig-ax-plt-subplots">2.2 面向对象：<code>fig, ax = plt.subplots()</code> ★</h3>
+<p>教材先带你写「过程式」老写法：<code>plt.plot(input_values, output_values)</code>，所有东西都往<strong>全局的 <code>plt</code></strong> 上挂。它能跑，但画三张图时标题互相覆盖、图互相顶掉，你得不停 <code>plt.figure()</code>、<code>plt.subplot()</code>。面向对象写法把「图」和「坐标轴」分成两个对象：</p>
+<pre><code class="language-text"><span class="cl">示例</span>fig（图 / figure）——整张画布：多个子图、整体标题、存盘
+ └── ax（坐标轴 / axes）——一块绘图区：画线、设标题、设刻度
+</code></pre>
+<p>类比：<strong>fig 是画板，ax 是画板上贴好的一张白纸</strong>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>                  <span class="c1"># 拿一块画板 + 一张纸</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span>             <span class="c1"># 在纸上画</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"第一个面向对象图"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"oo_第一张图.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+</code></pre>
+<p>中间的逗号叫<strong>解包</strong>：函数返回元组 <code>(figure, axes)</code>，一句话拆成两个变量。<code>ax</code> 是官方推荐的名字（<code>axes</code> 的缩写），全世界教程都在用。</p>
+<h3 id="2-3-折线图细节-线宽-标签-样式">2.3 折线图细节：线宽、标签、样式</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>linewidth</code> / <code>lw</code></td>
+<td>线条粗细（单位是「点」不是像素）</td>
+<td><code>lw=3</code></td>
+</tr>
+<tr>
+<td><code>linestyle</code> / <code>ls</code></td>
+<td>线型</td>
+<td><code>"--"</code> 虚线、<code>":"</code> 点线</td>
+</tr>
+<tr>
+<td><code>color</code> / <code>c</code></td>
+<td>颜色</td>
+<td><code>c="red"</code>、<code>c="#1f77b4"</code></td>
+</tr>
+<tr>
+<td><code>marker</code></td>
+<td>数据点形状</td>
+<td><code>marker="o"</code></td>
+</tr>
+<tr>
+<td><code>alpha</code></td>
+<td>透明度 0~1</td>
+<td><code>alpha=0.5</code></td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>图例用的名字</td>
+<td><code>label="实际值"</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>内置样式</strong>一行换肤：先 <code>print(plt.style.available)</code> 看有哪些，再 <code>plt.style.use("seaborn-v0_8")</code>。</p>
+<blockquote>
+<p><strong>版本坑（教材未涉及，补充）</strong>：matplotlib 0.13 之后 seaborn 系列样式名都带版本后缀，要写 <code>"seaborn-v0_8"</code> 而不是 <code>"seaborn"</code>，否则抛 <code>ValueError: style 'seaborn' is not in the list of available styles</code>。而 <code>"ggplot"</code>、<code>"bmh"</code> 这些老名字仍然有效。样式只是皮肤，删掉不影响结果。</p>
+</blockquote>
+<p><strong>★ <code>figsize</code> 与 <code>dpi</code></strong>：清晰度靠 <code>dpi</code>，物理尺寸靠 <code>figsize</code>（英寸）。想插一张不糊的图，两个一起加：<code>subplots(figsize=(12, 8))</code> 配 <code>savefig(..., dpi=200)</code>。</p>
+<h3 id="2-4-散点图三件套-s-c-cmap">2.4 散点图三件套：s=、c=、cmap=</h3>
+<p>折线图适合<strong>有先后顺序</strong>的数据，散点图适合<strong>两个量的关系</strong>。<strong>★ 三件套是三个独立通道</strong>：</p>
+<pre><code class="language-text"><span class="cl">示例</span>散点图 = 点在哪（x, y）
+       + 点多大（s=）      ← 第三个维度：数量级
+       + 点什么色（c=）    ← 第四个维度：类别或数值
+</code></pre>
+<ul>
+<li><code>s=</code>（size）控制<strong>面积</strong>，单位是「点」。教材里 <code>s=x_values * 2</code> 就是为了看得清。</li>
+<li><code>c=</code>（color）可以传<strong>颜色名字</strong>（分类），也可以传<strong>数值</strong>（必须配 <code>cmap=</code>）。</li>
+<li><code>cmap=</code>（color map）规定「数值怎么翻译成颜色」，最常用 <code>plt.cm.Blues</code>——值小则浅，值大则深。</li>
+</ul>
+<p>「绘制一系列点」就是把两组数据画在同一张 <code>ax</code> 上（见示例 2），两种颜色叠着，一眼看出「谁增长得快」。</p>
+<p>传<strong>颜色名字</strong>和传<strong>数值</strong>是两套机制：前者是「每点自己指定颜色」，后者是「让 matplotlib 按数值自动上色，并自动多一条颜色条」。初学最容易混的就是这个——<code>c</code> 里传数字却不给 <code>cmap</code>，所有点会变成同一种默认颜色，<strong>不报错</strong>，但你以为的渐变根本没出现。</p>
+<h3 id="2-5-校正绘图-给坐标轴留边距">2.5 ★ 校正绘图：给坐标轴留边距</h3>
+<p>这是新手最高频的坑，值得单独一节。默认坐标轴范围<strong>贴着数据</strong>：x 轴从最小值到最大值。但点本身有「直径」——<code>s=100</code> 的点不是没有面积的一个点，而画布边框会<strong>切掉越界部分</strong>，于是两端点被削掉一小块，看着像「数据缺了一头」。</p>
+<p><strong>解决办法是手动指定范围</strong>：<code>ax.axis([0, 1100, 0, 1_100_000])</code>，四个数顺序是 <code>[xmin, xmax, ymin, ymax]</code>。为什么写 1100 和 1 100 000 这种「多出来的数」？因为数据最大值正好是它们，<strong>再留一点余量</strong>，点才不被切。110 万写作 <code>1_100_000</code>（下划线只分组）。</p>
+<pre><code class="language-text"><span class="cl">示例</span>没校正                  校正之后（四周加了余量）
+┌──────────────┐      ┌──────────────┐
+│◐   ○ ○ ○   ◑ │  →   │  ◐ ○ ○ ○ ◑  │
+│ ◐ ○ ○ ○ ○ ◑  │      │  ○ ○ ○ ○ ○ ○  │
+└──────────────┘      └──────────────┘
+ ↑ 贴边的点被削掉了      ↑ 点完整，四周留白
+</code></pre>
+<p><code>ax.axis([...])</code> 这名字很怪——它既设范围又管外观。等价写法是 <code>ax.set_xlim()</code> + <code>ax.set_ylim()</code>，更直白。<strong>关键是要知道为什么要手动设范围</strong>；更稳的做法是用 <code>max(数据) * 1.05</code> 算余量，数据换了也不用改代码（见示例 3）。</p>
+<p><strong>定制刻度标记。</strong> 默认刻度由 matplotlib 自选，大数字上会变成 <code>1.0e6</code> 科学计数法，或标签挤成一团。<code>set_xticks()</code> 是「<strong>刻度放在这些位置</strong>」，<code>set_xticklabels()</code> 是「<strong>这些位置显示什么</strong>」（见示例 3）。</p>
+<p><strong>★ <code>set_xticks</code> 与 <code>set_xticklabels</code> 必须配套调用。</strong> 只调后者，标签会被硬贴在默认刻度上，位置不够就叠。</p>
+<p><strong>★ 自动保存绘图</strong>用 <code>fig.savefig()</code>，推荐写全两个参数：<code>dpi=200</code> 让线更细腻，<code>bbox_inches="tight"</code> 表示「<strong>按有内容区域裁剪</strong>」，不写就带大片白边。</p>
+<h3 id="2-6-随机游走-randomwalk-类">2.6 随机游走：RandomWalk 类</h3>
+<p><strong>随机游走</strong>是最简单的随机模型：一只小虫每次随机往一个方向走一步，走一千步得到一条弯曲路径。它是布朗运动、股票涨跌、扩散的数学原型。教材把它做成一个类，这个设计比代码更值得学——<strong>「一只虫」是一个对象，<code>x</code>、<code>y</code> 是属性，「走一步」是方法</strong>（类见示例 4）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">RandomWalk</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span> <span class="o">=</span> <span class="n">num_points</span>          <span class="c1"># 属性：走多少步</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>                   <span class="c1"># 属性：从原点出发</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span><span class="p">:</span>
+            <span class="n">x_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">y_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">x_step</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>                      <span class="c1"># ★ 拒绝原地不动</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x_step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_step</span><span class="p">)</span>
+</code></pre>
+<p><strong>★ 这里最容易错：为什么要「拒绝原地不动」？</strong> 若允许 x 和 y 同时不变，这轮什么也没发生。四种组合里「不动」占 1/4，5000 步里约 1250 步原地踏步。<strong>这违反了随机游走「每一步都要真的移动」的定义。</strong> 正确写法是两个<strong>同时</strong>为 0 才重来——所以用 <code>and</code>，不是 <code>or</code>。</p>
+<p><code>random.choice(seq)</code> 是「<strong>从序列里随机挑一个</strong>」，兄弟还有 <code>random.randint(a, b)</code>（含两端）、<code>random.random()</code>（0~1）。
+<strong>★ <code>random.seed(42)</code> 是这一章最有工程价值的一行。</strong> 随机性是编程里的「double 难度 bug 源」：跑一遍正常、再跑一遍崩，而你复现不出来。写上种子后<strong>随机序列完全可复现</strong>，bug 能稳定复现、修好、再验证。<strong>调试随机程序第一件事就是加种子。</strong></p>
+<p>模拟多次随机游走就是循环创建多个对象（完整代码见示例 4），有三点值得说：<code>alpha=0.1</code> 让 500 条半透明路径叠在一起、<strong>经过次数多的区域自然变深</strong>（不透明会糊成一坨纯黑）；<code>edgecolors="none"</code> 是点太多时不要描边；<code>c=[i] * len(...)</code> 配 <code>cmap=plt.cm.Blues</code> 让**「第几次游走」变成深浅**（<code>c</code> 必须和点一样长）。</p>
+<h3 id="2-7-plotly-掷骰子-die-类">2.7 Plotly 掷骰子：Die 类</h3>
+<p>前面全是 matplotlib，从这里换成 Plotly，因为掷骰子的本质是「大量样本的<strong>分布</strong>」，Plotly 的 <code>bar</code> 一行出图还自带交互。<strong>选库看需求，不看时髦程度</strong>——要把这张图印进 PDF 的话，matplotlib 一样能画。</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>pip<span class="w"> </span>install<span class="w"> </span>plotly<span class="w"> </span>kaleido<span class="w">      </span><span class="c1"># kaleido 只在导出 PNG/SVG 时需要</span>
+</code></pre>
+<blockquote>
+<p><code>kaleido</code> 是 Plotly 静态导出的引擎，教材存 HTML 用不到它；本讲义统一用 <code>fig.write_html()</code>。</p>
+</blockquote>
+<p><strong><code>Die</code> 类的设计</strong>：骰子是「能被掷的对象」，该有的是——<strong>面数（属性）</strong>、<strong>记住每次结果（属性）</strong>、<strong>掷一次（方法）</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Die</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""一枚 n 面骰子。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_sides</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sides</span> <span class="o">=</span> <span class="n">num_sides</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>              <span class="c1"># 存每一次掷出的点数</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">roll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sides</span><span class="p">)</span>   <span class="c1"># 含两端</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre>
+<p><strong>★ <code>results.count(value)</code> 是本节的关键一招。</strong> 想知道「1 点出现了多少次」，最笨是手写循环去数；<code>list</code> 自带 <code>count()</code>，一行返回出现次数（见示例 5）。统计完还要加 <code>assert sum(frequencies) == len(die.results)</code>：这不是装饰——分布类程序最容易出的 bug 是「某个类别被漏掉了」，而它不报错、只让你看到缺一列的图。</p>
+<p><strong>画分布图。</strong> <code>px.bar()</code> 需要横纵两组数据；定制用 <code>fig.update_layout()</code>（改整体：标题、轴标题）和 <code>fig.update_traces()</code>（改柱子：颜色、描边）；还可以用 <code>fig.add_hline()</code> 画「理论平均线」，让读者一眼看出随机结果靠不靠谱。</p>
+<blockquote>
+<p><strong>★ 术语纠正</strong>：中文常把这种图叫「直方图」（histogram），但 <code>px.bar()</code> 画的是<strong>柱状图</strong>。真正的直方图（<code>px.histogram</code>）是把<strong>连续数值分箱</strong>——比如把身高分成 160~170、170~180 两堆。骰子点数是<strong>离散类别</strong>，所以用 <code>bar</code>。</p>
+</blockquote>
+<p><strong>同时掷两个骰子</strong>，建两个对象、掷同样多次后<strong>把结果相加</strong>（2 到 12 共 11 种），核心就一行列表推导：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">rolls_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span>   <span class="c1"># 骰子 1 的 1000 次</span>
+<span class="n">rolls_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span>   <span class="c1"># 骰子 2 的 1000 次</span>
+<span class="n">sums</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rolls_1</span><span class="p">,</span> <span class="n">rolls_2</span><span class="p">)]</span>       <span class="c1"># zip 把两串配对</span>
+<span class="n">frequencies</span> <span class="o">=</span> <span class="p">[</span><span class="n">sums</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">)]</span>     <span class="c1"># 2~12 共 11 种</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">frequencies</span><span class="p">)))</span>
+</code></pre>
+<p><code>zip(a, b)</code> 把两条等长列表「拉链」起来，一次给你一对元素，<code>for a, b in ...</code> 再把这一对拆成两个名字。<strong>这个 <code>zip + 解包</code> 后面「两份数据逐行对照」都会用到</strong>，务必练熟。</p>
+<p><strong>同时掷两个面数不同的骰子</strong>，用 <code>plotly.graph_objects</code> 显式画两组柱子（见示例 5）。<code>go.Figure() + add_trace()</code> 比 <code>px.bar()</code> 啰嗦，但控制力强：能画多条配置的柱子、能命名、能设透明度。<code>barmode="group"</code> 是<strong>并排</strong>，<code>"overlay"</code> 是<strong>叠放</strong>（记得配 <code>opacity</code>）。</p>
+<p><strong>统计结论（比代码更重要）</strong>：每次掷骰子各点数<strong>等概率</strong>，所以单个骰子的分布是<strong>平的</strong>。两个骰子相加时，<strong>靠中间的点有更多组合方式凑出来</strong>（六面+六面凑 7 有 6 种组合，凑 2 只有 1 种），分布向中间隆起；<strong>面数越多分布越均匀</strong>（六面+二十面有 120 种组合，几乎平坦）。这就是「大数压倒小数」。</p>
+<p><strong>保存图形</strong>——两个库不一样：matplotlib 存静态图用 <code>fig.savefig("x.png", bbox_inches="tight")</code>；Plotly 存可交互网页用 <code>fig.write_html("x.html")</code>，需要静态图（且装了 kaleido）用 <code>fig.write_image("x.png")</code>。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-折线图三连-默认-加粗改标签-换内置样式">示例 1：折线图三连（默认 → 加粗改标签 → 换内置样式）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># line_demo.py —— 折线图三连</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">input_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">output_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>
+
+<span class="c1"># ===== 1. 最朴素的一张折线图（对照老写法 plt.plot）=====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_values</span><span class="p">,</span> <span class="n">output_values</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"朴素版"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"line_1_朴素版.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"可用样式："</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">available</span><span class="p">[:</span><span class="mi">8</span><span class="p">],</span> <span class="s2">"..."</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 改线宽、改标签文字 =====</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>                    <span class="c1"># 先换皮肤</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_values</span><span class="p">,</span> <span class="n">output_values</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>   <span class="c1"># lw=3 让线明显变粗</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"折线图：平方增长"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"输入值"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"输出值"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">input_values</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">output_values</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>                                   <span class="c1"># 网格线，方便读数</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"line_2_加粗版.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 换皮肤再画一张（matplotlib 自带的 bmh 样式）=====</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"bmh"</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">input_values</span><span class="p">,</span> <span class="n">output_values</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"tomato"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"折线图：换个皮肤"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"line_3_换皮肤版.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"三张图都已保存"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-2-散点图三件套-绘制一系列点">示例 2：散点图三件套 + 绘制一系列点</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># scatter_demo.py —— s= / c= / cmap= 三件套</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+
+<span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
+
+<span class="c1"># ===== 1. 基础散点图：位置 = 两个列表 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>                 <span class="c1"># s=100：点大小</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"scatter_1_基础.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 三件套同时上场 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span>
+           <span class="n">s</span><span class="o">=</span><span class="p">[</span><span class="n">v</span> <span class="o">*</span> <span class="mi">30</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">],</span>                <span class="c1"># 点大小随 x 变化</span>
+           <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span>                                  <span class="c1"># 颜色由 y 值决定</span>
+           <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span>                           <span class="c1"># Blues 这套渐变色</span>
+           <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>                           <span class="c1"># 灰边让点更清楚</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"scatter_2_三件套.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 绘制一系列点：传颜色名字 = 分类上色 =====</span>
+<span class="n">years</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2010</span><span class="p">,</span> <span class="mi">2021</span><span class="p">))</span>
+<span class="n">program_a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">82</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">118</span><span class="p">]</span>   <span class="c1"># 增长快</span>
+<span class="n">program_b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">35</span><span class="p">]</span>    <span class="c1"># 增长慢</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">years</span><span class="p">,</span> <span class="n">program_a</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"方案 A"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">years</span><span class="p">,</span> <span class="n">program_b</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"方案 B"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"两个方案的用户增长对比"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"年份"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"用户数（万）"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>                                            <span class="c1"># 图例靠 label 自动生成</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"scatter_3_两个系列.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"三张散点图都已保存"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-3-校正绘图与定制刻度-新手最高频的坑">示例 3：★ 校正绘图与定制刻度（新手最高频的坑）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># axis_fix_demo.py —— ax.axis([xmin, xmax, ymin, ymax]) 留边距</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 造数据：100 个点，最大值正好是 1100 / 1_100_000 =====</span>
+<span class="n">x_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">))</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">11000</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">]</span>        <span class="c1"># 100 * 11000 = 1_100_000</span>
+
+<span class="c1"># ===== 2. 不校正：最左最右的点会被边框削掉 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"没有校正：边上的点被切了"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"axis_1_没校正.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 校正：手工指定四个边界，多留 5% 余量 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"校正之后：四周有留白，点是完整的"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1_100_000</span><span class="p">])</span>   <span class="c1"># 顺序是 [xmin, xmax, ymin, ymax]</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"axis_2_校正.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 4. 让代码自己算余量，并定制刻度 =====</span>
+<span class="n">x_max</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_values</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>           <span class="c1"># 刻度位置</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span>   <span class="c1"># 刻度文字</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1_100_001</span><span class="p">,</span> <span class="mi">200_000</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1_100_001</span><span class="p">,</span> <span class="mi">200_000</span><span class="p">)])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"自动边距 + 定制刻度"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"axis_3_自动边距.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"三张图都已保存"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-4-randomwalk-类-画一次-模拟多次">示例 4：<code>RandomWalk</code> 类（画一次 + 模拟多次）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># random_walk_demo.py —— 教材 RandomWalk 类：单次轨迹 + 500 次叠加</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RandomWalk</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""模拟一只小虫的随机游走：每一步往四个方向之一移动一格。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">5000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span> <span class="o">=</span> <span class="n">num_points</span>       <span class="c1"># 走多少步</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>                <span class="c1"># 属性：位置列表，从原点出发</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""走一步，然后在列表末尾追加新位置。"""</span>
+        <span class="n">x_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">y_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># ★ and 不是 or：只有"横竖都不动"才重来</span>
+        <span class="k">if</span> <span class="n">x_step</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x_step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_step</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""反复调用 step，直到攒够 num_points 个点。"""</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>        <span class="c1"># 固定种子：每次运行结果一样，bug 可复现</span>
+
+<span class="c1"># ===== 1. 画一次游走：连线 + 标出终点 =====</span>
+<span class="n">walk</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">walk</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"点数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">),</span> <span class="s2">" 终点:"</span><span class="p">,</span> <span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">walk</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="n">walk</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">)</span>   <span class="c1"># 连线看轨迹</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">walk</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"终点"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"一次随机游走（1000 步）"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">])</span>       <span class="c1"># 校正绘图：留边距</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"random_walk_一次.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 自检：拒绝原地不动之后，实际步数必须刚好等于 num_points =====</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1000</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"点数不对：</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"自检通过：没有原地踏步的浪费"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 模拟 500 次游走并设置样式 =====</span>
+<span class="n">num_walks</span><span class="p">,</span> <span class="n">num_points</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">5000</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_walks</span><span class="p">):</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="n">num_points</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+    <span class="c1"># 用「第几次游走」当颜色值：先画的淡、后画的深，形成历史层次</span>
+    <span class="c1"># 注意 c 必须和点一样长，所以写成 [i] * len(...) 这样的列表</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="n">w</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">x_values</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span>
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">num_walks</span><span class="si">}</span><span class="s2"> 次随机游走（每次 </span><span class="si">{</span><span class="n">num_points</span><span class="si">}</span><span class="s2"> 步）"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_points</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">num_points</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"random_walk_500.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两张图都已保存"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-5-die-类-两个骰子-两种面数对比">示例 5：<code>Die</code> 类 + 两个骰子 + 两种面数对比</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># die_plotly.py —— Plotly 模拟掷骰子（单骰 / 双六面 / 六面+二十面）</span>
+<span class="c1"># 跑完可以删掉生成的 html 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Die</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""一枚 n 面骰子，results 记住每一次的点数。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_sides</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sides</span> <span class="o">=</span> <span class="n">num_sides</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">roll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sides</span><span class="p">)</span>   <span class="c1"># 含 1 和 num_sides 两端</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 单个六面骰：results.count() 数频次 =====</span>
+<span class="n">die</span> <span class="o">=</span> <span class="n">Die</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">die</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+
+<span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">die</span><span class="o">.</span><span class="n">num_sides</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">die</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">die</span><span class="o">.</span><span class="n">num_sides</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"点数:"</span><span class="p">,</span> <span class="n">x_values</span><span class="p">,</span> <span class="s2">"次数:"</span><span class="p">,</span> <span class="n">y_values</span><span class="p">)</span>
+
+<span class="c1"># ★ 自检：频次之和必须等于总投掷次数，否则说明漏统计了某个类别</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">die</span><span class="o">.</span><span class="n">results</span><span class="p">),</span> <span class="s2">"频次对不上，肯定漏了一个类别"</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"y"</span><span class="p">:</span> <span class="s2">"出现次数"</span><span class="p">})</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"掷 1000 次六面骰子的点数分布"</span><span class="p">,</span> <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">"骰子点数"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">,</span> <span class="n">marker_line_color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_hline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">die</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="o">/</span> <span class="n">die</span><span class="o">.</span><span class="n">num_sides</span><span class="p">,</span> <span class="n">line_dash</span><span class="o">=</span><span class="s2">"dash"</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span>
+              <span class="n">annotation_text</span><span class="o">=</span><span class="s2">"理论平均"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"die_六面.html"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 两个六面骰：zip 把两条列表拉链配对，列表推导逐对相加 =====</span>
+<span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">Die</span><span class="p">(),</span> <span class="n">Die</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">d1</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+    <span class="n">d2</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+
+<span class="n">sums</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">d1</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">d2</span><span class="o">.</span><span class="n">results</span><span class="p">)]</span>
+<span class="n">freq</span> <span class="o">=</span> <span class="p">[</span><span class="n">sums</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">)]</span>          <span class="c1"># 2~12 共 11 种</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">),</span> <span class="s2">"点数和统计对不上"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"点数和频次:"</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">freq</span><span class="p">)))</span>
+
+<span class="n">fig2</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">)),</span> <span class="n">y</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="s2">"点数和"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="s2">"出现次数"</span><span class="p">})</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"掷两个六面骰子 1000 次：点数和分布（钟形）"</span><span class="p">)</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">,</span> <span class="n">marker_line_color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">)</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">add_hline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sums</span><span class="p">)</span> <span class="o">/</span> <span class="mi">11</span><span class="p">,</span> <span class="n">line_dash</span><span class="o">=</span><span class="s2">"dash"</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span>
+               <span class="n">annotation_text</span><span class="o">=</span><span class="s2">"理论平均"</span><span class="p">)</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"die_两个六面.html"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 两个面数不同的骰子：六面 vs 二十面（graph_objects 画两组柱子）=====</span>
+<span class="n">d6</span><span class="p">,</span> <span class="n">d20</span> <span class="o">=</span> <span class="n">Die</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">Die</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
+    <span class="n">d6</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+    <span class="n">d20</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+
+<span class="n">fig3</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)),</span>
+                      <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">d6</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">d6</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)],</span>
+                      <span class="n">name</span><span class="o">=</span><span class="s2">"六面骰子"</span><span class="p">,</span> <span class="n">marker_color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)),</span>
+                      <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">d20</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">d20</span><span class="o">.</span><span class="n">results</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)],</span>
+                      <span class="n">name</span><span class="o">=</span><span class="s2">"二十面骰子"</span><span class="p">,</span> <span class="n">marker_color</span><span class="o">=</span><span class="s2">"tomato"</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">barmode</span><span class="o">=</span><span class="s2">"group"</span><span class="p">,</span>
+                   <span class="n">title</span><span class="o">=</span><span class="s2">"六面 vs 二十面：面数越多，分布越平（2000 次）"</span><span class="p">,</span>
+                   <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">"点数"</span><span class="p">,</span> <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">"频率"</span><span class="p">)</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"die_六面vs二十面.html"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"已生成三张 html：单个骰子平坦，叠加后中间隆起，面数越多越平坦"</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 15-1【折线图三连】</strong>
+写 <code>line_three.py</code>：
+1. 生成 20 个点：<code>x = list(range(1, 21))</code>，<code>y = [i * i for i in x]</code>
+2. 画折线，<code>linewidth=3</code>、<code>marker="o"</code>，标题「20 以内的平方」
+3. <code>set_xticks(x[::2])</code>（只标奇数位避免重叠），<code>set_yticks(list(range(0, 401, 50)))</code>
+4. 换三种内置样式各存一张图
+5. <strong>验收</strong>：三张 png 都生成；换样式后图确实变了；刻度不叠字</p>
+<p><strong>练习 15-2【散点三件套】</strong>
+写 <code>scatter_trio.py</code>：
+1. 造 30 个点：<code>y = [i * i + random.randint(-20, 20) for i in range(30)]</code>
+2. 一张图用 <code>s=</code>、<code>c=y</code>、<code>cmap=plt.cm.Blues</code>，加 <code>edgecolors="gray"</code>
+3. 另一张图画<strong>两个系列</strong>：偶数下标红、奇数下标蓝，加 <code>label</code> 出图例
+4. 用 <code>ax.set_facecolor("#f0f0f0")</code> 把底色调浅灰
+5. <strong>验收</strong>：图例上有两项；第一张图点有大有小、颜色有深浅</p>
+<p><strong>练习 15-3【校正绘图演练】</strong>
+写 <code>axis_fix.py</code>：
+1. 生成 200 个随机点：<code>x = [random.uniform(0, 100) for _ in range(200)]</code>，<code>y = [random.uniform(0, 1_000_000) for _ in range(200)]</code>
+2. 先<strong>不校正</strong>存 <code>axis_before.png</code>，再用 <code>ax.axis([0, 110, 0, 1_100_000])</code> 校正后存 <code>axis_after.png</code>
+3. 打印两个列表的 <code>max()</code>，确认为什么要留余量
+4. <strong>验收</strong>：对比两图能看出「贴边的点被切」；说清四个数的顺序</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 15-4【可复现的随机游走】</strong>
+写 <code>walk_reproducible.py</code>：
+1. 写 <code>RandomWalk</code> 类（含「拒绝原地不动」），<code>num_points=2000</code>
+2. 第一次<strong>不写</strong> <code>random.seed()</code> 存 <code>walk_a.png</code>；第二次开头写 <code>random.seed(42)</code> 存 <code>walk_b.png</code>
+3. 第三段：同样 <code>seed(42)</code>，连建两个 <code>RandomWalk</code> 并 <code>fill_walk()</code>，打印两个终点——应<strong>完全相同</strong>
+4. <strong>验收</strong>：第 2、3 步终点相同；能解释「固定种子」为何是调试随机程序的必备手段</p>
+<p><strong>练习 15-5【多系列随机游走对照】</strong>
+写 <code>walk_compare.py</code>：
+1. <code>seed(42)</code>，做 3 组实验：每组 100 次游走、每条 2000 步，步长分别 1、2、3（<code>random.choice([-1,0,1])</code> 乘步长）
+2. 三组各画一张图，都用 <code>alpha=0.1</code> + <code>cmap=plt.cm.Blues</code>
+3. 用 <code>fig, axes = plt.subplots(1, 3, figsize=(18, 5))</code> 把三张图排成一行（<strong>第一次用到多个坐标轴</strong>），加 <code>fig.suptitle()</code> 存 <code>walk_三组对比.png</code>
+4. <strong>验收</strong>：步长越大范围越大；一行三图保存成功；能说出 <code>plt.subplots(1, 3)</code> 返回什么</p>
+<p><strong>练习 15-6【骰子实验台】</strong>
+写 <code>die_lab.py</code>：
+1. <code>Die</code> 类 + <code>random.seed(2024)</code>
+2. 掷 2 个六面骰 1000 次，打印点数和频次表（2~12），加 <code>assert sum == 1000</code>
+3. 掷 1 个六面 + 1 个二十面 2000 次，统计点数和（2~26 共 25 种），用 <code>px.bar</code> 存 html
+4. 计算两个分布的<strong>方差</strong>（提示：<code>sum((v - mean) ** 2 for v in data) / len(data)</code>）
+5. <strong>验收</strong>：第 3 题分布比第 2 题更平（方差更小、峰更矮）；能解释原因</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-15-1">参考答案 15-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># line_three.py —— 折线图三种样式</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"20 以内的平方数"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"数字"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"平方"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># ===== 定制刻度：x 轴只标奇数位，y 轴每 50 一格 =====</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>                              <span class="c1"># 1, 3, 5, ... 隔一个取一个</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">50</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">":"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>             <span class="c1"># 点状网格，不抢主体</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"square_默认样式.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 换三种内置样式各存一张 =====</span>
+<span class="n">styles</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">available</span>
+          <span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">,</span> <span class="s2">"ggplot"</span><span class="p">,</span> <span class="s2">"bmh"</span><span class="p">,</span> <span class="s2">"dark_background"</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">style</span> <span class="ow">in</span> <span class="n">styles</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"o"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"平方数（</span><span class="si">{</span><span class="n">style</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">401</span><span class="p">,</span> <span class="mi">50</span><span class="p">)))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">"square_</span><span class="si">{</span><span class="n">style</span><span class="si">}</span><span class="s2">.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"已生成"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"square_</span><span class="si">{</span><span class="n">style</span><span class="si">}</span><span class="s2">.png"</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"default"</span><span class="p">)</span>        <span class="c1"># 换回默认，免得影响后面画的东西</span>
+</code></pre>
+<h3 id="参考答案-15-2">参考答案 15-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># scatter_trio.py —— s / c / cmap 三件套 + 两个系列</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 三件套同时上场 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+           <span class="n">s</span><span class="o">=</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="mi">20</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">],</span>     <span class="c1"># 点大小随 x 递增</span>
+           <span class="n">c</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span>        <span class="c1"># 颜色由 y 决定 + Blues 渐变</span>
+           <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>             <span class="c1"># 灰边让密集的点分得开</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"散点图三件套：s / c / cmap"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"trio_三件套.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 两个系列：偶数下标红色、奇数下标蓝色 =====</span>
+<span class="n">even</span> <span class="o">=</span> <span class="p">[(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">odd</span> <span class="o">=</span> <span class="p">[(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">even</span><span class="p">],</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">even</span><span class="p">],</span>
+           <span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"偶数下标"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">odd</span><span class="p">],</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">odd</span><span class="p">],</span>
+           <span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">"blue"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"奇数下标"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"两个系列一起画：靠 label + legend() 出图例"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s2">"#f0f0f0"</span><span class="p">)</span>            <span class="c1"># 坐标区底色调浅灰，散点更跳</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"trio_两个系列.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两张图都已保存"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-15-3">参考答案 15-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># axis_fix.py —— 校正绘图前后对比</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 造 200 个随机点 =====</span>
+<span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1_000_000</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"数据最大值: x=</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">x_values</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, y=</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">y_values</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所以边界设成 x:0~110、y:0~1_100_000 —— 比最大值多留约 10% 余量"</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 不校正：贴着边框的点会被切掉 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"before：没有校正，边上的点被切掉"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"axis_before.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 3. 校正：ax.axis([xmin, xmax, ymin, ymax]) =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"after：校正过，四周留白，点是完整的"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1_100_000</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"axis_after.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+
+<span class="c1"># ===== 4. 等价写法：set_xlim / set_ylim，名字更直白 =====</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">110</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1_100_000</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"axis_after_setlim.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"三张图都已保存"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-15-4">参考答案 15-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># walk_reproducible.py —— random.seed() 让随机程序可复现</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RandomWalk</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span> <span class="o">=</span> <span class="n">num_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span><span class="p">:</span>
+            <span class="n">x_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">y_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">x_step</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>                     <span class="c1"># ★ and 不是 or</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x_step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_step</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 不设种子：结果随机 =====</span>
+<span class="n">walk_a</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">walk_a</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一次运行终点:"</span><span class="p">,</span> <span class="p">(</span><span class="n">walk_a</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">walk_a</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># ===== 2. 设种子：结果被固定 =====</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">walk_b</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">walk_b</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第二次运行终点(seed 42):"</span><span class="p">,</span> <span class="p">(</span><span class="n">walk_b</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">walk_b</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="c1"># ===== 3. 同一个种子跑两次，终点必须完全一样 =====</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">w1</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">w1</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+<span class="n">w2</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">w1</span><span class="o">.</span><span class="n">x_values</span> <span class="o">==</span> <span class="n">w2</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="s2">"同种子却给出了不同路径，seed 用法错了"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"自检通过：random.seed(42) 之后随机序列完全可复现"</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w1</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="n">w1</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"random.seed(42) 的随机游走"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2000</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"walk_reproducible.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-15-5">参考答案 15-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># walk_compare.py —— 三种步长对照，一行三张图</span>
+<span class="c1"># 跑完可以删掉生成的 png 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RandomWalk</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span> <span class="o">=</span> <span class="n">num_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span>          <span class="c1"># 新属性：一步走几格</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fill_walk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_points</span><span class="p">:</span>
+            <span class="n">x_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span>
+            <span class="n">y_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span>
+            <span class="k">if</span> <span class="n">x_step</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x_step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_step</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">"seaborn-v0_8"</span><span class="p">)</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">step_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">num_walks</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">num_points</span> <span class="o">=</span> <span class="mi">2000</span>
+
+<span class="c1"># ★ plt.subplots(1, 3) 返回 1 个 figure + 3 个 ax，参数是行数、列数</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">19</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">step_size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">step_sizes</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>                       <span class="c1"># 逐个取出坐标轴对象</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_walks</span><span class="p">):</span>
+        <span class="n">walk</span> <span class="o">=</span> <span class="n">RandomWalk</span><span class="p">(</span><span class="n">num_points</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+        <span class="n">walk</span><span class="o">.</span><span class="n">fill_walk</span><span class="p">()</span>
+        <span class="c1"># c 必须是和点等长的列表，所以写成 [i] * len(...) 这样的列表</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">,</span> <span class="n">walk</span><span class="o">.</span><span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                   <span class="n">c</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">x_values</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">,</span>
+                   <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"步长 = </span><span class="si">{</span><span class="n">step_size</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_points</span> <span class="o">*</span> <span class="n">step_size</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">num_points</span> <span class="o">*</span> <span class="n">step_size</span> <span class="o">*</span> <span class="mf">1.05</span><span class="p">])</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">"三种步长对比：每张图 </span><span class="si">{</span><span class="n">num_walks</span><span class="si">}</span><span class="s2"> 次游走 × </span><span class="si">{</span><span class="n">num_points</span><span class="si">}</span><span class="s2"> 步"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>                          <span class="c1"># 自动排版，标题和图不重叠</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"walk_三组对比.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"已保存 walk_三组对比.png：步长越大，游走范围越大"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-15-6">参考答案 15-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># die_lab.py —— 骰子实验平台</span>
+<span class="c1"># 跑完可以删掉生成的 html 文件</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Die</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_sides</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sides</span> <span class="o">=</span> <span class="n">num_sides</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">roll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_sides</span><span class="p">))</span>
+
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2024</span><span class="p">)</span>
+
+<span class="c1"># ===== 1. 两个六面骰：点数和 =====</span>
+<span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">Die</span><span class="p">(),</span> <span class="n">Die</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="n">d1</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+    <span class="n">d2</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+
+<span class="n">sums_6</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">d1</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">d2</span><span class="o">.</span><span class="n">results</span><span class="p">)]</span>
+<span class="n">freq_6</span> <span class="o">=</span> <span class="p">[</span><span class="n">sums_6</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">)]</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">freq_6</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums_6</span><span class="p">),</span> <span class="s2">"统计对不上"</span>
+<span class="n">mean_6</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sums_6</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums_6</span><span class="p">)</span>
+<span class="n">var_6</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">v</span> <span class="o">-</span> <span class="n">mean_6</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sums_6</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums_6</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"两个六面骰：均值 </span><span class="si">{</span><span class="n">mean_6</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">（理论 7），方差 </span><span class="si">{</span><span class="n">var_6</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">（理论 5.83）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"频次:"</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span> <span class="n">freq_6</span><span class="p">)))</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">13</span><span class="p">)),</span> <span class="n">y</span><span class="o">=</span><span class="n">freq_6</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="s2">"点数和"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="s2">"出现次数"</span><span class="p">})</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"两个六面骰：点数和分布（钟形）"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_color</span><span class="o">=</span><span class="s2">"royalblue"</span><span class="p">,</span> <span class="n">marker_line_color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_hline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sums_6</span><span class="p">)</span> <span class="o">/</span> <span class="mi">11</span><span class="p">,</span> <span class="n">line_dash</span><span class="o">=</span><span class="s2">"dash"</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span>
+              <span class="n">annotation_text</span><span class="o">=</span><span class="s2">"理论平均"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"lab_两个六面.html"</span><span class="p">)</span>
+
+<span class="c1"># ===== 2. 六面 + 二十面：面数越多，分布越平 =====</span>
+<span class="n">d6</span><span class="p">,</span> <span class="n">d20</span> <span class="o">=</span> <span class="n">Die</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="n">Die</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2000</span><span class="p">):</span>
+    <span class="n">d6</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+    <span class="n">d20</span><span class="o">.</span><span class="n">roll</span><span class="p">()</span>
+
+<span class="n">sums_mix</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">d6</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">d20</span><span class="o">.</span><span class="n">results</span><span class="p">)]</span>
+<span class="n">freq_mix</span> <span class="o">=</span> <span class="p">[</span><span class="n">sums_mix</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">27</span><span class="p">)]</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">freq_mix</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums_mix</span><span class="p">),</span> <span class="s2">"统计对不上"</span>
+<span class="n">mean_mix</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sums_mix</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums_mix</span><span class="p">)</span>
+<span class="n">var_mix</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">((</span><span class="n">v</span> <span class="o">-</span> <span class="n">mean_mix</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sums_mix</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sums_mix</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">六面 + 二十面：均值 </span><span class="si">{</span><span class="n">mean_mix</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">（理论 13.5），方差 </span><span class="si">{</span><span class="n">var_mix</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"最高点 </span><span class="si">{</span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">freq_mix</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">freq_mix</span><span class="p">))</span><span class="si">}</span><span class="s2">，方差对比："</span>
+      <span class="sa">f</span><span class="s2">"两个六面 </span><span class="si">{</span><span class="n">var_6</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> vs 六面+二十面 </span><span class="si">{</span><span class="n">var_mix</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">fig2</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">27</span><span class="p">)),</span> <span class="n">y</span><span class="o">=</span><span class="n">freq_mix</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="s2">"点数和"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="s2">"出现次数"</span><span class="p">})</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"六面 + 二十面：点数和分布（更平、峰更矮）"</span><span class="p">)</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_color</span><span class="o">=</span><span class="s2">"tomato"</span><span class="p">,</span> <span class="n">marker_line_color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">)</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">"lab_六面加二十面.html"</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-忘记校正绘图-点被边框切掉">错误 1：★ 忘记校正绘图，点被边框切掉</h3>
+<p>数据范围正好等于坐标轴范围时，最边缘的点被裁掉一半，像「数据少了两头」。修法：<code>ax.axis([0, x_max * 1.05, 0, y_max * 1.05])</code>，四个数顺序是 <code>[xmin, xmax, ymin, ymax]</code>，写反会出现「图空白」。</p>
+<h3 id="错误-2-fill_walk-里把-and-写成-or">错误 2：★ <code>fill_walk()</code> 里把 <code>and</code> 写成 <code>or</code></h3>
+<p>写成 <code>if x_step == 0 or y_step == 0: continue</code>，等于要求「每一步必须同时改变 x 和 y」，图会退化成一条直线——不报错，只是图很怪。正确条件是两个都不动才重来，必须用 <code>and</code>。</p>
+<h3 id="错误-3-c-传了数字却忘了-cmap">错误 3：<code>c=</code> 传了数字却忘了 <code>cmap=</code></h3>
+<p>所有点画成同一种默认蓝色，渐变根本没出现，<strong>却不报错</strong>。传数字必须配 <code>cmap</code>。</p>
+<h3 id="错误-4-set_xticklabels-不配-set_xticks">错误 4：<code>set_xticklabels</code> 不配 <code>set_xticks</code></h3>
+<p>标签被硬贴在默认刻度上，数量一多就叠成团。<strong>位置和文字必须配套调用。</strong></p>
+<h3 id="错误-5-样式名写老版本-报-valueerror-style-seaborn-">错误 5：样式名写老版本，报 <code>ValueError: style 'seaborn' is not in available styles</code></h3>
+<p>matplotlib 0.13 之后 seaborn 系列加了版本后缀，写 <code>"seaborn-v0_8"</code> 而不是 <code>"seaborn"</code>；拿不准就先 <code>print(plt.style.available)</code> 看现装的。样式只是皮肤。</p>
+<h3 id="错误-6-matplotlib-use-agg-写在-import-matplo">错误 6：<code>matplotlib.use("Agg")</code> 写在 <code>import matplotlib.pyplot</code> 之后</h3>
+<p>会报 <code>RuntimeError: Cannot switch to Agg after importing pyplot</code>，因为后端在导入 pyplot 时就定死了。顺序必须先 <code>matplotlib.use</code>、后 <code>import pyplot</code>。</p>
+<h3 id="错误-7-忘了-assert-sum-frequencies-len-resul">错误 7：忘了 <code>assert sum(frequencies) == len(results)</code></h3>
+<h2 id="range-1-die-num_sides-1-少写-1-最后一个面的频次永远是"><code>range(1, die.num_sides + 1)</code> 少写 <code>+ 1</code>，最后一个面的频次永远是 0，图上少一根柱子，程序一声不吭。凡「按类别统计」都该加这行断言。</h2>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：Matplotlib 和 Plotly 分别在什么场景下选？为什么不能「一个库走天下」？</p>
+<blockquote>
+<p><strong>要点</strong>：Matplotlib 适合<strong>静态图</strong>——要打印、贴进报告/论文，需要确定的像素。Plotly 适合<strong>可交互图</strong>——在浏览器里悬停看数值、缩放、开关图例。两者不是谁更高级，而是<strong>输出形态不同</strong>：前者输出「一张图」，后者输出「一个可以操作的小程序」。</p>
+</blockquote>
+<p><strong>2. 判断题</strong>：<code>fig, ax = plt.subplots()</code> 里 <code>fig</code>、<code>ax</code> 各代表什么？把 <code>ax.axis([0, 1100, 0, 1_100_000])</code> 里四个数的顺序说对。</p>
+<blockquote>
+<p><strong>要点</strong>：<code>fig</code> 是 figure（整张画板），负责存盘与多子图排版；<code>ax</code> 是 axes（一张纸），负责画线、设标题、设刻度。逗号左边是解包：函数返回 <code>(figure, axes)</code> 元组被拆成两个变量。<code>ax.axis([...])</code> 四个数依次是 <strong><code>[xmin, xmax, ymin, ymax]</code></strong>。写反不报错但图会莫名其妙。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：散点三件套 <code>s=</code>、<code>c=</code>、<code>cmap=</code> 各控制什么？<code>c</code> 传名字和传数字有何不同？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>s</code>（size）控制点的<strong>面积</strong>；<code>c</code>（color）控制颜色；<code>cmap</code> 规定「数值 → 颜色」的翻译表。<code>c</code> 传<strong>颜色名字</strong>是逐点指定，不会有颜色条；<code>c</code> 传<strong>数值列表</strong>必须配 <code>cmap=</code>，此时自动上色并生成颜色条。<strong>传数字忘配 <code>cmap</code> 是最高频的错误</strong>——不报错，但点全同色。</p>
+</blockquote>
+<p><strong>4. 改错题</strong>：下面两段代码各有一处错误，先自己找，再看答案。</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">x_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">y_step</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">x_step</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">y_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x_step</span><span class="p">)</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y_step</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"点数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s2">" y 的取值:"</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">y</span><span class="p">)))</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">x_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">160</span><span class="p">,</span> <span class="mi">250</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">y_values</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s2">"一"</span><span class="p">,</span> <span class="s2">"二"</span><span class="p">,</span> <span class="s2">"三"</span><span class="p">,</span> <span class="s2">"四"</span><span class="p">,</span> <span class="s2">"五"</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">250</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"broken_刻度与边距.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<blockquote>
+<p><strong>要点</strong>：第一处，<code>and</code> 被写成 <code>or</code>。只要 <code>x_step</code> 或 <code>y_step</code> 任意一个为 0 就重来，等于要求「每一步必须同时改变 x 和 y」——<code>y_step</code> 拿不到非零机会，图退化；更糟的是若 <code>x_step</code> 恰好一直为 0，整个循环一次都不执行，<code>len(x)</code> 只有 1。正确条件是「两个都不动才重来」：<code>if x_step == 0 and y_step == 0: continue</code>。第二处有两个问题：一是 <code>c=y_values</code> 没给 <code>cmap=</code>，颜色渐变根本不会出现（不报错，最隐蔽）；二是 <code>set_xticklabels</code> 没配 <code>set_xticks</code>，5 个标签被硬贴在默认刻度上，很可能重叠。另外 <code>ax.axis([0, 4, 0, 250])</code> 的上界正好等于数据最大值，最后一个点会被边框切掉，应留余量写成 <code>[0, 5.5, 0, 275]</code>。<strong>5. 简答题</strong>：<code>random.seed()</code> 解决什么问题？为何调试随机程序应该<strong>最先</strong>加它？
+<strong>要点</strong>：随机数<strong>不可复现</strong>——同样的代码跑两遍结果不同，出现「跑一遍正常、再跑一遍崩」的 bug 时根本无从下手。<code>random.seed(n)</code> 把随机数发生器初始化到一个确定起点，之后的<strong>随机序列完全可复现</strong>。所以调试第一步就是加种子：先把「随机性」这个变量消掉，剩下的行为就是确定的。</p>
+</blockquote>
+<p><strong>6. 简答题</strong>：<code>results.count(value)</code> 在干什么？为什么统计完要 <code>assert sum(frequencies) == len(results)</code>？为什么两个面数不同的骰子叠加后分布更均匀？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>results.count(value)</code> 是 <code>list</code> 的内置方法，返回该值出现了多少次——一行代替手写统计循环。断言确认「各类别频次之和 = 总投掷次数」，防止 <code>range(1, die.num_sides + 1)</code> 漏写 <code>+ 1</code> 导致最后一个面频次恒为 0——这类 bug 不报错，只是图上少一根柱子。统计结论：单枚骰子各点等概率、分布是平的；两个骰子相加时<strong>靠中间的点有更多组合方式凑出来</strong>（凑 7 有 6 种组合，凑 2 只有 1 种），分布向中间隆起；面数越多分布越平坦——<strong>面数多 → 组合多 → 分布均匀</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能说清 Matplotlib（静态 PNG）与 Plotly（交互 HTML）选型</li>
+<li>[ ] 能默写 <code>fig, ax = plt.subplots()</code>，并解释它为何优于 <code>plt.plot()</code></li>
+<li>[ ] 会用 <code>linewidth=</code>、<code>labels=</code>、<code>plt.style.use()</code> 定制折线图，知道老样式名要加 <code>-v0_8</code> 后缀</li>
+<li>[ ] 能同时用上 <code>s=</code>、<code>c=</code>、<code>cmap=plt.cm.Blues</code>，说出 <code>c</code> 传名字和传数字的差别</li>
+<li>[ ] <strong>能用 <code>ax.axis([xmin, xmax, ymin, ymax])</code> 校正绘图留边距</strong>，并解释点被裁掉的原因</li>
+<li>[ ] 会用 <code>set_xticks()</code> + <code>set_xticklabels()</code> 配套定制刻度，只调后者叠字</li>
+<li>[ ] 存图记得加 <code>bbox_inches="tight"</code>（可选 <code>dpi=200</code>），无图形界面时先 <code>matplotlib.use("Agg")</code> 再导入 pyplot</li>
+<li>[ ] 能写出带「拒绝原地不动」的 <code>RandomWalk</code> 类，解释为何用 <code>and</code> 而非 <code>or</code>，会用 <code>random.seed()</code> 让结果可复现</li>
+<li>[ ] 能写出 <code>Die</code> 类，用 <code>results.count()</code> 统计频次、<code>px.bar()</code> 画分布图</li>
+<li>[ ] 练习 15-1、15-4、15-6 跑通
+<strong>下一单元预告</strong>：本单元的数据全是<strong>我们自己造出来的</strong>。下一单元讲「下载真实数据」：数据从网上的 CSV（锡特卡机场气温）和 GeoJSON（USGS 地震）里来。你会学 <code>csv</code> 读表头、<code>datetime.strptime</code> 解析日期、处理缺失值的 <code>try/except ValueError</code> + <code>else</code> 套路，并用 <code>px.scatter_geo()</code> 画全球地震图。本单元练「造数据 + 画图」，下一单元练「拿数据 + 洗数据」。</li>
+</ul></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="14.html"><small>← 上一单元</small><b>单元 14 · Play 按钮与记分</b></a><div class="spot"><a class="pn" href="ppt/u/15.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s15"><small>课程大纲课件</small><b>阶段总览 p15 →</b></a></div><a class="pn nx" href="16.html"><small>下一单元 →</small><b>单元 16 · 下载真实数据</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

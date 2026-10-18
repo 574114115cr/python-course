@@ -1,0 +1,21 @@
+node_modules/
+android/www/
+android/node_modules/
+android/android/
+android/local.properties
+
+# 构建缓存与本地产物
+.cache/
+.slidep/
+.workbuddy/
+dist/
+__pycache__/
+*.pyc
+
+# 验证用临时脚本（不随仓库分发）
+.tmp_*
+.verify_*.mjs
+.diag*.mjs
+.sweep*.mjs
+.exp_*.mjs
+.sweep_result.json

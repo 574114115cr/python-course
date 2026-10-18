@@ -1,0 +1,113 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>单元 9–10 · 从「能跑」到「靠谱」</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            程序要处理外部世界：文件会不存在、输入会出错、改代码会改坏旧功能
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 150, width: '566px', height: 440, flexDirection: 'column' }}>
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 24, flexDirection: 'column', gap: 14,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <Box style={{ width: 46, height: 46, borderRadius: 8, background: '#1F5FA8', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#FFFFFF' }}>9</Text>
+                </Box>
+                <Box style={{ flexDirection: 'column' }}>
+                    <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>文件和异常</Text>
+                    <Text style={{ fontSize: 13, color: '#8A9AAA' }}>教材第 10 章 · W11 · 3 次课</Text>
+                </Box>
+            </Box>
+
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
+                <Text style={{ fontSize: 16, color: '#3A4A58', lineHeight: 1.65 }}>
+                    读取文件、写入与追加、with 语句、异常处理 try / except / else / finally、
+                    JSON 存取数据。
+                </Text>
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#1F5FA8' }}>必须讲透的两个点</Text>
+                    <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                        1. 永远用 with，文件会自动关闭；且必须写 encoding="utf-8"，否则 Windows 上中文乱码。
+                    </Text>
+                    <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                        2. else 子句在没有异常时才执行，适合「只在成功时保存文件」，这是最容易被忽略的用法。
+                    </Text>
+                </Box>
+            </Box>
+
+            <Box style={{
+                background: '#EEF5FB', borderRadius: 8, padding: '12px 14px',
+                marginTop: 'auto', flexDirection: 'column', gap: 3,
+            }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA' }}>动手项目</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', fontWeight: 'bold' }}>学习笔记管理 10.1–10.13</Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', right: 64, top: 150, width: '566px', height: 440, flexDirection: 'column' }}>
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 24, flexDirection: 'column', gap: 14,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <Box style={{ width: 46, height: 46, borderRadius: 8, background: '#0E9B78', alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#FFFFFF' }}>10</Text>
+                </Box>
+                <Box style={{ flexDirection: 'column' }}>
+                    <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>测试代码</Text>
+                    <Text style={{ fontSize: 13, color: '#8A9AAA' }}>教材第 11 章 · W12 · 3 次课</Text>
+                </Box>
+            </Box>
+
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
+                <Text style={{ fontSize: 16, color: '#3A4A58', lineHeight: 1.65 }}>
+                    为什么测试、pip 安装 pytest、测试函数与断言、测试类、fixture 与参数化。
+                </Text>
+                <Box style={{ flexDirection: 'column', gap: 6 }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#0E9B78' }}>必须讲透的两个点</Text>
+                    <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                        1. assert 后面不要写说明文字，pytest 会自动报告失败原因，写了反而覆盖掉。
+                    </Text>
+                    <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                        2. 测试的价值在改代码之前。先写测试再改，才能知道有没有改坏东西。
+                    </Text>
+                </Box>
+            </Box>
+
+            <Box style={{
+                background: '#E8F7F1', borderRadius: 8, padding: '12px 14px',
+                marginTop: 'auto', flexDirection: 'column', gap: 3,
+            }}>
+                <Text style={{ fontSize: 13, color: '#6B9F8C' }}>动手项目 + 加练</Text>
+                <Text style={{ fontSize: 15, color: '#0A7A5F', fontWeight: 'bold' }}>
+                    投票分析器测试 11.1–11.3，再给单元 7/8/9 的代码补测试
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 606, width: '1152px', height: 56,
+        background: '#16232E', borderRadius: 10, flexDirection: 'row',
+        alignItems: 'center', padding: '0 24px', gap: 16,
+    }}>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E8B36A' }}>产出</Text>
+        <Text style={{ fontSize: 16, color: '#D6E4F0' }}>
+            一个能存到 JSON 的学习笔记程序 + 一个至少 10 条测试的 pytest 套件
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–1 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>10 / 17</Text>
+    </Box>
+</Slide>

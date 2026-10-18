@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 7 · 函数</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="7">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 7 · 函数</h1>
+  <a class="ppt" href="ppt/u/07.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="33" data-to="39"><div class="uprog-h"><b>已学 0 / 7 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u7"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/07.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s8"><span class="k">大纲</span><span class="v">课程大纲课件 p8</span></a><a href="bank.html#u7"><span class="k">题库</span><span class="v">本单元 8 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-函数-给一段代码起个名字">2.1 函数：给一段代码起个名字</a>
+<a class="lv3" href="#2-2-return-把结果-递出窗口">2.2 return：把结果&quot;递出窗口&quot;</a>
+<a class="lv3" href="#2-3-三种参数写法">2.3 三种参数写法</a>
+<a class="lv3" href="#2-4-参数传递的副本语义-本单元最重要的概念">2.4 ★ 参数传递的副本语义（本单元最重要的概念）</a>
+<a class="lv3" href="#2-5-作用域-谁能看见谁">2.5 作用域：谁能看见谁</a>
+<a class="lv3" href="#2-6-函数是-一等公民">2.6 函数是&quot;一等公民&quot;</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-定义与调用函数">示例 1：定义与调用函数</a>
+<a class="lv3" href="#示例-2-return-与-none">示例 2：return 与 None</a>
+<a class="lv3" href="#示例-3-三种参数写法">示例 3：三种参数写法</a>
+<a class="lv3" href="#示例-4-参数传递的副本语义">示例 4：★ 参数传递的副本语义</a>
+<a class="lv3" href="#示例-5-作用域与-global">示例 5：作用域与 global</a>
+<a class="lv3" href="#示例-6-函数是一等公民">示例 6：函数是一等公民</a>
+<a class="lv3" href="#示例-7-默认参数的可变对象陷阱">示例 7：默认参数的可变对象陷阱</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-7-1">参考答案 7-1</a>
+<a class="lv3" href="#参考答案-7-2">参考答案 7-2</a>
+<a class="lv3" href="#参考答案-7-3">参考答案 7-3</a>
+<a class="lv3" href="#参考答案-7-4">参考答案 7-4</a>
+<a class="lv3" href="#参考答案-7-5">参考答案 7-5</a>
+<a class="lv3" href="#参考答案-7-6">参考答案 7-6</a>
+<a class="lv3" href="#参考答案-7-7">参考答案 7-7</a>
+<a class="lv3" href="#参考答案-7-8">参考答案 7-8</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-忘记写冒号-或缩进错误">错误 1：忘记写冒号，或缩进错误</a>
+<a class="lv3" href="#错误-2-函数修改列表-会改到原列表">错误 2：★ 函数修改列表，会改到原列表</a>
+<a class="lv3" href="#错误-3-默认参数用了可变对象">错误 3：默认参数用了可变对象</a>
+<a class="lv3" href="#错误-4-忘记-return-函数等于白写">错误 4：忘记 return，函数等于白写</a>
+<a class="lv3" href="#错误-5-参数顺序或数量不对">错误 5：参数顺序或数量不对</a>
+<a class="lv3" href="#错误-6-局部变量遮蔽全局变量">错误 6：局部变量遮蔽全局变量</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-7-函数">单元 7：函数</h1>
+<blockquote>
+<p>对应教材第 8 章「函数」
+关键词：<code>def</code> 定义、<code>return</code> 返回值、文档字符串、位置参数、关键字参数、默认参数、<code>*args</code>、<code>**kwargs</code>、作用域、<strong>参数传递的副本语义</strong></p>
+<p>⚠️ <strong>本单元是难点单元</strong>。函数是"从会写代码"到"会组织代码"的分水岭。本单元末尾附有一份<strong>常见错误清单</strong>，请务必逐条对照自查。</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>用 <code>def</code> 定义函数，用 <code>return</code> 返回结果，并说清「有 return」和「没 return」的本质区别。</li>
+<li>熟练使用位置参数、关键字参数、默认参数，并解释 Python 规则「<strong>有默认值的参数必须放最后</strong>」。</li>
+<li>解释<strong>参数传递的副本语义</strong>：整数/字符串传入函数是副本，列表/字典传入是同一份数据，并能写出正确应对方式。</li>
+<li>说出全局变量与局部变量的区别，能判断某个变量在函数内是否可见。</li>
+<li>读懂并修复 5 类高频函数错误（见末尾错误清单）。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-函数-给一段代码起个名字">2.1 函数：给一段代码起个名字</h3>
+<p>没有函数时，计算 BMI 的代码要在不同地方重复写三遍：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">bmi1</span> <span class="o">=</span> <span class="mi">70</span> <span class="o">/</span> <span class="mf">1.75</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">bmi2</span> <span class="o">=</span> <span class="mi">80</span> <span class="o">/</span> <span class="mf">1.80</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">bmi3</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">/</span> <span class="mf">1.65</span> <span class="o">**</span> <span class="mi">2</span>
+</code></pre>
+<p>函数把它打包成一个"有名字的积木"：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">calculate_bmi</span><span class="p">(</span><span class="n">weight</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""根据体重和身高计算 BMI。"""</span>
+    <span class="k">return</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">height</span> <span class="o">**</span> <span class="mi">2</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">calculate_bmi</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">))</span>   <span class="c1"># 22.86</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">calculate_bmi</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mf">1.80</span><span class="p">))</span>   <span class="c1"># 24.69</span>
+</code></pre>
+<p>生活化类比：函数就像**「饺子机」**——你把原料（参数）放进去，按下按钮（调用），机器产出饺子（返回值）。同一台机器可以反复使用，产出多少饺子取决于你这次放了多少原料。你不需要知道机器内部怎么运作，只需要会用。</p>
+<p>三条语法铁律：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">函数名</span><span class="p">(</span><span class="n">参数</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""文档字符串"""</span>
+    <span class="n">函数体</span>
+    <span class="k">return</span> <span class="n">结果</span>
+</code></pre>
+<ol>
+<li><code>def</code> 和函数名之间<strong>有空格</strong>（<code>def 函数名</code>，不是 <code>def函数名</code>）</li>
+<li>括号后面<strong>必须有冒号</strong></li>
+<li>函数体<strong>必须缩进</strong></li>
+</ol>
+<h3 id="2-2-return-把结果-递出窗口">2.2 return：把结果"递出窗口"</h3>
+<p><code>return</code> 做两件事：
+1. <strong>立刻结束函数</strong>（后面的代码不再执行）
+2. <strong>把一个值交回给调用者</strong></p>
+<p><strong>有 return 和没 return 的本质区别</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">with_return</span><span class="p">():</span>
+    <span class="k">return</span> <span class="mi">42</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">without_return</span><span class="p">():</span>
+    <span class="k">pass</span>              <span class="c1"># 什么都不返回</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">with_return</span><span class="p">())</span>       <span class="c1"># 42</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">without_return</span><span class="p">())</span>    <span class="c1"># None  ← 默认就是 None</span>
+</code></pre>
+<p>生活化类比：<code>return</code> 相当于<strong>柜台的取货窗口</strong>。函数内部的员工在窗口后面干活，做好的东西从窗口递给你。没有窗口（没有 return），你伸手只能拿到一个空的窗口（None）。</p>
+<p><strong>两条极重要的规则</strong>：</p>
+<p>① <code>return</code> 之后的代码永远不执行：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">"早退了"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"这句话永远不会打印"</span><span class="p">)</span>      <span class="c1"># 死代码</span>
+    <span class="k">return</span> <span class="s2">"第二个 return 也不可达"</span>
+</code></pre>
+<p>② 一个函数<strong>可以有多个 return</strong>，但<strong>只会走一个</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">classify</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"正数"</span>      <span class="c1"># 命中就返回，函数结束</span>
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"负数"</span>
+    <span class="k">return</span> <span class="s2">"零"</span>            <span class="c1"># 兜底分支</span>
+</code></pre>
+<blockquote>
+<p>注意最后那个 <code>return "零"</code> 要<strong>缩进在函数体层级</strong>（和 <code>if</code> 平齐），而不是缩进在 <code>elif</code> 里面。</p>
+</blockquote>
+<h3 id="2-3-三种参数写法">2.3 三种参数写法</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="o">*</span><span class="n">hobbies</span><span class="p">,</span> <span class="o">**</span><span class="n">extras</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""三种参数写法的演示。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"姓名：</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"年龄：</span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"爱好：</span><span class="si">{</span><span class="n">hobbies</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"其他：</span><span class="si">{</span><span class="n">extras</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">describe</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">)</span>                        <span class="c1"># 年龄用默认值 18，hobbies 为空</span>
+<span class="n">describe</span><span class="p">(</span><span class="s2">"小红"</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>                    <span class="c1"># 位置传参：第二个参数是年龄</span>
+<span class="n">describe</span><span class="p">(</span><span class="s2">"小刚"</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>                <span class="c1"># 关键字传参：明确指定年龄</span>
+<span class="n">describe</span><span class="p">(</span><span class="s2">"小丽"</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">"读书"</span><span class="p">,</span> <span class="s2">"游泳"</span><span class="p">)</span>       <span class="c1"># 多余的位置参数进 *hobbies</span>
+<span class="n">describe</span><span class="p">(</span><span class="s2">"小强"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"篮球"</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s2">"杭州"</span><span class="p">)</span>   <span class="c1"># 多余关键字参数进 **extras</span>
+</code></pre>
+<p><strong>Python 的强制规则：有默认值的参数必须放在没有默认值的参数后面。</strong></p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">bad</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>      <span class="c1"># SyntaxError: non-default argument 'b' follows default argument</span>
+    <span class="k">pass</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>原因是调用时 Python 无法确定 <code>bad(2)</code> 里的 2 该给 a 还是 b。规则简单：<strong>必填参数在前，选填参数在后。</strong></p>
+<h3 id="2-4-参数传递的副本语义-本单元最重要的概念">2.4 ★ 参数传递的副本语义（本单元最重要的概念）</h3>
+<p>这是零基础学习者最容易掉坑的地方，必须彻底搞懂。</p>
+<p><strong>Python 传递参数时，传递的永远是"指向数据的地址"。</strong> 而函数内部对参数做的操作，分为两类：</p>
+<table>
+<thead>
+<tr>
+<th>参数类型</th>
+<th>函数内部做什么</th>
+<th>影响到原变量吗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>整数、字符串、布尔、浮点数</strong>（不可变类型）</td>
+<td>修改参数 = 造一份新的给参数</td>
+<td><strong>不影响</strong></td>
+</tr>
+<tr>
+<td><strong>列表、字典</strong>（可变类型）</td>
+<td>修改参数 = 改同一份数据</td>
+<td><strong>会影响！</strong></td>
+</tr>
+</tbody>
+</table>
+<p>看代码：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ===== 情况1：传整数，不影响原变量 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_one</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>        <span class="c1"># 只是让参数 n 指向了一个新的整数</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"函数内 n = </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>      <span class="c1"># 11</span>
+
+
+<span class="n">age</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">add_one</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"函数外 age = </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>      <span class="c1"># 10  ← 没变</span>
+
+<span class="c1"># ===== 情况2：传列表，会影响原列表 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>    <span class="c1"># 直接改的是同一份列表</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"函数内 items = </span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">]</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"函数外 fruits = </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># ['苹果', '香蕉', '新元素']  ← 变了！</span>
+</code></pre>
+<p><strong>生活化类比（务必记住这个）：</strong></p>
+<blockquote>
+<p>函数就像一个<strong>公共厨房</strong>。你把食材递进去：
+- 递进去<strong>一瓶牛奶</strong>（整数、字符串这类不可变数据）——厨房里的人往瓶子上贴了新标签自己用，<strong>你的那瓶没动</strong>。
+- 递进去<strong>一整盘菜</strong>（列表、字典这类可变数据）——厨房里的人<strong>直接吃了你的菜</strong>，还往盘子里加了料，<strong>你的盘子内容就变了</strong>。</p>
+</blockquote>
+<p><strong>三种正确的应对方式</strong>（按推荐程度排序）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 方案 1：函数内自己造副本（推荐，最简单）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_append_1</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span><span class="p">[:]</span>    <span class="c1"># 先复制一份，只改副本</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+<span class="c1"># 方案 2：调用时传副本</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">safe_append_1</span><span class="p">(</span><span class="n">fruits</span><span class="p">[:])</span>     <span class="c1"># 调用方负责给副本</span>
+
+<span class="c1"># 方案 3：用不可变类型替代可变类型</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_append_3</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">items</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"新元素"</span><span class="p">]</span>          <span class="c1"># + 号产生新列表，原列表不动</span>
+</code></pre>
+<p><strong>判断原则</strong>：如果一个函数<strong>接收列表或字典</strong>，并且它可能修改这个参数，那么这个函数有一个"副作用"——调用者需要知道这件事。所以有两种设计取向：</p>
+<ul>
+<li><strong>有意修改</strong>：用 <code>modify()</code> 这样的名字明确表达"我会改它"，比如单元 9 里写文件。</li>
+<li><strong>无意修改</strong>：函数内部造副本，或者干脆不要这个参数。</li>
+</ul>
+<h3 id="2-5-作用域-谁能看见谁">2.5 作用域：谁能看见谁</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"全局变量"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">():</span>
+    <span class="n">local_name</span> <span class="o">=</span> <span class="s2">"局部变量"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>                <span class="c1"># 能看全局的</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">local_name</span><span class="p">)</span>          <span class="c1"># 能看自己的</span>
+
+
+<span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">local_name</span><span class="p">)</span>      <span class="c1"># NameError: name 'local_name' is not defined</span>
+</code></pre>
+<p>规则很简单：
+- 函数内定义的变量是<strong>局部变量</strong>，只在函数内可见，函数结束就消失。
+- 函数可以<strong>读取</strong>全局变量，但<strong>不推荐修改</strong>全局变量。
+- 函数内如果要给一个名字赋值，Python 就认为它是局部的（不会去改全局的那个）。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">broken</span><span class="p">():</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>        <span class="c1"># 这是新建了一个局部 count，全局的那个不受影响</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>       <span class="c1"># 100</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">works</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span>       <span class="c1"># 声明"我要用全局的那个"</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>
+
+
+<span class="n">broken</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>       <span class="c1"># 0  ← 全局没被改</span>
+<span class="n">works</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>       <span class="c1"># 100 ← 这次真改了</span>
+</code></pre>
+<p><strong>最佳实践：不要用 <code>global</code>。</strong> 需要修改全局状态时，把数据传进去、把结果返回出来：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_to_total</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">current_total</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回新的总额，而不是修改外部变量。"""</span>
+    <span class="k">return</span> <span class="n">current_total</span> <span class="o">+</span> <span class="n">amount</span>
+
+
+<span class="n">total</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">add_to_total</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>     <span class="c1"># 显式地接住返回值</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>       <span class="c1"># 150</span>
+</code></pre>
+<h3 id="2-6-函数是-一等公民">2.6 函数是"一等公民"</h3>
+<p>Python 的函数可以：
+- <strong>赋给变量</strong>：<code>double = lambda x: x * 2</code>（<code>lambda</code> 就是"一次性小函数"）
+- <strong>当参数传给别的函数</strong>：<code>sorted(scores, key=scores.get)</code>
+- <strong>放进列表</strong>：<code>operations = [加, 减, 乘]</code>
+- <strong>当返回值返回</strong>：<code>def get_adder(): return 加</code></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+
+<span class="c1"># 函数赋给变量</span>
+<span class="n">operation</span> <span class="o">=</span> <span class="n">add</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">operation</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>    <span class="c1"># 7</span>
+
+<span class="c1"># lambda：一个参数的小函数，写法极简</span>
+<span class="n">square</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>         <span class="c1"># 25</span>
+
+<span class="c1"># 函数放进列表，根据需要选</span>
+<span class="n">operations</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">op</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">operations</span><span class="p">])</span>    <span class="c1"># [13, 7, 30]</span>
+</code></pre>
+<p>这个特性的价值在单元 11 的投票分析器里会充分体现——你可以把"加票"和"投票"两个函数分别交给两个不同的类。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-定义与调用函数">示例 1：定义与调用函数</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># function_basics.py —— 函数的定义与调用</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet_user</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""一个最简单的函数：打招呼。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"你好，欢迎使用 Python！"</span><span class="p">)</span>
+
+
+<span class="n">greet_user</span><span class="p">()</span>      <span class="c1"># 调用：写函数名加括号</span>
+<span class="n">greet_user</span><span class="p">()</span>      <span class="c1"># 可以反复调用，每次都执行一遍</span>
+
+<span class="c1"># 带参数的函数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">greet_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""向指定的人打招呼。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你好，</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">！"</span><span class="p">)</span>
+
+
+<span class="n">greet_name</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">)</span>
+<span class="n">greet_name</span><span class="p">(</span><span class="s2">"小红"</span><span class="p">)</span>
+
+<span class="c1"># 带默认值的参数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">greet_with_title</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"同学"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""带称呼的问候，title 可以不填。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你好，</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">！"</span><span class="p">)</span>
+
+
+<span class="n">greet_with_title</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">)</span>              <span class="c1"># 你好，同学 小明！</span>
+<span class="n">greet_with_title</span><span class="p">(</span><span class="s2">"李老师"</span><span class="p">,</span> <span class="s2">"老师"</span><span class="p">)</span>     <span class="c1"># 你好，老师 李老师！</span>
+
+<span class="c1"># 多参数函数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rectangle_area</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""计算矩形面积。"""</span>
+    <span class="k">return</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"面积：</span><span class="si">{</span><span class="n">rectangle_area</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>        <span class="c1"># 面积：15</span>
+</code></pre>
+<h3 id="示例-2-return-与-none">示例 2：return 与 None</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># return_demo.py —— return 的三个要点</span>
+
+<span class="c1"># 有 return 和没 return 的差别</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">with_return</span><span class="p">():</span>
+    <span class="k">return</span> <span class="mi">42</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">without_return</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"我执行了，但我什么都不返回"</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"with_return() 返回："</span><span class="p">,</span> <span class="n">with_return</span><span class="p">())</span>      <span class="c1"># 42</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"without_return() 返回："</span><span class="p">,</span> <span class="n">without_return</span><span class="p">())</span>  <span class="c1"># None</span>
+
+<span class="c1"># return 之后立刻结束函数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">early_exit</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">"这是第一个 return 的结果"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"这行永远不会执行"</span><span class="p">)</span>            <span class="c1"># 死代码</span>
+    <span class="k">return</span> <span class="s2">"这行也永远不会执行"</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">early_exit</span><span class="p">())</span>        <span class="c1"># 这是第一个 return 的结果</span>
+
+<span class="c1"># 一个函数可以有多个 return，但只会走一个</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">classify_number</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""判断正数、负数或零。"""</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"正数"</span>
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"负数"</span>
+    <span class="k">return</span> <span class="s2">"零"</span>      <span class="c1"># 注意：这行缩进和 if 平齐，不在 elif 里面</span>
+
+
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> 是 </span><span class="si">{</span><span class="n">classify_number</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 返回多个值：其实返回的是一个元组</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">min_and_max</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回最小值和最大值。"""</span>
+    <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">numbers</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+
+<span class="n">smallest</span><span class="p">,</span> <span class="n">largest</span> <span class="o">=</span> <span class="n">min_and_max</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"最小 </span><span class="si">{</span><span class="n">smallest</span><span class="si">}</span><span class="s2">，最大 </span><span class="si">{</span><span class="n">largest</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 返回字典：适合"多个名字的东西"</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""返回用户信息的字典。"""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+
+
+<span class="n">user</span> <span class="o">=</span> <span class="n">get_user</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">user</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">今年 </span><span class="si">{</span><span class="n">user</span><span class="p">[</span><span class="s1">'age'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 岁"</span><span class="p">)</span>
+
+<span class="c1"># 无 return 的隐式 None（容易踩坑）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">side_effect_only</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""只打印不返回。"""</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">side_effect_only</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"返回值是："</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>      <span class="c1"># None —— 所以别拿它参与运算</span>
+</code></pre>
+<h3 id="示例-3-三种参数写法">示例 3：三种参数写法</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># parameters.py —— 位置参数、关键字参数、默认参数</span>
+
+<span class="c1"># 1）位置参数：按顺序对应</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">describe_pet</span><span class="p">(</span><span class="n">animal_type</span><span class="p">,</span> <span class="n">pet_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""位置参数：调用时的顺序必须和定义时一致。"""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"这是一只</span><span class="si">{</span><span class="n">animal_type</span><span class="si">}</span><span class="s2">，名字叫</span><span class="si">{</span><span class="n">pet_name</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">describe_pet</span><span class="p">(</span><span class="s2">"狗"</span><span class="p">,</span> <span class="s2">"旺财"</span><span class="p">))</span>       <span class="c1"># 狗 / 旺财</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">describe_pet</span><span class="p">(</span><span class="s2">"猫"</span><span class="p">,</span> <span class="s2">"咪咪"</span><span class="p">))</span>       <span class="c1"># 猫 / 咪咪</span>
+<span class="c1"># print(describe_pet("旺财", "狗"))    # 参数顺序错了，含义就全错了</span>
+
+<span class="c1"># 2）关键字参数：按名字对应，顺序可以变</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">describe_pet</span><span class="p">(</span><span class="n">pet_name</span><span class="o">=</span><span class="s2">"旺财"</span><span class="p">,</span> <span class="n">animal_type</span><span class="o">=</span><span class="s2">"狗"</span><span class="p">))</span>   <span class="c1"># 顺序变了但结果正确</span>
+
+<span class="c1"># 3）默认参数：可以不填，用默认值</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_pizza</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">with_cheese</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""默认参数：有默认值的参数必须写在最后。"""</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> 英寸披萨"</span>
+    <span class="k">if</span> <span class="n">with_cheese</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s2">"，加芝士"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info</span> <span class="o">+=</span> <span class="s2">"，不加芝士"</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">())</span>                          <span class="c1"># 12 英寸披萨，加芝士</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>                         <span class="c1"># 16 英寸披萨，加芝士</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>                  <span class="c1"># 16 英寸披萨，不加芝士</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="n">with_cheese</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>          <span class="c1"># 12 英寸披萨，不加芝士（跳过第一个）</span>
+
+<span class="c1"># 4）可变参数 *args：收集所有的位置参数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sum_all</span><span class="p">(</span><span class="o">*</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""接收任意多个位置参数。"""</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">sum_all</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>           <span class="c1"># 6</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sum_all</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>     <span class="c1"># 15</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sum_all</span><span class="p">())</span>                  <span class="c1"># 0</span>
+
+<span class="c1"># 5）可变参数 **kwargs：收集所有的关键字参数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_profile</span><span class="p">(</span><span class="o">**</span><span class="n">info</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""接收任意多个关键字参数，打包成字典。"""</span>
+    <span class="k">return</span> <span class="n">info</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">build_profile</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"小明"</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s2">"杭州"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">build_profile</span><span class="p">())</span>             <span class="c1"># {}</span>
+
+<span class="c1"># 6）四种参数混合使用（顺序有强制规定）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">full_demo</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""必填参数 -&gt; 默认参数 -&gt; *args -&gt; **kwargs，顺序不能乱。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"a=</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"b=</span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"args=</span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"kwargs=</span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">full_demo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># 错误示范：必填参数放在默认参数后面会报 SyntaxError</span>
+<span class="c1"># def wrong(a=1, b):    # SyntaxError</span>
+<span class="c1">#     pass</span>
+</code></pre>
+<h3 id="示例-4-参数传递的副本语义">示例 4：★ 参数传递的副本语义</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># copy_semantics.py —— 函数里修改参数，到底影响不影响原数据</span>
+
+<span class="c1"># ===== 情况1：传整数 -&gt; 不影响原变量 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_one</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>         <span class="c1"># 只是让参数 n 指向了一个新整数</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 n = </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">age</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">add_one</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数外 age = </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 10  没变</span>
+
+<span class="c1"># ===== 情况2：传字符串 -&gt; 不影响 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">shout</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>   <span class="c1"># 返回了新字符串，参数指向了它</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 word = </span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"tom"</span>
+<span class="n">shout</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数外 name = </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># tom  没变</span>
+
+<span class="c1"># ===== 情况3：传列表 -&gt; 会影响原列表！=====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>     <span class="c1"># 直接改的是同一份列表</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 items = </span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">]</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数外 fruits = </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># ['苹果', '香蕉', '新元素']  变了！</span>
+
+<span class="c1"># ===== 情况4：传字典 -&gt; 同样会影响 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_name</span><span class="p">(</span><span class="n">profile</span><span class="p">):</span>
+    <span class="n">profile</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"李四"</span>    <span class="c1"># 改的是同一个字典</span>
+
+
+<span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"张三"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">20</span><span class="p">}</span>
+<span class="n">set_name</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数外 user = </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>       <span class="c1"># name 变成了李四</span>
+
+<span class="c1"># ===== 三种修复方案 =====</span>
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">]</span>
+
+<span class="c1"># 方案1：函数内自己造副本（推荐）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_append</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span><span class="p">[:]</span>      <span class="c1"># 先复制一份，只动副本</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">safe_append</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"方案1：原列表 </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="s2">，新列表 </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 方案2：调用时传副本</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">append_direct</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">fruits</span><span class="p">[:]</span>        <span class="c1"># 调用方给副本</span>
+<span class="n">append_direct</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"方案2：原列表 </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="s2">，新列表 </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 方案3：用 + 产生新列表，天然不改原数据</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">append_pure</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">items</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"新元素"</span><span class="p">]</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">append_pure</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"方案3：原列表 </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="s2">，新列表 </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-5-作用域与-global">示例 5：作用域与 global</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># scope_demo.py —— 全局变量与局部变量</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"全局变量"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show_variables</span><span class="p">():</span>
+    <span class="n">local_name</span> <span class="o">=</span> <span class="s2">"局部变量"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  函数内可以看全局："</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  函数内可以看局部："</span><span class="p">,</span> <span class="n">local_name</span><span class="p">)</span>
+
+
+<span class="n">show_variables</span><span class="p">()</span>
+<span class="c1"># print(local_name)      # NameError: 局部变量出了函数就不存在了</span>
+
+<span class="c1"># ===== 修改全局变量的三种方式 =====</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># 方式1：直接赋值 -&gt; 只是新建了一个局部变量，全局没变</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">way_one</span><span class="p">():</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  方式1 函数内 count = </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">way_one</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"方式1 之后全局 count ="</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>    <span class="c1"># 0  没变</span>
+
+<span class="c1"># 方式2：global 声明 -&gt; 真能改，但官方不推荐</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">way_two</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  方式2 函数内 count = </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">way_two</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"方式2 之后全局 count ="</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>    <span class="c1"># 100  改了</span>
+
+<span class="c1"># 方式3（最佳）：把数据传进去，把结果返回出来</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_to_count</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">current</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""不碰全局状态，纯靠参数和返回值。"""</span>
+    <span class="k">return</span> <span class="n">current</span> <span class="o">+</span> <span class="n">amount</span>
+
+
+<span class="n">total</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">add_to_count</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>      <span class="c1"># 显式接住返回值</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"方式3 total ="</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>         <span class="c1"># 150</span>
+
+<span class="c1"># 结论：能用参数和返回值解决的，绝不用 global</span>
+<span class="c1"># 因为 global 让函数的"隐藏副作用"变多，代码会变得难追踪</span>
+</code></pre>
+<h3 id="示例-6-函数是一等公民">示例 6：函数是一等公民</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># first_class.py —— 把函数当数据用</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+
+<span class="c1"># 1）赋给变量</span>
+<span class="n">operation</span> <span class="o">=</span> <span class="n">add</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"operation(3, 4) ="</span><span class="p">,</span> <span class="n">operation</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>        <span class="c1"># 7</span>
+
+<span class="c1"># 2）放进列表，按需要选</span>
+<span class="n">operations</span> <span class="o">=</span> <span class="p">[</span><span class="n">add</span><span class="p">,</span> <span class="n">subtract</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"逐个执行："</span><span class="p">,</span> <span class="p">[</span><span class="n">op</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">operations</span><span class="p">])</span>   <span class="c1"># [13, 7]</span>
+
+<span class="c1"># 3）当参数传给别的函数（sorted 的 key 就是这么用的）</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"小明"</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">:</span> <span class="mi">72</span><span class="p">}</span>
+<span class="n">by_score</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"按分数排序："</span><span class="p">,</span> <span class="n">by_score</span><span class="p">)</span>
+
+<span class="c1"># 4）当返回值返回（"工厂函数"）</span>
+<span class="c1"># 注意：sorted 的 key 参数要求函数只接收"一个"参数，</span>
+<span class="c1"># 而比较函数天然要接收"两个"，所以要用 cmp_to_key 包一层适配。</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_comparator</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回一个"两两比较"函数：接收两个值，返回负/零/正。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compare</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+    <span class="k">return</span> <span class="n">compare</span>
+
+
+<span class="n">asc</span> <span class="o">=</span> <span class="n">get_comparator</span><span class="p">()</span>
+<span class="n">desc</span> <span class="o">=</span> <span class="n">get_comparator</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"升序："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">functools</span><span class="o">.</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="n">asc</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"降序："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">functools</span><span class="o">.</span><span class="n">cmp_to_key</span><span class="p">(</span><span class="n">desc</span><span class="p">)))</span>
+
+<span class="c1"># 5）lambda：一次性小函数，写法极简</span>
+<span class="n">square</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"square(5) ="</span><span class="p">,</span> <span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>       <span class="c1"># 25</span>
+
+<span class="c1"># lambda 的本质就是个没有名字的普通函数</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"lambda 和 def 等价："</span><span class="p">,</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="n">square</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>   <span class="c1"># True</span>
+</code></pre>
+<h3 id="示例-7-默认参数的可变对象陷阱">示例 7：默认参数的可变对象陷阱</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># mutable_default.py —— 默认参数不要用可变对象（重要坑）</span>
+
+<span class="c1"># ===== 错误写法：默认参数用了列表 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="p">[]):</span>      <span class="c1"># 注意这个 []</span>
+<span class="w">    </span><span class="sd">"""危险！默认列表只创建一次，所有调用共享它。"""</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"买菜"</span><span class="p">))</span>     <span class="c1"># ['买菜']</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"做饭"</span><span class="p">))</span>     <span class="c1"># ['买菜', '做饭']  &lt;- 上次的"买菜"还在！</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"睡觉"</span><span class="p">))</span>     <span class="c1"># ['买菜', '做饭', '睡觉']</span>
+
+<span class="c1"># 原因：默认参数在函数**定义时**只求值一次，</span>
+<span class="c1"># 之后每次调用都用那同一份列表对象。</span>
+
+<span class="c1"># ===== 正确写法1：用 None 作为默认值 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""默认值为 None，每次调用时再创建新列表。"""</span>
+    <span class="k">if</span> <span class="n">todo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">todo</span> <span class="o">=</span> <span class="p">[]</span><span class="c1"># 每次都新建一个，互不影响</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"买菜"</span><span class="p">))</span>     <span class="c1"># ['买菜']</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"做饭"</span><span class="p">))</span>     <span class="c1"># ['做饭']  干净了</span>
+
+<span class="c1"># ===== 正确写法2：用不可变类型 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">()):</span>        <span class="c1"># 元组不可变，安全</span>
+    <span class="k">return</span> <span class="n">tags</span> <span class="o">+</span> <span class="p">(</span><span class="n">tag</span><span class="p">,)</span>
+
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_tag</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>     <span class="c1"># ('a',)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_tag</span><span class="p">(</span><span class="s2">"b"</span><span class="p">))</span>     <span class="c1"># ('b',)  独立</span>
+
+<span class="c1"># ===== 默认参数还有另一个用途：让函数"记住"状态 =====</span>
+<span class="c1"># 这是少数"用可变默认值"是合理的场景</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_counter</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回一个能计数的函数，记住上次的结果。"""</span>
+    <span class="k">return</span> <span class="n">start</span>
+
+
+<span class="c1"># 更实用的闭包写法</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_adder</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回一个"加了 n 的函数"。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">adder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">n</span>
+
+    <span class="k">return</span> <span class="n">adder</span>
+
+
+<span class="n">add_5</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"add_5(10) ="</span><span class="p">,</span> <span class="n">add_5</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>      <span class="c1"># 15</span>
+<span class="n">add_10</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"add_10(10) ="</span><span class="p">,</span> <span class="n">add_10</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>    <span class="c1"># 20  两者互不影响</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 7-1【温度转换函数】</strong>
+写 <code>celsius_to_fahrenheit(celsius)</code>，把摄氏温度转成华氏温度：<code>华氏 = 摄氏 × 9/5 + 32</code>。
+然后写 <code>fahrenheit_to_celsius(fahrenheit)</code> 做反向转换。
+要求：两个函数都有文档字符串；用 <code>for</code> 循环一次性转换 <code>[0, 100, 37, -40]</code> 四个值并输出对照表。</p>
+<p><strong>练习 7-2【带默认参数的函数】</strong>
+写 <code>make_profile(name, age=18, city="未知", **extras)</code>，返回一个字典：
+- 必填项是 <code>name</code>、<code>age</code>、<code>city</code>
+- <code>**extras</code> 收集所有其余关键字参数（如 <code>email</code>、<code>hobby</code>）
+测试：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">make_profile</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">)</span>
+<span class="n">make_profile</span><span class="p">(</span><span class="s2">"小红"</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+<span class="n">make_profile</span><span class="p">(</span><span class="s2">"小刚"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"杭州"</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s2">"x@x.com"</span><span class="p">,</span> <span class="n">hobby</span><span class="o">=</span><span class="s2">"篮球"</span><span class="p">)</span>
+</code></pre>
+<p><strong>练习 7-3【可变参数求和】</strong>
+写 <code>average(*numbers)</code>，接受任意多个数字，返回平均值。要求：
+- 没有传参数时返回 <code>0</code>（而不是崩掉）
+- 用 <code>sum()</code> 和 <code>len()</code> 实现</p>
+<p><strong>练习 7-4【最长单词】</strong>
+写 <code>longest_word(words)</code>，接收一个单词列表，返回最长的那个单词。
+- 如果长度相同，返回<strong>第一个</strong>（用循环的写法，不用 <code>max(key=...)</code> 也可以）
+- 再写一个版本用 <code>max(words, key=len)</code>，比较两者结果是否一致</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 7-5【★ 副本语义验证实验】</strong>
+这是本单元最重要的练习，请完整做完。
+1. 写函数 <code>modify_int(n)</code>，把 <code>n</code> 改成 <code>n + 1</code>；调用它传入 <code>num = 10</code>，打印调用前后的 <code>num</code>
+2. 写函数 <code>modify_list(items)</code>，用 <code>append</code> 加一个元素；调用它传入 <code>fruits = ["苹果"]</code>，打印调用前后的 <code>fruits</code>
+3. 写函数 <code>modify_str(s)</code>，用 <code>.upper()</code>；调用它传入 <code>text = "abc"</code>，打印调用前后的 <code>text</code>
+4. <strong>总结规律</strong>：哪一类参数会被影响，哪一类不会？为什么？
+5. 再写 <code>safe_modify_list(items)</code>，内部先造副本再修改，返回新列表。验证原列表不再被影响。</p>
+<p><strong>练习 7-6【文本统计器】</strong>
+写一个函数 <code>analyze_text(text)</code>，接收一段字符串，返回一个字典，包含：
+- <code>"字符数"</code>：总长度（不含空格）
+- <code>"单词数"</code>：按空格 split 的数量
+- <code>"最长单词"</code>：最长的那个单词
+- <code>"各单词次数"</code>：一个字典，记录每个单词出现几次（用单元 5 的计数方法）
+再写一个包装函数 <code>print_report(text)</code>，调用 <code>analyze_text</code> 并格式化输出所有信息。
+测试文本：<code>"the quick brown fox jumps over the lazy dog"</code>（注意 the 出现 3 次）</p>
+<p><strong>练习 7-7【多返回值与解包】</strong>
+写 <code>analyze_numbers(numbers)</code>，返回<strong>一个元组</strong>：<code>(总和, 平均值, 最大值, 最小值, 偶数个数)</code>。
+再写 <code>count_vowels(text)</code>，返回 <code>(元音数量, 元音列表)</code>。
+要求用解包一次接收所有结果，并正确使用它们。</p>
+<p><strong>练习 7-8【装饰器的思想预演】</strong>
+不用 <code>def</code> 语法，先用"函数返回函数"的方式实现一个计时器：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">make_timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> 耗时 </span><span class="si">{</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> 秒"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre>
+<p>要求：
+1. 用它包装一个 <code>slow_sum(n)</code> 函数（内部用循环累加大量数字）
+2. 包装后调用，观察输出
+3. 思考：如果把这个 <code>wrapper</code> 的名字改回 <code>func</code> 的名字（<code>wrapper.__name__ = func.__name__</code>），为什么更有用？
+（这其实是 Python 内置 <code>functools.wraps</code> 在做的事，能看懂即可，不要求掌握。）</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-7-1">参考答案 7-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># temperature.py —— 温度转换函数</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">celsius_to_fahrenheit</span><span class="p">(</span><span class="n">celsius</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把摄氏温度转换成华氏温度。</span>
+
+<span class="sd">    参数:</span>
+<span class="sd">        celsius: 摄氏温度，数字或数字字符串</span>
+<span class="sd">    返回:</span>
+<span class="sd">        华氏温度（float）</span>
+<span class="sd">    """</span>
+    <span class="c1"># 用 float() 转换，兼容用户输入字符串的情况</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">32</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fahrenheit_to_celsius</span><span class="p">(</span><span class="n">fahrenheit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把华氏温度转换成摄氏温度。"""</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fahrenheit</span><span class="p">)</span> <span class="o">-</span> <span class="mi">32</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">/</span> <span class="mi">9</span>
+
+
+<span class="c1"># 测试：输出对照表</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'摄氏'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">'华氏'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">21</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">celsius</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="o">-</span><span class="mi">40</span><span class="p">]:</span>
+    <span class="n">fahrenheit</span> <span class="o">=</span> <span class="n">celsius_to_fahrenheit</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">celsius</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">fahrenheit</span><span class="si">:</span><span class="s2">&gt;8.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 反向验证：来回转换应该回到原点</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 反向转换验证 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">celsius</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">37</span><span class="p">]:</span>
+    <span class="n">back</span> <span class="o">=</span> <span class="n">fahrenheit_to_celsius</span><span class="p">(</span><span class="n">celsius_to_fahrenheit</span><span class="p">(</span><span class="n">celsius</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">celsius</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">celsius_to_fahrenheit</span><span class="p">(</span><span class="n">celsius</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">back</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 特殊值说明：-40 摄氏正好也是 -40 华氏，这是唯一一个"两温度刻度数值相同"的点</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">-40 摄氏 ="</span><span class="p">,</span> <span class="n">celsius_to_fahrenheit</span><span class="p">(</span><span class="o">-</span><span class="mi">40</span><span class="p">),</span> <span class="s2">"华氏"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-7-2">参考答案 7-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># make_profile.py —— 必填 + 默认 + **extras 的组合</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_profile</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s2">"未知"</span><span class="p">,</span> <span class="o">**</span><span class="n">extras</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""创建用户档案字典。</span>
+
+<span class="sd">    必填：name</span>
+<span class="sd">    选填：age（默认 18）、city（默认"未知"）</span>
+<span class="sd">    其余任意关键字参数会进入 extras</span>
+<span class="sd">    """</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s2">"age"</span><span class="p">:</span> <span class="n">age</span><span class="p">,</span>
+        <span class="s2">"city"</span><span class="p">:</span> <span class="n">city</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="c1"># 把其余的关键字参数也加进去</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">extras</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">profile</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">profile</span>
+
+
+<span class="c1"># 测试各种调用方式</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_profile</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">))</span>
+<span class="c1"># {'name': '小明', 'age': 18, 'city': '未知'}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">make_profile</span><span class="p">(</span><span class="s2">"小红"</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>
+<span class="c1"># {'name': '小红', 'age': 25, 'city': '未知'}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">make_profile</span><span class="p">(</span><span class="s2">"小刚"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"杭州"</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s2">"x@x.com"</span><span class="p">,</span> <span class="n">hobby</span><span class="o">=</span><span class="s2">"篮球"</span><span class="p">))</span>
+<span class="c1"># {'name': '小刚', 'age': 20, 'city': '杭州', 'email': 'x@x.com', 'hobby': '篮球'}</span>
+
+<span class="c1"># 用关键字参数跳过中间的默认值</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_profile</span><span class="p">(</span><span class="s2">"小丽"</span><span class="p">,</span> <span class="n">city</span><span class="o">=</span><span class="s2">"北京"</span><span class="p">))</span>
+<span class="c1"># {'name': '小丽', 'age': 18, 'city': '北京'}</span>
+
+<span class="c1"># 注意：extras 只能接关键字参数，位置参数会报错</span>
+<span class="c1"># print(make_profile("小强", 20, "上海", "额外的"))    # TypeError</span>
+</code></pre>
+<h3 id="参考答案-7-3">参考答案 7-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># average.py —— 可变参数求平均值</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">average</span><span class="p">(</span><span class="o">*</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回所有传入数字的平均值，没有参数时返回 0。</span>
+
+<span class="sd">    用法:average(1, 2, 3) -&gt; 2.0</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numbers</span><span class="p">:</span>              <span class="c1"># 空元组是"假值"</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+
+<span class="c1"># 测试</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>       <span class="c1"># 20.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>     <span class="c1"># 3.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>               <span class="c1"># 100.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">())</span>                  <span class="c1"># 0   空输入不崩</span>
+
+<span class="c1"># numbers 实际上是一个元组，可以用列表方法以外的方式处理</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">average_verbose</span><span class="p">(</span><span class="o">*</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""同样的功能，但展示 numbers 的真实类型。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  numbers 的类型是 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">，内容是 </span><span class="si">{</span><span class="n">numbers</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">average_verbose</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"平均值："</span><span class="p">,</span> <span class="n">average_verbose</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+
+<span class="c1"># 进阶：把一个已有列表展开成可变参数</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"列表展开调用："</span><span class="p">,</span> <span class="n">average</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">))</span>     <span class="c1"># *data 把列表拆成一个个参数</span>
+</code></pre>
+<h3 id="参考答案-7-4">参考答案 7-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># longest_word.py —— 找出最长单词</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">longest_word_loop</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用普通循环找最长单词，长度相同返回第一个。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>               <span class="c1"># 空列表要提前处理</span>
+        <span class="k">return</span> <span class="s2">""</span>
+
+    <span class="n">longest</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>          <span class="c1"># 假设第 0 个最长</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">longest</span><span class="p">):</span>     <span class="c1"># 严格大于，所以同长度保留先来的</span>
+            <span class="n">longest</span> <span class="o">=</span> <span class="n">word</span>
+    <span class="k">return</span> <span class="n">longest</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">longest_word_max</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用内置 max 找最长单词。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">""</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
+
+
+<span class="c1"># 测试</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"watermelon"</span><span class="p">,</span> <span class="s2">"kiwi"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"输入："</span><span class="p">,</span> <span class="n">words</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环版："</span><span class="p">,</span> <span class="n">longest_word_loop</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>     <span class="c1"># watermelon</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"max 版："</span><span class="p">,</span> <span class="n">longest_word_max</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>      <span class="c1"># watermelon</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两者一致："</span><span class="p">,</span> <span class="n">longest_word_loop</span><span class="p">(</span><span class="n">words</span><span class="p">)</span> <span class="o">==</span> <span class="n">longest_word_max</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>
+
+<span class="c1"># 边界情况：长度相同时都应返回第一个</span>
+<span class="n">tie</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"mango"</span><span class="p">,</span> <span class="s2">"pear"</span><span class="p">]</span>              <span class="c1"># mango 和 pear 都是 5 个字母</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"并列时循环版："</span><span class="p">,</span> <span class="n">longest_word_loop</span><span class="p">(</span><span class="n">tie</span><span class="p">))</span>    <span class="c1"># mango</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"并列时 max 版："</span><span class="p">,</span> <span class="n">longest_word_max</span><span class="p">(</span><span class="n">tie</span><span class="p">))</span>     <span class="c1"># mango</span>
+<span class="c1"># max 也返回第一个，这是 Python 的稳定行为</span>
+
+<span class="c1"># 空列表</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"空列表："</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">longest_word_loop</span><span class="p">([])),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">longest_word_max</span><span class="p">([])))</span>
+
+<span class="c1"># 顺带演示：所有单词都返回</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">all_longest_words</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回所有达到最长长度的单词。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">==</span> <span class="n">max_len</span><span class="p">]</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所有最长的："</span><span class="p">,</span> <span class="n">all_longest_words</span><span class="p">(</span><span class="n">tie</span><span class="p">))</span>    <span class="c1"># ['mango', 'pear']</span>
+</code></pre>
+<h3 id="参考答案-7-5">参考答案 7-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># copy_experiment.py —— 副本语义验证实验</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"===== 实验1：传整数 ====="</span><span class="p">)</span>
+<span class="n">num</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用前：num = </span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_int</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>          <span class="c1"># 只是让参数指向了新整数，原数据没动</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 n = </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">modify_int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用后：num = </span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 10  没变</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"===== 实验2：传字符串 ====="</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"abc"</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用前：text = </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_str</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>      <span class="c1"># 返回新字符串，参数指向了它</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 s = </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">modify_str</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用后：text = </span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># abc  没变</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"===== 实验3：传列表 ====="</span><span class="p">)</span>
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用前：fruits = </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_list</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">)</span>    <span class="c1"># 直接改的就是同一份列表</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 items = </span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">modify_list</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用后：fruits = </span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># ['苹果', '香蕉']  变了！</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"===== 实验4：传字典 ====="</span><span class="p">)</span>
+<span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"张三"</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用前：user = </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"李四"</span>     <span class="c1"># 改的是同一个字典</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  函数内 d = </span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">modify_dict</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"调用后：user = </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># name 变成李四</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"===== 规律总结 ====="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"整数、浮点数、字符串、布尔 -&gt; 不可变类型 -&gt; 函数内修改不影响原变量"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"列表、字典 -&gt; 可变类型 -&gt; 函数内修改会直接影响原数据"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">===== 修复方案 ====="</span><span class="p">)</span>
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_modify_list</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""安全版：先造副本再修改，返回新列表。"""</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span><span class="p">[:]</span>      <span class="c1"># 关键一行：造一份独立的副本</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">safe_modify_list</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"原列表：</span><span class="si">{</span><span class="n">fruits</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span><span class="c1"># ['苹果']没变</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"新列表：</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># ['苹果', '香蕉']</span>
+
+<span class="c1"># 生活化总结：</span>
+<span class="c1"># 传整数像"递进去一瓶牛奶"，厨房贴自己的标签，你的牛奶没动。</span>
+<span class="c1"># 传列表像"递进去一盘菜"，厨房直接吃你的菜并加了料，你的盘子内容变了。</span>
+</code></pre>
+<h3 id="参考答案-7-6">参考答案 7-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># text_analyzer.py —— 文本统计分析函数</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_text</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""分析一段文本，返回包含各项统计信息的字典。</span>
+
+<span class="sd">    返回的字典包含：</span>
+<span class="sd">        字符数     不含空格的字符总数</span>
+<span class="sd">        单词数     按空格切分后的单词数量</span>
+<span class="sd">        最长单词   长度最大的单词</span>
+<span class="sd">        各单词次数 {单词: 出现次数}</span>
+<span class="sd">    """</span>
+    <span class="c1"># 切分成单词列表</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="c1"># 统计各单词出现次数（单元 5 的计数方法）</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="c1"># 找最长单词</span>
+    <span class="n">longest</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">longest</span><span class="p">):</span>
+            <span class="n">longest</span> <span class="o">=</span> <span class="n">word</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"字符数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">""</span><span class="p">)),</span>
+        <span class="s2">"单词数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">),</span>
+        <span class="s2">"最长单词"</span><span class="p">:</span> <span class="n">longest</span><span class="p">,</span>
+        <span class="s2">"各单词次数"</span><span class="p">:</span> <span class="n">counts</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">print_report</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""调用 analyze_text 并格式化输出所有信息。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"文本分析报告"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"原文：</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"字符数（不含空格）：</span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'字符数'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"单词数：</span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'单词数'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"最长单词：</span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'最长单词'</span><span class="p">]</span><span class="si">}</span><span class="s2">（</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">'最长单词'</span><span class="p">])</span><span class="si">}</span><span class="s2"> 个字母）"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"词频统计："</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"各单词次数"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">word</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+
+
+<span class="c1"># 测试</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"the quick brown fox jumps over the lazy dog"</span>
+<span class="n">print_report</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># 进阶：统计出现次数最多的词</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">analyze_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">top_word</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"各单词次数"</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">"各单词次数"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"出现最多的词是 '</span><span class="si">{</span><span class="n">top_word</span><span class="si">}</span><span class="s2">'，出现了 </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">'各单词次数'</span><span class="p">][</span><span class="n">top_word</span><span class="p">]</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+
+<span class="c1"># 顺带演示：注意"字符数不含空格"和"含空格"的区别</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="s2">"a b c"</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">sample</span><span class="si">}</span><span class="s2">' 的字符数（不含空格）：</span><span class="si">{</span><span class="n">analyze_text</span><span class="p">(</span><span class="n">sample</span><span class="p">)[</span><span class="s1">'字符数'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">sample</span><span class="si">}</span><span class="s2">' 的单词数：</span><span class="si">{</span><span class="n">analyze_text</span><span class="p">(</span><span class="n">sample</span><span class="p">)[</span><span class="s1">'单词数'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>             <span class="c1"># 3</span>
+</code></pre>
+<h3 id="参考答案-7-7">参考答案 7-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># multi_return.py —— 多返回值与解包</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_numbers</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 (总和, 平均值, 最大值, 最小值, 偶数个数) 组成的元组。"""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">largest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">smallest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+    <span class="n">even_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">even_count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="c1"># 逗号分隔多个值，Python 会自动打包成元组返回</span>
+    <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">average</span><span class="p">,</span> <span class="n">largest</span><span class="p">,</span> <span class="n">smallest</span><span class="p">,</span> <span class="n">even_count</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_vowels</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 (元音数量, 元音列表) 组成的元组。"""</span>
+    <span class="n">vowels</span> <span class="o">=</span> <span class="s2">"aeiouAEIOU"</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">vowels</span><span class="p">:</span>
+            <span class="n">found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">found</span><span class="p">),</span> <span class="n">found</span>
+
+
+<span class="c1"># ===== 解包接收全部结果 =====</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+
+<span class="n">total</span><span class="p">,</span> <span class="n">average</span><span class="p">,</span> <span class="n">largest</span><span class="p">,</span> <span class="n">smallest</span><span class="p">,</span> <span class="n">even_count</span> <span class="o">=</span> <span class="n">analyze_numbers</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总和：</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"平均值：</span><span class="si">{</span><span class="n">average</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"最大值：</span><span class="si">{</span><span class="n">largest</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"最小值：</span><span class="si">{</span><span class="n">smallest</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"偶数个数：</span><span class="si">{</span><span class="n">even_count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 元组也可以整体接收，然后按下标访问</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">analyze_numbers</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">下标访问：总和 </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">，最大 </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 星号解包：只要中间几个，中间用 * 忽略</span>
+<span class="n">total</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">largest</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">analyze_numbers</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"只要总和和最大值：</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">，</span><span class="si">{</span><span class="n">largest</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 元音统计</span>
+<span class="n">vowel_count</span><span class="p">,</span> <span class="n">vowel_list</span> <span class="o">=</span> <span class="n">count_vowels</span><span class="p">(</span><span class="s2">"Hello World, Python is Fun!"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">元音数量：</span><span class="si">{</span><span class="n">vowel_count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"元音列表：</span><span class="si">{</span><span class="n">vowel_list</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 顺带演示一个实用技巧：打印表格</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 数据报告 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'总和'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">total</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'平均值'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">average</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'最大值'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">largest</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'最小值'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">smallest</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'偶数个数'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">even_count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-7-8">参考答案 7-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># timer_decorator.py —— 用"函数返回函数"实现计时器</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_timer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把一个函数包成"会自动打印耗时"的版本。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>      <span class="c1"># 真正干活</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">] 耗时 </span><span class="si">{</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> 秒"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>                      <span class="c1"># 别忘了把结果传出去</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="c1"># 被包装的函数：故意做点耗时的活</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">slow_sum</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""累加 1 到 n 的和，n 大一点才有感。"""</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">total</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">quick_answer</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""一个几乎不耗时的函数。"""</span>
+    <span class="k">return</span> <span class="mi">42</span>
+
+
+<span class="c1"># ===== 使用 =====</span>
+<span class="n">timed_slow_sum</span> <span class="o">=</span> <span class="n">make_timer</span><span class="p">(</span><span class="n">slow_sum</span><span class="p">)</span>
+<span class="n">timed_answer</span> <span class="o">=</span> <span class="n">make_timer</span><span class="p">(</span><span class="n">quick_answer</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"调用被包装的慢函数："</span><span class="p">)</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="n">timed_slow_sum</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  返回值："</span><span class="p">,</span> <span class="n">result1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">调用被包装的快函数："</span><span class="p">)</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">timed_answer</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  返回值："</span><span class="p">,</span> <span class="n">result2</span><span class="p">)</span>
+
+<span class="c1"># ===== 观察问题 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 问题：被包装后函数名变了 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"timed_slow_sum 的 __name__ 是："</span><span class="p">,</span> <span class="n">timed_slow_sum</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原函数 slow_sum 的 __name__ 是："</span><span class="p">,</span> <span class="n">slow_sum</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="c1"># 打印栈信息或报错时，会显示 wrapper 这个没有意义的名字</span>
+
+<span class="c1"># ===== 修复：手动把名字复制过去 =====</span>
+<span class="n">timed_slow_sum</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">=</span> <span class="n">slow_sum</span><span class="o">.</span><span class="vm">__name__</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">修复后 timed_slow_sum 的 __name__ 是："</span><span class="p">,</span> <span class="n">timed_slow_sum</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Python 内置的functools.wraps 就是自动做这件事的工具：</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_timer_pro</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用 functools.wraps 保留原函数的名字和文档。"""</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>         <span class="c1"># 这一行等价于上面的手动赋值 + 复制文档</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">] 耗时 </span><span class="si">{</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> 秒"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">用 wraps 版本再试一次："</span><span class="p">)</span>
+<span class="n">timed_slow_sum2</span> <span class="o">=</span> <span class="n">make_timer_pro</span><span class="p">(</span><span class="n">slow_sum</span><span class="p">)</span>
+<span class="n">timed_slow_sum2</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  名字是："</span><span class="p">,</span> <span class="n">timed_slow_sum2</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  文档是："</span><span class="p">,</span> <span class="n">timed_slow_sum2</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="c1"># 思考题答案：</span>
+<span class="c1"># 保留原函数名很重要，因为报错信息、帮助文档、日志都会用到它。</span>
+<span class="c1"># 如果用户看到一个叫 wrapper 的函数名在报错里，他会完全不知道</span>
+<span class="c1"># 自己调用的是哪个函数。这正是 @装饰器 语法糖要解决的问题。</span>
+</code></pre>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<blockquote>
+<p>以下 6 类是写函数时最高频的错误。每一条都给出「症状 → 原因 → 修法」。</p>
+</blockquote>
+<h3 id="错误-1-忘记写冒号-或缩进错误">错误 1：忘记写冒号，或缩进错误</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>      <span class="c1"># 错误 1a：括号后面漏了冒号</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet2</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>           <span class="c1"># 错误 1b：函数体没有缩进</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet3</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>       <span class="c1"># 错误 1c：缩进用了 Tab 而不是 4 个空格</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"这里是函数外的代码"</span><span class="p">)</span>  <span class="c1"># 错误 1d：函数体提前结束了，缩进不一致</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet4</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"多缩进了"</span><span class="p">)</span>   <span class="c1"># 错误 1e：同一块内缩进不一致 -&gt; IndentationError</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>SyntaxError: expected ':'</code> / <code>IndentationError: expected an indented block</code>
+<strong>原因</strong>：<code>def</code> 行末必须有 <code>:</code>；函数体所有行必须用<strong>一致的 4 个空格</strong>缩进。
+<strong>修法</strong>：VS Code 里按 Tab 会自动插入 4 空格，不要混用 Tab。报错信息里的 <code>^</code> 会指到出问题的位置。</p>
+<h3 id="错误-2-函数修改列表-会改到原列表">错误 2：★ 函数修改列表，会改到原列表</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>      <span class="c1"># 这一行直接改掉了调用方的列表</span>
+
+
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">]</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>      <span class="c1"># ['苹果', '新元素']  ← 原数据被污染了</span>
+</code></pre>
+<p><strong>症状</strong>：函数返回后，原列表莫名其妙多了东西；或者多个函数调用之间数据互相串味。
+<strong>原因</strong>：列表是<strong>可变对象</strong>，Python 传的是"地址"，函数里改的就是原件。
+<strong>修法</strong>（三选一）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 修法1：函数内造副本（推荐）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span><span class="p">[:]</span>        <span class="c1"># 先复制</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+<span class="c1"># 修法2：调用时传副本</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">fruits</span><span class="p">[:])</span>
+
+<span class="c1"># 修法3：用 + 产生新列表</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">items</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"新元素"</span><span class="p">]</span>
+</code></pre>
+<h3 id="错误-3-默认参数用了可变对象">错误 3：默认参数用了可变对象</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="p">[]):</span>     <span class="c1"># 错误：默认值是列表！</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"买菜"</span><span class="p">))</span>     <span class="c1"># ['买菜']</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"做饭"</span><span class="p">))</span>     <span class="c1"># ['买菜', '做饭']  ← 上次的"买菜"莫名出现！</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"睡觉"</span><span class="p">))</span>     <span class="c1"># ['买菜', '做饭', '睡觉']</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：单独调用正常，反复调用时结果里出现了前面调用的数据。
+<strong>原因</strong>：默认参数在<strong>函数定义时</strong>只求值一次，那个列表被所有调用共享。
+<strong>修法</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>     <span class="c1"># 默认值用 None</span>
+    <span class="k">if</span> <span class="n">todo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">todo</span> <span class="o">=</span> <span class="p">[]</span>                 <span class="c1"># 每次调用时新建</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+</code></pre>
+<h3 id="错误-4-忘记-return-函数等于白写">错误 4：忘记 return，函数等于白写</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">add_score</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>      <span class="c1"># 列表确实被改了，但函数本身返回 None</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">add_score</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>      <span class="c1"># None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>TypeError: 'NoneType' object is not subscriptable</code> 或者结果莫名是 <code>None</code>。
+<strong>原因</strong>：没有 <code>return</code> 的函数默认返回 <code>None</code>。修改外部数据 ≠ 返回新结果。
+<strong>修法</strong>：明确写出 <code>return</code>。如果函数只是"做事"不改返回值（比如写文件、打印），就把 <code>def f():</code> 写成 <code>def f():</code> 并在文档里说明它没有返回值。</p>
+<h3 id="错误-5-参数顺序或数量不对">错误 5：参数顺序或数量不对</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">make_pizza</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">with_cheese</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""有默认值的参数必须写在没有默认值的参数后面。"""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> 英寸，芝士=</span><span class="si">{</span><span class="n">with_cheese</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="c1"># INTENTIONALLY-BROKEN 演示 3 类调用错误</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>       <span class="c1"># 合法：16 英寸，芝士=False</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>           <span class="c1"># 陷阱：False 被当成了 size！</span>
+<span class="c1"># print(make_pizza(16, 18, 20))    # 错误：Too many positional arguments</span>
+<span class="c1"># print(make_pizza(size=16, cheese=True))   # 错误：参数名写错，应为 with_cheese</span>
+
+<span class="c1"># 报错信息里有个高频拼写错误：cheese 不是 with_cheese</span>
+<span class="c1"># TypeError: make_pizza() got an unexpected keyword argument 'cheese'</span>
+</code></pre>
+<p><strong>症状</strong>：<code>TypeError: got an unexpected keyword argument</code> 或结果莫名其妙。
+<strong>原因</strong>：位置参数按顺序匹配；关键字参数按名字匹配；参数个数或名字不对。
+<strong>修法</strong>：多个参数时<strong>优先用关键字参数</strong>，比如 <code>make_pizza(size=16, with_cheese=False)</code>，顺序和意图一目了然，也不用担心位置搞混。</p>
+<h3 id="错误-6-局部变量遮蔽全局变量">错误 6：局部变量遮蔽全局变量</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">reset_counter</span><span class="p">():</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>       <span class="c1"># 错误：这是新建了一个局部变量，全局 count 没变</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 打印 100</span>
+
+
+<span class="n">reset_counter</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 0  ← 你以为改了，其实没改</span>
+</code></pre>
+<p><strong>症状</strong>：函数里改了变量，函数外"莫名其妙"没变；或者函数里想读全局值却报 <code>NameError</code>。
+<strong>原因</strong>：函数内只要出现赋值，Python 就认定这个名字是<strong>局部</strong>的，不会去读全局的那个。
+<strong>修法</strong>（推荐第一种）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 修法1（最佳）：把数据传进去，把结果返回出来</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_to_count</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">current</span> <span class="o">+</span> <span class="n">amount</span>
+
+
+<span class="n">count</span> <span class="o">=</span> <span class="n">add_to_count</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 100</span>
+
+<span class="c1"># 修法2：确实需要改全局时用 global（官方不推荐）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reset_counter</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>
+</code></pre>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">modify</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">return</span> <span class="n">n</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">modify</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+</code></pre>
+<p>输出什么？为什么？</p>
+<blockquote>
+<p><strong>要点</strong>：输出 <code>5 10</code>。整数是<strong>不可变类型</strong>，函数内的 <code>n = 10</code> 只是让参数 <code>n</code> 指向了一个新的整数 10，原始数据 5 毫发无损。<code>return</code> 返回的 10 和外部的 <code>x = 5</code> 是两个完全无关的值。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新"</span><span class="p">)</span>
+
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre>
+<p>输出什么？如果希望 <code>data</code> 保持为空，应该怎么改？</p>
+<blockquote>
+<p><strong>要点</strong>：输出 <code>['新']</code>。列表是可变对象，Python 传递的是指向列表的地址，函数内的 <code>append</code> 修改的就是 <code>data</code> 指向的那一份数据。要让 <code>data</code> 保持为空，两种改法：① 函数内先造副本 <code>items = items[:]</code> 再 append；② 或者干脆改用 <code>return items + ["新"]</code> 的纯函数写法。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：<code>def f(a, b=2): return a + b</code> 这行代码可以写成 <code>def f(b=2, a)</code> 吗？</p>
+<blockquote>
+<p><strong>要点</strong>：不可以，会报 <code>SyntaxError: non-default argument 'a' follows default argument</code>。Python 要求有默认值的参数必须排在没有默认值的参数之后，否则调用时无法判断 <code>f(5)</code> 里的 5 是给 <code>a</code> 还是 <code>b</code>。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：<code>return</code> 语句有哪些作用？如果函数里没有写 <code>return</code>，调用它会得到什么？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>return</code> 有两个作用——① 立刻结束函数，后面的代码不再执行；② 把一个值交回调用者。没有写 <code>return</code> 的函数，调用结果是 <code>None</code>（Python 默认隐式返回 None）。这个坑很隐蔽：函数里明明修改了列表，但 <code>result = func(lst)</code> 拿到的却是 <code>None</code>。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：下面这个函数为什么第二次调用时结果里会多出第一次的"买菜"？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：因为默认参数 <code>[]</code> 是在<strong>函数定义时</strong>只求值一次，那个列表对象被后续所有调用共享。所以第二次调用时，<code>todo</code> 里已经有了第一次放进去的"买菜"。正确写法是 <code>def add_task(task, todo=None):</code>，然后在函数体里写 <code>if todo is None: todo = []</code>，让每次调用都创建一个新列表。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能默写 <code>def 函数名(参数): ... return 值</code> 的完整结构</li>
+<li>[ ] 能说清「传整数不影响 / 传列表会影响」的原因（副本语义）</li>
+<li>[ ] 知道默认参数不能写 <code>[]</code> 或 <code>{}</code></li>
+<li>[ ] 知道有默认值的参数必须放最后</li>
+<li>[ ] 练习 7-5、7-6 已跑通</li>
+<li>[ ] 已逐条检查过上面的 6 条常见错误清单</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 8 讲类——从"函数是一段行为"进阶到"类是一类事物"。你会学会 <code>class</code>、<code>__init__</code>、<code>self</code>、属性、方法、继承与重写、<code>super()</code>，并第一次面向对象地设计自己的类型。同样附<strong>常见错误清单</strong>（忘记写 <code>self</code>、忘记冒号、属性与方法重名等）。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="06.html"><small>← 上一单元</small><b>单元 6 · 用户输入与while循环</b></a><div class="spot"><a class="pn" href="ppt/u/07.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s8"><small>课程大纲课件</small><b>阶段总览 p8 →</b></a></div><a class="pn nx" href="08.html"><small>下一单元 →</small><b>单元 8 · 类</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

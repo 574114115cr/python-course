@@ -1,0 +1,76 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>课程坐标</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            这门课要把你从「从没写过代码」送到「能独立交付一个上线的项目」，中间设两道硬关卡
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 136, width: '1152px', height: 152, flexDirection: 'row', gap: 14 }}>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 16, flexDirection: 'column' }}>
+            <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#1F5FA8' }}>22</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#16232E', marginTop: 2 }}>单元</Text>
+            <Text style={{ fontSize: 13, color: '#5A6B7A', marginTop: 4, lineHeight: 1.5 }}>含单元 0 环境准备<br />阶段 1 十二个 + 阶段 2 十个</Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 16, flexDirection: 'column' }}>
+            <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#0E9B78' }}>111</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#16232E', marginTop: 2 }}>节课</Text>
+            <Text style={{ fontSize: 13, color: '#5A6B7A', marginTop: 4, lineHeight: 1.5 }}>每节 90 分钟<br />复盘/目标/实操/作业/讲评</Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 16, flexDirection: 'column' }}>
+            <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#0E9B78' }}>29</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#16232E', marginTop: 2 }}>周</Text>
+            <Text style={{ fontSize: 13, color: '#5A6B7A', marginTop: 4, lineHeight: 1.5 }}>每周投入 6–10 小时<br />阶段 1 约 13 周 + 阶段 2 约 16 周</Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 16, flexDirection: 'column' }}>
+            <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#E08A15' }}>2</Text>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#16232E', marginTop: 2 }}>道关卡</Text>
+            <Text style={{ fontSize: 13, color: '#5A6B7A', marginTop: 4, lineHeight: 1.5 }}>不达标不前进<br />只补那一项，不整体重学</Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 292, width: '1152px', height: 250 }}>
+        <svg width='1152' height='250' viewBox='0 0 1152 250'>
+            <text fontFamily='Microsoft YaHei' x='0' y='22' fontSize='17' fontWeight='bold' fill='#16232E'>我现在的起点</text>
+
+            <rect x='0' y='40' width='1152' height='76' rx='10' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='22' y='72' fontSize='16' fontWeight='bold' fill='#1F5FA8'>零基础 / 写过几行就没继续 / 看教程能懂但自己动手就卡住</text>
+            <text fontFamily='Microsoft YaHei' x='22' y='98' fontSize='14' fill='#5A6B7A'>这三种情况都适用——本课程按「完全没写过代码」设计，不预设任何基础</text>
+
+            <text fontFamily='Microsoft YaHei' x='0' y='152' fontSize='17' fontWeight='bold' fill='#16232E'>我要达到的终点</text>
+
+            <rect x='0' y='170' width='560' height='72' rx='10' fill='#1F5FA8' />
+            <text fontFamily='Microsoft YaHei' x='22' y='200' fontSize='15' fontWeight='bold' fill='#FFFFFF'>阶段 1 结束（关卡 1）</text>
+            <text fontFamily='Microsoft YaHei' x='22' y='224' fontSize='13.5' fill='#CFE2F5'>能独立写 100 行以内的小程序，会测试、会用 Git</text>
+
+            <path d='M572 206 L 600 206' stroke='#E08A15' strokeWidth='3' fill='none' />
+            <path d='M592 200 L 600 206 L 592 212' stroke='#E08A15' strokeWidth='3' fill='none' />
+
+            <rect x='610' y='170' width='542' height='72' rx='10' fill='#0E9B78' />
+            <text fontFamily='Microsoft YaHei' x='632' y='200' fontSize='15' fontWeight='bold' fill='#FFFFFF'>阶段 2 结束（关卡 2）</text>
+            <text fontFamily='Microsoft YaHei' x='632' y='224' fontSize='13.5' fill='#D7F0E7'>三个项目上线、公网可访问、别人能接手</text>
+        </svg>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 556, width: '1152px', height: 92,
+        background: '#FDF3E2', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 6,
+    }}>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E08A15' }}>这套课表的特点</Text>
+        <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.7 }}>
+            每个单元有产出物与验收标准，每节课有复盘与讲评，每阶段末有硬关卡。
+            讲义、题库、课节页全部本地可读，进度保存在本机浏览器。
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 22, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>02 / 23</Text>
+    </Box>
+</Slide>

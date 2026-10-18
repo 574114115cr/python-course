@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 16 节 · 切片、元组与 PEP 8 排版</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="16">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 16/111 节 · 切片、元组与 PEP 8 排版</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/03.html#s6" title="本课节对应的课件">本课课件 u3·p6</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv3" href="#2-5-切片-一次取出一段">2.5 切片：一次取出一段</a>
+<a class="lv3" href="#2-6-元组-用括号表示-不可修改">2.6 元组：用括号表示&quot;不可修改&quot;</a>
+<a class="lv3" href="#2-7-pep-8-让代码能被人读">2.7 PEP 8：让代码能被人读</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-for-循环基础">示例 1：for 循环基础</a>
+<a class="lv3" href="#示例-2-range-的四种形式">示例 2：range 的四种形式</a>
+<a class="lv3" href="#示例-3-常见循环搭档">示例 3：常见循环搭档</a>
+<a class="lv3" href="#示例-4-列表推导式">示例 4：列表推导式</a>
+<a class="lv3" href="#示例-5-切片">示例 5：切片</a>
+<a class="lv3" href="#示例-6-元组">示例 6：元组</a>
+<a class="lv3" href="#示例-7-pep-8-排版示范">示例 7：PEP 8 排版示范</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 3</h4>
+      <a class="ppt-thumb" href="../ppt/u/03.html#s6">
+        <img loading="lazy" src="../ppt/u/03/slide-06.webp" alt="本课节课件">
+        <span class="cap"><b>单元 3 · p6</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../03.html"><span class="k">讲义</span>
+          <span class="v">单元 3 · 操作列表</span></a>
+        <a href="../ppt/u/03.html#s6"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u3"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u3"><span class="k">题库</span>
+          <span class="v">本单元 7 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 16 节 / 111</span>
+        <span class="kwk">W3</span>
+        <span class="ku">单元 3 · 操作列表</span>
+      </div>
+      <h1>切片、元组与 PEP 8 排版</h1>
+      <p class="goal">掌握切片三个参数与元组的不可变性，能按 PEP 8 排版</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 15 节 · range() 与列表推导式</h3><ul><li><code>range(n)</code> 给 0 到 n-1；<code>range(a, b)</code> <b>左闭右开</b>；<code>range(a, b, step)</code> 步长可为负（倒着走）。</li><li><code>range</code> <b>不是列表</b>，要看内容得 <code>list(range(5))</code>。</li><li>列表推导式：<code>[x*2 for x in nums if x &gt; 3]</code>，一行替代「建空表 + for + append」三步。</li><li>上节作业：进阶档做完几道？</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>用切片取出字符串后 5 个字符</li><li>故意给元组赋值看报错</li><li>把一段故意写乱的代码排版规范</li></ol>
+    </div>
+
+    <h3 id="2-5-切片-一次取出一段">2.5 切片：一次取出一段</h3>
+<p>切片语法 <code>list[start:stop:step]</code>，<strong>含 <code>start</code>，不含 <code>stop</code></strong>。</p>
+<p>生活化类比：切片就像切面包——你要的是"从第 3 片到第 7 片之间"，第 3 片要、第 7 片不要（它属于下一段）。这个"要左边不要右边"的规则叫<strong>左闭右开</strong>，因为它让 <code>len</code> 天然对得上：<code>len(a[b:c]) == c - b</code>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">]</span>
+<span class="n">letters</span><span class="p">[:]</span>      <span class="c1"># 全部（浅拷贝）</span>
+<span class="n">letters</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>     <span class="c1"># ['c', 'd', 'e', 'f']      从索引2 到末尾</span>
+<span class="n">letters</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>     <span class="c1"># ['a', 'b', 'c']           前三个</span>
+<span class="n">letters</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>    <span class="c1"># ['b', 'c', 'd']</span>
+<span class="n">letters</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>    <span class="c1"># ['a', 'c', 'e']           步长 2</span>
+<span class="n">letters</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># ['f', 'e', 'd', 'c', 'b', 'a']  反转</span>
+<span class="n">letters</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>    <span class="c1"># ['e', 'f']                最后两个</span>
+</code></pre>
+<p>切片可以用于<strong>列表、字符串、元组</strong>，这是三种序列类型的共同能力。</p>
+<p><strong>切片也是浅拷贝</strong>：<code>a[:]</code> 得到新列表，但里面的元素还是同一批对象（嵌套列表时要注意）。</p>
+<h3 id="2-6-元组-用括号表示-不可修改">2.6 元组：用括号表示"不可修改"</h3>
+<p>列表的方括号 <code>[]</code> 表示"可以改"，圆括号 <code>()</code> 表示"不能改"：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># point[0] = 9    # TypeError: 'tuple' object does not support item assignment</span>
+</code></pre>
+<p>生活化类比：列表像<strong>活页本</strong>，能撕能换；元组像<strong>一次性塑封的相片</strong>，封好就不能改了。</p>
+<p>元组的三点区别：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>列表 list</th>
+<th>元组 tuple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写法</td>
+<td><code>[1, 2, 3]</code></td>
+<td><code>(1, 2, 3)</code></td>
+</tr>
+<tr>
+<td>能否改元素</td>
+<td>能</td>
+<td><strong>不能</strong></td>
+</tr>
+<tr>
+<td>能否增删</td>
+<td>能</td>
+<td>不能（只有重新赋值整个变量）</td>
+</tr>
+<tr>
+<td>是否有 <code>append</code></td>
+<td>有</td>
+<td><strong>没有</strong></td>
+</tr>
+<tr>
+<td>长度</td>
+<td>变长</td>
+<td>固定</td>
+</tr>
+<tr>
+<td>用途</td>
+<td>一组会变化的数据</td>
+<td>一组固定的数据，如坐标、日期</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 元组"看似不能改"，但可以整体重新赋值</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># point[0] = 9   # 不行</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>    <span class="c1"># 可以：换了一个全新的元组</span>
+</code></pre>
+<p><strong>只有一个元素的元组必须写逗号</strong>——这是超级高频的坑：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="c1"># 这不是元组！这是整数 5，括号只是分组</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span>    <span class="c1"># 这才是长度为1 的元组</span>
+<span class="nb">type</span><span class="p">((</span><span class="mi">5</span><span class="p">))</span>   <span class="c1"># &lt;class 'int'&gt;</span>
+<span class="nb">type</span><span class="p">((</span><span class="mi">5</span><span class="p">,))</span>  <span class="c1"># &lt;class 'tuple'&gt;</span>
+</code></pre>
+<p><strong>为什么字典的键要用元组这类不可变类型</strong>：键必须是"不会变的"，否则你把键改了，就再也找不到对应的值了。列表可以改，所以列表不能当键；元组不能改，所以可以。</p>
+<h3 id="2-7-pep-8-让代码能被人读">2.7 PEP 8：让代码能被人读</h3>
+<p>PEP 8 是 Python 官方风格指南，与功能无关但直接影响你能不能维护自己的代码。核心三条：</p>
+<ol>
+<li><strong>一行不超过 79（现代放宽到 99）个字符</strong>，长了要换行。</li>
+<li><strong>运算符两侧加空格，逗号后加一个空格</strong>：</li>
+<li><strong>缩进统一用 4 个空格</strong>，永远不要混用 Tab。</li>
+</ol>
+<p>对比示例：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 推荐</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="c1"># 不推荐</span>
+<span class="n">total</span><span class="o">=</span><span class="n">price</span><span class="o">*</span><span class="n">quantity</span><span class="o">+</span><span class="mi">5</span>
+</code></pre>
+<p>还有两条新手常忘：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 括号内逗号后留一个空格</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"blue"</span><span class="p">]</span>
+<span class="c1"># 切片冒号两边都留空格（复杂表达式可省略）</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">sub</span> <span class="o">=</span> <span class="n">letters</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+</code></pre>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-for-循环基础">示例 1：for 循环基础</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># for_basics.py —— for 循环的标准结构</span>
+
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">,</span> <span class="s2">"雷克萨斯"</span><span class="p">]</span>
+
+<span class="c1"># 结构：for 临时变量 in 数据集合:  然后缩进的循环体</span>
+<span class="k">for</span> <span class="n">car</span> <span class="ow">in</span> <span class="n">cars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+
+<span class="c1"># 循环结束后，变量依然存在，保留最后一个值</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环结束后 car ="</span><span class="p">,</span> <span class="n">car</span><span class="p">)</span>      <span class="c1"># 雷克萨斯</span>
+
+<span class="c1"># 循环体内的多行都属于循环</span>
+<span class="k">for</span> <span class="n">car</span> <span class="ow">in</span> <span class="n">cars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"正在处理："</span><span class="p">,</span> <span class="n">car</span><span class="p">)</span>     <span class="c1"># 执行 3 次</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"处理完毕"</span><span class="p">)</span>             <span class="c1"># 也执行 3 次</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"全部处理完毕"</span><span class="p">)</span>             <span class="c1"># 只执行 1 次</span>
+
+<span class="c1"># 缩进错误的后果：下面这段会报 IndentationError</span>
+<span class="c1"># for car in cars:</span>
+<span class="c1"># print(car)</span>
+</code></pre>
+<h3 id="示例-2-range-的四种形式">示例 2：range 的四种形式</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># range_demo.py —— range() 生成数字序列</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(5)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>                <span class="c1"># [0, 1, 2, 3, 4]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(1, 6)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)))</span>          <span class="c1"># [1, 2, 3, 4, 5]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(2, 11, 2)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>  <span class="c1"># [2, 4, 6, 8, 10]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(10, 0, -1)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="c1"># [10, ..., 1, 0]</span>
+
+<span class="c1"># 关键：含起点不含终点</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># range(5) 等价于 range(0, 5)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两种写法相同："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>
+
+<span class="c1"># len() 可以直接算 range 的长度，不必真的生成列表</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(1, 100) 有几个数："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>      <span class="c1"># 99</span>
+
+<span class="c1"># 用 range 遍历列表下标</span>
+<span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"索引 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 的元素是 </span><span class="si">{</span><span class="n">letters</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 更推荐的写法：enumerate</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">letters</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"索引 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 的元素是 </span><span class="si">{</span><span class="n">letter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-3-常见循环搭档">示例 3：常见循环搭档</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># loop_helpers.py —— for 循环的三个高性价比搭档</span>
+
+<span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+
+<span class="c1"># 1）enumerate()：同时拿到下标和元素</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">letters</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 位是 </span><span class="si">{</span><span class="n">letter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># start 参数可以指定下标起点</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 个是 </span><span class="si">{</span><span class="n">letter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 2）zip()：同时遍历多个列表（长度不等时以最短的为准）</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">]</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span><span class="c1">#故意多一个</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">scores</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> 得了 </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2"> 分"</span><span class="p">)</span>
+<span class="c1"># 小明 88 / 小红 95 / 小刚 72 —— 第 4 个分数因为没有对应名字被忽略</span>
+
+<span class="c1"># 3）在循环里做条件筛选</span>
+<span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">letters</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">letter</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"找到元音："</span><span class="p">,</span> <span class="n">letter</span><span class="p">)</span>
+
+<span class="c1"># 累加器模式：循环最常见的用途</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">72</span><span class="p">]:</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">score</span><span class="c1"># 等价于 total = total + score</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"总分："</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>         <span class="c1"># 255</span>
+</code></pre>
+<h3 id="示例-4-列表推导式">示例 4：列表推导式</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># comprehension.py —— 列表推导式：传统写法 vs 一行写法</span>
+
+<span class="c1"># 案例1：计算平方</span>
+<span class="c1"># 传统写法</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">squares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"传统写法："</span><span class="p">,</span> <span class="n">squares</span><span class="p">)</span>
+
+<span class="c1"># 推导式写法（完全等价）</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">number</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"推导式："</span><span class="p">,</span> <span class="n">squares</span><span class="p">)</span>          <span class="c1"># [1, 4, 9, 16, 25]</span>
+
+<span class="c1"># 案例2：筛选偶数</span>
+<span class="c1"># 传统写法</span>
+<span class="n">evens</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">evens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"传统筛选："</span><span class="p">,</span> <span class="n">evens</span><span class="p">)</span>
+
+<span class="c1"># 推导式 + if 条件</span>
+<span class="n">evens</span> <span class="o">=</span> <span class="p">[</span><span class="n">number</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span> <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"推导式筛选："</span><span class="p">,</span> <span class="n">evens</span><span class="p">)</span>        <span class="c1"># [2, 4, 6, 8, 10]</span>
+
+<span class="c1"># 案例3：字符串统一大写</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"python"</span><span class="p">,</span> <span class="s2">"is"</span><span class="p">,</span> <span class="s2">"fun"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"大写："</span><span class="p">,</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])</span>
+
+<span class="c1"># 案例4：三元表达式放进推导式</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"标记奇偶："</span><span class="p">,</span> <span class="p">[(</span><span class="s2">"偶"</span> <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"奇"</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">])</span>
+
+<span class="c1"># 什么时候不要用推导式：逻辑复杂时老老实实写循环</span>
+<span class="c1"># 下面这种嵌套推导式虽然能跑，但没人看得懂：</span>
+<span class="c1"># print([x * y for x in range(3) for y in range(3) if x != y])</span>
+<span class="c1"># 可读性优先于行数。</span>
+</code></pre>
+<h3 id="示例-5-切片">示例 5：切片</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># slicing.py —— 切片 list[start:stop:step]</span>
+
+<span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表："</span><span class="p">,</span> <span class="n">letters</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[:]      "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[:])</span>       <span class="c1"># 全部</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[2:]     "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>      <span class="c1"># ['c','d','e','f']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[:3]     "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>      <span class="c1"># ['a','b','c']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[1:4]    "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>     <span class="c1"># ['b','c','d']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[::2]    "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>     <span class="c1"># ['a','c','e']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[::-1]   "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>    <span class="c1"># 反转</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[-2:]    "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span>     <span class="c1"># ['e','f']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[-4:-1]  "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>   <span class="c1"># ['c','d','e']</span>
+
+<span class="c1"># 左闭右开：切片的秘密</span>
+<span class="c1"># len(a[b:c]) == c - b，用这个公式快速预测结果</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[2:5] 的长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]))</span>    <span class="c1"># 3 = 5 - 2</span>
+
+<span class="c1"># 切片对字符串同样有效</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://example.com/page"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"协议："</span><span class="p">,</span> <span class="n">url</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>                <span class="c1"># https://</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"主机名："</span><span class="p">,</span> <span class="n">url</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">19</span><span class="p">])</span>             <span class="c1"># example.com</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"去掉末尾斜杠："</span><span class="p">,</span> <span class="n">url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">))</span>
+
+<span class="c1"># 切片是浅拷贝：外层是新的，内层元素还是同一批</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span class="n">copy</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[:]</span>
+<span class="n">copy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原matrix："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>          <span class="c1"># [[1, 2, 99], [3, 4]]  内层被影响！</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"copy："</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span>
+
+<span class="c1"># 深拷贝要显式 import copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+<span class="n">deep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">77</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"深拷贝后原 matrix："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>  <span class="c1"># [[1, 2, 99], [3, 4]]  完全没变</span>
+</code></pre>
+<h3 id="示例-6-元组">示例 6：元组</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># tuples.py —— 元组：不可修改的序列</span>
+
+<span class="c1"># 创建元组：用圆括号，或者直接逗号</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"blue"</span>          <span class="c1"># 不加括号也合法，但建议加括号</span>
+<span class="n">empty_tuple</span> <span class="o">=</span> <span class="p">()</span>
+<span class="n">single</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span>                             <span class="c1"># 单元素元组必须带逗号！</span>
+<span class="n">not_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>                           <span class="c1"># 这其实是整数 5</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"point："</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="s2">"类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"not_tuple："</span><span class="p">,</span> <span class="n">not_tuple</span><span class="p">,</span> <span class="s2">"类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">not_tuple</span><span class="p">))</span>   <span class="c1"># int！括号只是分组</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"single："</span><span class="p">,</span> <span class="n">single</span><span class="p">,</span> <span class="s2">"类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">single</span><span class="p">))</span>            <span class="c1"># tuple，正确</span>
+
+<span class="c1"># 读取和切片都可以</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"point[0]："</span><span class="p">,</span> <span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>              <span class="c1"># 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"point[-1]："</span><span class="p">,</span> <span class="n">point</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>             <span class="c1"># 5</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"切片："</span><span class="p">,</span> <span class="n">point</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>                  <span class="c1"># (3,)</span>
+
+<span class="c1"># 修改会报 TypeError</span>
+<span class="c1"># point[0] = 9      # TypeError: 'tuple' object does not support item assignment</span>
+
+<span class="c1"># 但可以"整体替换"</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"整体替换后："</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>                <span class="c1"># (9, 5)</span>
+
+<span class="c1"># 元组没有 append/remove 方法</span>
+<span class="c1"># point.append(1)   # AttributeError: 'tuple' object has no attribute 'append'</span>
+
+<span class="c1"># 常用场景1：坐标</span>
+<span class="n">location</span> <span class="o">=</span> <span class="p">(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"经度："</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"纬度："</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># 常用场景2：日期（年、月、日天然固定）</span>
+<span class="n">date</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="n">date</span>                    <span class="c1"># 解包，一次取出三个值</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">年</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">月</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">日"</span><span class="p">)</span>
+
+<span class="c1"># 常用场景3：字典的键必须是不可变类型，所以常用元组</span>
+<span class="n">locations</span> <span class="o">=</span> <span class="p">{(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">):</span> <span class="s2">"北京"</span><span class="p">,</span> <span class="p">(</span><span class="mf">121.47</span><span class="p">,</span> <span class="mf">31.23</span><span class="p">):</span> <span class="s2">"上海"</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"北京坐标："</span><span class="p">,</span> <span class="n">locations</span><span class="p">[(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)])</span>    <span class="c1"># 北京</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"键的类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">((</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)))</span>         <span class="c1"># tuple</span>
+
+<span class="c1"># 元组和列表可以互相转换</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"元组转列表："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>               <span class="c1"># [1, 2, 3]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"列表转元组："</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>        <span class="c1"># (1, 2, 3)</span>
+</code></pre>
+<h3 id="示例-7-pep-8-排版示范">示例 7：PEP 8 排版示范</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="c1"># ===== 不推荐：省空格，写起来快，读起来痛苦 =====</span>
+<span class="n">total</span><span class="o">=</span><span class="n">price</span><span class="o">*</span><span class="n">quantity</span><span class="o">+</span><span class="n">tax</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ===== 推荐：空格、换行、命名都照顾读者 =====</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span> <span class="o">+</span> <span class="n">tax</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""计算两个数的和。"""</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="c1"># 超过 79 字符时这样折行</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">first_number</span>
+    <span class="o">+</span> <span class="n">second_number</span>
+    <span class="o">+</span> <span class="n">third_number</span>
+    <span class="o">+</span> <span class="n">fourth_number</span>
+<span class="p">)</span>
+
+<span class="c1"># 函数调用的折行：每行一个参数</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">some_function</span><span class="p">(</span>
+    <span class="n">argument_one</span><span class="p">,</span>
+    <span class="n">argument_two</span><span class="p">,</span>
+    <span class="n">argument_three</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># 注释也要符合规范：井号后一个空格</span>
+<span class="c1"># 这是标准注释</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 行尾注释前两个空格</span>
+</code></pre>
+<hr>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>完成题库 L1-5、L1-6</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>切片三个参数，负的和正的混用试过吗？</li><li><code>a[::-1]</code> 为什么能反转？</li><li><code>(5)</code> 和 <code>(5,)</code> 的类型分别是什么？现在还会搞混吗？</li><li>故意写乱的那段代码，排完版行长都 ≤ 79 了吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>切片和 range 一样左闭右开；单元素元组的逗号不能省。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../03.html">查看单元 3 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="15.html"><small>← 上一节</small><b>第 15 节 · range() 与列表推导式</b></a><a class="pn nx" id="nextLink" href="17.html"><small>下一节 →</small><b>第 17 节 · 动手实战与答案讲评</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

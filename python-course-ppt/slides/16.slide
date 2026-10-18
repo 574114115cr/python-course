@@ -1,0 +1,89 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>通过关卡之后 · 阶段 2 长什么样</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            阶段 1 让你能写，阶段 2 让你做完能交付。下面这条路径是教材下篇第 12–20 章
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 152, width: '1152px', height: 250 }}>
+        <svg width='1152' height='250' viewBox='0 0 1152 250'>
+            <rect x='20' y='70' width='200' height='120' rx='10' fill='#1F5FA8' />
+            <text x='120' y='118' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>外星人入侵</text>
+            <text x='120' y='146' fontSize='14' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>第 12–14 章</text>
+            <text x='120' y='170' fontSize='13' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>pygame · 6–8 周</text>
+
+            <path d='M228 130 L 258 130' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+            <path d='M250 124 L 258 130 L 250 136' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+
+            <rect x='266' y='70' width='200' height='120' rx='10' fill='#0E9B78' />
+            <text x='366' y='118' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>数据可视化</text>
+            <text x='366' y='146' fontSize='14' fill='#D7F0E7' textAnchor='middle' fontFamily='Inter'>第 15–17 章</text>
+            <text x='366' y='170' fontSize='13' fill='#D7F0E7' textAnchor='middle' fontFamily='Inter'>matplotlib / API · 4–5 周</text>
+
+            <path d='M474 130 L 504 130' stroke='#0E9B78' strokeWidth='3' fill='none' />
+            <path d='M496 124 L 504 130 L 496 136' stroke='#0E9B78' strokeWidth='3' fill='none' />
+
+            <rect x='512' y='70' width='200' height='120' rx='10' fill='#2F7BC8' />
+            <text x='612' y='118' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>学习笔记 Web</text>
+            <text x='612' y='146' fontSize='14' fill='#EAF3FC' textAnchor='middle' fontFamily='Inter'>第 18–20 章</text>
+            <text x='612' y='170' fontSize='13' fill='#EAF3FC' textAnchor='middle' fontFamily='Inter'>Django · 6–8 周</text>
+
+            <path d='M720 130 L 750 130' stroke='#E08A15' strokeWidth='3' fill='none' />
+            <path d='M742 124 L 750 130 L 742 136' stroke='#E08A15' strokeWidth='3' fill='none' />
+
+            <rect x='758' y='50' width='180' height='160' rx='10' fill='#E08A15' />
+            <text x='848' y='108' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>工程能力</text>
+            <text x='848' y='136' fontSize='14' fill='#FDF0DC' textAnchor='middle' fontFamily='Inter'>教材外必补</text>
+            <text x='848' y='164' fontSize='13' fill='#FDF0DC' textAnchor='middle' fontFamily='Inter'>Git 分支合并</text>
+            <text x='848' y='184' fontSize='13' fill='#FDF0DC' textAnchor='middle' fontFamily='Inter'>venv 依赖管理</text>
+
+            <path d='M946 130 L 976 130' stroke='#5A6B7A' strokeWidth='3' fill='none' />
+            <path d='M968 124 L 976 130 L 968 136' stroke='#5A6B7A' strokeWidth='3' fill='none' />
+
+            <rect x='984' y='70' width='150' height='120' rx='10' fill='#16232E' />
+            <text x='1059' y='118' fontSize='20' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>上线交付</text>
+            <text x='1059' y='146' fontSize='14' fill='#A8C4DE' textAnchor='middle' fontFamily='Inter'>公开可访问</text>
+            <text x='1059' y='170' fontSize='13' fill='#A8C4DE' textAnchor='middle' fontFamily='Inter'>有 README 和测试</text>
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 408, width: '1152px', height: 224, flexDirection: 'row', gap: 16 }}>
+        <Box style={{
+            flex: 1.2, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 20, flexDirection: 'column', gap: 10,
+        }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1F5FA8' }}>阶段 2 与阶段 1 的差别</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.7 }}>
+                阶段 1 的产出是「一个能跑的程序」，阶段 2 是「一个有上千行、能被别人接手、能长期改的项目」。
+                最大的变化是：代码量超过 300 行后，如果不拆模块，你自己也会找不到东西。
+                所以工程能力那一栏虽然标着「教材外」，但它是阶段 2 能不能做完的关键。
+            </Text>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#EEF5FB', borderRadius: 12, padding: 18,
+            flexDirection: 'column', gap: 8,
+        }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1F5FA8' }}>教材没有的内容</Text>
+            <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.7 }}>
+                虚拟环境与依赖管理<br />
+                Git 分支与合并<br />
+                调试与读 traceback<br />
+                代码组织与重构<br />
+                查文档的方法
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–1 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>16 / 17</Text>
+    </Box>
+</Slide>

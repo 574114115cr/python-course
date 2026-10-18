@@ -1,0 +1,32 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '12px', height: '720px', background: '#0E9B78' }} />
+    <Box style={{ position: 'absolute', left: 72, top: 44, width: '1144px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#16232E' }}>单元 21 · 小结与验收</Text>
+        <Text style={{ fontSize: 16, color: '#5A6B7A', marginTop: 6 }}>阶段 2 综合 + 关卡 2 验收</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 72, top: 148, width: '552px', height: 400, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 18, flexDirection: 'column' }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1F5FA8' }}>本单元课节回顾</Text>
+        <Box style={{ marginTop: 10, position: 'relative', height: 330 }}>
+            <svg width='516' height='330' viewBox='0 0 516 330'><text x='0' y='34' fontSize='14.5' fill='#3A4A58' fontFamily='Microsoft YaHei'>· 第 108 节 · 工程流程回顾与技术地图</text><text x='0' y='64' fontSize='14.5' fill='#3A4A58' fontFamily='Microsoft YaHei'>· 第 109 节 · 能力跃迁与工程问题速查</text><text x='0' y='94' fontSize='14.5' fill='#3A4A58' fontFamily='Microsoft YaHei'>· 第 110 节 · ★ 关卡 2 五项逐条自测</text><text x='0' y='124' fontSize='14.5' fill='#3A4A58' fontFamily='Microsoft YaHei'>· 第 111 节 · 综合项目与阶段 2 收尾</text></svg>
+        </Box>
+    </Box>
+    <Box style={{ position: 'absolute', left: 656, top: 148, width: '560px', height: 400, background: '#FDF3E2', borderRadius: 12, padding: 20, flexDirection: 'column' }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#E08A15' }}>过关标准</Text>
+        <Text style={{ fontSize: 15, color: '#3A4A58', marginTop: 12, lineHeight: 1.9 }}>
+            1. 本单元每一节的课后作业都做完并自己验收过
+
+            2. 不看讲义能独立重写一遍本单元的示例代码
+
+            3. 讲义最后「本单元验收自测」全部答对
+
+            4. 产出物已经写进笔记或提交到 Git
+        </Text>
+        <Text style={{ fontSize: 14, color: '#8A6A2A', marginTop: 16, lineHeight: 1.7 }}>
+            没过关的项回到对应那一节重做，不要整体重学。
+        </Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 72, bottom: 26, width: '1144px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 13, color: '#8A9AAA' }}>Python 讲授课件 · 逐节版</Text>
+        <Text style={{ fontSize: 13, color: '#8A9AAA' }}>单元 21 · 小结</Text>
+    </Box>
+</Slide>

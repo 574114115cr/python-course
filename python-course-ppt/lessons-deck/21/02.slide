@@ -1,0 +1,15 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 64, top: 36, width: '1152px', flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <Box style={{ background: '#1F5FA8', borderRadius: 5, padding: '3px 11px' }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>第 108 / 111 节</Text>
+        </Box>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#16232E' }}>工程流程回顾与技术地图</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px' }}>
+        <svg width='1280' height='720' viewBox='0 0 1280 720'>
+            <rect x='64' y='104' width='1152' height='112' rx='12' fill='#EEF5FB' /><text x='84' y='134' fontSize='15' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>学习目标</text><text x='84' y='164' fontSize='16' fill='#243444' textAnchor='start' fontFamily='Microsoft YaHei'>掌握「读需求 → 拆解 → 查文档 → 编码 → 提交 → README → 重构」七步流程</text><rect x='64' y='240' width='562' height='248' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><text x='84' y='274' fontSize='15' fontWeight='bold' fill='#0E9B78' textAnchor='start' fontFamily='Microsoft YaHei'>课堂实操（40 分钟 · 不看答案）</text><text x='84' y='308.0' fontSize='14.5' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 用七步流程复盘自己这三个项目各走了哪几步</text><text x='84' y='338.75' fontSize='14.5' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 给一个需求现场拆成步骤清单</text><rect x='654' y='240' width='562' height='248' rx='12' fill='#FDF3E2' stroke='none' /><text x='674' y='274' fontSize='15' fontWeight='bold' fill='#E08A15' textAnchor='start' fontFamily='Microsoft YaHei'>课后作业</text><text x='674' y='308.0' fontSize='14.5' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 产出：三项目的工程流程自查表</text><rect x='64' y='508' width='1152' height='92' rx='12' fill='#16232E' /><text x='84' y='540' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='start' fontFamily='Microsoft YaHei'>这节课的节奏</text><text x='84' y='570' fontSize='14' fill='#A8C4DE' textAnchor='start' fontFamily='Microsoft YaHei'>先读讲义 20 分钟 → 自己敲 40 分钟（报错先自己读） → 对着讲评自查 20 分钟 → 写作业 10 分钟</text>
+            <text x='64' y='684' fontSize='13' fill='#8A9AAA' fontFamily='Microsoft YaHei'>Python 讲授课件 · 逐节版</text>
+            <text x='1216' y='684' fontSize='13' fill='#8A9AAA' textAnchor='end' fontFamily='Microsoft YaHei'>单元 21 · 第 108 节</text>
+        </svg>
+    </Box>
+</Slide>

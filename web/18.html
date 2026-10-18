@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 18 · Django入门</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="18">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 18 · Django入门</h1>
+  <a class="ppt" href="ppt/u/18.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="92" data-to="97"><div class="uprog-h"><b>已学 0 / 6 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u18"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/18.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s16"><span class="k">大纲</span><span class="v">课程大纲课件 p16</span></a><a href="bank.html#u18"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-虚拟环境-给每个项目一间独立的-工具间">2.1 虚拟环境：给每个项目一间独立的「工具间」★</a>
+<a class="lv3" href="#2-2-django-的三个层次-项目-应用程序-mvt">2.2 Django 的三个层次：项目、应用程序、MVT ★</a>
+<a class="lv3" href="#2-3-模型-迁移-数据库-改数据的-三步曲">2.3 模型 → 迁移 → 数据库：改数据的「三步曲」★</a>
+<a class="lv3" href="#2-4-一对多-topic-和-entry-的外键">2.4 一对多：Topic 和 Entry 的外键 ★</a>
+<a class="lv3" href="#2-5-一次请求的旅程-url-视图-模板">2.5 一次请求的旅程：URL → 视图 → 模板 ★</a>
+<a class="lv3" href="#2-6-模板语法-for-与-url">2.6 模板语法：{{ }}、{% for %} 与 {% url %}</a>
+<a class="lv3" href="#2-7-模板继承与-404-别每个页面重复写导航栏">2.7 模板继承与 404：别每个页面重复写导航栏 ★</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-用纯-python-看懂外键和级联删除">示例 1：用纯 Python 看懂外键和级联删除</a>
+<a class="lv3" href="#示例-2-用纯-python-模拟-url-视图-模板-请求链路">示例 2：用纯 Python 模拟「URL → 视图 → 模板」请求链路</a>
+<a class="lv3" href="#示例-3-用纯-python-模拟模板继承">示例 3：用纯 Python 模拟模板继承</a>
+<a class="lv3" href="#示例-4-learning_logs-models-py-项目文件-完整版">示例 4：learning_logs/models.py（项目文件，完整版）</a>
+<a class="lv3" href="#示例-5-learning_logs-admin-py-与-django-she">示例 5：learning_logs/admin.py 与 Django shell 查数据</a>
+<a class="lv3" href="#示例-6-两个-urls-py-项目文件-完整版">示例 6：两个 urls.py（项目文件，完整版）</a>
+<a class="lv3" href="#示例-7-learning_logs-views-py-项目文件-完整版">示例 7：learning_logs/views.py（项目文件，完整版）</a>
+<a class="lv3" href="#示例-8-四份模板-项目文件-完整版">示例 8：四份模板（项目文件，完整版）</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-18-1">参考答案 18-1</a>
+<a class="lv3" href="#参考答案-18-2">参考答案 18-2</a>
+<a class="lv3" href="#参考答案-18-3">参考答案 18-3</a>
+<a class="lv3" href="#参考答案-18-4">参考答案 18-4</a>
+<a class="lv3" href="#参考答案-18-5">参考答案 18-5</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-忘了激活虚拟环境">错误 1：★ 忘了激活虚拟环境</a>
+<a class="lv3" href="#错误-2-搞混-learning_log-ll_project-learning">错误 2：★ 搞混 learning_log/、ll_project/、learning_logs/</a>
+<a class="lv3" href="#错误-3-改了-models-py-不迁移">错误 3：改了 models.py 不迁移</a>
+<a class="lv3" href="#错误-4-新-app-忘了在-installed_apps-登记">错误 4：新 app 忘了在 INSTALLED_APPS 登记</a>
+<a class="lv3" href="#错误-5-startproject-末尾忘了写句点">错误 5：startproject 末尾忘了写句点</a>
+<a class="lv3" href="#错误-6-模板里-url-写错">错误 6：模板里 {% url %} 写错</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-18-django-入门">单元 18：Django 入门</h1>
+<blockquote>
+<p>对应教材第 18 章「Django 入门」
+阶段 2 · 项目 3：学习笔记（Learning Log）
+本单元目标：<strong>从零搭起一个能跑的 Django 项目——建虚拟环境、建项目、写模型、配好管理网站，并用「URL → 视图 → 模板」链路渲染出第一个网页。</strong></p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>独立完成「建虚拟环境 → 激活 → 安装 Django → startproject → startapp → migrate → runserver」全流程，并说出<strong>虚拟环境到底解决什么问题</strong>，以及 Windows / macOS / Linux 三条激活命令。</li>
+<li>画出 <code>learning_log/</code>、<code>ll_project/</code>、<code>learning_logs/</code> 三者的目录关系，解释**项目（project）<strong>与</strong>应用程序（app）**的分工，以及模型、视图、模板（MVT）各自负责什么。</li>
+<li>编写模型并走完「改 <code>models.py</code> → <code>makemigrations</code> → <code>migrate</code>」三步曲，解释「迁移文件是数据库的施工图纸」，并用管理网站和 Django shell 查看、添加数据。</li>
+<li>完整走通一次请求的旅程：浏览器输入 URL → <code>urls.py</code> 路由 → <code>views.py</code> 处理 → <code>render()</code> 渲染模板 → 返回响应，并能说清每一步改了哪个文件、会影响什么。</li>
+<li>用模板继承把公共部分收进 <code>base.html</code>，并用 <code>{{ }}</code>、<code>{% for %}</code>、<code>{% url %}</code> 写出显示数据的页面。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-虚拟环境-给每个项目一间独立的-工具间">2.1 虚拟环境：给每个项目一间独立的「工具间」★</h3>
+<p>这是整个阶段 2 的第一个大坑，先说清楚：<strong>为什么 Django 之前必须先建虚拟环境</strong>。</p>
+<p>生活化类比：不同项目需要的工具不一样——项目 A 要 Django 5.0，项目 B 可能还赖在 Django 4.2 上不肯升级。如果所有包都塞进系统里同一个 Python，就像把木工的电锯和电工的万用表扔进同一间屋子：互相打架，谁也别想干活。<strong>虚拟环境就是给每个项目单独隔出一间工具间</strong>，工具只在本房间有效，出了门就看不见。</p>
+<table>
+<thead>
+<tr>
+<th>系统</th>
+<th>创建（只需一次）</th>
+<th>激活（每开一个新终端都要做）</th>
+<th>退出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows（命令行）</td>
+<td><code>python -m venv ll_env</code></td>
+<td><code>ll_env\Scripts\activate</code></td>
+<td><code>deactivate</code></td>
+</tr>
+<tr>
+<td>Windows（PowerShell）</td>
+<td>同上</td>
+<td><code>ll_env\Scripts\Activate</code>（A 大写）</td>
+<td><code>deactivate</code></td>
+</tr>
+<tr>
+<td>macOS / Linux</td>
+<td><code>python -m venv ll_env</code></td>
+<td><code>source ll_env/bin/activate</code></td>
+<td><code>deactivate</code></td>
+</tr>
+</tbody>
+</table>
+<p>激活成功的标志：<strong>命令行提示符前面出现了 <code>(ll_env)</code></strong>。没出现，就说明工具间的门根本没开，后面所有命令都会出怪问题。</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 18.1.2 ~ 18.1.4：建目录、建虚拟环境、装 Django（教材原命令）</span>
+mkdir<span class="w"> </span>learning_log
+<span class="nb">cd</span><span class="w"> </span>learning_log
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>ll_env
+<span class="nb">source</span><span class="w"> </span>ll_env/bin/activate<span class="w">        </span><span class="c1"># Windows 用 ll_env\Scripts\activate</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>django
+</code></pre>
+<p>三个必须记住的细节：</p>
+<ul>
+<li><strong><code>ll_env</code> 是两个小写的 L 加 <code>env</code></strong>，不是数字 1。教材特意提醒过这一点。</li>
+<li><strong><code>pip install</code> 前一定看一眼有没有 <code>(ll_env)</code></strong>。没有它，Django 会被装到全局 Python 里，当下也能跑，但换台机器、换个项目就是一堆兼容性噩梦。</li>
+<li>关闭终端 = 虚拟环境自动失效，下次开工要重新激活。这是新手最常犯的错，没有之一：昨天明明跑得好好的，今天一开终端全报 <code>ModuleNotFoundError: No module named 'django'</code>——99% 是忘了激活。</li>
+</ul>
+<p>本讲义基于 Django 5.x（执行 <code>pip install django</code> 装到的最新稳定版）。教材写作时用的是 4.1，但本单元涉及的所有 API 在两个版本中完全一致。</p>
+<h3 id="2-2-django-的三个层次-项目-应用程序-mvt">2.2 Django 的三个层次：项目、应用程序、MVT ★</h3>
+<p>新手在 Django 里迷路，90% 是因为分不清<strong>项目</strong>和<strong>应用程序</strong>。先看目录，再看类比：</p>
+<pre><code class="language-text"><span class="cl">示例</span>learning_log/                  ← 你亲手建的工作目录（所有命令都在这里执行）
+├── ll_env/                    ← 虚拟环境「工具间」，Django 住在里面
+├── ll_project/                ← 项目（project）：配置的家，全项目只有一份
+│   ├── settings.py            ←   项目总控室：装了什么 app、数据库在哪
+│   ├── urls.py                ←   项目总前台：把请求分发给各个 app
+│   └── wsgi.py                ←   部署时用的服务器接口（本单元用不到）
+├── learning_logs/             ← 应用程序（app）：真正干活的地方
+│   ├── models.py              ←   数据长什么样（M：模型）
+│   ├── views.py               ←   拿到数据怎么处理（V：视图）
+│   ├── admin.py               ←   管理网站的登记处
+│   ├── migrations/            ←   数据库的施工图纸存档
+│   └── templates/             ←   页面长什么样（T），18.3 节才创建
+│       └── learning_logs/     ←     再套一层 app 名，防止模板名撞车
+├── db.sqlite3                 ← 数据库本体：一个文件就是一整个数据库
+└── manage.py                  ← Django 的遥控器：所有管理命令都靠它发出
+</code></pre>
+<p>模板为什么要套两层（<code>learning_logs/templates/learning_logs/</code>）？教材的解释是：这好像有点多余，但建立了 Django 能够明确解读的结构——项目变大、app 变多之后，不同 app 里有同名模板（比如都叫 <code>index.html</code>）也不会搞混。视图里写 <code>render(request, "learning_logs/index.html")</code> 这个路径时，前面的 <code>learning_logs/</code> 就是在指这层目录。</p>
+<ul>
+<li><strong>项目（project）= 餐厅的营业执照和规章制度</strong>。全项目一份，规定「本店用什么灶、账记在哪」。</li>
+<li><strong>应用程序（app）= 厨房、收银台、库房</strong>。可以有很多个，各干各的活；它们协同工作，让项目成为一个整体。本项目先只有一个 <code>learning_logs</code>，第 19 章会加第二个 <code>accounts</code>。</li>
+</ul>
+<p>Django 信奉 <strong>MVT 三件套</strong>，和你在单元 8 学过的「类」无缝衔接：</p>
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>名字</th>
+<th>文件</th>
+<th>职责</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M</td>
+<td>Model 模型</td>
+<td><code>models.py</code></td>
+<td>数据长什么样、怎么存</td>
+<td>仓库的库存账</td>
+</tr>
+<tr>
+<td>V</td>
+<td>View 视图</td>
+<td><code>views.py</code></td>
+<td>拿到数据怎么加工</td>
+<td>厨师</td>
+</tr>
+<tr>
+<td>T</td>
+<td>Template 模板</td>
+<td><code>templates/</code> 下的 <code>.html</code></td>
+<td>数据以什么长相呈现</td>
+<td>摆盘</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>settings.py</code> 里的 <code>INSTALLED_APPS</code></strong>：每新建一个 app，都要来这里「注册学籍」——不登记，Django 就不知道它的存在：<code>migrate</code> 不会给它的模型建表，管理网站也看不到它。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ll_project/settings.py（片段）——把 learning_logs 加进 INSTALLED_APPS</span>
+<span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># 我的应用程序</span>
+    <span class="s1">'learning_logs'</span><span class="p">,</span>
+
+    <span class="c1"># Django 默认添加的应用程序</span>
+    <span class="s1">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s1">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s1">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s1">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s1">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s1">'django.contrib.staticfiles'</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre>
+<p>为什么要分组、还要把自己的 app 放在默认应用前面？教材的说法是：项目变大、app 变多之后，分组让你一眼看清谁是谁；自己写的 app 放前面，才能覆盖默认 app 的行为。</p>
+<h3 id="2-3-模型-迁移-数据库-改数据的-三步曲">2.3 模型 → 迁移 → 数据库：改数据的「三步曲」★</h3>
+<p>模型就是单元 8 学过的类，只不过它继承自 Django 的 <code>models.Model</code>。改完模型，数据库不会自动跟着变——必须走三步曲：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>命令</th>
+<th>在干什么</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 改模型</td>
+<td>编辑 <code>models.py</code></td>
+<td>告诉 Django 你想要什么数据结构</td>
+<td>建筑师改图纸</td>
+</tr>
+<tr>
+<td>② 生成迁移</td>
+<td><code>python manage.py makemigrations learning_logs</code></td>
+<td>把改动翻译成施工图纸，存进 <code>migrations/0001_initial.py</code></td>
+<td>把图纸晒成施工队能看懂的版本</td>
+</tr>
+<tr>
+<td>③ 应用迁移</td>
+<td><code>python manage.py migrate</code></td>
+<td>照图纸真正修改数据库</td>
+<td>施工队照图施工</td>
+</tr>
+</tbody>
+</table>
+<p><strong>迁移文件就是数据库的施工图纸</strong>——它记录「上次数据库长这样，这次要加一张表 / 加一列」。有了它，数据库的任何改动都有据可查、可以回放，换台电脑也能从零施工出一模一样的数据库。</p>
+<p>最常见的翻车：只做了 ①②漏了 ③，或者 ① 做完就跑去刷新网页，然后看到 <code>OperationalError: no such table</code>——图纸画了没人施工，数据库还是空地一块。</p>
+<p><strong>管理网站 <code>/admin/</code></strong> 是 Django 白送的后台：先建一个超级用户（相当于总经理，手握所有房间的钥匙）。</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>python<span class="w"> </span>manage.py<span class="w"> </span>createsuperuser<span class="w">   </span><span class="c1"># 按提示输入用户名、邮箱（可空）、密码两次</span>
+python<span class="w"> </span>manage.py<span class="w"> </span>runserver<span class="w">         </span><span class="c1"># 然后浏览器访问 http://127.0.0.1:8000/admin/</span>
+</code></pre>
+<p><strong>Django shell</strong>（<code>python manage.py shell</code>）是调试神器：它启动一个带项目环境的 Python 解释器，让你<strong>不进网页直接查数据库</strong>。类比：不用推门进房，直接趴窗户上看里面。写查询代码时，先在 shell 里试通，能跑对再抄进 <code>views.py</code>——在简单的 shell 里排错，比在生成网页的一堆文件里排错容易得多。退出按 <code>Ctrl+D</code>（Windows 先按 <code>Ctrl+Z</code> 再回车）。</p>
+<h3 id="2-4-一对多-topic-和-entry-的外键">2.4 一对多：Topic 和 Entry 的外键 ★</h3>
+<p>学习笔记的数据长这样：一个<strong>主题</strong>（比如「Python」）下面挂着很多<strong>条目</strong>（今天学的一点、明天学的一点）。这叫<strong>多对一</strong>关系——多个条目关联到同一个主题。Django 用<strong>外键</strong>表达它，在 <code>Entry</code> 模型里写一行 <code>topic = models.ForeignKey(Topic, on_delete=models.CASCADE)</code>（示例 4 有完整代码）。</p>
+<p>翻译成人话：每条 Entry 身上都有一列，记住「我属于哪个 Topic」。</p>
+<p><code>on_delete=models.CASCADE</code> 回答的是一个尖锐问题：<strong>主题被删了，挂在它下面的条目怎么办？</strong> <code>CASCADE</code>（级联删除）的答案是——一起删。类比：删掉一个文件夹，里面的文件跟着消失；如果没有这条规则，数据库里会留下一堆「找不到家」的孤儿条目，查询时全是麻烦。</p>
+<p>这个参数<strong>必须显式写</strong>。Django 2.0 起它就是必填的——框架逼着你在删数据之前想清楚后果，这本身就是一种安全设计。</p>
+<h3 id="2-5-一次请求的旅程-url-视图-模板">2.5 一次请求的旅程：URL → 视图 → 模板 ★</h3>
+<p>这是本单元最难的部分，也是 Django 的命脉。用户每敲一次网址，都发生下面这一串事：</p>
+<pre><code class="language-text"><span class="cl">示例</span>浏览器输入 http://127.0.0.1:8000/topics/
+  │
+  │ ① 请求到达 Django 服务器
+  ▼
+ll_project/urls.py                项目总前台
+  │ ② 逐个比对 urlpatterns：'' 开头的都归 learning_logs 管
+  │    path('', include('learning_logs.urls')) —— 转手
+  ▼
+learning_logs/urls.py             应用分前台
+  │ ③ 比对 urlpatterns：'topics/' 命中 path('topics/', views.topics, name='topics')
+  │    调用视图函数；如果 URL 里带 &lt;int:topic_id&gt;，顺手把数字抠出来当参数
+  ▼
+learning_logs/views.py            厨师
+  │ ④ topics(request) 向数据库要数据：Topic.objects.order_by('date_added')
+  │    把数据装进 context 字典
+  ▼
+templates/learning_logs/topics.html   摆盘
+  │ ⑤ render(request, 模板, context) 把数据填进模板的坑里
+  ▼
+一串 HTML（HTTP 响应）→ 浏览器渲染成你看到的页面
+</code></pre>
+<p>每个文件「是干什么的、改了它会影响什么」，一张表说清：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>角色</th>
+<th>改坏了会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ll_project/urls.py</code></td>
+<td>总路由，把请求分流给各 app</td>
+<td>整个网站 404</td>
+</tr>
+<tr>
+<td><code>learning_logs/urls.py</code></td>
+<td>本 app 的路由表，URL → 视图函数</td>
+<td>某个页面打不开 / NoReverseMatch</td>
+</tr>
+<tr>
+<td><code>learning_logs/views.py</code></td>
+<td>业务逻辑，查数据、装 context</td>
+<td>页面数据不对或报错</td>
+</tr>
+<tr>
+<td><code>templates/learning_logs/*.html</code></td>
+<td>页面长相</td>
+<td>长相不对或变量显示为空</td>
+</tr>
+</tbody>
+</table>
+<p><code>path()</code> 接受三个实参：<strong>URL 模式字符串</strong>（比如 <code>'topics/&lt;int:topic_id&gt;/'</code>）、<strong>要调用的视图函数</strong>、<strong>这个模式的名字</strong>（<code>name='topic'</code>）。名字是给 <code>{% url %}</code> 用的——以后改 URL 结构，只需改 <code>urls.py</code> 一处，所有链接自动更新，这正是模板标签生成 URL 的价值。</p>
+<h3 id="2-6-模板语法-for-与-url">2.6 模板语法：<code>{{ }}</code>、<code>{% for %}</code> 与 <code>{% url %}</code></h3>
+<p>模板里只有三样东西要记：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>名字</th>
+<th>作用</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{{ topic.text }}</code></td>
+<td>模板变量</td>
+<td>把 context 里的数据填进来</td>
+<td>双花括号，不会出现在网页里</td>
+</tr>
+<tr>
+<td><code>{% for topic in topics %}</code></td>
+<td>模板标签</td>
+<td>一小段代码，循环 / 判断</td>
+<td>花括号加百分号</td>
+</tr>
+<tr>
+<td><code>{% url 'learning_logs:topic' topic.id %}</code></td>
+<td>模板标签</td>
+<td>按名字生成 URL</td>
+<td>命名空间写法</td>
+</tr>
+</tbody>
+</table>
+<p>循环必须以 <code>{% endfor %}</code> 显式收尾——模板不靠缩进判断边界，忘了写 <code>{% endfor %}</code> 是高频错误。<code>{% empty %}</code> 是贴心设计：列表为空时显示什么，一句话搞定，不用在视图里写 if。</p>
+<pre><code class="language-html"><span class="cl">HTML</span>{% for topic in topics %}
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ topic.text }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+{% empty %}
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>还没有添加任何主题。<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+{% endfor %}
+</code></pre>
+<p>过滤器用竖线 <code>|</code> 表示，在渲染过程中修改变量的值：<code>{{ entry.date_added|date:'M d, Y H:i' }}</code> 把时间戳格式化成「May 20, 2022 03:33」，<code>{{ entry.text|linebreaks }}</code> 把条目里的换行转换成浏览器认的格式。</p>
+<p><code>'learning_logs:topic'</code> 里的<strong>冒号前是命名空间</strong>（来自 <code>urls.py</code> 里的 <code>app_name</code>，相当于 URL 模式们的「姓」），冒号后是模式名（「名」）。两个 app 都有一叫 <code>index</code> 的页面也不打架，靠姓区分。顺带记住教材的提醒：模板里写的是 <code>topic.id</code>（取对象的 ID 值），而视图函数里的形参叫 <code>topic_id</code>（装这个值的变量）——用错就是 NoReverseMatch。</p>
+<h3 id="2-7-模板继承与-404-别每个页面重复写导航栏">2.7 模板继承与 404：别每个页面重复写导航栏 ★</h3>
+<p>每个页面都有导航栏。如果每个 <code>.html</code> 都手写一遍，改一次导航要翻遍所有文件、漏一个就是一个坏链接——这是「复制粘贴式开发」的经典悲剧。Django 的解法是<strong>模板继承</strong>：把公共骨架写进父模板 <code>base.html</code>，挖好「坑」；子模板只管填自己那一亩三分地。</p>
+<p>类比：<code>base.html</code> 是开发商的精装房——水电、地板、墙面全装好，留几个空房间；子模板是业主，只往空房间里摆自己的家具。</p>
+<pre><code class="language-html"><span class="cl">HTML</span>{% block content %}{% endblock content %}
+</code></pre>
+<p>这个「坑」叫 <code>content</code>。子模板第一行必须用 <code>{% extends %}</code> 认祖归宗：</p>
+<pre><code class="language-html"><span class="cl">HTML</span>{% extends 'learning_logs/base.html' %}
+
+{% block content %}
+  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>这个页面独有的内容都放在这里。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+{% endblock content %}
+</code></pre>
+<p><strong>404 处理</strong>：视图里 <code>Topic.objects.get(id=topic_id)</code> 遇到不存在的 ID 会抛异常，直接变成 500 服务器错误页——很难看，也暴露了内部信息。教材在第 19 章的正式做法是先判断归属、再 <code>raise Http404</code>；这里先给一个等价的一步到写法：</p>
+<blockquote>
+<p>教材未涉及，补充说明：Django 还提供快捷函数 <code>get_object_or_404(Topic, id=topic_id)</code>——取到就返回对象，取不到就自动抛 404。它和「先 <code>get()</code> 再手动判断」效果一样，只是更短。本课程后续统一用教材的写法，你知道有这把扳手即可。</p>
+</blockquote>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<blockquote>
+<p>示例 1 ~ 3 是纯 Python 模拟程序，直接 <code>python 文件名.py</code> 就能运行——目的是在碰 Django 之前，先把「外键」「请求链路」「模板继承」三个抽象概念在屏幕上跑起来；示例 4 ~ 8 是学习笔记项目的真实文件，需在 Django 项目环境里运行（每块都标了文件路径，全部完整、无省略）。</p>
+</blockquote>
+<h3 id="示例-1-用纯-python-看懂外键和级联删除">示例 1：用纯 Python 看懂外键和级联删除</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fk_simulation.py —— 模拟 models.ForeignKey 背后发生的事</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Topic</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""主题：相当于数据库表 learning_logs_topic 里的一行。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_id</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">topic_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Entry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""条目：topic 这一列「指向」某个主题——这就是外键。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_id</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">entry_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span>          <span class="c1"># 外键：记住自己属于哪个主题</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span>
+
+
+<span class="c1"># ===== 造数据：两个主题、三条条目（一对多）=====</span>
+<span class="n">python_topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Python"</span><span class="p">)</span>
+<span class="n">django_topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Django"</span><span class="p">)</span>
+<span class="n">entries</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Entry</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">python_topic</span><span class="p">,</span> <span class="s2">"列表推导式很好用"</span><span class="p">),</span>
+    <span class="n">Entry</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">python_topic</span><span class="p">,</span> <span class="s2">"生成器可以省内存"</span><span class="p">),</span>
+    <span class="n">Entry</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">django_topic</span><span class="p">,</span> <span class="s2">"先建虚拟环境再装包"</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"删除前，所有条目："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  条目</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> -&gt; 属于《</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">topic</span><span class="si">}</span><span class="s2">》"</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 模拟 on_delete=models.CASCADE（级联删除）=====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_topic_cascade</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">all_entries</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""级联删除：剔除该主题，以及挂在它下面的全部条目。"""</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">all_entries</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">topic</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">topic</span><span class="p">]</span>
+
+
+<span class="n">entries</span> <span class="o">=</span> <span class="n">delete_topic_cascade</span><span class="p">(</span><span class="n">python_topic</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">删除《Python》后（CASCADE 生效），剩下的条目："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  条目</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2"> -&gt; 属于《</span><span class="si">{</span><span class="n">entry</span><span class="o">.</span><span class="n">topic</span><span class="si">}</span><span class="s2">》"</span><span class="p">)</span>
+
+<span class="c1"># ===== 对比：没有 on_delete 规则会怎样 =====</span>
+<span class="n">orphan</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="mi">99</span><span class="p">,</span> <span class="n">python_topic</span><span class="p">,</span> <span class="s2">"这条的作者已经没人认领了"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">假如没有级联删除，数据库里会留下孤儿："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  条目</span><span class="si">{</span><span class="n">orphan</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">orphan</span><span class="si">}</span><span class="s2"> -&gt; 指向的主题《</span><span class="si">{</span><span class="n">orphan</span><span class="o">.</span><span class="n">topic</span><span class="si">}</span><span class="s2">》已不存在"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  =&gt; 显示、查询时全是麻烦，所以 on_delete 必须显式写清楚"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-2-用纯-python-模拟-url-视图-模板-请求链路">示例 2：用纯 Python 模拟「URL → 视图 → 模板」请求链路</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># request_chain_simulation.py —— 60 行复现 Django 处理一次请求的全过程</span>
+<span class="c1"># 对应关系：urlpatterns = urls.py，视图函数 = views.py，render() = 模板渲染</span>
+
+<span class="c1"># ===== 1）路由表：相当于 learning_logs/urls.py 里的 urlpatterns =====</span>
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""注册路由。@route('topics/') 等价于 path('topics/', views.topics)。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">view_func</span><span class="p">):</span>
+        <span class="n">urlpatterns</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">path</span><span class="p">,</span> <span class="n">view_func</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">view_func</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+
+
+<span class="c1"># ===== 2）模板：相当于 templates/learning_logs/*.html =====</span>
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"index.html"</span><span class="p">:</span> <span class="s2">"&lt;h1&gt;学习笔记&lt;/h1&gt;&lt;p&gt;已记录 </span><span class="si">{count}</span><span class="s2"> 个主题。&lt;/p&gt;"</span><span class="p">,</span>
+    <span class="s2">"topics.html"</span><span class="p">:</span> <span class="s2">"&lt;h1&gt;主题&lt;/h1&gt;&lt;ul&gt;</span><span class="si">{items}</span><span class="s2">&lt;/ul&gt;"</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># ===== 3）render()：把 context 字典的数据填进模板 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">TEMPLATES</span><span class="p">[</span><span class="n">template_name</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">context</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"{"</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">"}"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">html</span>
+
+
+<span class="c1"># ===== 4）视图：相当于 views.py 里的函数 =====</span>
+<span class="nd">@route</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""主页视图：不查数据库，直接渲染模板。"""</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s2">"index.html"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"count"</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+
+
+<span class="nd">@route</span><span class="p">(</span><span class="s2">"topics/"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">topics</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""主题列表视图：先查数据，装进 context，再渲染。"""</span>
+    <span class="n">topic_list</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Python"</span><span class="p">,</span> <span class="s2">"Django"</span><span class="p">,</span> <span class="s2">"Git"</span><span class="p">]</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">topic_list</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s2">"topics.html"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"items"</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span>
+
+
+<span class="c1"># ===== 5）Django 的「接线员」：按 URL 找到对应视图 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">handle_request</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"浏览器请求：GET /</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">view_func</span> <span class="ow">in</span> <span class="n">urlpatterns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">url</span> <span class="o">==</span> <span class="n">path</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  urls.py 匹配 </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> -&gt; 调用视图 </span><span class="si">{</span><span class="n">view_func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()"</span><span class="p">)</span>
+            <span class="n">html</span> <span class="o">=</span> <span class="n">view_func</span><span class="p">({</span><span class="s2">"path"</span><span class="p">:</span> <span class="n">url</span><span class="p">})</span>      <span class="c1"># request 在这里只是个字典</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  render() 渲染完成，返回 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">html</span><span class="p">)</span><span class="si">}</span><span class="s2"> 字符的 HTML"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">html</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  没有匹配的 URL 模式 -&gt; 404 Not Found"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1"># ===== 测试三次访问 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 访问主页 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">handle_request</span><span class="p">(</span><span class="s2">""</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 访问主题页 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">handle_request</span><span class="p">(</span><span class="s2">"topics/"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 访问不存在的页面 ---"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">handle_request</span><span class="p">(</span><span class="s2">"不存在/"</span><span class="p">))</span>
+</code></pre>
+<h3 id="示例-3-用纯-python-模拟模板继承">示例 3：用纯 Python 模拟模板继承</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># template_inheritance_simulation.py —— {% block %} 和 {% extends %} 到底在干什么</span>
+
+<span class="n">BASE_HTML</span> <span class="o">=</span> <span class="s2">"""&lt;!DOCTYPE html&gt;</span>
+<span class="s2">&lt;html&gt;</span>
+<span class="s2">&lt;head&gt;&lt;title&gt;学习笔记&lt;/title&gt;&lt;/head&gt;</span>
+<span class="s2">&lt;body&gt;</span>
+<span class="s2">  &lt;nav&gt;&lt;a href="/"&gt;主页&lt;/a&gt; | &lt;a href="/topics/"&gt;主题&lt;/a&gt;&lt;/nav&gt;</span>
+<span class="s2">  &lt;main&gt;</span>
+<span class="s2">    {% block content %}{</span><span class="si">% e</span><span class="s2">ndblock content %}</span>
+<span class="s2">  &lt;/main&gt;</span>
+<span class="s2">&lt;/body&gt;</span>
+<span class="s2">&lt;/html&gt;"""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">render_page</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">block_content</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""模拟模板继承：把子模板的内容填进 base 的 content 坑里。"""</span>
+    <span class="n">start_tag</span> <span class="o">=</span> <span class="s2">"{% block content %}"</span>
+    <span class="n">end_tag</span> <span class="o">=</span> <span class="s2">"{</span><span class="si">% e</span><span class="s2">ndblock content %}"</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">base</span><span class="p">[:</span><span class="n">base</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">start_tag</span><span class="p">)]</span>
+    <span class="n">tail</span> <span class="o">=</span> <span class="n">base</span><span class="p">[</span><span class="n">base</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_tag</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_tag</span><span class="p">):]</span>
+    <span class="k">return</span> <span class="n">head</span> <span class="o">+</span> <span class="n">block_content</span> <span class="o">+</span> <span class="n">tail</span>
+
+
+<span class="c1"># 主页只写自己关心的部分</span>
+<span class="n">index_body</span> <span class="o">=</span> <span class="s2">"&lt;h1&gt;学习笔记&lt;/h1&gt;&lt;p&gt;欢迎回来！&lt;/p&gt;"</span>
+
+<span class="c1"># 主题页也只写自己关心的部分</span>
+<span class="n">topics_body</span> <span class="o">=</span> <span class="s2">"&lt;h1&gt;所有主题&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;Python&lt;/li&gt;&lt;li&gt;Django&lt;/li&gt;&lt;/ul&gt;"</span>
+
+<span class="n">index_page</span> <span class="o">=</span> <span class="n">render_page</span><span class="p">(</span><span class="n">BASE_HTML</span><span class="p">,</span> <span class="n">index_body</span><span class="p">)</span>
+<span class="n">topics_page</span> <span class="o">=</span> <span class="n">render_page</span><span class="p">(</span><span class="n">BASE_HTML</span><span class="p">,</span> <span class="n">topics_body</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 主页 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">index_page</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 主题页 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">topics_page</span><span class="p">)</span>
+
+<span class="c1"># 两个页面共享完全一致的导航栏，因为它来自同一份 base.html</span>
+<span class="n">nav_index</span> <span class="o">=</span> <span class="n">index_page</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"&lt;main&gt;"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">nav_topics</span> <span class="o">=</span> <span class="n">topics_page</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"&lt;main&gt;"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">两个页面的导航栏完全一致："</span><span class="p">,</span> <span class="n">nav_index</span> <span class="o">==</span> <span class="n">nav_topics</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=&gt; 想改导航？只改 base.html 一处，所有页面自动生效"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-4-learning_logs-models-py-项目文件-完整版">示例 4：<code>learning_logs/models.py</code>（项目文件，完整版）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/models.py —— 学习笔记的数据模型</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Topic</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用户学习的主题（一对多关系里的「一」）。"""</span>
+
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">date_added</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""在管理网站和 shell 里显示主题时，返回 text。"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Entry</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""学到的有关某个主题的具体知识（一对多关系里的「多」）。"""</span>
+
+    <span class="n">topic</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Topic</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">date_added</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">"entries"</span>      <span class="c1"># 否则管理网站会显示难看的 Entrys</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""条目可能很长，只截取前 50 个字符显示。"""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span>
+</code></pre>
+<h3 id="示例-5-learning_logs-admin-py-与-django-she">示例 5：<code>learning_logs/admin.py</code> 与 Django shell 查数据</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/admin.py —— 向管理网站注册模型（不注册，后台就看不到）</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">admin</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Topic</span><span class="p">,</span> <span class="n">Entry</span>
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Topic</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Entry</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 对应的终端操作：建超级用户、迁移、进 shell 查数据</span>
+python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations<span class="w"> </span>learning_logs
+python<span class="w"> </span>manage.py<span class="w"> </span>migrate
+python<span class="w"> </span>manage.py<span class="w"> </span>createsuperuser
+python<span class="w"> </span>manage.py<span class="w"> </span>shell
+</code></pre>
+<pre><code class="language-text"><span class="cl">示例</span>Django shell 会话（python manage.py shell 之后逐行输入）：
+
+&gt;&gt;&gt; from learning_logs.models import Topic
+&gt;&gt;&gt; Topic.objects.all()
+&lt;QuerySet [&lt;Topic: Chess&gt;, &lt;Topic: Rock Climbing&gt;]&gt;
+&gt;&gt;&gt; for topic in Topic.objects.all():
+...     print(topic.id, topic)
+...
+1 Chess
+2 Rock Climbing
+&gt;&gt;&gt; t = Topic.objects.get(id=1)
+&gt;&gt;&gt; t.entry_set.all()          # 通过外键反向查出该主题的所有条目
+&lt;QuerySet [&lt;Entry: The opening is the first part of the game...&gt;]&gt;
+&gt;&gt;&gt; exit()                     # 或按 Ctrl+D 退出（Windows 先 Ctrl+Z 再回车）
+</code></pre>
+<h3 id="示例-6-两个-urls-py-项目文件-完整版">示例 6：两个 <code>urls.py</code>（项目文件，完整版）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/urls.py —— 应用程序自己的路由表</span>
+<span class="sd">"""定义 learning_logs 的 URL 模式"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s2">"learning_logs"</span>          <span class="c1"># 命名空间：模板里 {% url 'learning_logs:index' %} 靠它</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># 主页</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+    <span class="c1"># 显示所有主题的页面</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"topics/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">topics</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"topics"</span><span class="p">),</span>
+    <span class="c1"># 特定主题的详细页面</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"topics/&lt;int:topic_id&gt;/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"topic"</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ll_project/urls.py —— 项目的总路由：把 learning_logs 开头的请求转给 app</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"admin/"</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s2">"learning_logs.urls"</span><span class="p">)),</span>
+<span class="p">]</span>
+</code></pre>
+<h3 id="示例-7-learning_logs-views-py-项目文件-完整版">示例 7：<code>learning_logs/views.py</code>（项目文件，完整版）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py —— 学习笔记的视图函数</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">render</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Topic</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""学习笔记的主页。"""</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/index.html"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">topics</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""显示所有主题。"""</span>
+    <span class="n">topics</span> <span class="o">=</span> <span class="n">Topic</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">"date_added"</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"topics"</span><span class="p">:</span> <span class="n">topics</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/topics.html"</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">topic</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">topic_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""显示单个主题及其所有条目。"""</span>
+    <span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">topic_id</span><span class="p">)</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">topic</span><span class="o">.</span><span class="n">entry_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">"-date_added"</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">topic</span><span class="p">,</span> <span class="s2">"entries"</span><span class="p">:</span> <span class="n">entries</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/topic.html"</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-8-四份模板-项目文件-完整版">示例 8：四份模板（项目文件，完整版）</h3>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/learning_logs/base.html —— 父模板：所有页面共享的骨架 --&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'learning_logs:index' %}"</span><span class="p">&gt;</span>Learning Log<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> -
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'learning_logs:topics' %}"</span><span class="p">&gt;</span>Topics<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+{% block content %}{% endblock content %}
+</code></pre>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/learning_logs/index.html —— 主页 --&gt;</span>
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Learning Log helps you keep track of your learning, for any topic
+  you're interested in.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+{% endblock content %}
+</code></pre>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/learning_logs/topics.html —— 显示所有主题 --&gt;</span>
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+
+  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Topics<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    {% for topic in topics %}
+      <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'learning_logs:topic' topic.id %}"</span><span class="p">&gt;</span>{{ topic.text }}<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    {% empty %}
+      <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>No topics have been added yet.<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    {% endfor %}
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+
+{% endblock content %}
+</code></pre>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/learning_logs/topic.html —— 显示特定主题及其条目 --&gt;</span>
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+
+  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Topic: {{ topic.text }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    {% for entry in entries %}
+      <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ entry.date_added|date:'M d, Y H:i' }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ entry.text|linebreaks }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    {% empty %}
+      <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>There are no entries for this topic yet.<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    {% endfor %}
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+
+{% endblock content %}
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 18-1【从零跑通第一个页面】</strong>
+按顺序执行，每一步记录结果：
+1. 建目录 <code>learning_log</code>，创建虚拟环境 <code>ll_env</code>，激活（确认提示符出现 <code>(ll_env)</code>）
+2. <code>pip install --upgrade pip</code> 后安装 Django
+3. <code>django-admin startproject ll_project .</code>——<strong>千万别忘了末尾的句点</strong>，然后 <code>ls</code> 看看创建了什么
+4. <code>python manage.py startapp learning_logs</code>，并把 app 注册进 <code>INSTALLED_APPS</code>
+5. <code>python manage.py migrate</code>，再 <code>python manage.py runserver</code>
+6. 浏览器打开 <code>http://127.0.0.1:8000/</code>，看到 Django 的火箭欢迎页
+验收点：能说清 <code>ll_env</code>、<code>ll_project</code>、<code>learning_logs</code> 三层各自是什么；知道 <code>db.sqlite3</code> 是哪一步产生的。</p>
+<p><strong>练习 18-2【教材练习 18.2：简短的条目】</strong>
+教材原题：当前 <code>Entry.__str__()</code> 总在末尾加省略号。请加一条 <code>if</code> 语句，<strong>仅当条目长度超过 50 个字符时</strong>才加省略号。改完后重新迁移，用管理网站添加一个不超过 50 个字符的条目，确认显示时不带省略号。
+提示：改的是 <code>models.py</code>，改完必须重走三步曲的后两步。</p>
+<p><strong>练习 18-3【教材练习 18.4：比萨与配料】</strong>
+新建项目 <code>pizzeria_project</code>（记得末尾句点）和 app <code>pizzas</code>：
+1. 定义模型 <code>Pizza</code>：字段 <code>name</code>（存储比萨名）
+2. 定义模型 <code>Topping</code>：字段 <code>pizza</code>（关联到 <code>Pizza</code> 的外键）和 <code>name</code>（配料名）
+3. 向管理网站注册两个模型，用后台添加几个比萨和配料
+4. 用 Django shell 查询：打印所有比萨，以及某张比萨的所有配料
+验收点：外键方向别写反——是「配料指向比萨」，不是反过来。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 18-4【手写迷你模板引擎】</strong>
+不借助 Django，写一个迷你渲染器 <code>mini_render(template, context)</code>，要求：
+1. 支持 <code>{{ 变量名 }}</code> 替换为 context 里对应的值
+2. 支持 <code>{% for x in 列表 %}...{% endfor %}</code> 单层循环，循环体内可用 <code>{{ x }}</code>
+3. 用 <code>{"topics": ["Python", "Django", "Git"]}</code> 和对应模板测试，输出正确 HTML
+提示：可以先用字符串 <code>find</code>/切片定位标签位置，循环部分把循环体重复拼接。写完对比示例 2、3 的思路。</p>
+<p><strong>练习 18-5【给学习笔记加「关于」页面】</strong>
+新增一个 <code>/about/</code> 页面，改三个文件：
+1. <code>learning_logs/urls.py</code>：加 <code>path("about/", views.about, name="about")</code>
+2. <code>learning_logs/views.py</code>：加 <code>about(request)</code> 视图，渲染 <code>"learning_logs/about.html"</code>
+3. 新建 <code>templates/learning_logs/about.html</code>：继承 <code>base.html</code>，写一两句项目介绍
+4. 顺手在 <code>base.html</code> 导航里加上它的链接
+验收点：浏览器打开 <code>/about/</code> 正常显示，且导航链接可点击跳转。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-18-1">参考答案 18-1</h3>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># ===== 1）建目录 + 虚拟环境 =====</span>
+mkdir<span class="w"> </span>learning_log
+<span class="nb">cd</span><span class="w"> </span>learning_log
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>ll_env
+
+<span class="c1"># ===== 2）激活（按系统三选一）=====</span>
+<span class="nb">source</span><span class="w"> </span>ll_env/bin/activate<span class="w">          </span><span class="c1"># macOS / Linux</span>
+ll_env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate<span class="w">             </span><span class="c1"># Windows 命令行</span>
+ll_env<span class="se">\S</span>cripts<span class="se">\A</span>ctivate<span class="w">             </span><span class="c1"># Windows PowerShell（A 大写）</span>
+<span class="c1"># 激活成功的标志：提示符变成 (ll_env)learning_log$</span>
+
+<span class="c1"># ===== 3）装 Django =====</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>django
+
+<span class="c1"># ===== 4）建项目（末尾句点是重点）=====</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>django-admin<span class="w"> </span>startproject<span class="w"> </span>ll_project<span class="w"> </span>.
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>ls
+<span class="c1"># ll_env  ll_project  manage.py</span>
+
+<span class="c1"># ===== 5）建应用 + 注册学籍 =====</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>startapp<span class="w"> </span>learning_logs
+<span class="c1"># 然后编辑 ll_project/settings.py，把 'learning_logs' 加进 INSTALLED_APPS</span>
+
+<span class="c1"># ===== 6）建数据库 + 跑起来 =====</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>migrate
+<span class="c1"># 执行后目录里会出现 db.sqlite3——这就是数据库本体</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>runserver
+<span class="c1"># 浏览器访问 http://127.0.0.1:8000/ 看到火箭页即成功</span>
+<span class="c1"># 端口被占用时：python manage.py runserver 8001</span>
+</code></pre>
+<p>自查三个问题：<code>ll_env</code> 是工具间（装 Django 的地方）；<code>ll_project</code> 是项目配置的家（settings.py、总 urls.py 住这）；<code>learning_logs</code> 是干活的 app（models、views 住这）。<code>db.sqlite3</code> 由 <code>migrate</code> 产生。</p>
+<h3 id="参考答案-18-2">参考答案 18-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/models.py —— Entry.__str__() 仅在超过 50 字符时加省略号</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Topic</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用户学习的主题"""</span>
+
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">date_added</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Entry</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""学到的有关某个主题的具体知识"""</span>
+
+    <span class="n">topic</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Topic</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">date_added</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">"entries"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""条目超过 50 个字符时才加省略号。"""</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">..."</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+</code></pre>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 改完模型必须重走后两步，否则数据库不认</span>
+python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations<span class="w"> </span>learning_logs
+python<span class="w"> </span>manage.py<span class="w"> </span>migrate
+</code></pre>
+<p>注意：这次只改了 <code>__str__()</code>（一个普通方法，不涉及数据库列），<code>makemigrations</code> 会提示「No changes detected」——这是正常的，方法层面的修改本来就不需要迁移。</p>
+<h3 id="参考答案-18-3">参考答案 18-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># pizzas/models.py —— 比萨与配料（多对一）</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Pizza</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""一种比萨。"""</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Topping</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""比萨上的一种配料，通过外键关联到特定比萨。"""</span>
+
+    <span class="n">pizza</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Pizza</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># pizzas/admin.py —— 注册两个模型</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib</span><span class="w"> </span><span class="kn">import</span> <span class="n">admin</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pizza</span><span class="p">,</span> <span class="n">Topping</span>
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Pizza</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Topping</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 终端操作</span>
+python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations<span class="w"> </span>pizzas
+python<span class="w"> </span>manage.py<span class="w"> </span>migrate
+python<span class="w"> </span>manage.py<span class="w"> </span>createsuperuser
+python<span class="w"> </span>manage.py<span class="w"> </span>runserver<span class="w">      </span><span class="c1"># 访问 /admin/ 添加数据</span>
+</code></pre>
+<pre><code class="language-text"><span class="cl">示例</span>Django shell 验证查询：
+
+&gt;&gt;&gt; from pizzas.models import Pizza, Topping
+&gt;&gt;&gt; for pizza in Pizza.objects.all():
+...     print(pizza.name)
+...     for topping in pizza.topping_set.all():   # 外键的反向查询
+...         print("  -", topping.name)
+...
+Hawaiian
+  - pineapple
+  - Canadian bacon
+Meat Lovers
+  - sausage
+</code></pre>
+<p>方向判断口诀：<strong>外键写在「多」的那一边</strong>。N 个配料属于 1 张比萨，所以 <code>ForeignKey</code> 定义在 <code>Topping</code> 里，指向 <code>Pizza</code>。</p>
+<h3 id="参考答案-18-4">参考答案 18-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># mini_template.py —— 手写迷你模板引擎（支持 {{ }} 和 {% for %}）</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mini_render</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""渲染模板：支持 {{ 变量 }} 与 {% for x in 列表 %}...{% endfor %}。"""</span>
+    <span class="c1"># ===== 第 1 步：处理循环（从最内层开始，一层套一层由递归保证）=====</span>
+    <span class="n">for_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+        <span class="sa">r</span><span class="s2">"\{%\s*for\s+(\w+)\s+in\s+(\w+)\s*%\}(.*?)\{%\s*endfor\s*%\}"</span><span class="p">,</span>
+        <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">expand_for</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+        <span class="n">var_name</span><span class="p">,</span> <span class="n">list_name</span><span class="p">,</span> <span class="n">body</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">list_name</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="c1"># 循环体内的 {{ 变量 }} 先替换成当前元素</span>
+            <span class="n">rendered</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"{{ "</span> <span class="o">+</span> <span class="n">var_name</span> <span class="o">+</span> <span class="s2">" }}"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rendered</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="s2">"{</span><span class="si">% f</span><span class="s2">or"</span> <span class="ow">in</span> <span class="n">template</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">for_pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">expand_for</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+
+    <span class="c1"># ===== 第 2 步：处理剩下的普通变量 {{ 变量 }} =====</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">replace_var</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"\{\{\s*(\w+)\s*\}\}"</span><span class="p">,</span> <span class="n">replace_var</span><span class="p">,</span> <span class="n">template</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">template</span>
+
+
+<span class="c1"># ===== 测试 =====</span>
+<span class="n">TEMPLATE</span> <span class="o">=</span> <span class="s2">"""&lt;h1&gt;所有主题&lt;/h1&gt;</span>
+<span class="s2">&lt;ul&gt;</span>
+<span class="s2">{</span><span class="si">% f</span><span class="s2">or topic in topics %}</span>
+<span class="s2">  &lt;li&gt;{{ topic }}&lt;/li&gt;</span>
+<span class="s2">{</span><span class="si">% e</span><span class="s2">ndfor %}</span>
+<span class="s2">&lt;/ul&gt;</span>
+<span class="s2">&lt;p&gt;共 {{ count }} 个主题。&lt;/p&gt;"""</span>
+
+<span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"topics"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Python"</span><span class="p">,</span> <span class="s2">"Django"</span><span class="p">,</span> <span class="s2">"Git"</span><span class="p">],</span> <span class="s2">"count"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">mini_render</span><span class="p">(</span><span class="n">TEMPLATE</span><span class="p">,</span> <span class="n">context</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"还支持空列表："</span><span class="p">,</span> <span class="n">mini_render</span><span class="p">(</span><span class="s2">"{</span><span class="si">% f</span><span class="s2">or x in items %}{{ x }}{</span><span class="si">% e</span><span class="s2">ndfor %}"</span><span class="p">,</span>
+                                   <span class="p">{</span><span class="s2">"items"</span><span class="p">:</span> <span class="p">[]})</span> <span class="o">==</span> <span class="s2">""</span><span class="p">)</span>
+</code></pre>
+<p>思路说明：先循环后变量——循环体里也可能嵌着 <code>{{ x }}</code>，等循环展开完再统一替换最省心。这正是 Django 模板引擎的简化版工作原理。</p>
+<h3 id="参考答案-18-5">参考答案 18-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/urls.py —— 加上 about 路由</span>
+<span class="sd">"""定义 learning_logs 的 URL 模式"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s2">"learning_logs"</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># 主页</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"index"</span><span class="p">),</span>
+    <span class="c1"># 关于页面</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"about/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"about"</span><span class="p">),</span>
+    <span class="c1"># 显示所有主题的页面</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"topics/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">topics</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"topics"</span><span class="p">),</span>
+    <span class="c1"># 特定主题的详细页面</span>
+    <span class="n">path</span><span class="p">(</span><span class="s2">"topics/&lt;int:topic_id&gt;/"</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"topic"</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py —— 新增 about 视图</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">render</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Topic</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""学习笔记的主页。"""</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/index.html"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""关于页面：介绍这个项目是干什么的。"""</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/about.html"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">topics</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""显示所有主题。"""</span>
+    <span class="n">topics</span> <span class="o">=</span> <span class="n">Topic</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">"date_added"</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"topics"</span><span class="p">:</span> <span class="n">topics</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/topics.html"</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">topic</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">topic_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""显示单个主题及其所有条目。"""</span>
+    <span class="n">topic</span> <span class="o">=</span> <span class="n">Topic</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">topic_id</span><span class="p">)</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">topic</span><span class="o">.</span><span class="n">entry_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">"-date_added"</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"topic"</span><span class="p">:</span> <span class="n">topic</span><span class="p">,</span> <span class="s2">"entries"</span><span class="p">:</span> <span class="n">entries</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">"learning_logs/topic.html"</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/learning_logs/about.html —— 继承父模板，只写独有内容 --&gt;</span>
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+  <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>关于学习笔记<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>Learning Log 是一个在线笔记应用，帮助你记录感兴趣的主题，
+  以及学习每个主题过程中的心得。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+{% endblock content %}
+</code></pre>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/learning_logs/base.html —— 导航里加上 about 链接 --&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'learning_logs:index' %}"</span><span class="p">&gt;</span>Learning Log<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> -
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'learning_logs:topics' %}"</span><span class="p">&gt;</span>Topics<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> -
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'learning_logs:about' %}"</span><span class="p">&gt;</span>About<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+{% block content %}{% endblock content %}
+</code></pre>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-忘了激活虚拟环境">错误 1：★ 忘了激活虚拟环境</h3>
+<p>症状：<code>ModuleNotFoundError: No module named 'django'</code>；或者 Django 装是装上了，但换个终端就消失。诊断方法只有一个——<strong>看提示符前面有没有 <code>(ll_env)</code></strong>。没有就重新激活：<code>source ll_env/bin/activate</code>（Windows 用 <code>ll_env\Scripts\activate</code>）。记住：每开一个新终端，就要重新激活一次。</p>
+<h3 id="错误-2-搞混-learning_log-ll_project-learning">错误 2：★ 搞混 <code>learning_log/</code>、<code>ll_project/</code>、<code>learning_logs/</code></h3>
+<p>三个名字长得像，角色完全不同：<code>learning_log/</code> 是你的工作目录（<code>manage.py</code> 在这），<code>ll_project/</code> 是项目配置的家（<code>settings.py</code>、总 <code>urls.py</code> 在这），<code>learning_logs/</code> 是干活的 app（<code>models.py</code>、<code>views.py</code> 在这）。<strong>改错文件是新手最贵的浪费</strong>——在 <code>ll_project</code> 里找 <code>models.py</code> 当然找不到，因为模型在 <code>learning_logs</code> 里。拿不准就 <code>ls</code> 看一眼。</p>
+<h3 id="错误-3-改了-models-py-不迁移">错误 3：改了 <code>models.py</code> 不迁移</h3>
+<p>加完字段直接刷新网页，报 <code>OperationalError: no such table</code> 或「no such column」。原因：只改了图纸没施工。记住三步曲一个都不能少：改 <code>models.py</code> → <code>makemigrations</code> → <code>migrate</code>。反过来也要警惕：<code>makemigrations</code> 之后忘了 <code>migrate</code>，同样是图纸没施工。</p>
+<h3 id="错误-4-新-app-忘了在-installed_apps-登记">错误 4：新 app 忘了在 <code>INSTALLED_APPS</code> 登记</h3>
+<p>症状：<code>migrate</code> 不给你的模型建表；管理网站里看不到模型；报 <code>LookupError: No installed app with label 'xxx'</code>。类比：新生不来注册学籍，学校花名册上就没这人，食堂不给他开饭。<code>startapp</code> 之后第一件事，就是去 <code>settings.py</code> 登记。</p>
+<h3 id="错误-5-startproject-末尾忘了写句点">错误 5：<code>startproject</code> 末尾忘了写句点</h3>
+<p><code>django-admin startproject ll_project</code>（没有 <code>.</code>）会多套一层目录，<code>manage.py</code> 被埋进子目录，部署时各种配置问题。教材特意用「注意」框强调：<strong>千万别忘了这个句点</strong>。真忘了也别慌——删掉刚生成的目录（保留 <code>ll_env</code>），带上句点重跑。</p>
+<h3 id="错误-6-模板里-url-写错">错误 6：模板里 <code>{% url %}</code> 写错</h3>
+<p><code>NoReverseMatch: Reverse for 'index' not found</code>——十有八九是漏了命名空间。正确写法是 <code>{% url 'learning_logs:index' %}</code>（app 名 + 冒号 + URL 模式名）。另外注意教材的提醒：模板里用对象的 <code>topic.id</code> 取 ID 值，视图里的形参叫 <code>topic_id</code>，两者别混。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：虚拟环境解决什么问题？三条激活命令是什么？怎么判断激活成功了？</p>
+<blockquote>
+<p><strong>要点</strong>：不同项目依赖不同版本的包，全塞进一个 Python 会互相冲突；虚拟环境给每个项目一间独立的「工具间」，包装在本环境内、只在本环境有效。激活命令：macOS/Linux 用 <code>source ll_env/bin/activate</code>，Windows 命令行用 <code>ll_env\Scripts\activate</code>，PowerShell 可能要写 <code>Activate</code>。激活成功的标志是提示符前出现 <code>(ll_env)</code>。新建 app、装包之前，第一件事就是确认这个前缀在不在。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：解释「模型 → 迁移 → 数据库」三步曲，<code>makemigrations</code> 和 <code>migrate</code> 各做什么？</p>
+<blockquote>
+<p><strong>要点</strong>：① 改 <code>models.py</code>，告诉 Django 想要什么数据结构；② <code>makemigrations</code> 把改动翻译成迁移文件（<code>migrations/0001_initial.py</code>），这是<strong>数据库的施工图纸</strong>，记录这次要建什么表、加什么列；③ <code>migrate</code> 照图纸真正修改数据库。只画图不施工（漏了 <code>migrate</code>）会报 <code>no such table</code>；反过来，不画图就想施工是行不通的——没有迁移文件，Django 不知道你要怎么改。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：<code>Topic.objects.order_by("date_added")</code> 返回的是列表，所以在模板里要先用 <code>|length</code> 才能遍历。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。它返回的是查询集（queryset），行为像列表——可以直接遍历、可以切片、可以传给模板。模板里 <code>{% for topic in topics %}</code> 不需要任何预处理。（教材未涉及，补充说明：查询集还是惰性的，定义时不一定马上查数据库，真正被迭代到数据时才查。）</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：画出用户访问 <code>/topics/</code> 时，Django 内部发生的完整链路。</p>
+<blockquote>
+<p><strong>要点</strong>：浏览器发请求 → <code>ll_project/urls.py</code> 的 <code>urlpatterns</code> 比对，<code>''</code> 前缀的请求经 <code>include("learning_logs.urls")</code> 转手 → <code>learning_logs/urls.py</code> 里 <code>'topics/'</code> 命中 <code>path('topics/', views.topics, name='topics')</code> → 调用 <code>views.py</code> 的 <code>topics(request)</code>，执行 <code>Topic.objects.order_by("date_added")</code> 查库，把结果装进 <code>context</code> 字典 → <code>render(request, "learning_logs/topics.html", context)</code> 把数据填进模板 → 返回 HTML 响应，浏览器渲染。</p>
+</blockquote>
+<p><strong>5. 改错题</strong>：下面代码想让「主题列表页」工作，有 3 处错误，找出来并改正。</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">topics</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""显示所有主题"""</span>
+    <span class="n">topics</span> <span class="o">=</span> <span class="n">Topic</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="n">topics</span><span class="p">:</span> <span class="n">topics</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="s2">"learning_logs/topics.html"</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<blockquote>
+<p><strong>要点</strong>：错误一，<code>context = {topics: topics}</code> 把变量当键名了，字典的键必须是字符串——应为 <code>context = {"topics": topics}</code>，模板里才能用 <code>{% for topic in topics %}</code> 按这个名字取数据；错误二，<code>render()</code> 少了第一个实参 <code>request</code>——应为 <code>render(request, "learning_logs/topics.html", context)</code>，Django 的 <code>render()</code> 签名是 <code>render(request, template_name, context)</code>；错误三（潜在），<code>Topic.objects.all()</code> 虽然能跑，但主题页应该按添加时间排序，规范写法是 <code>Topic.objects.order_by("date_added")</code>，让老主题在前、新主题在后。</p>
+</blockquote>
+<p><strong>6. 简答题</strong>：<code>on_delete=models.CASCADE</code> 是什么意思？如果删掉一个 Topic，会发生什么？</p>
+<blockquote>
+<p><strong>要点</strong>：外键字段 <code>topic = models.ForeignKey(Topic, on_delete=models.CASCADE)</code> 表达「条目属于主题」的多对一关系；<code>on_delete</code> 回答「主题没了，条目怎么办」。<code>CASCADE</code> 是级联删除：删主题时，挂在它下面的所有条目一起删。类比删文件夹时里面的文件一起消失。不写这个参数 Django 直接报错——它逼你在删数据前想清楚后果。反向查询用 <code>topic.entry_set.all()</code>：通过外键关系拿到某个主题的所有条目。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能不查资料说出虚拟环境解决什么问题，并写出三条激活命令</li>
+<li>[ ] 能画出 <code>learning_log/</code>、<code>ll_project/</code>、<code>learning_logs/</code> 的目录关系，说清各自住着什么文件</li>
+<li>[ ] 能默写三步曲：改 <code>models.py</code> → <code>makemigrations</code> → <code>migrate</code>，并解释迁移文件是什么</li>
+<li>[ ] 能画出「URL → 视图 → 模板」请求链路图，说清 <code>render()</code> 的三个实参</li>
+<li>[ ] 能写出 <code>{% for %}</code>、<code>{{ }}</code>、<code>{% url 'learning_logs:xxx' %}</code>、<code>{% block content %}</code> 四种模板语法</li>
+<li>[ ] 能解释 <code>on_delete=models.CASCADE</code> 与外键的反向查询 <code>topic.entry_set.all()</code></li>
+<li>[ ] 练习 18-1、18-4 已跑通</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 19 讲「用户账户」——给学习笔记装上「人」的维度：用 <code>ModelForm</code> 让用户不进后台就能添加主题和条目，用 Django 自带的登录/注销视图和自己写的注册页面搭好身份验证，最重要的是学会 <code>@login_required</code> 和 <code>filter(owner=request.user)</code>，守住「每个用户只能看见自己的数据」这条 Web 开发的安全红线。你现在这个项目还只有你一个用户，下一单元之后，任何人都能注册、每个人都有一间自己的上锁房间。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="17.html"><small>← 上一单元</small><b>单元 17 · 使用API与Plotly</b></a><div class="spot"><a class="pn" href="ppt/u/18.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s16"><small>课程大纲课件</small><b>阶段总览 p16 →</b></a></div><a class="pn nx" href="19.html"><small>下一单元 →</small><b>单元 19 · 用户账户</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

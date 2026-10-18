@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 2 · 列表简介</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="2">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 2 · 列表简介</h1>
+  <a class="ppt" href="ppt/u/02.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="10" data-to="13"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u2"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/02.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u2"><span class="k">题库</span><span class="v">本单元 4 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-列表-一个名字-一排抽屉">2.1 列表：一个名字，一排抽屉</a>
+<a class="lv3" href="#2-2-索引从-0-开始-为什么不是从-1-开始">2.2 索引从 0 开始：为什么不是从 1 开始</a>
+<a class="lv3" href="#2-3-列表是可变的-能直接改">2.3 列表是可变的：能直接改</a>
+<a class="lv3" href="#2-4-增删改方法-五个主力">2.4 增删改方法：五个主力</a>
+<a class="lv3" href="#2-5-remove-与-pop-一个删-值-一个删-位置">2.5 .remove() 与 .pop()：一个删&quot;值&quot;，一个删&quot;位置&quot;</a>
+<a class="lv3" href="#2-6-引用共享-最反直觉的一课">2.6 引用共享：最反直觉的一课</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-创建列表与基本访问">示例 1：创建列表与基本访问</a>
+<a class="lv3" href="#示例-2-修改元素-列表可变的体现">示例 2：修改元素（列表可变的体现）</a>
+<a class="lv3" href="#示例-3-添加元素">示例 3：添加元素</a>
+<a class="lv3" href="#示例-4-删除元素">示例 4：删除元素</a>
+<a class="lv3" href="#示例-5-引用共享与浅拷贝">示例 5：引用共享与浅拷贝</a>
+<a class="lv3" href="#示例-6-排序与反转-列表自带的小工具">示例 6：排序与反转（列表自带的小工具）</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-2-1">参考答案 2-1</a>
+<a class="lv3" href="#参考答案-2-2">参考答案 2-2</a>
+<a class="lv3" href="#参考答案-2-3">参考答案 2-3</a>
+<a class="lv3" href="#参考答案-2-4">参考答案 2-4</a>
+<a class="lv3" href="#参考答案-2-5">参考答案 2-5</a>
+<a class="lv3" href="#参考答案-2-6">参考答案 2-6</a>
+<a class="lv3" href="#参考答案-2-7">参考答案 2-7</a>
+<a class="lv3" href="#参考答案-2-8">参考答案 2-8</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-2-列表简介">单元 2：列表简介</h1>
+<blockquote>
+<p>对应教材第 3 章「列表简介」
+关键词：列表 list、方括号创建、索引（从 0 开始）、负索引、len()、append、insert、remove、pop、del、永久修改性</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>用方括号创建一个列表，并说清列表与"变量"在本质上的区别（一个名字装多个值）。</li>
+<li>解释「索引从 0 开始」，能正确写出任意位置的正索引与负索引，并说明越界报什么错。</li>
+<li>用 <code>len()</code> 求长度，用索引做<strong>读取</strong>和<strong>赋值</strong>两种操作。</li>
+<li>熟练使用 <code>.append()</code>、<code>.insert()</code>、<code>.remove()</code>、<code>.pop()</code>、<code>del</code> 五种增删改方法，并说清 <code>.pop()</code> 的返回值可以被使用。</li>
+<li>理解列表是<strong>可变对象</strong>，理解"引用共享"现象——两个变量指向同一个列表时，改一个另一个也会变。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-列表-一个名字-一排抽屉">2.1 列表：一个名字，一排抽屉</h3>
+<p>到目前为止，变量只能装一个值。但现实中数据总是成组的：一串商品名、一堆分数、一串待办事项。</p>
+<p>如果用变量硬撑，需要这样：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">car1</span> <span class="o">=</span> <span class="s2">"小红帽"</span>
+<span class="n">car2</span> <span class="o">=</span> <span class="s2">"二手柯尼塞格"</span>
+<span class="n">car3</span> <span class="o">=</span> <span class="s2">"凯迪拉克"</span>
+</code></pre>
+<p>三个变量名，且<strong>加新的一辆车要改所有相关代码</strong>。列表的解法是：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"二手柯尼塞格"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+</code></pre>
+<p>生活化类比：变量像<strong>单个盒子</strong>，列表像<strong>一整排带编号的抽屉柜</strong>。<code>cars</code> 是柜子的名字，抽屉编号就是索引，你按编号取放东西。</p>
+<h3 id="2-2-索引从-0-开始-为什么不是从-1-开始">2.2 索引从 0 开始：为什么不是从 1 开始</h3>
+<p>这是一个"计算机思维 vs 日常思维"的经典冲突。你在数抽屉时会说"第一个、第二个"，但 Python 从 0 开始数。</p>
+<pre><code class="text"><span class="cl">目录结构</span>索引:      0        1                2
+      ┌────────┬─────────────────┬──────────────┐
+      │ 小红帽 │ 二手柯尼塞格│ 凯迪拉克      │
+      └────────┴─────────────────┴──────────────┘
+正索引:     第1个     第2 个             第3 个
+</code></pre>
+<p>生活化类比更准确的说法是：<strong>索引表示"从门口数起走几步"</strong>。站在门口（第 0 步）一步不用走就是第一个抽屉，往左走一步（1 步）是第二个。数组在内存里就是这样寻址的——第一个元素的地址就是起始地址，不需要"再加 1"。</p>
+<p><strong>负索引</strong>是 Python 的贴心设计：<code>cars[-1]</code> 表示最后一个，<code>cars[-2]</code> 表示倒数第二个。这样你不必先算长度就能从末尾取数据。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"二手柯尼塞格"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>     <span class="c1"># 小红帽   （第一个）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>     <span class="c1"># 二手柯尼塞格（第二个）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>    <span class="c1"># 凯迪拉克   （最后一个）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>    <span class="c1"># 小红帽     （第一个）</span>
+</code></pre>
+<p><strong>越界会报 <code>IndexError</code></strong>：<code>cars[3]</code> 或 <code>cars[-4]</code> 都会崩。</p>
+<h3 id="2-3-列表是可变的-能直接改">2.3 列表是可变的：能直接改</h3>
+<p>字符串是"打印好的纸条"（不可变），而列表是"活页笔记本"（可变）——你可以撕下第 2 页换一张新的，顺序和数量都不变。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"特斯拉"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>   <span class="c1"># ['特斯拉', '二手柯尼塞格', '凯迪拉克']</span>
+</code></pre>
+<p>注意这个和字符串方法的区别：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"tom"</span>
+<span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>   <span class="c1"># 只是复印了一份大写，name 不变</span>
+
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">]</span>
+<span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"z"</span>  <span class="c1"># 直接改了原列表本身</span>
+</code></pre>
+<p><strong>列表元素可以是任意类型</strong>，包括另一个列表（叫嵌套列表）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>   <span class="c1"># 两个列表组成的列表</span>
+</code></pre>
+<h3 id="2-4-增删改方法-五个主力">2.4 增删改方法：五个主力</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+
+<span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"雷克萨斯"</span><span class="p">)</span>       <span class="c1"># 末尾追加一个 -&gt; ['小红帽', '凯迪拉克', '雷克萨斯']</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"宝马"</span><span class="p">)</span>        <span class="c1"># 在索引 1 处插入 -&gt; ['小红帽', '宝马', '凯迪拉克', '雷克萨斯']</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"宝马"</span><span class="p">)</span>           <span class="c1"># 删除指定值（只能删值，不能删位置）</span>
+<span class="n">popped</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>           <span class="c1"># 弹出最后一个，**并把它返回出来**</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">popped</span><span class="p">)</span>                 <span class="c1"># 雷克萨斯</span>
+<span class="k">del</span> <span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                   <span class="c1"># 按位置删除，不返回值</span>
+</code></pre>
+<h3 id="2-5-remove-与-pop-一个删-值-一个删-位置">2.5 <code>.remove()</code> 与 <code>.pop()</code>：一个删"值"，一个删"位置"</h3>
+<p>这是本单元最容易混淆的一对：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>参数含义</th>
+<th>有没有返回值</th>
+<th>找不到会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.remove(值)</code></td>
+<td>要删掉的是<strong>哪个值</strong></td>
+<td>没有（返回 None）</td>
+<td>报 <code>ValueError</code></td>
+</tr>
+<tr>
+<td><code>.pop(位置)</code></td>
+<td>要删掉的是<strong>第几个</strong></td>
+<td><strong>有</strong>（被删掉的元素）</td>
+<td>报 <code>IndexError</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>.pop()</code> 的"顺带把元素交给你"这个特性极其有用：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">last</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>      <span class="c1"># 弹出来之后可以直接用，这正是"栈"这种数据结构的基础</span>
+</code></pre>
+<p><code>del</code> 和 <code>.pop()</code> 效果类似，但 <code>del</code> <strong>不返回</strong>被删的元素，所以要保留就得改用 <code>.pop()</code>。</p>
+<h3 id="2-6-引用共享-最反直觉的一课">2.6 引用共享：最反直觉的一课</h3>
+<p>这是初学者最容易踩的坑，也是"浅拷贝"概念的入门。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">cars</span>          <span class="c1"># 这不是复制！是给同一个列表贴了第二张标签</span>
+<span class="n">other</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"雷克萨斯"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>           <span class="c1"># ['小红帽', '凯迪拉克', '雷克萨斯']  ← cars 也变了！</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span> <span class="ow">is</span> <span class="n">other</span><span class="p">)</span>  <span class="c1"># True —— 它们本来就是同一个东西</span>
+</code></pre>
+<p>生活化类比：你把<strong>同一本笔记本</strong>的封面同时写上了"cars"和"other"两个名字。用胶带贴新标签不会得到第二本笔记本，往本子上写字，另一个名字看到的也是改后的内容。</p>
+<p>真正复制一份要用 <code>copy()</code>（<strong>浅拷贝</strong>，只是外层复制）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>   <span class="c1"># 完全独立的副本</span>
+</code></pre>
+<p>这是因为 Python 传的是"指向数据的地址"，而不是数据本身。单元 7（函数）讲<strong>参数传递的副本语义</strong>时会彻底展开这个话题，现在只要记住这一句：</p>
+<blockquote>
+<p><strong>给变量重新起个名字 ≠ 复制数据。</strong></p>
+</blockquote>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-创建列表与基本访问">示例 1：创建列表与基本访问</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># list_basics.py —— 列表的创建与元素访问</span>
+
+<span class="c1"># 用方括号创建列表，元素之间用逗号分隔</span>
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"二手柯尼塞格"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+<span class="n">mixed</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hello"</span><span class="p">,</span> <span class="mf">3.14</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>   <span class="c1"># 元素类型可以混合</span>
+<span class="n">empty</span> <span class="o">=</span> <span class="p">[]</span>                            <span class="c1"># 空列表</span>
+
+<span class="c1"># 按索引读取元素：索引从 0 开始</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>       <span class="c1"># 小红帽（第一个）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>       <span class="c1"># 二手柯尼塞格（第二个）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>       <span class="c1"># 凯迪拉克（第三个）</span>
+
+<span class="c1"># 负索引：从末尾往回数，-1 是最后一个</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>      <span class="c1"># 凯迪拉克</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>      <span class="c1"># 二手柯尼塞格</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>      <span class="c1"># 小红帽</span>
+
+<span class="c1"># len() 求长度：元素个数</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"cars 的长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cars</span><span class="p">))</span>     <span class="c1"># 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"empty 的长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty</span><span class="p">))</span>   <span class="c1"># 0</span>
+
+<span class="c1"># 常见错误：索引越界</span>
+<span class="c1"># print(cars[3])     # IndexError: list index out of range</span>
+<span class="c1"># print(cars[-4])    # IndexError: list index out of range</span>
+
+<span class="c1"># 用 len() 配合负索引，可以取到"倒数第几个"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"倒数第二个："</span><span class="p">,</span> <span class="n">cars</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">])</span>   <span class="c1"># 二手柯尼塞格</span>
+</code></pre>
+<h3 id="示例-2-修改元素-列表可变的体现">示例 2：修改元素（列表可变的体现）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># list_modify.py —— 列表元素可以直接赋值修改</span>
+
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"二手柯尼塞格"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"修改前："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>
+
+<span class="c1"># 直接给某个索引赋值 —— 这是列表"可变"的标志</span>
+<span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"特斯拉"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"修改第 0 个："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>      <span class="c1"># ['特斯拉', '二手柯尼塞格', '凯迪拉克']</span>
+
+<span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"保时捷"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"修改最后一个："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>      <span class="c1"># ['特斯拉', '二手柯尼塞格', '保时捷']</span>
+
+<span class="c1"># 对比字符串：字符串不能这样改</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"tom"</span>
+<span class="c1"># name[0] = "T"  # TypeError: 'str' object does not support item assignment</span>
+<span class="c1"># 字符串必须"生成新的再赋回"</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"T"</span> <span class="o">+</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"字符串的替代做法："</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>   <span class="c1"># Tom</span>
+
+<span class="c1"># 注意：直接把一个字符串塞进列表是可以的</span>
+<span class="n">mixed</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hello"</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mixed</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mixed</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>    <span class="c1"># &lt;class 'int'&gt; 列表可以装不同类型</span>
+</code></pre>
+<h3 id="示例-3-添加元素">示例 3：添加元素</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># list_add.py —— 三种添加方式</span>
+
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"初始："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>
+
+<span class="c1"># 1）append()：在列表末尾追加一个元素（最常用）</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"雷克萨斯"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"append 后："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>          <span class="c1"># ['小红帽', '凯迪拉克', '雷克萨斯']</span>
+
+<span class="c1"># 2）insert()：在指定索引位置插入，后面的元素自动后移</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"宝马"</span><span class="p">)</span>             <span class="c1"># 在索引 1（即"小红帽"和"凯迪拉克"之间）插入</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"insert 后："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>          <span class="c1"># ['小红帽', '宝马', '凯迪拉克', '雷克萨斯']</span>
+
+<span class="c1"># 3）用 + 拼接两个列表（会产生一个新列表）</span>
+<span class="n">more</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"本田"</span><span class="p">,</span> <span class="s2">"福特"</span><span class="p">]</span>
+<span class="n">combined</span> <span class="o">=</span> <span class="n">cars</span> <span class="o">+</span> <span class="n">more</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"拼接后："</span><span class="p">,</span> <span class="n">combined</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表没变："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>          <span class="c1"># + 不修改原列表</span>
+
+<span class="c1"># append 和 insert 的返回值都是 None，所以不能写 x = cars.append(...) 后期待 x 有值</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"沃尔沃"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"append 的返回值："</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>   <span class="c1"># None</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"但列表确实变了："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cars</span><span class="p">))</span> <span class="c1"># 5</span>
+
+<span class="c1"># 常见错误：append 只能一次加一个</span>
+<span class="c1"># cars.append("A", "B")   # TypeError: append() takes exactly one argument</span>
+<span class="c1"># 想一次加多个，用 extend</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"奥迪"</span><span class="p">,</span> <span class="s2">"英菲尼迪"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"extend 后："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-4-删除元素">示例 4：删除元素</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># list_remove.py —— remove / pop / del / clear</span>
+
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"宝马"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">,</span> <span class="s2">"雷克萨斯"</span><span class="p">,</span> <span class="s2">"保时捷"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"初始："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>
+
+<span class="c1"># 1）remove()：按"值"删除，只能删掉第一个匹配的</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"宝马"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"remove 后："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>         <span class="c1"># ['小红帽', '凯迪拉克', '雷克萨斯', '保时捷']</span>
+
+<span class="c1"># 删不存在的值会报 ValueError</span>
+<span class="c1"># cars.remove("菲亚特")           # ValueError: list.remove(x): x not in list</span>
+
+<span class="c1"># 2）pop()：按"位置"弹出，并返回被弹出的元素</span>
+<span class="n">last</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span><span class="c1"># 弹出最后一个</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"pop 出来的："</span><span class="p">,</span> <span class="n">last</span><span class="p">)</span>         <span class="c1"># 保时捷</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"pop 后："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>             <span class="c1"># ['小红帽', '凯迪拉克', '雷克萨斯']</span>
+
+<span class="c1"># pop 也可以指定位置</span>
+<span class="n">first_car</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>            <span class="c1"># 弹出第0 个</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"pop(0) 出来的："</span><span class="p">,</span> <span class="n">first_car</span><span class="p">)</span>  <span class="c1"># 小红帽</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"现在："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>               <span class="c1"># ['凯迪拉克', '雷克萨斯']</span>
+
+<span class="c1"># 3）del：按位置删除，但不返回值</span>
+<span class="k">del</span> <span class="n">cars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"del 后："</span><span class="p">,</span> <span class="n">cars</span><span class="p">)</span>             <span class="c1"># ['凯迪拉克']</span>
+
+<span class="c1"># 4）remove 和 pop 的本质区别</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+<span class="c1"># numbers.remove(20)   # 删掉"值为 20 的元素"</span>
+<span class="c1"># numbers.pop(1)       # 删掉"第 1 个位置的元素"（这里恰好也是 20）</span>
+
+<span class="c1"># 5）清空列表</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">nums</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"clear 后："</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="s2">"长度"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>   <span class="c1"># [] 长度 0</span>
+</code></pre>
+<h3 id="示例-5-引用共享与浅拷贝">示例 5：引用共享与浅拷贝</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># copy_semantics.py —— Python 列表的"引用"语义（重要）</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="c1"># 1）直接赋值 = 给同一个列表贴第二张标签，不是复制</span>
+<span class="n">original</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">]</span>
+<span class="n">alias</span> <span class="o">=</span> <span class="n">original</span>
+<span class="n">alias</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"橙子"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"original："</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>     <span class="c1"># ['苹果', '香蕉', '橙子']  ← 也变了！</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"alias："</span><span class="p">,</span> <span class="n">alias</span><span class="p">)</span>           <span class="c1"># ['苹果', '香蕉', '橙子']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"是不是同一个对象："</span><span class="p">,</span> <span class="n">original</span> <span class="ow">is</span> <span class="n">alias</span><span class="p">)</span>   <span class="c1"># True</span>
+
+<span class="c1"># 2）正确的浅拷贝：copy.copy() 或 original[:]</span>
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">original</span><span class="p">[:]</span><span class="c1"># 外层列表是新对象</span>
+<span class="n">shallow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"葡萄"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"original："</span><span class="p">,</span> <span class="n">original</span><span class="p">)</span>     <span class="c1"># ['苹果', '香蕉', '橙子']  ← 没变，好</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"shallow："</span><span class="p">,</span> <span class="n">shallow</span><span class="p">)</span>       <span class="c1"># ['苹果', '香蕉', '橙子', '葡萄']</span>
+
+<span class="c1"># 3）嵌套列表时，浅拷贝只保护外层！</span>
+<span class="n">nested</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">],</span> <span class="p">[</span><span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">]]</span>
+<span class="n">outer</span> <span class="o">=</span> <span class="n">nested</span><span class="p">[:]</span><span class="c1"># 浅拷贝</span>
+<span class="n">outer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"X"</span><span class="p">)</span>             <span class="c1"># 修改的是内层那个列表</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"nested："</span><span class="p">,</span> <span class="n">nested</span><span class="p">)</span>         <span class="c1"># [['a', 'b', 'X'], ['c', 'd']]  ← 内层被改了！</span>
+
+<span class="c1"># 4）完全独立的副本需要 deepcopy</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">nested</span><span class="p">)</span>
+<span class="n">deep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Y"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"nested："</span><span class="p">,</span> <span class="n">nested</span><span class="p">)</span>         <span class="c1"># [['a', 'b', 'X'], ['c', 'd']]  ← 完全没变</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"deep："</span><span class="p">,</span> <span class="n">deep</span><span class="p">)</span>             <span class="c1"># [['a', 'b', 'X', 'Y'], ['c', 'd']]</span>
+</code></pre>
+<h3 id="示例-6-排序与反转-列表自带的小工具">示例 6：排序与反转（列表自带的小工具）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># list_order.py —— 顺序相关的实用方法</span>
+
+<span class="n">ages</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">28</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原始："</span><span class="p">,</span> <span class="n">ages</span><span class="p">)</span>
+
+<span class="c1"># sort()：原地排序（修改原列表），返回 None</span>
+<span class="n">ages</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"升序 sort 后："</span><span class="p">,</span> <span class="n">ages</span><span class="p">)</span>      <span class="c1"># [20, 25, 28, 30, 35]</span>
+
+<span class="c1"># sort(reverse=True)：降序</span>
+<span class="n">ages</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"降序后："</span><span class="p">,</span> <span class="n">ages</span><span class="p">)</span>            <span class="c1"># [35, 30, 28, 25, 20]</span>
+
+<span class="c1"># sorted()：返回排好序的**新列表**，原列表不动</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">61</span><span class="p">]</span>
+<span class="n">top3</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>   <span class="c1"># 前三名</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表没变："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>     <span class="c1"># [88, 95, 72, 100, 61]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"前三名："</span><span class="p">,</span> <span class="n">top3</span><span class="p">)</span>           <span class="c1"># [100, 95, 88]</span>
+
+<span class="c1"># 按字母排序</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"dave"</span><span class="p">,</span> <span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"Bob"</span><span class="p">,</span> <span class="s2">"charlie"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原样："</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"按字母（区分大小写）："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>          <span class="c1"># Bob, alice, charlie, dave</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"忽略大小写："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">))</span>     <span class="c1"># Alice, bob, charlie, dave</span>
+
+<span class="c1"># reverse()：原地反转</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">nums</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"反转后："</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span>            <span class="c1"># [5, 4, 3, 2, 1]</span>
+
+<span class="c1"># count() 和 index()：计数与查找位置</span>
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">,</span> <span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"苹果有几个："</span><span class="p">,</span> <span class="n">fruits</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">))</span>    <span class="c1"># 2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"橙子在第几个："</span><span class="p">,</span> <span class="n">fruits</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"橙子"</span><span class="p">))</span>  <span class="c1"># 3（索引从 0 开始）</span>
+<span class="c1"># print(fruits.index("葡萄"))     # ValueError: '葡萄' is not in list</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 2-1【我的收藏清单】</strong>
+1. 创建一个名为 <code>hobbies</code> 的列表，包含至少 5 个字符串元素（你的爱好）。
+2. 输出列表长度。
+3. 输出第一个元素和最后一个元素（分别用正索引和负索引）。
+4. 输出最后一个元素的长度（用 <code>len()</code>）。
+5. 在末尾追加一个爱好，输出新列表。</p>
+<p><strong>练习 2-2【购物车】</strong>
+给定 <code>cart = ["牛奶", "面包", "鸡蛋"]</code>
+按顺序完成：① 在索引 1 插入"苹果"；② 追加"大米"；③ 删除"面包"；④ 弹出第一个元素并把弹出的值存入变量 <code>first_item</code>；⑤ 用一个 <code>print()</code> 同时输出 <code>first_item</code> 和剩余列表。
+期望最终输出：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">第一个商品</span><span class="err">：</span><span class="n">牛奶</span>
+<span class="n">剩余商品</span><span class="err">：</span><span class="p">[</span><span class="s1">'鸡蛋'</span><span class="p">,</span> <span class="s1">'苹果'</span><span class="p">,</span> <span class="s1">'大米'</span><span class="p">]</span>
+</code></pre>
+<p><strong>练习 2-3【正负索引热身】</strong>
+给定 <code>numbers = [10, 20, 30, 40, 50]</code>，用 5 行 <code>print()</code> 分别输出：第一个、最后一个、中间那个、倒数第二个，以及用 <code>len()</code> 表达式写出的"正数第二个"。
+输出：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="mi">10</span>
+<span class="mi">50</span>
+<span class="mi">30</span>
+<span class="mi">40</span>
+<span class="mi">20</span>
+</code></pre>
+<p><strong>练习 2-4【引用陷阱】</strong>
+先运行下面代码，观察输出，然后回答问题：为什么 <code>other</code> 里明明只加了一个元素，<code>cars</code> 也变了？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">cars</span>
+<span class="n">other</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span> <span class="ow">is</span> <span class="n">other</span><span class="p">)</span>
+</code></pre>
+<p>要求：① 写出实际输出；② 用一句生活化的比喻解释原因；③ 改写代码，让 <code>cars</code> 不受影响。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 2-5【成绩分析（不用循环）】</strong>
+给定 <code>scores = [88, 92, 79, 95, 60, 85, 91]</code>（可先不用 <code>for</code> 循环，用 7 行 <code>print()</code> 或索引逐个处理）
+完成：
+1. 输出最高分（用 <code>max()</code>）和最低分（用 <code>min()</code>）
+2. 用 <code>sorted()</code> 求前三名，输出
+3. 算出平均分（<code>sum()</code> 除以 <code>len()</code>），保留两位小数
+4. 把低于 85 分的分数找出来，用列表推导式（若还没学，用手动构造新列表的方式）输出</p>
+<p><strong>练习 2-6【实现自己的"栈"】</strong>
+一个栈是"后进先出"（最后放进去的先拿出来）——正好对应列表末尾 <code>append</code> + 末尾 <code>pop</code>。
+写一个购物车结账模拟：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cart</span> <span class="o">=</span> <span class="p">[]</span>
+</code></pre>
+<p>完成：① <code>append</code> 依次加入"手机""耳机""充电器"；② 用 <code>pop()</code> 取出最后加入的商品并存入变量；③ 输出取出的商品和剩余列表；④ 输出全过程一共弹出了几个（提示：先记录初始长度）。
+不要用类（本单元内容），只用列表方法。</p>
+<p><strong>练习 2-7【嵌套列表访问】</strong>
+给定 <code>matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]</code>
+完成：
+1. 输出 <code>matrix[0]</code> 和 <code>matrix[0][0]</code>，说明两者的区别
+2. 输出右下角元素 <code>9</code>（用两种索引写法实现）
+3. 输出最后一行的所有元素
+4. 修改 <code>matrix[1][2]</code> 的值为 <code>60</code>，输出修改后的 <code>matrix</code></p>
+<p><strong>练习 2-8【去重与计数】</strong>
+给定 <code>nums = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]</code>
+不用 <code>set()</code>，用列表方法完成：
+1. 输出列表长度
+2. 统计数字 <code>1</code> 出现几次（<code>.count()</code>）
+3. 找出 <code>3</code> 所在的所有位置（提示：<code>.index()</code> 会返回<strong>第一个</strong>位置，找到后把它替换成一个绝不会出现的标记值，再继续找）
+4. 输出排序后（升序/降序各一次）的列表
+5. 输出反转后的列表（不要破坏原列表）</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-2-1">参考答案 2-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># hobbies.py —— 我的收藏清单</span>
+
+<span class="n">hobbies</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"阅读"</span><span class="p">,</span> <span class="s2">"篮球"</span><span class="p">,</span> <span class="s2">"烹饪"</span><span class="p">,</span> <span class="s2">"摄影"</span><span class="p">,</span> <span class="s2">"吉他"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"我的爱好："</span><span class="p">,</span> <span class="n">hobbies</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"一共有"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">hobbies</span><span class="p">),</span> <span class="s2">"个爱好"</span><span class="p">)</span>            <span class="c1"># 5 个</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一个爱好："</span><span class="p">,</span> <span class="n">hobbies</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                <span class="c1"># 阅读</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最后一个爱好："</span><span class="p">,</span> <span class="n">hobbies</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>               <span class="c1"># 吉他</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最后一个爱好的长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">hobbies</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>      <span class="c1"># 2</span>
+
+<span class="n">hobbies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"爬山"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"追加后："</span><span class="p">,</span> <span class="n">hobbies</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-2-2">参考答案 2-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># cart.py —— 购物车的增删改</span>
+
+<span class="n">cart</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"牛奶"</span><span class="p">,</span> <span class="s2">"面包"</span><span class="p">,</span> <span class="s2">"鸡蛋"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"初始："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>
+
+<span class="c1"># 在索引 1 处插入"苹果"，原来索引 1 之后的元素自动后移</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"苹果"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"insert 后："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>      <span class="c1"># ['牛奶', '苹果', '面包', '鸡蛋']</span>
+
+<span class="c1"># 末尾追加</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"大米"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"append 后："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>      <span class="c1"># ['牛奶', '苹果', '面包', '鸡蛋', '大米']</span>
+
+<span class="c1"># 按"值"删除："面包"</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"面包"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"remove 后："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>      <span class="c1"># ['牛奶', '苹果', '鸡蛋', '大米']</span>
+
+<span class="c1"># 弹出第一个元素，并接住返回值</span>
+<span class="n">first_item</span> <span class="o">=</span> <span class="n">cart</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一个商品："</span><span class="p">,</span> <span class="n">first_item</span><span class="p">)</span>                <span class="c1"># 牛奶</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"剩余商品："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>                <span class="c1"># ['苹果', '鸡蛋', '大米']</span>
+</code></pre>
+<h3 id="参考答案-2-3">参考答案 2-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># indexes.py —— 正索引与负索引热身</span>
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                   <span class="c1"># 10  第一个</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>                  <span class="c1"># 50  最后一个</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>                   <span class="c1"># 30  中间那个（索引 2 = 第 3 个）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>                  <span class="c1"># 40  倒数第二个</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">])</span>    <span class="c1"># 20  用 len() 表达式表示"正数第二个"</span>
+</code></pre>
+<h3 id="参考答案-2-4">参考答案 2-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># reference_demo.py —— 引用陷阱的三种写法</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="c1"># ===== 原写法：会互相影响 =====</span>
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">cars</span><span class="c1"># 注意：这里没有复制，只是多贴了一张标签</span>
+<span class="n">other</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"实际输出："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>          <span class="c1"># ['a', 'b', 'c'] ['a', 'b', 'c']</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span> <span class="ow">is</span> <span class="n">other</span><span class="p">)</span>        <span class="c1"># True</span>
+
+<span class="c1"># 原因：把变量想象成贴在笔记本封面上的标签。</span>
+<span class="c1"># other = cars 相当于给同一本笔记本再贴一张标签，</span>
+<span class="c1"># 不管从哪张标签往本子上写字，本子都还是那一本。</span>
+
+<span class="c1"># ===== 写法一：切片复制（浅拷贝）=====</span>
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">cars</span><span class="p">[:]</span><span class="c1"># 创建了一个全新的列表</span>
+<span class="n">other</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"切片拷贝："</span><span class="p">,</span> <span class="n">cars</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>      <span class="c1"># ['a', 'b'] ['a', 'b', 'c']</span>
+
+<span class="c1"># ===== 写法二：copy.copy() =====</span>
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>
+<span class="n">other</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"copy.copy："</span><span class="p">,</span> <span class="n">cars</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>    <span class="c1"># ['a', 'b'] ['a', 'b', 'c']</span>
+
+<span class="c1"># ===== 写法三：完全独立（deepcopy）=====</span>
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>
+<span class="n">other</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"deepcopy："</span><span class="p">,</span> <span class="n">cars</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>     <span class="c1"># ['a', 'b'] ['a', 'b', 'c']</span>
+</code></pre>
+<h3 id="参考答案-2-5">参考答案 2-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># scores_report.py —— 成绩分析（只用内置函数，不用循环）</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">91</span><span class="p">]</span>
+
+<span class="c1"># 1）最高分与最低分</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最高分："</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>          <span class="c1"># 95</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最低分："</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>          <span class="c1"># 60</span>
+
+<span class="c1"># 2）前三名：sorted 产生新列表，所以原scores 不受影响</span>
+<span class="n">top3</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"前三名："</span><span class="p">,</span> <span class="n">top3</span><span class="p">)</span>                 <span class="c1"># [95, 92, 91]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表没变："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+
+<span class="c1"># 3）平均分：sum 求和后除以元素个数</span>
+<span class="n">average</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"平均分：</span><span class="si">{</span><span class="n">average</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span><span class="c1"># 84.29</span>
+
+<span class="c1"># 4）低于 85 分的分数：用列表推导式过滤</span>
+<span class="n">low_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">85</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"低于 85 分的："</span><span class="p">,</span> <span class="n">low_scores</span><span class="p">)</span>      <span class="c1"># [79, 60]</span>
+
+<span class="c1"># 顺带演示：如果不用推导式，手动构造也能做</span>
+<span class="n">low_manual</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">85</span><span class="p">:</span>
+        <span class="n">low_manual</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"低分（手动版）："</span><span class="p">,</span> <span class="n">low_manual</span><span class="p">)</span>
+
+<span class="c1"># 5）最高分和最低分的差</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"极差："</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>          <span class="c1"># 35</span>
+</code></pre>
+<h3 id="参考答案-2-6">参考答案 2-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># stack_sim.py —— 用列表实现"后进先出"的栈</span>
+
+<span class="n">cart</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># 入栈：用 append 放到末尾</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"手机"</span><span class="p">)</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"耳机"</span><span class="p">)</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"充电器"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"加入商品后："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>        <span class="c1"># ['手机', '耳机', '充电器']</span>
+
+<span class="c1"># 出栈：用 pop 从末尾取出，取出的值存入变量</span>
+<span class="n">popped</span> <span class="o">=</span> <span class="n">cart</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"结账取出："</span><span class="p">,</span> <span class="n">popped</span><span class="p">)</span>        <span class="c1"># 充电器（最后加入的先出来）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"剩余："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>              <span class="c1"># ['手机', '耳机']</span>
+
+<span class="c1"># 再弹一次</span>
+<span class="n">popped2</span> <span class="o">=</span> <span class="n">cart</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"再次取出："</span><span class="p">,</span> <span class="n">popped2</span><span class="p">)</span>       <span class="c1"># 耳机</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"剩余："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>              <span class="c1"># ['手机']</span>
+
+<span class="c1"># 统计一共弹出了几个：初始长度 3，现在长度 1，所以弹出了 2 个</span>
+<span class="n">initial</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"弹出总数："</span><span class="p">,</span> <span class="n">initial</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">cart</span><span class="p">))</span>      <span class="c1"># 2</span>
+
+<span class="c1"># 空列表再 pop 会报 IndexError，所以要先检查</span>
+<span class="k">if</span> <span class="n">cart</span><span class="p">:</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"弹出后："</span><span class="p">,</span> <span class="n">cart</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"购物车已经是空的，不能再弹出"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-2-7">参考答案 2-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># matrix_demo.py —— 嵌套列表（矩阵）的访问</span>
+
+<span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+
+<span class="c1"># 1）区别：matrix[0] 拿到的是"一整个子列表"，matrix[0][0] 才是具体数字</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"matrix[0]："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># [1, 2, 3]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"matrix[0][0]："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>    <span class="c1"># 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"类型对比："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">type</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># 2）取右下角元素 9，两种写法</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"写法一："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>          <span class="c1"># 9  用正索引</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"写法二："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="c1"># 9  用负索引</span>
+
+<span class="c1"># 3）最后一行的所有元素</span>
+<span class="n">last_row</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最后一行："</span><span class="p">,</span> <span class="n">last_row</span><span class="p">)</span>            <span class="c1"># [7, 8, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一行："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># 4）修改 matrix[1][2] 的值为 60</span>
+<span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"修改后："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>      <span class="c1"># [[1, 2, 3], [4, 5, 60], [7, 8, 9]]</span>
+
+<span class="c1"># 顺带演示：把整个第二行换掉（不是修改，是整体替换）</span>
+<span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"替换第二行后："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>          <span class="c1"># [[1, 2, 3], [40, 50, 60], [7, 8, 9]]</span>
+</code></pre>
+<h3 id="参考答案-2-8">参考答案 2-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dedupe_analysis.py —— 不用 set，用列表方法做计数与查位置</span>
+
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># 1）长度</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"列表长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>            <span class="c1"># 10</span>
+
+<span class="c1"># 2）统计 1 出现几次</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1 出现了："</span><span class="p">,</span> <span class="n">nums</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s2">"次"</span><span class="p">)</span>   <span class="c1"># 2 次</span>
+
+<span class="c1"># 3）找出 3 所在的所有位置</span>
+<span class="c1">#思路：index() 只返回第一个位置，所以找到后把它替换成</span>
+<span class="c1">#      一个绝不会出现在列表里的标记（这里是 0），然后继续往后找。</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[:]</span><span class="c1"># 用副本，不破坏原始数据</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">):</span>                     <span class="c1"># while 循环属于单元 6，先照抄即可</span>
+    <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>                     <span class="c1"># 打标记，避免重复找到</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"3 出现的位置："</span><span class="p">,</span> <span class="n">positions</span><span class="p">)</span>        <span class="c1"># [0, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原数据没被破坏："</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span>
+
+<span class="c1"># 4）升序与降序（sorted 不修改原列表）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"升序："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>             <span class="c1"># [1, 1, 2, 3, 3, 4, 5, 5, 6, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"降序："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+<span class="c1"># 5）反转，且不破坏原列表</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"反转副本："</span><span class="p">,</span> <span class="n">nums</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表："</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span>               <span class="c1"># [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]</span>
+
+<span class="c1"># 如果允许原地修改，才用 reverse()</span>
+<span class="n">flipped</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[:]</span>
+<span class="n">flipped</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原地反转："</span><span class="p">,</span> <span class="n">flipped</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：<code>fruits = ["苹果", "香蕉", "橙子"]</code>，<code>fruits[1]</code> 和 <code>fruits[-2]</code> 分别是什么？为什么它们相同？</p>
+<blockquote>
+<p><strong>要点</strong>：都是 <code>"香蕉"</code>。索引从 0 开始时，<code>[1]</code> 是<strong>正向走 1 步</strong>（第二个）；负索引 <code>[-2]</code> 是<strong>从末尾倒着数第 2 个</strong>。列表长度是 3，从末尾数第 2 个正好也是第二个，所以两者指向同一个元素。</p>
+</blockquote>
+<p><strong>2. 判断题</strong>：<code>a = [1, 2, 3]</code> 和 <code>b = [1, 2, 3]</code> 这两行代码执行后，<code>a == b</code> 的结果是什么？<code>a is b</code> 呢？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>a == b</code> 是 <code>True</code>（内容相同）；<code>a is b</code> 是 <code>False</code>（<code>is</code> 比较"是不是同一个对象"，方括号各自创建了两个独立列表）。这说明 <code>==</code> 比内容，<code>is</code> 比身份。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：下面代码输出什么？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="n">last</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"b"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">last</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：第一行报错 <code>TypeError: 'NoneType' object is not iterable</code>——不对，更准确的是：<strong><code>last</code> 是 <code>None</code></strong>，然后 <code>print(last)</code> 输出 <code>None</code>，<code>print(cars)</code> 输出 <code>['a', 'c']</code>。关键点是 <code>.remove()</code> <strong>没有返回值</strong>，它只负责删除。而 <code>.pop()</code> 有返回值。</p>
+</blockquote>
+<p><strong>4. 判断题</strong>：<code>lst = [1, 2, 3]</code> 然后 <code>lst2 = lst[:]</code> 然后 <code>lst2.append(4)</code>，此时 <code>lst</code> 的内容是 <code>[1, 2, 3, 4]</code>。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。<code>lst</code> 仍然是 <code>[1, 2, 3]</code>。<code>lst[:]</code> 是<strong>切片</strong>，会产生一个新列表（外层浅拷贝），所以 <code>lst2</code> 是独立的对象。若写成 <code>lst2 = lst</code>，才会互相影响。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>append()</code> 和 <code>insert()</code> 都可以添加元素，两者区别是什么？各写一行代码实现"在列表 <code>nums = [1, 4]</code> 的索引 1 处插入 2"。</p>
+<blockquote>
+<p><strong>要点</strong>：<code>append()</code> 只能加到<strong>末尾</strong>（不传位置）；<code>insert(位置, 值)</code> 可以加到<strong>任意位置</strong>，该位置及其后的元素会自动后移。实现：<code>nums.insert(1, 2)</code> → <code>[1, 2, 4]</code>。若用 append 则只能是 <code>nums.append(2)</code> → <code>[1, 4, 2]</code>。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能解释「索引从 0 开始」和负索引的用法</li>
+<li>[ ] 能说出 <code>.remove()</code> 与 <code>.pop()</code> 的三个区别（参数含义 / 有无返回值 / 报错类型）</li>
+<li>[ ] 能解释为什么 <code>b = a</code> 之后改 <code>a</code> 会影响 <code>b</code></li>
+<li>[ ] 练习 2-4、2-8 已跑通并能口述原理</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 3 讲操作列表——终于引入 <code>for</code> 循环，让你能用 3 行代码处理 1000 个数据；同时会学 <code>range()</code>、列表推导式（一行写出筛选逻辑）、切片（<code>[start:stop:step]</code>）和元组（不可修改的列表），并第一次接触 PEP 8 代码排版规范。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="01.html"><small>← 上一单元</small><b>单元 1 · 变量与数据类型</b></a><div class="spot"><a class="pn" href="ppt/u/02.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s6"><small>课程大纲课件</small><b>阶段总览 p6 →</b></a></div><a class="pn nx" href="03.html"><small>下一单元 →</small><b>单元 3 · 操作列表</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

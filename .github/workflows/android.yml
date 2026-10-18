@@ -1,0 +1,74 @@
+name: Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - 'web/**'
+      - 'index.html'
+      - 'python-course-syllabus.html'
+      - 'python-learning-roadmap.html'
+      - 'sw.js'
+      - 'manifest.webmanifest'
+      - 'icon*.png'
+      - 'android/**'
+      - 'tools/*.py'
+      - '.github/workflows/android.yml'
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Capacitor 8 要求 JDK 21；ubuntu-latest 自带 Android SDK
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: 安装 Pillow（生成图标/启动屏源图）
+        run: pip install --break-system-packages pillow
+
+      - name: 生成原生图标与启动屏源图
+        run: python3 tools/build_app_assets.py
+
+      - name: 组装 webDir（android/www）
+        run: python3 tools/build_android_www.py
+
+      - name: 接受 Android SDK 许可
+        run: yes | sdkmanager --licenses > /dev/null 2>&1 || true
+
+      - name: 安装 Capacitor 依赖
+        working-directory: android
+        run: npm install
+
+      - name: 添加安卓平台（android/android 为生成物，CI 每次重建）
+        working-directory: android
+        run: npx cap add android
+
+      - name: 同步 Web 资源
+        working-directory: android
+        run: npx cap sync android
+
+      - name: 写入应用图标与启动屏
+        working-directory: android
+        run: npx --yes @capacitor/assets generate --android
+
+      - name: 构建 Debug APK
+        working-directory: android/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: 上传 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-course-debug-apk
+          path: android/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

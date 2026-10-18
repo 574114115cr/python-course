@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 111 节 · 综合项目与阶段 2 收尾</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="111">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 111/111 节 · 综合项目与阶段 2 收尾</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/21.html#s8" title="本课节对应的课件">本课课件 u21·p8</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-21-1-三个项目的工程件">参考答案 21-1（三个项目的工程件）</a>
+<a class="lv3" href="#参考答案-21-2-pytest-测试-可直接运行">参考答案 21-2（pytest 测试，可直接运行）</a>
+<a class="lv3" href="#参考答案-21-3-重构冲刺前后对比">参考答案 21-3（重构冲刺前后对比）</a>
+<a class="lv3" href="#参考答案-21-4-陌生项目定位-bug-的完整过程">参考答案 21-4（陌生项目定位 bug 的完整过程）</a>
+<a class="lv3" href="#综合项目-3-个自选-做一个就够">综合项目（3 个自选，做一个就够）</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-没有-gitignore-就-git-add-虚拟环境和数据库进了仓库">错误 1：★ 没有 .gitignore 就 git add .，虚拟环境和数据库进了仓库</a>
+<a class="lv3" href="#错误-2-pip-freeze-在全局环境执行-清单长到没法看">错误 2：pip freeze 在全局环境执行，清单长到没法看</a>
+<a class="lv3" href="#错误-3-测试全是抄教材的-自己一条没写">错误 3：★ 测试全是抄教材的，自己一条没写</a>
+<a class="lv3" href="#错误-4-把-secret_key-硬编码在-settings-py-里-还推上">错误 4：把 SECRET_KEY 硬编码在 settings.py 里，还推上了公开仓库</a>
+<a class="lv3" href="#错误-5-代码里全是魔法数字-改一个参数要翻-8-个文件">错误 5：代码里全是魔法数字，改一个参数要翻 8 个文件</a>
+<a class="lv3" href="#错误-6-所有代码堆在一个文件里-两千行">错误 6：所有代码堆在一个文件里，两千行</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#八-关卡-2-验收标准-五条硬指标">八、关卡 2 验收标准（五条硬指标）</a>
+<a class="lv3" href="#硬指标-1-三个项目全部跑通-且已推到公开仓库-每个都有-readme-requ">✅ 硬指标 1：三个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt</a>
+<a class="lv3" href="#硬指标-2-学习笔记-已部署上线-公网可访问-错误页已定制">✅ 硬指标 2：「学习笔记」已部署上线，公网可访问，错误页已定制</a>
+<a class="lv3" href="#硬指标-3-能用自己的函数写出-pytest-测试并跑过-不是抄教材的">✅ 硬指标 3：能用自己的函数写出 pytest 测试并跑过（不是抄教材的）</a>
+<a class="lv3" href="#硬指标-4-接手一个没写过的-500-行-python-项目-能读懂结构并定位一">✅ 硬指标 4：接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</a>
+<a class="lv3" href="#硬指标-5-能说清每个项目-解决了什么问题-还能怎么扩展">✅ 硬指标 5：能说清每个项目「解决了什么问题、还能怎么扩展」</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 21</h4>
+      <a class="ppt-thumb" href="../ppt/u/21.html#s8">
+        <img loading="lazy" src="../ppt/u/21/slide-08.webp" alt="本课节课件">
+        <span class="cap"><b>单元 21 · p8</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../21.html"><span class="k">讲义</span>
+          <span class="v">单元 21 · 阶段 2 综合 + 关卡 2 验收</span></a>
+        <a href="../ppt/u/21.html#s8"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u21"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u21"><span class="k">题库</span>
+          <span class="v">本单元 3 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 111 节 / 111</span>
+        <span class="kwk">W29</span>
+        <span class="ku">单元 21 · 阶段 2 综合 + 关卡 2 验收</span>
+      </div>
+      <h1>综合项目与阶段 2 收尾</h1>
+      <p class="goal">任选一个综合项目做完，形成阶段 2 的收尾产出</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 110 节 · ★ 关卡 2 五项逐条自测</h3><ul><li>★ 阶段 1 的函数、类、文件、异常、pytest，在三个项目里全都用上了——能讲清这条呼应关系，说明你是真的理解而不是背下来的。</li><li>下一步方向要「先有项目、再学框架」，不要反过来先啃框架。</li><li>阶段 2 的终点：能独立交付一个别人能用的东西，然后按兴趣选方向继续。</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>任选 A/B/C 之一定题并开工</li><li>对照统一要求自查四条</li></ol>
+    </div>
+
+    <h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 21-1【给三个项目补齐工程件】</strong>
+为外星人入侵、数据可视化、学习笔记各补齐缺失的工程件。要求：① 每个项目根目录有 <code>README.md</code>（必含三段：这是什么 / 怎么装依赖 / 怎么运行，附一段运行输出示例）；② 有 <code>requirements.txt</code>，由 <code>pip freeze &gt; requirements.txt</code> 生成且依赖都锁了版本；③ 有 <code>.gitignore</code>，至少忽略 <code>__pycache__/</code>、虚拟环境目录、<code>.env</code>；④ 三个项目都 <code>git init</code> 过并推到公开仓库。<strong>验收点</strong>：跑一遍示例 1 的 <code>project_doctor.py</code>，问题数为 0；把任意一个仓库 clone 到<strong>另一台机器</strong>，照 README 能跑起来——关卡 2 第 1 条就过了。</p>
+<p><strong>练习 21-2【给自己的函数写 pytest 测试】</strong>
+不许抄教材里现成的测试。挑三个项目里各一个<strong>纯逻辑函数</strong>（不碰屏幕、不碰数据库的），各写 2 条 pytest 测试。要求：① 文件名 <code>test_xxx.py</code>、函数名 <code>test_xxx</code>；② 每条测试断言<strong>具体数值</strong>（不是 <code>assert result is not None</code>）；③ 至少覆盖一条边界情况（0、空列表、非法输入）；④ <code>pytest -v</code> 输出全绿。<strong>验收点</strong>：能逐条说清「这条测试在防哪种 bug」。项目里没有纯逻辑函数的话，先按 2.3 标准一拆文件。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 21-3【重构冲刺】</strong>
+任选一个项目（推荐外星人入侵，<code>alien_invasion.py</code> 通常最大），做一次 60 分钟的重构冲刺。要求：① 用示例 3 跑出基线（重构前的总行数、最长函数、最高复杂度）；② 按「谁调用它」拆文件，<strong>每个新文件不超过 300 行</strong>；③ 把魔法数字/路径抽到 <code>settings.py</code>；④ 拆完后功能必须和重构前完全一样；⑤ 再跑一次示例 3，对比前后数据。<strong>验收点</strong>：能说清「重构后代码行数变多」的原因（拆文件会多出 import 和模块文档字符串，这是正常的；可维护性提升不以行数下降衡量）。</p>
+<p><strong>练习 21-4【接手一个陌生项目】</strong>
+找一个真实的开源 Python 项目（200–800 行、3 个以上文件），按 2.4 的五步读它，并完成：① 画出目录树 + 每个文件角色的清单；② 找到程序入口，从入口往下追三层调用关系；③ 找到一个你认为是 bug 的地方，写出复现步骤并用 <code># INTENTIONALLY-BROKEN</code> 标出来；④ 如果上游有 issue 区，说明你的问题是不是已知问题。<strong>验收点</strong>：能用 5 分钟向别人口述这个项目「干什么、怎么跑、入口在哪、你发现的 bug 在哪一行」。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-21-1-三个项目的工程件">参考答案 21-1（三个项目的工程件）</h3>
+<p>外星人入侵项目的 README（另两个项目按同样结构写）：</p>
+<pre><code class="language-markdown"><span class="cl">markdown</span><span class="gh"># 外星人入侵（Alien Invasion）</span>
+
+用 Pygame 实现的打飞机小游戏：驾驶飞船射击外星舰队，外星人横向移动并不断下压，
+撞到玩家或撞到底部就损失一艘飞船，游戏结束。
+
+<span class="gs">**怎么装依赖**</span>：需要 Python 3.12，执行 pip install -r requirements.txt（依赖：pygame）。
+
+<span class="gs">**怎么运行**</span>：执行 python alien_invasion.py。
+<span class="k">-</span><span class="w"> </span>← → 左右移动，↓ 加速，空格 开火，P 暂停，Q 退出
+
+<span class="gs">**项目结构**</span>
+<span class="k">-</span><span class="w"> </span>alien_invasion.py —— 组装：创建窗口、编组、主循环
+<span class="k">-</span><span class="w"> </span>settings.py —— 全部常量（颜色、数量、速度）
+<span class="k">-</span><span class="w"> </span>ship.py / alien.py / bullet.py —— 三个精灵类
+<span class="k">-</span><span class="w"> </span>game_functions.py —— 纯逻辑函数（update / check_keydown 等，可直接测试）
+
+<span class="gs">**测试**</span>：执行 pytest -v，11 条测试全部通过。
+</code></pre>
+<p>三个项目的 <code>requirements.txt</code>（形态示例，实际以你机器上 <code>pip freeze</code> 的输出为准）与通用 <code>.gitignore</code>：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="c1"># requirements.txt —— 外星人入侵</span>
+<span class="na">pygame</span><span class="o">=</span><span class="s">=2.6.0</span>
+
+<span class="c1"># requirements.txt —— 数据可视化</span>
+<span class="na">matplotlib</span><span class="o">=</span><span class="s">=3.9.0</span>
+<span class="na">plotly</span><span class="o">=</span><span class="s">=5.22.0</span>
+<span class="na">requests</span><span class="o">=</span><span class="s">=2.32.3</span>
+
+<span class="c1"># requirements.txt —— 学习笔记（本地依赖）</span>
+<span class="na">asgiref</span><span class="o">=</span><span class="s">=3.8.1</span>
+<span class="na">Django</span><span class="o">=</span><span class="s">=5.0.2</span>
+<span class="na">django-bootstrap5</span><span class="o">=</span><span class="s">=23.11</span>
+<span class="na">sqlparse</span><span class="o">=</span><span class="s">=0.4.2</span>
+<span class="c1"># 线上专用依赖另放 requirements_remote.txt：gunicorn、psycopg2</span>
+
+<span class="c1"># .gitignore（三个项目通用）</span>
+<span class="na">__pycache__/</span>
+<span class="na">*.py[cod]</span>
+<span class="na">venv/</span>
+<span class="na">.venv/</span>
+<span class="na">env/</span>
+<span class="na">ll_env/</span>
+<span class="na">.env</span>
+<span class="na">*.sqlite3</span>
+<span class="na">db.sqlite3</span>
+<span class="na">data/</span>
+<span class="na">.pytest_cache/</span>
+<span class="na">.DS_Store</span>
+</code></pre>
+<p>体检脚本在这个项目上的输出示例：</p>
+<pre><code class="language-text"><span class="cl">示例</span>体检对象：D:/projects/alien_invasion
+
+【必备工程件】
+  [OK] 项目说明：README.md
+  [OK] 依赖清单：requirements.txt
+  [OK] 忽略清单：.gitignore
+
+【内容检查】
+  [OK] 依赖清单检查通过
+  [OK] 忽略清单检查通过
+
+【代码扫描】（共 6 个 .py 文件）
+  [OK] 硬编码密钥检查
+  [OK] 300 行检查
+
+体检通过：工程件齐全，可以推仓库 / 部署了。
+</code></pre>
+<h3 id="参考答案-21-2-pytest-测试-可直接运行">参考答案 21-2（pytest 测试，可直接运行）</h3>
+<p>以「外星人入侵」里 <code>game_functions.py</code> 的三个纯逻辑函数为例：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_game_functions.py —— 关卡 2 第 3 条的验收材料：自己写的测试</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">game_functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_collision</span><span class="p">,</span> <span class="n">check_ship_limit</span><span class="p">,</span> <span class="n">update_score</span>
+
+
+<span class="c1"># ===== 一个只提供 colliderect 的替身，够测试用了 =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FakeRect</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">colliderect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">w</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">h</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">far_apart</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""飞船和外星人相距很远，谁也碰不到谁。"""</span>
+    <span class="k">return</span> <span class="n">FakeRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">FakeRect</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestCheckShipLimit</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""正常：还有 2 艘。"""</span>
+        <span class="k">assert</span> <span class="n">check_ship_limit</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_zero_ships_means_game_over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 边界：0 艘必须返回 0，调用方据此结束游戏。"""</span>
+        <span class="k">assert</span> <span class="n">check_ship_limit</span><span class="p">([])</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"ships,expected"</span><span class="p">,</span> <span class="p">[([],</span> <span class="mi">0</span><span class="p">),</span> <span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">3</span><span class="p">)])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_parametrized</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ships</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""参数化：一次测多个输入。"""</span>
+        <span class="k">assert</span> <span class="n">check_ship_limit</span><span class="p">(</span><span class="n">ships</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestCheckCollision</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_ship_hits_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""飞船和外星人位置重叠 → 碰撞。"""</span>
+        <span class="k">assert</span> <span class="n">check_collision</span><span class="p">(</span><span class="n">FakeRect</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+                              <span class="n">FakeRect</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">[])</span> <span class="ow">is</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_bullet_hits_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 飞船没撞到，但子弹撞到了 → 也算碰撞。"""</span>
+        <span class="n">ship</span><span class="p">,</span> <span class="n">alien</span> <span class="o">=</span> <span class="n">far_apart</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">check_collision</span><span class="p">(</span><span class="n">ship</span><span class="p">,</span> <span class="n">alien</span><span class="p">,</span> <span class="p">[</span><span class="n">FakeRect</span><span class="p">(</span><span class="mi">510</span><span class="p">,</span> <span class="mi">510</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span> <span class="ow">is</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_no_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""谁都没碰到 → 不碰撞。"""</span>
+        <span class="n">ship</span><span class="p">,</span> <span class="n">alien</span> <span class="o">=</span> <span class="n">far_apart</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">check_collision</span><span class="p">(</span><span class="n">ship</span><span class="p">,</span> <span class="n">alien</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestUpdateScore</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_one_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 断言具体数值：1 个外星人 = 10 分。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_none_hit_adds_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""边界：没击落任何外星人，分数不变。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">30</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_custom_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""改成每只 20 分。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">points_per_alien</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span> <span class="o">==</span> <span class="mi">40</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_negative_score_is_allowed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 业务约定：分数可以减（踩到外星人扣分），不是 bug。"""</span>
+        <span class="k">assert</span> <span class="n">update_score</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">5</span>
+</code></pre>
+<p>运行结果必须全绿：</p>
+<pre><code class="language-text"><span class="cl">示例</span>$ pytest -v
+============================= test session starts ==============================
+collected 11 items
+
+test_game_functions.py::TestCheckShipLimit::test_normal PASSED        [  9%]
+test_game_functions.py::TestCheckShipLimit::test_zero_ships_means_game_over PASSED [18%]
+...
+============================= 11 passed in 0.24s ==============================
+</code></pre>
+<h3 id="参考答案-21-3-重构冲刺前后对比">参考答案 21-3（重构冲刺前后对比）</h3>
+<p>以 <code>alien_invasion.py</code> 为例（数据形态示例，实际以你的项目为准）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>重构前（python code_metrics.py alien_invasion）
+  共 1 个文件、412 行、9 个函数
+  【超过 300 行的文件】
+    alien_invasion.py：412 行
+  【复杂度最高的 5 个函数】
+     9  168 行  run_game()      (alien_invasion.py:38) ← 超标 ← 太长
+     7   54 行  update()        (alien_invasion.py:210)
+     5   31 行  reset_game()    (alien_invasion.py:280)
+  共 4 处值得重构。
+
+重构后
+  共 6 个文件、486 行、14 个函数
+  【超过 300 行的文件】
+    无
+  【复杂度最高的 5 个函数】
+     6   38 行  update()        (game_functions.py:12)
+     5   29 行  spawn_alien()   (game_functions.py:55)
+     4   24 行  reset_game()    (alien_invasion.py:44)
+  共 1 处值得重构（update 可以再拆）。
+</code></pre>
+<p><strong>关于「行数反而变多了」</strong>：从 412 行变成 486 行，但分布从「一个巨型文件」变成「6 个都小于 300 行的文件」，最长函数从 168 行降到 38 行。<strong>行数增加是拆分的正常成本</strong>（每个新文件要写 import 和模块文档字符串），换来的是：① 任何一个文件都能一口气读完；② <code>game_functions.py</code> 里的纯逻辑能直接写测试；③ 改 <code>settings.py</code> 的常量不会碰到游戏逻辑。拆分后 <code>alien_invasion.py</code> 只剩组装职责（约 80 行）：<code>run_game()</code> 里只有「创建窗口 → 建三个编组 → while 循环里查事件、调 <code>update_*</code> 函数、<code>draw()</code> 绘制、<code>pygame.display.flip()</code>」这一串骨架，所有细节都委托给了 <code>game_functions</code> 里的纯逻辑函数。<strong>判断标准是：入口文件里如果出现了具体的碰撞坐标、速度数值，说明拆分没做干净。</strong></p>
+<h3 id="参考答案-21-4-陌生项目定位-bug-的完整过程">参考答案 21-4（陌生项目定位 bug 的完整过程）</h3>
+<p>定位 bug 的标准动作。假设读到一个这样的小游戏片段：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># buggy_code.py —— INTENTIONALLY-BROKEN 演示用：4 处 bug，请自己发现</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_keydown</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ship</span><span class="p">,</span> <span class="n">bullets</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""处理按键。"""</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_q</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>                      <span class="c1"># bug 1：用了 sys.exit() 但没 import sys</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+        <span class="n">bullets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Bullet</span><span class="p">(</span><span class="n">ship</span><span class="p">))</span>       <span class="c1"># bug 2：Bullet 类没定义、也没导入</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+        <span class="n">ship</span><span class="o">.</span><span class="n">moving_right</span> <span class="o">=</span> <span class="kc">False</span>       <span class="c1"># bug 3：按右键反而停下，应该 = True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">update_aliens</span><span class="p">(</span><span class="n">aliens</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""让整个舰队横向移动。"""</span>
+    <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+        <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>            <span class="c1"># bug 4：只是定义了函数内的局部变量</span>
+</code></pre>
+<p><strong>定位过程（这四步就是关卡 2 第 4 条的答案）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>做法</th>
+<th>对上面代码的发现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 分类</td>
+<td>看 import 和目录：用了 pygame，属于「事件驱动的图形程序」</td>
+<td>搜 <code>if __name__</code> 找到入口 <code>run_game()</code></td>
+</tr>
+<tr>
+<td>② 静态看</td>
+<td>从入口往下追三层：<code>run_game</code> → <code>check_keydown</code> / <code>update_aliens</code></td>
+<td>找到两个可疑函数</td>
+</tr>
+<tr>
+<td>③ 读报错</td>
+<td>看 traceback 的<strong>最后一行</strong>（异常类型）和<strong>第一行 File "…", line N</strong></td>
+<td><code>NameError: name 'sys' is not defined</code>（bug 1）→ 定位到具体行</td>
+</tr>
+<tr>
+<td>④ 判断是不是 bug</td>
+<td>对着「代码想表达的意思」逐行对照</td>
+<td>bug 2/3/4 静态就能看出来</td>
+</tr>
+</tbody>
+</table>
+<p><strong>修复要点</strong>：bug 1、2 补上 <code>import sys</code> 和 <code>from bullet import Bullet</code>；bug 3 把 <code>ship.moving_right = False</code> 改成 <code>True</code>；bug 4 把 <code>update_aliens</code> 改成接收一个 <code>game_state</code> 字典参数，写 <code>game_state["active"] = False</code>，让状态改动作用到调用方可见的对象上。</p>
+<p>★ bug 4 最值得记住：<code>game_active = False</code> 只在函数内创建了一个<strong>局部变量</strong>，函数一返回就没了，调用方的状态一点没变。这和阶段 1 里 <code>self.count = count</code> 是同一个家族的问题——<strong>赋值只是给一个名字绑定对象，能不能影响别人，取决于这个名字的作用域。</strong></p>
+<h3 id="综合项目-3-个自选-做一个就够">综合项目（3 个自选，做一个就够）</h3>
+<p><strong>A · 个人数据看板</strong>
+选一个你真关心的数据源（天气、豆瓣读书 top、GitHub 趋势、自己的记账 CSV 都行）。要求：① 数据从 API 或 CSV 取，<strong>不允许硬编码数据</strong>；② 用 matplotlib 或 Plotly 至少出 2 张图（趋势图 + 对比图）；③ 出图前先 <code>print</code> 出关键统计量，<strong>图要能支持一个结论</strong>；④ 整条链路封装成 <code>python dashboard.py</code> 一条命令可重跑；⑤ 取数失败要 <code>try/except</code> 给出友好提示；⑥ README 写清「这个看板回答什么问题」。<strong>加分</strong>：加一个 <code>report.txt</code>，自动写出「三个数字 + 一句话结论」。</p>
+<p><strong>B · 待办网站（把阶段 1 的命令行待办管理器升级成 Django 版）</strong>
+阶段 1 你写过命令行待办管理器（练习 11-2），现在把它搬到浏览器。要求：① 建虚拟环境，<code>startproject</code> 建项目、<code>startapp</code> 建应用，<strong>锁 requirements.txt</strong>；② 模型：任务（标题、完成状态、优先级、创建时间）、分类；③ 用 <code>ModelForm</code> 做增删改查，模板继承 base.html；④ 用 <code>LoginView</code> 做登录，并像单元 19 那样<strong>按用户过滤</strong>任务列表；⑤ 用 django-bootstrap5 美化；⑥ 部署到 Platform.sh，<strong>定制 404/500 页</strong>；⑦ 至少 3 条 pytest 测试（模型方法 + 一个视图）。<strong>验收点</strong>：把网址发给别人，他能注册、登录、建任务，且<strong>看不到你的任务</strong>。</p>
+<p><strong>C · 小游戏增强版（给外星人入侵加三个功能）</strong>
+① <strong>最高分持久化</strong>——用 JSON 存 <code>high_score</code>，游戏结束时更新（路径常量放 <code>settings.py</code>）；② <strong>音效</strong>——用 <code>pygame.mixer</code> 在开火和游戏结束时播音效，加 <code>enable_sound</code> 开关（音效文件找不到时优雅降级，不能崩）；③ <strong>暂停/继续</strong>——按 <code>P</code> 切换状态（需要把主循环改成可中断的 while 条件）。<strong>必做</strong>：把三个纯逻辑函数抽到独立模块，并写 <strong>3 条 pytest 测试</strong>覆盖它们（<code>load_high_score</code> / <code>update_high_score</code> / 暂停状态切换），用 <code>tmp_path</code> 夹具，不在项目目录留下文件。<strong>验收点</strong>：<code>pytest -v</code> 里这 3 条测试是你自己写的，全绿。</p>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-没有-gitignore-就-git-add-虚拟环境和数据库进了仓库">错误 1：★ 没有 .gitignore 就 <code>git add .</code>，虚拟环境和数据库进了仓库</h3>
+<p><strong>现象</strong>：<code>git push</code> 传了 400MB。<strong>原因</strong>：没有 <code>.gitignore</code>，<code>git add .</code> 把一切都加进去了。<strong>修复</strong>：补写 <code>.gitignore</code>，再 <code>git rm -r --cached ll_env</code> 把已跟踪文件撤出索引（只删索引，不删本地文件），然后提交。</p>
+<h3 id="错误-2-pip-freeze-在全局环境执行-清单长到没法看">错误 2：<code>pip freeze</code> 在全局环境执行，清单长到没法看</h3>
+<p><strong>现象</strong>：requirements.txt 有 80 行，大部分是本项目没用到的包。<strong>原因</strong>：没建虚拟环境就 <code>pip freeze</code>，冻的是全局环境。<strong>修复</strong>：<code>python -m venv venv</code> → 激活 → 只装项目需要的包 → <code>pip freeze &gt; requirements.txt</code>。</p>
+<h3 id="错误-3-测试全是抄教材的-自己一条没写">错误 3：★ 测试全是抄教材的，自己一条没写</h3>
+<p><strong>现象</strong>：关卡 2 第 3 条过不了。<strong>原因</strong>：<code>test_game_functions.py</code> 里全是照抄的用例，没有一条针对你自己写的代码。<strong>修复</strong>：挑 3 个自己的纯逻辑函数，各写 2 条断言具体数值的测试（练习 21-2）。<strong>判断标准</strong>：关掉讲义后还能写出来，才算真的会。</p>
+<h3 id="错误-4-把-secret_key-硬编码在-settings-py-里-还推上">错误 4：把 SECRET_KEY 硬编码在 settings.py 里，还推上了公开仓库</h3>
+<p><strong>现象</strong>：仓库公开后被人 issue 提醒。<strong>原因</strong>：<code>SECRET_KEY = "django-insecure-…"</code> 直接写在代码里。<strong>修复</strong>：改成 <code>os.environ["DJANGO_SECRET_KEY"]</code>，<strong>立刻去平台后台重置旧密钥</strong>（删记录没用，克隆里已经有了），把 <code>.env</code> 加进 <code>.gitignore</code>、提交 <code>.env.example</code> 说明要配哪些变量。</p>
+<h3 id="错误-5-代码里全是魔法数字-改一个参数要翻-8-个文件">错误 5：代码里全是魔法数字，改一个参数要翻 8 个文件</h3>
+<p><strong>现象</strong>：「敌人快一点」这个需求改了半小时。<strong>原因</strong>：<code>alien.rect.top += 1</code> 这种数字散落在各处。<strong>修复</strong>：按 2.3 标准二抽到 <code>settings.py</code>，用有名字的常量替换；改完再搜一遍那个数字，确认没有漏网。</p>
+<h3 id="错误-6-所有代码堆在一个文件里-两千行">错误 6：所有代码堆在一个文件里，两千行</h3>
+<p><strong>现象</strong>：想加个功能要读 500 行才敢动手；pytest 一导入就把 pygame 窗口开起来了。<strong>原因</strong>：没拆文件（2.3 标准一）。<strong>修复</strong>：按「谁调用它」拆，<strong>先把纯逻辑挑出来——这一步顺带就解决了测试要开窗口的问题</strong>。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 判断题</strong>：跟着教材把三个项目完整敲了一遍，就算「具备独立做项目的能力」了。</p>
+<blockquote>
+<p><strong>要点</strong>：<strong>错误</strong>，也是最需要警惕的自我感觉。跟着敲得到的是<strong>能跑的代码</strong>；独立做项目需要的是<strong>能交付、能维护、能被接手</strong>的工程——判断标准就是关卡 2 那五条。三个项目敲完但一条硬指标没过，只能算「完成了教材」。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：为什么 <code>requirements.txt</code> 里每个依赖都要写 <code>==</code> 版本号？什么时候可以不写？</p>
+<blockquote>
+<p><strong>要点</strong>：因为部署环境是一台全新的机器，只能靠清单重建；不带版本号就是「装最新版」，大版本升级可能带不兼容改动，半年后重建环境直接启动失败。可以不写的情况只有一种：<strong>这个包只在你本地开发环境用</strong>（如 <code>platformshconfig</code>、本地 <code>gunicorn</code>），但即使这种也建议写清，注释说明理由。</p>
+</blockquote>
+<p><strong>3. 改错题</strong>：下面这段想把「最高分」从 JSON 文件读出来，错在哪里？该怎么改？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># high_score_buggy.py —— INTENTIONALLY-BROKEN 演示用：改错题</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">HIGH_SCORE_FILE</span> <span class="o">=</span> <span class="s2">"data/high_score.json"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_high_score</span><span class="p">():</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">HIGH_SCORE_FILE</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>      <span class="c1"># 第一次运行时文件还不存在，会直接崩</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="s2">"score"</span><span class="p">]</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：三个问题。① <strong>没处理文件不存在</strong>：第一次运行 <code>FileNotFoundError</code> 直接崩，游戏开不了；修法是 <code>try/except FileNotFoundError</code> 返回默认值 0。② <strong>没指定 <code>encoding="utf-8"</code></strong>：Windows 默认按 GBK 打开，含中文时抛 <code>UnicodeDecodeError</code>。③ <strong>路径硬编码</strong>：按 2.3 标准二应放进 <code>settings.py</code>。建议另补 <code>except json.JSONDecodeError</code> 处理文件被写坏的情况。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：接手一个 500 行的陌生项目，你的前三步分别做什么？为什么不能从头读到尾？</p>
+<blockquote>
+<p><strong>要点</strong>：① <strong>画目录树 + 标文件角色</strong>（入口 / 配置 / 测试 / 业务逻辑 / 数据），<code>python explorer.py 项目路径</code> 可自动完成；② <strong>读 README 和 requirements.txt</strong>，知道它解决什么问题、用了什么库；③ <strong>从入口往下追三层调用关系</strong>（<code>__main__</code> → <code>main()</code> → 它调用的函数 → 被调用函数的定义）。从头读到尾会把常量、工具函数、类、业务逻辑混着看，读完记不住也拼不出全貌——<strong>先建地图再进细节，是读代码的第一原则</strong>。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>print()</code> 和 <code>logging</code> 有什么区别？为什么正式项目要用后者？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>print</code> 无条件打到标准输出，没有时间戳、没有级别、不能按级别开关、不能按文件分类、出错后不留痕。<code>logging</code> 有级别（DEBUG/INFO/WARNING/ERROR）、有格式（时间+级别+模块+内容）、可同时输出到终端和文件（<code>RotatingFileHandler</code> 自动轮换防写满磁盘）。用 logging 的真正价值是：<strong>出问题时能回头查「那一刻发生了什么」</strong>。模板见示例 4。</p>
+</blockquote>
+<hr>
+<h2 id="八-关卡-2-验收标准-五条硬指标">八、关卡 2 验收标准（五条硬指标）</h2>
+<blockquote>
+<p>这五条对应学习路线图与主页上的「关卡 2 · 判定『能独立做项目』」。<strong>五条全部达标</strong>，说明你已经从「会写代码的人」变成「能交付软件的人」。</p>
+</blockquote>
+<h3 id="硬指标-1-三个项目全部跑通-且已推到公开仓库-每个都有-readme-requ">✅ 硬指标 1：三个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt</h3>
+<p><strong>怎么算达标</strong>：三个仓库链接都拿到了；每个仓库首页能看到 README；每个仓库里有 <code>requirements.txt</code> 且依赖都带 <code>==</code>；把任意一个仓库 clone 到<strong>另一台机器</strong>，照 README 能跑起来。<strong>怎么验证</strong>：跑一遍示例 1 的 <code>project_doctor.py</code>，问题数为 0。<strong>没过怎么办</strong>：README 照参考答案 21-1 的三段结构写；requirements.txt 在虚拟环境里重新 <code>pip freeze &gt; requirements.txt</code>；仓库还没有就 <code>git init</code> → <code>git add .</code> → <code>git commit</code> → 建远程仓库 → <code>git push</code>。</p>
+<h3 id="硬指标-2-学习笔记-已部署上线-公网可访问-错误页已定制">✅ 硬指标 2：「学习笔记」已部署上线，公网可访问，错误页已定制</h3>
+<p><strong>怎么算达标</strong>：<code>platform url</code> 给出的网址在<strong>手机流量</strong>（不是同一个 WiFi）下能打开；访问不存在的网址返回你定制的 404 页；服务器出错时 500 页也是定制的，不是 Django 调试页。<strong>怎么验证</strong>：重点测首页、<code>/不存在/</code>、<code>/accounts/login/</code> 三个 URL。<strong>没过怎么办</strong>：回单元 20，按 2.7 节三大坑（<code>ALLOWED_HOSTS</code>、<code>collectstatic</code>、<code>DEBUG</code>）逐项排查，改完 <code>git commit</code> + <code>platform push</code>。<strong>注意</strong>：定制错误页只在 <code>DEBUG = False</code> 时生效，本地默认看不到。</p>
+<h3 id="硬指标-3-能用自己的函数写出-pytest-测试并跑过-不是抄教材的">✅ 硬指标 3：能用<strong>自己的</strong>函数写出 pytest 测试并跑过（不是抄教材的）</h3>
+<p><strong>怎么算达标</strong>：≥ 3 条测试针对你自己项目里的纯逻辑函数；每条断言具体数值；至少一条覆盖边界（0 / 空 / 非法输入）；<code>pytest -v</code> 全绿。<strong>怎么验证</strong>：关掉讲义和教材，只留项目代码和 pytest，问自己：<strong>这三条测试的断言值我能自己算出来吗？</strong> 算不出来就是抄的。<strong>没过怎么办</strong>：先按 2.3 标准一把纯逻辑从「界面/数据库代码」里拆出来（这是前提），再照参考答案 21-2 写。记住：文件名和函数名都要 <code>test_</code> 前缀，命名不对 pytest 显示 <code>collected 0 items</code> 而<strong>不报错</strong>。</p>
+<h3 id="硬指标-4-接手一个没写过的-500-行-python-项目-能读懂结构并定位一">✅ 硬指标 4：接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</h3>
+<p><strong>怎么算达标</strong>：能在 30 分钟内画出结构图、指出入口、找到至少一处 bug（或明确的改进点）并说明理由；能判断项目属于哪一类（脚本 / 事件驱动 / 数据处理 / Web）。<strong>怎么验证</strong>：按 2.4 的五步走一遍，用 <code>grep -rn</code> 搜关键字。<strong>没过怎么办</strong>：<strong>找不到入口</strong>就搜 <code>if __name__</code>；<strong>读不懂逻辑</strong>就画调用图（grep 搜函数名看谁调用谁）；<strong>不敢确定是 bug</strong>就看上游有没有 open 的 issue。</p>
+<h3 id="硬指标-5-能说清每个项目-解决了什么问题-还能怎么扩展">✅ 硬指标 5：能说清每个项目「解决了什么问题、还能怎么扩展」</h3>
+<p><strong>怎么算达标</strong>：对三个项目各能回答两问——① 它解决什么真实问题（不是「练了 xxx API」）；② 至少说得出三条扩展方向，<strong>并能说明每条要动哪几个文件</strong>。<strong>怎么验证</strong>：录一段 3 分钟口述，或写进每个项目 README 的「未来想法」一节。<strong>没过怎么办</strong>：这题问的是<strong>判断力</strong>，只能自己想。万能模板（以数据看板为例）：① 数据源换更细的粒度；② 加一个导出报告的功能；③ 每天定时跑并把结果推给你。<strong>能说出「要动哪几个文件」，就说明你真懂它的结构。</strong></p>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能不看讲义完整复述做项目的七步流程，并说出它为什么比「跟着敲一遍」重要</li>
+<li>[ ] 能填出三个项目的技术地图（Pygame 编组 / matplotlib+Plotly+API / Django MVT+ORM+认证+Platform.sh 部署），并说出每个项目解决了什么问题</li>
+<li>[ ] 用 <code>project_doctor.py</code>、<code>code_metrics.py</code>、<code>explorer.py</code> 三个脚本体检过自己的项目</li>
+<li>[ ] 三个项目都有了 README.md + requirements.txt + .gitignore + 测试文件，并推到了公开仓库</li>
+<li>[ ] 「学习笔记」已部署上线，公网能访问，404/500 是定制页</li>
+<li>[ ] 能用自己的纯逻辑函数写出 ≥3 条 pytest 测试并跑绿（断言具体数值，含边界用例）</li>
+<li>[ ] 能说清每个项目「解决了什么问题、还能怎么扩展」，并按 2.6 节选定了下一步方向</li>
+</ul>
+<p><strong>下一单元预告</strong>：阶段 2 到此结束，<strong>关卡 2 五条硬指标全部达标即毕业</strong>。接下来进入<strong>阶段 3 · 工程能力补齐</strong>（教材刻意不讲，但决定你是"会写代码的人"还是"会交付软件的人"）：虚拟环境与依赖管理的系统打法、Git 分支与合并、断点调试与读 traceback、代码组织与重构（单文件 ≤300 行、配置与逻辑分离、类型注解入门）、读文档的正确姿势，以及按兴趣挑一条深造路线（FastAPI/Flask · pandas · 爬虫 · 算法与 LeetCode）。<strong>先按 2.6 节选定主攻方向。</strong></p>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>★ 产出：一个可展示的综合项目 + 阶段 1 学习总结</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>★ 阶段 1 的学习总结写了吗？最大的收获是什么？</li><li>四个下一步方向里你选了哪个？说得出理由吗？</li><li>★ 你能说清「为什么阶段 1 的函数/类在阶段 2 全都用上了」吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>阶段 2 的终点是「能独立交付一个项目」，然后按兴趣选方向继续。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../21.html">查看单元 21 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="110.html"><small>← 上一节</small><b>第 110 节 · ★ 关卡 2 五项逐条自测</b></a><a class="pn nx" id="nextLink" href="index.html"><small>全部课程 →</small><b>回到课程目录</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

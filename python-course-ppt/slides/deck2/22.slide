@@ -1,0 +1,80 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+            <Box style={{ background: '#16232E', borderRadius: 5, padding: '4px 12px' }}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>通过关卡 2 之后</Text>
+            </Box>
+            <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>阶段 3 · 从会写代码到会交付软件</Text>
+        </Box>
+        <Text style={{ fontSize: 18, color: '#5A6B7A' }}>
+            这部分教材刻意不讲，但它决定你是「会写代码的人」还是「能交付软件的人」。与阶段 2 并行穿插，占比约 15%
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 144, width: '1152px', height: 216 }}>
+        <svg width='1152' height='216' viewBox='0 0 1152 216'>
+            <text x='0' y='18' fontSize='15' fontWeight='bold' fill='#16232E' fontFamily='Microsoft YaHei'>六项教材外的必补能力</text>
+
+            <rect x='0' y='34' width='182' height='88' rx='10' fill='#1F5FA8' />
+            <text x='91' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Microsoft YaHei'>虚拟环境</text>
+            <text x='91' y='86' fontSize='12' fill='#CFE2F5' textAnchor='middle' fontFamily='Microsoft YaHei'>venv / pip</text>
+            <text x='91' y='106' fontSize='12' fill='#CFE2F5' textAnchor='middle' fontFamily='Microsoft YaHei'>requirements.txt</text>
+
+            <rect x='194' y='34' width='182' height='88' rx='10' fill='#2F7BC8' />
+            <text x='285' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Microsoft YaHei'>Git 进阶</text>
+            <text x='285' y='86' fontSize='12' fill='#EAF3FC' textAnchor='middle' fontFamily='Microsoft YaHei'>分支 / 合并</text>
+            <text x='285' y='106' fontSize='12' fill='#EAF3FC' textAnchor='middle' fontFamily='Microsoft YaHei'>解决冲突 / tag</text>
+
+            <rect x='388' y='34' width='182' height='88' rx='10' fill='#2F7BC8' />
+            <text x='479' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Microsoft YaHei'>调试能力</text>
+            <text x='479' y='86' fontSize='12' fill='#EAF3FC' textAnchor='middle' fontFamily='Microsoft YaHei'>断点调试</text>
+            <text x='479' y='106' fontSize='12' fill='#EAF3FC' textAnchor='middle' fontFamily='Microsoft YaHei'>逐层读 traceback</text>
+
+            <rect x='582' y='34' width='182' height='88' rx='10' fill='#0E9B78' />
+            <text x='673' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Microsoft YaHei'>代码组织</text>
+            <text x='673' y='86' fontSize='12' fill='#D7F0E7' textAnchor='middle' fontFamily='Microsoft YaHei'>超 300 行就拆</text>
+            <text x='673' y='106' fontSize='12' fill='#D7F0E7' textAnchor='middle' fontFamily='Microsoft YaHei'>类型注解入门</text>
+
+            <rect x='776' y='34' width='182' height='88' rx='10' fill='#0E9B78' />
+            <text x='867' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Microsoft YaHei'>读文档</text>
+            <text x='867' y='86' fontSize='12' fill='#D7F0E7' textAnchor='middle' fontFamily='Microsoft YaHei'>官方文档检索</text>
+            <text x='867' y='106' fontSize='12' fill='#D7F0E7' textAnchor='middle' fontFamily='Microsoft YaHei'>看源码与 changelog</text>
+
+            <rect x='970' y='34' width='182' height='88' rx='10' fill='#E08A15' />
+            <text x='1061' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Microsoft YaHei'>选一个方向深挖</text>
+            <text x='1061' y='86' fontSize='12' fill='#FDF0DC' textAnchor='middle' fontFamily='Microsoft YaHei'>Web / 数据</text>
+            <text x='1061' y='106' fontSize='12' fill='#FDF0DC' textAnchor='middle' fontFamily='Microsoft YaHei'>爬虫 / 工程化</text>
+
+            <text x='0' y='156' fontSize='13.5' fill='#5A6B7A' fontFamily='Microsoft YaHei'>补法：不是单独开一门课，而是把每条能力嵌进阶段 2 的项目里练——部署时学 venv，改错时学分支，拆文件时学重构。</text>
+            <text x='0' y='182' fontSize='13.5' fontWeight='bold' fill='#0E9B78' fontFamily='Microsoft YaHei'>四个方向都要「先有项目、再学框架」，不要反过来先啃框架。</text>
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 380, width: '1152px', height: 228, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1F5FA8' }}>阶段 3 想解决什么问题</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.8 }}>
+                阶段 1 解决「写不出来」，阶段 2 解决「做不完整」，阶段 3 解决「交付不可靠」。<br />
+                具体表现是：改一个功能不小心弄坏了别处（没测试）、线上出问题不知道怎么回滚（没版本管理）、
+                换台电脑就跑不起来（没锁依赖）。
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#EEF5FB', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 10 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1F5FA8' }}>四条方向，先学什么</Text>
+            <Text style={{ fontSize: 14.5, color: '#3A4A58', lineHeight: 1.75 }}>
+                <b>Web</b> → Django REST Framework，把学习笔记做成接口<br />
+                <b>数据</b> → pandas / numpy，处理十万行以上的表<br />
+                <b>自动化</b> → requests + 定时任务，把重复劳动脚本化<br />
+                <b>工程化</b> → pytest 进阶、CI、类型检查
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>22 / 23</Text>
+    </Box>
+</Slide>

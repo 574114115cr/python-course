@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 1 · 变量与数据类型</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="1">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 1 · 变量与数据类型</h1>
+  <a class="ppt" href="ppt/u/01.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="6" data-to="9"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u1"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/01.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u1"><span class="k">题库</span><span class="v">本单元 5 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-变量-一个贴了标签的盒子">2.1 变量：一个贴了标签的盒子</a>
+<a class="lv3" href="#2-2-命名规则-为什么-my-var-和-2var-不行">2.2 命名规则：为什么 my-var 和 2var 不行</a>
+<a class="lv3" href="#2-3-字符串-str-带引号的文字">2.3 字符串 str：带引号的文字</a>
+<a class="lv3" href="#2-4-整数-int-与浮点数-float">2.4 整数 int 与浮点数 float</a>
+<a class="lv3" href="#2-5-布尔值-bool-只有两个取值">2.5 布尔值 bool：只有两个取值</a>
+<a class="lv3" href="#2-6-类型转换-把一种类型的标签换成另一种">2.6 类型转换：把一种类型的标签换成另一种</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-四种类型与-type">示例 1：四种类型与 type()</a>
+<a class="lv3" href="#示例-2-变量重新赋值与命名规范">示例 2：变量重新赋值与命名规范</a>
+<a class="lv3" href="#示例-3-字符串常用方法">示例 3：字符串常用方法</a>
+<a class="lv3" href="#示例-4-类型转换">示例 4：类型转换</a>
+<a class="lv3" href="#示例-5-f-string-格式化输出">示例 5：f-string 格式化输出</a>
+<a class="lv3" href="#示例-6-多行字符串与转义">示例 6：多行字符串与转义</a>
+<a class="lv3" href="#示例-7-注释的正确写法">示例 7：注释的正确写法</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-1-1">参考答案 1-1</a>
+<a class="lv3" href="#参考答案-1-2">参考答案 1-2</a>
+<a class="lv3" href="#参考答案-1-3">参考答案 1-3</a>
+<a class="lv3" href="#参考答案-1-4">参考答案 1-4</a>
+<a class="lv3" href="#参考答案-1-5">参考答案 1-5</a>
+<a class="lv3" href="#参考答案-1-6">参考答案 1-6</a>
+<a class="lv3" href="#参考答案-1-7">参考答案 1-7</a>
+<a class="lv3" href="#参考答案-1-8">参考答案 1-8</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-1-变量与简单数据类型">单元 1：变量与简单数据类型</h1>
+<blockquote>
+<p>对应教材第 1 章「搭建环境」+ 第 2 章「变量与简单数据类型」
+关键词：变量、命名规范、字符串 str、整数 int、浮点数 float、布尔值 bool、类型转换、f-string</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>说出并正确使用四种基本数据类型 <code>str</code> / <code>int</code> / <code>float</code> / <code>bool</code>，能判断一个变量的类型。</li>
+<li>独立写出符合 PEP 8 命名规范的变量名，能说出为什么不能用 <code>2myvar</code>、<code>my var</code>、<code>class</code> 这类名字。</li>
+<li>熟练使用 <code>str()</code> <code>int()</code> <code>float()</code> <code>bool()</code> 完成类型转换，能解释 <code>int("3.9")</code> 报错的原因。</li>
+<li>掌握字符串常用方法：<code>.upper()</code> <code>.lower()</code> <code>.title()</code> <code>.strip()</code> <code>.len()</code>，并说明它们<strong>不改变原字符串</strong>。</li>
+<li>用 f-string 拼接输出任意格式的句子，并用 <code>#</code> 写规范的注释。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-变量-一个贴了标签的盒子">2.1 变量：一个贴了标签的盒子</h3>
+<p>变量不是"存储数据的空间"，更准确的说法是：<strong>一个指向某个数据的名字</strong>。</p>
+<p>生活化类比：你有一支笔，笔身上贴了一张标签写着"会议记录"。变量 <code>pen</code> 就是那张标签，而笔（数据）是真实存在的东西。你可以换一支笔，只要把标签重新贴一下——这就是"重新赋值"：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">color</span> <span class="o">=</span> <span class="s2">"红"</span>
+<span class="n">color</span> <span class="o">=</span> <span class="s2">"蓝"</span>   <span class="c1"># 换了一支笔，标签上现在写"蓝"</span>
+</code></pre>
+<p>Python 的重要特点：<strong>先赋值，后使用</strong>。如果变量还没有被赋值就被使用，会报 <code>NameError</code>。这就像你还没买笔就想用"会议记录"这个标签去柜子里拿东西——柜子里空无一物。</p>
+<h3 id="2-2-命名规则-为什么-my-var-和-2var-不行">2.2 命名规则：为什么 <code>my-var</code> 和 <code>2var</code> 不行</h3>
+<p>变量名只能包含三类字符：字母、数字、下划线，且<strong>不能以数字开头</strong>。除此之外还有一批 Python 关键字被系统保留了，不能用作变量名（<code>if</code>、<code>for</code>、<code>while</code>、<code>class</code>、<code>def</code>、<code>import</code>、<code>True</code>、<code>False</code>、<code>None</code> 等）。</p>
+<p>PEP 8 是 Python 官方风格指南，对变量命名的核心建议是：<strong>全小写 + 多词用下划线分隔</strong>。
+- 好：<code>user_name</code>、<code>total_price</code>、<code>item2</code>
+- 差：<code>UserName</code>、<code>userName</code>、<code>用户名</code></p>
+<p>另外一条来自本书的实践建议：<strong>名字要够长、够具体</strong>。<code>a</code>、<code>x</code>、<code>data</code>、<code>temp</code> 这类短名字在一周后你自己都看不懂，而 <code>current_user_score</code> 一眼就懂。这项习惯对零基础学习者尤其重要。</p>
+<h3 id="2-3-字符串-str-带引号的文字">2.3 字符串 str：带引号的文字</h3>
+<p>字符串必须被引号包起来，可以是单引号 <code>'abc'</code> 或双引号 <code>"abc"</code>。两者的区别在于<strong>当字符串本身含引号时</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">msg1</span> <span class="o">=</span> <span class="s2">"I'm happy"</span>    <span class="c1"># 双引号包住里面的单引号 → 合法</span>
+<span class="n">msg2</span> <span class="o">=</span> <span class="s1">'He said "hi"'</span> <span class="c1"># 单引号包住里面的双引号 → 合法</span>
+</code></pre>
+<p><strong>不可变性</strong>是字符串最重要的性质：字符串一旦创建就不能原地修改。所有"看起来在改"的方法，实际上都是<strong>返回了一个新的字符串</strong>。</p>
+<p>生活化类比：一张打印好的纸条。你不能把纸条上的字擦掉重写；但你可以<strong>复印一份，在复印件上改</strong>。<code>.upper()</code> 就是"复印一份并把字改成大写"。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"tom"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>   <span class="c1"># 输出 TOM</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>           <span class="c1"># 输出 tom —— 原纸条没变！</span>
+</code></pre>
+<p>所以正确用法是<strong>接住返回值</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>   <span class="c1"># 现在 name 才是 "TOM"</span>
+</code></pre>
+<h3 id="2-4-整数-int-与浮点数-float">2.4 整数 int 与浮点数 float</h3>
+<p><code>int</code> 是整数（<code>-3</code>、<code>0</code>、<code>42</code>），<code>float</code> 是小数（<code>3.14</code>、<code>-0.5</code>）。</p>
+<p>一个必须知道的细节：<strong>Python 的小数是二进制浮点数，会存在精度误差</strong>。所以你会看到：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span>   <span class="c1"># 0.30000000000000004  ← 不是 bug，是浮点表示的本质</span>
+</code></pre>
+<p>若必须得到精确结果，教材和工程界的做法是先用 <code>round()</code> 保留有效位数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>   <span class="c1"># 0.3</span>
+</code></pre>
+<p><code>round(数字, 位数)</code> 的第二个参数表示保留几位小数。</p>
+<h3 id="2-5-布尔值-bool-只有两个取值">2.5 布尔值 bool：只有两个取值</h3>
+<p>布尔值只有 <code>True</code> 和 <code>False</code>，<strong>首字母必须大写</strong>，这是初学者的高频语法错误（写 <code>true</code> 会报 <code>NameError</code>）。</p>
+<p>Python 里有一批"真值判断"规则，在单元 4、6 会大量用到：</p>
+<table>
+<thead>
+<tr>
+<th>值为以下情况</th>
+<th>布尔意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code>、<code>0.0</code>、空字符串 <code>""</code>、空列表 <code>[]</code>、空字典 <code>{}</code>、<code>None</code></td>
+<td>False（假）</td>
+</tr>
+<tr>
+<td>其他任何值（含非零数字、非空文本）</td>
+<td>True（真）</td>
+</tr>
+</tbody>
+</table>
+<p>生活化类比：问"这个盒子里有东西吗？"——空盒子回答 False，非空盒子回答 True。Python 判断的就是"有没有内容"，不关心内容是什么。</p>
+<h3 id="2-6-类型转换-把一种类型的标签换成另一种">2.6 类型转换：把一种类型的标签换成另一种</h3>
+<p><code>input()</code> 拿回来的<strong>永远是字符串</strong>，即使你输入 <code>18</code>，它也是 <code>"18"</code> 这个字符串，直接做加法会出错：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">age</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"年龄："</span><span class="p">)</span>   <span class="c1"># 用户输入 18，age 是 str "18"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>          <span class="c1"># TypeError：can only concatenate str to str</span>
+</code></pre>
+<p>解决办法是用转换函数重新贴标签：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"年龄："</span><span class="p">))</span>    <span class="c1"># "18" → 18（整数）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>                <span class="c1"># 19</span>
+</code></pre>
+<p>四个转换函数：<code>str()</code> 转字符串、<code>int()</code> 转整数、<code>float()</code> 转小数、<code>bool()</code> 转布尔。</p>
+<p><strong>转换可能失败</strong>，失败会报 <code>ValueError</code>：
+- <code>int("abc")</code> → <code>ValueError: invalid literal for int()</code>（abc 不是合法整数）
+- <code>int("3.9")</code> → <code>ValueError</code>（带小数点的字符串不能直接转整数，必须先 <code>float</code> 或 <code>int(float(...))</code>）
+- <code>float("abc")</code> → <code>ValueError</code></p>
+<p>记住这条链：<strong><code>"3.9"</code> → <code>float()</code> 得 <code>3.9</code> → <code>int()</code> 得 <code>3</code></strong>。字符串到整数没有"一步到位"的捷径，因为 <code>3.9</code> 转整数会丢失小数部分，Python 拒绝替你做这个决定。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-四种类型与-type">示例 1：四种类型与 type()</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># data_types.py —— Python 四种基本数据类型</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小明"</span>      <span class="c1"># str：字符串，文字必须用引号包起来</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span><span class="c1"># int：整数，没有小数点</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>      <span class="c1"># float：小数，有小数点</span>
+<span class="n">is_student</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># bool：布尔值，只有 True/False，首字母大写</span>
+
+<span class="c1"># type() 返回变量的类型</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>        <span class="c1"># &lt;class 'str'&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>         <span class="c1"># &lt;class 'int'&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">height</span><span class="p">))</span>      <span class="c1"># &lt;class 'float'&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">is_student</span><span class="p">))</span>  <span class="c1"># &lt;class 'bool'&gt;</span>
+
+<span class="c1"># 类型决定了能做什么：整数能加，小数能加，字符串也能加（但含义不同）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>        <span class="c1"># 19      数值加法</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">height</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>   <span class="c1"># 1.85    数值加法</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s2">"同学"</span><span class="p">)</span>   <span class="c1"># 小明同学    字符串拼接（连接）</span>
+<span class="c1"># print(age + name)  # 报错 TypeError：不同类型不能直接相加</span>
+</code></pre>
+<h3 id="示例-2-变量重新赋值与命名规范">示例 2：变量重新赋值与命名规范</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># naming.py —— 变量命名与重新赋值</span>
+
+<span class="c1"># 好名字：全小写 + 下划线分隔 + 有具体含义</span>
+<span class="n">user_name</span> <span class="o">=</span> <span class="s2">"张三"</span>
+<span class="n">total_price</span> <span class="o">=</span> <span class="mf">68.5</span>
+<span class="n">item_count</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"用户："</span><span class="p">,</span> <span class="n">user_name</span><span class="p">,</span> <span class="s2">"总价："</span><span class="p">,</span> <span class="n">total_price</span><span class="p">)</span>
+
+<span class="c1"># 重新赋值：变量名不变，指向的数据换了</span>
+<span class="n">total_price</span> <span class="o">=</span> <span class="n">total_price</span> <span class="o">*</span> <span class="n">item_count</span><span class="c1"># 68.5 × 4 = 274.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"四个商品总价："</span><span class="p">,</span> <span class="n">total_price</span><span class="p">)</span>
+
+<span class="c1"># 一次赋给多个变量</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="c1"># x 和 y 都指向整数 10</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"x ="</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s2">"y ="</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># 链式赋值：从右往左执行，等价于 total_price = total_price - 8</span>
+<span class="n">total_price</span> <span class="o">-=</span> <span class="mi">8</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"优惠后："</span><span class="p">,</span> <span class="n">total_price</span><span class="p">)</span>
+
+<span class="c1"># 以下写法会报错，实际动手试一遍</span>
+<span class="c1"># 2nd_place = "亚军"    # 数字开头 -&gt; SyntaxError</span>
+<span class="c1"># my name = "张三"       # 有空格   -&gt; SyntaxError</span>
+<span class="c1"># class = "三班"         # 关键字   -&gt; SyntaxError</span>
+</code></pre>
+<h3 id="示例-3-字符串常用方法">示例 3：字符串常用方法</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># string_methods.py —— 字符串的"复印与改写"</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"  ada lovelace  "</span>
+
+<span class="c1"># .upper() / .lower() 大小写转换</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>       <span class="c1"># '  ADA LOVELACE  '</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>       <span class="c1"># '  ada lovelace  '</span>
+
+<span class="c1"># .strip() 去掉两端空白（不会去掉中间的空格）</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span><span class="c1"># 'ada lovelace'  用 repr() 才能看清首尾有没有空格</span>
+
+<span class="c1"># .title() 每个单词首字母大写</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>   <span class="c1"># 'Ada Lovelace'</span>
+
+<span class="c1"># .len() 计算长度（算的是字符个数）</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>      <span class="c1"># 12</span>
+
+<span class="c1"># .count() 数某个字符出现几次</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"banana"</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>        <span class="c1"># 3</span>
+
+<span class="c1"># .replace() 替换</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"hello world"</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"world"</span><span class="p">,</span> <span class="s2">"python"</span><span class="p">))</span>   <span class="c1"># 'hello python'</span>
+
+<span class="c1"># 关键：上面所有方法都"没有改动" name</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>                    <span class="c1">#  '  ada lovelace  '  ← 原字符串原封不动</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>      <span class="c1"># &lt;class 'str'&gt;  返回的是一个新字符串</span>
+
+<span class="c1"># 想真正保存结果，必须接住返回值</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>                    <span class="c1"># 'Ada Lovelace'  ← 现在才是新值</span>
+</code></pre>
+<h3 id="示例-4-类型转换">示例 4：类型转换</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># convert.py —— 四种类型之间的转换</span>
+
+<span class="c1"># str 转 int：常见且安全（前提是字符串确实是整数）</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s2">"18"</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1"># 19</span>
+
+<span class="c1"># str 转 float</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">"3.9"</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>      <span class="c1"># 4.0</span>
+
+<span class="c1"># 注意：float 转回 int 会丢失小数部分（不是报错，是截断）</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">3.9</span><span class="p">))</span>                <span class="c1"># 3   直接丢弃小数</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mf">3.9</span><span class="p">))</span>              <span class="c1"># 4   四舍五入</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mf">2.5</span><span class="p">))</span>              <span class="c1"># 2   注意：Python 的 round 用"银行家舍入"</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mf">3.456</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>         <span class="c1"># 3.46  保留两位小数</span>
+
+<span class="c1"># 数字转 str</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"元"</span><span class="p">)</span>          <span class="c1"># 100元</span>
+
+<span class="c1"># bool 转换：空/零为 False，其余为 True</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>     <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="s2">""</span><span class="p">))</span>      <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="s2">"0"</span><span class="p">))</span><span class="c1"># True  ← 字符串 "0" 非空，所以是 True！</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>       <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>      <span class="c1"># True  负数也是 True</span>
+
+<span class="c1"># 转换失败会报 ValueError，下面两行会崩</span>
+<span class="c1"># print(int("abc"))          # ValueError</span>
+<span class="c1"># print(int("3.9"))          # ValueError：带小数点的字符串不能直接转 int</span>
+<span class="c1"># 想让 "3.9" 变 3，必须分两步</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s2">"3.9"</span><span class="p">)))</span>     <span class="c1"># 3先转小数，再转整数</span>
+</code></pre>
+<h3 id="示例-5-f-string-格式化输出">示例 5：f-string 格式化输出</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fstring.py —— f-string：把变量嵌进文字里的最佳方式</span>
+
+<span class="n">product</span> <span class="o">=</span> <span class="s2">"机械键盘"</span>
+<span class="n">price</span> <span class="o">=</span> <span class="mf">499.5</span>
+<span class="n">quantity</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">discount</span> <span class="o">=</span> <span class="mf">0.85</span>
+<span class="n">is_in_stock</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span> <span class="o">*</span> <span class="n">discount</span>
+
+<span class="c1"># 基础用法</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"商品：</span><span class="si">{</span><span class="n">product</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"单价：</span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+
+<span class="c1"># 花括号里可以放完整的表达式</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总价：</span><span class="si">{</span><span class="n">price</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">quantity</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">discount</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+
+<span class="c1"># 格式说明符：:.&lt;宽度&gt;.&lt;小数位&gt;f</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"|</span><span class="si">{</span><span class="n">product</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span><span class="c1"># 左对齐，占 10 字符宽</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"|</span><span class="si">{</span><span class="n">price</span><span class="si">:</span><span class="s2">&gt;10.2f</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>           <span class="c1"># 右对齐，保留两位小数</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"|</span><span class="si">{</span><span class="n">product</span><span class="si">:</span><span class="s2">^12</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>            <span class="c1"># 居中</span>
+
+<span class="c1"># 补零，常用于编号</span>
+<span class="n">code</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"订单号：</span><span class="si">{</span><span class="n">code</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>          <span class="c1"># 订单号：00042</span>
+
+<span class="c1"># 千位分隔符</span>
+<span class="n">big</span> <span class="o">=</span> <span class="mf">1234567.891</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"金额：</span><span class="si">{</span><span class="n">big</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>         <span class="c1"># 金额：1,234,567.89 元</span>
+
+<span class="c1"># 让布尔值更易读</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"是否有货：</span><span class="si">{</span><span class="n">is_in_stock</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 是否有货：True</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"是否有货：</span><span class="si">{</span><span class="s1">'有'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">is_in_stock</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'无'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># 是否有货：有</span>
+
+<span class="c1"># 多行 f-string：括号里可以换行，不用反复 print</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"商品：</span><span class="si">{</span><span class="n">product</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
+      <span class="sa">f</span><span class="s2">"单价：</span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2"> 元</span><span class="se">\n</span><span class="s2">"</span>
+      <span class="sa">f</span><span class="s2">"总价：</span><span class="si">{</span><span class="n">total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-6-多行字符串与转义">示例 6：多行字符串与转义</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># multiline.py —— 字符串的换行与特殊字符</span>
+
+<span class="c1"># 三引号可以写多行文本</span>
+<span class="n">poem</span> <span class="o">=</span> <span class="s2">"""床前明月光，</span>
+<span class="s2">疑是地上霜。</span>
+<span class="s2">举头望明月，</span>
+<span class="s2">低头思故乡。"""</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">poem</span><span class="p">)</span>
+
+<span class="c1"># 反斜杠开头的三引号不参与缩进，适合保持代码原样</span>
+<span class="n">code_sample</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"""</span>
+<span class="s2">def hello():</span>
+<span class="s2">    print("这里面的缩进原样保留")</span>
+<span class="s2">    if True:</span>
+<span class="s2">        print("4 个空格")</span>
+<span class="s2">"""</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">code_sample</span><span class="p">)</span>
+
+<span class="c1"># 转义字符</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一行</span><span class="se">\n</span><span class="s2">第二行"</span><span class="p">)</span>      <span class="c1"># \n 换行</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"制表符：</span><span class="se">\t</span><span class="s2">|结束"</span><span class="p">)</span><span class="c1"># \t 水平制表符</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"他说：</span><span class="se">\"</span><span class="s2">你好</span><span class="se">\"</span><span class="s2">"</span><span class="p">)</span>       <span class="c1"># \" 表示双引号本身</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"路径：C:</span><span class="se">\\</span><span class="s2">new</span><span class="se">\\</span><span class="s2">test"</span><span class="p">)</span>  <span class="c1"># \\ 表示一个反斜杠</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"使用 </span><span class="se">\a</span><span class="s2"> 响一声：</span><span class="se">\a</span><span class="s2">"</span><span class="p">)</span>  <span class="c1"># \a 终端响铃</span>
+
+<span class="c1"># 一行太长时用 \ 续行，或者直接用括号</span>
+<span class="n">long_text</span> <span class="o">=</span> <span class="s2">"这是一段很长很长的文字，"</span> \
+            <span class="s2">"用来演示续行拼接的效果"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">long_text</span><span class="p">)</span>
+
+<span class="n">long_text2</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"这是一段很长很长的文字，"</span>
+              <span class="s2">"用括号代替反斜杠，更推荐这种写法，因为括号内的换行会被自动忽略"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">long_text2</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-7-注释的正确写法">示例 7：注释的正确写法</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># comments.py —— 注释的三种写法</span>
+
+<span class="c1"># 这是"整行注释"，写在单独一行，用来解释下面这段代码在干什么</span>
+
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span>  <span class="c1"># 这是"行尾注释"，跟在代码后面，前面要有两个空格</span>
+
+<span class="c1"># 注释可以很详细，也可以很简短。判断标准是：</span>
+<span class="c1"># 三个月后你回来看，需要这段说明吗？需要就写。</span>
+
+<span class="c1"># 不必要的注释反而是噪音，比如：</span>
+<span class="c1"># print(age + 1)  # 打印年龄加一  ← 重复了代码本身的意思，属于废话注释</span>
+
+<span class="c1"># 有价值的注释解释的是"为什么"，而不是"是什么"：</span>
+<span class="n">limit</span> <span class="o">=</span> <span class="mi">60</span>  <span class="c1"># 限制为 60 是因为需求文档规定单页最多 60 条</span>
+
+<span class="c1"># 一个函数或类的开头用三引号写"文档字符串"，能被工具自动读取</span>
+<span class="sd">"""</span>
+<span class="sd">这个模块演示注释与文档字符串的写法。</span>
+
+<span class="sd">文档字符串（docstring）用来描述模块、类或函数的用途，</span>
+<span class="sd">写法是紧跟在它们下面的三引号字符串。</span>
+<span class="sd">"""</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<blockquote>
+<p>🌐 标注的题目需要 <code>input()</code> 交互，请配套单元 0 的经验在终端里运行。</p>
+</blockquote>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 1-1【你的个人信息卡】</strong>
+定义 5 个变量：<code>name</code>（str）、<code>age</code>（int）、<code>height</code>（float，单位米）、<code>weight</code>（float，单位千克）、<code>is_student</code>（bool）。用 5 行 <code>print()</code> 分别输出每个变量的名字、值和类型（用 <code>type()</code>）。
+输出示例：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">name</span> <span class="o">=</span> <span class="n">小明</span><span class="p">,</span> <span class="n">类型</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="err">'</span><span class="nc">str</span><span class="s1">'&gt;</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">,</span> <span class="n">类型</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="err">'</span><span class="nc">int</span><span class="s1">'&gt;</span>
+</code></pre>
+<p><strong>练习 1-2【BMI 计算】</strong>
+已知 <code>weight = 70</code>（千克，int）、<code>height = 1.75</code>（米，float）。计算 BMI = weight / height²，用 f-string 输出一句话，BMI 保留两位小数。
+输出示例：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">你的身高是</span> <span class="mf">1.75</span> <span class="n">米</span><span class="err">，</span><span class="n">体重是</span> <span class="mi">70</span> <span class="n">千克</span><span class="err">，</span><span class="n">BMI</span> <span class="n">是</span> <span class="mf">22.86</span><span class="err">。</span>
+</code></pre>
+<p>提示：平方写作 <code>height ** 2</code>。</p>
+<p><strong>练习 1-3【字符串方法接力】</strong>
+给定 <code>text = "   python is FUN   "</code>，用一行 <code>print()</code> 输出依次经过下列处理后的结果（<strong>每个处理都单独输出一行</strong>）：
+① 原样输出（用 <code>repr()</code> 才能看清空格）；② <code>.strip()</code>；③ <code>.strip().lower()</code>；④ <code>.strip().title()</code>；⑤ 处理后字符串的长度。
+要求：<strong>不能修改 <code>text</code> 本身</strong>。</p>
+<p><strong>练习 1-4【类型转换五连问】</strong>
+对字符串 <code>"42"</code> 分别执行 <code>int()</code>、<code>float()</code>、<code>str()</code>、<code>bool()</code>，输出四个结果。
+再对字符串 <code>"hello"</code> 执行 <code>int()</code>，用 <code>try/except</code> 之外的简单方式——思考并写出注释说明会报什么错。（本单元只需注释说明，不需要真的写 try，单元 9 会正式讲。）</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 1-5🌐【收银小票】</strong>
+用 <code>input()</code> 依次读取：商品名称（字符串）、单价（需 <code>float()</code> 转换）、数量（需 <code>int()</code> 转换）、折扣率（需 <code>float()</code> 转换，如 <code>0.9</code> 表示九折）。计算折后总价并用 f-string 输出小票，金额保留两位小数、千位分隔。
+测试输入：<code>机械键盘</code> / <code>499.5</code> / <code>3</code> / <code>0.85</code>
+期望输出：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">商品</span><span class="err">：</span><span class="n">机械键盘</span>
+<span class="n">单价</span><span class="err">：</span><span class="mf">499.50</span> <span class="n">元</span>
+<span class="n">数量</span><span class="err">：</span><span class="mi">3</span>
+<span class="n">折扣率</span><span class="err">：</span><span class="mf">0.85</span>
+<span class="n">应付</span><span class="err">：</span><span class="mf">1273.88</span> <span class="n">元</span>
+</code></pre>
+<p>（提示：<code>{1234567.891:,.2f}</code> 输出 <code>1,234,567.89</code>）</p>
+<p><strong>练习 1-6【格式化对齐报表】</strong>
+定义三个商品：名称、单价、库存量（int）。要求输出一张<strong>列对齐</strong>的表格，名称左对齐宽度 12，单价右对齐宽度 10 且保留两位小数，库存居中宽度 6，表头行用 <code>-</code> 分隔。
+输出示例：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">商品名称</span>      <span class="o">|</span>       <span class="n">单价</span> <span class="o">|</span> <span class="n">库存</span>  <span class="o">|</span>
+<span class="o">--------------------------------------</span>
+<span class="n">机械键盘</span>     <span class="o">|</span>     <span class="mf">499.50</span> <span class="o">|</span>   <span class="mi">12</span>  <span class="o">|</span>
+<span class="n">人体工学鼠标</span>  <span class="o">|</span>     <span class="mf">129.00</span> <span class="o">|</span>  <span class="mi">156</span>  <span class="o">|</span>
+</code></pre>
+<p><strong>练习 1-7【字符串拆解分析器】</strong>
+给定 <code>code = "PY-2024-Basic-01"</code>，用字符串方法（不要用 <code>split</code>，那是单元 3 内容；用 <code>count()</code> 和 <code>replace()</code>）把它里的 <code>-</code> 换成 <code>|</code>，输出替换结果；统计 <code>-</code> 出现的次数；输出大写形式；输出倒序形式（用切片 <code>[::-1]</code>，可以提前学）。
+输出示例：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="n">处理后</span><span class="err">：</span><span class="n">PY</span><span class="o">|</span><span class="mi">2024</span><span class="o">|</span><span class="n">Basic</span><span class="o">|</span><span class="mi">01</span>
+<span class="n">分隔符个数</span><span class="err">：</span><span class="mi">3</span>
+<span class="n">大写</span><span class="err">：</span><span class="n">PY</span><span class="o">-</span><span class="mi">2024</span><span class="o">-</span><span class="n">BASIC</span><span class="o">-</span><span class="mi">01</span>
+<span class="n">倒序</span><span class="err">：</span><span class="mi">10</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="n">cisaB</span><span class="o">-</span><span class="mi">4202</span><span class="o">-</span><span class="n">YP</span>
+</code></pre>
+<p><strong>练习 1-8【bool 的真相表】</strong>
+写 <code>truthy.py</code>，对以下 10 个值分别用 <code>bool()</code> 转换并输出结果和解释：
+<code>0</code>、<code>1</code>、<code>0.0</code>、<code>-1</code>、<code>""</code>、<code>"0"</code>、<code>"False"</code>、<code>[]</code>、<code>[0]</code>、<code>None</code>
+要求：先输出 Python 的实际结果，然后你自己用一句话判断"为什么 Python 认为它是 True/False"。
+输出示例：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="o">=</span> <span class="kc">False</span> <span class="err">——</span> <span class="n">零被视为假</span>
+<span class="nb">bool</span><span class="p">(</span><span class="s2">"0"</span><span class="p">)</span>   <span class="o">=</span> <span class="kc">True</span>  <span class="err">——</span> <span class="n">非空字符串一律为真</span><span class="err">，</span><span class="n">内容不影响</span>
+</code></pre>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-1-1">参考答案 1-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># profile.py —— 个人信息卡</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s2">"小明"</span>         <span class="c1"># str 类型</span>
+<span class="n">age</span> <span class="o">=</span> <span class="mi">18</span>              <span class="c1"># int 类型</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>         <span class="c1"># float 类型</span>
+<span class="n">weight</span> <span class="o">=</span> <span class="mf">68.5</span>         <span class="c1"># float 类型</span>
+<span class="n">is_student</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># bool 类型</span>
+
+<span class="c1"># 用 f-string 把变量名、值和类型排在一起</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"name = </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">, 类型 = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"age = </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2">, 类型 = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"height = </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2">, 类型 = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"weight = </span><span class="si">{</span><span class="n">weight</span><span class="si">}</span><span class="s2">, 类型 = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"is_student = </span><span class="si">{</span><span class="n">is_student</span><span class="si">}</span><span class="s2">, 类型 = </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">is_student</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-1-2">参考答案 1-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># bmi.py —— 计算 BMI</span>
+
+<span class="n">weight</span> <span class="o">=</span> <span class="mi">70</span>    <span class="c1"># 体重，单位千克（整数）</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>  <span class="c1"># 身高，单位米（小数）</span>
+
+<span class="c1"># BMI = 体重 / 身高平方，** 是幂运算符</span>
+<span class="n">bmi</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">height</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="c1"># 用 f-string 输出，:.2f 表示保留两位小数</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你的身高是 </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> 米，体重是 </span><span class="si">{</span><span class="n">weight</span><span class="si">}</span><span class="s2"> 千克，BMI 是 </span><span class="si">{</span><span class="n">bmi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">。"</span><span class="p">)</span>
+
+<span class="c1"># 顺带解释一下数值的含义</span>
+<span class="k">if</span> <span class="n">bmi</span> <span class="o">&lt;</span> <span class="mf">18.5</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"偏瘦"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">bmi</span> <span class="o">&lt;</span> <span class="mi">24</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"正常范围"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">bmi</span> <span class="o">&lt;</span> <span class="mi">28</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"偏重"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"肥胖"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-1-3">参考答案 1-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># text_pipeline.py —— 字符串方法接力，全过程不修改原变量</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"   python is FUN   "</span>
+
+<span class="c1"># ① 原样输出：普通 print 看不出首尾空格，用 repr() 可以看清</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+<span class="c1"># ② 只去掉两端空白</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+
+<span class="c1"># ③ 再转小写</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+
+<span class="c1"># ④ 再每个单词首字母大写</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+
+<span class="c1"># ⑤ 处理完之后的长度</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+
+<span class="c1"># 验证：原字符串自始至终没有被改动</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原变量仍然是："</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+<span class="c1"># 如果想让 text 本身保存处理结果，必须显式赋值</span>
+<span class="c1"># text = text.strip().title()</span>
+<span class="c1"># print(text)</span>
+</code></pre>
+<h3 id="参考答案-1-4">参考答案 1-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># convert_quiz.py —— 类型转换练习</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="s2">"42"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>    <span class="c1"># 42    字符串 "42" -&gt; 整数 42</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>  <span class="c1"># 42.0  字符串 "42" -&gt; 小数 42.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>    <span class="c1"># 42字符串 -&gt; 字符串（内容看起来一样，但类型是 str）</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>   <span class="c1"># True  非空字符串一律为真</span>
+
+<span class="c1"># int("hello") 会抛出 ValueError: invalid literal for int() with base 10: 'hello'</span>
+<span class="c1"># 原因：Python 无法把 "hello" 理解成一个十进制数字，所以在转换时直接报错。</span>
+<span class="c1"># 如果想"转换失败也不崩溃"，需要用 try/except 包裹：</span>
+<span class="c1">#   try:</span>
+<span class="c1">#       print(int("hello"))</span>
+<span class="c1">#   except ValueError:</span>
+<span class="c1">#       print("这个字符串不是合法的整数")</span>
+<span class="c1"># 单元 9 会正式讲 try/except 的写法。</span>
+</code></pre>
+<h3 id="参考答案-1-5">参考答案 1-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># receipt.py —— 收银小票</span>
+
+<span class="c1"># input() 返回的永远是字符串，必须显式转换才能做数值运算</span>
+<span class="n">product</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入商品名称："</span><span class="p">)</span>
+<span class="n">price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入单价："</span><span class="p">))</span>
+<span class="n">quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入数量："</span><span class="p">))</span>
+<span class="n">discount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入折扣率（如 0.85 表示 85 折）："</span><span class="p">))</span>
+
+<span class="c1"># 计算折后总价</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span> <span class="o">*</span> <span class="n">discount</span>
+
+<span class="c1"># 用 f-string 输出小票</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"商品：</span><span class="si">{</span><span class="n">product</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"单价：</span><span class="si">{</span><span class="n">price</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"数量：</span><span class="si">{</span><span class="n">quantity</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"折扣率：</span><span class="si">{</span><span class="n">discount</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"小计：</span><span class="si">{</span><span class="n">price</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">quantity</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"应付：</span><span class="si">{</span><span class="n">total</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-1-6">参考答案 1-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># report.py —— 列对齐报表</span>
+
+<span class="n">products</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"机械键盘"</span><span class="p">,</span> <span class="mf">499.5</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"人体工学鼠标"</span><span class="p">,</span> <span class="mf">129.0</span><span class="p">,</span> <span class="mi">156</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"4K 显示器"</span><span class="p">,</span> <span class="mf">2399.0</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># 表头：名称左对齐 12，单价右对齐 10，库存居中 6</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'商品名称'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="s1">''</span><span class="si">:</span><span class="s2">&gt;11</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="s1">'库存'</span><span class="si">:</span><span class="s2">^6</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">32</span><span class="p">)</span>
+
+<span class="c1"># 遍历列表，按格式输出每一行</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">stock</span> <span class="ow">in</span> <span class="n">products</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">price</span><span class="si">:</span><span class="s2">&gt;10.2f</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">stock</span><span class="si">:</span><span class="s2">^6</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>
+
+<span class="c1"># 计算库存总件数</span>
+<span class="n">total_stock</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">stock</span> <span class="ow">in</span> <span class="n">products</span><span class="p">:</span>
+    <span class="n">total_stock</span> <span class="o">+=</span> <span class="n">stock</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">32</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"库存合计：</span><span class="si">{</span><span class="n">total_stock</span><span class="si">}</span><span class="s2"> 件"</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p>提示：<code>for</code> 循环和元组解包属于单元 3、单元 7 的正式内容。如果还没学到，可以只写打印部分，或先用 5 行重复代码代替循环——这在练习中是完全可以接受的。</p>
+</blockquote>
+<h3 id="参考答案-1-7">参考答案 1-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># code_analyzer.py —— 用字符串方法分析一个编号</span>
+
+<span class="n">code</span> <span class="o">=</span> <span class="s2">"PY-2024-Basic-01"</span>
+
+<span class="c1"># 替换分隔符：把 - 换成 |</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"处理后："</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">))</span>
+
+<span class="c1"># 统计分隔符个数</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"分隔符个数："</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"-"</span><span class="p">))</span>
+
+<span class="c1"># 大写形式</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"大写："</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+
+<span class="c1"># 倒序形式：切片 [::-1] 表示"从末尾到开头每隔 1 个取一次"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"倒序："</span><span class="p">,</span> <span class="n">code</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># 顺带演示其他常用方法</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"去掉所有短横线："</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>   <span class="c1"># PY2024Basic01</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"首字符："</span><span class="p">,</span> <span class="n">code</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                          <span class="c1"># P</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"是否以 PY 开头："</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"PY"</span><span class="p">))</span>    <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"是否以 01 结尾："</span><span class="p">,</span> <span class="n">code</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"01"</span><span class="p">))</span>      <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">code</span><span class="p">))</span><span class="c1"># 14</span>
+</code></pre>
+<h3 id="参考答案-1-8">参考答案 1-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># truthy.py —— bool 转换的真相表</span>
+
+<span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">,</span> <span class="s2">"False"</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+
+<span class="c1"># Python 判断"真/假"的唯一规则：空或零为假，其余为真</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"bool(</span><span class="si">{</span><span class="n">value</span><span class="si">!r:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2">) = </span><span class="si">{</span><span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 逐条解释 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool(0)      = False —— 整数零被视为假"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool(1)      = True  —— 非零整数为真"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool(0.0)    = False —— 浮点零同样为假"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool(-1)     = True  —— 负数也是非零，为真"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'bool("")     = False —— 空字符串为假'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'bool("0")   = True  —— 字符串 </span><span class="se">\"</span><span class="s1">0</span><span class="se">\"</span><span class="s1"> 非空，内容不是 </span><span class="se">\"\"</span><span class="s1"> 所以为真'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'bool("False") = True —— 同上，非空字符串一律为真'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool([])     = False —— 空列表为假"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool([0])    = True  —— 列表里有一个元素，不为空，为真"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool(None)   = False —— None 表示</span><span class="se">\"</span><span class="s2">什么都没有</span><span class="se">\"</span><span class="s2">，为假"</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><code>{value!r:&gt;10}</code> 中的 <code>!r</code> 表示用 <code>repr()</code> 形式显示（带引号，能看清空字符串），<code>:&gt;10</code> 表示右对齐占 10 格。</p>
+</blockquote>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 判断题</strong>：<code>name = "Alice"</code> 然后 <code>print(name.upper())</code> 之后，<code>name</code> 的值变成了 <code>"ALICE"</code>。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。<code>name</code> 仍是 <code>"Alice"</code>。字符串不可变，<code>.upper()</code> 返回一个<strong>新字符串</strong>，必须写 <code>name = name.upper()</code> 才能把新值存回变量。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：<code>int("3.9")</code> 会返回什么？为什么不能直接转？</p>
+<blockquote>
+<p><strong>要点</strong>：会报 <code>ValueError</code>。因为把字符串转成 int 要求这个字符串<strong>整体</strong>是一个合法整数，而 <code>"3.9"</code> 带小数点，不满足要求。正确做法是分两步：<code>int(float("3.9"))</code> 得 <code>3</code>。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：<code>bool("False")</code> 的结果是 <code>False</code>。</p>
+<blockquote>
+<p><strong>要点</strong>：错误，结果是 <code>True</code>。Python 只看"是否为空"，<code>"False"</code> 是一个非空字符串（里面恰好有 5 个字母），所以为真。Python <strong>不解析</strong>字符串内容。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：下面代码输出什么？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="s2">"5"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：输出 <code>5555</code>。逐步跟踪：第 2 行 <code>x</code> 变成字符串 <code>"5"</code>；第 3 行 <code>x + "5"</code> 是字符串拼接，得 <code>"55"</code>；第 4 行 <code>"55" * 2</code> 是字符串重复，得 <code>"5555"</code>。同一个运算符 <code>+</code> 和 <code>*</code>，对字符串和对数字的含义完全不同——这正是"Python 根据类型决定行为"的体现。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：说出下面三种变量名为什么非法（各写一句理由）。
+<code>2nd_place</code>、<code>my name</code>、<code>class</code></p>
+<blockquote>
+<p><strong>要点</strong>：<code>2nd_place</code> 以数字开头（语法层面名称必须以字母或下划线开头）；<code>my name</code> 中间有空格（名称是一个整体，不能拆开）；<code>class</code> 是 Python 关键字，已被语言本身占用（正确写法 <code>class_name = "三班"</code>）。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能默写出四种类型和 <code>type()</code> 的用法</li>
+<li>[ ] 能说出 <code>.upper()</code> 为什么不改变原变量</li>
+<li>[ ] 能解释 <code>bool("0")</code> 为什么是 <code>True</code></li>
+<li>[ ] 能写出带 <code>.2f</code>、<code>,</code>、<code>&gt;8</code>、<code>^8</code> 格式说明符的 f-string</li>
+<li>[ ] 练习 1-5、1-8 已跑通</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 2 讲列表简介——你会认识"一个变量装一串数据"的做法：<code>numbers = [1, 2, 3]</code>、按索引取值、<code>.append()</code> 追加、<code>.insert()</code> 插入、<code>.remove()</code> 删除、<code>.pop()</code> 弹出，以及列表最重要的特性——<strong>它是有序的、可以修改的</strong>。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="00.html"><small>← 上一单元</small><b>单元 0 · 环境与工具</b></a><div class="spot"><a class="pn" href="ppt/u/01.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s6"><small>课程大纲课件</small><b>阶段总览 p6 →</b></a></div><a class="pn nx" href="02.html"><small>下一单元 →</small><b>单元 2 · 列表简介</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 13 · 射击与外星舰队</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="13">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 13 · 射击与外星舰队</h1>
+  <a class="ppt" href="ppt/u/13.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="70" data-to="74"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u13"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/13.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u13"><span class="k">题库</span><span class="v">本单元 4 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-项目回顾-现在的代码里有什么-13-1">2.1 项目回顾：现在的代码里有什么（13.1）</a>
+<a class="lv3" href="#2-2-编组-group-与精灵-sprite-为什么不用普通列表">2.2 编组 Group 与精灵 Sprite：为什么不用普通列表 ★</a>
+<a class="lv3" href="#2-3-射击-bullet-类与开火-12-8">2.3 射击：Bullet 类与开火（12.8）</a>
+<a class="lv3" href="#2-4-创建第一个外星人-13-2">2.4 创建第一个外星人（13.2）</a>
+<a class="lv3" href="#2-5-创建外星舰队-13-3">2.5 创建外星舰队（13.3）</a>
+<a class="lv3" href="#2-6-让外星舰队移动-13-4">2.6 让外星舰队移动（13.4）</a>
+<a class="lv3" href="#2-7-碰撞检测与游戏结束-13-5-13-7">2.7 碰撞检测与游戏结束（13.5–13.7）</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-settings-py-新增子弹-外星人-舰队三组设置">示例 1：settings.py——新增子弹、外星人、舰队三组设置</a>
+<a class="lv3" href="#示例-2-group_demo-py-不打开窗口-把编组的核心行为演示一遍">示例 2：group_demo.py——不打开窗口，把编组的核心行为演示一遍</a>
+<a class="lv3" href="#示例-3-bullet-py-子弹类-可直接运行自测">示例 3：bullet.py——子弹类（可直接运行自测）</a>
+<a class="lv3" href="#示例-4-alien-py-外星人类-可直接运行自测">示例 4：alien.py——外星人类（可直接运行自测）</a>
+<a class="lv3" href="#示例-5-配套的两个小文件-game_stats-py-和改版-ship-py">示例 5：配套的两个小文件（game_stats.py 和改版 ship.py）</a>
+<a class="lv3" href="#示例-6-alien_invasion-py-完整版-13-章终态">示例 6：alien_invasion.py——完整版（13 章终态）</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-13-1">参考答案 13-1</a>
+<a class="lv3" href="#参考答案-13-2">参考答案 13-2</a>
+<a class="lv3" href="#参考答案-13-3">参考答案 13-3</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-13-射击与外星舰队">单元 13：射击与外星舰队</h1>
+<blockquote>
+<p>对应教材第 12 章 12.8 节「射击」与第 13 章「外星人」全章
+阶段 2 · 项目 1：外星人入侵（Pygame）
+本单元目标：<strong>给游戏加上子弹、外星舰队、碰撞检测和结束条件，做出一个有输赢的外星人入侵</strong></p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>说清 <code>pygame.sprite.Group</code> 和 <code>Sprite</code> 的分工，以及用编组代替普通列表的三个好处。</li>
+<li>编写 <code>Bullet(Sprite)</code> 和 <code>Alien(Sprite)</code>，把对象加进编组，并用 <code>group.update()</code> / <code>group.draw()</code> 批量更新和绘制。</li>
+<li>说清「边遍历边删除」为什么会漏删，并用 <code>self.bullets.copy()</code> 正确删除已消失的子弹。</li>
+<li>用 <code>fleet_direction</code> 和 <code>check_edges()</code> 实现外星舰队整体移动：到边缘 → 整队下移 → 反向。</li>
+<li>使用 <code>pygame.sprite.groupcollide()</code> 和 <code>spritecollideany()</code> 做碰撞检测，并解释两个布尔参数的含义。</li>
+<li>用 <code>GameStats.game_active</code> 控制「游戏进行中 / 已结束」，说清 13.7 节对 <code>run_game()</code> 的改动。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-项目回顾-现在的代码里有什么-13-1">2.1 项目回顾：现在的代码里有什么（13.1）</h3>
+<p>单元 12 结束时，项目是三个文件：<code>alien_invasion.py</code>（主循环）、<code>settings.py</code>（设置）、<code>ship.py</code>（飞船）。本单元要往里加三样东西：<strong>子弹、外星人、游戏状态</strong>，于是项目长成了六个文件：</p>
+<pre><code class="language-text"><span class="cl">示例</span>外星人入侵（单元 13 结束时）
+├── alien_invasion.py   主循环 + 所有 _update/_check 方法（最忙的文件）
+├── settings.py         所有会变的数值（新增子弹、外星人、舰队设置）
+├── ship.py             飞船（新增：继承 Sprite、center_ship）
+├── bullet.py           子弹（新增）
+├── alien.py            外星人（新增）
+└── game_stats.py       游戏统计信息（新增：ships_left、game_active）
+</code></pre>
+<p>先认清每个类的职责，后面才不容易晕：</p>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>一句话职责</th>
+<th>关键属性/方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Settings</code></td>
+<td>存所有可调数值</td>
+<td><code>bullet_speed</code>、<code>alien_speed</code>、<code>fleet_direction</code></td>
+</tr>
+<tr>
+<td><code>Ship</code></td>
+<td>飞船的位置和移动</td>
+<td><code>moving_right</code>、<code>update()</code>、<code>center_ship()</code></td>
+</tr>
+<tr>
+<td><code>Bullet</code></td>
+<td>一颗子弹的位置和移动</td>
+<td><code>rect</code>、<code>y</code>、<code>update()</code>、<code>draw_bullet()</code></td>
+</tr>
+<tr>
+<td><code>Alien</code></td>
+<td>一个外星人的位置和移动</td>
+<td><code>rect</code>、<code>x</code>、<code>check_edges()</code>、<code>update()</code></td>
+</tr>
+<tr>
+<td><code>GameStats</code></td>
+<td>游戏进行到哪一步了</td>
+<td><code>ships_left</code>、<code>game_active</code></td>
+</tr>
+</tbody>
+</table>
+<p>注意一个规律：<strong>除了 Settings 和 GameStats，每个可见的东西都是一个类</strong>。屏幕上有几个「会自己动的东西」，就有几个类——这就是面向对象在游戏里的落地方式。</p>
+<h3 id="2-2-编组-group-与精灵-sprite-为什么不用普通列表">2.2 编组 <code>Group</code> 与精灵 <code>Sprite</code>：为什么不用普通列表 ★</h3>
+<p>本单元的核心工具是<strong>编组（Group）</strong>。新手的第一反应是：「子弹和外星人我用 list 装不就行了？」可以，但你会立刻遇到三堵墙：</p>
+<ol>
+<li><strong>批量更新</strong>：每颗子弹都要 <code>update()</code>，用列表得自己写 <code>for bullet in self.bullets: bullet.update()</code>；编组直接 <code>self.bullets.update()</code>，它替你遍历。</li>
+<li><strong>批量绘制</strong>：<code>self.aliens.draw(self.screen)</code> 一行画完整个舰队；用列表得自己写循环调 <code>blit</code>。</li>
+<li><strong>碰撞检测</strong>：<code>groupcollide()</code>、<code>spritecollideany()</code> 只认编组，列表没有这些方法。</li>
+</ol>
+<p>生活化类比：<strong>编组像班长，精灵像学生</strong>。班长手里有一份名单，喊一声「所有人 update」，名单上每个人都动一下；喊一声「draw」，每个人都把自己画到黑板上。你要新增一个学生，只需 <code>group.add(student)</code>；要清空重来，<code>group.empty()</code> 一键搞定。</p>
+<p>那什么是「精灵（Sprite）」？可以理解成<strong>参加过军训的学生</strong>：Pygame 要求被编组管理的对象必须继承 <code>pygame.sprite.Sprite</code>，并且有两样装备——</p>
+<ul>
+<li><code>image</code>：长相（一张表面，决定绘制时画什么）；</li>
+<li><code>rect</code>：站位（矩形，决定画在哪、碰撞时怎么比）。</li>
+</ul>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bullet</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>          <span class="c1"># ★ 必须先调用，否则编组不认这个对象</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>   <span class="c1"># 装备一：站位</span>
+        <span class="c1"># 子弹没有 image（它是个色块），所以不用 Group.draw()，改成手动画</span>
+</code></pre>
+<p>★ <strong>这里为什么难</strong>：<code>super().__init__()</code> 这行看起来「什么都没做」，但它是 Sprite 内部注册机制的一部分，漏掉它不会立刻报错，而是让你遇到「加进编组后 <code>update()</code> 不生效」这种诡异症状。<strong>记住：继承 Sprite 的类，<code>__init__</code> 第一行永远是 <code>super().__init__()</code>。</strong></p>
+<p>编组常用方法一览：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+<th>本单元用在哪</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>group.add(obj)</code></td>
+<td>加入一个精灵</td>
+<td>开火时加入子弹、创建外星人</td>
+</tr>
+<tr>
+<td><code>group.update()</code></td>
+<td>全员执行 <code>update()</code></td>
+<td>每帧更新子弹和外星人</td>
+</tr>
+<tr>
+<td><code>group.draw(surface)</code></td>
+<td>全员把自己画到 surface 上</td>
+<td>画外星舰队</td>
+</tr>
+<tr>
+<td><code>group.sprites()</code></td>
+<td>返回全员列表</td>
+<td>遍历检查边缘、碰撞</td>
+</tr>
+<tr>
+<td><code>group.copy()</code></td>
+<td>返回副本</td>
+<td><strong>遍历时安全删除</strong>（见 2.3）</td>
+</tr>
+<tr>
+<td><code>group.remove(obj)</code></td>
+<td>移除一个精灵</td>
+<td>删除消失的子弹</td>
+</tr>
+<tr>
+<td><code>group.empty()</code></td>
+<td>清空</td>
+<td>重置游戏、击落全部外星人后</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-3-射击-bullet-类与开火-12-8">2.3 射击：<code>Bullet</code> 类与开火（12.8）</h3>
+<p>子弹和飞船最大的区别是：<strong>子弹会不断地产生和消失</strong>。这一节的所有设计都是围绕「一批会生灭的对象」展开的。</p>
+<p><strong>（1）子弹长什么样。</strong> 教材没有给子弹找图片，而是用 <code>pygame.Rect</code> 画一个细长条，再用 <code>pygame.draw.rect()</code> 上色：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bullet</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""管理飞船发射的子弹的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_color</span>
+
+        <span class="c1"># 在 (0, 0) 处创建子弹矩形，再移到飞船顶部</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_width</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">midtop</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">midtop</span>
+
+        <span class="c1"># 用浮点数记录纵坐标：Rect 的 y 只能是整数</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""向上移动子弹。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""在屏幕上绘制子弹。"""</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+</code></pre>
+<p><code>midtop</code> 这个锚点用得很巧：子弹的「顶边中点」对齐飞船的「顶边中点」，看起来正是从炮口射出去的。</p>
+<p><strong>（2）存到编组里。</strong> 在主文件的 <code>__init__</code> 里建一个空编组 <code>self.bullets = Group()</code>，开火时往里加：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_fire_bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""创建一颗新子弹，并加入编组。"""</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullets_allowed</span><span class="p">:</span>
+        <span class="n">new_bullet</span> <span class="o">=</span> <span class="n">Bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_bullet</span><span class="p">)</span>
+</code></pre>
+<p><code>len(self.bullets)</code> 就是屏幕上现存子弹数，和 <code>bullets_allowed</code> 比较，实现「限制子弹数量」——不然按住空格会瞬间刷出几百颗，游戏失去挑战。</p>
+<p><strong>（3）删除已消失的子弹。</strong> 子弹飞出屏幕顶部后要删掉，否则编组越涨越大，最终拖慢游戏。判断条件是 <code>bullet.rect.bottom &lt;= 0</code>（整个矩形都离开屏幕了）。但删除的写法藏着一个大坑：</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">bullet</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bullet</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>★ <strong>这就是本单元最重要的一条红线</strong>，和阶段 1「遍历字典时不能删键」是同一个坑。原因：迭代器（<code>for</code> 背后的东西）手里攥着一份<strong>序号表</strong>，它从 0 开始一个个数。你在第 2 号位置删掉一个元素，后面所有元素往前补一位——原本排在第 3 号的现在排第 2 号，而迭代器已经「走过」第 2 号了，于是它被永久跳过。多颗子弹同一帧消失时，就会漏删一半。</p>
+<p>正确写法是先复制一份再遍历：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">bullet</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bullet</span><span class="p">)</span>
+</code></pre>
+<p><code>copy()</code> 返回一个<strong>新编组</strong>（内容相同但相互独立），遍历副本、删除原件，补位影响不到迭代器，一颗都不会漏。阶段 1 我们说过「要删就先把目标收集到列表，遍历结束再删」——<code>copy()</code> 就是官方给的等价方案。</p>
+<p><strong>（4）把更新逻辑收进 <code>_update_bullets()</code>。</strong> 和单元 12 的重构思路一致：主循环只写 <code>self._update_bullets()</code>，更新位置、删除消失子弹、检测碰撞都下沉到这个方法里。</p>
+<h3 id="2-4-创建第一个外星人-13-2">2.4 创建第一个外星人（13.2）</h3>
+<p><code>Alien</code> 和 <code>Ship</code> 结构几乎一样，都是「加载图片 → 拿 rect → 放位置」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Alien</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""表示单个外星人的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"images/alien.bmp"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+
+        <span class="c1"># 初始位置在屏幕左上角附近，留出一个身位</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># 用浮点数记录水平位置</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</code></pre>
+<p>两个细节：起始坐标用 <code>self.rect.width</code> 而不是 0，是故意留出一个外星人的宽度当边距，看起来不贴边；<code>self.x</code> 存浮点，理由和飞船一样——<code>alien_speed</code> 可能是小数。</p>
+<h3 id="2-5-创建外星舰队-13-3">2.5 创建外星舰队（13.3）</h3>
+<p>一个外星人好办，一整支舰队要解决两个问题：<strong>每行放几个</strong>和<strong>放几行</strong>。教材的思路是「拿一个外星人当尺子量屏幕」：</p>
+<pre><code class="language-text"><span class="cl">示例</span>屏幕宽 800，外星人宽 60：
+可用宽度 = 800 - 2×60 = 680      （左右各留一个身位）
+每个外星人占位 = 2×60 = 120      （自己一个 + 间距一个）
+每行个数 = 680 // 120 = 5
+</code></pre>
+<p>对应代码：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_create_fleet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""创建外星舰队。"""</span>
+    <span class="c1"># 先造一个外星人当"尺子"（它只是用来量尺寸，不加进编组）</span>
+    <span class="n">alien</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">alien_width</span><span class="p">,</span> <span class="n">alien_height</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="c1"># 计算每行能放几个：左右各留一个身位，每个占两个身位</span>
+    <span class="n">available_space_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span><span class="p">)</span>
+    <span class="n">number_aliens_x</span> <span class="o">=</span> <span class="n">available_space_x</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span><span class="p">)</span>
+
+    <span class="c1"># 创建第一行外星人</span>
+    <span class="k">for</span> <span class="n">alien_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_aliens_x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_alien</span><span class="p">(</span><span class="n">alien_number</span><span class="p">)</span>
+</code></pre>
+<p>注意这里做了一次小重构：创建舰队分成两个方法，<code>_create_fleet()</code> 负责算账，<code>_create_alien()</code> 负责造人。这样等会儿加「多行」时，只需要在算账部分加几行，造人的逻辑一行不用动：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_create_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alien_number</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""创建一个外星人，并把它放到当前行的对应位置。"""</span>
+    <span class="n">alien</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">alien_width</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">alien_width</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span> <span class="o">*</span> <span class="n">alien_number</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">x</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">alien</span><span class="p">)</span>
+</code></pre>
+<p>多加几行的思路完全一样——先算垂直方向能放几行（<strong>底部要留给飞船</strong>，不能让它一出生就被撞死），再双层循环：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_create_fleet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""创建外星舰队（多行版）。"""</span>
+    <span class="n">alien</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="n">alien_width</span><span class="p">,</span> <span class="n">alien_height</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">available_space_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span><span class="p">)</span>
+    <span class="n">number_aliens_x</span> <span class="o">=</span> <span class="n">available_space_x</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span><span class="p">)</span>
+
+    <span class="c1"># 垂直方向：给飞船留一个身位，上下再各留一个</span>
+    <span class="n">ship_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">available_space_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_height</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">alien_height</span><span class="p">)</span> <span class="o">-</span> <span class="n">ship_height</span><span class="p">)</span>
+    <span class="n">number_rows</span> <span class="o">=</span> <span class="n">available_space_y</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_height</span><span class="p">)</span>
+
+    <span class="c1"># 逐行逐列创建整个舰队</span>
+    <span class="k">for</span> <span class="n">row_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_rows</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">alien_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_aliens_x</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_alien</span><span class="p">(</span><span class="n">alien_number</span><span class="p">,</span> <span class="n">row_number</span><span class="p">)</span>
+</code></pre>
+<p>为什么强调「用一个外星人量尺寸」而不要硬编码 <code>alien_width = 60</code>？因为图片一换，所有间距都自动跟着变——这也是 <code>Settings</code> 之外另一种「不为未来挖坑」的习惯。</p>
+<h3 id="2-6-让外星舰队移动-13-4">2.6 让外星舰队移动（13.4）</h3>
+<p>舰队移动的规则听起来简单，实现时有一个关键设计：<strong>方向不存每个外星人身上，而是全队共用的一个标志位</strong> <code>fleet_direction</code>（存在 <code>Settings</code> 里，<code>1</code> 向右、<code>-1</code> 向左）。</p>
+<p>每个外星人的 <code>update()</code> 都乘上这个方向：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""向左或向右移动外星人。"""</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_direction</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+</code></pre>
+<p>生活化类比：<strong>课间操队列</strong>。队列整体向左转，每个人只是跟着挪一步；决定「往哪转」的是体育老师（<code>fleet_direction</code>），不是每个同学自己。如果方向存在每个人身上，就会出现「有人往左有人往右」的乱局。</p>
+<p>那谁当体育老师？答案是「最先撞到边缘的那个人」。每帧检查所有外星人，只要有任何一个到达边缘，就命令整队下移并反向：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">check_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""如果外星人位于屏幕边缘，就返回 True。"""</span>
+    <span class="n">screen_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">right</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_check_fleet_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""有外星人到达边缘时，改变整个舰队的方向。"""</span>
+    <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">alien</span><span class="o">.</span><span class="n">check_edges</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_change_fleet_direction</span><span class="p">()</span>
+            <span class="k">break</span>                      <span class="c1"># ★ 只需要一个外星人触发，必须 break</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_change_fleet_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""将整队外星人下移，并改变移动方向。"""</span>
+    <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+        <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_drop_speed</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_direction</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre>
+<p>★ <code>break</code> 是这里最容易漏的一行。如果漏了，一行里每个到边缘的外星人都会触发一次「下移 + 反向」——下移距离翻几倍、方向被反转奇数次变回原方向，表现为外星人<strong>在边缘抽搐式抖动</strong>。改成 <code>break</code> 后，一帧只处理一次。</p>
+<p><code>fleet_direction *= -1</code> 这行也很值得体会：方向在 <code>1</code> 和 <code>-1</code> 之间反复横跳，而所有外星人的 <code>update()</code> 都无需改动——<strong>用一个数字的符号编码「方向」，是游戏编程里极其常用的技巧</strong>。</p>
+<h3 id="2-7-碰撞检测与游戏结束-13-5-13-7">2.7 碰撞检测与游戏结束（13.5–13.7）</h3>
+<p><strong>（1）子弹打中外星人。</strong> Pygame 把「两个编组互相检测碰撞」做成了一个函数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">collisions</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">groupcollide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</code></pre>
+<p>四个参数的含义：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 个</td>
+<td><code>self.bullets</code></td>
+<td>编组 A（子弹）</td>
+</tr>
+<tr>
+<td>第 2 个</td>
+<td><code>self.aliens</code></td>
+<td>编组 B（外星人）</td>
+</tr>
+<tr>
+<td>第 3 个</td>
+<td><code>True</code></td>
+<td>碰撞后<strong>删除子弹</strong></td>
+</tr>
+<tr>
+<td>第 4 个</td>
+<td><code>True</code></td>
+<td>碰撞后<strong>删除外星人</strong></td>
+</tr>
+</tbody>
+</table>
+<p>返回值是个字典：键是「撞到人的子弹」，值是「被这颗子弹撞到的外星人列表」。所以「这一帧击落几个」可以直接 <code>len(collisions)</code> 算出来。</p>
+<p>击落全部外星人后要生成新舰队，顺便把残留子弹清掉：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_check_bullet_alien_collisions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""响应子弹和外星人的碰撞。"""</span>
+    <span class="n">collisions</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">groupcollide</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">:</span>
+        <span class="c1"># 外星人死光了：清空子弹，再来一队</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_fleet</span><span class="p">()</span>
+</code></pre>
+<p><strong>（2）「为测试创建大子弹」的调试思维。</strong> 教材在这里专门讲了一个调试技巧：怀疑碰撞检测有 bug 时，临时把 <code>bullet_width</code> 从 3 改成 300——子弹粗到不可能打不中。如果这样能击落了，说明碰撞逻辑没问题，只是正常尺寸下命中率低；如果还不能击落，才说明真有 bug。<strong>把偶发问题变成必现问题，是调试的第一生产力。</strong> 验证完记得改回 3。</p>
+<p><strong>（3）外星人撞到飞船。</strong> 检测「一个精灵 vs 整个编组」用另一个函数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">if</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">spritecollideany</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_ship_hit</span><span class="p">()</span>
+</code></pre>
+<p><code>spritecollideany()</code> 只要有任意一个外星人碰到飞船就返回那个外星人（否则返回 <code>None</code>），用作条件判断正合适。注意它要求飞船也是精灵，所以 13.6 节要把 <code>Ship</code> 改成继承 <code>Sprite</code> 并调用 <code>super().__init__()</code>。</p>
+<p>被撞之后不是「游戏结束」，而是「少一条命、重置局面」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_ship_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""响应飞船被外星人撞到。"""</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">-=</span> <span class="mi">1</span>        <span class="c1"># 少一条命</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>               <span class="c1"># 清空现存外星人</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>              <span class="c1"># 清空现存子弹</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_fleet</span><span class="p">()</span>              <span class="c1"># 重新放一队</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">center_ship</span><span class="p">()</span>           <span class="c1"># 飞船回底部中央</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>                        <span class="c1"># 暂停半秒，让玩家看清发生了什么</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>    <span class="c1"># 没命了，游戏结束</span>
+</code></pre>
+<p>外星人碰到屏幕下边缘也算「被撞」，处理完全相同（<code>_check_aliens_bottom()</code>）——敌人突破防线，和你主动撞上去，后果一样。</p>
+<p><strong>（4）游戏状态。</strong> 到这里出现了第一个「不是屏幕上可见对象、却决定游戏怎么跑」的类：<code>GameStats</code>。它只存两样东西——还剩几条命（<code>ships_left</code>），以及游戏是否正在进行（<code>game_active</code>）。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""跟踪游戏统计信息的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">True</span>           <span class="c1"># 游戏一开始是活动状态</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""初始化在游戏运行期间可能变化的信息。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+</code></pre>
+<p><strong>（5）13.7 节：确定应运行游戏的哪些部分。</strong> 最后给主循环加一道闸门——游戏结束后，只画屏幕、收事件，不再更新任何游戏对象：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">run_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""开始游戏的主循环。"""</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_events</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_bullets</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_aliens</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_screen</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+</code></pre>
+<p>为什么<code>_update_screen()</code> 在闸门外面？因为游戏结束后画面要<strong>停在最后那一帧</strong>（残局），而不是黑屏或继续动。这种「用状态位控制每帧跑多少逻辑」的写法，是后面做「开始按钮」「暂停」的地基。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<blockquote>
+<p>Pygame 示例在无显示环境里请加前缀 <code>SDL_VIDEODRIVER=dummy</code>。示例 2、3、4、5 都不打开窗口，任何环境都能直接跑。</p>
+</blockquote>
+<h3 id="示例-1-settings-py-新增子弹-外星人-舰队三组设置">示例 1：settings.py——新增子弹、外星人、舰队三组设置</h3>
+<p>在单元 12 的 <code>Settings</code> 里追加三组设置（其余部分不变）。直接运行本文件会打印全部设置。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># settings.py —— 单元 13 需要的完整设置</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Settings</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""存储游戏《外星人入侵》所有设置的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># —— 屏幕设置 ——</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">=</span> <span class="mi">800</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span> <span class="o">=</span> <span class="mi">600</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">)</span>
+
+        <span class="c1"># —— 飞船设置 ——</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_speed</span> <span class="o">=</span> <span class="mf">1.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship_limit</span> <span class="o">=</span> <span class="mi">3</span>                 <span class="c1"># 每条命撞一次少一条</span>
+
+        <span class="c1"># —— 子弹设置 ——</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullet_speed</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullet_width</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullet_height</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullet_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets_allowed</span> <span class="o">=</span> <span class="mi">3</span>            <span class="c1"># 屏幕上最多同时存在 3 颗</span>
+
+        <span class="c1"># —— 外星人设置 ——</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alien_speed</span> <span class="o">=</span> <span class="mf">1.0</span>              <span class="c1"># 舰队左右移动的速度</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fleet_direction</span> <span class="o">=</span> <span class="mi">1</span>            <span class="c1"># 1 向右，-1 向左</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fleet_drop_speed</span> <span class="o">=</span> <span class="mi">10</span>          <span class="c1"># 撞到边缘后整队下移的距离</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"screen_width"</span><span class="p">,</span> <span class="s2">"screen_height"</span><span class="p">,</span> <span class="s2">"bg_color"</span><span class="p">,</span> <span class="s2">"ship_speed"</span><span class="p">,</span>
+                 <span class="s2">"ship_limit"</span><span class="p">,</span> <span class="s2">"bullet_speed"</span><span class="p">,</span> <span class="s2">"bullet_width"</span><span class="p">,</span> <span class="s2">"bullet_height"</span><span class="p">,</span>
+                 <span class="s2">"bullet_color"</span><span class="p">,</span> <span class="s2">"bullets_allowed"</span><span class="p">,</span> <span class="s2">"alien_speed"</span><span class="p">,</span>
+                 <span class="s2">"fleet_direction"</span><span class="p">,</span> <span class="s2">"fleet_drop_speed"</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">18</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>screen_width       = 800
+screen_height      = 600
+bg_color           = (230, 230, 230)
+ship_speed         = 1.5
+ship_limit         = 3
+bullet_speed       = 2.0
+bullet_width       = 3
+bullet_height      = 15
+bullet_color       = (60, 60, 60)
+bullets_allowed    = 3
+alien_speed        = 1.0
+fleet_direction    = 1
+fleet_drop_speed   = 10
+</code></pre>
+<h3 id="示例-2-group_demo-py-不打开窗口-把编组的核心行为演示一遍">示例 2：group_demo.py——不打开窗口，把编组的核心行为演示一遍</h3>
+<p>这个示例把 <code>Group</code> 的添加、批量更新、批量绘制、两种碰撞检测、清空全部跑一遍，而且<strong>不需要显示器</strong>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># group_demo.py —— 用 dummy 驱动演示 Group 的核心行为（无需真实显示器）</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dummy"</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Sprite</span><span class="p">,</span> <span class="n">groupcollide</span><span class="p">,</span> <span class="n">spritecollideany</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""一个彩色小方块精灵：有 image（长相）和 rect（站位）。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">topleft</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Group.update() 会自动调用每个成员的 update()。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vx</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Block(x=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, y=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="c1"># 1）创建编组，放入 5 个精灵</span>
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">blocks</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Block</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"① 编组建好，成员数："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">))</span>
+
+<span class="c1"># 2）批量更新：改一次速度，一次 update 全员生效</span>
+<span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">blocks</span><span class="p">:</span>
+    <span class="n">block</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">blocks</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"② update 后第一个方块的 x："</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">sprites</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># 3）批量绘制：把每个精灵的 image 画到屏幕上（dummy 下不可见但不报错）</span>
+<span class="n">blocks</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"③ draw() 调用成功"</span><span class="p">)</span>
+
+<span class="c1"># 4）spritecollideany：单个精灵 vs 整个编组</span>
+<span class="n">runner</span> <span class="o">=</span> <span class="n">Block</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">runner</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">runner</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">spritecollideany</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">blocks</span><span class="p">):</span>
+        <span class="k">break</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"④ spritecollideany 撞到了吗："</span><span class="p">,</span> <span class="n">spritecollideany</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">blocks</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># 5）groupcollide：两个编组互撞，两个 True 表示"碰撞后双方都消失"</span>
+<span class="n">enemies</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">enemies</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Block</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="mi">140</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">groupcollide</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">enemies</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"⑤ groupcollide 撞掉了"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">collisions</span><span class="p">),</span> <span class="s2">"个；"</span><span class="p">,</span>
+      <span class="s2">"blocks 剩"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">),</span> <span class="s2">"个，enemies 剩"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">enemies</span><span class="p">),</span> <span class="s2">"个"</span><span class="p">)</span>
+
+<span class="c1"># 6）empty()：一键清空</span>
+<span class="n">blocks</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="n">enemies</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"⑥ empty() 之后剩："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blocks</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">enemies</span><span class="p">))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>① 编组建好，成员数： 5
+② update 后第一个方块的 x： 110
+③ draw() 调用成功
+④ spritecollideany 撞到了吗： True
+⑤ groupcollide 撞掉了 3 个； blocks 剩 2 个，enemies 剩 0 个
+⑥ empty() 之后剩： 0 0
+</code></pre>
+<p>注意第 ⑤ 步：<code>groupcollide()</code> 的返回值是<strong>字典</strong>——键是被撞掉的 blocks 成员，值是撞上它的 enemies 成员列表。所以 <code>len(collisions)</code> 就是「被撞掉了几个人」。</p>
+<h3 id="示例-3-bullet-py-子弹类-可直接运行自测">示例 3：bullet.py——子弹类（可直接运行自测）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># bullet.py —— 管理飞船发射的子弹的类</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dummy"</span>   <span class="c1"># 自测不需要真实显示器</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bullet</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""管理飞船发射的子弹的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""在飞船的当前位置创建一颗子弹。"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_color</span>
+
+        <span class="c1"># 先在 (0, 0) 处创建子弹矩形，再移动到飞船顶部</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_width</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">midtop</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">midtop</span>
+
+        <span class="c1"># 用浮点数记录纵坐标（Rect 的 y 只能是整数）</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""向上移动子弹。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullet_speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""在屏幕上绘制子弹。"""</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="c1"># 自测：不打开真实窗口，验证位置、移动和绘制</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+    <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubSettings</span><span class="p">:</span>
+        <span class="n">bullet_speed</span> <span class="o">=</span> <span class="mf">2.0</span>
+        <span class="n">bullet_width</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">bullet_height</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="n">bullet_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="n">bullets_allowed</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubShip</span><span class="p">:</span>
+        <span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">552</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubGame</span><span class="p">:</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="n">StubSettings</span><span class="p">()</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+        <span class="n">ship</span> <span class="o">=</span> <span class="n">StubShip</span><span class="p">()</span>
+
+    <span class="n">game</span> <span class="o">=</span> <span class="n">StubGame</span><span class="p">()</span>
+    <span class="n">bullet</span> <span class="o">=</span> <span class="n">Bullet</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"是否精灵："</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bullet</span><span class="p">,</span> <span class="n">Sprite</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"初始 y："</span><span class="p">,</span> <span class="n">bullet</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s2">"rect："</span><span class="p">,</span> <span class="n">bullet</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">bullet</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"update 3 次后 y："</span><span class="p">,</span> <span class="n">bullet</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">bullet</span><span class="o">.</span><span class="n">draw_bullet</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"draw_bullet() 调用成功"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>是否精灵： True
+初始 y： 552.0 rect: &lt;rect(398, 552, 3, 15)&gt;
+update 3 次后 y： 546.0
+draw_bullet() 调用成功
+</code></pre>
+<p><code>midtop</code> 让子弹水平居中在飞船上方：飞船中心 x 是 430，子弹宽 3，所以 <code>rect.x = 398</code>。</p>
+<h3 id="示例-4-alien-py-外星人类-可直接运行自测">示例 4：alien.py——外星人类（可直接运行自测）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># alien.py —— 表示单个外星人的类</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dummy"</span>   <span class="c1"># 自测不需要真实显示器</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Alien</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""表示单个外星人的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""初始化外星人并设置其起始位置。"""</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+
+        <span class="c1"># 加载外星人图像；没有图片文件时生成一张占位图</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"images/alien.bmp"</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">"images"</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">placeholder</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">58</span><span class="p">))</span>
+            <span class="n">placeholder</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">80</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">120</span><span class="p">))</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">placeholder</span><span class="p">,</span> <span class="s2">"images/alien.bmp"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"images/alien.bmp"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+
+        <span class="c1"># 初始位置在屏幕左上角附近，留出一个身位</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># 用浮点数记录水平位置</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""如果外星人位于屏幕边缘，就返回 True。"""</span>
+        <span class="n">screen_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">right</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""向左或向右移动外星人。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_speed</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="c1"># 自测：不打开真实窗口，验证边缘检测和左右移动</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+    <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubSettings</span><span class="p">:</span>
+        <span class="n">alien_speed</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">fleet_direction</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">fleet_drop_speed</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubGame</span><span class="p">:</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="n">StubSettings</span><span class="p">()</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+
+    <span class="n">game</span> <span class="o">=</span> <span class="n">StubGame</span><span class="p">()</span>
+    <span class="n">alien</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"初始位置：x ="</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="s2">"y ="</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"是否精灵："</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">alien</span><span class="p">,</span> <span class="n">Sprite</span><span class="p">))</span>
+
+    <span class="c1"># 边缘检测：中间 False，左边缘 True，右边缘 True</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">370</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"x=370 时 check_edges："</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">check_edges</span><span class="p">())</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"x=0 时 check_edges："</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">check_edges</span><span class="p">())</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">800</span> <span class="o">-</span> <span class="mi">60</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"x=740 时 check_edges："</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">check_edges</span><span class="p">())</span>
+
+    <span class="c1"># 方向为 1 向右，改成 -1 向左</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mf">100.0</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"fleet_direction=1 移动一次后 x："</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">game</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_direction</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"fleet_direction=-1 移动一次后 x："</span><span class="p">,</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="c1"># 清理自测生成的占位图（跑完可以删掉）</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"images/alien.bmp"</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"images/alien.bmp"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">"images"</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="s2">"images"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"已清理占位图片"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>初始位置：x = 60 y = 58
+是否精灵： True
+x=370 时 check_edges： False
+x=0 时 check_edges： True
+x=740 时 check_edges： True
+fleet_direction=1 移动一次后 x： 101
+fleet_direction=-1 移动一次后 x： 100
+已清理占位图片
+</code></pre>
+<h3 id="示例-5-配套的两个小文件-game_stats-py-和改版-ship-py">示例 5：配套的两个小文件（game_stats.py 和改版 ship.py）</h3>
+<p><code>game_stats.py</code> 是全新的；<code>ship.py</code> 相比单元 12 只有两处改动——继承 <code>Sprite</code>、新增 <code>center_ship()</code>（这样 <code>spritecollideany()</code> 才能检测它，被撞后也才能复位）。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># game_stats.py —— 跟踪游戏统计信息</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""跟踪《外星人入侵》的统计信息。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""初始化统计信息。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+        <span class="c1"># 游戏刚启动时处于活动状态</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""初始化在游戏运行期间可能变化的信息。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="c1"># 自测：用一个"假游戏"验证三条命的消耗过程</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubSettings</span><span class="p">:</span>
+        <span class="n">ship_limit</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">StubGame</span><span class="p">:</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="n">StubSettings</span><span class="p">()</span>
+
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">GameStats</span><span class="p">(</span><span class="n">StubGame</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"初始：ships_left ="</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span><span class="p">,</span>
+          <span class="s2">"game_active ="</span><span class="p">,</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> 次被撞后：ships_left = </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span><span class="si">}</span><span class="s2">，"</span>
+              <span class="sa">f</span><span class="s2">"game_active = </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>初始：ships_left = 3 game_active = True
+第 1 次被撞后：ships_left = 2，game_active = True
+第 2 次被撞后：ships_left = 1，game_active = True
+第 3 次被撞后：ships_left = 0，game_active = False
+第 4 次被撞后：ships_left = 0，game_active = False
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ship.py —— 单元 13 版的飞船类（相比单元 12 的两处改动已标注）</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sprite</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Ship</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>                      <span class="c1"># 改动一：继承 Sprite</span>
+<span class="w">    </span><span class="sd">"""管理飞船的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ai_game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>               <span class="c1"># 改动一（续）：必须调用</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">settings</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"images/ship.bmp"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">error</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">70</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">180</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">midbottom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">midbottom</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moving_right</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">moving_left</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""根据移动标志调整飞船的位置，并限制在屏幕内。"""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_right</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_speed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_left</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">blitme</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""在指定位置绘制飞船。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">center_ship</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>               <span class="c1"># 改动二：新增</span>
+<span class="w">        </span><span class="sd">"""让飞船回到屏幕底部中央。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">midbottom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span><span class="o">.</span><span class="n">midbottom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-6-alien_invasion-py-完整版-13-章终态">示例 6：alien_invasion.py——完整版（13 章终态）</h3>
+<p>把示例 1、3、4、5 的五个文件放在同一目录，运行 <code>SDL_VIDEODRIVER=dummy python alien_invasion.py</code>，就得到一个完整可玩的外星人入侵：左右移动、空格射击、击落外星人、撞三次游戏结束。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># alien_invasion.py —— 《外星人入侵》主文件（第 13 章完成时）</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">alien</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alien</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bullet</span><span class="w"> </span><span class="kn">import</span> <span class="n">Bullet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">game_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameStats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ship</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ship</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AlienInvasion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""管理游戏资源和行为的类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""初始化游戏并创建资源。"""</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_height</span><span class="p">))</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s2">"Alien Invasion"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">GameStats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>     <span class="c1"># 游戏统计信息</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship</span> <span class="o">=</span> <span class="n">Ship</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>           <span class="c1"># 装子弹的编组</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>            <span class="c1"># 装外星人的编组</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_fleet</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""开始游戏的主循环。"""</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_events</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_bullets</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_aliens</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_screen</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+
+    <span class="c1"># —— 事件处理 ——</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""响应按键和鼠标事件。"""</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_keydown_events</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYUP</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_keyup_events</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_keydown_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""响应按键。"""</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">moving_right</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_LEFT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">moving_left</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_q</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fire_bullet</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_keyup_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""响应松键。"""</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">moving_right</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_LEFT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">moving_left</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fire_bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""创建一颗新子弹，并加入编组（受数量限制）。"""</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bullets_allowed</span><span class="p">:</span>
+            <span class="n">new_bullet</span> <span class="o">=</span> <span class="n">Bullet</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_bullet</span><span class="p">)</span>
+
+    <span class="c1"># —— 子弹 ——</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_bullets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""更新子弹位置，并删除消失的子弹。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>      <span class="c1"># 遍历副本，安全删除</span>
+            <span class="k">if</span> <span class="n">bullet</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bullet</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_bullet_alien_collisions</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_bullet_alien_collisions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""响应子弹和外星人的碰撞。"""</span>
+        <span class="n">collisions</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">groupcollide</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">:</span>
+            <span class="c1"># 外星人全部被击落：清空子弹，再来一队</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_fleet</span><span class="p">()</span>
+
+    <span class="c1"># —— 外星人 ——</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_fleet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""创建外星舰队。"""</span>
+        <span class="n">alien</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>                     <span class="c1"># 先造一个当"尺子"</span>
+        <span class="n">alien_width</span><span class="p">,</span> <span class="n">alien_height</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="n">available_space_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_width</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span><span class="p">)</span>
+        <span class="n">number_aliens_x</span> <span class="o">=</span> <span class="n">available_space_x</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span><span class="p">)</span>
+
+        <span class="n">ship_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">available_space_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">screen_height</span>
+                             <span class="o">-</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">alien_height</span><span class="p">)</span> <span class="o">-</span> <span class="n">ship_height</span><span class="p">)</span>
+        <span class="n">number_rows</span> <span class="o">=</span> <span class="n">available_space_y</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">alien_height</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">row_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_rows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">alien_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_aliens_x</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_create_alien</span><span class="p">(</span><span class="n">alien_number</span><span class="p">,</span> <span class="n">row_number</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_alien</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alien_number</span><span class="p">,</span> <span class="n">row_number</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""创建一个外星人，并把它放进舰队。"""</span>
+        <span class="n">alien</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">alien_width</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">alien</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">alien_width</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">alien_width</span> <span class="o">*</span> <span class="n">alien_number</span>
+        <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">row_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">alien</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_aliens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""更新舰队位置，并处理与飞船的碰撞。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fleet_edges</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">spritecollideany</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ship_hit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_aliens_bottom</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_fleet_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""有外星人到达边缘时，改变整个舰队的方向。"""</span>
+        <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">alien</span><span class="o">.</span><span class="n">check_edges</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_change_fleet_direction</span><span class="p">()</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_change_fleet_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""将整队外星人下移，并改变移动方向。"""</span>
+        <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+            <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_drop_speed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">fleet_direction</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ship_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""响应飞船被外星人撞到。"""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_fleet</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">center_ship</span><span class="p">()</span>
+            <span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_aliens_bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""检查是否有外星人到达屏幕下边缘。"""</span>
+        <span class="n">screen_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">alien</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">&gt;=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">bottom</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ship_hit</span><span class="p">()</span>      <span class="c1"># 像飞船被撞一样处理</span>
+                <span class="k">break</span>
+
+    <span class="c1"># —— 画面 ——</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""更新屏幕上的图像，并切换到新屏幕。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">bg_color</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+            <span class="n">bullet</span><span class="o">.</span><span class="n">draw_bullet</span><span class="p">()</span>      <span class="c1"># 子弹没有 image，手动绘制</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>  <span class="c1"># 外星人有 image，整编组一次画完</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ship</span><span class="o">.</span><span class="n">blitme</span><span class="p">()</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">ai</span> <span class="o">=</span> <span class="n">AlienInvasion</span><span class="p">()</span>
+    <span class="n">ai</span><span class="o">.</span><span class="n">run_game</span><span class="p">()</span>
+</code></pre>
+<p><code>_update_screen()</code> 里两种画法放在一起正好对比：外星人走 <code>Group.draw()</code>（因为它们有 <code>image</code>），子弹只能手动循环 <code>draw_bullet()</code>（因为它是色块，没有 <code>image</code>）——这就是 2.2 节说的「装备不齐，编组帮不了你」。</p>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 13-1【编组基本功】</strong></p>
+<p>不打开窗口，用 <code>pygame.sprite</code> 完成以下流程并打印结果：创建一个 <code>Group</code>，放入 5 个自制精灵；调用 <code>group.update()</code> 让它们全部右移 100 像素；再造一个 3 成员的「子弹」编组，与前者 <code>groupcollide()</code>；最后 <code>empty()</code>。</p>
+<p>验收点：每一步打印成员数；能说出 <code>groupcollide()</code> 返回值的结构（键是谁、值是谁）。</p>
+<p><strong>练习 13-2【复现并修复「漏删」bug】</strong></p>
+<p>用列表模拟子弹（每个元素是 <code>{"id": i, "y": ...}</code>，<code>y &lt;= 0</code> 表示已飞出屏幕），故意让多个「已消失」的子弹相邻：先直接遍历列表并 <code>remove()</code>，数一数剩下的；再用 <code>copy()</code> 修复，再数一次。</p>
+<p>验收点：错误写法至少漏删 1 个；正确写法全部删净。并用一句话回答：这和阶段 1「遍历字典时不能删键」为什么是同一个坑？</p>
+<p><strong>练习 13-3【边缘检测】</strong></p>
+<p>不用 Pygame 窗口，实现 <code>check_edges()</code> 的逻辑（用假 <code>rect</code>：宽 60、屏宽 800），验证三种情况：<code>x = 0</code> → <code>True</code>；<code>x = 740</code> → <code>True</code>；<code>x = 370</code> → <code>False</code>。</p>
+<p>验收点：三种情况判断正确；能解释为什么边界判断用 <code>&gt;=</code> 和 <code>&lt;=</code> 而不是 <code>==</code>。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 13-4【舰队密度可调】</strong></p>
+<p>在示例 6 的 <code>_create_fleet()</code> 里改计算，让每行外星人少 1 个、行数少 1 行（提示：把 <code>number_aliens_x</code> 和 <code>number_rows</code> 各减 1 是最直接的做法，但更好的做法是从「可用空间」上减去一个身位）。打印修改前后的两组数字。</p>
+<p>验收点：打印出修改前后的 <code>number_aliens_x</code> 和 <code>number_rows</code>；能说清少一个外星人对游戏难度的影响。</p>
+<p><strong>练习 13-5【三条命的完整流程】</strong></p>
+<p>用示例 5 的 <code>GameStats</code>，再写一个小类模拟 <code>_ship_hit()</code> 的逻辑（被撞 → 减命 → 清空 → 重建 → 复位；没命了 → <code>game_active = False</code>）。连续撞 4 次，打印每次之后的状态。</p>
+<p>验收点：<code>ships_left</code> 从 3 递减到 0；第 3 次被撞后 <code>game_active</code> 变 <code>False</code>；第 4 次撞击不再改变任何状态。</p>
+<p><strong>练习 13-6【子弹越打越快，结束时有简报】</strong></p>
+<p>在示例 6 的基础上做两个增强（都可以用不打开窗口的小程序验证）：</p>
+<ul>
+<li>每击落一个外星人，<code>bullet_speed</code> 增加 0.5，但不超过 6.0；</li>
+<li>游戏结束时打印「本局击落 X 个外星人、坚持了 Y 帧、剩余 Z 条命」。</li>
+</ul>
+<p>验收点：速度封顶 6.0；击落数用 <code>len(collisions)</code> 累加得到；三个数字与模拟过程一致。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-13-1">参考答案 13-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># group_basic.py —— 编组基本功（无需显示器）</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"SDL_VIDEODRIVER"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"dummy"</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygame.sprite</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">Sprite</span><span class="p">,</span> <span class="n">groupcollide</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Block</span><span class="p">(</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">topleft</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vx</span>
+
+
+<span class="n">aliens</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">aliens</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Block</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"① 加入 5 个外星人："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="n">aliens</span><span class="p">:</span>
+    <span class="n">alien</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">aliens</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"② 全员右移 100 后，第一个的 x："</span><span class="p">,</span> <span class="n">aliens</span><span class="o">.</span><span class="n">sprites</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># 3 颗子弹，故意和外星人重叠</span>
+<span class="n">bullets</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">bullets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Block</span><span class="p">((</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="mi">120</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+
+<span class="n">collisions</span> <span class="o">=</span> <span class="n">groupcollide</span><span class="p">(</span><span class="n">bullets</span><span class="p">,</span> <span class="n">aliens</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"③ 碰撞字典的键（被撞掉的外星人）："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">collisions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"   "</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="s2">"被"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="s2">"颗子弹命中"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   碰撞后外星人剩："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">),</span> <span class="s2">"，子弹剩："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bullets</span><span class="p">))</span>
+
+<span class="n">bullets</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="n">aliens</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"④ empty() 之后："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bullets</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">aliens</span><span class="p">))</span>
+</code></pre>
+<h3 id="参考答案-13-2">参考答案 13-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># iteration_bug.py —— 复现"边遍历边删除"的漏删 bug</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_bullets</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""y &lt;= 0 表示已飞出屏幕；故意让多个消失的子弹相邻。"""</span>
+    <span class="k">return</span> <span class="p">[{</span><span class="s2">"id"</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">40</span><span class="p">])]</span>
+
+
+<span class="c1"># 错误写法：直接遍历并删除</span>
+<span class="n">bullets</span> <span class="o">=</span> <span class="n">make_bullets</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"删除前："</span><span class="p">,</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bullets</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="n">bullets</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">bullet</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bullets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bullet</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"错误写法删除后："</span><span class="p">,</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bullets</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"还剩几个 -5："</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bullets</span> <span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># 正确写法：遍历副本</span>
+<span class="n">bullets</span> <span class="o">=</span> <span class="n">make_bullets</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="n">bullets</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">bullet</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">bullets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bullet</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"正确写法删除后："</span><span class="p">,</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bullets</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"结论：迭代器按序号走，删除会让后面的元素往前补位、被跳过；"</span>
+      <span class="s2">"这和阶段 1 遍历字典时不能删键是同一个坑。"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>删除前： [100, -5, -5, 80, 60, -5, -5, -5, 40]
+错误写法删除后： [100, -5, 80, 60, -5, 40]
+还剩几个 -5： 2
+正确写法删除后： [100, 80, 60, 40]
+结论：迭代器按序号走，删除会让后面的元素往前补位、被跳过；这和阶段 1 遍历字典时不能删键是同一个坑。
+</code></pre>
+<h3 id="参考答案-13-3">参考答案 13-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># edge_check.py —— 边缘检测逻辑（无需 pygame）</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FakeRect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""模拟 pygame.Rect 的 x / right / left。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">width</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Alien</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">FakeRect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>      <span class="c1"># 外星人宽 60</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen_width</span><span class="o">=</span><span class="mi">800</span><span class="p">):</span>
+        <span class="n">screen_rect</span> <span class="o">=</span> <span class="n">FakeRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">right</span> <span class="o">&gt;=</span> <span class="n">screen_rect</span><span class="o">.</span><span class="n">right</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">expect</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="mi">740</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="mi">370</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="mi">741</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">Alien</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">check_edges</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"x=</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">&gt;3</span><span class="si">}</span><span class="s2"> → check_edges=</span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">（期望 </span><span class="si">{</span><span class="n">expect</span><span class="si">}</span><span class="s2">）"</span><span class="p">,</span>
+          <span class="s2">"PASS"</span> <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">expect</span> <span class="k">else</span> <span class="s2">"FAIL"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"解释：用 &gt;= 和 &lt;= 是因为'刚好贴上边缘'也算到边；"</span>
+      <span class="s2">"速度大于 1 时可能一步跨过精确坐标，用 == 会漏判。"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>x=  0 → check_edges=True（期望 True）PASS
+x=740 → check_edges=True（期望 True）PASS
+x=370 → check_edges=False（期望 False）PASS
+x=741 → check_edges=True（期望 True）PASS
+解释：用 &gt;= 和 &lt;= 是因为'刚好贴上边缘'也算到边；速度大于 1 时可能一步跨过精确坐标，用 == 会漏判。
+</code></pre>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 判断题</strong>：子弹列表可以用 <code>self.bullets.pop()</code> 直接删除，因为它就是个普通列表。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。<code>self.bullets</code> 不是 list 而是 <code>pygame.sprite.Group</code>（编组）。Group 的 <code>pop()</code> 接受的是<strong>精灵对象</strong>不是下标，删完也不自动维护内部列表。要删子弹必须走 <code>self.bullets.remove(bullet)</code> 或 <code>self.bullets.empty()</code>。这题专门考「编组和列表不是一回事」——阶段 1 学列表时形成的直觉在这里会骗人。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：为什么删除子弹的代码要写 <code>for bullet in self.bullets.copy():</code>，而不是 <code>for bullet in self.bullets:</code>？</p>
+<blockquote>
+<p><strong>要点</strong>：因为在遍历过程中删除元素会漏删。遍历 <code>self.bullets</code> 时拿到的是一个「正在被遍历的列表」的快照式访问，一旦你在循环体里删元素，遍历指针会错位——后面的子弹被跳过，明明还在屏幕上也消失了。<code>.copy()</code> 先复制一份快照，遍历副本、删除原件，两边互不干扰。这和阶段 1「遍历字典时不能删键」是同一条红线，只是这次的对象换成了编组。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：<code>groupcollide(self.bullets, self.aliens, True, True)</code> 后面两个 <code>True</code> 分别是什么意思？改成 <code>False</code> 会怎样？</p>
+<blockquote>
+<p><strong>要点</strong>：第一个 <code>True</code> 是 <code>kill_bullets</code>——命中的子弹会被移除；第二个 <code>True</code> 是 <code>kill_aliens</code>——命中的外星人会被移除。都改成 <code>False</code> 的话，碰撞依然会被检测到并返回列表，但什么都不删，于是同一个外星人在原地反复被同一颗子弹判定命中、反复加分。这是新手最常见的「打不死外星人」bug 根因。</p>
+</blockquote>
+<p><strong>4. 判断题</strong>：检测边缘时可以写 <code>if self.rect.left == 0:</code>，和教材用的 <code>&gt;=</code> / <code>&lt;=</code> 效果完全一样。</p>
+<blockquote>
+<p><strong>要点</strong>：错误，只在一种情况下碰巧一样。舰队的移动步长由 <code>aliens_speed</code> 决定，一旦速度大于 1，<code>rect.left</code> 可能一步跨过 0 变成负数，<code>==</code> 就永远匹配不上，舰队会飞出屏幕外再也不掉头。教材用 <code>&gt;=</code> / <code>&lt;=</code> 是为了「越过或刚好贴上边缘」都能抓住。这个 bug 的表现是「玩着玩着整队消失」，很难查，所以要一开始就写对。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>Alien.check_edges()</code> 里为什么要拿<b>任意一个</b>外星人来判断，而不是所有外星人？</p>
+<blockquote>
+<p><strong>要点</strong>：因为整支舰队是<b>同速同向</b>整体移动的。同一时刻所有外星人的 x 坐标差值固定，谁先到边缘一定是左端或右端那个。所以只要拿一个代表（教材里取 <code>self.aliens.sprites()[0]</code>，靠 Group 按加入顺序排序保证它是最左的）就够了。对每个人都调一次方法是 O(n) 的无用功，而且一旦有外星人被击落，代表就换人了，反而更乱。</p>
+</blockquote>
+<p><strong>6. 改错题</strong>：下面这段代码有什么问题？运行后飞船会怎样？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">_update_bullets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">bullet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+        <span class="n">bullet</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">bullet</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bullet</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pygame</span><span class="o">.</span><span class="n">sprite</span><span class="o">.</span><span class="n">groupcollide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bullets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliens</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_fleet</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">aliens_speed</span> <span class="o">*=</span> <span class="mf">1.1</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：<strong>检查了碰撞，却没把子弹挪出循环</strong>。命中判定已经把子弹和外星人移出编组了，但 <code>for</code> 仍在遍历这份<strong>快照</strong>。此时 <code>bullet</code> 对象虽然已不在 <code>self.bullets</code> 里，循环体却还会继续对它调 <code>bullet.update()</code>。更要命的是 <code>self._create_fleet()</code> 在每次碰撞时都会执行——如果同一颗子弹在同一帧击落多个外星人，或者子弹数量多，就会连续重建舰队。正确写法见正文：拿到碰撞列表后先判断 <code>if collisions:</code>，只在确实命中时才重建舰队并加速。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能说清 <code>pygame.sprite.Group</code> 和普通 list 的三点差别（<code>add</code> / <code>update</code> / <code>draw</code> 自动、<code>copy()</code> 才能安全遍历、<code>remove</code> 接受对象而非下标）</li>
+<li>[ ] 能默写「遍历时删除」的正确写法：遍历 <code>.copy()</code>，删除原件</li>
+<li>[ ] 能解释 <code>groupcollide</code> 后两个布尔参数的含义，知道都设 <code>False</code> 会导致「外星人不消失、分数乱加」</li>
+<li>[ ] 能说清边缘检测为什么用 <code>&gt;=</code> / <code>&lt;=</code> 而不是 <code>==</code></li>
+<li>[ ] 能解释 <code>check_edges()</code> 只看一个外星人的理由（同速同向整体移动）</li>
+<li>[ ] 练习 13-2（复现并修复「漏删」bug）已亲自跑过，不是只看懂</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 14 讲记分——给游戏加上 Play 按钮、游戏状态机（inactive / active / game over）、动态难度和完整记分牌。做完单元 14，外星人入侵这个项目就完整了：能开、能射、能得分、能结束。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="12.html"><small>← 上一单元</small><b>单元 12 · Pygame起步与飞船驾驶</b></a><div class="spot"><a class="pn" href="ppt/u/13.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s14"><small>课程大纲课件</small><b>阶段总览 p14 →</b></a></div><a class="pn nx" href="14.html"><small>下一单元 →</small><b>单元 14 · Play 按钮与记分</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

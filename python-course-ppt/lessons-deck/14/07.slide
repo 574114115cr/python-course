@@ -1,0 +1,16 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 64, top: 36, width: '1152px', flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <Box style={{ background: '#0E9B78', borderRadius: 5, padding: '3px 11px' }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>第 77 节</Text>
+        </Box>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#16232E' }}>核心知识点</Text>
+        <Text style={{ fontSize: 15, color: '#5A6B7A', marginTop: 10 }}>· 动态难度与余下飞船数</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px' }}>
+        <svg width='1280' height='720' viewBox='0 0 1280 720'>
+            <rect x='64' y='96' width='548' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='64' y='96' width='548' height='4' rx='2' fill='#1F5FA8' /><text x='82' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>2.5 动态难度：speedup_scale 与 scor…</text><text x='82' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· speedup_scale = 1.1：每升一级，ship_speed / bullet_speed…</text><text x='82' y='197.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· score_scale = 1.5：每升一级，alien_points 乘 1.5。</text><text x='82' y='226.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· initialize_dynamic_settings()：取初始值，点 Play 重置时调用。</text><rect x='668' y='96' width='548' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='668' y='96' width='548' height='4' rx='2' fill='#1F5FA8' /><text x='686' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>2.6 余下的飞船数：Group + Ship 的复用</text><text x='686' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· Group() 是 Pygame 的精灵编组，像一艘航空母舰，把一堆 Sprite 装进去统一管理</text><text x='686' y='188.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>，s…</text><text x='686' y='217.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 每个小图标都是一个完整的 Ship 对象——有图片、有 rect、有速度，只是不更新位</text><text x='686' y='236.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>置，纯粹借它的「…</text><text x='686' y='265.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· ship.rect.width 是图片宽度，用它当间距，图标之间刚好不重叠。</text><rect x='64' y='574' width='1152' height='66' rx='12' fill='#EEF5FB' /><text x='84' y='616' fontSize='14' fill='#243444' textAnchor='start' fontFamily='Microsoft YaHei'>看不懂的地方先回讲义对应小节读一遍，再回来对着这页复述一次——能讲出来才算真懂。</text>
+            <text x='64' y='684' fontSize='13' fill='#8A9AAA' fontFamily='Microsoft YaHei'>Python 讲授课件 · 逐节版</text>
+            <text x='1216' y='684' fontSize='13' fill='#8A9AAA' textAnchor='end' fontFamily='Microsoft YaHei'>单元 14 · 第 77 节</text>
+        </svg>
+    </Box>
+</Slide>

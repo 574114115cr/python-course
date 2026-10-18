@@ -1,0 +1,106 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '180px', background: '#16232E' }} />
+
+    <Box style={{ position: 'absolute', left: 64, top: 44, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#FFFFFF' }}>单元 4–6 · 让程序会做判断</Text>
+        <Text style={{ fontSize: 18, color: '#A8C4DE', marginTop: 8 }}>
+            从「按顺序执行」到「会分支、会重复、会查表」，这是能写出第一个真程序的前提
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 202, width: '1152px', height: 348,
+        flexDirection: 'row', gap: 18,
+    }}>
+        <Box style={{
+            flex: 1, background: '#EEF5FB', borderRadius: 12, padding: 24,
+            flexDirection: 'column', gap: 12,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 48, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>04</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#16232E' }}>if 语句</Text>
+            </Box>
+            <Text style={{ fontSize: 14, color: '#8A9AAA' }}>教材第 5 章 · W4</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    条件测试、比较运算、布尔表达式、in / not in、if-else / elif 链。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    讲法要点：条件顺序必须从窄到宽，先挡掉非法输入再进业务逻辑。
+                    用票价分级当例子最直观。
+                </Text>
+            </Box>
+            <Text style={{ fontSize: 15, color: '#1F5FA8', fontWeight: 'bold', marginTop: 'auto' }}>
+                产出 3 个条件判断小程序
+            </Text>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#EEF5FB', borderRadius: 12, padding: 24,
+            flexDirection: 'column', gap: 12,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 48, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>05</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#16232E' }}>字典</Text>
+            </Box>
+            <Text style={{ fontSize: 14, color: '#8A9AAA' }}>教材第 6 章 · W5</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    键值对、增删改查、get() 安全取值、三种遍历方式、嵌套结构。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    讲法要点：用生日调查演示字典列表、列表字典、字典字典三种嵌套。
+                    嵌套是后面所有 JSON 数据的入门钥匙。
+                </Text>
+            </Box>
+            <Text style={{ fontSize: 15, color: '#1F5FA8', fontWeight: 'bold', marginTop: 'auto' }}>
+                产出生日调查字典 6.1–6.3
+            </Text>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FDF3E2', borderRadius: 12, padding: 24,
+            flexDirection: 'column', gap: 12,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+                <Text style={{ fontSize: 48, fontWeight: 'bold', color: '#E08A15', lineHeight: 1 }}>06</Text>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#16232E' }}>输入与 while</Text>
+            </Box>
+            <Text style={{ fontSize: 14, color: '#B07A10' }}>教材第 7 章 · W6 · 难点</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    input() / int() / 求模、while 循环、标志位、break / continue。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.65 }}>
+                    讲法要点：整节围绕「避免无限循环」展开。非数字输入必须捕获
+                    ValueError，否则程序一崩学员就以为自己写错了。
+                </Text>
+            </Box>
+            <Text style={{ fontSize: 15, color: '#8A5A08', fontWeight: 'bold', marginTop: 'auto' }}>
+                产出投票统计 7.5–7.9 / 收银机 7.10
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 566, width: '1152px', height: 94,
+        background: '#16232E', borderRadius: 12,
+        flexDirection: 'row', alignItems: 'center', padding: '0 26px', gap: 20,
+    }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#E8B36A' }}>进入单元 7 的门槛</Text>
+        <Text style={{ fontSize: 17, color: '#D6E4F0', lineHeight: 1.6 }}>
+            能写出一个「反复提示输入、直到输入合法为止」的循环程序 · 能解释 break 和 continue 的区别 · 能说出 for 与 while 各自适合什么场景
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', right: 64, bottom: 24,
+        flexDirection: 'row', alignItems: 'center', gap: 40,
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–1 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>07 / 17</Text>
+    </Box>
+</Slide>

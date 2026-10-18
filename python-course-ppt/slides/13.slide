@@ -1,0 +1,94 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>练习题库 · 五档递进共 52 题</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            每题都有参考答案与解析。卡 15 分钟再看答案，看完必须关掉重写一遍
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 152, width: '700px', height: 400 }}>
+        <svg width='700' height='400' viewBox='0 0 700 400'>
+            <line x1='60' y1='340' x2='680' y2='340' stroke='#D8E3EE' strokeWidth='2' />
+
+            <rect x='80' y='250' width='104' height='90' rx='6' fill='#1F5FA8' />
+            <text x='132' y='285' fontSize='24' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L1</text>
+            <text x='132' y='315' fontSize='14' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>12 题</text>
+            <text x='132' y='366' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>变量 / 列表</text>
+            <text x='132' y='388' fontSize='13' fill='#8A9AAA' textAnchor='middle' fontFamily='Inter'>3 小时</text>
+
+            <rect x='204' y='210' width='104' height='130' rx='6' fill='#1F5FA8' />
+            <text x='256' y='252' fontSize='24' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L2</text>
+            <text x='256' y='284' fontSize='14' fill='#CFE2F5' textAnchor='middle' fontFamily='Inter'>16 题</text>
+            <text x='256' y='312' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>循环 / 条件 /</text>
+            <text x='256' y='332' fontSize='13' fill='#5A6B7A' textAnchor='middle' fontFamily='Inter'>字典 / while</text>
+            <text x='256' y='366' fontSize='13' fill='#8A9AAA' textAnchor='middle' fontFamily='Inter'>6 小时</text>
+
+            <rect x='328' y='180' width='104' height='160' rx='6' fill='#2F7BC8' />
+            <text x='380' y='228' fontSize='24' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L3</text>
+            <text x='380' y='260' fontSize='14' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>8 题</text>
+            <text x='380' y='288' fontSize='13' fill='#EAF3FC' textAnchor='middle' fontFamily='Inter'>函数 / 递归 /</text>
+            <text x='380' y='308' fontSize='13' fill='#EAF3FC' textAnchor='middle' fontFamily='Inter'>装饰器 / 模块</text>
+            <text x='380' y='366' fontSize='13' fill='#8A9AAA' textAnchor='middle' fontFamily='Inter'>4 小时</text>
+
+            <rect x='452' y='150' width='104' height='190' rx='6' fill='#0E9B78' />
+            <text x='504' y='205' fontSize='24' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L4</text>
+            <text x='504' y='237' fontSize='14' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>8 题</text>
+            <text x='504' y='265' fontSize='13' fill='#D7F0E7' textAnchor='middle' fontFamily='Inter'>类 / 继承 /</text>
+            <text x='504' y='285' fontSize='13' fill='#D7F0E7' textAnchor='middle' fontFamily='Inter'>组合 / dataclass</text>
+            <text x='504' y='366' fontSize='13' fill='#8A9AAA' textAnchor='middle' fontFamily='Inter'>5 小时</text>
+
+            <rect x='576' y='112' width='104' height='228' rx='6' fill='#E08A15' />
+            <text x='628' y='175' fontSize='24' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L5</text>
+            <text x='628' y='207' fontSize='14' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>8 题</text>
+            <text x='628' y='235' fontSize='13' fill='#FDF0DC' textAnchor='middle' fontFamily='Inter'>文件 / 异常 /</text>
+            <text x='628' y='255' fontSize='13' fill='#FDF0DC' textAnchor='middle' fontFamily='Inter'>JSON / pytest</text>
+            <text x='628' y='366' fontSize='13' fill='#8A9AAA' textAnchor='middle' fontFamily='Inter'>5 小时</text>
+
+            <path d='M184 220 L 200 190' stroke='#1F5FA8' strokeWidth='2' fill='none' />
+            <path d='M308 190 L 324 165' stroke='#1F5FA8' strokeWidth='2' fill='none' />
+            <path d='M432 145 L 448 128' stroke='#0E9B78' strokeWidth='2' fill='none' />
+            <path d='M556 105 L 572 96' stroke='#E08A15' strokeWidth='2' fill='none' />
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', right: 64, top: 148, width: 420, flexDirection: 'column', gap: 14 }}>
+        <Box style={{ background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1F5FA8' }}>每题的固定三段结构</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                题目（写清输入输出）→ 参考答案（完整可运行代码，不是伪代码）→ 解析（说明为什么这么写，以及常见错法）
+            </Text>
+        </Box>
+
+        <Box style={{ background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#1F5FA8' }}>重点题（会卡人的）</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.7 }}>
+                L2-5 列表引用陷阱<br />
+                L2-14 for-else 写法<br />
+                L3-3 列表传参改与不改<br />
+                L4-3 属性私有化与 @property<br />
+                L5-3 异常 else 子句
+            </Text>
+        </Box>
+
+        <Box style={{ background: '#FDF3E2', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#8A5A08' }}>另外有 3 道综合挑战</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.7 }}>
+                A 文本词频分析器<br />
+                B 学生成绩管理器<br />
+                C 命令行记事本<br />
+                三道都涉及模块化拆分与 pytest
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–1 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>13 / 17</Text>
+    </Box>
+</Slide>

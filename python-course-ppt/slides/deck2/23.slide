@@ -1,0 +1,54 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px',
+        background: 'linear-gradient(135deg, #16232E 0%, #1F5FA8 100%)' }} />
+
+    <Box style={{ position: 'absolute', left: 96, top: 104, width: '1090px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 30, color: '#8FB8E0', letterSpacing: 4 }}>阶段 0–2 完整路径</Text>
+        <Text style={{ fontSize: 64, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 1.25, marginTop: 18 }}>
+            今天就把环境装好
+        </Text>
+        <Text style={{ fontSize: 64, fontWeight: 'bold', color: '#E08A15', lineHeight: 1.25 }}>
+            把第一行 print 敲出来
+        </Text>
+
+        <Box style={{ width: 160, height: 5, background: '#E08A15', marginTop: 30, marginBottom: 30 }} />
+
+        <Text style={{ fontSize: 22, color: '#C9DEEE', lineHeight: 1.8, width: '1000px' }}>
+            22 个单元 · 111 节课 · 29 周，看起来很长。但每节课只有 90 分钟，
+            每个单元的产出物都写得清清楚楚。<br />
+            真正决定结果的不是速度，是「每节课都动手、每个单元都交东西」。
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 96, top: 500, width: '1090px', height: 118, flexDirection: 'row', gap: 16 }}>
+        <Box style={{ flex: 1, background: 'rgba(255,255,255,0.10)', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 6 }}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#8FB8E0' }}>资料都在哪</Text>
+            <Text style={{ fontSize: 15, color: '#FFFFFF', lineHeight: 1.6 }}>
+                22 份单元讲义 + 111 节课节页<br />
+                + 52 道分阶题库，本地双击就能读
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: 'rgba(255,255,255,0.10)', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 6 }}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#8FB8E0' }}>进度怎么记</Text>
+            <Text style={{ fontSize: 15, color: '#FFFFFF', lineHeight: 1.6 }}>
+                每节课和每个单元都有勾选框<br />
+                勾选状态保存在本机浏览器
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: 'rgba(224,138,21,0.22)', borderRadius: 12, padding: 18, flexDirection: 'column', gap: 6 }}>
+            <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#E08A15' }}>第一个动作</Text>
+            <Text style={{ fontSize: 15, color: '#FFFFFF', lineHeight: 1.6 }}>
+                装 Python 3.12+（勾选 Add to PATH）<br />
+                装 VS Code + Python 扩展，跑通 hello.py
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 96, bottom: 34, width: '1090px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#7E9AB8' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#7E9AB8' }}>23 / 23</Text>
+    </Box>
+</Slide>

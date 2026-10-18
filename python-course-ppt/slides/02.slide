@@ -1,0 +1,87 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>课程坐标</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            这门课要把你从「从没写过代码」送到「能独立交付一个完整项目」
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 150, width: '1152px', height: 420,
+        flexDirection: 'row', gap: 16,
+    }}>
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 24, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>12</Text>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>个单元</Text>
+                <Text style={{ fontSize: 16, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    单元 0 是环境搭建，单元 1–10 对应教材第 1–11 章，单元 11 是复习与关卡
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 24, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#0E9B78', lineHeight: 1 }}>13</Text>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>周周期</Text>
+                <Text style={{ fontSize: 16, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    每周 3 次课，每次 90 分钟，加课余作业约 6–10 小时。单元 3、6、7、8 可各加 1 周
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 24, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>52</Text>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>道练习题</Text>
+                <Text style={{ fontSize: 16, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    分五档递进，每题都有参考答案与解析。卡 15 分钟再看答案，看完必须关掉重写
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 24, flexDirection: 'column', justifyContent: 'space-between',
+        }}>
+            <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#E08A15', lineHeight: 1 }}>11</Text>
+            <Box style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>个动手项目</Text>
+                <Text style={{ fontSize: 16, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    教材原项目 8 个（偏好调查、忘记密码清单、生日调查、投票统计、魔方消息、学习笔记管理、投票分析器测试），另加综合项目 3 个
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 596, width: '1152px', height: 66,
+        background: '#EEF5FB', borderLeft: '5px solid #1F5FA8', borderRadius: 8,
+        flexDirection: 'row', alignItems: 'center', padding: '0 22px', gap: 16,
+    }}>
+        <Text style={{ fontSize: 17, color: '#1F5FA8', fontWeight: 'bold' }}>出口</Text>
+        <Text style={{ fontSize: 17, color: '#3A4A58' }}>
+            通过关卡 1 的四项验收，才准进入阶段 2（pygame 游戏 → 数据可视化 → Django 学习笔记）
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–1 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>02 / 17</Text>
+    </Box>
+</Slide>

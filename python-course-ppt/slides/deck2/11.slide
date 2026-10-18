@@ -1,0 +1,46 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#16232E',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px', background: 'linear-gradient(135deg, #16232E 0%, #1F5FA8 100%)', opacity: 0.9 }} />
+    <Box style={{ position: 'absolute', left: 0, top: 560, width: '1280px', height: '160px', background: '#0B1620', opacity: 0.5 }} />
+
+    <Box style={{ position: 'absolute', left: 120, top: 150, width: '520px', flexDirection: 'column', gap: 20 }}>
+        <Text style={{ fontSize: 190, fontWeight: 'bold', color: '#E08A15', lineHeight: 0.85 }}>11</Text>
+        <Box style={{ width: 120, height: 6, background: '#FFFFFF' }} />
+        <Text style={{ fontSize: 42, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 1.3 }}>
+            总复习<br />+ 关卡验收
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 720, top: 150, width: '440px', flexDirection: 'column', gap: 18 }}>
+        <Box style={{ background: 'rgba(255,255,255,0.10)', borderRadius: 12, padding: '20px 22px', flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF' }}>课 1 · 串讲</Text>
+            <Text style={{ fontSize: 16, color: '#C9DEEE', lineHeight: 1.7 }}>
+                画一张从变量到类的知识图谱，把 11 章串成一条线。
+                集中复盘最容易错的十处：缩进、索引、sort、传参、self、super、with、encoding。
+            </Text>
+        </Box>
+
+        <Box style={{ background: 'rgba(255,255,255,0.10)', borderRadius: 12, padding: '20px 22px', flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF' }}>课 2 · 需求拆解示范</Text>
+            <Text style={{ fontSize: 16, color: '#C9DEEE', lineHeight: 1.7 }}>
+                教师当众把一个模糊需求拆成步骤清单，再拆成函数。
+                学员看完整过程，这一步是给阶段 2 的大项目做预演。
+            </Text>
+        </Box>
+
+        <Box style={{ background: '#E08A15', borderRadius: 12, padding: '20px 22px', flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#FFFFFF' }}>课 3 · 关卡 1 现场测评</Text>
+            <Text style={{ fontSize: 16, color: '#FDF0DC', lineHeight: 1.7 }}>
+                限时 2 小时，四项任务当场完成。
+                不查资料，测的是能不能独立写，不是记不记得住。
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 120, bottom: 60, width: '1040px', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontSize: 15, color: '#8FB4D8' }}>教材第 1–11 章全部结束 · 约 40 小时 · 52 道练习题</Text>
+        <Text style={{ fontSize: 14, color: '#8FB4D8' }}>11 / 23</Text>
+    </Box>
+</Slide>

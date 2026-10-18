@@ -1,0 +1,17 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '150px', background: '#1F5FA8' }} />
+    <Box style={{ position: 'absolute', left: 64, top: 34, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#BFD9F2', letterSpacing: 2 }}>阶段 2 · 单元 13</Text>
+        <Text style={{ fontSize: 38, fontWeight: 'bold', color: '#FFFFFF', marginTop: 6 }}>射击与外星舰队</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 64, top: 168, width: '1152px', height: 470 }}>
+        <svg width='1152' height='470' viewBox='0 0 1152 470'>
+            <text x='0' y='18' fontSize='15' fontWeight='bold' fill='#16232E' fontFamily='Microsoft YaHei'>本单元共 5 节课</text>
+            <rect x='0' y='196' width='1152' height='38' rx='7' fill='#FFFFFF' /><text x='16' y='221' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 70 节</text><text x='96' y='221' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>编组 Group 与精灵 Sprite</text><text x='1080' y='221' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W15</text><rect x='0' y='238' width='1152' height='38' rx='7' fill='#F2F7FD' /><text x='16' y='263' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 71 节</text><text x='96' y='263' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>射击：Bullet 类与开火</text><text x='1080' y='263' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W15</text><rect x='0' y='280' width='1152' height='38' rx='7' fill='#FFFFFF' /><text x='16' y='305' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 72 节</text><text x='96' y='305' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>外星舰队与整体移动</text><text x='1080' y='305' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W15</text><rect x='0' y='322' width='1152' height='38' rx='7' fill='#F2F7FD' /><text x='16' y='347' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 73 节</text><text x='96' y='347' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>碰撞检测与游戏结束</text><text x='1080' y='347' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W15</text><rect x='0' y='364' width='1152' height='38' rx='7' fill='#FFFFFF' /><text x='16' y='389' fontSize='15' fontWeight='bold' fill='#1F5FA8' fontFamily='Microsoft YaHei'>第 74 节</text><text x='96' y='389' fontSize='15' fill='#16232E' fontFamily='Microsoft YaHei'>实战、答案与验收复盘</text><text x='1080' y='389' fontSize='13' fill='#5A6B7A' textAnchor='end' fontFamily='Microsoft YaHei'>W15</text>
+        </svg>
+    </Box>
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 13, color: '#8A9AAA' }}>Python 讲授课件 · 逐节版</Text>
+        <Text style={{ fontSize: 13, color: '#8A9AAA' }}>单元 13 · 封面</Text>
+    </Box>
+</Slide>

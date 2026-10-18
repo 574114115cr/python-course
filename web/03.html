@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 3 · 操作列表</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="3">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 3 · 操作列表</h1>
+  <a class="ppt" href="ppt/u/03.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="14" data-to="18"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u3"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/03.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u3"><span class="k">题库</span><span class="v">本单元 7 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-for-循环-把重复交给机器">2.1 for 循环：把重复交给机器</a>
+<a class="lv3" href="#2-2-range-造出一串数字">2.2 range()：造出一串数字</a>
+<a class="lv3" href="#2-3-循环的常见搭档">2.3 循环的常见搭档</a>
+<a class="lv3" href="#2-4-列表推导式-一行搞定筛选">2.4 列表推导式：一行搞定筛选</a>
+<a class="lv3" href="#2-5-切片-一次取出一段">2.5 切片：一次取出一段</a>
+<a class="lv3" href="#2-6-元组-用括号表示-不可修改">2.6 元组：用括号表示&quot;不可修改&quot;</a>
+<a class="lv3" href="#2-7-pep-8-让代码能被人读">2.7 PEP 8：让代码能被人读</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-for-循环基础">示例 1：for 循环基础</a>
+<a class="lv3" href="#示例-2-range-的四种形式">示例 2：range 的四种形式</a>
+<a class="lv3" href="#示例-3-常见循环搭档">示例 3：常见循环搭档</a>
+<a class="lv3" href="#示例-4-列表推导式">示例 4：列表推导式</a>
+<a class="lv3" href="#示例-5-切片">示例 5：切片</a>
+<a class="lv3" href="#示例-6-元组">示例 6：元组</a>
+<a class="lv3" href="#示例-7-pep-8-排版示范">示例 7：PEP 8 排版示范</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-3-1">参考答案 3-1</a>
+<a class="lv3" href="#参考答案-3-2">参考答案 3-2</a>
+<a class="lv3" href="#参考答案-3-3">参考答案 3-3</a>
+<a class="lv3" href="#参考答案-3-4">参考答案 3-4</a>
+<a class="lv3" href="#参考答案-3-5">参考答案 3-5</a>
+<a class="lv3" href="#参考答案-3-6">参考答案 3-6</a>
+<a class="lv3" href="#参考答案-3-7">参考答案 3-7</a>
+<a class="lv3" href="#参考答案-3-8">参考答案 3-8</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-3-操作列表">单元 3：操作列表</h1>
+<blockquote>
+<p>对应教材第 4 章「操作列表」
+关键词：for 循环、range()、while（本单元仅作对比）、列表推导式、切片 slice、元组 tuple、PEP 8</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，应该能够：</p>
+<ol>
+<li>用 <code>for</code> 循环遍历列表中的每个元素，并说清循环变量每轮的值是怎么变化的。</li>
+<li>掌握 <code>range()</code> 的三种常用形式，并能计算 <code>len(range(a, b, c))</code>。</li>
+<li>用一行<strong>列表推导式</strong>写出筛选/变换逻辑，并与等价的多行 <code>for</code> 循环对比。</li>
+<li>正确书写切片 <code>list[start:stop:step]</code>，说清「左闭右开」规则，并预测负索引切片的结果。</li>
+<li>说出元组与列表的三点区别，并解释为什么字典的键必须是元组/字符串这类不可变类型。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-for-循环-把重复交给机器">2.1 for 循环：把重复交给机器</h3>
+<p>没有 <code>for</code> 时，处理 5 个元素要写 5 行：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+</code></pre>
+<p>有 1000 个元素呢？写 1000 行——显然不行。</p>
+<p><code>for</code> 循环的标准结构是三部分：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">for</span> <span class="n">变量</span> <span class="ow">in</span> <span class="n">数据集合</span><span class="p">:</span>
+    <span class="n">循环体</span>
+</code></pre>
+<p>生活化类比：<strong>流水线</strong>。传送带（数据集合）上一个个送来工件（元素），工人（循环体）在固定工位（缩进块）对每个工件做同样的操作。工人不关心工件长什么样，只管"来了就做一次"。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">car</span> <span class="ow">in</span> <span class="n">cars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+<span class="c1"># 第 1 轮：car = "a"</span>
+<span class="c1"># 第 2 轮：car = "b"</span>
+<span class="c1"># 第 3 轮：car = "c"</span>
+<span class="c1"># 循环结束，car 里残留着最后一个值（这点很重要，容易被忽略）</span>
+</code></pre>
+<p><strong>最关键的陷阱：缩进决定循环体。</strong> 只有缩进了的行才是循环体：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">for</span> <span class="n">car</span> <span class="ow">in</span> <span class="n">cars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>      <span class="c1"># 循环体内：执行 3 次</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"再见"</span><span class="p">)</span>    <span class="c1"># 循环体内：也执行 3 次</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环结束"</span><span class="p">)</span>     <span class="c1"># 循环外：只执行 1 次</span>
+</code></pre>
+<p>忘记写冒号 <code>:</code> 会报 <code>SyntaxError</code>，忘记缩进会报 <code>IndentationError</code> 或 <code>IndentationError: expected an indented block</code>——这两条是本课程后续最常见的报错。</p>
+<h3 id="2-2-range-造出一串数字">2.2 range()：造出一串数字</h3>
+<p>有时我们还没有列表，只想"重复 N 次"，这时用 <code>range()</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>           <span class="c1"># 0, 1, 2, 3, 4        —— 5 个数，从 0 开始，不含 5</span>
+<span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>        <span class="c1"># 1, 2, 3, 4, 5        —— 含 1 不含 6</span>
+<span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>    <span class="c1"># 2, 4, 6, 8, 10      —— 步长为 2</span>
+<span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>   <span class="c1"># 10, 9, ..., 1, 0     —— 负步长，倒着数</span>
+</code></pre>
+<p>三个通用规则，记住就够用一辈子：
+1. <strong>含起点，不含终点</strong>（左闭右开）
+2. 只有一个参数时 = <code>range(0, 参数)</code>
+3. 步长的符号决定方向</p>
+<p><code>range</code> 在 Python 3 里是"惰性"的——它不一次性生成所有数字，而是你每要一个它才算一个。所以<strong>不会因为 <code>range(1000000000)</code> 而内存爆掉</strong>（但循环十亿次会很慢）。</p>
+<h3 id="2-3-循环的常见搭档">2.3 循环的常见搭档</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 只打印奇数</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># 遍历列表的同时拿到下标：enumerate()</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+
+<span class="c1"># 遍历字典会拿到键（单元 5 详讲）</span>
+<span class="c1"># 同时遍历多个列表：zip()</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">]</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">scores</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</code></pre>
+<h3 id="2-4-列表推导式-一行搞定筛选">2.4 列表推导式：一行搞定筛选</h3>
+<p>列表推导式的结构是 <code>[表达式 for 变量 in 集合 if 条件]</code>。</p>
+<p>对比两种写法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 传统写法：4 行</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">squares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># 列表推导式：1 行，完全等价</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">number</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+</code></pre>
+<p>生活化类比：传统写法像是"先准备一个空篮子 → 逐个捡东西放进去"；推导式像是"直接摊开一块布，东西落下来就自动摆好"。省掉的不是打字，而是"创建一个空列表 + 逐个 append"这两个中间步骤。</p>
+<p><strong>什么时候用推导式</strong>：处理<strong>单个元素</strong>、产出<strong>单个值</strong>时最清晰。
+<strong>什么时候不用</strong>：需要多步中间变量、需要 <code>break</code>、或者嵌套超过两层时，强行用推导式会写出没人看得懂的代码。这种时候老老实实用普通 <code>for</code>——可读性永远优先。</p>
+<h3 id="2-5-切片-一次取出一段">2.5 切片：一次取出一段</h3>
+<p>切片语法 <code>list[start:stop:step]</code>，<strong>含 <code>start</code>，不含 <code>stop</code></strong>。</p>
+<p>生活化类比：切片就像切面包——你要的是"从第 3 片到第 7 片之间"，第 3 片要、第 7 片不要（它属于下一段）。这个"要左边不要右边"的规则叫<strong>左闭右开</strong>，因为它让 <code>len</code> 天然对得上：<code>len(a[b:c]) == c - b</code>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">]</span>
+<span class="n">letters</span><span class="p">[:]</span>      <span class="c1"># 全部（浅拷贝）</span>
+<span class="n">letters</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>     <span class="c1"># ['c', 'd', 'e', 'f']      从索引2 到末尾</span>
+<span class="n">letters</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>     <span class="c1"># ['a', 'b', 'c']           前三个</span>
+<span class="n">letters</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>    <span class="c1"># ['b', 'c', 'd']</span>
+<span class="n">letters</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>    <span class="c1"># ['a', 'c', 'e']           步长 2</span>
+<span class="n">letters</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># ['f', 'e', 'd', 'c', 'b', 'a']  反转</span>
+<span class="n">letters</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>    <span class="c1"># ['e', 'f']                最后两个</span>
+</code></pre>
+<p>切片可以用于<strong>列表、字符串、元组</strong>，这是三种序列类型的共同能力。</p>
+<p><strong>切片也是浅拷贝</strong>：<code>a[:]</code> 得到新列表，但里面的元素还是同一批对象（嵌套列表时要注意）。</p>
+<h3 id="2-6-元组-用括号表示-不可修改">2.6 元组：用括号表示"不可修改"</h3>
+<p>列表的方括号 <code>[]</code> 表示"可以改"，圆括号 <code>()</code> 表示"不能改"：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># point[0] = 9    # TypeError: 'tuple' object does not support item assignment</span>
+</code></pre>
+<p>生活化类比：列表像<strong>活页本</strong>，能撕能换；元组像<strong>一次性塑封的相片</strong>，封好就不能改了。</p>
+<p>元组的三点区别：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>列表 list</th>
+<th>元组 tuple</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写法</td>
+<td><code>[1, 2, 3]</code></td>
+<td><code>(1, 2, 3)</code></td>
+</tr>
+<tr>
+<td>能否改元素</td>
+<td>能</td>
+<td><strong>不能</strong></td>
+</tr>
+<tr>
+<td>能否增删</td>
+<td>能</td>
+<td>不能（只有重新赋值整个变量）</td>
+</tr>
+<tr>
+<td>是否有 <code>append</code></td>
+<td>有</td>
+<td><strong>没有</strong></td>
+</tr>
+<tr>
+<td>长度</td>
+<td>变长</td>
+<td>固定</td>
+</tr>
+<tr>
+<td>用途</td>
+<td>一组会变化的数据</td>
+<td>一组固定的数据，如坐标、日期</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 元组"看似不能改"，但可以整体重新赋值</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># point[0] = 9   # 不行</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>    <span class="c1"># 可以：换了一个全新的元组</span>
+</code></pre>
+<p><strong>只有一个元素的元组必须写逗号</strong>——这是超级高频的坑：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="c1"># 这不是元组！这是整数 5，括号只是分组</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span>    <span class="c1"># 这才是长度为1 的元组</span>
+<span class="nb">type</span><span class="p">((</span><span class="mi">5</span><span class="p">))</span>   <span class="c1"># &lt;class 'int'&gt;</span>
+<span class="nb">type</span><span class="p">((</span><span class="mi">5</span><span class="p">,))</span>  <span class="c1"># &lt;class 'tuple'&gt;</span>
+</code></pre>
+<p><strong>为什么字典的键要用元组这类不可变类型</strong>：键必须是"不会变的"，否则你把键改了，就再也找不到对应的值了。列表可以改，所以列表不能当键；元组不能改，所以可以。</p>
+<h3 id="2-7-pep-8-让代码能被人读">2.7 PEP 8：让代码能被人读</h3>
+<p>PEP 8 是 Python 官方风格指南，与功能无关但直接影响你能不能维护自己的代码。核心三条：</p>
+<ol>
+<li><strong>一行不超过 79（现代放宽到 99）个字符</strong>，长了要换行。</li>
+<li><strong>运算符两侧加空格，逗号后加一个空格</strong>：</li>
+<li><strong>缩进统一用 4 个空格</strong>，永远不要混用 Tab。</li>
+</ol>
+<p>对比示例：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 推荐</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="c1"># 不推荐</span>
+<span class="n">total</span><span class="o">=</span><span class="n">price</span><span class="o">*</span><span class="n">quantity</span><span class="o">+</span><span class="mi">5</span>
+</code></pre>
+<p>还有两条新手常忘：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 括号内逗号后留一个空格</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"blue"</span><span class="p">]</span>
+<span class="c1"># 切片冒号两边都留空格（复杂表达式可省略）</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">sub</span> <span class="o">=</span> <span class="n">letters</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+</code></pre>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-for-循环基础">示例 1：for 循环基础</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># for_basics.py —— for 循环的标准结构</span>
+
+<span class="n">cars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小红帽"</span><span class="p">,</span> <span class="s2">"凯迪拉克"</span><span class="p">,</span> <span class="s2">"雷克萨斯"</span><span class="p">]</span>
+
+<span class="c1"># 结构：for 临时变量 in 数据集合:  然后缩进的循环体</span>
+<span class="k">for</span> <span class="n">car</span> <span class="ow">in</span> <span class="n">cars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+
+<span class="c1"># 循环结束后，变量依然存在，保留最后一个值</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环结束后 car ="</span><span class="p">,</span> <span class="n">car</span><span class="p">)</span>      <span class="c1"># 雷克萨斯</span>
+
+<span class="c1"># 循环体内的多行都属于循环</span>
+<span class="k">for</span> <span class="n">car</span> <span class="ow">in</span> <span class="n">cars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"正在处理："</span><span class="p">,</span> <span class="n">car</span><span class="p">)</span>     <span class="c1"># 执行 3 次</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"处理完毕"</span><span class="p">)</span>             <span class="c1"># 也执行 3 次</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"全部处理完毕"</span><span class="p">)</span>             <span class="c1"># 只执行 1 次</span>
+
+<span class="c1"># 缩进错误的后果：下面这段会报 IndentationError</span>
+<span class="c1"># for car in cars:</span>
+<span class="c1"># print(car)</span>
+</code></pre>
+<h3 id="示例-2-range-的四种形式">示例 2：range 的四种形式</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># range_demo.py —— range() 生成数字序列</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(5)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>                <span class="c1"># [0, 1, 2, 3, 4]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(1, 6)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)))</span>          <span class="c1"># [1, 2, 3, 4, 5]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(2, 11, 2)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>  <span class="c1"># [2, 4, 6, 8, 10]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(10, 0, -1)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="c1"># [10, ..., 1, 0]</span>
+
+<span class="c1"># 关键：含起点不含终点</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># range(5) 等价于 range(0, 5)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两种写法相同："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>
+
+<span class="c1"># len() 可以直接算 range 的长度，不必真的生成列表</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(1, 100) 有几个数："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>      <span class="c1"># 99</span>
+
+<span class="c1"># 用 range 遍历列表下标</span>
+<span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"索引 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 的元素是 </span><span class="si">{</span><span class="n">letters</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 更推荐的写法：enumerate</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">letters</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"索引 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 的元素是 </span><span class="si">{</span><span class="n">letter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-3-常见循环搭档">示例 3：常见循环搭档</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># loop_helpers.py —— for 循环的三个高性价比搭档</span>
+
+<span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]</span>
+
+<span class="c1"># 1）enumerate()：同时拿到下标和元素</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">letters</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 位是 </span><span class="si">{</span><span class="n">letter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># start 参数可以指定下标起点</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">letter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">letters</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 个是 </span><span class="si">{</span><span class="n">letter</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 2）zip()：同时遍历多个列表（长度不等时以最短的为准）</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">]</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span><span class="c1">#故意多一个</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">scores</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> 得了 </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2"> 分"</span><span class="p">)</span>
+<span class="c1"># 小明 88 / 小红 95 / 小刚 72 —— 第 4 个分数因为没有对应名字被忽略</span>
+
+<span class="c1"># 3）在循环里做条件筛选</span>
+<span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">letters</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">letter</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"找到元音："</span><span class="p">,</span> <span class="n">letter</span><span class="p">)</span>
+
+<span class="c1"># 累加器模式：循环最常见的用途</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">72</span><span class="p">]:</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">score</span><span class="c1"># 等价于 total = total + score</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"总分："</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>         <span class="c1"># 255</span>
+</code></pre>
+<h3 id="示例-4-列表推导式">示例 4：列表推导式</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># comprehension.py —— 列表推导式：传统写法 vs 一行写法</span>
+
+<span class="c1"># 案例1：计算平方</span>
+<span class="c1"># 传统写法</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">squares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"传统写法："</span><span class="p">,</span> <span class="n">squares</span><span class="p">)</span>
+
+<span class="c1"># 推导式写法（完全等价）</span>
+<span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">number</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"推导式："</span><span class="p">,</span> <span class="n">squares</span><span class="p">)</span>          <span class="c1"># [1, 4, 9, 16, 25]</span>
+
+<span class="c1"># 案例2：筛选偶数</span>
+<span class="c1"># 传统写法</span>
+<span class="n">evens</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">evens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"传统筛选："</span><span class="p">,</span> <span class="n">evens</span><span class="p">)</span>
+
+<span class="c1"># 推导式 + if 条件</span>
+<span class="n">evens</span> <span class="o">=</span> <span class="p">[</span><span class="n">number</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span> <span class="k">if</span> <span class="n">number</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"推导式筛选："</span><span class="p">,</span> <span class="n">evens</span><span class="p">)</span>        <span class="c1"># [2, 4, 6, 8, 10]</span>
+
+<span class="c1"># 案例3：字符串统一大写</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"python"</span><span class="p">,</span> <span class="s2">"is"</span><span class="p">,</span> <span class="s2">"fun"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"大写："</span><span class="p">,</span> <span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">])</span>
+
+<span class="c1"># 案例4：三元表达式放进推导式</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"标记奇偶："</span><span class="p">,</span> <span class="p">[(</span><span class="s2">"偶"</span> <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"奇"</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">])</span>
+
+<span class="c1"># 什么时候不要用推导式：逻辑复杂时老老实实写循环</span>
+<span class="c1"># 下面这种嵌套推导式虽然能跑，但没人看得懂：</span>
+<span class="c1"># print([x * y for x in range(3) for y in range(3) if x != y])</span>
+<span class="c1"># 可读性优先于行数。</span>
+</code></pre>
+<h3 id="示例-5-切片">示例 5：切片</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># slicing.py —— 切片 list[start:stop:step]</span>
+
+<span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">,</span> <span class="s2">"f"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表："</span><span class="p">,</span> <span class="n">letters</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[:]      "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[:])</span>       <span class="c1"># 全部</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[2:]     "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>      <span class="c1"># ['c','d','e','f']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[:3]     "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>      <span class="c1"># ['a','b','c']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[1:4]    "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>     <span class="c1"># ['b','c','d']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[::2]    "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>     <span class="c1"># ['a','c','e']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[::-1]   "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>    <span class="c1"># 反转</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[-2:]    "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span>     <span class="c1"># ['e','f']</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[-4:-1]  "</span><span class="p">,</span> <span class="n">letters</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>   <span class="c1"># ['c','d','e']</span>
+
+<span class="c1"># 左闭右开：切片的秘密</span>
+<span class="c1"># len(a[b:c]) == c - b，用这个公式快速预测结果</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"letters[2:5] 的长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">letters</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]))</span>    <span class="c1"># 3 = 5 - 2</span>
+
+<span class="c1"># 切片对字符串同样有效</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://example.com/page"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"协议："</span><span class="p">,</span> <span class="n">url</span><span class="p">[:</span><span class="mi">8</span><span class="p">])</span>                <span class="c1"># https://</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"主机名："</span><span class="p">,</span> <span class="n">url</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">19</span><span class="p">])</span>             <span class="c1"># example.com</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"去掉末尾斜杠："</span><span class="p">,</span> <span class="n">url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">))</span>
+
+<span class="c1"># 切片是浅拷贝：外层是新的，内层元素还是同一批</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span class="n">copy</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[:]</span>
+<span class="n">copy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原matrix："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>          <span class="c1"># [[1, 2, 99], [3, 4]]  内层被影响！</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"copy："</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span>
+
+<span class="c1"># 深拷贝要显式 import copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+<span class="n">deep</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">77</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"深拷贝后原 matrix："</span><span class="p">,</span> <span class="n">matrix</span><span class="p">)</span>  <span class="c1"># [[1, 2, 99], [3, 4]]  完全没变</span>
+</code></pre>
+<h3 id="示例-6-元组">示例 6：元组</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># tuples.py —— 元组：不可修改的序列</span>
+
+<span class="c1"># 创建元组：用圆括号，或者直接逗号</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="s2">"red"</span><span class="p">,</span> <span class="s2">"green"</span><span class="p">,</span> <span class="s2">"blue"</span>          <span class="c1"># 不加括号也合法，但建议加括号</span>
+<span class="n">empty_tuple</span> <span class="o">=</span> <span class="p">()</span>
+<span class="n">single</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span>                             <span class="c1"># 单元素元组必须带逗号！</span>
+<span class="n">not_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>                           <span class="c1"># 这其实是整数 5</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"point："</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="s2">"类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"not_tuple："</span><span class="p">,</span> <span class="n">not_tuple</span><span class="p">,</span> <span class="s2">"类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">not_tuple</span><span class="p">))</span>   <span class="c1"># int！括号只是分组</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"single："</span><span class="p">,</span> <span class="n">single</span><span class="p">,</span> <span class="s2">"类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">single</span><span class="p">))</span>            <span class="c1"># tuple，正确</span>
+
+<span class="c1"># 读取和切片都可以</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"point[0]："</span><span class="p">,</span> <span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>              <span class="c1"># 3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"point[-1]："</span><span class="p">,</span> <span class="n">point</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>             <span class="c1"># 5</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"切片："</span><span class="p">,</span> <span class="n">point</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>                  <span class="c1"># (3,)</span>
+
+<span class="c1"># 修改会报 TypeError</span>
+<span class="c1"># point[0] = 9      # TypeError: 'tuple' object does not support item assignment</span>
+
+<span class="c1"># 但可以"整体替换"</span>
+<span class="n">point</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"整体替换后："</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>                <span class="c1"># (9, 5)</span>
+
+<span class="c1"># 元组没有 append/remove 方法</span>
+<span class="c1"># point.append(1)   # AttributeError: 'tuple' object has no attribute 'append'</span>
+
+<span class="c1"># 常用场景1：坐标</span>
+<span class="n">location</span> <span class="o">=</span> <span class="p">(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"经度："</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"纬度："</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># 常用场景2：日期（年、月、日天然固定）</span>
+<span class="n">date</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="n">date</span>                    <span class="c1"># 解包，一次取出三个值</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">年</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">月</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">日"</span><span class="p">)</span>
+
+<span class="c1"># 常用场景3：字典的键必须是不可变类型，所以常用元组</span>
+<span class="n">locations</span> <span class="o">=</span> <span class="p">{(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">):</span> <span class="s2">"北京"</span><span class="p">,</span> <span class="p">(</span><span class="mf">121.47</span><span class="p">,</span> <span class="mf">31.23</span><span class="p">):</span> <span class="s2">"上海"</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"北京坐标："</span><span class="p">,</span> <span class="n">locations</span><span class="p">[(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)])</span>    <span class="c1"># 北京</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"键的类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">((</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)))</span>         <span class="c1"># tuple</span>
+
+<span class="c1"># 元组和列表可以互相转换</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"元组转列表："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>               <span class="c1"># [1, 2, 3]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"列表转元组："</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>        <span class="c1"># (1, 2, 3)</span>
+</code></pre>
+<h3 id="示例-7-pep-8-排版示范">示例 7：PEP 8 排版示范</h3>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="c1"># ===== 不推荐：省空格，写起来快，读起来痛苦 =====</span>
+<span class="n">total</span><span class="o">=</span><span class="n">price</span><span class="o">*</span><span class="n">quantity</span><span class="o">+</span><span class="n">tax</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ===== 推荐：空格、换行、命名都照顾读者 =====</span>
+<span class="n">total</span> <span class="o">=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quantity</span> <span class="o">+</span> <span class="n">tax</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""计算两个数的和。"""</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="c1"># 超过 79 字符时这样折行</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">first_number</span>
+    <span class="o">+</span> <span class="n">second_number</span>
+    <span class="o">+</span> <span class="n">third_number</span>
+    <span class="o">+</span> <span class="n">fourth_number</span>
+<span class="p">)</span>
+
+<span class="c1"># 函数调用的折行：每行一个参数</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">some_function</span><span class="p">(</span>
+    <span class="n">argument_one</span><span class="p">,</span>
+    <span class="n">argument_two</span><span class="p">,</span>
+    <span class="n">argument_three</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># 注释也要符合规范：井号后一个空格</span>
+<span class="c1"># 这是标准注释</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 行尾注释前两个空格</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 3-1【打印与累加】</strong>
+给定 <code>scores = [88, 92, 79, 95, 60]</code>
+1. 用 <code>for</code> 循环逐个打印每个分数和它的序号（从 1 开始）
+2. 用 <code>for</code> 循环累加总分，最后输出总分
+3. 输出最高分和最低分
+4. 输出平均分（保留两位小数）</p>
+<p><strong>练习 3-2【range 练手】</strong>
+分别输出下列序列，每个一行：
+1. <code>range(1, 10)</code>
+2. <code>range(2, 20, 3)</code>
+3. <code>range(10, 0, -2)</code>
+4. <code>range(0)</code>
+并回答：<code>len(range(3, 100, 5))</code> 等于多少？</p>
+<p><strong>练习 3-3【切片预测题】</strong>
+给定 <code>nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code>
+<strong>先不要运行</strong>，写出下列每一个切片的预测结果，然后再运行核对：
+1. <code>nums[:5]</code>
+2. <code>nums[5:]</code>
+3. <code>nums[2:8]</code>
+4. <code>nums[::3]</code>
+5. <code>nums[::-1]</code>
+6. <code>nums[-3:]</code>
+7. <code>nums[:-3]</code>
+8. <code>nums[8:2:-1]</code>
+9. <code>len(nums[3:9])</code></p>
+<p><strong>练习 3-4【推导式改写】</strong>
+把下面 4 段传统循环改写成列表推导式：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># A</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># B</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"cherry"</span><span class="p">]:</span>
+    <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
+
+<span class="c1"># C</span>
+<span class="n">evens</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">evens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># D</span>
+<span class="n">short</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"hi"</span><span class="p">,</span> <span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"python"</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">short</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</code></pre>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 3-5【商品总价计算器】</strong>
+给定 <code>products = [("键盘", 299), ("鼠标", 129), ("显示器", 1899)]</code>（元组列表）
+用 <code>for</code> 循环 + 元组解包，输出每件商品的名称和单价，并输出总价。若总价超过 1000，额外输出一行"享受 9折优惠"，并输出折后价格。</p>
+<p><strong>练习 3-6【斐波那契数列】</strong>
+用 <code>for</code> 循环和列表生成前 15 个斐波那契数（1, 1, 2, 3, 5, 8, ...）。
+提示：先建列表 <code>[1, 1]</code>，然后循环 <code>range(13)</code> 次，每次把最后两个数相加后 <code>append</code>。</p>
+<p><strong>练习 3-7【元组与列表的选择】</strong>
+下面 5 个场景，分别该用列表还是元组？各写一行代码。
+1. 一门课的学生名单（会有学生退课、转学）
+2. 经纬度坐标
+3. 购物车里的商品（会增删）
+4. 一个人的生日（年、月、日，生日不会变）
+5. 字典的键（不能变，否则找不到值）</p>
+<p><strong>练习 3-8【实战：数据清洗】</strong>
+给定混杂的原始列表：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">raw</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"  苹果  "</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"  "</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"  葡萄"</span><span class="p">]</span>
+</code></pre>
+<p>目标：清洗得到 <code>["苹果", "香蕉", "橙子", "葡萄"]</code>
+要求：
+- 去掉每个元素首尾的空格
+- 去掉空字符串和 <code>None</code>
+- 保持原有顺序
+- 优先尝试用<strong>列表推导式</strong>一行写出来（提示：<code>if item</code> 可以过滤掉 <code>""</code> 但<strong>过滤不掉 <code>None</code></strong>，所以需要 <code>if item</code> 之外再加一道 <code>is not None</code>；如果卡住了，用普通 <code>for</code> 循环也可以）</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-3-1">参考答案 3-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># score_loop.py —— 循环遍历、累加与统计</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">79</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span>
+
+<span class="c1"># 1）逐个打印分数和序号（从 1 开始）</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 个分数：</span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 2）累加总分</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">score</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"总分："</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>         <span class="c1"># 414</span>
+
+<span class="c1"># 3）最高分与最低分</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最高分："</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>        <span class="c1"># 95</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最低分："</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>        <span class="c1"># 60</span>
+
+<span class="c1"># 4）平均分：先累加再除，用 f-string 保留两位小数</span>
+<span class="n">average</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"平均分：</span><span class="si">{</span><span class="n">average</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span><span class="c1"># 82.80</span>
+
+<span class="c1"># 顺带演示：不改动原列表的情况下排序</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"降序排列："</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre>
+<h3 id="参考答案-3-2">参考答案 3-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ranges.py —— range 的四种形式</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(1, 10)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1"># [1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(2, 20, 3)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="c1"># [2, 5, 8, 11, 14, 17]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(10, 0, -2)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)))</span>
+<span class="c1"># [10, 8, 6, 4, 2]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"range(0)："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="c1"># []</span>
+
+<span class="c1"># 练习问答题</span>
+<span class="c1"># 步长为 5，从 3 到 99：序列是 3, 8, 13, ..., 98</span>
+<span class="c1"># 用公式计算：(stop - start) / step 需要向下取整</span>
+<span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"len(range(3, 100, 5)) ="</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>     <span class="c1"># 20</span>
+<span class="c1"># 验证一下具体内容</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>
+</code></pre>
+<h3 id="参考答案-3-3">参考答案 3-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># slice_predict.py —— 切片预测与验证</span>
+
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+
+<span class="c1"># 我的预测（先写在注释里，然后运行核对）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1. nums[:5]      -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>          <span class="c1"># [0, 1, 2, 3, 4]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2. nums[5:]      -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">5</span><span class="p">:])</span>          <span class="c1"># [5, 6, 7, 8, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"3. nums[2:8]     -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>         <span class="c1"># [2, 3, 4, 5, 6, 7]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"4. nums[::3]     -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[::</span><span class="mi">3</span><span class="p">])</span>         <span class="c1"># [0, 3, 6, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"5. nums[::-1]    -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="c1"># [9, 8, ..., 1, 0]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"6. nums[-3:]     -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>         <span class="c1"># [7, 8, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"7. nums[:-3]     -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[:</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span><span class="c1"># [0, 1, 2, 3, 4, 5, 6]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"8. nums[8:2:-1]  -&gt;"</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>      <span class="c1"># [8, 7, 6, 5, 4, 3]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"9. len(nums[3:9])-&gt;"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">9</span><span class="p">]))</span>    <span class="c1"># 6 = 9 - 3</span>
+
+<span class="c1"># 切片的三条通用规则：</span>
+<span class="c1"># 1）含 start，不含 stop（左闭右开）</span>
+<span class="c1"># 2）省略 start 表示"从最前面开始"，省略 stop 表示"一直到末尾"</span>
+<span class="c1"># 3）省略 step 表示步长为 1；step 为负数表示倒着走</span>
+</code></pre>
+<h3 id="参考答案-3-4">参考答案 3-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># rewrite_comprehension.py —— 把传统循环改写成列表推导式</span>
+
+<span class="c1"># ===== A =====</span>
+<span class="c1"># 原写法：result = []</span>
+<span class="c1">#       for i in range(10):</span>
+<span class="c1">#           result.append(i * 2)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"A:"</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>     <span class="c1"># [0, 2, 4, ..., 18]</span>
+
+<span class="c1"># ===== B =====</span>
+<span class="c1"># 原写法：names = []</span>
+<span class="c1">#       for w in ["apple", "banana", "cherry"]:</span>
+<span class="c1">#           names.append(w.upper())</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"cherry"</span><span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"B:"</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>      <span class="c1"># ['APPLE', 'BANANA', 'CHERRY']</span>
+
+<span class="c1"># ===== C =====</span>
+<span class="c1"># 原写法：evens = []</span>
+<span class="c1">#       for n in range(1, 21):</span>
+<span class="c1">#           if n % 2 == 0:</span>
+<span class="c1">#               evens.append(n)</span>
+<span class="n">evens</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"C:"</span><span class="p">,</span> <span class="n">evens</span><span class="p">)</span>      <span class="c1"># [2, 4, 6, ..., 20]</span>
+
+<span class="c1"># ===== D =====</span>
+<span class="c1"># 原写法：short = []</span>
+<span class="c1">#       for w in ["hi", "hello", "ok", "python"]:</span>
+<span class="c1">#           if len(w) &lt; 3:</span>
+<span class="c1">#               short.append(w)</span>
+<span class="n">all_words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"hi"</span><span class="p">,</span> <span class="s2">"hello"</span><span class="p">,</span> <span class="s2">"ok"</span><span class="p">,</span> <span class="s2">"python"</span><span class="p">]</span>
+<span class="n">short</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">all_words</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"D:"</span><span class="p">,</span> <span class="n">short</span><span class="p">)</span>      <span class="c1"># ['hi', 'ok']</span>
+</code></pre>
+<h3 id="参考答案-3-5">参考答案 3-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># shopping_total.py —— 用元组解包遍历商品</span>
+
+<span class="c1"># 列表的每个元素是一个元组：(名称, 单价)</span>
+<span class="n">products</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"键盘"</span><span class="p">,</span> <span class="mi">299</span><span class="p">),</span> <span class="p">(</span><span class="s2">"鼠标"</span><span class="p">,</span> <span class="mi">129</span><span class="p">),</span> <span class="p">(</span><span class="s2">"显示器"</span><span class="p">,</span> <span class="mi">1899</span><span class="p">)]</span>
+
+<span class="c1"># for 循环直接解包元组：两个变量依次接住元组的第0、第1 个元素</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="n">products</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">price</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原价合计："</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="s2">"元"</span><span class="p">)</span>       <span class="c1"># 2327 元</span>
+
+<span class="c1"># 超过 1000 就打折</span>
+<span class="k">if</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"总价超过 1000 元，享受 9 折优惠！"</span><span class="p">)</span>
+    <span class="n">discounted</span> <span class="o">=</span> <span class="n">total</span> <span class="o">*</span> <span class="mf">0.9</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"折后价格：</span><span class="si">{</span><span class="n">discounted</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>    <span class="c1"># 2094.30 元</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"总价不足 1000 元，无优惠"</span><span class="p">)</span>
+
+<span class="c1"># 顺带演示：排序后遍历（按价格从高到低）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"按价格从高到低："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">products</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-3-6">参考答案 3-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fibonacci.py —— 用列表生成斐波那契数列</span>
+
+<span class="n">fib</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"初始："</span><span class="p">,</span> <span class="n">fib</span><span class="p">)</span>         <span class="c1"># [1, 1]</span>
+
+<span class="c1"># 循环 13 次，一共得到 15 个数</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">13</span><span class="p">):</span>
+    <span class="n">next_number</span> <span class="o">=</span> <span class="n">fib</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">fib</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>    <span class="c1"># 最后两个数相加</span>
+    <span class="n">fib</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_number</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"前 15 个斐波那契数："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fib</span><span class="p">)</span>
+<span class="c1"># [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610]</span>
+
+<span class="c1"># 打印成更好看的格式</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"用空格分隔："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">fib</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># 顺带验证：斐波那契数列有个性质，第 n 项等于它前面两项之和</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"fib[10] + fib[11] ="</span><span class="p">,</span> <span class="n">fib</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="n">fib</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s2">"，等于 fib[12] ="</span><span class="p">,</span> <span class="n">fib</span><span class="p">[</span><span class="mi">12</span><span class="p">])</span>
+</code></pre>
+<h3 id="参考答案-3-7">参考答案 3-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># choose_type.py —— 列表 vs 元组：按"会不会变"来选</span>
+
+<span class="c1"># 1）课程学生名单：会有人退课/转学 -&gt; 列表</span>
+<span class="n">class_students</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">]</span>
+<span class="n">class_students</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"小丽"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1. 名单用列表："</span><span class="p">,</span> <span class="n">class_students</span><span class="p">)</span>
+
+<span class="c1"># 2）经纬度坐标：位置固定 -&gt; 元组</span>
+<span class="n">beijing</span> <span class="o">=</span> <span class="p">(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2. 坐标用元组："</span><span class="p">,</span> <span class="n">beijing</span><span class="p">)</span>
+
+<span class="c1"># 3）购物车：随时增删 -&gt; 列表</span>
+<span class="n">shopping_cart</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"牛奶"</span><span class="p">,</span> <span class="s2">"面包"</span><span class="p">]</span>
+<span class="n">shopping_cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"面包"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"3. 购物车用列表："</span><span class="p">,</span> <span class="n">shopping_cart</span><span class="p">)</span>
+
+<span class="c1"># 4）生日：年/月/日不会变 -&gt; 元组</span>
+<span class="n">birthday</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="n">birthday</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"4. 生日用元组：</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">年</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">月</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">日"</span><span class="p">)</span>
+
+<span class="c1"># 5）字典的键：必须不可变，否则改了就找不到值 -&gt; 元组</span>
+<span class="n">city_by_coord</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">):</span> <span class="s2">"北京"</span><span class="p">,</span>
+    <span class="p">(</span><span class="mf">121.47</span><span class="p">,</span> <span class="mf">31.23</span><span class="p">):</span> <span class="s2">"上海"</span><span class="p">,</span>
+    <span class="p">(</span><span class="mf">113.26</span><span class="p">,</span> <span class="mf">23.13</span><span class="p">):</span> <span class="s2">"广州"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"5. 字典键用元组："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  (116.40, 39.90) -&gt;"</span><span class="p">,</span> <span class="n">city_by_coord</span><span class="p">[(</span><span class="mf">116.40</span><span class="p">,</span> <span class="mf">39.90</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  (113.26, 23.13) -&gt;"</span><span class="p">,</span> <span class="n">city_by_coord</span><span class="p">[(</span><span class="mf">113.26</span><span class="p">,</span> <span class="mf">23.13</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  字典共有"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">city_by_coord</span><span class="p">),</span> <span class="s2">"个键"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-3-8">参考答案 3-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># data_cleaning.py —— 数据清洗实战</span>
+
+<span class="n">raw</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"  苹果  "</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"  "</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"  葡萄"</span><span class="p">]</span>
+
+<span class="c1"># ===== 写法一：列表推导式（简洁）=====</span>
+<span class="c1"># 注意：`if item` 这个条件能过滤掉 ""，但过滤不掉 None，</span>
+<span class="c1"># 因为 None 在 if 判断中等于 False，所以其实是能过滤掉的。</span>
+<span class="c1"># 写两个条件也可以，但一个 if item 就够了。</span>
+<span class="n">cleaned</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">raw</span> <span class="k">if</span> <span class="n">item</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"推导式结果："</span><span class="p">,</span> <span class="n">cleaned</span><span class="p">)</span>
+<span class="c1"># ['苹果', '香蕉', '橙子', '葡萄']</span>
+
+<span class="c1"># ===== 写法二：普通 for 循环（逻辑更清晰时用）=====</span>
+<span class="n">cleaned2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">raw</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span><span class="c1"># 先挡掉 None，否则 .strip() 会崩</span>
+        <span class="k">continue</span>                     <span class="c1"># continue = 跳过本轮，继续下一次循环</span>
+    <span class="n">stripped</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="c1"># 去首尾空格</span>
+    <span class="k">if</span> <span class="n">stripped</span><span class="p">:</span>                     <span class="c1"># 非空才留下</span>
+        <span class="n">cleaned2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stripped</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环结果："</span><span class="p">,</span> <span class="n">cleaned2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两者一致："</span><span class="p">,</span> <span class="n">cleaned</span> <span class="o">==</span> <span class="n">cleaned2</span><span class="p">)</span>
+
+<span class="c1"># 统计清洗掉了几个</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原始数量："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">),</span> <span class="s2">"清洗后数量："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"清掉了："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned</span><span class="p">),</span> <span class="s2">"个"</span><span class="p">)</span>   <span class="c1"># 3 个</span>
+
+<span class="c1"># 去重（保序）</span>
+<span class="n">unique</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique</span><span class="p">:</span>
+        <span class="n">unique</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"去重后："</span><span class="p">,</span> <span class="n">unique</span><span class="p">)</span>
+</code></pre>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：下面代码输出什么？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"i ="</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：先输出 <code>2\n4\n6</code>，再输出 <code>i = 3</code>。因为 <code>range(1, 4)</code> 是 1、2、3 三轮；循环结束后 <code>i</code> 仍保留最后一次的值 3。</p>
+</blockquote>
+<p><strong>2. 判断题</strong>：<code>nums = [1, 2, 3, 4, 5, 6]</code>，<code>nums[1:5]</code> 的结果是 <code>[2, 3, 4, 5]</code>。</p>
+<blockquote>
+<p><strong>要点</strong>：正确。左闭右开——包含索引 1（值 2），不包含索引 5（值 6），所以结果是 <code>[2, 3, 4, 5]</code>，长度为 <code>5 - 1 = 4</code>。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：<code>t = (5)</code> 和 <code>t = (5,)</code> 的类型分别是什么？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>type((5))</code> 是 <code>&lt;class 'int'&gt;</code>——它就是整数 5，括号只是数学上的分组符号，逗号才是元组的标志。<code>type((5,))</code> 是 <code>&lt;class 'tuple'&gt;</code>——加了逗号才是长度为 1 的元组。</p>
+</blockquote>
+<p><strong>4. 判断题</strong>：字典的键可以用列表，因为列表也能"存多个数据"。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。字典的键必须是<strong>不可变</strong>类型。列表可以 <code>.append()</code> 修改内容，一旦键被修改，Python 就再也定位不到对应的值了。元组不能修改，所以可以当键；元组的长度和内容一旦创建就固定，用它当键才安全。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：下面代码会输出什么？为什么没输出东西？</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">numbers</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">number</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<blockquote>
+<p><strong>要点</strong>：会报 <code>SyntaxError</code>。<code>for</code> 语句末尾<strong>漏写了冒号 <code>:</code></strong>。这和括号不匹配是同一类问题——Python 语法上读不下去，代码一行都不会被执行。修复方法：<code>for number in numbers:</code>。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能默写 <code>range</code> 的三种形式并算出长度</li>
+<li>[ ] 能不运行就预测任意切片的结果（含负索引和负步长）</li>
+<li>[ ] 能把 3 行 <code>for</code> 循环改写成 1 行列表推导式</li>
+<li>[ ] 能说出元组和列表的三点区别，说出「单元素元组为什么要逗号」</li>
+<li>[ ] 练习 3-3、3-8 已跑通</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 4 讲 <code>if</code> 语句——从"能做重复的事"进阶到"能做选择"：单分支、<code>if-else</code>、<code>elif</code> 多分支，以及把一长串 <code>if</code> 收敛成一个简洁的<strong>条件表达式</strong>。同时会讲清布尔运算符 <code>and</code> / <code>or</code> / <code>not</code> 的短路特性，以及 <code>==</code> 和 <code>is</code> 到底什么时候用哪个。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="02.html"><small>← 上一单元</small><b>单元 2 · 列表简介</b></a><div class="spot"><a class="pn" href="ppt/u/03.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s6"><small>课程大纲课件</small><b>阶段总览 p6 →</b></a></div><a class="pn nx" href="04.html"><small>下一单元 →</small><b>单元 4 · if语句</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 61 节 · ★ 综合项目 2：成绩分析器</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="61">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 61/111 节 · ★ 综合项目 2：成绩分析器</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/11.html#s10" title="本课节对应的课件">本课课件 u11·p10</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv3" href="#参考答案-11-3-综合项目-2-成绩分析器完整实现">参考答案 11-3（综合项目 2：成绩分析器完整实现）</a>
+<a class="lv3" href="#参考答案-11-3-的测试文件">参考答案 11-3 的测试文件</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 11</h4>
+      <a class="ppt-thumb" href="../ppt/u/11.html#s10">
+        <img loading="lazy" src="../ppt/u/11/slide-10.webp" alt="本课节课件">
+        <span class="cap"><b>单元 11 · p10</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../11.html"><span class="k">讲义</span>
+          <span class="v">单元 11 · 阶段 1 总复习 + 关卡验收</span></a>
+        <a href="../ppt/u/11.html#s10"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u11"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u11"><span class="k">题库</span>
+          <span class="v">本单元 2 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 61 节 / 111</span>
+        <span class="kwk">W13</span>
+        <span class="ku">单元 11 · 阶段 1 总复习 + 关卡验收</span>
+      </div>
+      <h1>★ 综合项目 2：成绩分析器</h1>
+      <p class="goal">独立写出一个能统计平均分、最高分并画图的成绩分析器</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 60 节 · ★ 综合项目 1：待办管理器</h3><ul><li>待办管理器 = 类 + 列表 + JSON 持久化 + 增删改查。</li><li>关键数据流：程序启动读 JSON 回内存 → 内存里增删改 → <b>每次改完写回 JSON</b>。</li><li>上节作业：项目 1 和它的 3 条测试完成了吗？</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>先限时 40 分钟自己写，再看参考答案对照</li><li>对照参考答案补齐自己漏掉的功能</li></ol>
+    </div>
+
+    <h3 id="参考答案-11-3-综合项目-2-成绩分析器完整实现">参考答案 11-3（综合项目 2：成绩分析器完整实现）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># score_analyzer.py —— 综合项目 2：成绩管理分析器</span>
+<span class="c1"># 设计要点：分析逻辑是纯函数（不碰文件、不碰 input），所以最容易测试</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">DATA_FILE</span> <span class="o">=</span> <span class="s2">"scores.json"</span>
+<span class="n">REPORT_FILE</span> <span class="o">=</span> <span class="s2">"report.csv"</span>
+
+
+<span class="c1"># ===== 数据加载 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_scores</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">DATA_FILE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""读取成绩数据。文件不存在或损坏时返回空列表。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"找不到文件 </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">，将使用空数据集"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> 不是合法的 JSON 文件"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"读取失败：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="c1"># 校验每一项：必须有 name，且各科成绩是数字</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]),</span>
+                <span class="s2">"math"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"math"</span><span class="p">]),</span>
+                <span class="s2">"english"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"english"</span><span class="p">]),</span>
+            <span class="p">}</span>
+            <span class="n">valid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> 条数据格式有误，已跳过"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">valid</span>
+
+
+<span class="c1"># ===== 纯函数：所有分析逻辑都在这里 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subject_stats</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">subject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回某科目的平均分、最高分、最低分。</span>
+
+<span class="sd">    subject: "math" 或 "english"</span>
+<span class="sd">    """</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">values</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"平均分"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"最高分"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"最低分"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">"人数"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"平均分"</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+        <span class="s2">"最高分"</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+        <span class="s2">"最低分"</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+        <span class="s2">"人数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_total</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回带总分字段的成绩列表（不修改入参）。"""</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">{</span><span class="o">**</span><span class="n">s</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">"math"</span><span class="p">]</span> <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="s2">"english"</span><span class="p">]}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ranking</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""总分排名榜（降序）。"""</span>
+    <span class="n">with_total</span> <span class="o">=</span> <span class="n">add_total</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">with_total</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">"total"</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">subject_toppers</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">subject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""某科目的第一名（并列时返回全部）。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">scores</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">subject</span><span class="p">]</span> <span class="o">==</span> <span class="n">best</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">failed_students</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">pass_line</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""需要补考的学生（任一科 &lt; 60）。"""</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+        <span class="n">subjects</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"math"</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pass_line</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">subjects</span><span class="p">:</span>
+            <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span>
+                <span class="s2">"failed_subjects"</span><span class="p">:</span> <span class="n">subjects</span><span class="p">,</span>
+            <span class="p">})</span>
+    <span class="k">return</span> <span class="n">failed</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">class_overview</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""班级总览。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">scores</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"人数"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"班级平均总分"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span>
+    <span class="n">with_total</span> <span class="o">=</span> <span class="n">add_total</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"人数"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span>
+        <span class="s2">"班级平均总分"</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">with_total</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span>
+        <span class="s2">"最高总分"</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">with_total</span><span class="p">),</span>
+        <span class="s2">"最低总分"</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">with_total</span><span class="p">),</span>
+    <span class="p">}</span>
+
+
+<span class="c1"># ===== 报告导出 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">export_report</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">REPORT_FILE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把排名导出为 CSV。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">"排名"</span><span class="p">,</span> <span class="s2">"姓名"</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">,</span> <span class="s2">"英语"</span><span class="p">,</span> <span class="s2">"总分"</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ranking</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+                    <span class="n">rank</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s2">"math"</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s2">"english"</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s2">"total"</span><span class="p">],</span>
+                <span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"报告已导出到 </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"导出失败：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_sample_data</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">DATA_FILE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""生成一份示例数据，方便演示。"""</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">92</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">88</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">95</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小刚"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">72</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小丽"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">91</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小强"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">55</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">48</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小美"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">97</span><span class="p">},</span>
+    <span class="p">]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已生成示例数据：</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="c1"># ===== 主流程 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"成绩管理分析器"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">load_scores</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">scores</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">没有可分析的数据。"</span><span class="p">)</span>
+        <span class="n">generate_sample_data</span><span class="p">()</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="n">load_scores</span><span class="p">()</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">1. 班级总览"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"2. 各科统计"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"3. 总分排名"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"4. 单科第一名"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"5. 补考名单"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"6. 导出 CSV 报告"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"0. 退出"</span><span class="p">)</span>
+
+        <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请选择："</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"1"</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 班级总览 ---"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">class_overview</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"2"</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 各科统计 ---"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">cn</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"math"</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"english"</span><span class="p">,</span> <span class="s2">"英语"</span><span class="p">)]:</span>
+                    <span class="n">stats</span> <span class="o">=</span> <span class="n">subject_stats</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cn</span><span class="si">}</span><span class="s2">：平均 </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'平均分'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">，"</span>
+                          <span class="sa">f</span><span class="s2">"最高 </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'最高分'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">，"</span>
+                          <span class="sa">f</span><span class="s2">"最低 </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'最低分'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"3"</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 总分排名 ---"</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="s1">'排名'</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}{</span><span class="s1">'姓名'</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="s1">'总分'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ranking</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">rank</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}{</span><span class="n">s</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">s</span><span class="p">[</span><span class="s1">'total'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;8.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"4"</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 单科第一名 ---"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">subject</span><span class="p">,</span> <span class="n">cn</span> <span class="ow">in</span> <span class="p">[(</span><span class="s2">"math"</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"english"</span><span class="p">,</span> <span class="s2">"英语"</span><span class="p">)]:</span>
+                    <span class="n">toppers</span> <span class="o">=</span> <span class="n">subject_toppers</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">subject</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">cn</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="s1">'、'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">toppers</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">toppers</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'无'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"5"</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 补考名单（低于 60 分）---"</span><span class="p">)</span>
+                <span class="n">failed</span> <span class="o">=</span> <span class="n">failed_students</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">failed</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"  全员通过！"</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">failed</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">item</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="s1">'、'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">'failed_subjects'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"6"</span><span class="p">:</span>
+                <span class="n">export_report</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"0"</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"再见！"</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"无效选项"</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">正在退出..."</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"发生错误：</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+<h3 id="参考答案-11-3-的测试文件">参考答案 11-3 的测试文件</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_score_analyzer.py —— 综合项目 2 的测试</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">score_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">subject_stats</span><span class="p">,</span>
+    <span class="n">add_total</span><span class="p">,</span>
+    <span class="n">ranking</span><span class="p">,</span>
+    <span class="n">subject_toppers</span><span class="p">,</span>
+    <span class="n">failed_students</span><span class="p">,</span>
+    <span class="n">class_overview</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># 共享的测试数据</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_scores</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""pytest 夹具：每个测试自动获得一份干净的数据。"""</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">92</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">88</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">95</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小刚"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">65</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">72</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小强"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">55</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">48</span><span class="p">},</span>
+    <span class="p">]</span>
+
+
+<span class="c1"># ===== subject_stats =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestSubjectStats</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""正常情况：数学平均分。"""</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">subject_stats</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"平均分"</span><span class="p">]</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">((</span><span class="mi">92</span> <span class="o">+</span> <span class="mi">78</span> <span class="o">+</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">55</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"最高分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">92</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"最低分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">55</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"人数"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 空数据：不能崩，返回全 0。"""</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">subject_stats</span><span class="p">([],</span> <span class="s2">"math"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"平均分"</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"人数"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_single_student</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""只有一个人：平均分等于自己的分数。"""</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">subject_stats</span><span class="p">([{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">90</span><span class="p">}],</span> <span class="s2">"math"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"平均分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">88</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"最高分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">88</span>
+        <span class="k">assert</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"最低分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">88</span>
+
+
+<span class="c1"># ===== add_total =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_add_total_does_not_modify_input</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""★ 纯函数：不能修改传入的数据。"""</span>
+    <span class="n">add_total</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="s2">"total"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sample_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_add_total_values</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">):</span>
+    <span class="n">with_total</span> <span class="o">=</span> <span class="n">add_total</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">with_total</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
+
+
+<span class="c1"># ===== ranking =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestRanking</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_sorted_descending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""排名按总分降序。"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">ranking</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+        <span class="n">totals</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">totals</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">totals</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_first_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""第一名应该是总分最高的。"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">ranking</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"小明"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">ranking</span><span class="p">([])</span> <span class="o">==</span> <span class="p">[]</span>
+
+
+<span class="c1"># ===== subject_toppers =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestToppers</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_single_topper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">subject_toppers</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">)</span> <span class="o">==</span> <span class="p">[</span><span class="s2">"小明"</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_tie_returns_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 并列时返回全部第一名。"""</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">80</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">70</span><span class="p">},</span>
+        <span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">subject_toppers</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">))</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">subject_toppers</span><span class="p">([],</span> <span class="s2">"math"</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>
+
+
+<span class="c1"># ===== failed_students =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestFailedStudents</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_one_subject_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""小强两科都不及格。"""</span>
+        <span class="n">failed</span> <span class="o">=</span> <span class="n">failed_students</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">failed</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s2">"小强"</span> <span class="ow">in</span> <span class="n">names</span>
+        <span class="k">assert</span> <span class="s2">"小明"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_all_pass_returns_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">failed_students</span><span class="p">([</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">80</span><span class="p">},</span>
+        <span class="p">])</span> <span class="o">==</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_exactly_60_is_pass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 正好 60 分算及格（边界）。"""</span>
+        <span class="k">assert</span> <span class="n">failed_students</span><span class="p">([{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">60</span><span class="p">}])</span> <span class="o">==</span> <span class="p">[]</span>
+
+
+<span class="c1"># ===== class_overview =====</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestOverview</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_scores</span><span class="p">):</span>
+        <span class="n">overview</span> <span class="o">=</span> <span class="n">class_overview</span><span class="p">(</span><span class="n">sample_scores</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">overview</span><span class="p">[</span><span class="s2">"人数"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="k">assert</span> <span class="n">overview</span><span class="p">[</span><span class="s2">"最高总分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">180</span>
+        <span class="k">assert</span> <span class="n">overview</span><span class="p">[</span><span class="s2">"最低总分"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">103</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">overview</span> <span class="o">=</span> <span class="n">class_overview</span><span class="p">([])</span>
+        <span class="k">assert</span> <span class="n">overview</span><span class="p">[</span><span class="s2">"人数"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">overview</span><span class="p">[</span><span class="s2">"班级平均总分"</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+
+<span class="c1"># ===== 文件读写 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_load_scores_missing_file_returns_empty</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""★ 文件不存在时返回空列表而不是崩溃。"""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">score_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_scores</span>
+    <span class="k">assert</span> <span class="n">load_scores</span><span class="p">(</span><span class="s2">"绝对不存在的文件.json"</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_load_scores_invalid_json</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""内容不是合法 JSON 时返回空列表。"""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">score_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_scores</span>
+    <span class="n">bad_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">"bad.json"</span>
+    <span class="n">bad_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"{这不是合法JSON"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">load_scores</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">bad_file</span><span class="p">))</span> <span class="o">==</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_load_scores_skips_bad_records</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""★ 混入坏数据时，只跳过坏的，保留好的。"""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">score_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_scores</span>
+    <span class="n">good_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">"mixed.json"</span>
+    <span class="n">good_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"好数据"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">80</span><span class="p">},</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"缺字段"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="mi">70</span><span class="p">},</span>          <span class="c1"># 缺 english</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"类型错"</span><span class="p">,</span> <span class="s2">"math"</span><span class="p">:</span> <span class="s2">"abc"</span><span class="p">,</span> <span class="s2">"english"</span><span class="p">:</span> <span class="mi">80</span><span class="p">},</span>
+        <span class="p">]),</span>
+        <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">load_scores</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">good_file</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"好数据"</span>
+</code></pre>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>完成综合项目 2 及其测试文件</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>统计逻辑（平均 / 最高 / 最低）是手写的还是用内置函数？</li><li>排序是按总分还是单科？能切换吗？</li><li>空数据时程序崩吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>统计类程序的边界是「没有数据」和「只有一条数据」。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../11.html">查看单元 11 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="60.html"><small>← 上一节</small><b>第 60 节 · ★ 综合项目 1：待办管理器</b></a><a class="pn nx" id="nextLink" href="62.html"><small>下一节 →</small><b>第 62 节 · ★ 综合项目 3：文本统计工具</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 106 节 · ★ 三大部署坑</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="106">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 106/111 节 · ★ 三大部署坑</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/20.html#s8" title="本课节对应的课件">本课课件 u20·p8</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv3" href="#2-7-三大部署坑-allowed_hosts-collectstatic-de">2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2）</a>
+<a class="lv3" href="#2-8-定制错误页面与-继续开发-对应教材-20-2">2.8 定制错误页面与「继续开发」（对应教材 20.2）</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-同一份代码-两个环境-config_switcher-py">示例 1：同一份代码，两个环境（config_switcher.py）</a>
+<a class="lv3" href="#示例-2-给-requirements-txt-做入职体检-requiremen">示例 2：给 requirements.txt 做入职体检（requirements_tools.py）</a>
+<a class="lv3" href="#示例-3-400-bad-request-是怎么来的-host_check-py">示例 3：400 Bad Request 是怎么来的（host_check.py）</a>
+<a class="lv3" href="#示例-4-collectstatic-到底在搬什么-static_collect">示例 4：collectstatic 到底在搬什么（static_collector.py）</a>
+<a class="lv3" href="#示例-5-推送到-platform-sh-之前的最后一遍自查-deploy_ch">示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py）</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 20</h4>
+      <a class="ppt-thumb" href="../ppt/u/20.html#s8">
+        <img loading="lazy" src="../ppt/u/20/slide-08.webp" alt="本课节课件">
+        <span class="cap"><b>单元 20 · p8</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../20.html"><span class="k">讲义</span>
+          <span class="v">单元 20 · 样式与部署</span></a>
+        <a href="../ppt/u/20.html#s8"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u20"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u20"><span class="k">题库</span>
+          <span class="v">本单元 2 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 106 节 / 111</span>
+        <span class="kwk">W27–W28</span>
+        <span class="ku">单元 20 · 样式与部署</span>
+      </div>
+      <h1>★ 三大部署坑</h1>
+      <p class="goal">记住 ALLOWED_HOSTS / collectstatic / DEBUG 三个坑；能逐条排查</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 105 节 · ★ platformshconfig 与本地线上双环境</h3><ul><li>★ 安全红线的完整链条：<code>@login_required</code> 挡住未登录 → <code>filter(owner=request.user)</code> 挡住跨用户 → 双重校验挡住跨用户改条目。</li><li>部署三件套：requirements.txt（依赖清单）、两个 yaml（怎么跑 + 路由怎么指）、settings.py 的环境判断分支。</li><li>★ 上线检查清单：ALLOWED_HOSTS、DEBUG、collectstatic、错误页——少一条就有坑。</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>故意不改 ALLOWED_HOSTS 看 400</li><li>故意不改 DEBUG 看报错页</li></ol>
+    </div>
+
+    <h3 id="2-7-三大部署坑-allowed_hosts-collectstatic-de">2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2）</h3>
+<p><strong>坑一：ALLOWED_HOSTS 不改，线上直接 400。</strong> Django 会检查每个请求的 <code>Host</code> 头在不在 <code>ALLOWED_HOSTS</code> 名单里，不在就返回 <code>400 Bad Request</code>——<strong>连你的视图代码都不会执行</strong>。默认的 <code>ALLOWED_HOSTS = []</code> 只放行 <code>localhost</code>，线上域名 100% 被拒。修复就是 2.6 里那行 <code>ALLOWED_HOSTS.append('.platformsh.site')</code>（开头带点表示「匹配所有子域名」，你的项目域名类似 <code>xxx.us-3.platformsh.site</code>）。</p>
+<p><strong>坑二：<code>DEBUG = False</code> 之后，不 collectstatic 就是一个白脸页面。</strong> <code>DEBUG = True</code> 时开发服务器会顺带帮你发静态文件；一旦关掉，静态文件必须由真正的 Web 服务器发。所以 app.yaml 的 build 钩子里有 <code>python manage.py collectstatic --noinput</code>：它把<strong>各个应用的 <code>static/</code> 目录全部汇总到 <code>STATIC_ROOT</code></strong>，再由 routes 里 <code>/static</code> 那条规则直接发文件。忘了这一步，HTML 能出来但 CSS/JS 全丢，页面就是个没化妆的素颜。</p>
+<p><strong>坑三：把本地数据库和虚拟环境传上云。</strong> 必须写 <code>.gitignore</code>：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="na">ll_env/            # 虚拟环境：几百 MB，平台要自己建</span>
+<span class="na">__pycache__/       # Python 的编译缓存</span>
+<span class="na">*.sqlite3          # 本地数据库：平台上用 PostgreSQL，带上只会混淆视听</span>
+</code></pre>
+<p>macOS 用户再加一行 <code>.DS_Store</code>。这三个坑是部署新手踩坑率最高的前三名。</p>
+<h3 id="2-8-定制错误页面与-继续开发-对应教材-20-2">2.8 定制错误页面与「继续开发」（对应教材 20.2）</h3>
+<p>线上出了 404（页面不存在）或 500（服务器内部错误），用户看到的不该是 Django 那个灰白的调试页，而应该是一个「说人话」的页面。做法是建两个模板，放到<strong>项目级 templates 目录</strong>：</p>
+<pre><code class="language-html"><span class="cl">HTML</span><span class="cm">&lt;!-- templates/404.html --&gt;</span>
+{% extends "learning_logs/base.html" %}
+
+{% block page_header %}
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>你访问的页面不存在。(404)<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+{% endblock page_header %}
+</code></pre>
+<p>500.html 做法完全类似（把文字换成「服务器内部错误」即可）。光放文件还不够，Django 得知道去<strong>项目级</strong> templates 目录找——修改 settings.py 的 <code>TEMPLATES</code>，把 <code>DIRS</code> 从空列表改成 <code>[BASE_DIR / 'templates']</code>。Django 查找模板的顺序是：先 <code>DIRS</code>（项目级），再各应用的 <code>templates/</code>，所以放项目级最稳妥。</p>
+<p><strong>如果想更精细地控制错误行为</strong>（比如 404 时也要查数据库、按不同错误码返回不同页面），可以在 <code>urls.py</code> 里用 <code>handler404</code> / <code>handler500</code> 指定专门的视图函数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ll_project/urls.py —— 可选项：定制错误处理器</span>
+<span class="n">handler404</span> <span class="o">=</span> <span class="s1">'learning_logs.views.my_404'</span>    <span class="c1"># 访问不存在的页面时调用这个视图</span>
+<span class="n">handler500</span> <span class="o">=</span> <span class="s1">'learning_logs.views.my_500'</span>    <span class="c1"># 服务器内部错误时调用这个视图</span>
+</code></pre>
+<p>不写这两个赋值时，Django 的默认行为就是「找 <code>templates/404.html</code> / <code>500.html</code>」，对大多数项目已经够用。<strong>注意：定制错误页只在 <code>DEBUG = False</code> 时生效</strong>——本地默认开着调试模式，看到的仍是详细报错页（练习 20-5 会做本地验证）。</p>
+<p><strong>「继续开发」的流程</strong>是部署之后最重要的工作流。首次上线只是开始，之后每次改 bug、加功能，都是这一个循环：</p>
+<pre><code class="language-text"><span class="cl">示例</span>① 本地改代码 → ② git add .（有新文件才需要）→ ③ git commit -am "说明"
+        ↓                                                          ↓
+⑥ 访问线上 URL 验证 ← ⑤ platform push（平台自动 build + deploy）← ④
+</code></pre>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>.<span class="w">                        </span><span class="c1"># 有新文件/迁移文件时才需要</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">"Added custom 404 and 500 error pages."</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>platform<span class="w"> </span>push<span class="w">                    </span><span class="c1"># 推送并触发部署</span>
+<span class="o">(</span>ll_env<span class="o">)</span>learning_log$<span class="w"> </span>platform<span class="w"> </span>url<span class="w">                     </span><span class="c1"># 查看线上项目的网址</span>
+</code></pre>
+<p><strong>你的代码库里同时住着两个环境，git 提交是本地唯一的真相来源，platform push 是把真相同步到云上的仪式。</strong> 项目不想要了，删除分两步：<code>platform project:delete</code> 删除平台上的项目（交互式确认），再 <code>git remote remove platform</code> 删掉本地 git 里指向平台的 remote——线上删了，本地仓库还留着。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<p>以下示例都不需要 Django 环境，用标准库把本单元的抽象概念「演」给你看。涉及写文件的示例统一写到 <code>data/</code> 目录，跑完可以整个删掉。</p>
+<h3 id="示例-1-同一份代码-两个环境-config_switcher-py">示例 1：同一份代码，两个环境（config_switcher.py）</h3>
+<p>这个脚本就是 settings.py 双环境切换的最小模型。注意 <code>build_settings()</code> 函数本身没有任何分支——<strong>分支在环境里，不在代码里</strong>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># config_switcher.py —— 演示「同一份代码，在本地和云上行为不同」</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_settings</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""根据环境变量决定配置。</span>
+
+<span class="sd">    这就是 settings.py 双环境切换的核心思想：代码只有一份，</span>
+<span class="sd">    行为由环境决定。platformshconfig 的 is_valid_platform()</span>
+<span class="sd">    底层就是在查 PLATFORM_APPLICATION 这个变量。</span>
+<span class="sd">    """</span>
+    <span class="n">on_platform</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PLATFORM_APPLICATION"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"1"</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"DEBUG"</span><span class="p">:</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">"数据库引擎"</span><span class="p">:</span> <span class="s2">"postgresql"</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="s2">"sqlite3"</span><span class="p">,</span>
+        <span class="s2">"ALLOWED_HOSTS"</span><span class="p">:</span> <span class="p">[</span><span class="s2">".platformsh.site"</span><span class="p">]</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="p">[</span><span class="s2">"localhost"</span><span class="p">],</span>
+        <span class="s2">"SECRET_KEY 来源"</span><span class="p">:</span> <span class="s2">"projectEntropy"</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="s2">"写死在 settings.py"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">env</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--- </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2"> ---"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">build_settings</span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">show</span><span class="p">(</span><span class="s2">"本地开发（没有 PLATFORM_APPLICATION）"</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">show</span><span class="p">(</span><span class="s2">"Platform.sh 云上（PLATFORM_APPLICATION=1）"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"PLATFORM_APPLICATION"</span><span class="p">:</span> <span class="s2">"1"</span><span class="p">})</span>
+</code></pre>
+<h3 id="示例-2-给-requirements-txt-做入职体检-requiremen">示例 2：给 requirements.txt 做入职体检（requirements_tools.py）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># requirements_tools.py —— 检查依赖清单：版本锁、重复项、关键包是否齐全</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># 云端跑起来必不可少的包（gunicorn/psycopg2 在 requirements_remote.txt 里）</span>
+<span class="n">NEEDED</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"django"</span><span class="p">,</span> <span class="s2">"django-bootstrap5"</span><span class="p">,</span> <span class="s2">"gunicorn"</span><span class="p">,</span> <span class="s2">"psycopg2"</span><span class="p">,</span> <span class="s2">"platformshconfig"</span><span class="p">}</span>
+
+<span class="n">REQUIREMENTS_TXT</span> <span class="o">=</span> <span class="s2">"""asgiref==3.7.2</span>
+<span class="s2">Django==4.2.10</span>
+<span class="s2">django-bootstrap5==23.4</span>
+<span class="s2">platformshconfig==2.4.0</span>
+<span class="s2">sqlparse==0.4.4</span>
+<span class="s2">"""</span>
+
+<span class="n">REQUIREMENTS_REMOTE_TXT</span> <span class="o">=</span> <span class="s2">"""# Requirements for live project.</span>
+<span class="s2">gunicorn</span>
+<span class="s2">psycopg2</span>
+<span class="s2">"""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""解析一份依赖清单，返回 {包名: 版本} 和问题列表。"""</span>
+    <span class="n">packages</span><span class="p">,</span> <span class="n">problems</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">lineno</span><span class="p">,</span> <span class="n">raw</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span> <span class="ow">or</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="s2">"=="</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> 第</span><span class="si">{</span><span class="n">lineno</span><span class="si">}</span><span class="s2">行「</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">」没锁版本，云端可能装到不兼容的新版"</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">version</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"=="</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">packages</span><span class="p">:</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2"> 第</span><span class="si">{</span><span class="n">lineno</span><span class="si">}</span><span class="s2">行「</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">」重复了"</span><span class="p">)</span>
+        <span class="n">packages</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">packages</span><span class="p">,</span> <span class="n">problems</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">():</span>
+    <span class="n">packages</span><span class="p">,</span> <span class="n">problems</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">REQUIREMENTS_TXT</span><span class="p">,</span> <span class="s2">"requirements.txt"</span><span class="p">)</span>
+    <span class="n">remote_packages</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">REQUIREMENTS_REMOTE_TXT</span><span class="p">,</span> <span class="s2">"requirements_remote.txt"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"共解析出 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个本地依赖、</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">remote_packages</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个线上依赖"</span><span class="p">)</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">NEEDED</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">packages</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">remote_packages</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"缺少部署必需包：</span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">problems</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"发现 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">problems</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个问题："</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">problems</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [问题] </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"体检通过：版本都已锁定，部署必需包齐全。"</span><span class="p">)</span>
+
+    <span class="c1"># 反面教材：requests 没锁版本 + Django 重复出现</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">bad</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="s2">"requests</span><span class="se">\n</span><span class="s2">Django==4.2</span><span class="se">\n</span><span class="s2">Django==5.0</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"坏例子.txt"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">bad</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [反面教材] </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">check</span><span class="p">()</span>
+</code></pre>
+<h3 id="示例-3-400-bad-request-是怎么来的-host_check-py">示例 3：400 Bad Request 是怎么来的（host_check.py）</h3>
+<p>用 20 行复现 Django 的 <code>ALLOWED_HOSTS</code> 校验逻辑，你会立刻明白为什么线上域名被拒之门外。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># host_check.py —— 复现 Django 的主机校验，看懂 400 从哪来</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_host_allowed</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">allowed_hosts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Django 校验 Host 的核心规则（教学简化版）。"""</span>
+    <span class="k">if</span> <span class="s2">"*"</span> <span class="ow">in</span> <span class="n">allowed_hosts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">host</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>          <span class="c1"># 去掉端口号：localhost:8000 → localhost</span>
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">allowed_hosts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pattern</span> <span class="o">==</span> <span class="n">host</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span> <span class="ow">and</span> <span class="n">host</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>                <span class="c1"># ".platformsh.site" 匹配所有子域名</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">local_only</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"localhost"</span><span class="p">,</span> <span class="s2">"127.0.0.1"</span><span class="p">]</span>
+    <span class="n">online</span> <span class="o">=</span> <span class="s2">"learning-log-main-abc123.us-3.platformsh.site"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"场景一：ALLOWED_HOSTS ="</span><span class="p">,</span> <span class="n">local_only</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  本地域名 -&gt;"</span><span class="p">,</span> <span class="s2">"200 OK"</span> <span class="k">if</span> <span class="n">is_host_allowed</span><span class="p">(</span><span class="s2">"localhost:8000"</span><span class="p">,</span> <span class="n">local_only</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"400"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  线上域名 -&gt;"</span><span class="p">,</span> <span class="s2">"200 OK"</span> <span class="k">if</span> <span class="n">is_host_allowed</span><span class="p">(</span><span class="n">online</span><span class="p">,</span> <span class="n">local_only</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"400 Bad Request（DisallowedHost）"</span><span class="p">)</span>
+
+    <span class="c1"># 场景二：加上 .platformsh.site（对应 settings.py 里 append 的那行）</span>
+    <span class="n">fixed</span> <span class="o">=</span> <span class="n">local_only</span> <span class="o">+</span> <span class="p">[</span><span class="s2">".platformsh.site"</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">场景二：ALLOWED_HOSTS ="</span><span class="p">,</span> <span class="n">fixed</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  线上域名 -&gt;"</span><span class="p">,</span> <span class="s2">"200 OK"</span> <span class="k">if</span> <span class="n">is_host_allowed</span><span class="p">(</span><span class="n">online</span><span class="p">,</span> <span class="n">fixed</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"400 Bad Request"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-4-collectstatic-到底在搬什么-static_collect">示例 4：collectstatic 到底在搬什么（static_collector.py）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># static_collector.py —— 用 30 行代码看懂 collectstatic 的核心动作</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">collect_static</span><span class="p">(</span><span class="n">app_names</span><span class="p">,</span> <span class="n">project_root</span><span class="p">,</span> <span class="n">static_root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""模拟 python manage.py collectstatic：</span>
+<span class="sd">    把每个应用的 static/ 目录，原样汇总到 STATIC_ROOT。</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">static_root</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">static_root</span><span class="p">)</span>
+    <span class="n">static_root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">copied</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">app_name</span> <span class="ow">in</span> <span class="n">app_names</span><span class="p">:</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">project_root</span> <span class="o">/</span> <span class="n">app_name</span> <span class="o">/</span> <span class="s2">"static"</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">continue</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="n">dest</span> <span class="o">=</span> <span class="n">static_root</span> <span class="o">/</span> <span class="n">file</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+                <span class="n">dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+                <span class="n">copied</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">copied</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/learning_log"</span><span class="p">)</span>
+    <span class="c1"># 造两个应用，各带自己的 static/ 目录</span>
+    <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"learning_logs/static/css"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"accounts/static/css"</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"learning_logs/static/css/styles.css"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+        <span class="s2">".jumbotron { padding: 2rem; }"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"accounts/static/css/login.css"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+        <span class="s2">".form-label { font-weight: bold; }"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="n">copied</span> <span class="o">=</span> <span class="n">collect_static</span><span class="p">([</span><span class="s2">"learning_logs"</span><span class="p">,</span> <span class="s2">"accounts"</span><span class="p">],</span> <span class="n">root</span><span class="p">,</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"static"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"共收集 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">copied</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个静态文件到 STATIC_ROOT："</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">copied</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  static/"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"static"</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"/"</span><span class="p">))</span>
+    <span class="c1"># 跑完可以删掉 data/ 目录</span>
+</code></pre>
+<h3 id="示例-5-推送到-platform-sh-之前的最后一遍自查-deploy_ch">示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py）</h3>
+<p>把部署注意事项固化成脚本，每次 push 前跑一遍。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># deploy_checklist.py —— 部署前自查：文件是否齐全、关键内容是否到位</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># (相对路径, 说明)</span>
+<span class="n">REQUIRED_FILES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">,</span> <span class="s2">"依赖清单"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"requirements_remote.txt"</span><span class="p">,</span> <span class="s2">"线上依赖（gunicorn/psycopg2）"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">".platform.app.yaml"</span><span class="p">,</span> <span class="s2">"应用配置"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">".platform/routes.yaml"</span><span class="p">,</span> <span class="s2">"路由配置"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">".platform/services.yaml"</span><span class="p">,</span> <span class="s2">"数据库服务"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">".gitignore"</span><span class="p">,</span> <span class="s2">"Git 忽略清单"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"manage.py"</span><span class="p">,</span> <span class="s2">"Django 入口"</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_files</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">REQUIRED_FILES</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✓"</span> <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="n">rel</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"✗"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">：</span><span class="si">{</span><span class="n">rel</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_contents</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""检查「文件在、但内容不对」的情况——这类问题更隐蔽。"""</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">gitignore</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">".gitignore"</span>
+    <span class="k">if</span> <span class="n">gitignore</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">gitignore</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"sqlite3"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✗"</span><span class="p">,</span> <span class="s2">".gitignore 没忽略 *.sqlite3，本地数据库会被传上云"</span><span class="p">))</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"ll_project/settings.py"</span>
+    <span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"platformsh.site"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✗"</span><span class="p">,</span> <span class="s2">"settings.py 没放行 .platformsh.site，线上会 400"</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">"DEBUG = False"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✗"</span><span class="p">,</span> <span class="s2">"settings.py 没在云上关闭 DEBUG"</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✗"</span><span class="p">,</span> <span class="s2">"找不到 ll_project/settings.py"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+    <span class="n">failed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">mark</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">mark</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mark</span> <span class="o">==</span> <span class="s2">"✗"</span><span class="p">:</span>
+            <span class="n">failed</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"有 </span><span class="si">{</span><span class="n">failed</span><span class="si">}</span><span class="s2"> 项未通过，修好再 push！"</span> <span class="k">if</span> <span class="n">failed</span> <span class="k">else</span> <span class="s2">"全部通过，可以 platform push。"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/checklist_demo"</span><span class="p">)</span>
+    <span class="c1"># 造一个「假项目」：该有的都有，唯独忘了 .gitignore</span>
+    <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">,</span> <span class="s2">"Django==4.2.10</span><span class="se">\n</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"requirements_remote.txt"</span><span class="p">,</span> <span class="s2">"# Requirements for live project.</span><span class="se">\n</span><span class="s2">gunicorn</span><span class="se">\n</span><span class="s2">psycopg2</span><span class="se">\n</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">".platform.app.yaml"</span><span class="p">,</span> <span class="s2">"name: ll_project</span><span class="se">\n</span><span class="s2">hooks:</span><span class="se">\n</span><span class="s2">  build: python manage.py collectstatic --noinput</span><span class="se">\n</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">".platform/routes.yaml"</span><span class="p">,</span> <span class="s1">'"https://</span><span class="si">{default}</span><span class="s1">/":</span><span class="se">\n</span><span class="s1">  type: upstream</span><span class="se">\n</span><span class="s1">  upstream: "ll_project:http"</span><span class="se">\n</span><span class="s1">'</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">".platform/services.yaml"</span><span class="p">,</span> <span class="s2">"db:</span><span class="se">\n</span><span class="s2">  type: postgresql:16</span><span class="se">\n</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"manage.py"</span><span class="p">,</span> <span class="s2">"# Django 入口</span><span class="se">\n</span><span class="s2">"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"ll_project/settings.py"</span><span class="p">,</span> <span class="s2">"ALLOWED_HOSTS = ['localhost']</span><span class="se">\n</span><span class="s2">DEBUG = True</span><span class="se">\n</span><span class="s2">"</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">rel</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="n">report</span><span class="p">(</span><span class="n">check_files</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">+</span> <span class="n">check_contents</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
+    <span class="c1"># 跑完可以删掉 data/ 目录</span>
+</code></pre>
+<hr>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>按上线检查清单逐条过一遍</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>★ 上线检查清单逐条过了吗？DEBUG 关了吗？ALLOWED_HOSTS 改了吗？</li><li>★ 访问不存在的 URL，看到的是定制错误页还是技术细节？</li><li>线上出问题时你知道怎么回滚吗？还是只能在线上硬改？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>上线不是推上去就完了——清单走完、错误页定制好，才算真的部署。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../20.html">查看单元 20 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="105.html"><small>← 上一节</small><b>第 105 节 · ★ platformshconfig 与本地线上双环境</b></a><a class="pn nx" id="nextLink" href="107.html"><small>下一节 →</small><b>第 107 节 · 部署上线、错误页与实战</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

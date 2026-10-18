@@ -1,0 +1,118 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>综合项目 · 三选一</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
+            单元 11 之后花 2–3 周做掉一个。目的不是练新语法，是把 11 章串成一个完整程序
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 146, width: '1152px', height: 438, flexDirection: 'row', gap: 16 }}>
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '2px solid #E08A15', borderRadius: 12,
+            padding: 20, flexDirection: 'column', gap: 12,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 46, fontWeight: 'bold', color: '#E08A15', lineHeight: 1 }}>A</Text>
+                <Box style={{ background: '#E08A15', borderRadius: 5, padding: '4px 12px' }}>
+                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#FFFFFF' }}>推荐</Text>
+                </Box>
+            </Box>
+            <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>个人记账本</Text>
+            <Text style={{ fontSize: 14, color: '#8A9AAA' }}>复习强度：中等 · 2 周</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    把交易记录写进文本文件，读取后汇总金额，按月统计并画成柱状图。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    覆盖：文件读写、异常处理、字典与列表、字符串解析。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    延伸：把图表导出成图片保存到本地。
+                </Text>
+            </Box>
+            <Box style={{ background: '#FDF3E2', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#B07A10' }}>适合</Text>
+                <Text style={{ fontSize: 15, color: '#8A5A08', fontWeight: 'bold' }}>文件与异常还不够熟的学员</Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '2px solid #1F5FA8', borderRadius: 12,
+            padding: 20, flexDirection: 'column', gap: 12,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 46, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>B</Text>
+                <Box style={{ background: '#1F5FA8', borderRadius: 5, padding: '4px 12px' }}>
+                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#FFFFFF' }}>推荐</Text>
+                </Box>
+            </Box>
+            <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>学生成绩管理器</Text>
+            <Text style={{ fontSize: 14, color: '#8A9AAA' }}>复习强度：较高 · 3 周</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    增删改查学生成绩，按总分或单科排序，计算平均分与及格率，数据存 JSON。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    覆盖：类、@property、异常、JSON、每项操作要有输入校验。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    延伸：补 8 条以上 pytest 测试。
+                </Text>
+            </Box>
+            <Box style={{ background: '#EEF5FB', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#8A9AAA' }}>适合</Text>
+                <Text style={{ fontSize: 15, color: '#1F5FA8', fontWeight: 'bold' }}>想重点巩固类与面向对象的学员</Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12,
+            padding: 20, flexDirection: 'column', gap: 12,
+        }}>
+            <Box style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 46, fontWeight: 'bold', color: '#0E9B78', lineHeight: 1 }}>C</Text>
+            </Box>
+            <Text style={{ fontSize: 21, fontWeight: 'bold', color: '#16232E' }}>命令行记事本</Text>
+            <Text style={{ fontSize: 14, color: '#8A9AAA' }}>复习强度：最高 · 3 周</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    支持 add / list / find / del / edit 五个子命令，数据存 JSON，
+                    用 argparse 处理命令行参数。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    覆盖：模块化拆分、argparse、异常兜底、测试。
+                </Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.65 }}>
+                    延伸：这是阶段 2 外星人项目的预热，提前练「大项目拆解」的手感。
+                </Text>
+            </Box>
+            <Box style={{ background: '#E8F7F1', borderRadius: 8, padding: '12px 14px', marginTop: 'auto' }}>
+                <Text style={{ fontSize: 13, color: '#6B9F8C' }}>适合</Text>
+                <Text style={{ fontSize: 15, color: '#0A7A5F', fontWeight: 'bold' }}>想直接衔接阶段 2 的学员</Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, top: 592, width: '1152px', height: 76,
+        background: '#16232E', borderRadius: 12, flexDirection: 'row',
+        alignItems: 'center', padding: '0 26px', gap: 20,
+    }}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#E8B36A' }}>统一要求</Text>
+        <Text style={{ fontSize: 16, color: '#D6E4F0', lineHeight: 1.6 }}>
+            拆成多个模块 · 补 pytest 测试 · 写 README 说明怎么跑 · 推到公开 git 仓库
+            —— 这四条做到位，直接衔接阶段 2
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 64, bottom: 24, width: '1152px',
+        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>21 / 23</Text>
+    </Box>
+</Slide>

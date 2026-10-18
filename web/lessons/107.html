@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 107 节 · 部署上线、错误页与实战</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="107">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 107/111 节 · 部署上线、错误页与实战</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/20.html#s10" title="本课节对应的课件">本课课件 u20·p10</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-20-1-换装后的关键模板">参考答案 20-1（换装后的关键模板）</a>
+<a class="lv3" href="#参考答案-20-2-配置文件全套">参考答案 20-2（配置文件全套）</a>
+<a class="lv3" href="#参考答案-20-3-故障诊断">参考答案 20-3（故障诊断）</a>
+<a class="lv3" href="#参考答案-20-4-本地模拟双环境">参考答案 20-4（本地模拟双环境）</a>
+<a class="lv3" href="#参考答案-20-5-定制错误页-本地验证">参考答案 20-5（定制错误页 + 本地验证）</a>
+<a class="lv3" href="#参考答案-20-6-检查清单增强版">参考答案 20-6（检查清单增强版）</a>
+<a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-allowed_hosts-没加平台域名-线上-400">错误 1：★ ALLOWED_HOSTS 没加平台域名，线上 400</a>
+<a class="lv3" href="#错误-2-忘了注册-django_bootstrap5-模板报-invalid-">错误 2：忘了注册 django_bootstrap5，模板报 Invalid block tag</a>
+<a class="lv3" href="#错误-3-debug-关了却没收静态文件-白脸页面">错误 3：DEBUG 关了却没收静态文件，白脸页面</a>
+<a class="lv3" href="#错误-4-requirements-txt-漏了-gunicorn-或-psyc">错误 4：requirements.txt 漏了 gunicorn 或 psycopg2</a>
+<a class="lv3" href="#错误-5-gitignore-缺失-虚拟环境和本地数据库被推上云">错误 5：.gitignore 缺失，虚拟环境和本地数据库被推上云</a>
+<a class="lv3" href="#错误-6-新文件忘了-git-add-推送后线上缺东西">错误 6：新文件忘了 git add，推送后线上缺东西</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 20</h4>
+      <a class="ppt-thumb" href="../ppt/u/20.html#s10">
+        <img loading="lazy" src="../ppt/u/20/slide-10.webp" alt="本课节课件">
+        <span class="cap"><b>单元 20 · p10</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../20.html"><span class="k">讲义</span>
+          <span class="v">单元 20 · 样式与部署</span></a>
+        <a href="../ppt/u/20.html#s10"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u20"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u20"><span class="k">题库</span>
+          <span class="v">本单元 2 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 107 节 / 111</span>
+        <span class="kwk">W28</span>
+        <span class="ku">单元 20 · 样式与部署</span>
+      </div>
+      <h1>部署上线、错误页与实战</h1>
+      <p class="goal">真正把网站推到公网；会定制 404/500 错误页</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 106 节 · ★ 三大部署坑</h3><ul><li>★ 关卡 2 五条里最容易忽略的是「接手一个没写过的 500 行项目」。能读懂别人的结构，才算真的具备项目能力。</li><li>「说清每个项目解决了什么问题、还能怎么扩展」考的是<b>反思能力</b>，不是背结论。</li><li>统一要求四条：单文件 ≤300 行、pytest ≥8 条、README 说清怎么装怎么跑、推到公开仓库。</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>走完 Platform.sh 全流程</li><li>故意访问不存在的 URL 看定制错误页</li></ol>
+    </div>
+
+    <h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 20-1【给「学习笔记」换装】</strong>
+用 django-bootstrap5 改造登录页、主页、主题列表页。要求：① 安装并在 INSTALLED_APPS 注册；② base.html 引入 Bootstrap、导航区分登录态；③ 登录页用 <code>{% bootstrap_form form %}</code> 并保留 <code>{% csrf_token %}</code>；④ 主页用 jumbotron 大卡片，<code>.jumbotron</code> 写在 <code>static/css/styles.css</code>；⑤ 主题页用列表组逐行列出。<strong>验收点</strong>：三页都有 Bootstrap 样式；登录后导航变「你好，用户名 + 退出」；能说清每个模板文件改了影响哪些页面。</p>
+<p><strong>练习 20-2【写部署三件套】</strong>
+写出 <code>requirements.txt</code>（用 <code>pip freeze</code> 生成，不许手写版本号）、<code>requirements_remote.txt</code>（只放 gunicorn 和 psycopg2 并写注释）、<code>.gitignore</code>（至少忽略虚拟环境、<code>__pycache__</code>、<code>*.sqlite3</code>）、<code>.platform.app.yaml</code>、<code>.platform/routes.yaml</code>、<code>.platform/services.yaml</code>。要求两处「暗号」对上：routes 的 upstream ↔ app.yaml 的 name；app.yaml 的 relationships ↔ services.yaml 的服务名。<strong>验收点</strong>：能解释每个文件「谁读它、什么时候读、读错会怎样」。</p>
+<p><strong>练习 20-3【诊断三个线上故障】</strong>
+三个故障都发生在部署之后：① 打开网址显示 <code>400 Bad Request</code>；② 页面能打开但没有样式；③ 部署日志报 <code>ModuleNotFoundError: No module named 'gunicorn'</code>。不写代码，回答每个现象的根因、验证方法、修法。<strong>验收点</strong>：三个原因都能定位到具体文件的具体一行，并说清「为什么本地没这问题」。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 20-4【本地模拟双环境】</strong>
+参考示例 1 写一个 <code>env_switch.py</code>：<strong>不安装 platformshconfig</strong>，仅用 <code>os.environ</code> 以 <code>PLATFORM_APPLICATION</code> 控制，打印两套配置对比（DEBUG、数据库引擎、ALLOWED_HOSTS、STATIC_ROOT、SECRET_KEY 来源），并写注释解释 <code>is_valid_platform()</code> 为什么能判断「我在云上」。<strong>验收点</strong>：<code>python env_switch.py</code> 与 <code>PLATFORM_APPLICATION=1 python env_switch.py</code>（Windows PowerShell 用 <code>$env:PLATFORM_APPLICATION="1"; python env_switch.py</code>）两次输出确实不同。</p>
+<p><strong>练习 20-5【本地验证定制错误页面】</strong>
+在本地把 404/500 定制页面做完并<strong>跑出来验证</strong>（难点：<code>DEBUG=True</code> 时定制页不生效）。要求：① 建项目级 <code>templates/</code>，放 404.html 和 500.html，都继承 base.html；② settings.py 的 <code>TEMPLATES['DIRS']</code> 指向它；③ 用 Django 测试客户端请求一个不存在的路径，确认返回 404 且用的是你的模板。<strong>验收点</strong>：能说清「为什么本地默认看不到定制错误页」。</p>
+<p><strong>练习 20-6【扩展部署检查清单】</strong>
+在示例 5 基础上给 <code>deploy_checklist.py</code> 增加至少 3 项检查。建议方向：requirements.txt 是否锁版本、有没有 pytest 测试文件、routes 的 upstream 和 app.yaml 的 name 是否一致、build 钩子是否包含 collectstatic。<strong>验收点</strong>：新增检查在「缺项」和「齐全」两种情况下都能正确报 ✓/✗；脚本不依赖 Django，纯标准库。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-20-1-换装后的关键模板">参考答案 20-1（换装后的关键模板）</h3>
+<p>settings.py 注册后，登录页 <code>templates/registration/login.html</code> 长这样：</p>
+<pre><code class="language-html"><span class="cl">HTML</span>{% extends "learning_logs/base.html" %}
+{% load django_bootstrap5 %}
+
+{% block page_header %}
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>登录你的账户。<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+{% endblock page_header %}
+
+{% block content %}
+{% if form.errors %}
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>你的用户名和密码不匹配，请重试。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+{% endif %}
+
+<span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">"{% url 'login' %}"</span> <span class="na">method</span><span class="o">=</span><span class="s">"post"</span><span class="p">&gt;</span>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">name</span><span class="o">=</span><span class="s">"submit"</span> <span class="na">class</span><span class="o">=</span><span class="s">"btn btn-primary"</span><span class="p">&gt;</span>登录<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">"hidden"</span> <span class="na">name</span><span class="o">=</span><span class="s">"next"</span> <span class="na">value</span><span class="o">=</span><span class="s">"{% url 'learning_logs:index' %}"</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+{% endblock content %}
+</code></pre>
+<p>主页 <code>templates/learning_logs/index.html</code> 用 jumbotron 当门面（<code>.jumbotron</code> 的 CSS 定义见 2.2 节）：</p>
+<pre><code class="language-html"><span class="cl">HTML</span>{% extends "learning_logs/base.html" %}
+
+{% block page_header %}
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"jumbotron"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">"display-3"</span><span class="p">&gt;</span>学习笔记<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"lead"</span><span class="p">&gt;</span>记录你学到的知识，随时复习。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    {% if not user.is_authenticated %}
+        <span class="p">&lt;</span><span class="nt">a</span> <span class="na">class</span><span class="o">=</span><span class="s">"btn btn-lg btn-primary"</span> <span class="na">href</span><span class="o">=</span><span class="s">"{% url 'login' %}"</span> <span class="na">role</span><span class="o">=</span><span class="s">"button"</span><span class="p">&gt;</span>登录 <span class="ni">&amp;raquo;</span><span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+    {% endif %}
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+{% endblock page_header %}
+</code></pre>
+<p>主题列表页 <code>templates/learning_logs/topics.html</code> 在 <code>{% block content %}</code> 里用列表组逐行排列：<code>{% for topic in topics %}</code> 包一个 <code>&lt;li class="list-group-item"&gt;</code>，里面放 <code>&lt;a href="{% url 'learning_logs:topic' topic.id %}"&gt;{{ topic.text }}&lt;/a&gt;</code>，再用 <code>{% empty %}</code> 处理「还没有添加任何主题」的情况。</p>
+<h3 id="参考答案-20-2-配置文件全套">参考答案 20-2（配置文件全套）</h3>
+<p><code>requirements.txt</code>（用 <code>pip freeze &gt; requirements.txt</code> 生成，下面是示例项目的形态）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>asgiref==3.7.2
+Django==4.2.10
+django-bootstrap5==23.4
+platformshconfig==2.4.0
+sqlparse==0.4.4
+</code></pre>
+<p><code>requirements_remote.txt</code>：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="c1"># Requirements for live project.</span>
+<span class="c1"># 这两个包只在线上用：本地有 runserver 和 SQLite，都不需要它们。</span>
+<span class="na">gunicorn</span>
+<span class="na">psycopg2</span>
+</code></pre>
+<p><code>.gitignore</code>：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="na">ll_env/</span>
+<span class="na">__pycache__/</span>
+<span class="na">*.sqlite3</span>
+<span class="na">.DS_Store</span>
+</code></pre>
+<p>两个 yaml 的完整内容和逐行讲解见 2.5 节，这里只强调<strong>核对清单</strong>：app.yaml 的 <code>name</code> 和 routes.yaml 的 <code>upstream</code> 同名；app.yaml 的 <code>relationships: database: "db:postgresql"</code> 和 services.yaml 的服务名 <code>db</code> 对上；build 钩子依次 install 两份 requirements 并 collectstatic；deploy 钩子跑 migrate。settings.py 末尾的 Platform.sh 段与 2.6 节一致，重点是五处覆写：<code>ALLOWED_HOSTS.append('.platformsh.site')</code>、<code>DEBUG = False</code>、<code>STATIC_ROOT</code>、<code>SECRET_KEY = config.projectEntropy</code>、<code>DATABASES</code>。</p>
+<h3 id="参考答案-20-3-故障诊断">参考答案 20-3（故障诊断）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>根因</th>
+<th>怎么验证</th>
+<th>怎么修</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>ALLOWED_HOSTS</code> 没有包含线上域名，Django 在校验 Host 阶段直接 400，<strong>视图根本没执行</strong></td>
+<td>看部署日志里是否有 <code>DisallowedHost</code></td>
+<td>Platform.sh 段加 <code>ALLOWED_HOSTS.append('.platformsh.site')</code>，提交后重新 push</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>DEBUG = False</code> 后 Django 不再代发静态文件，而 collectstatic 没跑或 <code>/static</code> 路由没配，CSS/JS 全 404</td>
+<td>浏览器开发者工具 → Network，看 CSS 请求是不是 404</td>
+<td>build 钩子确保有 <code>collectstatic --noinput</code>；确认 <code>STATIC_ROOT</code> 已设置</td>
+</tr>
+<tr>
+<td>3</td>
+<td>gunicorn 只写在 requirements_remote.txt，但 build 钩子漏了 <code>pip install -r requirements_remote.txt</code>（或文件没提交）</td>
+<td>看部署日志 build 阶段的输出</td>
+<td>补上这行 pip install；确认新文件已 <code>git add</code> 并提交</td>
+</tr>
+</tbody>
+</table>
+<p>共同教训：<strong>三个故障本地全都不会出现</strong>。本地 <code>DEBUG=True</code> 兜底了静态文件、<code>localhost</code> 天然在白名单里、依赖是你手动装的。部署的本质就是把这些「本地豁免」一项项取消。</p>
+<h3 id="参考答案-20-4-本地模拟双环境">参考答案 20-4（本地模拟双环境）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># env_switch.py —— 不装 platformshconfig，纯 os.environ 模拟双环境配置</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_settings</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""模拟 settings.py：同一份逻辑，两套配置。</span>
+
+<span class="sd">    platformshconfig 的 is_valid_platform() 底层就是在查</span>
+<span class="sd">    PLATFORM_APPLICATION：Platform.sh 运行应用时一定会注入它，</span>
+<span class="sd">    本地没有——所以「变量存在与否」就是「我在哪」的判据。</span>
+<span class="sd">    """</span>
+    <span class="n">on_platform</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PLATFORM_APPLICATION"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"1"</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"DEBUG"</span><span class="p">:</span> <span class="ow">not</span> <span class="n">on_platform</span><span class="p">,</span>
+        <span class="s2">"数据库"</span><span class="p">:</span> <span class="s2">"PostgreSQL（credentials('database')）"</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="s2">"SQLite（db.sqlite3）"</span><span class="p">,</span>
+        <span class="s2">"ALLOWED_HOSTS"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"localhost"</span><span class="p">,</span> <span class="s2">".platformsh.site"</span><span class="p">]</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="p">[</span><span class="s2">"localhost"</span><span class="p">],</span>
+        <span class="s2">"STATIC_ROOT"</span><span class="p">:</span> <span class="s2">"/app/static"</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">"SECRET_KEY"</span><span class="p">:</span> <span class="s2">"config.projectEntropy"</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="s2">"settings.py 里的字符串"</span><span class="p">,</span>
+        <span class="s2">"错误页面"</span><span class="p">:</span> <span class="s2">"定制 404/500"</span> <span class="k">if</span> <span class="n">on_platform</span> <span class="k">else</span> <span class="s2">"Django 调试页（DEBUG=True）"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">"Platform.sh 云环境"</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PLATFORM_APPLICATION"</span><span class="p">)</span> <span class="k">else</span> <span class="s2">"本地开发"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"=== 当前环境：</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> ==="</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">build_settings</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">key</span><span class="si">:</span><span class="s2">&lt;14</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>运行对比（两次输出不同，说明你的「旋转门」装对了）：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>$<span class="w"> </span>python<span class="w"> </span>env_switch.py
+<span class="o">===</span><span class="w"> </span>当前环境：本地开发<span class="w"> </span><span class="o">===</span>
+<span class="w">  </span><span class="nv">DEBUG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>True
+<span class="w">  </span><span class="nv">数据库</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>SQLite（db.sqlite3）
+<span class="w">  </span><span class="nv">ALLOWED_HOSTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s1">'localhost'</span><span class="o">]</span>
+
+$<span class="w"> </span><span class="nv">PLATFORM_APPLICATION</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python<span class="w"> </span>env_switch.py
+<span class="o">===</span><span class="w"> </span>当前环境：Platform.sh<span class="w"> </span><span class="nv">云环境</span><span class="w"> </span><span class="o">===</span>
+<span class="w">  </span><span class="nv">DEBUG</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>False
+<span class="w">  </span><span class="nv">数据库</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>PostgreSQL（credentials<span class="o">(</span><span class="s1">'database'</span><span class="o">)</span>）
+<span class="w">  </span><span class="nv">ALLOWED_HOSTS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s1">'localhost'</span>,<span class="w"> </span><span class="s1">'.platformsh.site'</span><span class="o">]</span>
+</code></pre>
+<h3 id="参考答案-20-5-定制错误页-本地验证">参考答案 20-5（定制错误页 + 本地验证）</h3>
+<p>模板和 <code>DIRS</code> 的改法见 2.8 节。本地验证用 Django 测试客户端（模拟一次真实请求，比 curl 省事）。在项目目录执行 <code>python manage.py shell</code>，然后：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 在 python manage.py shell 里运行（需要项目里有 Django）</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/a-page-that-does-not-exist/"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>      <span class="c1"># 404</span>
+</code></pre>
+<p>如果状态码是 404 但内容是 Django 的调试页，说明 <code>DEBUG</code> 还是 <code>True</code>——定制错误页只在 <code>DEBUG = False</code> 时启用。想完整体验，可临时把 <code>DEBUG</code> 改 <code>False</code>、<code>ALLOWED_HOSTS</code> 加 <code>'testserver'</code>，验证完记得改回来。</p>
+<h3 id="参考答案-20-6-检查清单增强版">参考答案 20-6（检查清单增强版）</h3>
+<p>在示例 5 基础上新增一项「依赖体检」（完整脚本 = 示例 5 + 下面新增部分），其余方向（测试文件有无、build 钩子是否含 collectstatic）思路相同，都是「读文件内容 → 判断关键词」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 新增检查：requirements.txt 是否锁版本 + 线上依赖齐全</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_requirements</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">main_file</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements.txt"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">main_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="s2">"✗"</span><span class="p">,</span> <span class="s2">"requirements.txt 不存在"</span><span class="p">)]</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">main_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="n">unpinned</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"=="</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">unpinned</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✗"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"有未锁版本的依赖：</span><span class="si">{</span><span class="n">unpinned</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+    <span class="n">remote</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements_remote.txt"</span>
+    <span class="n">remote_text</span> <span class="o">=</span> <span class="n">remote</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">if</span> <span class="n">remote</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="s2">""</span>
+    <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"gunicorn"</span><span class="p">,</span> <span class="s2">"psycopg2"</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pkg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">remote_text</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✗"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"requirements_remote.txt 缺少 </span><span class="si">{</span><span class="n">pkg</span><span class="si">}</span><span class="s2">（线上跑不起来）"</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"✓"</span><span class="p">,</span> <span class="s2">"依赖清单：版本已锁，线上依赖齐全"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre>
+<p>调用时把新检查加进 <code>report()</code>（片段，需与示例 6 合在一起运行）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>results = check_files(root) + check_contents(root)
+results += check_requirements(root)
+report(results)
+</code></pre>
+<hr>
+<h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-allowed_hosts-没加平台域名-线上-400">错误 1：★ ALLOWED_HOSTS 没加平台域名，线上 400</h3>
+<p><strong>现象</strong>：部署成功、日志没报错，但一打开网址就是 <code>400 Bad Request</code>。<strong>原因</strong>：Django 校验每个请求的 <code>Host</code> 头，不在 <code>ALLOWED_HOSTS</code> 就直接 400，视图根本不执行。<strong>修复</strong>：settings.py 的 Platform.sh 段加 <code>ALLOWED_HOSTS.append('.platformsh.site')</code>，提交后重新 push。</p>
+<h3 id="错误-2-忘了注册-django_bootstrap5-模板报-invalid-">错误 2：忘了注册 django_bootstrap5，模板报 Invalid block tag</h3>
+<p><strong>现象</strong>：页面 500，报 <code>TemplateSyntaxError: Invalid block tag: 'bootstrap_form'</code>。<strong>原因</strong>：<code>{% load %}</code> 只是「打开工具包」，包本身要在 <code>INSTALLED_APPS</code> 注册。<strong>修复</strong>：<code>INSTALLED_APPS</code> 加 <code>'django_bootstrap5'</code>。</p>
+<h3 id="错误-3-debug-关了却没收静态文件-白脸页面">错误 3：DEBUG 关了却没收静态文件，白脸页面</h3>
+<p><strong>现象</strong>：线上页面结构都在，但没有样式。<strong>原因</strong>：<code>DEBUG = False</code> 后 Django 不再代发静态文件；collectstatic 没跑，或 <code>STATIC_ROOT</code> 没设置。<strong>修复</strong>：build 钩子确保有 <code>python manage.py collectstatic --noinput</code>，云上段设置 <code>STATIC_ROOT</code>。</p>
+<h3 id="错误-4-requirements-txt-漏了-gunicorn-或-psyc">错误 4：requirements.txt 漏了 gunicorn 或 psycopg2</h3>
+<p><strong>现象</strong>：部署日志 <code>ModuleNotFoundError: No module named 'gunicorn'</code>，或连不上数据库。<strong>原因</strong>：本地用 <code>runserver</code> + SQLite，这两个包本地没装过，<code>pip freeze</code> 不会列出来。<strong>修复</strong>：建 <code>requirements_remote.txt</code> 写上两者，并在 build 钩子里 <code>pip install -r requirements_remote.txt</code>。</p>
+<h3 id="错误-5-gitignore-缺失-虚拟环境和本地数据库被推上云">错误 5：.gitignore 缺失，虚拟环境和本地数据库被推上云</h3>
+<p><strong>现象</strong>：push 奇慢，仓库几百 MB；甚至线上用了你本地带数据的 SQLite 文件。<strong>原因</strong>：没有 <code>.gitignore</code>，<code>git add .</code> 把 <code>ll_env/</code>、<code>__pycache__/</code>、<code>db.sqlite3</code> 全提交了。<strong>修复</strong>：补写 <code>.gitignore</code>，用 <code>git rm -r --cached</code> 把已跟踪文件撤出索引，再提交。</p>
+<h3 id="错误-6-新文件忘了-git-add-推送后线上缺东西">错误 6：新文件忘了 git add，推送后线上缺东西</h3>
+<p><strong>现象</strong>：本地明明建了 <code>templates/404.html</code>，线上还是默认错误页。<strong>原因</strong>：<code>git commit -am</code> 只提交<strong>已跟踪</strong>文件的修改，新文件必须先 <code>git add</code>。<strong>修复</strong>：只要产生了新文件（包括 <code>makemigrations</code> 生成的迁移文件），先 <code>git add .</code> 再 commit。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：<code>{% load django_bootstrap5 %}</code> 和 <code>{% bootstrap_form form %}</code> 分别负责什么？只写后者不写前者会怎样？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>load</code> 把模板标签库加载进当前模板，是「拿工具」；<code>bootstrap_form</code> 把字段逐个渲染成带 Bootstrap 类名的 HTML，是「干活的」。只写后者会报 <code>TemplateSyntaxError: Invalid block tag</code>——INSTALLED_APPS 注册和模板 load 缺一不可。</p>
+</blockquote>
+<p><strong>2. 判断题</strong>：<code>requirements.txt</code> 里写 <code>Django</code>（不带 <code>==</code> 版本号）也能正常部署，只是不优雅。</p>
+<blockquote>
+<p><strong>要点</strong>：<strong>错误</strong>。不带 <code>==</code> 意味着装最新版。大版本升级经常带不兼容改动，半年后平台重建环境时可能直接启动失败。锁版本是部署的纪律，不是风格问题。</p>
+</blockquote>
+<p><strong>3. 简答题</strong>：<code>relationships: database: "db:postgresql"</code> 里的暗号怎么读？routes.yaml 的 <code>upstream: "ll_project:http"</code> 又和谁对应？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>"db:postgresql"</code> 冒号前是 services.yaml 里的服务名（<code>db</code>），冒号后是服务类型；<code>config.credentials('database')</code> 读的就是这份关系。routes 的 <code>upstream</code> 必须和 <code>.platform.app.yaml</code> 的 <code>name</code> 一致——路由按应用名转发域名。两处暗号对不上，部署直接失败。</p>
+</blockquote>
+<p><strong>4. 改错题</strong>：下面这段被加进 settings.py 的 Platform.sh 段，但部署后数据库连不通。为什么？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># settings_snippet.py —— INTENTIONALLY-BROKEN 演示用：改错题，数据库配置连不通</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">platformshconfig</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">is_valid_platform</span><span class="p">():</span>
+    <span class="n">db_settings</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">credentials</span><span class="p">(</span><span class="s1">'database'</span><span class="p">)</span>
+    <span class="c1"># 有 bug：引擎写死 SQLite，读来的 PostgreSQL 连接信息一个都没用</span>
+    <span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'default'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'ENGINE'</span><span class="p">:</span> <span class="s1">'django.db.backends.sqlite3'</span><span class="p">,</span> <span class="s1">'NAME'</span><span class="p">:</span> <span class="s1">'db.sqlite3'</span><span class="p">}}</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：引擎写死了 SQLite，读来的 PostgreSQL 连接信息（host/port/username/password）一个都没用。云上必须用 <code>'django.db.backends.postgresql'</code>，并把 <code>db_settings</code> 的字段填进 <code>NAME/USER/PASSWORD/HOST/PORT</code>。另外 <code>credentials('database')</code> 要放在 <code>if not config.in_build():</code> 里——构建阶段连不上数据库。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>DEBUG = False</code> 之后，本地看到的报错页发生了什么变化？为什么定制 404/500 要求 <code>DEBUG = False</code>？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>DEBUG = False</code> 后 Django 不再显示带堆栈信息的黄色调试页，而是渲染 <code>templates/404.html</code>/<code>500.html</code>。调试页会泄露配置细节（设置项、SQL、文件路径），只适合本地；线上关闭调试后，友好的定制错误页才出场。</p>
+</blockquote>
+<p><strong>6. 简答题</strong>：描述一次「加功能」的完整部署流程，从本地改第一行代码到线上验证。</p>
+<blockquote>
+<p><strong>要点</strong>：① 本地改代码并跑通；② 产生了新文件（含迁移文件）就 <code>git add .</code>；③ <code>git commit -am "提交说明"</code>；④ <code>platform push</code>（平台自动执行 build 钩子装依赖、collectstatic，再执行 deploy 钩子 migrate）；⑤ <code>platform url</code> 打开线上网址验证；出问题先看部署日志，修好再走一遍 ③④。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能说清 <code>{% load %}</code> 和 <code>{% bootstrap_form %}</code> 的分工，并独立完成登录页改造</li>
+<li>[ ] 能讲清 <code>.platform.app.yaml</code>（应用）、<code>.platform/routes.yaml</code>（路由）、<code>.platform/services.yaml</code>（服务）各自的职责</li>
+<li>[ ] 能解释「同一份 settings.py 怎么知道自己在本地还是云上」，以及 <code>config.is_valid_platform()</code> 的判据</li>
+<li>[ ] 已完成一次完整部署：requirements.txt → git → <code>platform create</code> → <code>platform push</code> → 线上访问</li>
+<li>[ ] 定制了 404/500 错误页面，并知道它只在 <code>DEBUG = False</code> 时生效</li>
+<li>[ ] 避开了三大坑：ALLOWED_HOSTS、collectstatic、.gitignore</li>
+<li>[ ] 练习 20-1、20-2、20-3 已完成；进阶练习至少完成 1 题</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 21 是阶段 2 的收官单元——把三个项目的工程流程、技术地图串成一张总图，过一遍常见工程问题速查（依赖锁定、密钥管理、数据库备份），然后迎接<strong>关卡 2 验收</strong>：三个项目上线、pytest 测试、读懂陌生项目并定位 bug，五条硬指标逐条对照。</p>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>★ 产出：公网可访问的学习笔记 + 定制错误页</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>★ 关卡 2 五条，你过了几条？没过的定补齐计划了吗？</li><li>「学习笔记」公网能访问吗？你让别人试过吗？</li><li>★ 你能用一句话说清每个项目「还能怎么扩展」吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>关卡 2 考的不是记住多少 API，是「能不能独立把东西做出来并交出去」。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../20.html">查看单元 20 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="106.html"><small>← 上一节</small><b>第 106 节 · ★ 三大部署坑</b></a><a class="pn nx" id="nextLink" href="108.html"><small>下一节 →</small><b>第 108 节 · 工程流程回顾与技术地图</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

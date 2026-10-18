@@ -1,0 +1,16 @@
+<Slide style={{ width: '1280px', height: '720px', backgroundColor: '#FAFCFE', padding: 0, position: 'relative', overflow: 'hidden' }}>
+    <Box style={{ position: 'absolute', left: 64, top: 36, width: '1152px', flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <Box style={{ background: '#0E9B78', borderRadius: 5, padding: '3px 11px' }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>第 102 节</Text>
+        </Box>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#16232E' }}>核心知识点</Text>
+        <Text style={{ fontSize: 15, color: '#5A6B7A', marginTop: 10 }}>· 动手实战、答案与验收复盘</Text>
+    </Box>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px' }}>
+        <svg width='1280' height='720' viewBox='0 0 1280 720'>
+            <rect x='64' y='96' width='368' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='64' y='96' width='368' height='4' rx='2' fill='#1F5FA8' /><text x='82' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>基础档</text><text x='82' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 练习 19-1【登录页与注销】</text><text x='82' y='197.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 练习 19-2【注册页面】</text><text x='82' y='226.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 练习 19-3【让每个用户只有自己的主题】</text><rect x='468' y='96' width='368' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='468' y='96' width='368' height='4' rx='2' fill='#1F5FA8' /><text x='486' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>进阶档</text><text x='486' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 练习 19-4【教材练习 19.3：重构 check_topic_owne</text><text x='486' y='188.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>r()】</text><text x='486' y='217.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 练习 19-5【教材练习 19.4：保护 new_entry】</text><text x='486' y='245.5' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· 练习 19-6【纯 Python：带用户隔离的笔记本】</text><rect x='872' y='96' width='368' height='330' rx='12' fill='#FFFFFF' stroke='#D8E3EE' /><rect x='872' y='96' width='368' height='4' rx='2' fill='#1F5FA8' /><text x='890' y='130' fontSize='15.5' fontWeight='bold' fill='#1F5FA8' textAnchor='start' fontFamily='Microsoft YaHei'>参考答案 19-1</text><text x='890' y='169.0' fontSize='13' fill='#3A4A58' textAnchor='start' fontFamily='Microsoft YaHei'>· """为应用程序 accounts 定义 URL 模式"""</text><rect x='64' y='574' width='1152' height='66' rx='12' fill='#EEF5FB' /><text x='84' y='616' fontSize='14' fill='#243444' textAnchor='start' fontFamily='Microsoft YaHei'>看不懂的地方先回讲义对应小节读一遍，再回来对着这页复述一次——能讲出来才算真懂。</text>
+            <text x='64' y='684' fontSize='13' fill='#8A9AAA' fontFamily='Microsoft YaHei'>Python 讲授课件 · 逐节版</text>
+            <text x='1216' y='684' fontSize='13' fill='#8A9AAA' textAnchor='end' fontFamily='Microsoft YaHei'>单元 19 · 第 102 节</text>
+        </svg>
+    </Box>
+</Slide>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 25 节 · 遍历时修改与嵌套结构</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="lessons.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-lesson="25">
+<div class="top"><div class="top-in">
+  <a class="back" href="index.html">← 课程目录</a>
+  <h1>第 25/111 节 · 遍历时修改与嵌套结构</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="../ppt/u/05.html#s6" title="本课节对应的课件">本课课件 u5·p6</a>
+</div></div>
+<div class="pbar"><i id="pbar"></i></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="sblk">
+      <h4>本节内容</h4>
+      <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
+<a class="lv3" href="#2-6-遍历时能修改字典吗">2.6 遍历时能修改字典吗</a>
+<a class="lv3" href="#2-7-嵌套结构-字典的真正威力">2.7 嵌套结构：字典的真正威力</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-创建与基本访问">示例 1：创建与基本访问</a>
+<a class="lv3" href="#示例-2-新增-修改-删除">示例 2：新增、修改、删除</a>
+<a class="lv3" href="#示例-3-三种遍历方式">示例 3：三种遍历方式</a>
+<a class="lv3" href="#示例-4-get-安全取值">示例 4：get() 安全取值</a>
+<a class="lv3" href="#示例-5-遍历与修改的正确姿势">示例 5：遍历与修改的正确姿势</a>
+<a class="lv3" href="#示例-6-嵌套字典与综合提取">示例 6：嵌套字典与综合提取</a>
+<a class="lv3" href="#示例-7-字典的常用-全家桶-方法">示例 7：字典的常用&quot;全家桶&quot;方法</a>
+<a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk pptbox">
+      <h4>配套资料 · 单元 5</h4>
+      <a class="ppt-thumb" href="../ppt/u/05.html#s6">
+        <img loading="lazy" src="../ppt/u/05/slide-06.webp" alt="本课节课件">
+        <span class="cap"><b>单元 5 · p6</b> 课节页与知识点页</span>
+        <span class="go">打开本课课件 →</span>
+      </a>
+      <div class="rel">
+        <a href="../05.html"><span class="k">讲义</span>
+          <span class="v">单元 5 · 字典</span></a>
+        <a href="../ppt/u/05.html#s6"><span class="k">课件</span>
+          <span class="v">本课节逐节课件</span></a>
+        <a href="index.html#u5"><span class="k">课节</span>
+          <span class="v">本单元全部课节</span></a>
+        <a href="../bank.html#u5"><span class="k">题库</span>
+          <span class="v">本单元 1 题 · 共 84 题</span></a>
+      </div>
+    </div>
+
+    <details class="sblk nlx" id="nlx" open>
+      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
+      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
+<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
+<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
+<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
+<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
+<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
+<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
+<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
+<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
+<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
+<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
+<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
+<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
+<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
+<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
+<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
+<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
+<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
+<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
+<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
+<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
+<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
+<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
+<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
+<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
+<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
+<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
+<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
+<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
+<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
+<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
+<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
+<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
+<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
+<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
+<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
+<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
+<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
+<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
+<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
+<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
+<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
+<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
+<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
+<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
+<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
+<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
+<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
+<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
+<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
+<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
+<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
+<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
+<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
+<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
+<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
+<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
+<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
+<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
+<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
+<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
+<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
+<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
+<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
+<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
+<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
+<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
+<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
+<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
+<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
+<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
+<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
+<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
+<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
+<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
+<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
+<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
+<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
+<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
+<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
+<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
+<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
+<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
+<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
+<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
+<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
+<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
+<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
+<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
+<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
+<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
+<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
+<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
+<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
+<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
+<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
+<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+    </details>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 25 节 / 111</span>
+        <span class="kwk">W5</span>
+        <span class="ku">单元 5 · 字典</span>
+      </div>
+      <h1>遍历时修改与嵌套结构</h1>
+      <p class="goal">能处理嵌套结构，为后面学 JSON 打基础</p>
+    </div>
+    
+
+    <div class="sched">
+      <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
+      <div class="sc"><b>30</b><span>讲解 min</span></div>
+      <div class="sc hi"><b>40</b><span>实操 min</span></div>
+      <a class="sc hi" href="#review"><b>20</b><span>讲评 min</span></a>
+    </div>
+
+    <div class="blk recap" id="recap"><h3>◆ 复盘（10 分钟）｜上一节：第 24 节 · 三种遍历与 get() 安全取值</h3><ul><li>三种遍历：<code>d.items()</code> 拿键值对、<code>d.keys()</code> 拿键、<code>d.values()</code> 拿值。</li><li><code>d.get("键", 默认值)</code> 取不到也不崩，返回默认值——比 <code>[]</code> 安全。</li><li>数词频的惯用写法：<code>counts[w] = counts.get(w, 0) + 1</code>。</li><li>上节作业：5-4 ~ 5-6 做完几道？</li></ul></div>
+
+    <div class="blk live">
+      <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
+      <ol><li>现场把三层嵌套数据一层层打印出来</li><li>讨论：为什么 JSON 能被 Python 直接读</li></ol>
+    </div>
+
+    <h3 id="2-6-遍历时能修改字典吗">2.6 遍历时能修改字典吗</h3>
+<p><strong>不能。</strong> 遍历过程中修改字典会报 <code>RuntimeError: dictionary changed size during iteration</code>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="c1"># for k in d:</span>
+<span class="c1">#     del d[k]           # RuntimeError!</span>
+</code></pre>
+<p>生活化类比：你在<strong>点名册上边点名边划掉名字</strong>——划掉之后册子的页数变了，念到后面就会跳行出错。</p>
+<p>正确做法：先遍历，再修改（分两步）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>      <span class="c1"># 先复制一份键的列表</span>
+    <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>      <span class="c1"># {'b': 2, 'c': 3}</span>
+</code></pre>
+<p>（注意：<code>list(d.keys())</code> 是<strong>浅拷贝键列表</strong>，够用了，因为键本身是不可变的。）</p>
+<h3 id="2-7-嵌套结构-字典的真正威力">2.7 嵌套结构：字典的真正威力</h3>
+<p>真实数据几乎都是嵌套的：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">users</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"u1"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">"skills"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Python"</span><span class="p">,</span> <span class="s2">"SQL"</span><span class="p">]},</span>
+    <span class="s2">"u2"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="s2">"skills"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Java"</span><span class="p">]},</span>
+<span class="p">}</span>
+</code></pre>
+<p>提取数据时用<strong>连续取值</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 取出 u1 的名字</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="s2">"u1"</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span>              <span class="c1"># 小明</span>
+
+<span class="c1"># 安全取出</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"u9"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"查无此人"</span><span class="p">)</span>   <span class="c1"># 查无此人</span>
+
+<span class="c1"># 遍历两层</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"【</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">】</span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">，</span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">'age'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 岁，会 </span><span class="si">{</span><span class="s1">'、'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">'skills'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 统计：多少人会 Python</span>
+<span class="n">python_users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">"Python"</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s2">"skills"</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">python_users</span><span class="p">)</span>     <span class="c1"># ['小明']</span>
+</code></pre>
+<p>这一段代码就是单元 11 那个"投票分析器"的核心结构。现在多花点时间理解它，后面会省很多力气。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-创建与基本访问">示例 1：创建与基本访问</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dict_basics.py —— 字典的创建与访问</span>
+
+<span class="c1"># 用 {} 创建字典，键值对之间用逗号分隔，键和值之间用冒号</span>
+<span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"杭州"</span><span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"字典："</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>            <span class="c1"># 3  键值对的数量</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"name 的值："</span><span class="p">,</span> <span class="n">user</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span><span class="c1"># 小明</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"age 的值："</span><span class="p">,</span> <span class="n">user</span><span class="p">[</span><span class="s2">"age"</span><span class="p">])</span>       <span class="c1"># 18</span>
+
+<span class="c1"># 取不存在的键会报 KeyError</span>
+<span class="c1"># print(user["phone"])  # KeyError: 'phone'</span>
+
+<span class="c1"># 键可以是不同类型：字符串、数字、元组</span>
+<span class="n">mixed</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span>
+    <span class="mi">100</span><span class="p">:</span> <span class="s2">"百"</span><span class="p">,</span>
+    <span class="p">(</span><span class="mf">116.4</span><span class="p">,</span> <span class="mf">39.9</span><span class="p">):</span> <span class="s2">"北京坐标"</span><span class="p">,</span>
+    <span class="kc">True</span><span class="p">:</span> <span class="s2">"布尔键也可以"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mixed</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mixed</span><span class="p">[</span><span class="mi">100</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mixed</span><span class="p">[(</span><span class="mf">116.4</span><span class="p">,</span> <span class="mf">39.9</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mixed</span><span class="p">[</span><span class="kc">True</span><span class="p">])</span>
+
+<span class="c1"># 但列表不能当键</span>
+<span class="c1"># bad = {[1, 2]: "列表当键"}    # TypeError: unhashable type: 'list'</span>
+<span class="c1"># 原因：列表可以修改内容，改了就找不到了</span>
+
+<span class="c1"># 空字典</span>
+<span class="n">empty</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"空字典长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty</span><span class="p">))</span>     <span class="c1"># 0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"空字典是假值吗："</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">empty</span><span class="p">))</span>   <span class="c1"># False</span>
+</code></pre>
+<h3 id="示例-2-新增-修改-删除">示例 2：新增、修改、删除</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dict_crud.py —— 字典的增删改查</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"语文"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">:</span> <span class="mi">85</span><span class="p">}</span>
+
+<span class="c1"># 新增：键不存在时赋值 = 添加一对</span>
+<span class="n">scores</span><span class="p">[</span><span class="s2">"英语"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">78</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"新增后："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>      <span class="c1"># {'语文': 90, '数学': 85, '英语': 78}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"长度："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>   <span class="c1"># 3</span>
+
+<span class="c1"># 修改：键已存在时赋值 = 改值（覆盖）</span>
+<span class="n">scores</span><span class="p">[</span><span class="s2">"数学"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">92</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"修改后："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>      <span class="c1"># {'语文': 90, '数学': 92, '英语': 78}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"长度依然是："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>   <span class="c1"># 3，没有变长！</span>
+
+<span class="c1"># 删除：用 del</span>
+<span class="k">del</span> <span class="n">scores</span><span class="p">[</span><span class="s2">"英语"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"删除后："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>      <span class="c1"># {'语文': 90, '数学': 92}</span>
+
+<span class="c1"># 删除的第二种写法：pop()，能拿到被删的值</span>
+<span class="n">removed</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"语文"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"pop 出来的分数："</span><span class="p">,</span> <span class="n">removed</span><span class="p">)</span>     <span class="c1"># 90</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"现在剩下："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>             <span class="c1"># {'数学': 92}</span>
+
+<span class="c1"># popitem()：删除最后加入的那一对，返回 (键, 值) 元组</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"语文"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">:</span> <span class="mi">92</span><span class="p">}</span>
+<span class="n">pair</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">popitem</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"popitem 返回："</span><span class="p">,</span> <span class="n">pair</span><span class="p">)</span>         <span class="c1"># ('数学', 92)</span>
+
+<span class="c1"># 清空</span>
+<span class="n">scores</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"清空后："</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="s2">"长度"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>   <span class="c1"># {} 长度 0</span>
+</code></pre>
+<h3 id="示例-3-三种遍历方式">示例 3：三种遍历方式</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dict_traverse.py —— keys / values / items</span>
+
+<span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"杭州"</span><span class="p">}</span>
+
+<span class="c1"># 1）遍历键 —— 直接 for 就是遍历键</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 遍历键 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">user</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>    <span class="c1"># 等价写法，更显式</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="c1"># 2）遍历值</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 遍历值 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<span class="c1"># 3）遍历键值对 —— 最常用</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 遍历键值对 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 常见坑：for item in user 拿到的是键，不是键值对</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 陷阱演示 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">user</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"item = </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># 输出的是 name / age / city，不含值</span>
+
+<span class="c1"># 想同时拿到键和值，必须用 items()</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"item = </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>        <span class="c1"># ('name', '小明') 这种元组形式</span>
+
+<span class="c1"># 综合运用：统计每个键的值是数字还是字符串</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">user</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> 的类型是</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-4-get-安全取值">示例 4：get() 安全取值</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dict_get.py —— .get() 的价值</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"语文"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">:</span> <span class="mi">85</span><span class="p">}</span>
+
+<span class="c1"># 方括号取值：键不存在直接崩</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">"语文"</span><span class="p">])</span><span class="c1"># 90</span>
+<span class="c1"># print(scores["英语"])   # KeyError: '英语'</span>
+
+<span class="c1"># .get() 取值：键不存在返回 None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"语文"</span><span class="p">))</span>    <span class="c1"># 90</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"英语"</span><span class="p">))</span>    <span class="c1"># None</span>
+<span class="c1"># 注意：返回 None 说明"键不存在"，</span>
+<span class="c1"># 也可能说明"键存在但值就是 None"。要区分用 in</span>
+
+<span class="c1"># .get() 带默认值</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"英语"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>            <span class="c1"># 0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"英语"</span><span class="p">,</span> <span class="s2">"缺考"</span><span class="p">))</span>         <span class="c1"># 缺考</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"语文"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>            <span class="c1"># 90  键存在时忽略默认值</span>
+
+<span class="c1"># 判断键是否存在</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"英语"</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>         <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"语文"</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">)</span>         <span class="c1"># True</span>
+
+<span class="c1"># 区分"不存在"和"值为 None"</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>                <span class="c1"># None</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"a"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">)</span>                  <span class="c1"># True   键存在，只是值是 None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"b"</span><span class="p">,</span> <span class="s2">"没有这个键"</span><span class="p">))</span>    <span class="c1"># 没有这个键</span>
+
+<span class="c1"># ===== .get() 链式访问：处理嵌套数据的利器 =====</span>
+<span class="n">users</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"u1"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">}}</span>
+
+<span class="c1"># 传统写法：啰嗦</span>
+<span class="k">if</span> <span class="s2">"u1"</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"name"</span> <span class="ow">in</span> <span class="n">users</span><span class="p">[</span><span class="s2">"u1"</span><span class="p">]:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="s2">"u1"</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="c1"># .get() 链式写法：简洁且永不崩溃</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"u9"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"查无此人"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>      <span class="c1"># 查无此人</span>
+<span class="c1"># 关键在那个 {} —— u9 不存在时给一个空字典，</span>
+<span class="c1"># 这样后面的 .get("name") 就有东西可操作，链条不断裂</span>
+</code></pre>
+<h3 id="示例-5-遍历与修改的正确姿势">示例 5：遍历与修改的正确姿势</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dict_modify.py —— 遍历时能不能改字典</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"语文"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span> <span class="s2">"英语"</span><span class="p">:</span> <span class="mi">78</span><span class="p">}</span>
+
+<span class="c1"># 遍历过程中删除键值对 -&gt; RuntimeError</span>
+<span class="c1"># for key in scores:</span>
+<span class="c1">#     if scores[key] &lt; 80:</span>
+<span class="c1">#         del scores[key]     # RuntimeError: dictionary changed size during iteration</span>
+
+<span class="c1"># 正确做法一：先复制一份键的列表，再遍历副本</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="n">scores</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">scores</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"删除低于 80 的："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>   <span class="c1"># {'语文': 90, '数学': 85}</span>
+
+<span class="c1"># 正确做法二：用 .items() 复制元组列表</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"语文"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span> <span class="s2">"英语"</span><span class="p">:</span> <span class="mi">78</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">scores</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"结果一样："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>         <span class="c1"># {'语文': 90, '数学': 85}</span>
+
+<span class="c1"># 修改键的值（不改变字典大小）是允许的</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"语文"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span> <span class="s2">"数学"</span><span class="p">:</span> <span class="mi">85</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">scores</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">90</span><span class="p">:</span>
+        <span class="n">scores</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"提分后："</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>           <span class="c1"># {'语文': 90, '数学': 95}</span>
+<span class="c1"># 注意：改值不改长度，所以不需要复制</span>
+
+<span class="c1"># 翻面理解这个规则：</span>
+<span class="c1"># 遍历是"照着名单念名字"，而删除会让名单页数变少，后面就念乱了。</span>
+<span class="c1"># 但改名字内容不影响名单长度，所以是安全的。</span>
+</code></pre>
+<h3 id="示例-6-嵌套字典与综合提取">示例 6：嵌套字典与综合提取</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># nested_dict.py —— 嵌套字典：真实数据的形态</span>
+
+<span class="n">users</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"u1"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span>
+        <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+        <span class="s2">"skills"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Python"</span><span class="p">,</span> <span class="s2">"SQL"</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">"u2"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小红"</span><span class="p">,</span>
+        <span class="s2">"age"</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span>
+        <span class="s2">"skills"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Java"</span><span class="p">,</span> <span class="s2">"Python"</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="s2">"u3"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小刚"</span><span class="p">,</span>
+        <span class="s2">"age"</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+        <span class="s2">"skills"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"C++"</span><span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># 连续取值：直接按层往下取</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"u1 的名字："</span><span class="p">,</span> <span class="n">users</span><span class="p">[</span><span class="s2">"u1"</span><span class="p">][</span><span class="s2">"name"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"u2 的年龄："</span><span class="p">,</span> <span class="n">users</span><span class="p">[</span><span class="s2">"u2"</span><span class="p">][</span><span class="s2">"age"</span><span class="p">])</span>
+
+<span class="c1"># 安全取值</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"u9 的名字："</span><span class="p">,</span> <span class="n">users</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"u9"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"查无此人"</span><span class="p">))</span>
+
+<span class="c1"># 遍历两层：外层 uid 和 info，内层再用 info 的键</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"【</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">】</span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">，</span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">'age'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 岁"</span><span class="p">)</span>
+
+<span class="c1"># 提取所有人的名字</span>
+<span class="n">all_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所有人："</span><span class="p">,</span> <span class="n">all_names</span><span class="p">)</span>
+
+<span class="c1"># 筛选：谁会Python</span>
+<span class="n">python_users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">info</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">"Python"</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s2">"skills"</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"会 Python 的："</span><span class="p">,</span> <span class="n">python_users</span><span class="p">)</span>      <span class="c1"># ['小明', '小红']</span>
+
+<span class="c1"># 统计平均年龄</span>
+<span class="n">total_age</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">total_age</span> <span class="o">+=</span> <span class="n">info</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span>
+<span class="n">average</span> <span class="o">=</span> <span class="n">total_age</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"平均年龄：</span><span class="si">{</span><span class="n">average</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> 岁"</span><span class="p">)</span><span class="c1"># 21.7 岁</span>
+
+<span class="c1"># 找出技能最多的用户</span>
+<span class="n">most_skilled</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="n">max_count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">uid</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">users</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">"skills"</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">max_count</span><span class="p">:</span>
+        <span class="n">max_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">"skills"</span><span class="p">])</span>
+        <span class="n">most_skilled</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"技能最多的是</span><span class="si">{</span><span class="n">most_skilled</span><span class="si">}</span><span class="s2">，有 </span><span class="si">{</span><span class="n">max_count</span><span class="si">}</span><span class="s2"> 项"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-7-字典的常用-全家桶-方法">示例 7：字典的常用"全家桶"方法</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># dict_methods.py —— 字典常用方法速查</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"host"</span><span class="p">:</span> <span class="s2">"localhost"</span><span class="p">,</span> <span class="s2">"port"</span><span class="p">:</span> <span class="mi">8080</span><span class="p">,</span> <span class="s2">"debug"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+<span class="c1"># get：安全取值</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"port"</span><span class="p">))</span>            <span class="c1"># 8080</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"timeout"</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span>     <span class="c1"># 30</span>
+
+<span class="c1"># pop：取值并删除</span>
+<span class="n">port</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"port"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"取出的端口：</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s2">，剩余：</span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># setdefault：键不存在时才设置并返回</span>
+<span class="n">config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"timeout"</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"timeout："</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">"timeout"</span><span class="p">])</span>    <span class="c1"># 30  新增了</span>
+<span class="n">config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"timeout"</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"再设一次："</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s2">"timeout"</span><span class="p">])</span><span class="c1"># 30  没变，因为已存在</span>
+
+<span class="c1"># update：用另一个字典批量合并</span>
+<span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"host"</span><span class="p">:</span> <span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="s2">"level"</span><span class="p">:</span> <span class="s2">"info"</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"更新后："</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># 键和值的视图</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所有键："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所有值："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所有对："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+<span class="c1"># 计数小技巧：用字典统计出现次数</span>
+<span class="c1"># （这比 collections.Counter 更基础，务必掌握）</span>
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">,</span> <span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">,</span> <span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">]</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">fruit</span> <span class="ow">in</span> <span class="n">fruits</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">fruit</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">fruit</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span><span class="c1"># 已出现过，计数 +1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">fruit</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>     <span class="c1"># 第一次出现，计数为 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"统计结果："</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>   <span class="c1"># {'苹果': 3, '香蕉': 2, '橙子': 1}</span>
+
+<span class="c1"># 反向字典：值 -&gt; 键</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"小明"</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">:</span> <span class="mi">72</span><span class="p">}</span>
+<span class="n">name_by_score</span> <span class="o">=</span> <span class="p">{</span><span class="n">score</span><span class="p">:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"反向字典："</span><span class="p">,</span> <span class="n">name_by_score</span><span class="p">)</span>   <span class="c1"># {95: '小明', 88: '小红', 72: '小刚'}</span>
+</code></pre>
+<hr>
+
+    <div class="blk hw">
+      <h3>◆ 课后作业</h3>
+      <ol><li>★ 动手项目 6.1–6.3 生日调查</li></ol>
+    </div>
+
+    <div class="blk review" id="review"><h3>◆ 讲评（20 分钟）｜对照检查你刚写的代码</h3><ul><li>遍历时删键那次，RuntimeError 报在第几行？</li><li>改成 <code>list(d.items())</code> 之后为什么就能删了？</li><li>三层嵌套数据，你打印了几层？每层是什么类型说得清吗？</li></ul><div class="rv-sum"><b>本节一句话总结</b><span>遍历时不能改容器——这是列表和字典共有的红线。</span></div></div>
+
+    <div class="done-bar">
+      <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../05.html">查看单元 5 完整讲义 →</a>
+      <a href="../bank.html">打开练习题库 →</a>
+    </div>
+
+    <div class="pn"><a class="pn" id="prevLink" href="24.html"><small>← 上一节</small><b>第 24 节 · 三种遍历与 get() 安全取值</b></a><a class="pn nx" id="nextLink" href="26.html"><small>下一节 →</small><b>第 26 节 · 动手实战与答案讲评</b></a></div>
+  </main>
+</div>
+
+<script>var TOTAL=111;</script>
+<script>
+var K='lesson-done-v1';
+function getAll(){try{return JSON.parse(localStorage.getItem(K)||'{}');}catch(e){return {};}}
+function saveAll(o){try{localStorage.setItem(K,JSON.stringify(o));}catch(e){}}
+function init(){
+  var n=document.body.dataset.lesson, all=getAll();
+  var pct=Object.keys(all).filter(function(k){return all[k];}).length;
+  document.getElementById('pbar').style.width=(pct/ TOTAL *100)+'%';
+  // 侧栏勾号
+  document.querySelectorAll('.nlist a[data-n]').forEach(function(a){
+    if(all[a.dataset.n]) a.classList.add('done');
+    if(a.dataset.n===n) a.classList.add('cur');
+  });
+  var box=document.getElementById('doneBox');
+  if(box){
+    box.checked=!!all[n];
+    if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
+    box.addEventListener('change',function(){
+      var o=getAll(); o[n]=box.checked; saveAll(o);
+      document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
+      document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
+      document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
+    });
+  }
+  // 目录高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
+    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+      a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
+  on(); addEventListener('scroll',on,{passive:true});
+  document.querySelectorAll('.main pre').forEach(function(p){});
+}
+document.addEventListener('DOMContentLoaded',function(){
+  // 代码块角标由生成期已写入，仅补 tooltip
+  document.querySelectorAll('.main pre').forEach(function(p){
+    var c=p.querySelector('code'), lang=(c.className.match(/language-([\w-]+)/)||[])[1];
+    var lbl=(lang==='python'?'Python':(lang||'代码'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=lbl;
+    if(!p.querySelector('.cl')) p.insertBefore(s,c);
+  });
+  init();
+
+  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
+  var nlx=document.getElementById('nlx');
+  if(nlx&&window.innerWidth<=1000) nlx.open=false;
+
+  // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
+  document.addEventListener('keydown', function(e){
+    var t=e.target.tagName;
+    if(t==='INPUT'||t==='TEXTAREA'||e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.key==='ArrowLeft'){var a=document.getElementById('prevLink'); if(a){location.href=a.href;}}
+    if(e.key==='ArrowRight'){var b=document.getElementById('nextLink'); if(b){location.href=b.href;}}
+  });
+});
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+/* 代码块一键复制 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea'); t.value=txt;
+        t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+</script>
+<script src="../media/bgm.js" defer></script>
+</body>
+</html>

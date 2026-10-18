@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 6 · 用户输入与while循环</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="6">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 6 · 用户输入与while循环</h1>
+  <a class="ppt" href="ppt/u/06.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="28" data-to="32"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u6"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/06.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s7"><span class="k">大纲</span><span class="v">课程大纲课件 p7</span></a><a href="bank.html#u6"><span class="k">题库</span><span class="v">本单元 6 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-input-的铁律-拿回来的永远是字符串">2.1 input() 的铁律：拿回来的永远是字符串</a>
+<a class="lv3" href="#2-2-for-还是-while-怎么选">2.2 for 还是 while：怎么选</a>
+<a class="lv3" href="#2-3-while-的核心-条件先行">2.3 while 的核心：条件先行</a>
+<a class="lv3" href="#2-4-break-与-continue">2.4 break 与 continue</a>
+<a class="lv3" href="#2-5-while-else-循环-没被打断-时执行">2.5 while ... else：循环&quot;没被打断&quot;时执行</a>
+<a class="lv3" href="#2-6-交互程序的骨架">2.6 交互程序的骨架</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-input-的类型陷阱与三步模板">示例 1：input 的类型陷阱与三步模板</a>
+<a class="lv3" href="#示例-2-while-基本循环">示例 2：while 基本循环</a>
+<a class="lv3" href="#示例-3-break-与-continue">示例 3：break 与 continue</a>
+<a class="lv3" href="#示例-4-while-else">示例 4：while ... else</a>
+<a class="lv3" href="#示例-5-标志位-flag">示例 5：标志位 flag</a>
+<a class="lv3" href="#示例-6-交互式程序骨架">示例 6：交互式程序骨架</a>
+<a class="lv3" href="#示例-7-倒计时与死循环的自救">示例 7：倒计时与死循环的自救</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-6-1">参考答案 6-1</a>
+<a class="lv3" href="#参考答案-6-2">参考答案 6-2</a>
+<a class="lv3" href="#参考答案-6-3">参考答案 6-3</a>
+<a class="lv3" href="#参考答案-6-4">参考答案 6-4</a>
+<a class="lv3" href="#参考答案-6-5">参考答案 6-5</a>
+<a class="lv3" href="#参考答案-6-6">参考答案 6-6</a>
+<a class="lv3" href="#参考答案-6-7">参考答案 6-7</a>
+<a class="lv3" href="#参考答案-6-8">参考答案 6-8</a>
+<a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-6-用户输入和-while-循环">单元 6：用户输入和 while 循环</h1>
+<blockquote>
+<p>对应教材第 7 章「用户输入和 while 循环」
+关键词：<code>input()</code>、<code>int()</code>、<code>while</code>、<code>break</code>、<code>continue</code>、<code>while...else</code>、标志位 flag、交互式循环</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>用 <code>input()</code> 读取用户输入，并熟练完成「输入字符串 → 转换类型 → 参与运算」这三步。</li>
+<li>解释 <code>for</code> 与 <code>while</code> 的选择依据，能说出「循环次数未知用 <code>while</code>」这条判断规则。</li>
+<li>写出带条件的 <code>while</code> 循环，并说清条件为假时循环体一次都不执行。</li>
+<li>熟练使用 <code>break</code>（跳出）和 <code>continue</code>（跳过本轮），并用 <code>while ... else</code> 组织「循环正常结束」的逻辑。</li>
+<li>独立完成猜数字游戏，掌握 <code>while True</code> + <code>break</code> 这个交互程序的标准骨架。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-input-的铁律-拿回来的永远是字符串">2.1 input() 的铁律：拿回来的永远是字符串</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">age</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入年龄："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">age</span><span class="p">))</span>     <span class="c1"># &lt;class 'str'&gt;   哪怕你输入 18，它也是字符串 "18"</span>
+</code></pre>
+<p>这带来一个必须处理的经典问题：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">age</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"年龄："</span><span class="p">)</span>       <span class="c1"># 用户输入 18</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># TypeError: can only concatenate str (not "int") to str</span>
+</code></pre>
+<p>生活化类比：<code>input()</code> 相当于一个<strong>只认字不认数的管理员</strong>。你把数字 "18" 递过去，他不管你写的是数字还是文字，一律登记成"文字"。想让它按数字处理，你必须再翻译一次：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"年龄："</span><span class="p">))</span>       <span class="c1"># 用户输入 18 -&gt; 字符串 "18" -&gt; 整数 18</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>                   <span class="c1"># 19</span>
+</code></pre>
+<p><strong>标准三步模板</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 第1 步：用 input() 拿字符串</span>
+<span class="c1"># 第 2 步：转成需要的类型（int / float）</span>
+<span class="c1"># 第 3 步：参与运算或输出</span>
+</code></pre>
+<p>还有个实用技巧——<strong>给 input 加提示信息</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的名字："</span><span class="p">)</span>          <span class="c1"># 带提示</span>
+<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>                          <span class="c1"># 不带提示</span>
+</code></pre>
+<p>默认没有提示，用户会一脸茫然。</p>
+<h3 id="2-2-for-还是-while-怎么选">2.2 for 还是 while：怎么选</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>for</code></th>
+<th><code>while</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>控制方式</td>
+<td>遍历一个确定的数据序列</td>
+<td>判断一个条件</td>
+</tr>
+<tr>
+<td>循环次数</td>
+<td>序列有多长就转多少圈</td>
+<td>条件为真就转</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>遍历列表、字符串、range</td>
+<td>次数未知、直到满足条件才停</td>
+</tr>
+</tbody>
+</table>
+<p>选择规则一句话：<strong>你知不知道要循环几次？知道就用 <code>for</code>，不知道就用 <code>while</code>。</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 知道次数：遍历 10 个学生 -&gt; for</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># 不知道次数：一直问，直到用户输对了 -&gt; while</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入正确答案："</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">==</span> <span class="s2">"python"</span><span class="p">:</span>
+        <span class="k">break</span>
+</code></pre>
+<p>生活化类比：
+- <strong><code>for</code> 像按清单点名</strong>——名单上有 10 个人，念完 10 个就结束。
+- <strong><code>while</code> 像守门等人</strong>——你说"他来了我就开门"，所以得一直站着等，来几个人都不确定。</p>
+<h3 id="2-3-while-的核心-条件先行">2.3 while 的核心：条件先行</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1"># 输出 0 1 2</span>
+</code></pre>
+<p><strong>三个必须记住的点：</strong></p>
+<ol>
+<li><strong>条件为假时，循环体一次都不执行。</strong></li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span>   <span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
+   <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+       <span class="nb">print</span><span class="p">(</span><span class="s2">"永远不会打印"</span><span class="p">)</span>
+       <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+   
+</code></pre>
+<ol start="2">
+<li><strong>必须有让条件变假的那一行</strong>，否则进入死循环。</li>
+</ol>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span>   <span class="c1"># 死循环：count 永远是 0，永远小于 3</span>
+   <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+       <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>     <span class="c1"># 停不下来，只能按 Ctrl+C 强制中断</span>
+   
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p>调试死循环时最直接的救命办法：<strong>在循环里加一行 <code>print(count)</code></strong>，看它到底变没变。</p>
+<ol start="3">
+<li><strong>Python 允许 <code>while count:</code> 这种写法</strong>——条件本身是整数时，0 为假、非 0 为真。</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span>   <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+   <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+       <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+       <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+   
+</code></pre>
+<p>这个写法很地道，但初学阶段建议写完整的 <code>while n &gt; 0:</code>，更明确。</p>
+<h3 id="2-4-break-与-continue">2.4 break 与 continue</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># break：立刻跳出整个循环</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">break</span>        <span class="c1"># 直接跳出，后面的不再执行</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="c1"># 输出 0 1 2</span>
+
+<span class="c1"># continue：跳过本轮，直接进入下一轮</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>     <span class="c1"># 偶数跳过，只打印奇数</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="c1"># 输出 1 3 5 7 9</span>
+</code></pre>
+<p>生活化类比：
+- <strong><code>break</code> 是"提前下课"</strong>——举手表说"这节课剩下的不上了"，直接走人。
+- <strong><code>continue</code> 是"这题跳过，下一题"</strong>——留在教室里，只是跳过当前这一题。</p>
+<p>一个常见混用错误：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 错误：continue 之后多余的代码永远执行不到</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">continue</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"这里永远不执行"</span><span class="p">)</span>   <span class="c1"># 缩进在 if 块内，且在 continue 之后</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre>
+<h3 id="2-5-while-else-循环-没被打断-时执行">2.5 while ... else：循环"没被打断"时执行</h3>
+<p>这是一个非常优雅但很少人用、却极其好用的结构：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">while</span> <span class="n">次数</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"三次机会都用完了，仍然没猜对"</span><span class="p">)</span>
+</code></pre>
+<p><code>else</code> 块只在<strong>循环正常走完</strong>（没有被 <code>break</code> 打断）时执行。一旦 <code>break</code>，<code>else</code> 就被跳过。</p>
+<p>生活化类比：<strong>"如果这节课没被老师叫停，就说明大家表现好，下课"</strong>。一旦被叫停（有 break），这个"表扬"就不会发生。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 猜谜游戏的标准写法</span>
+<span class="n">guess</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">guess</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"1-10 猜个数："</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"猜对了！"</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="n">guess</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"机会用完了"</span><span class="p">)</span>
+</code></pre>
+<p>这段代码读起来非常自然：猜对了就 <code>break</code> 走人，猜满 3 次还没对就落进 <code>else</code>。<strong>这是单元 11 猜数字游戏的核心结构。</strong></p>
+<h3 id="2-6-交互程序的骨架">2.6 交互程序的骨架</h3>
+<p>任何需要"反复问用户"的程序，都是这个模式：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>                <span class="c1"># 无限循环</span>
+    <span class="n">用户输入</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">输入</span> <span class="o">==</span> <span class="s2">"退出"</span><span class="p">:</span>       <span class="c1"># 用户主动要求结束</span>
+        <span class="k">break</span>                <span class="c1"># 用 break 跳出无限循环</span>
+    <span class="k">if</span> <span class="n">输入无效</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"请重新输入"</span><span class="p">)</span>   <span class="c1"># 用 continue 回到循环开头</span>
+        <span class="k">continue</span>
+    <span class="n">处理有效的输入</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"程序结束"</span><span class="p">)</span>             <span class="c1"># 只有 break 出来才会走到这里</span>
+</code></pre>
+<p><strong>注意这个模式的关键点</strong>：
+- <code>while True</code> 本身没有出口，<strong>唯一</strong>的出口是 <code>break</code>。
+- 所以每一条通向"用户想退出"的路径，都必须有 <code>break</code>。
+- 这也是为什么必须有"退出"这个选项——否则用户被永远困在里面。</p>
+<p>这个骨架在单元 11 的猜数字游戏、投票分析器里会反复出现，请务必掌握到能默写。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-input-的类型陷阱与三步模板">示例 1：input 的类型陷阱与三步模板</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># input_demo.py —— input() 永远返回字符串</span>
+
+<span class="c1"># 观察类型：无论输入什么，type 都是 str</span>
+<span class="n">age</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入年龄："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你输入了 </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2">，类型是 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 直接做加法会报错（取消下面两行的注释运行看看）</span>
+<span class="c1"># print(age + 1)     # TypeError: can only concatenate str to int</span>
+
+<span class="c1"># 正确做法：三步模板</span>
+<span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入年龄："</span><span class="p">))</span>     <span class="c1"># 第1、2 步：输入 + 转整数</span>
+<span class="n">next_age</span> <span class="o">=</span> <span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="c1"># 第 3 步：参与运算</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"明年你</span><span class="si">{</span><span class="n">next_age</span><span class="si">}</span><span class="s2"> 岁"</span><span class="p">)</span>
+
+<span class="c1"># float 输入</span>
+<span class="n">price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入价格："</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"含税价格：</span><span class="si">{</span><span class="n">price</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1.13</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 元"</span><span class="p">)</span>
+
+<span class="c1"># ===== 三步模板的完整演示 =====</span>
+<span class="c1"># 第 1 步：用 input() 拿字符串</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入两个数，用空格分隔（如 10 5）："</span><span class="p">)</span>
+<span class="c1"># 第 2 步：用 split() 拆开，再转成数字</span>
+<span class="n">parts</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">()</span><span class="c1"># 得到字符串列表 ['10', '5']</span>
+<span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># 第 3 步：运算</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2"> × </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-2-while-基本循环">示例 2：while 基本循环</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># while_basics.py —— while 循环的基本形态</span>
+
+<span class="c1"># 1）最基础的计数循环</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span><span class="c1"># 关键：这行让条件最终变假，否则死循环</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环结束，count ="</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+
+<span class="c1"># 2）条件一开始就为假 -&gt; 循环体一次都不执行</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"这句话永远不会打印"</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"因为条件为假，直接跳过了循环体"</span><span class="p">)</span>
+
+<span class="c1"># 3）条件为真就停（注意 != 的用法）</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="k">while</span> <span class="n">password</span> <span class="o">!=</span> <span class="s2">"python123"</span><span class="p">:</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入密码："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"密码正确，欢迎！"</span><span class="p">)</span>
+
+<span class="c1"># 4）条件本身是数字：Python 允许（0 为假，非 0 为真）</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"n 减到 0，循环自动结束"</span><span class="p">)</span>
+
+<span class="c1"># ===== 死循环演示（请务必自己跑一次看看）=====</span>
+<span class="c1"># count = 0</span>
+<span class="c1"># while count &lt; 3:</span>
+<span class="c1">#     print("停不下来", count)</span>
+<span class="c1">#     # 忘了写 count += 1，永远停不了</span>
+<span class="c1"># 按 Ctrl+C 可以强制中断</span>
+</code></pre>
+<h3 id="示例-3-break-与-continue">示例 3：break 与 continue</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># break_continue.py —— 两个跳出关键字</span>
+
+<span class="c1"># break：跳出整个循环</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- break 演示 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"遇到 3，停止遍历"</span><span class="p">)</span>
+        <span class="k">break</span>            <span class="c1"># 直接跳出，后面 4~9 都不再处理</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># continue：跳过本轮</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- continue 演示 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>         <span class="c1"># 偶数跳过，只打印奇数</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># 两者配合：过滤并求和</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 综合运用 ---"</span><span class="p">)</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">continue</span>         <span class="c1"># 小于 3 的不要</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="k">break</span>            <span class="c1"># 大于 8 就停，反正后面只会更大</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"3 到 8 的总和："</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>   <span class="c1"># 3+4+5+6+7+8 = 33</span>
+
+<span class="c1"># 常见错误：continue 之后的代码永远执行不到</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 常见错误 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">continue</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"这里永远不会执行，因为 continue 已经跳到下一轮了"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># ===== continue 在 while 里的一个重要用途：输入校验 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 输入校验（关键模式）---"</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的年龄："</span><span class="p">)</span>
+    <span class="c1"># 如果不是纯数字，int() 会报 ValueError</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">age</span><span class="p">)</span>
+        <span class="k">break</span>            <span class="c1"># 转换成功，说明输入有效，跳出循环</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"输入的不是有效整数，请重新输入"</span><span class="p">)</span>
+<span class="c1"># try/except 属于单元 9 的内容，但这个模式先感受一下</span>
+</code></pre>
+<h3 id="示例-4-while-else">示例 4：while ... else</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># while_else.py —— 循环正常结束才执行的 else</span>
+
+<span class="c1"># 猜数游戏：猜对用 break，猜满次数落进 else</span>
+<span class="n">secret</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">attempts</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">guess</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">while</span> <span class="n">guess</span> <span class="o">&lt;</span> <span class="n">attempts</span><span class="p">:</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"1-10 猜一个数："</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">==</span> <span class="n">secret</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"猜对了！"</span><span class="p">)</span>
+        <span class="k">break</span>                <span class="c1"># 被 break 打断 -&gt; else 不执行</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"猜错了，再试一次"</span><span class="p">)</span>
+        <span class="n">guess</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># 只有循环正常走完（没被 break）才会到这里</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">attempts</span><span class="si">}</span><span class="s2"> 次机会用完了，正确答案是 </span><span class="si">{</span><span class="n">secret</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"游戏结束"</span><span class="p">)</span>
+
+<span class="c1"># ===== 用同样的逻辑写个"密码强度检查" =====</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s2">"abc"</span>
+
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"密码太短，要求至少 8 位"</span><span class="p">)</span>
+    <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"密码长度合格：</span><span class="si">{</span><span class="s1">'*'</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">password</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># short_password = "123"</span>
+<span class="c1"># while len(short_password) &lt; 8:</span>
+<span class="c1">#     print("密码太短，要求至少 8 位")</span>
+<span class="c1">#     break</span>
+<span class="c1"># else:</span>
+<span class="c1">#     print("长度合格")</span>
+</code></pre>
+<h3 id="示例-5-标志位-flag">示例 5：标志位 flag</h3>
+<p>当一个循环里需要触发多个 <code>break</code> 时，用一个变量"记账"更清晰：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># flag_demo.py —— 用标志位组织复杂退出条件</span>
+
+<span class="c1"># 问题：如果密码错误 和 用户名不存在 都要跳出，怎么写？</span>
+<span class="n">username</span> <span class="o">=</span> <span class="s2">"admin"</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s2">"wrong"</span>
+
+<span class="c1">#===== 做法一：标志位（推荐，可读性最好）=====</span>
+<span class="n">username_ok</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">password_ok</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">if</span> <span class="n">username</span> <span class="o">==</span> <span class="s2">"admin"</span><span class="p">:</span>
+    <span class="n">username_ok</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">password</span> <span class="o">==</span> <span class="s2">"123456"</span><span class="p">:</span>
+    <span class="n">password_ok</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="n">username_ok</span> <span class="ow">and</span> <span class="n">password_ok</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"登录成功"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"用户名或密码错误"</span><span class="p">)</span>
+
+<span class="c1"># ===== 做法二：逻辑运算符（更简洁）=====</span>
+<span class="k">if</span> <span class="n">username</span> <span class="o">==</span> <span class="s2">"admin"</span> <span class="ow">and</span> <span class="n">password</span> <span class="o">==</span> <span class="s2">"123456"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"登录成功"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"用户名或密码错误"</span><span class="p">)</span>
+
+<span class="c1"># ===== 标志位的真正用武之地：在循环里 =====</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">91</span><span class="p">]</span>
+<span class="n">target</span> <span class="o">=</span> <span class="mi">47</span>
+
+<span class="c1"># 找出目标值的下标，找不到返回 -1</span>
+<span class="n">found_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="c1"># 标志位：记录"找到了没有"</span>
+<span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+        <span class="n">found_index</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">break</span>            <span class="c1"># 找到了就停，不必再往下看</span>
+
+<span class="c1"># 用标志位决定后续走哪条路</span>
+<span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"在索引 </span><span class="si">{</span><span class="n">found_index</span><span class="si">}</span><span class="s2"> 处找到了 </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"列表中没有 </span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 也可以不用标志位，直接判断 found_index != -1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"（等价判断）索引是 </span><span class="si">{</span><span class="n">found_index</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-6-交互式程序骨架">示例 6：交互式程序骨架</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># interactive_skeleton.py —— 所有交互程序的通用骨架</span>
+
+<span class="c1"># ===== 骨架 1：菜单循环 =====</span>
+<span class="c1"># while True + break + continue 的完整组合</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">===== 简易计算器 ====="</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"1. 加法"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"2. 减法"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"3. 退出"</span><span class="p">)</span>
+
+    <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请选择操作："</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"3"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"再见！"</span><span class="p">)</span>
+        <span class="k">break</span><span class="c1"># 唯一的出口：用户要求退出</span>
+
+    <span class="k">if</span> <span class="n">choice</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"1"</span><span class="p">,</span> <span class="s2">"2"</span><span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"无效的选项，请重新输入"</span><span class="p">)</span>
+        <span class="k">continue</span>             <span class="c1"># 回到循环开头，菜单重新打印</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入第一个数："</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入第二个数："</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"1"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"结果：</span><span class="si">{</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"结果：</span><span class="si">{</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"循环外的代码，只有 break 出来才会执行"</span><span class="p">)</span>
+
+<span class="c1"># ===== 骨架 2：多条退出路径 =====</span>
+<span class="c1"># 三个不同的条件都要能退出循环，用标志位最清晰</span>
+<span class="n">attempts_left</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">locked</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">attempts_left</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你还有 </span><span class="si">{</span><span class="n">attempts_left</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s2"> 次机会"</span><span class="p">)</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"输入 'quit' 可以放弃："</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">==</span> <span class="s2">"quit"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"你选择了放弃"</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">if</span> <span class="n">answer</span> <span class="o">!=</span> <span class="s2">"yes"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"答案错误"</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"回答正确！"</span><span class="p">)</span>
+    <span class="n">locked</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"机会用完，锁定账户"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">locked</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== 已解锁 ==="</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-7-倒计时与死循环的自救">示例 7：倒计时与死循环的自救</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># countdown.py —— while 的经典应用：倒计时</span>
+
+<span class="c1"># 1）从 5 数到 1</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">while</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"起飞！"</span><span class="p">)</span>
+
+<span class="c1"># 2）模拟"游戏存档"：一个简单的登录重试流程</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 登录重试 ---"</span><span class="p">)</span>
+<span class="n">max_attempts</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">current_attempt</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">correct_password</span> <span class="o">=</span> <span class="s2">"python2024"</span>
+
+<span class="k">while</span> <span class="n">current_attempt</span> <span class="o">&lt;</span> <span class="n">max_attempts</span><span class="p">:</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入密码："</span><span class="p">)</span>
+    <span class="n">current_attempt</span> <span class="o">+=</span> <span class="mi">1</span><span class="c1"># 先计数，这样"最后一次"的判断才准</span>
+
+    <span class="k">if</span> <span class="n">password</span> <span class="o">==</span> <span class="n">correct_password</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"登录成功！"</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="n">max_attempts</span> <span class="o">-</span> <span class="n">current_attempt</span>
+        <span class="k">if</span> <span class="n">remaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"密码错误，还有 </span><span class="si">{</span><span class="n">remaining</span><span class="si">}</span><span class="s2"> 次机会"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"机会用尽，账户已锁定"</span><span class="p">)</span>
+
+<span class="c1"># 3）===== 调试死循环的救命技巧 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 死循环调试法 ---"</span><span class="p">)</span>
+<span class="c1"># 如果 while 停不下来，先在循环体第一行加 print 观察变量：</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"当前 i = </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># 关键：这行告诉你 i 到底变没变</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1"># 如果输出一直是"当前 i = 0"，说明你根本没写 i += 1，</span>
+<span class="c1"># 或者写在了缩进错误的位置（比如写到了 while 外面）。</span>
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 6-1【三步模板转换】</strong>
+🌐 写 <code>input_practice.py</code>，要求：
+1. 读取用户输入的姓名（字符串）
+2. 读取用户输入的出生年份（<strong>要转成整数</strong>）
+3. 读取用户输入的身高（<strong>要转成小数</strong>）
+4. 计算用户 2026 年的年龄，输出"你好，XXX，你今年 XX 岁，身高 X.XX 米"
+5. 如果年龄小于 0，额外输出"年龄输入有误"</p>
+<p><strong>练习 6-2【数字累加到 N】</strong>
+🌐 读取用户输入的一个整数 <code>n</code>，用 <code>while</code> 循环计算并输出 <code>1 + 2 + 3 + ... + n</code> 的和。
+输入 <code>10</code> → 输出 <code>55</code>
+进阶：用 <code>for</code> 再写一遍，对比两种写法。</p>
+<p><strong>练习 6-3【倍数输出】</strong>
+用 <code>while</code> 循环输出 1–50 之间所有 7 的倍数，每个一行。
+再用 <code>while</code> 输出 1–50 之间所有同时是 3 和 5 的倍数。</p>
+<p><strong>练习 6-4【break 找数】</strong>
+给定 <code>numbers = [12, 5, 33, 7, 91, 26]</code>，用循环找出第一个大于 30 的数：
+- 找到就用 <code>break</code> 停下，并输出它的<strong>下标</strong>和<strong>值</strong>
+- 如果一个都没有，输出"没有找到"
+提示：<code>enumerate()</code> 可以同时拿到下标和值。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 6-5🌐【猜数字游戏（完整版）】</strong>
+这是本单元最重要的练习，也是单元 11 关卡验收的项目之一。
+要求：
+1. 程序随机生成一个 1–100 的整数（<code>import random</code> → <code>random.randint(1, 100)</code>）
+2. 用 <code>while True</code> 循环持续读取用户猜测
+3. 猜对了输出"恭喜你猜对了！一共猜了 X 次"，用 <code>break</code> 跳出
+4. 猜错了给出提示：
+   - 猜的数字太大 → "太大了，再小一点"
+   - 猜的数字太小 → "太小了，再大一点"
+5. 提供退出方式：用户输入 <code>q</code> 或 <code>quit</code> 时，用 <code>break</code> 结束游戏
+6. 统计用户的猜测次数</p>
+<p><strong>练习 6-6【while...else 重试机制】</strong>
+设计一个"输密码"程序：
+- 正确密码是 <code>"py2026"</code>，最多 3 次机会
+- 用 <code>while ... else</code> 结构实现：猜满 3 次仍未正确，输出"账户锁定"并落进 <code>else</code>
+- 输入 <code>"exit"</code> 可以主动放弃
+- 每次失败后提示剩余机会</p>
+<p><strong>练习 6-7🌐【输入校验循环】</strong>
+写一个"读入有效正整数"的健壮程序：
+- 提示用户输入一个正整数
+- 如果输入的不是数字（<code>ValueError</code>），输出提示并要求重新输入
+- 如果输入的是 0 或负数，输出"请输入大于 0 的整数"并重新输入
+- 拿到有效输入后输出"你输入的数是 X"，结束循环
+要求：用 <code>while True</code> + <code>break</code> 骨架，校验逻辑先感受一下即可（单元 9 会正式讲 <code>try/except</code>，这里允许用 <code>try/except</code>，也允许用 <code>.isdigit()</code>）。</p>
+<p><strong>练习 6-8【嵌套 while：九九乘法表前 3 行】</strong>
+用嵌套 <code>while</code> 循环输出九九乘法表的前 3 行：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="mi">1</span><span class="err">×</span><span class="mi">1</span><span class="o">=</span><span class="mi">1</span>
+<span class="mi">1</span><span class="err">×</span><span class="mi">2</span><span class="o">=</span><span class="mi">2</span>   <span class="mi">2</span><span class="err">×</span><span class="mi">2</span><span class="o">=</span><span class="mi">4</span>
+<span class="mi">1</span><span class="err">×</span><span class="mi">3</span><span class="o">=</span><span class="mi">3</span>   <span class="mi">2</span><span class="err">×</span><span class="mi">3</span><span class="o">=</span><span class="mi">6</span>   <span class="mi">3</span><span class="err">×</span><span class="mi">3</span><span class="o">=</span><span class="mi">9</span>
+</code></pre>
+<p>提示：外层循环控制行号，内层循环控制每行有几个式子。
+<strong>注意观察</strong>：内层循环的变量在每轮外层循环开始时必须重置，否则会出错——这是嵌套循环最经典的 bug。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-6-1">参考答案 6-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># input_practice.py —— input 三步模板完整应用</span>
+
+<span class="c1"># 第 1 步 + 第 2 步：读取并转换类型</span>
+<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的姓名："</span><span class="p">)</span>
+<span class="n">birth_year</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的出生年份："</span><span class="p">))</span>
+<span class="n">height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的身高（米）："</span><span class="p">))</span>
+
+<span class="c1"># 第 3 步：参与运算</span>
+<span class="n">current_year</span> <span class="o">=</span> <span class="mi">2026</span>
+<span class="n">age</span> <span class="o">=</span> <span class="n">current_year</span> <span class="o">-</span> <span class="n">birth_year</span>
+
+<span class="c1"># 用 f-string 输出</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你好，</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">，你今年 </span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2"> 岁，身高 </span><span class="si">{</span><span class="n">height</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 米"</span><span class="p">)</span>
+
+<span class="c1"># 附加校验</span>
+<span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"年龄输入有误：出生年份不能大于今年"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">age</span> <span class="o">&gt;</span> <span class="mi">120</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"年龄输入有误：超过 120 岁"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">height</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"身高数据无效"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"验证通过：</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">，</span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2"> 岁，</span><span class="si">{</span><span class="n">height</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> 米"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-6-2">参考答案 6-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># sum_to_n.py —— while 与 for 两种写法的对比</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">"请输入一个正整数 n："</span><span class="p">))</span>
+
+<span class="c1"># ===== while 写法 =====</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">:</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">i</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"while 写法：1 到 </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> 的和是 </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== for 写法（更简洁，因为次数已知）=====</span>
+<span class="n">total2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"for 写法：1 到 </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> 的和是 </span><span class="si">{</span><span class="n">total2</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 另一种 while 写法：用累加器技巧 =====</span>
+<span class="n">total3</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="n">n</span>
+<span class="k">while</span> <span class="n">counter</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">total3</span> <span class="o">+=</span> <span class="n">counter</span>
+    <span class="n">counter</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"倒着加：</span><span class="si">{</span><span class="n">total3</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 验证几个固定答案</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n=</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> 时和为 </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># n=1 -&gt; 1, n=5 -&gt; 15, n=10 -&gt; 55, n=100 -&gt; 5050</span>
+</code></pre>
+<h3 id="参考答案-6-3">参考答案 6-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># multiples.py —— 用 while 输出倍数</span>
+
+<span class="c1"># 1）1–50 之间所有 7 的倍数</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 7 的倍数 ---"</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># 更简洁的等价写法：用 while 变量本身就以 7 为步长</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 7 的倍数（步长版）---"</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">7</span>
+
+<span class="c1"># 2）1–50 之间同时是 3 和 5 的倍数（即 15 的倍数）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 同时是 3 和 5 的倍数 ---"</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="c1"># 输出：15 30 45</span>
+
+<span class="c1"># 也可以用"lcm"（最小公倍数）的思路：15 的倍数就是答案</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 15 的倍数 ---"</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">50</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">15</span>
+
+<span class="c1"># 顺带做一个和：1–100 之间所有 7 的倍数之和</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="k">while</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">:</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">7</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"7 的倍数之和：</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>   <span class="c1"># 7+14+...+98 = 735</span>
+</code></pre>
+<h3 id="参考答案-6-4">参考答案 6-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># find_first.py —— 用 break 找第一个符合条件的数</span>
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">26</span><span class="p">]</span>
+
+<span class="c1"># ===== 写法一：用标志位（能表达"没找到"的情况）=====</span>
+<span class="n">target_value</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">found_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">number</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="n">target_value</span><span class="p">:</span>
+        <span class="n">found_index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">break</span>                <span class="c1"># 找到第一个就停</span>
+
+<span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第一个大于 </span><span class="si">{</span><span class="n">target_value</span><span class="si">}</span><span class="s2"> 的数是 </span><span class="si">{</span><span class="n">numbers</span><span class="p">[</span><span class="n">found_index</span><span class="p">]</span><span class="si">}</span><span class="s2">，"</span>
+          <span class="sa">f</span><span class="s2">"下标是 </span><span class="si">{</span><span class="n">found_index</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"没有找到大于 </span><span class="si">{</span><span class="n">target_value</span><span class="si">}</span><span class="s2"> 的数"</span><span class="p">)</span>
+
+<span class="c1"># ===== 写法二：用一个哨兵值（-1）表达"没找到" =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_first</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回第一个大于 limit 的元素及其下标，都找不到时返回 (None, -1)。"""</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">&gt;</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">item</span><span class="p">,</span> <span class="n">index</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+
+
+<span class="n">result</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">find_first</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"没有找到"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"找到 </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">，下标 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ===== 测试边界情况：全部都小于阈值 =====</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">find_first</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">100</span><span class="p">))</span>    <span class="c1"># (None, -1)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">find_first</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">30</span><span class="p">))</span>    <span class="c1"># (50, 1)</span>
+</code></pre>
+<h3 id="参考答案-6-5">参考答案 6-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># guess_number.py —— 完整的猜数字游戏</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">play_guess_number</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""启动猜数字游戏主流程。"""</span>
+    <span class="c1"># 生成 1–100 的随机整数</span>
+    <span class="n">secret</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>             <span class="c1"># 记录猜测历史，方便复盘</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"欢迎来到猜数字游戏！"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"我已经想好了一个 1 到 100 之间的整数"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"输入 'quit' 可以随时退出"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+
+    <span class="c1"># ===== 标准骨架：while True + 唯一出口 break =====</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"请输入你的猜测（1-100）："</span><span class="p">)</span>
+
+        <span class="c1"># 退出通道：用户主动结束</span>
+        <span class="k">if</span> <span class="n">raw</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"quit"</span><span class="p">,</span> <span class="s2">"q"</span><span class="p">,</span> <span class="s2">"exit"</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"游戏已退出，答案是"</span><span class="p">,</span> <span class="n">secret</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"你的猜测记录："</span><span class="p">,</span> <span class="n">history</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="c1"># 把字符串转成整数，转换失败就重新问</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">guess</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s2">' 不是有效数字，请重新输入"</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># 超出范围提示</span>
+        <span class="k">if</span> <span class="n">guess</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">guess</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"请输入 1 到 100 之间的数字"</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">guess</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">guess</span> <span class="o">&lt;</span> <span class="n">secret</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"太小了，再大一点（第 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次猜测）"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">guess</span> <span class="o">&gt;</span> <span class="n">secret</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"太大了，再小一点（第 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次猜测）"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"恭喜你猜对了！答案就是 </span><span class="si">{</span><span class="n">secret</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你一共猜了 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你的猜测记录：</span><span class="si">{</span><span class="n">history</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+            <span class="k">break</span>                   <span class="c1"># 猜对了，唯一的正常出口</span>
+
+    <span class="k">return</span> <span class="n">count</span>
+
+
+<span class="c1"># 游戏结束后统计一下平均猜测次数</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="p">[</span><span class="n">play_guess_number</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"本次游戏共猜了 </span><span class="si">{</span><span class="n">counts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-6-6">参考答案 6-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># password_retry.py —— 用 while...else 实现重试机制</span>
+
+<span class="n">correct_password</span> <span class="o">=</span> <span class="s2">"py2026"</span>
+<span class="n">max_attempts</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">attempt</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">while</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="n">max_attempts</span><span class="p">:</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="sa">f</span><span class="s2">"请输入密码（还可尝试 </span><span class="si">{</span><span class="n">max_attempts</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">attempt</span><span class="si">}</span><span class="s2"> 次）："</span><span class="p">)</span>
+    <span class="n">attempt</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># 主动放弃</span>
+    <span class="k">if</span> <span class="n">password</span> <span class="o">==</span> <span class="s2">"exit"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"你选择了放弃本次输入"</span><span class="p">)</span>
+        <span class="k">break</span>
+
+    <span class="k">if</span> <span class="n">password</span> <span class="o">==</span> <span class="n">correct_password</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"密码正确！你在第 </span><span class="si">{</span><span class="n">attempt</span><span class="si">}</span><span class="s2"> 次尝试时成功登录"</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"密码错误"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># 只有循环正常走完（尝试满 3 次都没 break）才会到这里</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"错误次数已达上限，账户被锁定"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">30</span><span class="p">)</span>
+
+<span class="c1"># ===== 对比：如果不用 while...else，长什么样 =====</span>
+<span class="c1"># 需要一个额外的标志位来记住"是不是正常走完的"</span>
+<span class="c1"># attempt &lt; max_attempts 这个循环结束后，</span>
+<span class="c1"># 如果 attempt == max_attempts，说明三次都错了</span>
+<span class="n">attempt2</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">attempt2</span> <span class="o">&lt;</span> <span class="n">max_attempts</span><span class="p">:</span>
+    <span class="n">pwd</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"密码："</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pwd</span> <span class="o">==</span> <span class="s2">"exit"</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">if</span> <span class="n">pwd</span> <span class="o">==</span> <span class="n">correct_password</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"成功"</span><span class="p">)</span>
+        <span class="k">break</span>
+    <span class="n">attempt2</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">if</span> <span class="n">attempt2</span> <span class="o">==</span> <span class="n">max_attempts</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"账户锁定"</span><span class="p">)</span>
+<span class="c1"># 结论：while...else 把"是否正常结束"这件事表达得干净得多</span>
+</code></pre>
+<h3 id="参考答案-6-7">参考答案 6-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># input_validation.py —— 读入一个有效的正整数</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"请输入一个正整数："</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"&gt; "</span><span class="p">)</span>
+
+    <span class="c1"># ===== 方式一：try/except（推荐，单元 9 会正式讲）=====</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"'</span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s2">' 不是有效的整数，请重新输入"</span><span class="p">)</span>
+        <span class="k">continue</span>             <span class="c1"># 回到循环开头重新要一次</span>
+
+    <span class="c1"># 整数校验通过，再检查范围</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"请输入大于 0 的整数"</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># 到这里说明输入完全合法，用 break 跳出无限循环</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你输入的数是 </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"程序继续往下执行，说明已经拿到了有效输入"</span><span class="p">)</span>
+
+<span class="c1"># ===== 方式二：不用 try，用 str.isdigit() =====</span>
+<span class="c1"># 注意 isdigit() 的局限：</span>
+<span class="c1">#   "12".isdigit()    -&gt; True</span>
+<span class="c1">#   "-12".isdigit()   -&gt; False  （负号不是数字字符）</span>
+<span class="c1">#   "1.5".isdigit()   -&gt; False  （小数点不是数字字符）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 用 isdigit 的版本 ---"</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"&gt; "</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">raw</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"请输入纯数字"</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"请输入大于 0 的整数"</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"你输入的数是 </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">break</span>
+</code></pre>
+<h3 id="参考答案-6-8">参考答案 6-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># multiplication_table.py —— 嵌套 while 循环</span>
+
+<span class="c1"># 完整九九乘法表</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 完整九九乘法表 ---"</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">:</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">:</span>                     <span class="c1"># 内层：每行输出 i 个式子</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">×</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">()</span><span class="c1"># 换行，让下一个 i 另起一行</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># 只输出前 3 行</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 前 3 行 ---"</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">×</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># ===== 嵌套循环的经典 bug：内层变量没重置 =====</span>
+<span class="c1"># 下面这段会输出错误结果</span>
+<span class="c1"># i = 1</span>
+<span class="c1"># while i &lt;= 3:</span>
+<span class="c1">#     j = 1</span>
+<span class="c1">#     while j &lt;= i:</span>
+<span class="c1">#         print(j, end=" ")</span>
+<span class="c1">#         j += 1</span>
+<span class="c1">#     print()</span>
+<span class="c1">#     # 忘记写 j = 1，第二轮 i=2 时 j 已经是 2，循环一次都不执行</span>
+<span class="c1">#     i += 1</span>
+
+<span class="c1"># 正确写法：内层循环的变量必须在每轮外层循环里重新初始化</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- 固定版---"</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>                 <span class="c1"># 关键：每轮外层循环开始时重置</span>
+    <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">×</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">j</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="c1"># 观察输出：</span>
+<span class="c1"># 1×1=1</span>
+<span class="c1"># 1×2=2   2×2=4</span>
+<span class="c1"># 1×3=3   2×3=6   3×3=9</span>
+</code></pre>
+<hr>
+<h2 id="六-本单元验收自测">六、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：下面代码输出什么？</p>
+<pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="n">age</span> <span class="o">=</span> <span class="s2">"20"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<blockquote>
+<p><strong>要点</strong>：会报 <code>TypeError: can only concatenate str (not "int") to str</code>。<code>input()</code> 返回的永远是字符串，<code>"20"</code> + <code>5</code> 是字符串拼接的意图但类型不允许。正确做法：<code>age = int(input(...))</code>，即 <code>int("20") + 5</code> 得 <code>25</code>。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：下面代码会输出什么？为什么？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">count</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">while</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"你好"</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：什么都不输出。<code>while</code> 是<strong>先判断条件再执行</strong>，第一次判断 <code>10 &lt; 5</code> 就是假，所以循环体一次都不执行。这是 <code>while</code> 和 <code>for</code> 的重要差别之一（<code>for</code> 在序列为空时同样不执行，但 <code>while</code> 的"不执行"发生在任何一行代码之前）。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：<code>break</code> 和 <code>continue</code> 的区别在于：<code>break</code> 结束整个循环，<code>continue</code> 只跳过本次循环。</p>
+<blockquote>
+<p><strong>要点</strong>：正确。<code>break</code> 一旦执行，整个最内层循环立即结束，控制流跳到循环之后；<code>continue</code> 立刻开始下一轮循环，本次循环体中 <code>continue</code> 之后的所有代码都不会执行。两者都只作用于<strong>最内层</strong>循环——嵌套循环里的 <code>break</code> 只能跳出内层。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：<code>while ... else</code> 中的 <code>else</code> 在什么情况下会被执行？什么情况下会被跳过？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>else</code> 块只在循环<strong>自然结束</strong>（条件变假而退出）时执行。一旦循环被 <code>break</code> 打断，<code>else</code> 就被跳过。典型用途：游戏重试机制——猜对了 <code>break</code> 走人，猜满次数没 <code>break</code> 就落进 <code>else</code> 执行"机会用完"的逻辑。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：为什么 <code>while True</code> 循环必须设计"退出"选项？写出这个骨架的关键组成部分。</p>
+<blockquote>
+<p><strong>要点</strong>：因为 <code>while True</code> 的条件永远是真，循环<strong>没有任何自动出口</strong>，唯一的出口是 <code>break</code>。如果不提供退出方式，用户会被永久困在循环里，程序也无法结束。骨架四个部分：① <code>while True:</code> 开始无限循环；② 用 <code>input()</code> 读取用户输入；③ <code>if 输入 == "退出"</code> 则 <code>break</code>；④ <code>if 输入无效</code> 则 <code>continue</code>（或 <code>continue</code> 让流程回到循环开头），末尾放一句"程序结束"作为 break 之后的出口标记。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 能默写 <code>while True</code> + <code>break</code> + <code>continue</code> 的交互骨架</li>
+<li>[ ] 能解释 <code>while</code> 与 <code>for</code> 各自的适用场景</li>
+<li>[ ] 能说出 <code>while ... else</code> 的执行条件</li>
+<li>[ ] 猜数字游戏（练习 6-5）已能独立跑通</li>
+<li>[ ] 知道死循环时怎么用 <code>print</code> 自救</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 7 讲函数——把反复写的代码打包成一个"有名字的积木"，从此不用复制粘贴。学习 <code>def</code> 定义、<code>return</code> 返回值、参数（位置参数、关键字参数、默认参数、可变参数）、以及本单元重点：<strong>参数传递的副本语义</strong>（为什么函数里修改列表会改到原列表）以及一节「常见错误清单」。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="05.html"><small>← 上一单元</small><b>单元 5 · 字典</b></a><div class="spot"><a class="pn" href="ppt/u/06.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s7"><small>课程大纲课件</small><b>阶段总览 p7 →</b></a></div><a class="pn nx" href="07.html"><small>下一单元 →</small><b>单元 7 · 函数</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

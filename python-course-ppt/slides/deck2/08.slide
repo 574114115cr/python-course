@@ -1,0 +1,86 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '420px', height: '720px', background: '#1F5FA8' }} />
+    <Box style={{ position: 'absolute', left: 0, top: 470, width: '420px', height: '250px', background: '#154477' }} />
+
+    <Box style={{ position: 'absolute', left: 56, top: 130, width: '320px', flexDirection: 'column', gap: 16 }}>
+        <Text style={{ fontSize: 150, fontWeight: 'bold', color: '#FFFFFF', lineHeight: 0.9 }}>07</Text>
+        <Box style={{ width: 90, height: 5, background: '#E08A15' }} />
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFFFFF' }}>函数</Text>
+        <Text style={{ fontSize: 16, color: '#BBD6EA', lineHeight: 1.7 }}>
+            教材第 8 章 · W7–W8<br />
+            建议安排 4 次课
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 464, top: 48, width: 760, flexDirection: 'column' }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#E08A15' }}>分水岭 · 抽象能力的第一次跳跃</Text>
+        <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#16232E', marginTop: 10, lineHeight: 1.35 }}>
+            从这里开始，代码不再是<br />「从上往下写一行算一行」
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 464, top: 168, width: 760, height: 352, flexDirection: 'column', gap: 12 }}>
+        <Box style={{ background: '#FFFFFF', borderRadius: 12, padding: '14px 20px', flexDirection: 'row', gap: 16, alignItems: 'flex-start', flex: 1 }}>
+            <Box style={{ width: 6, height: 6, borderRadius: 3, background: '#E08A15', marginTop: 9 }} />
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 4 }}>
+                <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#16232E' }}>四次课的排法</Text>
+                <Text style={{ fontSize: 14, color: '#5A6B7A', lineHeight: 1.55 }}>
+                    定义与返回值 → 位置 / 关键字实参与默认值 → 列表传参与 \*args / \*\*kwargs → 模块与导入（4 种写法）+ 函数编写指南
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{ background: '#FFFFFF', borderRadius: 12, padding: '14px 20px', flexDirection: 'row', gap: 16, alignItems: 'flex-start', flex: 1 }}>
+            <Box style={{ width: 6, height: 6, borderRadius: 3, background: '#E08A15', marginTop: 9 }} />
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 4 }}>
+                <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#16232E' }}>学员真正的卡点</Text>
+                <Text style={{ fontSize: 14, color: '#5A6B7A', lineHeight: 1.55 }}>
+                    不是「怎么定义函数」，而是「不知道该拆成几个函数」。
+                    对策：先照抄教材 3 个例子，再逐个改需求，最后才自己想拆法。
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{ background: '#FDF3E2', borderRadius: 12, padding: '14px 20px', flexDirection: 'row', gap: 16, alignItems: 'flex-start', flex: 1 }}>
+            <Box style={{ width: 6, height: 6, borderRadius: 3, background: '#D9820F', marginTop: 9 }} />
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 4 }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#8A5A08' }}>常见错误清单</Text>
+                <Text style={{ fontSize: 14, color: '#5A6B7A', lineHeight: 1.55 }}>
+                    函数里改列表会改到原列表 · 默认参数写成可变对象 · 误以为实参被修改就是 bug · 不知道返回值才是函数真正的输出
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 464, top: 534, width: 760, height: 84,
+        background: '#16232E', borderRadius: 12, padding: '0 24px',
+        flexDirection: 'row', alignItems: 'center', gap: 18,
+    }}>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E8B36A' }}>动手项目</Text>
+        <Text style={{ fontSize: 16, color: '#D6E4F0', lineHeight: 1.6 }}>
+            魔方消息 8.1–8.3 · 星际争霸 8.4–8.6 · 鸡尾酒 8.7<br />
+            产出 3 个可复用函数 + 2 个自定义模块
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', left: 40, top: 466, width: '340px', height: 186,
+        background: '#0F3E6E', borderRadius: 10, padding: '20px 22px',
+        flexDirection: 'column', gap: 10, justifyContent: 'space-between',
+    }}>
+        <Text style={{ fontSize: 14, color: '#8FB4D8', fontWeight: 'bold' }}>为什么这里最难教</Text>
+        <Text style={{ fontSize: 15, color: '#D6E4F0', lineHeight: 1.65 }}>
+            前面所有章节都是「想清楚再写」，函数是第一次要求在动手前就决定代码结构。
+            这种能力讲不出来，只能靠反复拆解和重构练出来。
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', right: 64, bottom: 24, flexDirection: 'row', gap: 40 }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>08 / 23</Text>
+    </Box>
+</Slide>

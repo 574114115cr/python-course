@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python 学习路线图 · 从入门到独立做项目</title>
+<meta name="theme-color" content="#1f5fa8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f7f8fa; --card:#ffffff; --line:#e3e6ec; --text:#1f2328; --muted:#656d76;
+  --p1:#2f6feb; --p1bg:#eef3fe; --p2:#0f9b6c; --p2bg:#e8f7f1; --p3:#b8720a; --p3bg:#fdf3e2;
+  --warn:#d1394b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.65}
+.wrap{max-width:1120px;margin:0 auto;padding:32px 20px 80px}
+header h1{margin:0 0 6px;font-size:28px}
+.sub{color:var(--muted);margin:0 0 24px;font-size:14px}
+.params{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:28px}
+.param{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.param b{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em}
+.param span{font-size:15px;font-weight:600}
+
+.bar{position:sticky;top:0;z-index:9;background:rgba(247,248,250,.94);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 0 12px;margin-bottom:24px}
+.bar-in{max-width:1120px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:14px}
+.track{flex:1;height:9px;background:#e6e9ef;border-radius:9px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));transition:width .25s}
+.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 11px;
+  font-size:12px;cursor:pointer;color:var(--muted)}
+.btn:hover{border-color:#c9cfd9;color:var(--text)}
+
+section{margin-bottom:34px}
+h2{font-size:19px;margin:0 0 4px;display:flex;align-items:center;gap:9px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.hint{color:var(--muted);font-size:13px;margin:0 0 16px}
+
+.stage{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:20px;margin-bottom:16px}
+.stage.s1{border-left:4px solid var(--p1)}
+.stage.s2{border-left:4px solid var(--p2)}
+.stage.s3{border-left:4px solid var(--p3)}
+.meta{font-size:12px;color:var(--muted);margin-bottom:14px}
+
+.grid{display:grid;gap:10px}
+.chk{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);
+  border-radius:10px;padding:11px 13px;background:#fcfcfd;transition:.15s}
+.chk:hover{border-color:#c9cfd9}
+.chk.done{background:#f6faf8;border-color:#cfe8de}
+.chk.done .t{text-decoration:line-through;color:#93a0ab}
+.chk input{margin-top:4px;width:16px;height:16px;accent-color:var(--p2);cursor:pointer;flex-shrink:0}
+.t{font-weight:600;font-size:14.5px;display:block}
+.d{font-size:13px;color:var(--muted);display:block;margin-top:2px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+  padding:2px 7px;border-radius:20px;margin-left:8px;vertical-align:1.5px}
+.tag.out{background:var(--p3bg);color:var(--p3)}
+.tag.gate{background:#fdeef0;color:var(--warn)}
+
+.gate-box{background:#fff8f8;border:1px dashed #e9b8bf;border-radius:10px;padding:13px 15px;margin-top:14px}
+.gate-box h4{margin:0 0 7px;font-size:13.5px;color:var(--warn)}
+.gate-box ol{margin:0;padding-left:20px;font-size:13.5px;color:#4a3b3e}
+.gate-box li{margin:3px 0}
+
+.tip{background:#fffdf5;border:1px solid #eee3c4;border-radius:10px;padding:13px 15px;font-size:13.5px}
+.tip b{color:#8a6d1f}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--muted);font-weight:600}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+@media (max-width:640px){.wrap{padding:20px 14px 60px}.stage{padding:15px}}
+.qbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:16px 0 0;font-size:13.5px}
+.qbar span{color:var(--muted)}
+.qbar a{background:#fff;border:1px solid var(--line);border-radius:7px;
+padding:5px 11px;font-weight:600;color:var(--p1)}
+.qbar a:hover{background:#f2f7fd;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <span class="count" id="txt">0 / 0</span>
+  <div class="track"><div class="fill" id="fill"></div></div>
+  <button class="btn" id="reset">重置进度</button>
+</div></div>
+
+<div class="wrap">
+<header>
+  <h1>Python 学习路线图</h1>
+  <p class="sub">依据《Python 编程：从入门到实践（第 3 版）》· 中文版全 20 章 + 附录 A–E · 零基础 → 能独立完成并交付完整项目</p>
+
+  <div class="qbar">
+    <span>配套：</span>
+    <a href="web/ppt/index.html">课程课件 23 页</a>
+    <a href="web/lessons/index.html">111 节课节页</a>
+    <a href="python-course-syllabus.html">总课表</a>
+  </div>
+</header>
+
+<div class="params">
+  <div class="param"><b>目标</b><span>独立做小项目</span></div>
+  <div class="param"><b>当前基础</b><span>零基础</span></div>
+  <div class="param"><b>节奏</b><span>不设期限 · 每周 1 单元</span></div>
+  <div class="param"><b>预计总周期</b><span>约 30–40 周</span></div>
+</div>
+
+<!-- ============ 阶段 0 ============ -->
+<section class="stage s1">
+  <h2><i class="dot" style="background:var(--p1)"></i>阶段 0 · 环境与工具</h2>
+  <p class="meta">Week 0 · 只花一个下午，但跳过它后面每一步都会疼</p>
+  <div class="grid">
+    <label class="chk"><input type="checkbox"><span class="t">装 Python 3.12+<span class="d">官方安装包，勾选 "Add Python to PATH"（对应附录 A.1）</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">装 VS Code + Python 扩展<span class="d">读附录 B.1，掌握运行/调试快捷键</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">跑通第一个脚本<span class="d">新建 hello.py，能在终端运行并理解报错长什么样</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">建第一个 Git 仓库<span class="d">读附录 D：init / status / add / commit / log，配好 .gitignore</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">建学习仓库结构<span class="d">exercises/ 每章一文件夹、projects/ 放项目、notes/ 写笔记</span></span></label>
+  </div>
+</section>
+
+<!-- ============ 阶段 1 ============ -->
+<section class="stage s1">
+  <h2><i class="dot" style="background:var(--p1)"></i>阶段 1 · 语法基础（第 1–11 章）</h2>
+  <p class="meta">约 11–13 周 · 每周 1 章 · 占比 ~35%</p>
+  <p class="hint">每章固定闭环：<b>读章节 → 敲完全部代码 → 做完全部「动手练 Try it yourself」→ 完成「动手项目」→ 合上书自测 5 问</b>。四项缺一不可。</p>
+  <div class="grid">
+    <label class="chk"><input type="checkbox"><span class="t">第 1 章 搭建环境<span class="d">编辑器 + 打印语句 + 变量命名。产出：一个自我介绍脚本</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 2 章 变量与简单数据类型<span class="d">字符串/整数/浮点数。动手项目：个人偏好调查（3.1–3.13）</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 3 章 列表简介<span class="d">增删改查、sort/sorted/len、索引从 0 开始</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 4 章 操作列表<span class="d">for 循环、range、<b>列表推导式</b>、切片、元组、PEP 8 缩进。<b>动手项目：忘记密码清单 3.4–3.8</b></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 5 章 if 语句<span class="d">条件测试、布尔表达式、多分支</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 6 章 字典<span class="d">增删改查、遍历、嵌套。<b>动手项目：生日调查 6.1–6.3</b></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 7 章 用户输入和 while 循环<span class="d">input()/int()/求模、标志、break/continue、<b>避免无限循环</b>。<b>动手项目：投票统计 7.5–7.9 / 收银机模拟 7.10</b></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 8 章 函数<span class="d">位置/关键字实参、默认值、返回值、\*args/\*\*kwargs、<b>模块与导入</b>。<b>动手项目：魔方消息 8.1–8.3 / 星际争霸 8.4–8.6 / 鸡尾酒 8.7</b></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 9 章 类<span class="d">实例/属性/方法、继承、重写、导入类、标准库、<b>类的编程风格</b>。自建 3 个小类练手：学生记录 / 购物车 / 银行账户</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 10 章 文件和异常<span class="d">读写文件、with、异常 try/except/else、JSON。<b>动手项目：学习笔记管理 10.1–10.13</b></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">第 11 章 测试代码<span class="d">pip 装 pytest、测试函数、测试类。<b>动手项目：投票分析器测试 11.1–11.3</b></span></span></label>
+  </div>
+  <div class="gate-box">
+    <h4>关卡 1 · 不达标别进阶段 2</h4>
+    <ol>
+      <li>合上书，10 分钟内手写一个"猜数字"游戏（while + input + if + 随机数）</li>
+      <li>手写一个含 <code>__init__</code>、方法、继承的类，并能解释 <code>self</code> 是什么</li>
+      <li>用 pytest 给第 11 章的函数写 3 条测试并全部通过</li>
+      <li>能读懂并修复一个 30 行 Python 脚本里的 <code>IndentationError</code> / <code>NameError</code></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 阶段 2 ============ -->
+<section class="stage s2">
+  <h2><i class="dot" style="background:var(--p2)"></i>阶段 2 · 项目实践（第 12–20 章）</h2>
+  <p class="meta">约 14–20 周 · 教材主战场 · 占比 ~50%</p>
+  <p class="hint">每个项目统一走工程流程：<b>读需求 → 自己先拆解（别急着抄）→ 查官方文档 → 编码 → git 提交 → 写 README → 重构</b>。每个小节一次 commit。</p>
+
+  <h3 style="font-size:15px;margin:20px 0 8px">项目一 · 外星人入侵（第 12–14 章）· 建议 6–8 周</h3>
+  <div class="grid">
+    <label class="chk"><input type="checkbox"><span class="t">12.1–12.3 项目规划 · 装 Pygame · 空窗口<span class="d">**产出**：能弹出并关闭的空白游戏窗口</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">12.4–12.5 飞船图像 · 重构 _check_events() / _update_screen()<span class="d">**关键**：学会用方法拆分 200 行文件</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">12.6 驾驶飞船<span class="d">方向键/左右键 + 屏幕边界限制</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">12.8 射击<span class="d">Bullet 类、发射位置、回收子弹</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">13.2–13.4 外星人类 · 外星舰队 · 移动<span class="d">group / rect / 边缘检测；动态调整舰队</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">13.5–13.7 击落外星人 · 结束游戏 · **确定只运行部分模块**<span class="d">**这是全书最重要的一节**：学会把大项目切成可单测的小块</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">14.1–14.4 Play 按钮 · 难度递增 · 记分板<span class="d">**产出**：完整可玩的游戏 + 计分存档</span></span></label>
+  </div>
+
+  <h3 style="font-size:15px;margin:22px 0 8px">项目二 · 数据可视化（第 15–17 章）· 建议 4–5 周</h3>
+  <div class="grid">
+    <label class="chk"><input type="checkbox"><span class="t">15.1–15.2 装 Matplotlib · 画折线图<span class="d">**产出**：年度温度折线图（动手项目 15.1–15.2）</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">15.3 随机游走<span class="d">**动手项目 15.3**：模拟随机漫步 / 分子运动 / 骰子</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">15.4 Plotly 模拟掷骰子<span class="d">首次接触交互式图表</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">16.1 CSV · 16.2 GeoJSON 全球地震散点图<span class="d">**动手项目 16.1–16.2**：缺失值处理、时间序列标注、地图绘制</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">17.1–17.2 使用 API + Plotly 可视化仓库<span class="d">**动手项目 17.1**：GitHub 最活跃 Python 仓库星标对比</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">17.3–17.4 Hacker News API<span class="d">**动手项目 17.2**：读写 API、404 处理、分页</span></span></label>
+  </div>
+
+  <h3 style="font-size:15px;margin:22px 0 8px">项目三 · Web 应用「学习笔记」（第 18–20 章）· 建议 6–8 周</h3>
+  <div class="grid">
+    <label class="chk"><input type="checkbox"><span class="t">18.1–18.2 Django 入门：建项目 · 创建应用<span class="d">**产出**：可运行的空白 Django 项目 + 18.2 动手项目「users」</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">18.3–18.4 建模 · URL · 模板 · 表单<span class="d">**动手项目 18.3–18.7**：Topic / Entry 模型、主页、新增/编辑/删除条目</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">19.1–19.4 用户账户 · 数据隔离<span class="d">注册/登录/退出、限制用户只能看自己的条目。<b>安全课：CSRF 到底在防什么</b></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">20.1 设置样式（Bootstrap）<span class="d">**动手项目 20.1**：模板继承、nav 栏、响应式</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">20.2 部署到线上<span class="d">Platform.sh（第 3 版已不用 Heroku）：requirements.txt、<b>.platform.app.yaml</b> / <b>.platform.routes.yaml</b>、platformshconfig 双环境判断、git push、<b>定制错误页</b>。题注：ALLOWED_HOSTS / DEBUG / collectstatic 是三大必踩坑</span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">+ 自选扩展<span class="d">把第 15–17 章的 matplotlib 图表嵌进 Django 页面，形成你自己的"数据看板"（推荐，最能体现项目能力）</span></span></label>
+  </div>
+
+  <div class="gate-box">
+    <h4>关卡 2 · 判定"能独立做项目"</h4>
+    <ol>
+      <li>3 个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt</li>
+      <li>学习笔记已部署上线，公网可访问，错误页已定制</li>
+      <li>能用 pytest 给自己的函数写测试并跑过</li>
+      <li>接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 阶段 3 ============ -->
+<section class="stage s3">
+  <h2><i class="dot" style="background:var(--p3)"></i>阶段 3 · 工程能力补齐</h2>
+  <p class="meta">与阶段 2 并行穿插 · 占比 ~15% · 教材刻意不讲，但决定你是"会写代码的人"还是"会交付软件的人"</p>
+  <div class="grid">
+    <label class="chk"><input type="checkbox"><span class="t">虚拟环境与依赖管理<span class="d">python -m venv / pip install / requirements.txt / .gitignore<span class="tag out">教材外</span></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">Git 进阶<span class="d">分支（git switch -c）、合并、解决冲突、tag。附录 D 只是入门<span class="tag out">教材外</span></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">调试与读 traceback<span class="d">断点调试、%p / print 断点法、异常链路逐层读<span class="tag out">教材外</span></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">代码组织与重构<span class="d">一个文件超 300 行就拆模块、config 与逻辑分离、PEP 8 与类型注解入门<span class="tag out">教材外</span></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">读文档能力<span class="d">附录 C.2：官方文档 / 库文档 / Stack Overflow 检索法<span class="tag out">教材外</span></span></span></label>
+    <label class="chk"><input type="checkbox"><span class="t">继续深造选方向<span class="d">按兴趣挑一条：FastAPI/Flask 后端 · pandas 数据分析 · 网络爬虫（注意 robots.txt）· 算法与 LeetCode</span></span></span></label>
+  </div>
+</section>
+
+<!-- ============ 卡点 ============ -->
+<section class="stage">
+  <h2>常见卡点与对策</h2>
+  <table>
+    <tr><th style="width:34%">卡在哪</th><th>为什么</th><th style="width:38%">怎么办</th></tr>
+    <tr><td>第 4–7 章（列表→if→while）</td><td>语法密度陡增，缩进错误多</td><td>回头重做"动手练"，一道题写三遍</td></tr>
+    <tr><td>第 8 章 函数</td><td>抽象思维跳跃，卡在"不知道该拆成几个函数"</td><td>先抄 3 个教材例子，再自己改需求</td></tr>
+    <tr><td>第 9 章 类</td><td>零基础最劝退的一章</td><td>允许慢 2 周；照着"学生/购物车/账户"自己造 3 个类</td></tr>
+    <tr><td>外星人入侵卡住</td><td>pygame 报错信息难读、代码量大</td><td>执行 13.7 节：逐模块单跑；先跑示例项目</td></tr>
+    <tr><td>Django 安装报错</td><td>版本/依赖冲突</td><td>建虚拟环境再装；严格按教材版本；查附录 E</td></tr>
+    <tr><td>学不下去</td><td>战线拉太长，失去反馈</td><td>切回短周期：只做 12.3 空白窗口，2 天内见效</td></tr>
+  </table>
+</section>
+
+<footer>
+  依据：Matthes《Python Crash Course, 3rd Edition》中文版实际结构 —— 上篇 1–11 章语法，下篇 12–14 章 pygame、15–17 章数据可视化、18–20 章 Django，附录 A 安装 / B 编辑器 / C 排错 / D Git / E 部署排错。<br>
+  进度保存在本浏览器本地（localStorage），换设备需重新勾选。
+</footer>
+</div>
+
+<script>
+(function(){
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk input'));
+  var KEY = 'py-roadmap-3e-v1';
+  var fill = document.getElementById('fill');
+  var txt  = document.getElementById('txt');
+
+  function render(){
+    var done = boxes.filter(function(b){return b.checked;}).length;
+    var pct  = boxes.length ? Math.round(done/boxes.length*100) : 0;
+    fill.style.width = pct + '%';
+    txt.textContent = done + ' / ' + boxes.length + ' 项完成 · ' + pct + '%';
+  }
+  function save(){
+    render();
+    try{ localStorage.setItem(KEY, JSON.stringify(boxes.map(function(b){return b.checked;}))); }catch(e){}
+  }
+
+  var saved;
+  try{ saved = JSON.parse(localStorage.getItem(KEY) || 'null'); }catch(e){ saved = null; }
+  if (Array.isArray(saved) && saved.length === boxes.length){
+    boxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+  }
+
+  boxes.forEach(function(b){
+    b.addEventListener('change', function(){
+      b.closest('.chk').classList.toggle('done', b.checked);
+      save();
+    });
+    b.closest('.chk').classList.toggle('done', b.checked);
+  });
+
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(b){ b.checked = false; b.closest('.chk').classList.remove('done'); });
+    save();
+  });
+
+  render();
+})();
+</script>
+<script>
+/* PWA：注册 Service Worker（http(s) 下生效；file:// 打开便携版时注册失败属预期，静默跳过） */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(function(){});
+  });
+}
+</script>
+<script src="web/media/bgm.js" defer></script>
+</body>
+</html>

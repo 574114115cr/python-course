@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python 学习中枢 · 从入门到独立做项目</title>
+<meta name="theme-color" content="#1f5fa8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f8fb; --card:#ffffff; --line:#e3e8ef; --text:#16232e; --muted:#5f7183;
+  --p1:#1f5fa8; --p1bg:#eaf1fb; --p2:#0e9b78; --p2bg:#e6f6f0; --p3:#e08a15; --p3bg:#fdf3e2;
+  --danger:#d1394b; --dangerbg:#fdeef0;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.68}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px 90px}
+a{color:inherit;text-decoration:none}
+
+/* ── 导航 ── */
+.nav{position:sticky;top:0;z-index:50;background:rgba(246,248,251,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line)}
+.nav-in{max-width:1240px;margin:0 auto;padding:0 24px;height:60px;
+  display:flex;align-items:center;gap:26px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;white-space:nowrap}
+.logo i{width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg,var(--p1),var(--p2));display:block}
+.nav-links{display:flex;gap:20px;flex:1;overflow-x:auto}
+.nav-links a{font-size:14px;color:var(--muted);white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+.nav-links a:hover{color:var(--p1);border-bottom-color:var(--p1)}
+.nav-prog{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ── Hero ── */
+.hero{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 30px;
+  background:linear-gradient(135deg,#1f5fa8 0%,#0e9b78 100%);padding:52px 52px 44px;color:#fff}
+.hero::after{content:'';position:absolute;right:-90px;bottom:-140px;width:420px;height:420px;
+  border-radius:50%;background:rgba(255,255,255,.08)}
+.hero>*{position:relative;z-index:1}
+.hsearch{position:relative;max-width:1200px;margin:-16px auto 26px;padding:0 22px}
+.hsearch input{width:100%;font:inherit;font-size:15px;color:var(--text);background:#fff;
+border:1px solid var(--line);border-radius:12px;padding:13px 16px;
+box-shadow:0 3px 14px rgba(20,40,70,.06)}
+.hsearch input:focus{outline:none;border-color:var(--p1);
+box-shadow:0 0 0 3px rgba(31,95,168,.12)}
+.hres{position:absolute;left:22px;right:22px;top:calc(100% + 6px)}
+.hres{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;
+border-radius:11px;box-shadow:0 14px 38px rgba(0,20,50,.22);overflow:hidden;
+display:none;max-height:430px;overflow-y:auto;z-index:30}
+.hres.on{display:block}
+.hres a{display:block;padding:9px 14px;border-bottom:1px solid #eef2f7;text-decoration:none}
+.hres a:last-child{border-bottom:none}
+.hres a:hover,.hres a.sel{background:#eaf1fb}
+.hres .t{font-size:14px;color:#16232e;font-weight:600}
+.hres .s{font-size:12px;color:#5f7183;margin-top:1px}
+.hres .none{padding:12px 14px;font-size:13px;color:#5f7183}
+.dash{background:#fff;border:1px solid var(--line);border-radius:14px;
+padding:16px 18px;margin:0 0 16px}
+.dhead{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.dhead b{font-size:15px}
+.dhead span{font-size:12px;color:var(--muted)}
+.drow{display:flex;align-items:center;gap:12px;margin:8px 0}
+.dlab{flex:0 0 34px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.dbar{flex:1;height:9px;background:#e6ecf3;border-radius:99px;overflow:hidden}
+.dbar i{display:block;height:100%;width:0;border-radius:99px;
+background:linear-gradient(90deg,#2f6df6,#22a06b);transition:width .25s}
+.dbar.b2 i{background:linear-gradient(90deg,#1f5fa8,#0e9b78)}
+.dbar.b3 i{background:linear-gradient(90deg,#e08a15,#c46f00)}
+.dval{flex:0 0 auto;min-width:120px;text-align:right;font-size:12.5px;
+font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+.dfoot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;
+padding-top:12px;border-top:1px dashed var(--line)}
+.dfoot .lprog-go{margin:0}
+.lpt{display:flex;gap:8px;margin-left:auto}
+.lpt button{font:inherit;font-size:12px;font-weight:600;color:var(--p1);background:#fff;
+border:1px solid var(--line);border-radius:7px;padding:4px 11px;cursor:pointer}
+.lpt button:hover{background:var(--p1bg)}
+.badge{display:inline-block;background:var(--p3);border-radius:6px;padding:6px 15px;
+  font-size:13px;font-weight:700;letter-spacing:1.5px;margin-bottom:20px}
+.hero h1{font-size:44px;margin:0 0 14px;line-height:1.2;letter-spacing:-.5px}
+.hero p{font-size:17px;color:#dcebf7;margin:0 0 30px;max-width:640px;line-height:1.75}
+.stats{display:flex;gap:44px;flex-wrap:wrap}
+.stat b{display:block;font-size:34px;font-weight:700;line-height:1.15}
+.stat span{font-size:13px;color:#b9d5ea}
+.stat.hi b{color:var(--p3)}
+
+/* ── 区块 ── */
+section{margin-bottom:44px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+h2{font-size:24px;margin:0;display:flex;align-items:center;gap:10px}
+h2 i{width:9px;height:9px;border-radius:50%;display:block;flex-shrink:0}
+.sec-sub{font-size:14px;color:var(--muted);margin:0 0 20px}
+
+/* ── 卡片通用 ── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.grid{display:grid;gap:14px}
+/* 单元卡片是折叠的：展开一张会把同排撑高。默认 align-items:stretch 会让
+   同排其它卡片一起被拉成空白大块，看起来像"跟着点开了"。改成按内容高度对齐。 */
+#unitList{align-items:start}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+/* ── 阶段 ── */
+.phase{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:24px;margin-bottom:16px}
+.phase-h{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.phase-h h3{margin:0;font-size:18px}
+.phase-meta{font-size:13px;color:var(--muted);margin-bottom:18px}
+.phase.p0{border-left:4px solid var(--p2)} .phase.p0 h3{color:var(--p2)}
+.phase.p1{border-left:4px solid var(--p1)} .phase.p1 h3{color:var(--p1)}
+.phase.p2{border-left:4px solid var(--p3)} .phase.p2 h3{color:var(--p3)}
+
+/* ── 单元卡 ── */
+.uall{margin-left:auto;display:flex;gap:7px}
+.uall button{font:inherit;font-size:12px;font-weight:600;color:var(--p1);background:#fff;
+border:1px solid var(--line);border-radius:7px;padding:4px 11px;cursor:pointer}
+.uall button:hover{background:var(--p1bg);border-color:var(--p1)}
+.u-head:focus-visible{outline:2px solid var(--p1);outline-offset:-2px}
+.unit{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  transition:border-color .16s,box-shadow .16s}
+.unit:hover{border-color:#c4cfdc}
+.unit.done{border-color:#b8e0d0;background:#f7fcfa}
+.u-head{display:flex;gap:14px;padding:18px 20px;cursor:pointer;align-items:flex-start}
+.u-num{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-size:19px;font-weight:700;color:#fff;background:var(--p1)}
+.u-num.z{background:var(--p2)} .u-num.g{background:var(--p3)}
+.u-info{flex:1;min-width:0}
+.u-t{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.u-m{font-size:12.5px;color:var(--muted);margin-top:3px}
+.unit.done .u-t{color:#7d8f9e}
+.chk{flex-shrink:0;margin-top:12px;width:19px;height:19px;accent-color:var(--p2);cursor:pointer}
+.tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.3px}
+.tag.core{background:var(--p1bg);color:var(--p1)}
+.tag.hard{background:var(--p3bg);color:#a86a0c}
+.tag.gate{background:var(--dangerbg);color:var(--danger)}
+.tag.gate2{background:var(--p2bg);color:#0a7a5f}
+.caret{flex-shrink:0;margin-top:11px;width:18px;height:18px;border-right:2px solid var(--muted);
+  border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin-right:6px}
+.unit.open .caret{transform:rotate(-135deg)}
+.u-body{display:none;padding:0 20px 20px;border-top:1px dashed var(--line)}
+.unit.open .u-body{display:block}
+.u-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px dashed #eef2f7}
+.u-row:last-of-type{border-bottom:none}
+.u-row b{flex-shrink:0;width:74px;font-size:12.5px;color:var(--muted);font-weight:600;padding-top:2px}
+.u-row div{flex:1;font-size:14px;color:#33475a;line-height:1.7}
+.u-row ul{margin:0;padding-left:17px}
+.u-row li{margin:3px 0}
+.u-row code{background:#eef1f5;border-radius:4px;padding:1px 6px;font-size:12.5px;
+  font-family:Consolas,"SFMono-Regular",monospace;color:#0f5a3d}
+.u-cta{display:flex;gap:10px;flex-wrap:wrap;padding-top:16px;margin-top:14px;border-top:1px solid var(--line)}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--p1);color:#fff;
+  padding:9px 17px;border-radius:8px;font-size:13.5px;font-weight:600;transition:background .15s;border:none;cursor:pointer}
+.btn:hover{background:#1a4e8a}
+.btn.g{background:var(--p2)} .btn.g:hover{background:#0a7a5f}
+.btn.o{background:var(--p3)} .btn.o:hover{background:#c0760f}
+.btn.l{background:#fff;color:var(--text);border:1px solid var(--line)}
+.btn.l:hover{background:#f2f5f9}
+
+/* ── 路径 ── */
+.path{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.pstep{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);
+  padding:18px 16px;position:relative}
+.pstep:first-child{border-radius:var(--r) 0 0 var(--r)}
+.pstep:last-child{border-radius:0 var(--r) var(--r) 0}
+.pstep+.pstep{border-left:none}
+.pstep b{display:block;font-size:14.5px;margin-bottom:5px}
+.pstep span{font-size:12.5px;color:var(--muted);line-height:1.55;display:block}
+.pstep .no{font-size:11px;font-weight:700;color:var(--p3);letter-spacing:1px;margin-bottom:7px;display:block}
+.pstep.on{background:var(--p1bg);border-color:#bcd4f2}
+.pstep.done{background:#f4fbf8}
+
+/* ── 课节进度条 ── */
+.lprog{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--card);
+border:1px solid var(--line);border-radius:12px;padding:14px 20px;margin:0 0 18px}
+.lprog-t{font-size:13.5px;font-weight:600;color:var(--p1)}
+.lprog-bar{flex:1;min-width:160px;height:8px;background:#e8edf3;border-radius:8px;overflow:hidden}
+.lprog-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p1),var(--p2));transition:width .25s}
+.lprog-c{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.lprog-go{padding:7px 15px;border-radius:20px;background:var(--p1);color:#fff;
+font-size:12.5px;font-weight:600;white-space:nowrap}
+.lprog-go:hover{background:#1a5296}
+.lprog-go.done{background:var(--p2)}
+
+/* ── 资料库 ── */
+.lib{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--r);transition:border-color .16s}
+.lib:hover{border-color:var(--p1)}
+.lib-i{width:42px;height:42px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px}
+.lib h4{margin:0 0 5px;font-size:15.5px}
+.lib p{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
+.lib .go{margin-left:auto;font-size:13px;color:var(--p1);font-weight:600;white-space:nowrap;align-self:center}
+
+/* ── 提示 ── */
+.tip{border-radius:var(--r);padding:20px 22px;font-size:14px;line-height:1.75}
+.tip h4{margin:0 0 10px;font-size:15.5px}
+.tip.blue{background:var(--p1bg)} .tip.blue h4{color:var(--p1)}
+.tip.green{background:var(--p2bg)} .tip.green h4{color:#0a7a5f}
+.tip.amber{background:var(--p3bg)} .tip.amber h4{color:#a86a0c}
+.tip.red{background:var(--dangerbg)} .tip.red h4{color:var(--danger)}
+.tip ul{margin:0;padding-left:19px} .tip li{margin:5px 0}
+.tip ol{margin:0;padding-left:20px} .tip ol li{margin:6px 0}
+kbd{background:#fff;border:1px solid #d6dde6;border-bottom-width:2px;border-radius:5px;
+  padding:1px 6px;font-size:12px;font-family:Consolas,monospace;color:#33475a}
+
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+th{background:#f1f4f8;font-size:12.5px;color:var(--muted);text-align:left;padding:11px 14px;font-weight:600}
+td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top;line-height:1.65}
+td:first-child{white-space:nowrap;font-weight:600;color:var(--p1)}
+td code{background:#eef1f5;border-radius:4px;padding:1px 6px;font-size:12.5px;
+  font-family:Consolas,monospace;color:#0f5a3d}
+
+footer{border-top:1px solid var(--line);padding-top:22px;font-size:13px;color:var(--muted);line-height:1.8}
+
+@media(max-width:820px){
+  .hero{padding:34px 24px}.hero h1{font-size:32px}.stats{gap:26px}.stat b{font-size:27px}
+  .wrap{padding:0 16px 60px}.nav-links{gap:14px}
+  .pstep,.pstep:first-child,.pstep:last-child{border-radius:0;border-left:1px solid var(--line)}
+  .pstep:first-child{border-radius:var(--r) var(--r) 0 0}
+  .pstep:last-child{border-radius:0 0 var(--r) var(--r)}
+  .u-row{flex-direction:column;gap:3px}.u-row b{width:auto}
+}
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+<script src="web/searchdata.js"></script>
+</head>
+<body>
+
+<nav class="nav"><div class="nav-in">
+  <div class="logo"><i></i>Python 学习中枢</div>
+  <div class="nav-links">
+    <a href="#overview">总览</a>
+    <a href="#path">路径</a>
+    <a href="#units">单元</a>
+    <a href="#gate">关卡</a>
+    <a href="#bank">题库</a>
+    <a href="#library">资料库</a>
+    <a href="#method">方法</a>
+  </div>
+  <div class="nav-prog" id="navProg">0 / 22</div>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+  <span class="badge">零基础 · 每周一个单元 · 三个项目 · 约 29 周</span>
+  <h1>从第一行 print<br>到能交付完整项目</h1>
+  <p>依据《Python 编程：从入门到实践（第 3 版）》中文版全 20 章。
+     22 个单元、111 节课、三个项目、两道关卡 —— 每一格都能点开，每一步都有产出。</p>
+  <div class="stats">
+    <div class="stat"><b data-n="units">22</b><span>单元</span></div>
+    <div class="stat"><b>29</b><span>周</span></div>
+    <div class="stat"><b data-n="lessons">111</b><span>节课 · 每节 90 分钟</span></div>
+    <div class="stat"><b data-n="bank">84</b><span>道练习题</span></div>
+    <div class="stat"><b>3</b><span>个大项目</span></div>
+    <div class="stat hi"><b>2</b><span>道关卡</span></div>
+  </div>
+</header>
+
+<div class="hsearch">
+  <input id="gs" type="search" autocomplete="off" spellcheck="false"
+         placeholder="搜课程内容：继承 / 切片 / 部署 / 装饰器 …    （Ctrl + K）">
+  <div class="hres" id="gsRes"></div>
+</div>
+
+
+<!-- ═══ 总览 ═══ -->
+<section id="overview">
+  <div class="sec-head"><h2><i style="background:var(--p1)"></i>这门课要解决什么</h2></div>
+  <p class="sec-sub">不是「学完语法」，是「能独立写出一个别人能接手、能长期改的程序」。</p>
+  <div class="grid g3">
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:16px;color:var(--p1)">你现在的状态</h3>
+      <p style="margin:0;font-size:14px;color:#40566b;line-height:1.75">
+        零基础，没写过代码，或者写过几行就没继续。<br>
+        面对报错会懵，看教程能懂但自己动手就卡住。
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:16px;color:var(--p2)">29 周之后</h3>
+      <p style="margin:0;font-size:14px;color:#40566b;line-height:1.75">
+        能独立完成并上线一个 Django Web 应用。<br>
+        会写测试、会用 Git、管好依赖、读得懂 500 行别人的项目。
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 10px;font-size:16px;color:var(--p3)">怎么保证走到</h3>
+      <p style="margin:0;font-size:14px;color:#40566b;line-height:1.75">
+        每个单元有产出物和验收标准。<br>
+        每阶段末有硬关卡，不达标不进入下一阶段。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 路径 ═══ -->
+<section id="path">
+  <div class="sec-head"><h2><i style="background:var(--p2)"></i>全程路径</h2></div>
+  <p class="sec-sub">先打地基（阶段 0–1），再做项目（阶段 2–3）。灰掉的部分需要先通过关卡。</p>
+  <div class="path">
+    <div class="pstep done">
+      <span class="no">阶段 0</span>
+      <b>环境与工具</b>
+      <span>Python 3 · VS Code · Git · 目录结构<br>1 天，W0</span>
+    </div>
+    <div class="pstep done">
+      <span class="no">阶段 1</span>
+      <b>语法基础</b>
+      <span>教材第 1–11 章<br>12 个单元 · 64 节课</span>
+    </div>
+    <div class="pstep on">
+      <span class="no">阶段 2</span>
+      <b>项目实践</b>
+      <span>pygame → 数据可视化 → Django<br>教材第 12–20 章 · 10 个单元 · 47 节课</span>
+    </div>
+    <div class="pstep">
+      <span class="no">阶段 3</span>
+      <b>工程能力</b>
+      <span>测试 · Git 分支 · 依赖管理<br>教材外必补</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 单元 ═══ -->
+<section id="units">
+  <div class="sec-head">
+    <h2><i style="background:var(--p1)"></i><span data-n="units">22</span> 个单元 · 点开看详情</h2>
+    <div class="uall">
+      <button type="button" data-all="open">全部展开</button>
+      <button type="button" data-all="close">全部收起</button>
+    </div>
+  </div>
+  <p class="sec-sub">勾选右上角方框记录进度（保存在本浏览器）。带「难点」标记的单元允许放慢 50%，课后作业不可省。</p>
+  <div class="grid g2" id="unitList"></div>
+</section>
+
+<!-- ═══ 关卡 ═══ -->
+<section id="gate">
+  <div class="sec-head"><h2><i style="background:var(--p3)"></i>两道关卡 · 不达标不前进</h2></div>
+  <p class="sec-sub">关卡是硬性的。某一项不达标，只补那一项并重测，不要整体重学。</p>
+
+  <div class="grid g2">
+    <div class="card" style="border-top:4px solid var(--p3)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <span class="tag gate">关卡 1</span>
+        <h3 style="margin:0;font-size:17px">阶段 0–1 结业测评</h3>
+      </div>
+      <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted)">限时 2 小时 · 不查资料 · 当场完成</p>
+      <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.85;color:#33475a">
+        <li>手写猜数字游戏 —— while + input + if + 随机数，输入非法不能崩</li>
+        <li>手写一个类 —— 含 <code style="background:#eef1f5;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">__init__</code>、两个实例方法、一个子类，能口述 <code style="background:#eef1f5;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">self</code> 指向什么</li>
+        <li>给单元 7 的函数写 3 条 pytest 测试（正常 / 边界 / 异常），全部通过</li>
+        <li>修复一段 30 行含 3 个 bug 的脚本，能读懂 traceback 定位到行</li>
+      </ol>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:#40566b">
+        <b style="color:var(--p3)">4/4 全达标</b> = 准予进入阶段 2<br>
+        <a href="web/gate1.html" style="display:inline-block;margin-top:9px;font-weight:700;
+           color:#8a5a00;background:#fdf3e2;border:1px solid #f0d8a8;border-radius:7px;
+           padding:5px 12px">打开关卡 1 验收清单 →</a>
+      </div>
+    </div>
+
+    <div class="card" style="border-top:4px solid var(--p2)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <span class="tag gate2">关卡 2</span>
+        <h3 style="margin:0;font-size:17px">阶段 1–2 结业测评</h3>
+      </div>
+      <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted)">判定「能独立做项目」</p>
+      <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.85;color:#33475a">
+        <li>三个项目全部跑通，且已推到公开仓库</li>
+        <li>每个项目都有 README 和 <code style="background:#eef1f5;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">requirements.txt</code></li>
+        <li>「学习笔记」已部署上线，公网可访问，错误页已定制</li>
+        <li>能用自己的函数写出 pytest 测试并跑过</li>
+        <li>接手一个没写过的 500 行项目，能读懂结构并定位一个 bug</li>
+      </ol>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:#40566b">
+        <b style="color:var(--p2)">5/5 全达标</b> = 可以选方向继续深造<br>
+        <a href="web/gate2.html" style="display:inline-block;margin-top:9px;font-weight:700;
+           color:#0a6b52;background:#e8f6f1;border:1px solid #bfe3d6;border-radius:7px;
+           padding:5px 12px">打开关卡 2 验收清单 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 题库 ═══ -->
+<section id="bank">
+  <div class="sec-head"><h2><i style="background:var(--p2)"></i>练习题库 · 六档递进 <span data-n="bank">84</span> 题</h2></div>
+  <p class="sec-sub">每题含题目 / 完整可运行参考答案 / 解析。卡 15 分钟再看答案，看完必须关掉重写一遍。</p>
+  <div class="tw"><table>
+    <thead><tr><th style="width:110px">档位</th><th style="width:70px">题量</th><th>覆盖内容</th><th style="width:150px">建议用时</th><th style="width:190px">重点题</th></tr></thead>
+    <tbody>
+      <tr><td>L1 基础</td><td>12</td><td>变量 · 字符串 · f-string · 列表 · 切片 · 元组 · 类型陷阱 · PEP 8</td><td>3 小时</td><td>L1-7 浮点比较</td></tr>
+      <tr><td>L2 循环与条件</td><td>16</td><td>for / while · range · 列表推导式 · 嵌套 · if 链 · 引用与复制 · 投票统计</td><td>6 小时</td><td>L2-5 引用陷阱<br>L2-14 for-else</td></tr>
+      <tr><td>L3 函数</td><td>8</td><td>三种传参 · 默认值 · 列表传参 · *args/**kwargs · 模块导入 · 递归 · 装饰器 · 类型注解</td><td>4 小时</td><td>L3-3 改与不改</td></tr>
+      <tr><td>L4 类</td><td>8</td><td>实例与属性 · 默认值 · 私有化与 @property · 继承 · 重写 · 组合 · 自定义异常 · dataclass</td><td>5 小时</td><td>L4-3 属性私有化</td></tr>
+      <tr><td>L5 工程</td><td>10</td><td>文件读写 · with · 异常处理 · JSON 持久化 · pytest 测试函数与测试类</td><td>6 小时</td><td>L5-3 异常 else<br>L5-9 综合统计</td></tr>
+      <tr><td>L6 项目</td><td>30</td><td>Pygame 主循环/精灵/碰撞 · Matplotlib · CSV 与 API · Plotly · Django 视图/模型/用户/部署</td><td>12 小时</td><td>L6-5 精灵坐标<br>L6-27 DEBUG=False</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="tip amber">
+      <h4>3 道综合挑战（选做，做完阶段 1 才算真的收尾）</h4>
+      <ul>
+        <li><b>A · 文本词频分析器</b> — 读文件、统计高频词、输出 JSON 报告。覆盖文件/异常/字典排序。</li>
+        <li><b>B · 学生成绩管理器</b> — 增删改查、排序、及格率、JSON 存储。覆盖类与测试。</li>
+        <li><b>C · 命令行记事本</b> — 五个子命令 + argparse + 模块拆分。提前练「大项目拆解」手感。</li>
+      </ul>
+    </div>
+    <div class="tip blue">
+      <h4>统一要求（四条做到位，直接衔接阶段 2）</h4>
+      <ul>
+        <li>拆成多个模块，单文件不超过 300 行</li>
+        <li>补 pytest 测试（至少 8 条）</li>
+        <li>写 README，说明怎么装、怎么跑</li>
+        <li>推到公开 git 仓库</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 资料库 ═══ -->
+<section id="library">
+  <div class="sec-head"><h2><i style="background:var(--p1)"></i>资料库</h2></div>
+  <p class="sec-sub">全部材料都在下面。讲义和题库是 Markdown，浏览器直接打开就能读。</p>
+
+  <div class="dash" id="lprog">
+    <div class="dhead"><b>学习总览</b><span>数据只存在本机浏览器 · 换电脑请先导出</span></div>
+    <div class="drow">
+      <span class="dlab">课节</span>
+      <div class="dbar"><i id="ltr"></i></div>
+      <span class="dval" id="lct">0 / 111 节</span>
+    </div>
+    <div class="drow">
+      <span class="dlab">题库</span>
+      <div class="dbar b2"><i id="dBr"></i></div>
+      <span class="dval" id="dBl">0 / 84 题</span>
+    </div>
+    <div class="drow">
+      <span class="dlab">关卡</span>
+      <div class="dbar b3"><i id="dGr"></i></div>
+      <span class="dval" id="dGl">0 / 24 项</span>
+    </div>
+    <div class="dfoot">
+      <a class="lprog-go" id="lgo" href="web/lessons/01.html">继续学习：第 1 节 →</a>
+      <div class="lpt">
+        <button type="button" id="expP">导出进度</button>
+        <button type="button" id="impP">导入进度</button>
+        <input type="file" id="impFile" accept=".json,application/json" hidden>
+      </div>
+    </div>
+  </div>
+  <div class="grid g2">
+    <a class="lib" href="web/lessons/index.html" target="_blank">
+      <div class="lib-i" style="background:linear-gradient(135deg,#2f6df6,#22a06b)">课程</div>
+      <div><h4>★ 111 节课 · 一节一节学（推荐入口）</h4>
+        <p>按 90 分钟课节切分 · 每节含复盘 / 目标 / 实操 / 作业 / 讲评 · 从装环境到关卡 2 验收全覆盖</p></div>
+      <span class="go">从第 1 节开始 →</span>
+    </a>
+    <a class="lib" href="web/01.html" target="_blank">
+      <div class="lib-i" style="background:var(--p2)">讲义</div>
+      <div><h4>单元讲义（22 份，可直接读）</h4>
+        <p>每份含知识点讲解、高亮代码示例、动手练习与参考答案 · 带侧边目录与上下单元导航</p></div>
+      <span class="go">从单元 0 开始 →</span>
+    </a>
+    <a class="lib" href="web/bank.html" target="_blank">
+      <div class="lib-i" style="background:#5a6b7a">题库</div>
+      <div><h4>分阶练习题库（<span data-n="bank">84</span> 题）</h4>
+        <p>六档递进 · 每题含完整可运行参考答案与解析 · 附 3 道综合挑战</p></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="lib" href="python-learning-roadmap.html" target="_blank">
+      <div class="lib-i" style="background:var(--p1)">路线</div>
+      <div><h4>学习路线图</h4>
+        <p>三阶段时间轴 · 每章练习项目 · 关卡验收标准 · 常见卡点表 · 可勾选进度</p></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="lib" href="python-course-syllabus.html" target="_blank">
+      <div class="lib-i" style="background:#7c5cbf">课表</div>
+      <div><h4>课程大纲</h4>
+        <p>12 单元总课表 · 每次课 90 分钟四段式 · 教学三原则 · 综合项目 · 可勾选进度</p></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="lib" href="web/ppt/u/index.html" target="_blank">
+      <div class="lib-i" style="background:var(--p3)">逐节课件</div>
+      <div><h4>逐节版讲授课件（22 份 · 每节课 2 页）</h4>
+        <p><b>每一节课都有自己的课节页与知识点页</b>：目标 / 实操 / 作业 + 本节要点与代码示例 ·
+           讲哪一节就翻哪两页，不用再从大纲里找</p></div>
+      <span class="go">按单位打开 →</span>
+    </a>
+    <a class="lib" href="web/ppt/index.html" target="_blank">
+      <div class="lib-i" style="background:#8a5a00">大纲课件</div>
+      <div><h4>课程大纲课件（23 页）</h4>
+        <p>课程宣讲与排期用 · 22 单元全景、三个项目、两道关卡</p></div>
+      <span class="go">放映 →</span>
+    </a>
+    <a class="lib" href="python-course-ppt/Python阶段0-2课程大纲.pptx" download>
+      <div class="lib-i" style="background:#8a5a00">下载</div>
+      <div><h4>课件源文件 .pptx（23 页）</h4>
+        <p>可在 PowerPoint / WPS 里编辑修改 · 与浏览器版内容完全一致</p></div>
+      <span class="go">下载 →</span>
+    </a>
+  </div>
+
+  <h3 style="margin:28px 0 14px;font-size:16px;color:var(--p1)">单元讲义快捷入口</h3>
+  <p class="sec-sub" style="margin-bottom:14px">点「打开讲义」进入可读页面；勾选框与主页进度同步。</p>
+  <div class="grid g3" id="libList"></div>
+</section>
+
+<!-- ═══ 方法 ═══ -->
+<section id="method">
+  <div class="sec-head"><h2><i style="background:var(--p3)"></i>怎么学才不白学</h2></div>
+  <p class="sec-sub">针对零基础设计的几条硬规矩。</p>
+
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="tip blue">
+      <h4>每次课 90 分钟怎么花</h4>
+      <div style="display:flex;gap:12px;margin:12px 0 14px">
+        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center">
+          <b style="font-size:26px;color:var(--p1);display:block">10</b><span style="font-size:12px;color:var(--muted)">复盘</span></div>
+        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center">
+          <b style="font-size:26px;color:var(--p1);display:block">30</b><span style="font-size:12px;color:var(--muted)">讲解</span></div>
+        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center;border:2px solid var(--p2)">
+          <b style="font-size:26px;color:var(--p2);display:block">40</b><span style="font-size:12px;color:var(--muted)">实操</span></div>
+        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center">
+          <b style="font-size:26px;color:var(--p2);display:block">20</b><span style="font-size:12px;color:var(--muted)">讲评</span></div>
+      </div>
+      <p style="margin:0">实操必须压过讲解。讲得多不等于学得多，<b>跑出输出才算</b>。</p>
+    </div>
+
+    <div class="tip green">
+      <h4>零基础教学三原则</h4>
+      <ul style="margin-top:10px">
+        <li><b>讲完 10 分钟内必须敲一次代码。</b>报错是教材，不要擦掉。练习顺序：照抄 → 改需求 → 自己写。</li>
+        <li><b>单元 3、6、7、8 允许放慢 50%。</b>这四章是分水岭，课时可加、练习翻倍。允许落后，不允许跳过。</li>
+        <li><b>每个单元都要有可跑的产出物。</b>一个能跑的小程序 + 一次 git 提交，正反馈才撑得住三周。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="tip red">
+      <h4>六处最容易卡住的地方</h4>
+      <div class="tw"><table style="margin-top:10px;border-radius:10px">
+        <tbody>
+          <tr><td style="padding:8px 10px;font-size:13px;white-space:normal">第 4–7 章</td><td style="padding:8px 10px;font-size:13px">语法陡增、缩进错多 → 动手练重做，同题写三遍</td></tr>
+          <tr><td style="padding:8px 10px;font-size:13px;white-space:normal">第 8 章 函数</td><td style="padding:8px 10px;font-size:13px">不知该拆几个 → 先抄 3 例，再改需求</td></tr>
+          <tr><td style="padding:8px 10px;font-size:13px;white-space:normal">第 9 章 类</td><td style="padding:8px 10px;font-size:13px">最劝退 → 慢 2 周，造学生/购物车/账户三例</td></tr>
+          <tr><td style="padding:8px 10px;font-size:13px;white-space:normal">第 10 章 文件</td><td style="padding:8px 10px;font-size:13px">乱码/找不到 → 全程 pathlib + with + utf-8</td></tr>
+          <tr><td style="padding:8px 10px;font-size:13px;white-space:normal">第 11 章 测试</td><td style="padding:8px 10px;font-size:13px">不会测 → 单元 0 就建虚拟环境，只测小函数</td></tr>
+          <tr><td style="padding:8px 10px;font-size:13px;white-space:normal">学不下去</td><td style="padding:8px 10px;font-size:13px">战线太长 → 降难度做 20 行小程序，两天内见效</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="tip amber">
+      <h4>零基础的三种假信号</h4>
+      <p style="margin:10px 0 8px;color:#5a4a20">下面这三句话，出现任意一条就等于没学会：</p>
+      <ul style="margin:0 0 10px">
+        <li>「我好像看懂了」</li>
+        <li>「跟着敲一遍没问题」</li>
+        <li>「这段逻辑很清楚」</li>
+      </ul>
+      <p style="margin:0;color:#5a4a20">真信号只有一个：<b>不看讲义，从空文件开始敲出来</b>。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  依据：Matthes《Python Crash Course, 3rd Edition》中文版 —— 上篇 1–11 章语法（pytest 在第 11 章，Git 入门在附录 D），
+  下篇 12–14 章 pygame、15–17 章 Matplotlib/Plotly、18–20 章 Django，附录 A 安装 / B 编辑器 / C 排错 / D Git / E 部署排错。<br>
+  进度保存在本浏览器本地（localStorage），换设备需重新勾选。
+</footer>
+
+</div>
+
+<script>
+var UNITS = [
+  {n:0,t:'环境与工具链',m:'附录 A / B / D · W0',cls:'z',src:'00-单元0-环境与工具.md',
+   goal:'装好 Python 3 与 VS Code，跑通第一个脚本，建立 git 仓库与练习目录结构',
+   lesson:['装 Python 3.12+（勾选 Add Python to PATH）','装 VS Code + Python 扩展，读附录 B.1 快捷键',
+           '终端基本命令与目录结构','git init / status / add / commit，配 .gitignore'],
+   hw:['建好 exercises/ projects/ notes/ 三个目录','写自我介绍脚本，完成 3 次 git 提交'],
+   out:'可运行的 hello.py + 首个 git 仓库'},
+
+  {n:1,t:'变量与简单数据类型',m:'教材第 1–2 章 · W1',cls:'',tag:'core',src:'01-单元1-变量与数据类型.md',
+   goal:'掌握变量命名、字符串全套操作、f-string 格式化、整数与浮点数',
+   lesson:['变量与命名规范（下划线，不用 1age / my name）','字符串：title / upper / lower / strip / 拼接与运算',
+           'f-string 与格式化（:.2f 千分位）','int / float 与注释；理解浮点为什么不能直接比相等'],
+   hw:['教材 2.3–2.8 全部动手练','动手项目 2-1 个人偏好调查','题库 L1-1 ~ L1-3、L1-7'],
+   out:'自我介绍脚本 + 偏好调查问卷'},
+
+  {n:2,t:'列表简介',m:'教材第 3 章 · W2',cls:'',tag:'core',src:'02-单元2-列表简介.md',
+   goal:'会增删改查、遍历、排序，能说清 sorted 与 sort 的区别',
+   lesson:['索引从 0 开始、负索引','append / insert / remove / del / pop','sort / sorted / reverse / len','索引错误 IndexError 的成因'],
+   hw:['教材 3.1–3.10 动手练','对同一个列表做 20 次增删改排序操作','题库 L1-4、L1-5、L1-6'],
+   out:'一个能增删改查排序的清单脚本'},
+
+  {n:3,t:'操作列表',m:'教材第 4 章 · W3',cls:'',tag:'hard',src:'03-单元3-操作列表.md',
+   goal:'for 循环、range、列表推导式、切片、元组；理解引用与复制的本质',
+   lesson:['for 循环与四类缩进错误','range() 与数值列表','列表推导式（重点）','切片 [start:stop:step] 与复制列表','元组 · PEP 8 缩进与行长'],
+   hw:['教材 4.1–4.4 动手练','动手项目 3.4–3.8 忘记密码清单','题库 L2-1 ~ L2-5（必做 L2-5 引用陷阱）'],
+   out:'忘记密码清单程序'},
+
+  {n:4,t:'if 语句',m:'教材第 5 章 · W4',cls:'',src:'04-单元4-if语句.md',
+   goal:'掌握条件测试与分支结构，能处理非法输入',
+   lesson:['条件测试：== != > < 与忽略大小写','布尔表达式 and / or / not','if / if-else / if-elif-else 多分支','用 if 处理列表、检查列表是否为空'],
+   hw:['教材 5.1–5.6 动手练','票价分级、BMI 判断器、用户名权限三个小程序','题库 L2-6 ~ L2-8'],
+   out:'3 个条件判断小程序'},
+
+  {n:5,t:'字典',m:'教材第 6 章 · W5',cls:'',tag:'core',src:'05-单元5-字典.md',
+   goal:'掌握字典增删改查、遍历与嵌套，能处理 JSON 形态的数据',
+   lesson:['键值对创建与访问 · get() 安全取值','增删改：赋值 / del','三种遍历：items / keys / values','三种嵌套：字典列表 / 列表字典 / 字典字典'],
+   hw:['教材 6.1–6.4 动手练','动手项目 6.1–6.3 生日调查','题库 L1-8、L1-9'],
+   out:'生日调查字典 + 三种嵌套结构各一组'},
+
+  {n:6,t:'用户输入与 while 循环',m:'教材第 7 章 · W6',cls:'',tag:'hard',src:'06-单元6-用户输入与while循环.md',
+   goal:'会写交互式循环程序，能避免无限循环与输入崩溃',
+   lesson:['input() / int() / 求模运算符 %','while 循环 · 标志 flag','break / continue','避免无限循环的四种方法','while 处理列表和字典'],
+   hw:['教材 7.1–7.4 动手练','动手项目 7.5–7.9 投票统计 + 7.10 收银机模拟','题库 L2-9 ~ L2-12、L2-14'],
+   out:'带输入校验的投票统计程序'},
+
+  {n:7,t:'函数',m:'教材第 8 章 · W7–W8',cls:'',tag:'hard',src:'07-单元7-函数.md',big:1,
+   goal:'掌握函数定义、三种传参方式与模块导入 —— 这是抽象能力的第一次跳跃',
+   lesson:['定义函数 · 形参实参 · 返回值','位置实参 / 关键字实参 / 默认值 / 混合','传递列表（会被改）与 *args / **kwargs','模块与导入的 4 种写法','函数编写指南'],
+   hw:['教材 8.1–8.7 动手练','动手项目 8.1–8.3 魔方消息 + 8.4–8.6 星际争霸 + 8.7 鸡尾酒','题库 L3-1 ~ L3-5'],
+   out:'3 个可复用函数 + 2 个自定义模块',
+   warn:['函数里改列表会改到原列表 —— 传切片或用返回值','默认值写成可变对象（[] / {}）是经典 bug','别忘了 super / 冒号 / 缩进',
+          '函数真正的输出是 return，不是 print']},
+
+  {n:8,t:'类',m:'教材第 9 章 · W9–W10',cls:'g',tag:'hard',src:'08-单元8-类.md',big:1,
+   goal:'掌握类、实例、继承与重写 —— 零基础最劝退的一章，但 Django 绕不开',
+   lesson:['类 / 实例 / 属性 / 方法 / self','__init__ 与默认值属性','继承 · 重写父类方法 · 实例作属性','导入类 · 标准库 · 类的编程风格'],
+   hw:['教材 9.1–9.3 动手练','自建 3 个类：学生记录 / 购物车 / 银行账户（含继承）','题库 L4-1 ~ L4-8'],
+   out:'3 个自建类（含继承）',
+   warn:['方法第一个参数忘记写 self —— 最高频错误','忘记 super().__init__() 就用父类属性',
+          '实例属性与类属性同名会互相覆盖','@property 让方法能像属性一样访问']},
+
+  {n:9,t:'文件与异常',m:'教材第 10 章 · W11',cls:'',src:'09-单元9-文件与异常.md',
+   goal:'会读写文件、处理异常、持久化 JSON 数据',
+   lesson:['读取文件与 with 语句（必写 encoding="utf-8"）','写入 / 追加 / 读写模式','异常 try / except / else / finally','JSON 存取数据 · 自定义异常 · 异常链'],
+   hw:['教材 10.1–10.4 动手练','动手项目 10.1–10.13 学习笔记管理','题库 L5-1 ~ L5-6'],
+   out:'能存到 JSON 的学习笔记程序',
+   warn:['永远用 with，文件会自动关闭','Windows 上不写 utf-8 会中文乱码',
+          'else 子句只在没有异常时执行 —— 最容易被忽略的用法']},
+
+  {n:10,t:'测试代码',m:'教材第 11 章 · W12',cls:'',src:'10-单元10-测试代码.md',
+   goal:'会用 pytest 给自己的函数和类写测试',
+   lesson:['为什么测试 · pip 安装 pytest','测试函数：assert / pytest.raises','测试类 · setUp · fixture','参数化 @pytest.mark.parametrize'],
+   hw:['教材 11.1–11.3 动手练','动手项目 11.1–11.3 投票分析器测试','给单元 7/8/9 写过的代码补测试（共 8 条以上）'],
+   out:'pytest 测试套件（至少 10 条）',
+   warn:['assert 后面不要写说明文字，会覆盖失败报告','测试的价值在改代码之前 —— 先写测试再改',
+          '每条测试要覆盖：正常输入 / 边界 / 异常']},
+
+  {n:11,t:'总复习 + 关卡验收',m:'阶段 1 结业 · W13',cls:'g',tag:'gate',src:'11-单元11-总复习与关卡验收.md',
+   goal:'把 11 章串成一条线，并通过关卡 1 的四项验收',
+   lesson:['知识图谱串讲：从变量到类的完整链路','易错点集中复盘（十处）','综合项目需求拆解示范','关卡 1 现场测评（限时 2 小时）'],
+   hw:['关卡 1 四项逐条自测','选定 1 个综合项目（A / B / C）开工'],
+   out:'通过关卡 1 → 准予进入阶段 2'},
+
+  {n:12,t:'Pygame 起步与飞船驾驶',m:'教材第 12 章（上）· W14',cls:'',tag:'hard',src:'12-单元12-Pygame起步与飞船驾驶.md',big:1,
+   goal:'装好 Pygame，做出「能开、能射不了」的飞船——第一次驾驭几百行的多文件项目',
+   lesson:['规划项目与安装 Pygame','创建窗口、控制帧率、设置背景色、Settings 类',
+           '创建 Ship 类并在屏幕上绘制飞船','重构 _check_events() 与 _update_screen()',
+           '响应按键、允许持续移动、限制活动范围','按 Q 退出与全屏模式'],
+   hw:['教材 12.1–12.7 全部动手练','自己加一个「飞船加速键 Shift」的功能','用 git 建立 alien_invasion 仓库并提交'],
+   out:'能驾驶、能退出、代码分成三个文件的外星人入侵雏形'},
+
+  {n:13,t:'射击与外星舰队',m:'教材第 12–13 章 · W15',cls:'',tag:'hard',src:'13-单元13-射击与外星舰队.md',big:1,
+   goal:'让游戏「能玩」：发射子弹、生成外星舰队、检测碰撞、有结束条件',
+   lesson:['创建 Bullet 类与编组 Group','开火、限制子弹数量、删除消失的子弹',
+           '创建一行外星人与 _create_fleet() 重构','整队移动：fleet_direction 与边缘检测',
+           '碰撞检测 groupcollide 与 spritecollideany','检测飞船被撞与外星人触底，游戏结束'],
+   hw:['教材 12.8、13.1–13.7 全部动手练','「为测试创建大子弹」练一次：把偶发 bug 变高频',
+       '给 Bullet 和 Alien 各加一个自己的行为'],
+   out:'完整可玩的外星人入侵：有子弹、有舰队、有胜负'},
+
+  {n:14,t:'Play 按钮与记分',m:'教材第 14 章 · W16',cls:'',src:'14-单元14-Play按钮与记分.md',
+   goal:'给游戏加上「开始 / 结束 / 重开」的状态机和一块像样的记分牌',
+   lesson:['游戏三态：inactive / active / game over','创建 Button 类：font.render 把文字变图像',
+           '开始游戏、重置游戏、隐藏光标','提高难度：speedup_scale 与 score_scale',
+           '记分牌：得分、最高分、等级、余下飞船数','round(score, -1) 与千分位格式化'],
+   hw:['教材 14.1–14.3 全部动手练','给最高分做文件持久化（JSON）','把记分牌改成右上角常驻 + 游戏结束居中显示'],
+   out:'带 Play 按钮、动态难度、完整记分牌的外星人入侵'},
+
+  {n:15,t:'Matplotlib 生成数据',m:'教材第 15 章 · W17',cls:'',src:'15-单元15-Matplotlib生成数据.md',
+   goal:'会用 matplotlib 和 Plotly 画折线图、散点图、直方图，并知道两者怎么选',
+   lesson:['安装 Matplotlib 与 fig, ax = plt.subplots()','修改标签文字、线条粗细、校正绘图 axis()',
+           '内置样式、散点图 s/c/cmap 三件套','颜色映射与自动保存 savefig',
+           '随机游走 RandomWalk 类','Plotly 掷骰子：Die 类 + 直方图 + write_html'],
+   hw:['教材 15.1–15.4 全部动手练','模拟 5000 步随机游走并保存成 PNG','同时掷两个面数不同的骰子，对比分布'],
+   out:'一个能反复跑的随机游画图脚本 + 一个掷骰子分布图'},
+
+  {n:16,t:'下载真实数据',m:'教材第 16 章 · W18',cls:'',tag:'hard',src:'16-单元16-下载真实数据.md',
+   goal:'能处理真实世界的脏数据：缺失值、编码、日期解析、GeoJSON',
+   lesson:['csv 模块解析文件头与数据','datetime.strptime() 把字符串变日期',
+           'plot + fill_between 画温度区间带','缺失值的 try/except 与错误检查',
+           'GeoJSON 结构：features / properties.mag / geometry.coordinates',
+           'scatter_geo 画全球地震散点图与悬停文本'],
+   hw:['教材 16.1–16.2 全部动手练','去 NOAA / USGS 下载最新一季数据重画','给自己的城市画一个月气温图'],
+   out:'一张用最新真实数据画的气温图 + 一张全球地震散点图'},
+
+  {n:17,t:'使用 API 与 Plotly',m:'教材第 17 章 · W19',cls:'',src:'17-单元17-使用API与Plotly.md',
+   goal:'会用 requests 调 API、处理响应、看懂速率限制，并把结果画成可交互图',
+   lesson:['API 是什么：requests.get 与 status_code','.json() 把响应转成字典',
+           'GitHub search API 提取仓库信息','监控 X-RateLimit-Remaining 速率限制',
+           'Plotly 可视化仓库：样式、悬停、可单击链接','Hacker News API 两段式调用'],
+   hw:['教材 17.1–17.3 全部动手练','给自己常看的语言画一张「热门仓库 TOP 20」图',
+       '给 API 调用加失败重试与休眠限速'],
+   out:'一个能拉 GitHub 数据并生成交互式 HTML 图表的脚本'},
+
+  {n:18,t:'Django 入门',m:'教材第 18 章 · W20–W21',cls:'',tag:'hard',src:'18-单元18-Django入门.md',big:1,
+   goal:'做出第一个能跑的网站：理解 URL→视图→模板链路，会用模型和管理后台',
+   lesson:['虚拟环境与安装 Django','项目 / 应用程序 / MVT 三件套的关系',
+           '定义模型 Topic 与 Entry、迁移、管理网站','Django shell 直接查数据库',
+           '映射 URL、编写视图、编写模板','模板继承与显示所有主题 / 特定主题'],
+   hw:['教材 18.1–18.4 全部动手练','给 Entry 加一个 date_added 之外的时间字段',
+       '画一张自己的 URL→视图→模板链路图，能讲给别人听'],
+   out:'能浏览「学习笔记」主题与条目的本地网站'},
+
+  {n:19,t:'用户账户',m:'教材第 19 章 · W22',cls:'',tag:'hard',src:'19-单元19-用户账户.md',
+   goal:'做出带登录注册的网站，并守住「用户只能看自己的数据」这条安全红线',
+   lesson:['ModelForm 把模型变成表单','is_valid → save(commit=False) → 补 owner 三段式',
+           'request.user 与 AnonymousUser','登录 / 注销 / 注册三件套',
+           '@login_required 门卫与 LOGIN_URL','filter(owner=request.user) 数据隔离'],
+   hw:['教材 19.1–19.3 全部动手练','故意把 filter 改成 all() 看会发生什么，再改回来',
+       '给「编辑条目」加双重归属校验'],
+   out:'带注册登录、数据按用户隔离的学习笔记网站'},
+
+  {n:20,t:'样式与部署',m:'教材第 20 章 · W23',cls:'',tag:'gate',src:'20-单元20-样式与部署.md',
+   goal:'把网站打扮好，并真正部署到公网——这是「我做的」变成「别人能访问」的一步',
+   lesson:['django-bootstrap5 与 {% bootstrap_form %}','改 base.html / jumbotron / 各页面样式',
+           'Platform.sh 账户、CLI 与两个 yaml 配置文件','platformshconfig：本地与线上的双环境',
+           'requirements.txt、ALLOWED_HOSTS、collectstatic','定制 404/500 错误页与继续开发流程'],
+   hw:['教材 20.1–20.2 全部动手练','按上线检查清单逐条过一遍再推送',
+       '把线上网址发给一个人，让他注册并加一条笔记'],
+   out:'公网可访问的学习笔记网站 + 定制错误页'},
+
+  {n:21,t:'阶段 2 综合与关卡 2',m:'阶段 2 收官 · W24',cls:'',tag:'gate2',src:'21-单元21-阶段2综合与关卡2.md',
+   goal:'把三个项目按工程流程收口，通过关卡 2，证明「能独立做项目」',
+   lesson:['三个项目的工程流程回顾','多文件项目的组织原则（单文件 ≤300 行）',
+           '依赖锁定、密钥管理、陌生项目读法','下一步方向选择：Web / 数据 / 自动化 / 工程化'],
+   hw:['三个项目各补 README + requirements.txt + .gitignore + 测试',
+       '任选一个项目做一次重构冲刺并对比前后','关卡 2 五项逐条自测'],
+   out:'三个推到公开仓库的项目 + 一个已部署上线的网站'},
+];
+
+var PROJECTS = [
+  {c:'A',t:'个人记账本',w:'2 周',d:'把交易记录写进文本文件，读取后汇总金额，按月统计并画成柱状图。覆盖文件读写、异常处理、字典与列表、字符串解析。',f:'适合文件与异常还不够熟的学员'},
+  {c:'B',t:'学生成绩管理器',w:'3 周',d:'增删改查学生成绩，按总分或单科排序，计算平均分与及格率，数据存 JSON，每项操作要有输入校验。覆盖类、@property、异常、测试。',f:'适合想重点巩固类与面向对象的学员'},
+  {c:'C',t:'命令行记事本',w:'3 周',d:'支持 add / list / find / del / edit 五个子命令，数据存 JSON，用 argparse 处理命令行参数。覆盖模块化拆分、异常兜底、测试。',f:'想直接衔接阶段 2 的学员选这个'}
+];
+
+var TAGS = {core:'核心',hard:'难点',gate:'关卡',gate2:'已通过'};
+
+/* 每单元切成的课节数（与 web/lessons/ 的 111 节课一致） */
+var LESSON_CNT = {0:5,1:4,2:4,3:5,4:4,5:5,6:5,7:7,8:7,9:5,10:5,11:8,12:5,13:5,14:4,15:5,16:4,17:4,18:6,19:5,20:5,21:4};
+/* 课节总数 = 111（阶段 1 共 64 节 + 阶段 2 共 47 节）*/
+
+/* ── 渲染 ── */
+function tagHtml(k){ return k ? '<span class="tag '+k+'">'+(TAGS[k]||'')+'</span>' : ''; }
+
+function unitCard(u){
+  var src = 'web/' + (u.n<10 ? '0'+u.n : u.n) + '.html';
+  return '<article class="unit" id="u'+u.n+'">'+
+    '<div class="u-head" role="button" tabindex="0" aria-expanded="false">'+
+      '<div class="u-num '+(u.cls||'')+'">'+u.n+'</div>'+
+      '<div class="u-info">'+
+        '<div class="u-t">'+u.t+tagHtml(u.tag)+'</div>'+
+        '<div class="u-m">'+u.m+'</div>'+
+      '</div>'+
+      '<input class="chk" type="checkbox" data-u="'+u.n+'" aria-label="标记单元'+u.n+'完成">'+
+      '<div class="caret"></div>'+
+    '</div>'+
+    '<div class="u-body">'+
+      (u.big?'<div class="u-row"><b>这一单元的地位</b><div>'+(u.n===7
+        ? '抽象能力的第一次跳跃。从这里开始代码不再是「从上往下写」，而是「拆成可复用的块」。学员真正的卡点不是「怎么定义函数」，而是「不知道该拆成几个函数」——先照抄教材 3 例，再逐个改需求。'
+        : '零基础放弃率最高的一章，而 Django 的模型、ORM、视图全是类。降低门槛的做法：自建学生记录 / 购物车 / 银行账户三个真实类，不要只跟教材的 Dog 和 Car。允许慢 2 周。')+'</div></div>':'')+
+      '<div class="u-row"><b>学习目标</b><div>'+u.goal+'</div></div>'+
+      '<div class="u-row"><b>讲什么</b><div><ul>'+u.lesson.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div></div>'+
+      (u.warn?'<div class="u-row"><b>常见错误</b><div><ul>'+u.warn.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div></div>':'')+
+      '<div class="u-row"><b>课后作业</b><div><ul>'+u.hw.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div></div>'+
+      '<div class="u-row"><b>本单元产出</b><div>'+u.out+'</div></div>'+
+      '<div class="u-cta">'+
+'<a class="btn" href="web/lessons/index.html#u'+u.n+'" target="_blank">按课节学（'+LESSON_CNT[u.n]+' 节）</a>'+
+        '<a class="btn l" href="'+src+'" target="_blank">打开整份讲义</a>'+
+        '<a class="btn l" href="'+src+'#四-动手练习">直接跳到动手练习</a>'+
+        (u.n===11?'<a class="btn g" href="#bank">查看 3 道综合挑战</a>':'')+
+        '<a class="btn l" href="web/bank.html" target="_blank">打开题库</a>'+
+      '</div>'+
+    '</div>'+
+  '</article>';
+}
+
+document.getElementById('unitList').innerHTML = UNITS.map(unitCard).join('');
+
+document.getElementById('libList').innerHTML = UNITS.map(function(u){
+  var col = u.cls==='z'?'var(--p2)':(u.cls==='g'?'var(--p3)':'var(--p1)');
+  var fn = 'web/' + (u.n<10 ? '0'+u.n : u.n) + '.html';
+  return '<a class="lib" style="padding:14px 16px" href="'+fn+'" target="_blank">'+
+    '<div class="lib-i" style="background:'+col+';width:34px;height:34px;font-size:13px">'+u.n+'</div>'+
+    '<div style="min-width:0"><h4 style="font-size:14px;margin:0 0 2px">'+u.t+'</h4>'+
+    '<p style="font-size:12px">'+u.m+'</p></div>'+
+  '</a>';
+}).join('');
+
+/* ── 交互：展开 / 勾选 / 进度 ── */
+var KEY='py-hub-v1';
+var chks=Array.prototype.slice.call(document.querySelectorAll('.chk'));
+var navProg=document.getElementById('navProg');
+
+function render(){
+  var d=chks.filter(function(b){return b.checked;}).length;
+  navProg.textContent=d+' / '+UNITS.length+' 单元';
+  try{ localStorage.setItem(KEY, JSON.stringify(chks.map(function(b){return b.checked;}))); }catch(e){}
+}
+
+var saved=null;
+try{ saved=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+if(Array.isArray(saved)&&saved.length===chks.length){
+  chks.forEach(function(b,i){ b.checked=!!saved[i]; });
+}
+
+chks.forEach(function(b){
+  b.addEventListener('change', function(){
+    b.closest('.unit').classList.toggle('done', b.checked);
+    render();
+  });
+  b.closest('.unit').classList.toggle('done', b.checked);
+});
+
+/* ── 单元展开：可点击、可键盘（Enter / 空格），并记住展开状态 ── */
+var OPEN_KEY='py-open-v1';
+function readOpen(){
+  try{ var a=JSON.parse(localStorage.getItem(OPEN_KEY)||'[]');
+       return Array.isArray(a)?a:[]; }catch(e){ return []; }
+}
+function saveOpen(){
+  var a=[].slice.call(document.querySelectorAll('.unit.open'))
+          .map(function(u){ return u.id.replace('u',''); });
+  try{ localStorage.setItem(OPEN_KEY, JSON.stringify(a)); }catch(e){}
+}
+function setOpen(unit, on){
+  unit.classList.toggle('open', on);
+  var h=unit.querySelector('.u-head');
+  if(h) h.setAttribute('aria-expanded', on ? 'true' : 'false');
+}
+function toggleUnit(h){
+  var u=h.parentElement;
+  setOpen(u, !u.classList.contains('open'));
+  saveOpen();
+}
+
+document.querySelectorAll('.u-head').forEach(function(h){
+  h.addEventListener('click', function(e){
+    if(e.target.classList.contains('chk')) return;
+    toggleUnit(h);
+  });
+  h.addEventListener('keydown', function(e){
+    if(e.key==='Enter' || e.key===' '){
+      e.preventDefault();               // 空格默认会滚动页面
+      toggleUnit(h);
+    }
+  });
+});
+
+/* 恢复上次展开的单元 */
+readOpen().forEach(function(n){
+  var u=document.getElementById('u'+n);
+  if(u) setOpen(u, true);
+});
+
+/* 全部展开 / 全部收起 */
+(function(){
+  var box=document.getElementById('units');
+  if(!box) return;
+  box.addEventListener('click', function(e){
+    var b=e.target.closest('[data-all]');
+    if(!b) return;
+    var on = b.getAttribute('data-all')==='open';
+    document.querySelectorAll('#unitList .unit').forEach(function(u){ setOpen(u, on); });
+    saveOpen();
+  });
+})();
+
+/* ── 课节进度（读取课节页写入的 lesson-done-v1）── */
+(function(){
+  // 总课节数由 LESSON_CNT 求和得出，不再写死。
+  // 曾经写死 TOTAL=64（那是阶段 1 的节数），导致学完第 64 节就显示「全部完成 ✓」，
+  // 而第 65–111 节根本没被计入，首页也永远不会推荐后面的课。
+  var TOTAL=Object.keys(LESSON_CNT).reduce(function(s,k){ return s+LESSON_CNT[k]; },0);
+  function read(){
+    try{ return JSON.parse(localStorage.getItem('lesson-done-v1')||'{}'); }catch(e){ return {}; }
+  }
+  var o=read(), n=0, next=0, i;
+  for(i=1;i<=TOTAL;i++){ if(o[String(i)]) n++; else if(!next) next=i; }
+  var bar=document.getElementById('ltr'), ct=document.getElementById('lct'), go=document.getElementById('lgo');
+  if(!bar) return;
+  bar.style.width=(n/TOTAL*100)+'%';
+  ct.textContent=n+' / '+TOTAL+' 节';
+  if(!next){ go.textContent='全部完成 ✓'; go.classList.add('done'); go.href='web/lessons/index.html'; }
+  else { go.textContent='继续学习：第 '+next+' 节 →'; go.href='web/lessons/'+(next<10?'0':'')+next+'.html'; }
+})();
+
+/* ── 学习总览：题库与关卡进度（课节那行在上一段已处理） ── */
+(function(){
+  function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return {}}}
+  /* 数量一律从 searchdata.js 的 SITE 取（由构建器扫产物生成），页面不再写死 */
+  function bankTotal(){
+    if(window.SITE && window.SITE.bank) return window.SITE.bank;
+    return (window.SEED||[]).filter(function(e){
+      return String(e[2]).indexOf('bank.html#')===0;}).length;
+  }
+  function gateTotal(){
+    return (window.SITE && window.SITE.gate1!=null)
+      ? (window.SITE.gate1 + window.SITE.gate2) : 0;
+  }
+
+  function paint(){
+    var b=read('bank-v1'), d=0, r=0;
+    for(var k in b){ if(b[k]===1) d++; else if(b[k]===2) r++; }
+    var br=document.getElementById('dBr'), bl=document.getElementById('dBl');
+    var bt=bankTotal();
+    if(br){
+      br.style.width=(bt? d/bt*100 : 0)+'%';
+      bl.textContent=d+' / '+bt+' 题'+(r?(' · 待复习 '+r):'');
+    }
+    var g=Object.keys(read('gate1-v1')).length+Object.keys(read('gate2-v1')).length;
+    var gt=gateTotal();
+    var gr=document.getElementById('dGr'), gl=document.getElementById('dGl');
+    if(gr){
+      gr.style.width=(gt? g/gt*100 : 0)+'%';
+      gl.textContent=g+' / '+(gt||'?')+' 项';
+    }
+  }
+  paint();
+  window.addEventListener('load',paint);      // SEED 若延迟到位，这里补一次
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+/* 平滑滚动时高亮当前区块 */
+var secs=Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+var links={};
+document.querySelectorAll('.nav-links a').forEach(function(a){ links[a.getAttribute('href').slice(1)]=a; });
+window.addEventListener('scroll', function(){
+  var cur=null;
+  secs.forEach(function(s){ if(window.scrollY>=s.offsetTop-140) cur=s.id; });
+  Object.keys(links).forEach(function(k){
+    links[k].style.color = (k===cur)?'var(--p1)':'';
+    links[k].style.borderBottomColor = (k===cur)?'var(--p1)':'transparent';
+  });
+});
+
+render();
+</script>
+<script>
+/* ── 全站搜索：课节 / 讲义小节 / 题库 / 课件 ── */
+(function(){
+  var box=document.getElementById('gs'), res=document.getElementById('gsRes');
+  if(!box||!res||!window.SEED) return;
+  var items=[], sel=-1;
+
+  function render(){
+    var q=box.value.trim().toLowerCase();
+    if(!q){res.classList.remove('on');res.innerHTML='';sel=-1;return;}
+    var hit=[];
+    for(var i=0;i<SEED.length;i++){
+      var e=SEED[i], t=e[0].toLowerCase(), k=(e[3]||'').toLowerCase();
+      var sc = t.indexOf(q)===0 ? 0 : (t.indexOf(q)>-1 ? 1 : (k.indexOf(q)>-1 ? 2 : -1));
+      if(sc<0) continue;
+      hit.push([sc,i,e]);
+      if(hit.length>400) break;
+    }
+    hit.sort(function(a,b){return a[0]-b[0]||a[1]-b[1];});
+    items=hit.slice(0,10).map(function(x){return x[2];});
+    sel=-1;
+    if(!items.length){res.innerHTML='<div class="none">没找到。试试「切片」「继承」「部署」这类关键词。</div>';
+      res.classList.add('on');return;}
+    res.innerHTML=items.map(function(e,i){
+      return '<a href="web/'+e[2]+'" data-i="'+i+'"><div class="t">'+e[0]+
+             '</div><div class="s">'+e[1]+'</div></a>';
+    }).join('');
+    res.classList.add('on');
+  }
+
+  function move(d){
+    if(!items.length) return;
+    sel=(sel+d+items.length)%items.length;
+    var links=res.querySelectorAll('a');
+    links.forEach(function(a,i){a.classList.toggle('sel',i===sel)});
+    if(links[sel]) links[sel].scrollIntoView({block:'nearest'});
+  }
+
+  box.addEventListener('input',render);
+  box.addEventListener('focus',render);
+  box.addEventListener('keydown',function(e){
+    if(e.key==='ArrowDown'){e.preventDefault();move(1);}
+    else if(e.key==='ArrowUp'){e.preventDefault();move(-1);}
+    else if(e.key==='Enter'){
+      var links=res.querySelectorAll('a');
+      var t=links[sel>=0?sel:0];
+      if(t){location.href=t.getAttribute('href');}
+    } else if(e.key==='Escape'){box.value='';render();box.blur();}
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.hsearch')) res.classList.remove('on');
+  });
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();box.focus();box.select();}
+  });
+  // 支持 ?q=关键词 直接带查询打开（也方便分享链接）
+  var m=location.search.match(/[?&]q=([^&]+)/);
+  if(m){ box.value=decodeURIComponent(m[1].replace(/\+/g,' ')); render(); }
+})();
+
+/* ── 进度导出 / 导入（换电脑、清缓存前先备份） ── */
+(function(){
+  var KEYS=['py-hub-v1','lesson-done-v1','bank-v1','gate1-v1','gate2-v1'];
+  var eb=document.getElementById('expP'), ib=document.getElementById('impP'),
+      fi=document.getElementById('impFile');
+  if(!eb||!ib||!fi) return;
+
+  eb.addEventListener('click',function(){
+    var data={};
+    KEYS.forEach(function(k){
+      var v=localStorage.getItem(k);
+      if(v!==null) data[k]=v;
+    });
+    var d=new Date(), pad=function(n){return n<10?'0'+n:''+n};
+    var name='学习进度-'+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+'.json';
+    var blob=new Blob([JSON.stringify({v:1,at:d.toISOString(),data:data},null,1)],
+                      {type:'application/json'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},800);
+    eb.textContent='已导出 ✓';
+    setTimeout(function(){eb.textContent='导出进度'},1600);
+  });
+
+  ib.addEventListener('click',function(){fi.click();});
+  fi.addEventListener('change',function(){
+    var f=this.files&&this.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var o=JSON.parse(r.result);
+        var d=o&&o.data?o.data:o;
+        if(!d||typeof d!=='object') throw new Error('格式不对');
+        var n=0;
+        Object.keys(d).forEach(function(k){
+          if(KEYS.indexOf(k)>-1){localStorage.setItem(k,d[k]);n++;}
+        });
+        alert('已导入 '+n+' 项进度，页面将刷新。');
+        location.reload();
+      }catch(err){ alert('导入失败：'+err.message); }
+    };
+    r.readAsText(f);
+  });
+})();
+</script>
+<script>
+/* 回到顶部（首页也很长） */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>600); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+
+<script>
+/* 页面上的规模数字（单元/课节/题量）跟随 SITE，别再手写——
+   SITE 由构建器扫产物生成，写死过 64 和 52 两次，都漏改过。 */
+(function(){
+  function sync(){
+    if(!window.SITE) return;
+    document.querySelectorAll('[data-n]').forEach(function(el){
+      var k=el.getAttribute('data-n');
+      if(window.SITE[k]!=null) el.textContent=window.SITE[k];
+    });
+  }
+  sync();
+  window.addEventListener('load', sync);
+})();
+</script>
+<script>
+/* PWA：注册 Service Worker（http(s) 下生效；file:// 打开便携版时注册失败属预期，静默跳过） */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js',{scope:'./'}).catch(function(){});
+  });
+}
+</script>
+<style>
+#pwaTip{position:fixed;right:16px;bottom:16px;z-index:80;max-width:300px;background:#fff;
+border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 34px rgba(20,40,70,.22);
+padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
+#pwaTip.on{display:block}
+#pwaTip b{display:block;font-size:14.5px;margin-bottom:4px}
+#pwaTip p{margin:0 0 10px;color:var(--muted)}
+#pwaTip .row{display:flex;gap:8px}
+#pwaTip button{flex:1;border-radius:9px;padding:8px 0;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+#pwaTip .yes{background:var(--p1);color:#fff;border:1px solid var(--p1)}
+#pwaTip .no{background:#fff;color:var(--muted);border:1px solid var(--line)}
+</style>
+<div id="pwaTip"><b>装到手机 / 桌面</b><p>安装后离线也能学，学习进度保存在本机。</p>
+<div class="row"><button class="yes" type="button">安装</button><button class="no" type="button">暂不</button></div></div>
+<script>
+(function(){
+  var tip=document.getElementById('pwaTip'), ev=null;
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); ev=e;
+    if(localStorage.getItem('pwa-tip-dismissed')) return;
+    tip.classList.add('on');
+  });
+  tip.querySelector('.yes').addEventListener('click',function(){
+    if(!ev) return;
+    ev.prompt();
+    ev.userChoice['finally'](function(){ tip.classList.remove('on'); });
+  });
+  tip.querySelector('.no').addEventListener('click',function(){
+    tip.classList.remove('on');
+    try{localStorage.setItem('pwa-tip-dismissed','1');}catch(err){}
+  });
+})();
+</script>
+<script src="web/media/bgm.js" defer></script>
+</body>
+</html>

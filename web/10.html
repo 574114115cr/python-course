@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 10 · 测试代码</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+#toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;
+box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
+transition:opacity .18s;z-index:60}
+#toTop.on{opacity:1;pointer-events:auto}
+@media print{#toTop{display:none}}
+</style>
+</head>
+<body data-unit="10">
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>单元 10 · 测试代码</h1>
+  <a class="ppt" href="ppt/u/10.html" title="本单元逐节课件：每节课都有课节页与知识点页">本单元课件</a>
+  <label class="dd"><input type="checkbox" id="doneBox"><span>标记本单元已完成</span></label>
+</div></div>
+
+<div class="layout">
+  <aside class="side">
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="52" data-to="56"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u10"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/10.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s10"><span class="k">大纲</span><span class="v">课程大纲课件 p10</span></a><a href="bank.html#u10"><span class="k">题库</span><span class="v">本单元 2 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
+    <h4>本单元目录</h4>
+    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+<a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
+<a class="lv3" href="#2-1-为什么需要测试-bug-有两种">2.1 为什么需要测试：Bug 有两种</a>
+<a class="lv3" href="#2-2-自动化测试的价值">2.2 自动化测试的价值</a>
+<a class="lv3" href="#2-3-三条硬性命名规则">2.3 三条硬性命名规则</a>
+<a class="lv3" href="#2-4-assert-用代码描述-应该是什么">2.4 assert：用代码描述&quot;应该是什么&quot;</a>
+<a class="lv3" href="#2-5-测试与被测代码必须分离">2.5 测试与被测代码必须分离</a>
+<a class="lv3" href="#2-6-测试用例的设计-正常-边界">2.6 测试用例的设计：正常 + 边界</a>
+<a class="lv3" href="#2-7-parametrize-一次测很多组数据">2.7 parametrize：一次测很多组数据</a>
+<a class="lv3" href="#2-8-运行-pytest-的常用命令">2.8 运行 pytest 的常用命令</a>
+<a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
+<a class="lv3" href="#示例-1-安装与验证">示例 1：安装与验证</a>
+<a class="lv3" href="#示例-2-第一个被测模块与测试">示例 2：第一个被测模块与测试</a>
+<a class="lv3" href="#示例-3-断言消息与常见断言">示例 3：断言消息与常见断言</a>
+<a class="lv3" href="#示例-4-测试类">示例 4：测试类</a>
+<a class="lv3" href="#示例-5-参数化测试">示例 5：参数化测试</a>
+<a class="lv3" href="#示例-6-测试夹具-简单版">示例 6：测试夹具（简单版）</a>
+<a class="lv3" href="#示例-7-读懂-pytest-的输出">示例 7：读懂 pytest 的输出</a>
+<a class="lv2" href="#四-动手练习">四、动手练习</a>
+<a class="lv3" href="#基础档">基础档</a>
+<a class="lv3" href="#进阶档">进阶档</a>
+<a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-10-1">参考答案 10-1</a>
+<a class="lv3" href="#参考答案-10-2">参考答案 10-2</a>
+<a class="lv3" href="#参考答案-10-3">参考答案 10-3</a>
+<a class="lv3" href="#参考答案-10-4">参考答案 10-4</a>
+<a class="lv3" href="#参考答案-10-5">参考答案 10-5</a>
+<a class="lv3" href="#参考答案-10-6">参考答案 10-6</a>
+<a class="lv3" href="#参考答案-10-7">参考答案 10-7</a>
+<a class="lv3" href="#参考答案-10-8">参考答案 10-8</a>
+<a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
+    <div class="sidetag">
+      <b>学习提醒</b><br>
+      讲完不超过 10 分钟就要自己敲一遍代码。<br>
+      报错是教材，不要擦掉。
+    </div>
+  </aside>
+  <main class="main"><h1 id="单元-10-测试代码">单元 10：测试代码</h1>
+<blockquote>
+<p>对应教材第 11 章「测试代码（pytest）」
+关键词：pytest 安装、<code>assert</code> 断言、测试函数命名 <code>test_*</code>、测试类 <code>Test*</code>、<code>-v</code> 详细输出、<code>-k</code> 按名字筛选、<code>@pytest.mark.parametrize</code>、测试与被测代码分离</p>
+</blockquote>
+<hr>
+<h2 id="一-学习目标">一、学习目标</h2>
+<p>完成本单元后，你应该能够：</p>
+<ol>
+<li>用 <code>pip install pytest</code> 装好 pytest，并用 <code>pytest --version</code> 验证。</li>
+<li>写出一个合格的测试函数：文件命名 <code>test_*.py</code>、函数命名 <code>test_*</code>、用 <code>assert</code> 断言结果。</li>
+<li>区分<strong>正常用例</strong>和<strong>边界用例</strong>，会为除零、负数、空输入这类情况设计测试。</li>
+<li>用 <code>pytest -v</code> 查看详细结果、用 <code>pytest -k "关键词"</code> 只跑相关测试，并读懂 FAILURE 报告定位问题。</li>
+<li>用 <code>@pytest.mark.parametrize</code> 为同一个测试准备多组输入，理解它如何减少重复代码。</li>
+</ol>
+<hr>
+<h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
+<h3 id="2-1-为什么需要测试-bug-有两种">2.1 为什么需要测试：Bug 有两种</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>危害</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>语法错误（Syntax Error）</strong></td>
+<td>Python 读不懂你的代码</td>
+<td>立即报错，跑不起来，<strong>很明显</strong></td>
+</tr>
+<tr>
+<td><strong>逻辑错误（Logic Error）</strong></td>
+<td>代码能跑，但结果不对</td>
+<td>悄无声息，可能几个月后才被发现，<strong>最危险</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>逻辑错误是测试唯一能对付的东西。</strong> 语法错误在第一次运行时就会暴露，根本不需要测试。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 一个语法完全正确、但逻辑错误的函数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_average</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""求平均值 —— 这个实现有 bug。"""</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>      <span class="c1"># 忘了除以个数！</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">calculate_average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]))</span>   <span class="c1"># 270，不是 90</span>
+</code></pre>
+<p>程序跑得通，不报任何错。如果你没有测试，这个 bug 可能一直留到有人拿它算工资的那天。</p>
+<h3 id="2-2-自动化测试的价值">2.2 自动化测试的价值</h3>
+<p><strong>手动测试</strong>：改一次代码 → 手动跑一遍所有功能 → 累。
+<strong>自动化测试</strong>：改一次代码 → 跑一条命令 <code>pytest</code> → 几秒内告诉你所有测试是否通过。</p>
+<p>生活化类比：
+- <strong>手动测试</strong>像每次装修完都亲自去每个房间检查一遍门锁、水电——可靠但极慢。
+- <strong>自动化测试</strong>像装一套传感器系统，装修完按下按钮，所有房间的检测报告十几秒内全出来。</p>
+<p>项目越大、代码改得越频繁，自动化的收益越明显。</p>
+<h3 id="2-3-三条硬性命名规则">2.3 三条硬性命名规则</h3>
+<p>pytest 靠<strong>命名约定</strong>自动发现测试，规则错了测试就"根本不被执行"：</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>命名规则</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文件</td>
+<td><code>test_*.py</code></td>
+<td><code>test_calculator.py</code></td>
+</tr>
+<tr>
+<td>函数</td>
+<td><code>test_*</code></td>
+<td><code>test_add()</code></td>
+</tr>
+<tr>
+<td>类</td>
+<td><code>Test*</code>（且类里不能有 <code>__init__</code>）</td>
+<td><code>TestCalculator</code></td>
+</tr>
+<tr>
+<td>类里的方法</td>
+<td><code>test_*</code></td>
+<td><code>test_divide()</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>最高频的坑</strong>：文件名或函数名少写了 <code>test_</code>，pytest 静默地不跑它——<strong>不报错，但也不执行</strong>。如果你发现"pytest 说 0 passed"，第一件事就是检查命名。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 下面这个类有 __init__ 是错的</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBad</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>    <span class="c1"># pytest 报错：不能有 __init__，测试类只用来分组</span>
+
+
+<span class="c1"># 正确：测试类只用来把测试函数归类，不做初始化</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestGood</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="kc">True</span>
+</code></pre>
+<h3 id="2-4-assert-用代码描述-应该是什么">2.4 <code>assert</code>：用代码描述"应该是什么"</h3>
+<p><code>assert</code> 的意思是"<strong>断言</strong>"。写法是：<code>assert 表达式</code>，表达式为假就报错。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">test_add</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">2</span>          <span class="c1"># 通过：条件为真，测试通过</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_add_wrong</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">3</span>          <span class="c1"># 失败：AssertionError</span>
+</code></pre>
+<p><strong>关键在于 <code>assert</code> 里要写"实际结果 == 预期结果"，而不是只写实际结果</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 不推荐：只测了"返回了一个东西"，测不出返回值对不对</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_bad</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+<span class="c1"># 推荐：明确写出期望值</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_good</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+</code></pre>
+<p><strong>断言消息</strong>：可以给 <code>assert</code> 加一句说明，失败时这条消息会显示出来。这在测试复杂逻辑时非常有用：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">assert</span> <span class="n">actual</span> <span class="o">==</span> <span class="n">expected</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"期望 </span><span class="si">{</span><span class="n">expected</span><span class="si">}</span><span class="s2">，实际得到 </span><span class="si">{</span><span class="n">actual</span><span class="si">}</span><span class="s2">"</span>
+</code></pre>
+<h3 id="2-5-测试与被测代码必须分离">2.5 测试与被测代码必须分离</h3>
+<p><strong>不要把测试代码写在被测文件里。</strong> 正确做法是两个文件：</p>
+<pre><code class="text"><span class="cl">目录结构</span>project/
+├── calculator.py       ← 被测代码（纯粹的函数定义）
+└── test_calculator.py  ← 测试代码（只有测试）
+</code></pre>
+<p>这样做的好处：
+1. 测试可以独立运行、独立删除（删掉测试不影响程序运行）。
+2. 被测代码保持干净，没有"为了测试而加的怪代码"。
+3. 一目了然哪些是测试哪些是功能。</p>
+<h3 id="2-6-测试用例的设计-正常-边界">2.6 测试用例的设计：正常 + 边界</h3>
+<p><strong>一个好的测试不只测"正常情况"，更重要的是测"极端情况"。</strong></p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正常用例</td>
+<td><code>divide(10, 2) == 5</code></td>
+</tr>
+<tr>
+<td>边界用例</td>
+<td><code>divide(10, 1)</code>、<code>divide(1, 10)</code></td>
+</tr>
+<tr>
+<td><strong>异常用例</strong></td>
+<td><code>divide(10, 0)</code> —— 除零会怎样？</td>
+</tr>
+<tr>
+<td>类型用例</td>
+<td><code>add("a", "b")</code> —— 字符串能加吗？</td>
+</tr>
+<tr>
+<td>空值用例</td>
+<td><code>average([])</code> —— 空列表会怎样？</td>
+</tr>
+<tr>
+<td>负数用例</td>
+<td><code>factorial(-1)</code> —— 负数怎么处理？</td>
+</tr>
+</tbody>
+</table>
+<p><strong>除零、负数、空输入这三类是最容易藏 bug 的地方</strong>，也是面试和实际工作里最常被要求测试的点。本单元的练习会重点覆盖。</p>
+<h3 id="2-7-parametrize-一次测很多组数据">2.7 <code>parametrize</code>：一次测很多组数据</h3>
+<p>如果同一个测试要跑 6 组数据，逐个写函数太浪费：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 不推荐：6 个几乎一样的函数</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_1</span><span class="p">():</span> <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_2</span><span class="p">():</span> <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+<span class="c1"># ...</span>
+</code></pre>
+<p>用参数化装饰器，一行搞定：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"a,b,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre>
+<p>pytest 会自动把这个测试<strong>展开成 4 个独立的测试</strong>，任何一个失败都会单独报告。</p>
+<h3 id="2-8-运行-pytest-的常用命令">2.8 运行 pytest 的常用命令</h3>
+<pre><code class="language-bash"><span class="cl">终端命令</span>pytest<span class="w">                      </span><span class="c1"># 运行当前目录所有测试</span>
+pytest<span class="w"> </span>-v<span class="w">                   </span><span class="c1"># 详细模式：显示每个测试名和 PASSED/FAILED</span>
+pytest<span class="w"> </span>-vv<span class="w">                  </span><span class="c1"># 更详细</span>
+pytest<span class="w"> </span>-q<span class="w">                   </span><span class="c1"># 安静模式：只显示汇总</span>
+pytest<span class="w"> </span>test_calculator.py<span class="w">   </span><span class="c1"># 只运行指定文件</span>
+pytest<span class="w"> </span>-k<span class="w"> </span><span class="s2">"divide"</span><span class="w">          </span><span class="c1"># 只运行名字里含 "divide" 的测试</span>
+pytest<span class="w"> </span>-x<span class="w">                   </span><span class="c1"># 第一个失败就停止</span>
+pytest<span class="w"> </span>--tb<span class="o">=</span>short<span class="w">           </span><span class="c1"># 缩短错误堆栈的显示</span>
+</code></pre>
+<p><code>-v</code> 是你用得最多的一个参数，因为它会告诉你<strong>哪个测试失败了、哪个通过了</strong>。</p>
+<hr>
+<h2 id="三-可运行代码示例">三、可运行代码示例</h2>
+<h3 id="示例-1-安装与验证">示例 1：安装与验证</h3>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 安装 pytest</span>
+pip<span class="w"> </span>install<span class="w"> </span>pytest
+
+<span class="c1"># 验证安装成功（会输出版本号）</span>
+pytest<span class="w"> </span>--version
+
+<span class="c1"># 如果 pip 找不到，可以试 python -m pip install pytest</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_00_version.py —— 确认 pytest 环境正常</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_pytest_works</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""最小测试：确认 pytest 能正常发现并运行测试。"""</span>
+    <span class="k">assert</span> <span class="kc">True</span>      <span class="c1"># 这个测试总是通过，用来验证环境</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_assert_message</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""验证 assert 的消息会显示出来。"""</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"1 加 1 应该等于 2，实际是 </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span>
+</code></pre>
+<h3 id="示例-2-第一个被测模块与测试">示例 2：第一个被测模块与测试</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># calculator.py —— 被测代码（纯功能，没有测试）</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回两数之和。"""</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回两数之差。"""</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">multiply</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回两数之积。"""</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回两数之商。</span>
+
+<span class="sd">    除数为 0 时抛出 ZeroDivisionError。</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_calculator.py —— 测试代码（只放测试）</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">calculator</span><span class="w"> </span><span class="kn">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">subtract</span><span class="p">,</span> <span class="n">multiply</span><span class="p">,</span> <span class="n">divide</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+
+<span class="c1"># ===== 正常用例 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_add</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""测试加法。"""</span>
+    <span class="k">assert</span> <span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">add</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_subtract</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""测试减法。"""</span>
+    <span class="k">assert</span> <span class="n">subtract</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">subtract</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">subtract</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_multiply</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""测试乘法。"""</span>
+    <span class="k">assert</span> <span class="n">multiply</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">12</span>
+    <span class="k">assert</span> <span class="n">multiply</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">multiply</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">6</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""测试除法。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">5</span>
+
+
+<span class="c1"># ===== 边界用例 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_one</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除以 1 的边界情况。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_result_is_float</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除法结果应该是浮点数。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="mf">5.0</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 异常用例：除零 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_zero_raises</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除以0 应该抛出 ZeroDivisionError。"""</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ZeroDivisionError</span><span class="p">):</span>
+        <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-3-断言消息与常见断言">示例 3：断言消息与常见断言</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_assertions.py —— 各种 assert 写法</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_equal</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""相等断言。"""</span>
+    <span class="k">assert</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">4</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_not_equal</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""不等断言。"""</span>
+    <span class="k">assert</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">5</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_with_message</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""带消息的断言，失败时会显示消息。"""</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+    <span class="n">average</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">average</span> <span class="o">==</span> <span class="mi">90</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"平均分应该是 90，实际是 </span><span class="si">{</span><span class="n">average</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_comparison_chain</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""链式比较。"""</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="k">assert</span> <span class="mi">18</span> <span class="o">&lt;=</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_in_container</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""判断元素是否在容器里。"""</span>
+    <span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="s2">"苹果"</span> <span class="ow">in</span> <span class="n">fruits</span>
+    <span class="k">assert</span> <span class="s2">"西瓜"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fruits</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_type_check</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""类型断言。"""</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="s2">"42"</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_truthy</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""真假值断言。"""</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="p">[]</span>        <span class="c1"># 空列表是假，所以 not [] 是真</span>
+    <span class="k">assert</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>        <span class="c1"># 非空列表是真</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="s2">""</span>        <span class="c1"># 空字符串同样是假</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_approx</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""浮点数比较要用 approx，不能直接用 ==。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span>
+    <span class="c1"># assert result == 0.3        # 失败！结果是 0.30000000000000004</span>
+    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_multiple_asserts</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""一个测试函数里可以写多个断言，全部通过才算通过。"""</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">6</span>
+    <span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre>
+<h3 id="示例-4-测试类">示例 4：测试类</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_bank.py —— 测试类：把相关测试归类</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BankAccount</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""被测的银行账户类。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">balance</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="n">owner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">deposit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""存款。"""</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"存款金额必须大于 0"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balance</span> <span class="o">+=</span> <span class="n">amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"存款 </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">withdraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""取款。"""</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"余额不足"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">balance</span> <span class="o">-=</span> <span class="n">amount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"取款 </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">balance</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBankAccountDeposit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试类：只用来分组，不能有 __init__。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_deposit_increases_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""存款后余额增加。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">account</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">account</span><span class="o">.</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">150</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_deposit_returns_new_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""存款方法返回新的余额。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">account</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">150</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_deposit_zero_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""存 0 元应该报错。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">account</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_deposit_negative_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""存负数应该报错。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">account</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_history_records_transaction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""交易记录应该被保存。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">account</span><span class="o">.</span><span class="n">deposit</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">account</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="s2">"存款 50"</span> <span class="ow">in</span> <span class="n">account</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBankAccountWithdraw</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""另一组测试，同样针对 BankAccount。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_withdraw_reduces_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">account</span><span class="o">.</span><span class="n">withdraw</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">account</span><span class="o">.</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">70</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_withdraw_all_succeeds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""取光全部余额应该允许。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">account</span><span class="o">.</span><span class="n">withdraw</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">account</span><span class="o">.</span><span class="n">balance</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_withdraw_too_much_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""取超额应该报错。"""</span>
+        <span class="n">account</span> <span class="o">=</span> <span class="n">BankAccount</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">account</span><span class="o">.</span><span class="n">withdraw</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-5-参数化测试">示例 5：参数化测试</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_parametrize.py —— 用 parametrize 减少重复代码</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""判断 n 是否为素数。"""</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span> <span class="o">**</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="c1"># ===== 不用 parametrize：写 4 个几乎一样的函数 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_prime_2</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_prime</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_prime_4</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_prime</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_prime_17</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_prime</span><span class="p">(</span><span class="mi">17</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_prime_1</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_prime</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="c1"># ===== 用 parametrize：等价但更紧凑 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_prime_true</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""这些数都是素数。"""</span>
+    <span class="k">assert</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"n"</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_prime_false</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""这些数都不是素数。"""</span>
+    <span class="k">assert</span> <span class="n">is_prime</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="c1"># ===== 多参数：一次测多组组合 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 a 除以 b。"""</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"a,b,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""多组数据共用一个测试函数。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="c1"># ===== 参数化 + 异常测试 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"b"</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_zero</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""除以 0 应该报错。"""</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ZeroDivisionError</span><span class="p">):</span>
+        <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre>
+<h3 id="示例-6-测试夹具-简单版">示例 6：测试夹具（简单版）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_fixture.py —— 用 setup_method 准备测试数据</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShoppingCart</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""被测的购物车。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"price"</span><span class="p">:</span> <span class="n">price</span><span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"price"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestShoppingCart</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""用 setup_method 为每个测试准备一个全新的购物车。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""pytest 会在每个测试函数之前自动调用这个方法。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_cart_is_empty_before_add</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""测试：初始购物车是空的。"""</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">empty</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">empty</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_setup_added_two_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""测试：setup_method 确实准备好数据了。"""</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">8.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"橙子"</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">12.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">3.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_remove_nonexistent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""删除不存在的商品不应该报错，也不应该改变购物车。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"西瓜"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+</code></pre>
+<h3 id="示例-7-读懂-pytest-的输出">示例 7：读懂 pytest 的输出</h3>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 运行全部测试，查看详细结果</span>
+pytest<span class="w"> </span>-v
+</code></pre>
+<p>典型输出（成功时）：</p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="o">=============================</span> <span class="n">test</span> <span class="n">session</span> <span class="n">starts</span> <span class="o">==============================</span>
+<span class="n">platform</span> <span class="n">linux</span> <span class="o">--</span> <span class="n">Python</span> <span class="mf">3.12.0</span><span class="p">,</span> <span class="n">pytest</span><span class="o">-</span><span class="mf">8.0.0</span>
+<span class="n">collected</span> <span class="mi">12</span> <span class="n">items</span>
+
+<span class="n">test_calculator</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_add</span> <span class="n">PASSED</span>                          <span class="p">[</span>  <span class="mi">8</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_calculator</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_subtract</span> <span class="n">PASSED</span>                     <span class="p">[</span> <span class="mi">16</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_calculator</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_divide_by_zero_raises</span> <span class="n">PASSED</span>        <span class="p">[</span> <span class="mi">25</span><span class="o">%</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="o">=============================</span> <span class="mi">12</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.42</span><span class="n">s</span> <span class="o">=============================</span>
+</code></pre>
+<p>失败时会明确指出<strong>哪个测试失败、期望什么、实际得到什么</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="o">===================================</span> <span class="n">FAILURES</span> <span class="o">===================================</span>
+<span class="n">_________________________________</span> <span class="n">test_average</span> <span class="n">__________________________________</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_average</span><span class="p">():</span>
+<span class="o">&gt;</span>       <span class="k">assert</span> <span class="n">calculate_average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span> <span class="o">==</span> <span class="mi">90</span>
+<span class="n">E</span>       <span class="k">assert</span> <span class="mi">270</span> <span class="o">==</span> <span class="mi">90</span>
+<span class="n">E</span>        <span class="o">+</span>  <span class="n">where</span> <span class="mi">270</span> <span class="o">=</span> <span class="n">calculate_average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="o">===========================</span> <span class="n">short</span> <span class="n">test</span> <span class="n">summary</span> <span class="n">info</span> <span class="o">============================</span>
+<span class="n">FAILED</span> <span class="n">test_average</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_average</span> <span class="o">-</span> <span class="k">assert</span> <span class="mi">270</span> <span class="o">==</span> <span class="mi">90</span>
+<span class="o">=========================</span> <span class="mi">1</span> <span class="n">failed</span><span class="p">,</span> <span class="mi">11</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.51</span><span class="n">s</span> <span class="o">=========================</span>
+</code></pre>
+<p><strong>读法</strong>：
+- <code>E       assert 270 == 90</code> —— 实际值 270，期望值 90
+- <code>+ where 270 = ...</code> —— 额外说明这个 270 是怎么来的
+- <code>FAILED test_average.py::test_average</code> —— 精确到哪个文件哪个测试
+- <code>1 failed, 11 passed</code> —— 总体情况</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># 只运行名字含 "average" 的测试</span>
+pytest<span class="w"> </span>-k<span class="w"> </span><span class="s2">"average"</span>
+
+<span class="c1"># 只运行 test_bank.py 文件</span>
+pytest<span class="w"> </span>test_bank.py
+
+<span class="c1"># 只运行测试类</span>
+pytest<span class="w"> </span>test_bank.py::TestBankAccountDeposit
+
+<span class="c1"># 只运行某一个具体测试</span>
+pytest<span class="w"> </span>test_bank.py::TestBankAccountDeposit::test_deposit_zero_raises
+
+<span class="c1"># 第一个失败就停止</span>
+pytest<span class="w"> </span>-x
+</code></pre>
+<hr>
+<h2 id="四-动手练习">四、动手练习</h2>
+<h3 id="基础档">基础档</h3>
+<p><strong>练习 10-1【给函数补测试】</strong>
+创建两个文件：
+- <code>text_utils.py</code>：包含三个函数
+  - <code>count_words(text)</code>：返回文本中的单词数
+  - <code>reverse(text)</code>：返回反转后的字符串
+  - <code>is_palindrome(text)</code>：判断是否回文（忽略大小写和空格）
+- <code>test_text_utils.py</code>：为每个函数至少写 3 个测试
+必须覆盖：正常情况 + 边界情况（空字符串）。
+先运行 <code>pytest -v</code> 确认全部通过。</p>
+<p><strong>练习 10-2【除法测试器】</strong>
+创建 <code>divider.py</code>（<code>divide(a, b)</code>）和 <code>test_divider.py</code>。
+测试用例至少包括：
+1. 正常除法：<code>divide(10, 2) == 5</code>
+2. 整除：<code>divide(9, 3) == 3</code>
+3. 负数：<code>divide(-10, 2) == -5</code>
+4. 除以 1：<code>divide(7, 1) == 7</code>
+5. <strong>除零</strong>：<code>divide(10, 0)</code> 必须抛 <code>ZeroDivisionError</code>
+要求第 5 条用 <code>with pytest.raises(ZeroDivisionError):</code> 写。</p>
+<p><strong>练习 10-3【测试类入门】</strong>
+创建 <code>book.py</code>（<code>Book</code> 类，有 <code>title</code>、<code>price</code>、<code>borrow()</code>、<code>return_book()</code>）和 <code>test_book.py</code>。
+写 <code>TestBook</code> 类，至少 5 个测试方法，覆盖：
+- 创建时的默认值
+- 借出后 <code>available</code> 变为 <code>False</code>
+- 归还后变回 <code>True</code>
+- 已借出时再次借出应该报错（<code>pytest.raises</code>）</p>
+<p><strong>练习 10-4【故意写个 bug 让测试失败】</strong>
+写 <code>buggy.py</code>，故意让 <code>calculate_average(numbers)</code> 忘记除以 <code>len(numbers)</code>。
+然后写 3 个测试，至少 1 个会失败。
+运行 <code>pytest -v</code>，把失败报告完整抄下来。
+<strong>然后修复 bug，重新运行，确认全部通过。</strong>
+要求：亲手体验一次"测试帮我抓到了 bug"的过程，并说清失败报告里哪几行最有用。</p>
+<h3 id="进阶档">进阶档</h3>
+<p><strong>练习 10-5【参数化测试】</strong>
+给 <code>divider.py</code> 的 <code>divide</code> 写一个 <code>@pytest.mark.parametrize</code> 测试，覆盖至少 6 组数据，包括正常、负数、除以 1。
+再给 <code>text_utils.py</code> 的 <code>count_words</code> 写一个参数化测试，覆盖：
+- <code>"hello world"</code> → 2
+- <code>""</code> → 0
+- <code>"   "</code> → 0（全是空格）
+- <code>"hello"</code> → 1
+- <code>"a b c d e"</code> → 5</p>
+<p><strong>练习 10-6【测试类 + setup_method】</strong>
+创建 <code>cart.py</code>（购物车类）和 <code>test_cart.py</code>：
+- <code>add(name, price)</code>、<code>remove(name)</code>、<code>total()</code>、<code>count()</code>、<code>clear()</code>
+- 写 <code>TestCart</code> 类，用 <code>setup_method</code> 准备数据
+测试至少 6 个，覆盖：添加、总价计算、删除不存在的商品（不崩）、清空、删除最后一件商品后 total 为 0。</p>
+<p><strong>练习 10-7【完整的投票分析器测试】</strong>
+这是教材第 11 章的核心练习。创建 <code>vote_analyzer.py</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">analyze_votes</span><span class="p">(</span><span class="n">votes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""votes 是候选人名字的列表，返回统计字典。"""</span>
+    <span class="c1"># 返回 {"winner": 票数最多的名字或None, "total": 总票数, "counts": {...}}</span>
+    <span class="c1"># 要求：票数并列时返回 None 作为 winner</span>
+</code></pre>
+<p>然后写 <code>test_vote_analyzer.py</code>，至少 8 个测试，覆盖：
+1. 正常情况（某人明显胜出）
+2. 平票（winner 为 <code>None</code>）
+3. 空列表（total 为 0，winner 为 <code>None</code>）
+4. 只有一票
+5. 所有人票数相同
+6. 大量数据（生成 1000 票）
+7. 用 parametrize 覆盖几种不同的票数分布</p>
+<p><strong>练习 10-8【测试驱动的开发流程】</strong>
+选一个你做过的小函数，完整走一遍"先写测试 → 看它失败 → 再写实现 → 看它通过"的流程：
+1. <strong>先</strong>写 <code>test_feature.py</code>，测试一个你还没实现的函数 <code>calculate_tip(bill, rate)</code>
+2. 运行 pytest，确认它<strong>失败</strong>（因为函数还不存在，报 ImportError/AttributeError）
+3. <strong>再</strong>创建 <code>tip.py</code> 实现 <code>calculate_tip</code>
+4. 运行 pytest，确认<strong>通过</strong>
+5. 在测试里加一个你没实现的边界（<code>bill=0</code>），再运行，看它失败
+6. 修复实现，再运行，确认通过
+<strong>把每一步的 pytest 输出都记录下来</strong>，这是最有价值的一份学习记录。</p>
+<hr>
+<h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-10-1">参考答案 10-1</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># text_utils.py —— 被测模块</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_words</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回文本中的单词数，以空格分隔。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">reverse</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回反转后的字符串。"""</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_palindrome</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""判断是否回文（忽略大小写、空格和常见标点）。"""</span>
+    <span class="c1"># 清洗：只保留字母和数字，统一小写</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">char</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span>
+        <span class="k">if</span> <span class="n">char</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">cleaned</span> <span class="o">==</span> <span class="n">cleaned</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_text_utils.py —— 测试模块</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">text_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_words</span><span class="p">,</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">is_palindrome</span>
+
+
+<span class="c1"># ===== count_words =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_words_normal</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""正常情况：普通句子。"""</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="s2">"hello world"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="s2">"a b c d e"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_words_single</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""只有一个单词。"""</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_words_empty</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""空字符串返回 0。"""</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_words_all_spaces</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""全是空格也返回 0。"""</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="s2">"   "</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="s2">"      "</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="c1"># ===== reverse =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_reverse_normal</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"olleh"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_reverse_empty</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span> <span class="o">==</span> <span class="s2">""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_reverse_single_char</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">"a"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"a"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_reverse_palindrome</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""反转回文串后不变。"""</span>
+    <span class="k">assert</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">"abcba"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"abcba"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_reverse_unicode</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""中文也要能反转。"""</span>
+    <span class="k">assert</span> <span class="n">reverse</span><span class="p">(</span><span class="s2">"你好世界"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"界世好你"</span>
+
+
+<span class="c1"># ===== is_palindrome =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_normal</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"racecar"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"level"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_case_insensitive</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""忽略大小写。"""</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"RaceCar"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"MadamImAdam"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="c1"># 反面例子：AbleWasI 看起来像回文，但倒过来是 IsawelbA，其实不是</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"AbleWasI"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_with_spaces</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""忽略空格和标点。"""</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"A man, a plan, a canal: Panama"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_chinese</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""中文回文。"""</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"上海自来水来自海上"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_not</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">"python"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_empty</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""空串算回文。"""</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="c1"># ===== 参数化版本（进阶写法）=====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"text,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"hello world"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"hello"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"   "</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"a b c d e"</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"one two three four five six"</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_words_parametrized</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用参数化覆盖更多输入组合。"""</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+</code></pre>
+<h3 id="参考答案-10-2">参考答案 10-2</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># divider.py —— 被测模块</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 a 除以 b 的结果。</span>
+
+<span class="sd">    除数为 0 时会抛出 ZeroDivisionError。</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">divide_safe</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""安全除法：除数为 0 时返回默认值。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+    <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">default</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_divider.py —— 测试模块</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">divider</span><span class="w"> </span><span class="kn">import</span> <span class="n">divide</span><span class="p">,</span> <span class="n">divide_safe</span>
+
+
+<span class="c1"># ===== 正常用例 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_normal</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""普通除法。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_not_exact</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除不尽会产生小数。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">3.3333333</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 边界用例 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_one</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除以 1。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_zero_by_number</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""0 除以非 0 数。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+
+<span class="c1"># ===== 负数用例 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_negative</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""负数相除。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+
+
+<span class="c1"># ===== ★ 异常用例：除零 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_zero_raises</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除以 0 应该抛出 ZeroDivisionError。"""</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ZeroDivisionError</span><span class="p">):</span>
+        <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_zero_float_raises</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除以浮点 0.0 也应该报错。"""</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ZeroDivisionError</span><span class="p">):</span>
+        <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+
+<span class="c1"># ===== 参数化版本 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"a,b,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_parametrized</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用参数化覆盖多组除法数据。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="c1"># ===== 测试 divide_safe =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_safe_normal</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">divide_safe</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mf">5.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_safe_zero</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""除零返回默认值。"""</span>
+    <span class="k">assert</span> <span class="n">divide_safe</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span>
+    <span class="k">assert</span> <span class="n">divide_safe</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">default</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mf">1.0</span>
+</code></pre>
+<h3 id="参考答案-10-3">参考答案 10-3</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># book.py —— 被测模块</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Book</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""一本书。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available</span> <span class="o">=</span> <span class="n">available</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">borrow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""借出图书。已被借出时抛出 ValueError。"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">available</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"《</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">》已被借出，无法再次借出"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">return_book</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""归还图书。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_discount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""打折，rate 是 0-1 之间的折扣率。"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"折扣率必须在 0 到 1 之间"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="n">rate</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_book.py —— 测试模块</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">book</span><span class="w"> </span><span class="kn">import</span> <span class="n">Book</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBookInitialization</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试 Book 的创建与默认值。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_default_available_is_true</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""新建的书默认可借。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">available</span> <span class="ow">is</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_stores_title_and_price</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""标题和价格正确保存。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="s2">"Python编程"</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">price</span> <span class="o">==</span> <span class="mi">89</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_can_set_unavailable_on_creation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""创建时可以直接指定为不可借。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"旧书"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">available</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBookBorrow</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试借阅功能。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_borrow_sets_unavailable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""借出后标记为不可借。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">available</span> <span class="ow">is</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_borrow_returns_self</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""borrow() 返回自身，支持链式调用。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="n">book</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_borrow_twice_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 已被借出的书再次借出应该报错。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_borrow_unavailable_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""创建时就是不可借状态，借出应报错。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"旧书"</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBookReturn</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试归还功能。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_return_sets_available</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""归还后标记为可借。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">return_book</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">available</span> <span class="ow">is</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_can_borrow_after_return</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""归还后可以再次借出。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">89</span><span class="p">)</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">return_book</span><span class="p">()</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">borrow</span><span class="p">()</span>                    <span class="c1"># 这次不应报错</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">available</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestBookDiscount</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""测试打折功能。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_apply_discount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="n">book</span><span class="o">.</span><span class="n">apply_discount</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">book</span><span class="o">.</span><span class="n">price</span> <span class="o">==</span> <span class="n">pytest</span><span class="o">.</span><span class="n">approx</span><span class="p">(</span><span class="mf">80.0</span><span class="p">)</span>
+
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"rate"</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_invalid_discount_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 非法折扣率应该报错。"""</span>
+        <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="p">(</span><span class="s2">"Python编程"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">book</span><span class="o">.</span><span class="n">apply_discount</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+</code></pre>
+<h3 id="参考答案-10-4">参考答案 10-4</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># buggy.py —— 第一版：有 bug，测试会失败</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_average</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""求平均值 —— 忘记除以个数了！"""</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_buggy.py —— 测试：会失败</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">buggy</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_average</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_average_normal</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""正常情况：应该有正确的平均值。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span> <span class="o">==</span> <span class="mi">90</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_average_single_value</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""只有一个数时，平均值就是它自己。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_average</span><span class="p">([</span><span class="mi">50</span><span class="p">])</span> <span class="o">==</span> <span class="mi">50</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_average_empty</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""空列表返回 0。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_average</span><span class="p">([])</span> <span class="o">==</span> <span class="mi">0</span>
+</code></pre>
+<p><strong>运行 <code>pytest -v</code> 后的输出（关键部分）：</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="o">===================================</span> <span class="n">FAILURES</span> <span class="o">===================================</span>
+<span class="n">________________________________</span> <span class="n">test_average_normal</span> <span class="n">________________________________</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_average_normal</span><span class="p">():</span>
+<span class="o">&gt;</span>       <span class="k">assert</span> <span class="n">calculate_average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span> <span class="o">==</span> <span class="mi">90</span>
+<span class="n">E</span>       <span class="k">assert</span> <span class="mi">270</span> <span class="o">==</span> <span class="mi">90</span>
+<span class="n">E</span>        <span class="o">+</span>  <span class="n">where</span> <span class="mi">270</span> <span class="o">=</span> <span class="n">calculate_average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="o">===============================</span> <span class="n">short</span> <span class="n">test</span> <span class="n">summary</span> <span class="n">info</span> <span class="o">=============================</span>
+<span class="n">FAILED</span> <span class="n">test_buggy</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_average_normal</span> <span class="o">-</span> <span class="k">assert</span> <span class="mi">270</span> <span class="o">==</span> <span class="mi">90</span>
+<span class="n">FAILED</span> <span class="n">test_buggy</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_average_single_value</span> <span class="o">-</span> <span class="k">assert</span> <span class="mi">50</span>
+<span class="o">=========================</span> <span class="mi">2</span> <span class="n">failed</span><span class="p">,</span> <span class="mi">1</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.31</span><span class="n">s</span> <span class="o">=========================</span>
+</code></pre>
+<p><strong>报告里最有用的是哪几行</strong>：
+- <code>E       assert 270 == 90</code> —— 一眼看出实际值 270、期望值 90
+- <code>+  where 270 = calculate_average([80, 90, 100])</code> —— 告诉你这个值从哪来
+- <code>FAILED test_buggy.py::test_average_normal</code> —— 精确到文件+测试名
+- <code>2 failed, 1 passed</code> —— 告诉你有多少功能是坏的</p>
+<p><strong>修复后的版本：</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># buggy_fixed.py —— 第二版：修复了 bug</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_average</span><span class="p">(</span><span class="n">numbers</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""求平均值。空列表返回 0。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">numbers</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</code></pre>
+<p><strong>重新运行后的输出：</strong></p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="o">=============================</span> <span class="mi">3</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.28</span><span class="n">s</span> <span class="o">=============================</span>
+</code></pre>
+<blockquote>
+<p><strong>这就是测试的价值所在</strong>：<code>test_average_empty</code> 在修复前后都通过（因为 <code>sum([])</code> 恰好返回 0），但另外两条立刻暴露了 bug。测试让你在把代码给别人之前就发现问题，而不是等别人用到时才发现。</p>
+</blockquote>
+<h3 id="参考答案-10-5">参考答案 10-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_parametrize_demo.py —— 参数化测试完整示例</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">divider</span><span class="w"> </span><span class="kn">import</span> <span class="n">divide</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">text_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_words</span><span class="p">,</span> <span class="n">is_palindrome</span>
+
+
+<span class="c1"># ===== divide的参数化测试：6 组数据 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"a,b,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>        <span class="c1"># 正常</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>         <span class="c1"># 正常，能整除</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">),</span>         <span class="c1"># 边界：除以 1</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>        <span class="c1"># 边界：除以比分子大</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">),</span>      <span class="c1"># 负数</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>      <span class="c1"># 负负得正</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""多组数据共用一个测试函数。"""</span>
+    <span class="k">assert</span> <span class="n">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="c1"># ===== 除零的参数化测试 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"zero"</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_divide_by_zero_raises</span><span class="p">(</span><span class="n">zero</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""各种形式的零都会导致除零错误。"""</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ZeroDivisionError</span><span class="p">):</span>
+        <span class="n">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">zero</span><span class="p">)</span>
+
+
+<span class="c1"># ===== count_words 的参数化测试 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"text,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"hello world"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>          <span class="c1"># 普通句子</span>
+    <span class="p">(</span><span class="s2">"hello"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>               <span class="c1"># 单个单词</span>
+    <span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>                    <span class="c1"># 空字符串</span>
+    <span class="p">(</span><span class="s2">"   "</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>                 <span class="c1"># 全是空格</span>
+    <span class="p">(</span><span class="s2">"a b c d e"</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>           <span class="c1"># 五个单词</span>
+    <span class="p">(</span><span class="s2">"one two three four"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># 稍长的句子</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_words</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""参数化覆盖各种输入。"""</span>
+    <span class="k">assert</span> <span class="n">count_words</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="c1"># ===== 带 id 的参数化：失败时好定位 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
+    <span class="s2">"text,expected"</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="s2">"racecar"</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"hello"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"Level"</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>         <span class="c1"># 忽略大小写</span>
+    <span class="p">],</span>
+    <span class="n">ids</span><span class="o">=</span><span class="p">[</span><span class="s2">"纯回文"</span><span class="p">,</span> <span class="s2">"非回文"</span><span class="p">,</span> <span class="s2">"混合大小写"</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_is_palindrome_with_ids</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""ids 让失败报告更易读。"""</span>
+    <span class="k">assert</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="ow">is</span> <span class="n">expected</span>
+
+
+<span class="c1"># ===== 多组数据的组合测试 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"a,b,c,expected_sum"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span>
+    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_add_three</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">expected_sum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""测试三数求和。"""</span>
+    <span class="k">assert</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">==</span> <span class="n">expected_sum</span>
+</code></pre>
+<h3 id="参考答案-10-6">参考答案 10-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># cart.py —— 被测模块</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShoppingCart</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""购物车。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""添加商品。price 必须大于 0。"""</span>
+        <span class="k">if</span> <span class="n">price</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"价格必须大于 0"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">"price"</span><span class="p">:</span> <span class="n">price</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""移除指定商品。商品不存在时不报错，返回是否真的移除了。"""</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">name</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">original</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""返回总价。"""</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"price"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""返回商品件数。"""</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""清空购物车。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_cart.py —— 测试模块</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cart</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoppingCart</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TestShoppingCart</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""购物车测试。每个测试前会自动重置购物车。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""pytest 在每个测试前自动调用，准备一份干净数据。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+
+    <span class="c1"># ===== 添加 =====</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_empty_cart</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""新购物车是空的。"""</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">empty</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">empty</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_setup_prepared_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""确认 setup_method 准备了 2 件商品，总价 8。"""</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">8.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""添加后件数和总价都增加。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"橙子"</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">12.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_add_zero_price_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 价格为 0 应该报错。"""</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"免费商品"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_add_negative_price_raises</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 负价格应该报错。"""</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"奇怪商品"</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">)</span>
+
+    <span class="c1"># ===== 删除 =====</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""删除后件数和总价都减少。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">3.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_remove_nonexistent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 删除不存在的商品不报错，也不改变购物车。"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"西瓜"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">8.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_remove_last_item_gives_zero_total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""★ 删掉最后一件商品后总价必须是 0。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+    <span class="c1"># ===== 清空 =====</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""清空后一切归零。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+    <span class="c1"># ===== 参数化 =====</span>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"name,expected_total"</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>      <span class="c1"># 删苹果，剩香蕉</span>
+        <span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>      <span class="c1"># 删香蕉，剩苹果</span>
+    <span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_remove_each_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">expected_total</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""分别删除不同商品，验证总价正确。"""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="n">expected_total</span>
+</code></pre>
+<h3 id="参考答案-10-7">参考答案 10-7</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># vote_analyzer.py —— 被测模块</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_votes</span><span class="p">(</span><span class="n">votes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""分析投票结果。</span>
+
+<span class="sd">    参数:</span>
+<span class="sd">        votes: 候选人名字组成的列表</span>
+
+<span class="sd">    返回:</span>
+<span class="sd">        {</span>
+<span class="sd">            "winner": 票数最多的候选人名字；平票或无票时为 None,</span>
+<span class="sd">            "total": 总票数,</span>
+<span class="sd">            "counts": {候选人: 票数},</span>
+<span class="sd">            "tied": 是否平票,</span>
+<span class="sd">        }</span>
+<span class="sd">    """</span>
+    <span class="c1"># 统计票数</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">votes</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span>
+
+    <span class="c1"># 空列表的边界情况</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">counts</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"winner"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"total"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"counts"</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">"tied"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c1"># 找出最高票数</span>
+    <span class="n">highest_count</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="c1"># 找出所有达到最高票数的候选人</span>
+    <span class="n">leaders</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="n">highest_count</span><span class="p">]</span>
+
+    <span class="c1"># 只有一个人领先才有winner，否则是平票</span>
+    <span class="n">winner</span> <span class="o">=</span> <span class="n">leaders</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">leaders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"winner"</span><span class="p">:</span> <span class="n">winner</span><span class="p">,</span>
+        <span class="s2">"total"</span><span class="p">:</span> <span class="n">total</span><span class="p">,</span>
+        <span class="s2">"counts"</span><span class="p">:</span> <span class="n">counts</span><span class="p">,</span>
+        <span class="s2">"tied"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">leaders</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">}</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_vote_analyzer.py —— 测试模块</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">vote_analyzer</span><span class="w"> </span><span class="kn">import</span> <span class="n">analyze_votes</span>
+
+
+<span class="c1"># ===== 1. 正常情况 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_clear_winner</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""某人明显胜出。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"A"</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">][</span><span class="s2">"A"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"tied"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_counts_are_correct</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""各候选人票数统计正确。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">]</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+
+
+<span class="c1"># ===== 2. 平票 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tie_returns_none_winner</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""★ 平票时 winner 应该是 None。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"tied"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_three_way_tie</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""三人平票。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"tied"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+
+
+<span class="c1"># ===== 3. 空列表 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_empty_votes</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""★ 空列表：total 为 0，winner 为 None。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">]</span> <span class="o">==</span> <span class="p">{}</span>
+
+
+<span class="c1"># ===== 4. 只有一票 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_single_vote</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""只有一票也算有效结果。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"A"</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+
+
+<span class="c1"># ===== 5. 所有人票数相同 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_all_equal</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""所有人票数相同时是平票。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"tied"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+
+
+<span class="c1"># ===== 6. 大量数据 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_large_number_of_votes</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""★ 1000 票也不能出错或崩溃。"""</span>
+    <span class="n">votes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">600</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"B"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">300</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"C"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1000</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"A"</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">][</span><span class="s2">"A"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">600</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">][</span><span class="s2">"B"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">300</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">][</span><span class="s2">"C"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">100</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_large_tie</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""大量数据下的平票。"""</span>
+    <span class="n">votes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">500</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"B"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">500</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"tied"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1000</span>
+
+
+<span class="c1"># ===== 7. 参数化：不同的票数分布 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span>
+    <span class="s2">"votes,expected_winner,expected_total"</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="c1"># (票列表, 期望的 winner, 期望总票数)</span>
+        <span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">],</span> <span class="s2">"A"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>                 <span class="c1"># A 以 2:1 胜出</span>
+        <span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>                     <span class="c1"># 平票</span>
+        <span class="p">([</span><span class="s2">"A"</span><span class="p">],</span> <span class="s2">"A"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>                           <span class="c1"># 一票</span>
+        <span class="p">([],</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>                             <span class="c1"># 空</span>
+        <span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">,</span> <span class="s2">"E"</span><span class="p">],</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>       <span class="c1"># 五人平票</span>
+        <span class="p">([</span><span class="s2">"B"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">],</span> <span class="s2">"B"</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>       <span class="c1"># B 反超</span>
+        <span class="p">([</span><span class="s2">"X"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"Y"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"X"</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>         <span class="c1"># X 大幅领先</span>
+        <span class="p">([</span><span class="s2">"X"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"Y"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">"Y"</span><span class="p">,</span> <span class="mi">13</span><span class="p">),</span>         <span class="c1"># Y 反超</span>
+    <span class="p">],</span>
+    <span class="n">ids</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">"2比1"</span><span class="p">,</span>
+        <span class="s2">"平票"</span><span class="p">,</span>
+        <span class="s2">"单票"</span><span class="p">,</span>
+        <span class="s2">"空列表"</span><span class="p">,</span>
+        <span class="s2">"五人平票"</span><span class="p">,</span>
+        <span class="s2">"B反超"</span><span class="p">,</span>
+        <span class="s2">"X领先"</span><span class="p">,</span>
+        <span class="s2">"Y反超"</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_parametrized</span><span class="p">(</span><span class="n">votes</span><span class="p">,</span> <span class="n">expected_winner</span><span class="p">,</span> <span class="n">expected_total</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""用参数化一次覆盖 8 种不同的分布。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="o">==</span> <span class="n">expected_winner</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"total"</span><span class="p">]</span> <span class="o">==</span> <span class="n">expected_total</span>
+
+
+<span class="c1"># ===== 8. 边界组合 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_zero_votes_multi_candidate</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""候选人在 counts 里但没人投他。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"counts"</span><span class="p">]</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+    <span class="k">assert</span> <span class="n">result</span><span class="p">[</span><span class="s2">"winner"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"A"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_result_structure</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""返回的字典必须包含约定的四个键。"""</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">analyze_votes</span><span class="p">([</span><span class="s2">"A"</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">==</span> <span class="p">{</span><span class="s2">"winner"</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">,</span> <span class="s2">"counts"</span><span class="p">,</span> <span class="s2">"tied"</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_counts_does_not_modify_input</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""分析过程不能修改传入的列表。"""</span>
+    <span class="n">votes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">]</span>
+    <span class="n">original</span> <span class="o">=</span> <span class="n">votes</span><span class="p">[:]</span>
+    <span class="n">analyze_votes</span><span class="p">(</span><span class="n">votes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">votes</span> <span class="o">==</span> <span class="n">original</span>       <span class="c1"># 原列表没有被改动</span>
+</code></pre>
+<h3 id="参考答案-10-8">参考答案 10-8</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_feature.py —— 第 1 步：先写测试（此时 tip.py 还不存在）</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">tip</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_tip</span>
+
+
+<span class="c1"># ===== 正常用例 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tip_ten_percent</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""10% 小费。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_tip</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">)</span> <span class="o">==</span> <span class="mf">10.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tip_twenty_percent</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""20% 小费。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_tip</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">)</span> <span class="o">==</span> <span class="mf">20.0</span>
+
+
+<span class="c1"># ===== 参数化 =====</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">"bill,rate,expected"</span><span class="p">,</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>      <span class="c1"># ★ 边界：账单为 0</span>
+<span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tip</span><span class="p">(</span><span class="n">bill</span><span class="p">,</span> <span class="n">rate</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""参数化测试。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_tip</span><span class="p">(</span><span class="n">bill</span><span class="p">,</span> <span class="n">rate</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span>
+
+
+<span class="c1"># ===== 边界用例（这一步会在实现完成后才通过）=====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tip_zero_bill</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""★ 账单为 0 时小费必须是 0，不能是 None 或报错。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_tip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tip_invalid_rate_raises</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""非法折扣率应该报错。"""</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+        <span class="n">calculate_tip</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+</code></pre>
+<p><strong>运行 <code>pytest -v</code>（第 2 步，观察失败）：</strong></p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="o">=============================</span> <span class="n">test</span> <span class="n">session</span> <span class="n">starts</span> <span class="o">==============================</span>
+<span class="n">collected</span> <span class="mi">7</span> <span class="n">items</span>
+
+<span class="n">test_feature</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_tip_ten_percent</span> <span class="n">ERROR</span>      <span class="p">[</span> <span class="mi">14</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_feature</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_tip_twenty_percent</span> <span class="n">ERROR</span>    <span class="p">[</span> <span class="mi">28</span><span class="o">%</span><span class="p">]</span>
+<span class="n">test_feature</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_tip</span> <span class="n">ERROR</span>                  <span class="p">[</span> <span class="mi">42</span><span class="o">%</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="o">===============================</span> <span class="n">ERRORS</span> <span class="o">================================</span>
+<span class="n">______________________</span> <span class="n">ERROR</span> <span class="n">collecting</span> <span class="n">test_feature</span><span class="o">.</span><span class="n">py</span> <span class="n">______________________</span>
+<span class="ne">ImportError</span> <span class="k">while</span> <span class="n">importing</span> <span class="n">test</span> <span class="n">module</span> <span class="s1">'test_feature.py'</span><span class="o">.</span>
+<span class="n">Hint</span><span class="p">:</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">your</span> <span class="n">test</span> <span class="n">module</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">have</span> <span class="n">valid</span> <span class="n">Python</span> <span class="n">module</span> <span class="n">names</span> <span class="ow">or</span> <span class="n">file</span> <span class="n">names</span><span class="o">.</span>
+<span class="o">=======================</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">'tip'</span> <span class="o">===========================</span>
+</code></pre>
+<p><strong>读报告</strong>：<code>No module named 'tip'</code> —— 明确告诉我们被测模块还不存在。这正是 TDD（测试驱动开发）的第一步：<strong>测试先失败，证明测试本身是有效的</strong>。如果测试一开始就通过，说明它什么也没测到，反而是危险信号。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># tip.py —— 第 3 步：实现功能，让测试通过</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_tip</span><span class="p">(</span><span class="n">bill</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""根据账单金额和小费率计算小费。</span>
+
+<span class="sd">    参数:</span>
+<span class="sd">        bill: 账单金额，数字，必须 &gt;= 0</span>
+<span class="sd">        rate: 小费率，0 到 1 之间，0.1 表示 10%</span>
+
+<span class="sd">    返回:</span>
+<span class="sd">        小费金额（float）</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">bill</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"账单金额不能为负数"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"小费率必须在 0 到 1 之间"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bill</span> <span class="o">*</span> <span class="n">rate</span>
+</code></pre>
+<p><strong>第 4 步，再次运行：</strong></p>
+<pre><code class="text"><span class="cl">运行结果</span><span class="o">=============================</span> <span class="mi">7</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.24</span><span class="n">s</span> <span class="o">==========================</span>
+</code></pre>
+<p><strong>第 5 步：加一个没实现的边界，再运行，看它失败</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 追加到 test_feature.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_tip_total_with_bill</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""账单为 0 时，总金额应等于小费。"""</span>
+    <span class="k">assert</span> <span class="n">calculate_tip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 临时把 tip.py 的实现改坏，模拟 bug</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_tip</span><span class="p">(</span><span class="n">bill</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bill</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"账单金额不能为负数"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"小费率必须在 0 到 1 之间"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bill</span> <span class="o">*</span> <span class="n">rate</span> <span class="o">*</span> <span class="mi">2</span>      <span class="c1"># ←故意乘了 2，引入 bug</span>
+</code></pre>
+<p><strong>运行测试：</strong></p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">FAILED</span> <span class="n">test_feature</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">test_tip_zero_bill</span> <span class="o">-</span> <span class="k">assert</span> <span class="mf">0.0</span> <span class="o">!=</span> <span class="mf">0.0</span>
+</code></pre>
+<blockquote>
+<p>等等，这个 bug 比较隐蔽——<code>0 * 2 == 0</code>，所以这个测试<strong>依然通过</strong>！这正说明一个重要道理：<strong>测试要专门针对 bug 可能藏身的地方设计</strong>。换一个能暴露它的测试：</p>
+</blockquote>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">test_tip_normal_amount</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">calculate_tip</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span> <span class="o">==</span> <span class="mf">15.0</span>     <span class="c1"># 乘 2 后是 30，会失败</span>
+</code></pre>
+<p><strong>第 6 步：修复实现，再次运行：</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 修复 tip.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_tip</span><span class="p">(</span><span class="n">bill</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bill</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"账单金额不能为负数"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rate</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"小费率必须在 0 到 1 之间"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bill</span> <span class="o">*</span> <span class="n">rate</span>
+</code></pre>
+<pre><code class="text"><span class="cl">运行结果</span><span class="o">=============================</span> <span class="mi">8</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.22</span><span class="n">s</span> <span class="o">==========================</span>
+</code></pre>
+<p><strong>这个流程的核心价值（务必记住）：</strong>
+1. <strong>测试先失败</strong>，证明测试真的在检查东西（而不是恒为真的假测试）。
+2. <strong>测试驱动实现</strong>，写代码时目标明确，不会漏掉边界情况。
+3. <strong>每次修改后跑一遍</strong>，几秒钟就知道有没有改坏东西。
+4. 从 0 个测试到 8 个通过的测试，全过程有据可查。</p>
+<hr>
+<h2 id="七-本单元验收自测">七、本单元验收自测</h2>
+<p><strong>1. 简答题</strong>：下面这个测试为什么不会被 pytest 执行？</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># test_calc.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">5</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>：因为函数名不以 <code>test_</code> 开头。pytest 按命名约定自动发现测试，函数必须命名成 <code>test_*</code> 才会被收集。如果命名不对，pytest 会显示 <code>collected 0 items</code>——<strong>不报错，但什么都不跑</strong>，这是最容易浪费时间的问题之一。改名为 <code>test_add</code> 即可。</p>
+</blockquote>
+<p><strong>2. 简答题</strong>：为什么测试文件应该单独放在 <code>test_calculator.py</code>，而不是直接写在 <code>calculator.py</code> 里？</p>
+<blockquote>
+<p><strong>要点</strong>：三个理由：① 测试代码可以被独立运行、独立删除，不会影响程序正常运行；② 被测代码保持"纯粹"，不用为了配合测试而加入奇怪的辅助代码；③ 一看文件名就能分清哪些是功能、哪些是测试。标准结构是两个文件并列：<code>calculator.py</code> 放函数定义，<code>test_calculator.py</code> 放测试。</p>
+</blockquote>
+<p><strong>3. 判断题</strong>：用 <code>assert</code> 写测试时，写 <code>assert result is not None</code> 就够了，不需要知道 <code>result</code> 具体等于多少。</p>
+<blockquote>
+<p><strong>要点</strong>：错误。这是一种"弱断言"，很多错误的实现也能通过它（比如函数返回 <code>"abc"</code>、返回 <code>0</code>、返回 <code>False</code>）。正确的做法是<strong>明确写出期望值</strong>：<code>assert add(2, 3) == 5</code>。测试的价值在于能区分"正确的实现"和"错误的实现"，只断言非空几乎做不到这一点。</p>
+</blockquote>
+<p><strong>4. 简答题</strong>：测试除法函数时，除了 <code>divide(10, 2) == 5</code> 这种正常情况，还必须测哪些边界情况？用什么语法写？</p>
+<blockquote>
+<p><strong>要点</strong>：至少要测：① <strong>除零</strong> <code>divide(10, 0)</code> —— 这是最重要的，必须用 <code>with pytest.raises(ZeroDivisionError):</code> 断言它抛异常；② <strong>除以 1</strong> <code>divide(7, 1) == 7</code>；③ <strong>负数相除</strong> <code>divide(-10, 2) == -5</code>；④ <strong>除不尽</strong> <code>divide(10, 3)</code> 的小数结果（用 <code>pytest.approx</code> 比较）；⑤ 如果函数要求整数输入，还要测小数输入。核心是<strong>异常路径也必须被测试</strong>——正常路径通常能工作，bug 都藏在异常路径里。</p>
+</blockquote>
+<p><strong>5. 简答题</strong>：<code>pytest -v</code> 输出 3 passed、1 failed，<code>-k "divide"</code>、<code>-x</code> 这两个参数分别有什么用？</p>
+<blockquote>
+<p><strong>要点</strong>：<code>-v</code>（verbose）用详细模式显示每个测试的名字和 PASSED/FAILED 状态，方便定位是哪一条失败了。<code>-k "divide"</code> 是按<strong>测试名字</strong>筛选，只运行名字里含 <code>divide</code> 的测试，在测试文件变多后能大幅缩短反馈时间。<code>-x</code> 是遇到第一个失败就停止（fail-fast），适合"CI 里快速发现问题"的场景。加上 <code>pytest test_bank.py::TestBook::test_borrow</code> 这样的完整路径，可以精确运行单个测试。</p>
+</blockquote>
+<hr>
+<h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
+<ul>
+<li>[ ] 已安装 pytest 并用 <code>pytest --version</code> 验证</li>
+<li>[ ] 能写出符合命名规范（<code>test_*.py</code> + <code>test_*</code> 函数）的测试</li>
+<li>[ ] 会用 <code>pytest.raises</code> 测试异常情况</li>
+<li>[ ] 会用 <code>pytest.approx</code> 处理浮点数比较</li>
+<li>[ ] 写过至少一个测试类（<code>Test*</code>，无 <code>__init__</code>）</li>
+<li>[ ] 用过 <code>@pytest.mark.parametrize</code></li>
+<li>[ ] 练习 10-4、10-8 已完成并记录了 pytest 输出</li>
+<li>[ ] 理解「测试先失败」的价值，能读懂 FAILURE 报告</li>
+</ul>
+<p><strong>下一单元预告</strong>：单元 11 是阶段 1 的总复习与关卡验收——把前 11 个单元的知识串成一张完整的地图，附 3 个综合项目建议和关卡 1 的 4 条验收标准（手写猜数字游戏、手写含继承的类、用 pytest 写 3 条测试并通过、修复 IndentationError/NameError）。完成这四条，你就正式具备"能独立做小项目"的能力，可以进入阶段 2 了。</p></main>
+</div>
+
+<div class="layout" style="padding-top:0">
+  <aside class="side"></aside>
+  <div class="pn"><a class="pn" href="09.html"><small>← 上一单元</small><b>单元 9 · 文件与异常</b></a><div class="spot"><a class="pn" href="ppt/u/10.html"><small>本单元课件</small><b>逐节版 · 点开就讲 →</b></a><a class="pn" href="ppt/index.html#s10"><small>课程大纲课件</small><b>阶段总览 p10 →</b></a></div><a class="pn nx" href="11.html"><small>下一单元 →</small><b>单元 11 · 总复习与关卡验收</b></a></div>
+</div>
+
+<style>
+.dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);
+cursor:pointer;white-space:nowrap}
+.dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+.uprog{margin:0 0 10px;padding:9px 10px;background:#f7f9fc;border-radius:9px}
+.uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;
+color:var(--muted);line-height:1.5}
+.uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+.uprog .track{margin-top:6px;height:7px;background:#e6ecf3;border-radius:99px;
+overflow:hidden}
+.uprog .track i{display:block;height:100%;width:0;background:var(--p2);
+border-radius:99px;transition:width .2s}
+pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
+font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
+border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+pre:hover .cp{opacity:1}
+pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
+.relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:14px;margin-bottom:12px}
+.relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
+font-weight:700}
+.rel{display:flex;flex-direction:column;gap:2px}
+.rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;
+text-decoration:none;color:inherit}
+.rel a:hover{background:#f2f7fd}
+.rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1);
+border-radius:4px;text-align:center;line-height:17px}
+.rel a:nth-child(2) .k{background:var(--p3)}
+.rel a:nth-child(3) .k{background:var(--p2)}
+.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel .v{font-size:12px;color:var(--text);line-height:1.45}
+.top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.dd.on span{color:var(--p2);font-weight:700}
+</style>
+<script>
+/* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp'; b.type='button'; b.textContent='复制';
+    b.addEventListener('click', function(){
+      var code=pre.querySelector('code')||pre;
+      var txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fallback(){
+        var t=document.createElement('textarea');
+        t.value=txt; t.style.position='fixed'; t.style.opacity='0';
+        document.body.appendChild(t); t.select();
+        try{document.execCommand('copy');ok();}catch(e){}
+        document.body.removeChild(t);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok, fallback);
+      } else fallback();
+    });
+    pre.appendChild(b);
+  });
+})();
+
+/* 单元完成度：读课节页写入的 lesson-done-v1，按本单元的课节号区间统计 */
+(function(){
+  var box=document.querySelector('.uprog'); if(!box) return;
+  var a=+box.dataset.from, b=+box.dataset.to, tot=b-a+1;
+  function paint(){
+    var o={}; try{o=JSON.parse(localStorage.getItem('lesson-done-v1')||'{}')}catch(e){}
+    var n=0; for(var i=a;i<=b;i++) if(o[String(i)]) n++;
+    box.querySelector('i').style.width=(n/tot*100)+'%';
+    box.querySelector('b').textContent='已学 '+n+' / '+tot+' 节';
+  }
+  paint();
+  window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+  window.addEventListener('storage',paint);
+})();
+
+
+/* 长页回到顶部 */
+(function(){
+  var b=document.createElement('button');
+  b.id='toTop'; b.type='button'; b.title='回到顶部'; b.textContent='↑';
+  document.body.appendChild(b);
+  function sync(){ b.classList.toggle('on', window.scrollY>500); }
+  window.addEventListener('scroll',sync,{passive:true}); sync();
+  b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+
+function markDone(n, on){
+  try{
+    var k='py-hub-v1', a=JSON.parse(localStorage.getItem(k)||'null');
+    if(!Array.isArray(a)) a=new Array(12).fill(false);
+    a[n]=on; localStorage.setItem(k, JSON.stringify(a));
+  }catch(e){}
+}
+function initDone(){
+  var n=parseInt(document.body.dataset.unit,10);
+  if(isNaN(n)) return;
+  var box=document.getElementById('doneBox');
+  try{
+    var a=JSON.parse(localStorage.getItem('py-hub-v1')||'null');
+    if(Array.isArray(a)&&a[n]){ box.checked=true; box.closest('.dd').classList.add('on'); }
+  }catch(e){}
+  box.addEventListener('change',function(){
+    box.closest('.dd').classList.toggle('on',box.checked);
+    markDone(n,box.checked);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  initDone();
+  // TOC 当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+  function onScroll(){
+    var y=window.scrollY+140, cur=0;
+    targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+  }
+  onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
+  // 代码块加标签
+  document.querySelectorAll('.main pre').forEach(function(pre){
+    var code=pre.querySelector('code');
+    var lang=(code.className.match(/language-([\w-]+)/)||[])[1];
+    var label = pre.classList.contains('broken') ? '故意写错 · 观察报错'
+              : (lang==='python'?'Python':(lang||'code'));
+    var s=document.createElement('span'); s.className='cl'; s.textContent=label;
+    pre.appendChild(s);
+  });
+});
+</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

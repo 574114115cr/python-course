@@ -1,0 +1,89 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px', background: '#EEF5FB' }} />
+    <Box style={{ position: 'absolute', right: 0, top: 0, width: '440px', height: '720px', background: '#16232E' }} />
+
+    <Box style={{ position: 'absolute', left: 64, top: 44, width: '700px', flexDirection: 'column' }}>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>零基础教学三原则</Text>
+        <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 8 }}>
+            针对「没有编程习惯」的学员，这三条比讲多少知识点都重要
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 156, width: '700px', height: 476, flexDirection: 'column', gap: 14 }}>
+        <Box style={{
+            background: '#FFFFFF', borderRadius: 12, padding: 18,
+            flexDirection: 'row', gap: 18, alignItems: 'flex-start', flex: 1,
+        }}>
+            <Text style={{ fontSize: 44, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>01</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 6 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#16232E' }}>讲完 10 分钟内必须敲一次代码</Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    报错是教材，不要擦掉。练习顺序固定为：先照抄 → 再改需求 → 最后自己写。
+                    跳过照抄就会养成「看懂即会写」的错觉。
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            background: '#FFFFFF', borderRadius: 12, padding: 18,
+            flexDirection: 'row', gap: 18, alignItems: 'flex-start', flex: 1,
+        }}>
+            <Text style={{ fontSize: 44, fontWeight: 'bold', color: '#1F5FA8', lineHeight: 1 }}>02</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 6 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#16232E' }}>单元 3、6、7、8 允许放慢 50%</Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    这四章是分水岭，课时可加，练习翻倍。允许落后，不允许跳过。
+                    后面的 Django 全靠类和函数的地基，地基松了上层必塌。
+                </Text>
+            </Box>
+        </Box>
+
+        <Box style={{
+            background: '#FFFFFF', borderRadius: 12, padding: 18,
+            flexDirection: 'row', gap: 18, alignItems: 'flex-start', flex: 1,
+        }}>
+            <Text style={{ fontSize: 44, fontWeight: 'bold', color: '#0E9B78', lineHeight: 1 }}>03</Text>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 6 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#16232E' }}>每个单元都有可跑的产出物</Text>
+                <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.6 }}>
+                    每章留一个能跑起来的小程序 + 一次 git 提交。
+                    看得见的产出才是正反馈，否则学三周会怀疑自己在原地踏步。
+                </Text>
+            </Box>
+        </Box>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', right: 56, top: 156, width: '330px', flexDirection: 'column', alignItems: 'flex-end',
+    }}>
+        <Text style={{ fontSize: 110, fontWeight: 'bold', color: '#E08A15', lineHeight: 1 }}>90%</Text>
+        <Text style={{ fontSize: 19, color: '#FFFFFF', marginTop: 10, textAlign: 'right' }}>学员的卡点不是听不懂</Text>
+        <Text style={{ fontSize: 19, color: '#FFFFFF', marginTop: 8, textAlign: 'right' }}>而是从没自己跑通过一次</Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', right: 56, top: 388, width: '330px',
+        background: '#1F2E3C', borderRadius: 12, padding: 22, flexDirection: 'column', gap: 12,
+    }}>
+        <Text style={{ fontSize: 15, color: '#8FB4D8', fontWeight: 'bold' }}>零基础最常见的假信号</Text>
+        <Text style={{ fontSize: 15, color: '#D6E4F0', lineHeight: 1.7 }}>
+            「我好像看懂了」<br />
+            「跟着敲一遍没问题」<br />
+            「这段逻辑很清楚」
+        </Text>
+        <Box style={{ width: '60px', height: 3, background: '#E08A15' }} />
+        <Text style={{ fontSize: 15, color: '#E8B36A', lineHeight: 1.7 }}>
+            真信号只有一个：不看讲义，从空文件开始敲出来。
+        </Text>
+    </Box>
+
+    <Box style={{
+        position: 'absolute', right: 56, bottom: 32,
+        flexDirection: 'row', alignItems: 'center', gap: 12,
+    }}>
+        <Text style={{ fontSize: 14, color: '#7C93A8' }}>05 / 17</Text>
+    </Box>
+</Slide>

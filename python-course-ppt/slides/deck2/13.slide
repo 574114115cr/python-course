@@ -1,0 +1,64 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '720px', background: '#FAFCFE' }} />
+    <Box style={{ position: 'absolute', left: 0, top: 0, width: '12px', height: '720px', background: '#0E9B78' }} />
+
+    <Box style={{ position: 'absolute', left: 96, top: 76, width: '1090px', flexDirection: 'column' }}>
+        <Box style={{
+            alignSelf: 'flex-start', background: '#0E9B78', borderRadius: 6,
+            padding: '6px 16px', marginBottom: 22,
+        }}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#FFFFFF', letterSpacing: 2 }}>
+                阶段 2 · 项目实践
+            </Text>
+        </Box>
+
+        <Text style={{ fontSize: 62, fontWeight: 'bold', color: '#16232E', lineHeight: 1.2 }}>
+            从「能写」到「能交付」
+        </Text>
+
+        <Box style={{ width: 160, height: 6, background: '#0E9B78', marginTop: 22, marginBottom: 26 }} />
+
+        <Text style={{ fontSize: 23, color: '#3A4A58', lineHeight: 1.7, width: '1040px' }}>
+            阶段 1 的产出是一个能跑的程序；阶段 2 的产出是一个别人能接手、能长期改的项目。
+            这两个之间的距离，不是多学几个 API 就能跨过去的。
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 96, top: 424, width: '1090px', height: 196, flexDirection: 'row', gap: 18 }}>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1F5FA8' }}>阶段 1 你练的是</Text>
+            <Text style={{ fontSize: 15, color: '#5A6B7A', lineHeight: 1.75 }}>
+                单个文件、百行以内<br />
+                自己一个人看代码<br />
+                「跑出结果」就算完成<br />
+                报错了就查、改完再跑
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FFFFFF', border: '1px solid #D8E3EE', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#0E9B78' }}>阶段 2 要练的是</Text>
+            <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.75 }}>
+                多文件项目、上千行<br />
+                写给别人看（README）<br />
+                「能交付、能部署」才算完成<br />
+                改错要能回滚、要有测试兜底
+            </Text>
+        </Box>
+        <Box style={{ flex: 1, background: '#FDF3E2', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 8 }}>
+            <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#E08A15' }}>唯一的办法</Text>
+            <Text style={{ fontSize: 15, color: '#3A4A58', lineHeight: 1.75 }}>
+                真做三个项目<br />
+                每个都走完整流程<br />
+                每个都推到公开仓库<br />
+                最后一个必须真的上线
+            </Text>
+        </Box>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 96, bottom: 30, width: '1090px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>13 / 23</Text>
+    </Box>
+</Slide>

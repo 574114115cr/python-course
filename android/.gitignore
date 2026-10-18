@@ -1,0 +1,4 @@
+# 本目录（Capacitor 工程根）的生成物不进仓库
+node_modules/
+www/
+local.properties

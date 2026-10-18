@@ -1,0 +1,96 @@
+<Slide style={{
+    width: '1280px', height: '720px', backgroundColor: '#FAFCFE',
+    padding: 0, position: 'relative', overflow: 'hidden',
+}}>
+    <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+            <Box style={{ background: '#1F5FA8', borderRadius: 5, padding: '4px 12px' }}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#FFFFFF' }}>项目三</Text>
+            </Box>
+            <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>学习笔记 Web · 单元 18–20</Text>
+        </Box>
+        <Text style={{ fontSize: 18, color: '#5A6B7A' }}>
+            教材第 18–20 章 · 5 周 · 全课程最密集的部分，也是唯一一个真的要上线的东西
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 140, width: '1152px', height: 292 }}>
+        <svg width='1152' height='292' viewBox='0 0 1152 292'>
+            <text fontFamily='Microsoft YaHei' x='0' y='18' fontSize='15' fontWeight='bold' fill='#16232E'>一次请求的旅程（单元 18 的核心）</text>
+
+            <rect x='0' y='34' width='152' height='72' rx='9' fill='#1F5FA8' />
+            <text fontFamily='Microsoft YaHei' x='76' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>浏览器</text>
+            <text fontFamily='Microsoft YaHei' x='76' y='88' fontSize='12' fill='#CFE2F5' textAnchor='middle'>访问一个 URL</text>
+
+            <path d='M160 70 L 186 70' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+            <path d='M178 64 L 186 70 L 178 76' stroke='#1F5FA8' strokeWidth='3' fill='none' />
+
+            <rect x='194' y='34' width='152' height='72' rx='9' fill='#2F7BC8' />
+            <text x='270' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>urls.py</text>
+            <text fontFamily='Microsoft YaHei' x='270' y='88' fontSize='12' fill='#EAF3FC' textAnchor='middle'>找路由</text>
+
+            <path d='M354 70 L 380 70' stroke='#2F7BC8' strokeWidth='3' fill='none' />
+            <path d='M372 64 L 380 70 L 372 76' stroke='#2F7BC8' strokeWidth='3' fill='none' />
+
+            <rect x='388' y='34' width='152' height='72' rx='9' fill='#0E9B78' />
+            <text x='464' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>views.py</text>
+            <text fontFamily='Microsoft YaHei' x='464' y='88' fontSize='12' fill='#D7F0E7' textAnchor='middle'>处理 + 查数据库</text>
+
+            <path d='M548 70 L 574 70' stroke='#0E9B78' strokeWidth='3' fill='none' />
+            <path d='M566 64 L 574 70 L 566 76' stroke='#0E9B78' strokeWidth='3' fill='none' />
+
+            <rect x='582' y='34' width='152' height='72' rx='9' fill='#16232E' />
+            <text x='658' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>models.py</text>
+            <text fontFamily='Microsoft YaHei' x='658' y='88' fontSize='12' fill='#A8C4DE' textAnchor='middle'>ORM 取数据</text>
+
+            <path d='M742 70 L 768 70' stroke='#16232E' strokeWidth='3' fill='none' />
+            <path d='M760 64 L 768 70 L 760 76' stroke='#16232E' strokeWidth='3' fill='none' />
+
+            <rect x='776' y='34' width='152' height='72' rx='9' fill='#2F7BC8' />
+            <text fontFamily='Microsoft YaHei' x='852' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>模板 .html</text>
+            <text fontFamily='Microsoft YaHei' x='852' y='88' fontSize='12' fill='#EAF3FC' textAnchor='middle'>渲染成页面</text>
+
+            <path d='M936 70 L 962 70' stroke='#E08A15' strokeWidth='3' fill='none' />
+            <path d='M954 64 L 962 70 L 954 76' stroke='#E08A15' strokeWidth='3' fill='none' />
+
+            <rect x='970' y='34' width='182' height='72' rx='9' fill='#E08A15' />
+            <text fontFamily='Microsoft YaHei' x='1061' y='64' fontSize='14.5' fontWeight='bold' fill='#FFFFFF' textAnchor='middle'>返回给用户</text>
+            <text fontFamily='Microsoft YaHei' x='1061' y='88' fontSize='12' fill='#FDF0DC' textAnchor='middle'>HTML 页面</text>
+
+            <text fontFamily='Microsoft YaHei' x='0' y='156' fontSize='15' fontWeight='bold' fill='#16232E'>三个单元各解决一层问题</text>
+
+            <rect x='0' y='174' width='370' height='106' rx='10' fill='#EEF5FB' />
+            <text fontFamily='Microsoft YaHei' x='20' y='204' fontSize='15.5' fontWeight='bold' fill='#1F5FA8'>单元 18 · 网站能跑起来</text>
+            <text fontFamily='Microsoft YaHei' x='20' y='230' fontSize='13' fill='#5A6B7A'>虚拟环境 · 项目 / 应用分层 · 模型与迁移</text>
+            <text fontFamily='Microsoft YaHei' x='20' y='252' fontSize='13' fill='#5A6B7A'>URL → 视图 → 模板 · 模板继承</text>
+            <text fontFamily='Microsoft YaHei' x='20' y='272' fontSize='12.5' fill='#8A9AAA'>第 18 章 · 6 节课</text>
+
+            <rect x='391' y='174' width='370' height='106' rx='10' fill='#FDF3E2' />
+            <text fontFamily='Microsoft YaHei' x='411' y='204' fontSize='15.5' fontWeight='bold' fill='#E08A15'>单元 19 · 数据属于谁</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='230' fontSize='13' fill='#3A4A58'>ModelForm · 登录 / 注销 / 注册</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='252' fontSize='13' fontWeight='bold' fill='#C0561A'>★ filter(owner=request.user) 安全红线</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='272' fontSize='12.5' fill='#8A9AAA'>第 19 章 · 5 节课</text>
+
+            <rect x='782' y='174' width='370' height='106' rx='10' fill='#EAF7F2' />
+            <text fontFamily='Microsoft YaHei' x='802' y='204' fontSize='15.5' fontWeight='bold' fill='#0E9B78'>单元 20 · 别人也能访问</text>
+            <text fontFamily='Microsoft YaHei' x='802' y='230' fontSize='13' fill='#3A4A58'>django-bootstrap5 · Platform.sh 部署</text>
+            <text x='802' y='252' fontSize='13' fill='#3A4A58' fontFamily='Inter'>ALLOWED_HOSTS / DEBUG / collectstatic</text>
+            <text fontFamily='Microsoft YaHei' x='802' y='272' fontSize='12.5' fill='#8A9AAA'>第 20 章 · 5 节课</text>
+        </svg>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, top: 448, width: '1152px', height: 156,
+        background: '#16232E', borderRadius: 12, padding: 20, flexDirection: 'column', gap: 8 }}>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#FFFFFF' }}>这一层是全课程唯一的安全课</Text>
+        <Text style={{ fontSize: 15, color: '#A8C4DE', lineHeight: 1.8 }}>
+            把 <code style={{ fontSize: 14 }}>filter(owner=request.user)</code> 写成 <code style={{ fontSize: 14 }}>.all()</code>，
+            每个用户就能看到所有人的笔记——这类 bug 不会报错、不会崩溃，只会静静泄露数据。
+            所以单元 19 会要求你<b style={{ color: '#E08A15' }}>用两个账号实测一次</b>，而不是「我记得写了」。
+        </Text>
+    </Box>
+
+    <Box style={{ position: 'absolute', left: 64, bottom: 22, width: '1152px', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>Python 阶段 0–2 课程大纲</Text>
+        <Text style={{ fontSize: 14, color: '#8A9AAA' }}>16 / 23</Text>
+    </Box>
+</Slide>

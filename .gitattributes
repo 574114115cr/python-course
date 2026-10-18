@@ -1,0 +1,15 @@
+# 统一以 LF 存入仓库：CI 在 ubuntu 上跑，避免 CRLF 影响脚本
+global	tab=tab
+*.py	text eol=lf
+*.mjs	text eol=lf
+*.js	text eol=lf
+*.json	text eol=lf
+*.yml	text eol=lf
+*.md	text eol=lf
+*.html	text eol=lf
+*.css	text eol=lf
+*.wav	binary
+*.png	binary
+*.webp	binary
+*.pptx	binary
+*.bat	text eol=crlf
