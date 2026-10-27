@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="92" data-to="97"><div class="uprog-h"><b>已学 0 / 6 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u18"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/18.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s16"><span class="k">大纲</span><span class="v">课程大纲课件 p16</span></a><a href="bank.html#u18"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="92" data-to="97"><div class="uprog-h"><b>已学 0 / 6 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u18"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/18.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s16"><span class="k">大纲</span><span class="v">课程大纲课件 p16</span></a><a href="bank.html#u18"><span class="k">题库</span><span class="v">本单元 5 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-虚拟环境-给每个项目一间独立的-工具间">2.1 虚拟环境：给每个项目一间独立的「工具间」★</a>
 <a class="lv3" href="#2-2-django-的三个层次-项目-应用程序-mvt">2.2 Django 的三个层次：项目、应用程序、MVT ★</a>
@@ -63,18 +64,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-6-模板里-url-写错">错误 6：模板里 {% url %} 写错</a>
 <a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-18-django-入门">单元 18：Django 入门</h1>
-<blockquote>
-<p>对应教材第 18 章「Django 入门」
-阶段 2 · 项目 3：学习笔记（Learning Log）
-本单元目标：<strong>从零搭起一个能跑的 Django 项目——建虚拟环境、建项目、写模型、配好管理网站，并用「URL → 视图 → 模板」链路渲染出第一个网页。</strong></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 18 章「Django 入门」</span></div><p class="bk-k">阶段 2 · 项目 3：学习笔记（Learning Log）
+本单元目标：<strong>从零搭起一个能跑的 Django 项目——建虚拟环境、建项目、写模型、配好管理网站，并用「URL → 视图 → 模板」链路渲染出第一个网页。</strong></p><a href="coverage.html#u18">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -310,6 +309,37 @@ templates/learning_logs/topics.html   摆盘
 </tbody>
 </table>
 <p><code>path()</code> 接受三个实参：<strong>URL 模式字符串</strong>（比如 <code>'topics/&lt;int:topic_id&gt;/'</code>）、<strong>要调用的视图函数</strong>、<strong>这个模式的名字</strong>（<code>name='topic'</code>）。名字是给 <code>{% url %}</code> 用的——以后改 URL 结构，只需改 <code>urls.py</code> 一处，所有链接自动更新，这正是模板标签生成 URL 的价值。</p>
+<p><code>path()</code> 里那些 <code>&lt;int:topic_id&gt;</code> 在匹配时会被翻成正则，所以「谁先谁后」有讲究。把匹配表写成纯 Python 跑一遍，你能亲眼看到「第一个命中的赢」和「<code>/topics/abc/</code> 为什么 404」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># URL 匹配表：urlpatterns 的顺序为什么不能乱</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="c1"># path('topics/&lt;int:topic_id&gt;/', ...) 在匹配时会被翻成这样的正则</span>
+<span class="n">URLPATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="sa">r</span><span class="s2">"^$"</span><span class="p">,</span> <span class="s2">"index"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">r</span><span class="s2">"^topics/$"</span><span class="p">,</span> <span class="s2">"topics"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">r</span><span class="s2">"^topics/(?P&lt;topic_id&gt;\d+)/$"</span><span class="p">,</span> <span class="s2">"topic"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">r</span><span class="s2">"^new_topic/$"</span><span class="p">,</span> <span class="s2">"new_topic"</span><span class="p">),</span>
+    <span class="p">(</span><span class="sa">r</span><span class="s2">"^topics/(?P&lt;topic_id&gt;\d+)/new_entry/$"</span><span class="p">,</span> <span class="s2">"new_entry"</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""逐个比对，第一个命中的就是赢家；一个都不中就 404。"""</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>          <span class="c1"># ★ urlpatterns 里的模式不带开头的斜杠</span>
+    <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">view</span> <span class="ow">in</span> <span class="n">URLPATTERNS</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">view</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">groupdict</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s2">"404"</span><span class="p">,</span> <span class="p">{}</span>
+
+
+<span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"/"</span><span class="p">,</span> <span class="s2">"/topics/"</span><span class="p">,</span> <span class="s2">"/topics/3/"</span><span class="p">,</span> <span class="s2">"/topics/3/new_entry/"</span><span class="p">,</span>
+             <span class="s2">"/topics/abc/"</span><span class="p">,</span> <span class="s2">"/new_topic/"</span><span class="p">,</span> <span class="s2">"/admin/"</span><span class="p">]:</span>
+    <span class="n">view</span><span class="p">,</span> <span class="n">kwargs</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"，参数 </span><span class="si">{</span><span class="n">kwargs</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="s2">""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">path</span><span class="si">:</span><span class="s2">&lt;24</span><span class="si">}</span><span class="s2">-&gt; </span><span class="si">{</span><span class="n">view</span><span class="si">}{</span><span class="n">extra</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>这段跑出来是：<code>/topics/3/</code> 命中 <code>topic</code> 并带出 <code>{'topic_id': '3'}</code>，<code>/topics/3/new_entry/</code> 命中 <code>new_entry</code>（<code>^topics/\d+/$</code> 末尾的 <code>$</code> 锚住了行尾，所以不会把它误吞），<code>/topics/abc/</code> 和 <code>/admin/</code> 都落到 <code>404</code>。<strong>模式末尾的 <code>$</code> 和「更具体的写前面」是最省事的两条纪律</strong>，Django 的 <code>include()</code> 也是同一个道理：总路由先按前缀分流，再进各 app 的匹配表。</p>
 <h3 id="2-6-模板语法-for-与-url">2.6 模板语法：<code>{{ }}</code>、<code>{% for %}</code> 与 <code>{% url %}</code></h3>
 <p>模板里只有三样东西要记：</p>
 <table>
@@ -351,6 +381,28 @@ templates/learning_logs/topics.html   摆盘
 </code></pre>
 <p>过滤器用竖线 <code>|</code> 表示，在渲染过程中修改变量的值：<code>{{ entry.date_added|date:'M d, Y H:i' }}</code> 把时间戳格式化成「May 20, 2022 03:33」，<code>{{ entry.text|linebreaks }}</code> 把条目里的换行转换成浏览器认的格式。</p>
 <p><code>'learning_logs:topic'</code> 里的<strong>冒号前是命名空间</strong>（来自 <code>urls.py</code> 里的 <code>app_name</code>，相当于 URL 模式们的「姓」），冒号后是模式名（「名」）。两个 app 都有一叫 <code>index</code> 的页面也不打架，靠姓区分。顺带记住教材的提醒：模板里写的是 <code>topic.id</code>（取对象的 ID 值），而视图函数里的形参叫 <code>topic_id</code>（装这个值的变量）——用错就是 NoReverseMatch。</p>
+<p>过滤器看着神秘，其实每个都能在 Python 里找到等价物——<strong>它们只改「怎么显示」，不改 context 里的原始值</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 模板过滤器 |date 的等价物：python 里就是 strftime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">entry</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"date_added"</span><span class="p">:</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">33</span><span class="p">),</span>
+         <span class="s2">"text"</span><span class="p">:</span> <span class="s2">"今天学了 Django 模板</span><span class="se">\n</span><span class="s2">第二行要换行"</span><span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"模板里写 {{ entry.date_added|date:'M d, Y H:i' }}"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  python 等价："</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s2">"date_added"</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%b </span><span class="si">%d</span><span class="s2">, %Y %H:%M"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  对照：%b 是缩写月份（May），%B 是全称（May 在这里一样，December 才有差别）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">模板里写 {{ entry.text|linebreaks }}"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  python 等价："</span><span class="p">,</span> <span class="s2">"&lt;p&gt;"</span> <span class="o">+</span> <span class="n">entry</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"&lt;/p&gt;&lt;p&gt;"</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"&lt;br&gt;"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&lt;/p&gt;"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">模板里写 {{ entry.text|truncatewords:4 }}"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  等价："</span><span class="p">,</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="s2">" …"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">这些过滤器都只改「显示」，不改 context 里的原始值："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  原始 date_added 还是："</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s2">"date_added"</span><span class="p">])</span>
+</code></pre>
+<p><code>|date</code> 用的格式码和单元 16 的 <code>strftime</code> <strong>完全同一套</strong>（<code>%Y</code> <code>%m</code> <code>%d</code> <code>%H</code> <code>%M</code>）；<code>|linebreaks</code> 就是「把换行变成 <code>&lt;br&gt;</code>、把空行变成分段」；<code>|truncatewords:4</code> 取前 4 个词。想验证一个过滤器到底做了什么，最直接的办法仍是「查看网页源代码」——它输出的就是 HTML 字符串。</p>
 <h3 id="2-7-模板继承与-404-别每个页面重复写导航栏">2.7 模板继承与 404：别每个页面重复写导航栏 ★</h3>
 <p>每个页面都有导航栏。如果每个 <code>.html</code> 都手写一遍，改一次导航要翻遍所有文件、漏一个就是一个坏链接——这是「复制粘贴式开发」的经典悲剧。Django 的解法是<strong>模板继承</strong>：把公共骨架写进父模板 <code>base.html</code>，挖好「坑」；子模板只管填自己那一亩三分地。</p>
 <p>类比：<code>base.html</code> 是开发商的精装房——水电、地板、墙面全装好，留几个空房间；子模板是业主，只往空房间里摆自己的家具。</p>
@@ -1076,6 +1128,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

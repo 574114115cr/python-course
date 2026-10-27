@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 2 课件 · 字典、集合与文本</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 2 · 逐节课件</div><h2>单元 2 · 字典、集合与文本</h2><div class="sub">第 3–4 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 5 课 · 目标与要点</div><h2>哈希表：dict 为什么快，顺序为什么稳定</h2><div class="sub">能画出 dict 的「索引数组 + 条目数组」结构，解释查找平均 O(1)、键必须可哈希、以及插入顺序为何被保留。</div><ul><li><b>哈希值相等不代表对象相等</b>：hash(a) == hash(b) 只说明可能落在同一槽位，最终还要 a == b。</li><li><b>自定义类做键</b>：默认按身份哈希；一旦重写 __eq__ 就必须同时重写 __hash__，否则类会变成不可哈希。</li><li><b>顺序稳定 ≠ 可排序</b>：dict 保留插入顺序，但不会替你排序；要排序得用 sorted(d.items())。</li><li>扩容会重建索引表，这也是为什么「边遍历边增删键」会抛 RuntimeError，需要先复制键列表。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 5 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>d = {&quot;apple&quot;: 3, &quot;banana&quot;: 5}
+print(hash(&quot;apple&quot;))        # 同一个进程内固定，跨进程会变（字符串哈希有随机化）
+d[&quot;cherry&quot;] = 7             # 插入：算 hash → 找槽位 → 写入
+print(&quot;apple&quot; in d)         # 查找：算 hash → 比对键 → 命中</code></pre><div class="sub">动手：用 time.perf_counter() 比较 x in list_of_100k 与 x in set_of_100k 的耗时，记录倍数。</div></section><section class="slide" data-s="4"><div class="sk">第 6 课 · 目标与要点</div><h2>映射的惯用法：合并、缺失键与视图</h2><div class="sub">能用一行代码完成字典合并、缺失键兜底与分组计数，并知道 setdefault、defaultdict、Counter 各自的适用场景。</div><ul><li>d[k] 缺失会抛 KeyError，d.get(k) 返回 None；需要区分「键不存在」和「值是 None」时用 if k in d。</li><li>defaultdict 的工厂函数每次缺失都会调用，用 lambda: [] 要小心闭包；直接用 list 更安全。</li><li>Counter 是 dict 的子类，可以做 +、-、&amp;、| 合并计数。</li><li><b>视图是动态的</b>：d.keys()、d.values()、d.items() 不复制数据，字典变了视图也变。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 6 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>defaults = {&quot;host&quot;: &quot;localhost&quot;, &quot;port&quot;: 8000}
+override = {&quot;port&quot;: 9000}
+cfg = defaults | override            # {&#x27;host&#x27;: &#x27;localhost&#x27;, &#x27;port&#x27;: 9000}
+cfg2 = {**defaults, **override}      # 等价写法</code></pre><div class="sub">动手：把三份配置（默认、文件、命令行）用 ChainMap 合成一份，验证优先级。</div></section><section class="slide" data-s="6"><div class="sk">第 7 课 · 目标与要点</div><h2>集合与不可变映射：用集合运算替代循环</h2><div class="sub">能用集合运算完成去重、交并差与成员测试，并知道什么时候该用 frozenset 或 MappingProxyType。</div><ul><li>集合元素必须可哈希，所以不能把 list 放进 set；需要放就用 tuple 或 frozenset。</li><li><b>&amp;、| 对 set 是集合运算，对 dict 的键视图也能用</b>：d1.keys() &amp; d2.keys() 直接求共同键。</li><li>in 在 set 上是 O(1)，在 list 上是 O(n)；循环里做成员测试时先转 set。</li><li>空集合只能写 set()，{} 是空字典。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 7 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>a = {&quot;alice&quot;, &quot;bob&quot;, &quot;cid&quot;}
+b = {&quot;bob&quot;, &quot;dave&quot;}
+
+print(a | b)      # 并集
+print(a &amp; b)      # 交集
+print(a - b)      # 差集：在 a 不在 b
+print(a ^ b)      # 对称差
+print(a &lt;= {&quot;alice&quot;, &quot;bob&quot;, &quot;cid&quot;, &quot;dave&quot;})   # 子集判断</code></pre><div class="sub">动手：有两份用户名单（老用户、新用户），求「新增」「流失」「两边都有」三个集合。</div></section><section class="slide" data-s="8"><div class="sk">第 8 课 · 目标与要点</div><h2>文本与字节：编码、解码与规范化</h2><div class="sub">能区分 str 与 bytes，独立排查 UnicodeDecodeError，并用 NFC/NFD 规范化处理「看起来一样」的字符串。</div><ul><li>打开文件永远显式写 encoding=&quot;utf-8&quot;，不要依赖系统默认（Windows 默认 GBK，Linux 默认 UTF-8）。</li><li><b>BOM 不是内容</b>：utf-8-sig 读取会吃掉 BOM；写 CSV 给 Excel 用时才需要加 BOM。</li><li>大小写折叠用 str.casefold()，比 lower() 更适合做不区分大小写的比较（德语 ß、土耳其语 İ 等）。</li><li><b>排序按码点，不按语言习惯</b>：中文按拼音排序需要 locale.strxfrm 或第三方库，sorted() 做不到。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 8 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>text = &quot;café&quot;
+raw = text.encode(&quot;utf-8&quot;)        # b&#x27;caf\xc3\xa9&#x27;
+print(len(text), len(raw))        # 4 5（é 占两个字节）
+print(raw.decode(&quot;utf-8&quot;))        # café</code></pre><div class="sub">动手：写一个函数 safe_read(path)：用 UTF-8 读文件，遇到 UnicodeDecodeError 时打印出错字节位置和前后各 20 字节，再抛出自定义异常。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>哈希：能讲清 dict 的查找路径，并说明键为什么必须可哈希</li><li>映射：用 defaultdict + Counter 完成一次分组统计，代码不超过 15 行</li><li>集合：用集合运算解决一次「两份名单对比」，不写嵌套循环</li><li>编码：独立排查一次 UnicodeDecodeError，并给出规范化方案</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../02.html">← 单元 2</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

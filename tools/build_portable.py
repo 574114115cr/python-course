@@ -23,7 +23,8 @@ INCLUDE_FILES = ["index.html", "python-learning-roadmap.html",
                  "sw.js", "manifest.webmanifest",
                  "icon-192.png", "icon-512.png",
                  "icon-maskable-192.png", "icon-maskable-512.png"]
-INCLUDE_DIRS = ["web", "course", "exercises", "python-course-ppt"]
+INCLUDE_DIRS = ["web", "course", "exercises", "python-course-ppt",
+                "fluent", "course-fluent"]
 INCLUDE_EXTRA = ["python-course-ppt/DESIGN.md", "python-course-ppt/STORY.md"]
 
 # 这些不打包
@@ -70,6 +71,18 @@ README = """Python 课程包 · 便携版
   course/ ...................... 讲义源文件（Markdown，可自行修改）
   exercises/ ................... 题库源文件
 
+  ── 进阶课：《流畅的 Python（第 2 版）》 ──
+  fluent/index.html ............ 进阶课首页（可从主页右上角切换）
+  fluent/web/01.html ~ 12.html . 12 份单元讲义（24 章课程化重写）
+  fluent/web/lessons/ .......... 48 节课节页
+  fluent/web/bank.html ......... 36 道题（按单元筛选 / 答案折叠）
+  fluent/web/gates.html ........ 2 个关卡（24 条验收）
+  fluent/web/ppt/index.html .... 18 页大纲课件（键盘翻页）
+  fluent/web/ppt/u/NN.html ..... 12 套逐节课件（每套 10 页：封面 + 每节 2 页 + 验收）
+  fluent/web/coverage.html ..... 覆盖与自足性（24 章逐章对照、课程不替代的部分）
+  fluent/web/terms.html ........ 术语索引（291 条，点课号直达）
+  course-fluent/ ............... 进阶课讲义源文件（Markdown）与 bookmap.json
+
 
 【功能说明】
 
@@ -83,11 +96,9 @@ README = """Python 课程包 · 便携版
     换页会接着上次的位置放，开关状态各页通用；浏览器限制自动播放，
     首次进来点一下页面任意处才会响。音乐文件在 web/media/bgm-8bit.wav。
   · 首页有全局搜索（Ctrl+K）：课节、讲义小节、题库、课件一起搜。
-  · 题库每题默认只显示题目，点开才看答案；可勾「已掌握」记录进度。
-  · 关卡页按条勾选，顶部显示「已达标 x/N」，全绿才算过关。
-  · 每个单元页右上角能看到「本单元已学 x/y 节」。
-  · 进度存在本机浏览器：换电脑前到首页点「导出进度」，到新电脑点「导入进度」。
-  · 首页有全局搜索（Ctrl+K）：课节、讲义小节、题库、课件一起搜。
+  · 进阶课每节末尾有「延伸」（易踩点）与「教材对照」（章节范围，本节自足）。
+  · 进阶课每单元末尾有「综合案例」：40–60 行可运行项目 + 设计取舍。
+  · 想确认课程覆盖到哪：打开进阶课首页「覆盖与自足性」，24 章逐章对照。
   · 题库每题默认只显示题目，点开才看答案；可勾「已掌握」记录进度。
   · 关卡页按条勾选，顶部显示「已达标 x/N」，全绿才算过关。
   · 每个单元页右上角能看到「本单元已学 x/y 节」。
@@ -109,6 +120,9 @@ README = """Python 课程包 · 便携版
 ================================================================
 依据《Python 编程：从入门到实践（第 3 版）》中文版全 20 章
 22 个单元 · 111 节课 · 2 道关卡 · 3 个大项目
+
+进阶课：依据《流畅的 Python（第 2 版）》24 章
+12 个单元 · 48 节课 · 2 个关卡 · 36 道题
 """
 
 

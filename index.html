@@ -39,12 +39,18 @@ a{color:inherit;text-decoration:none}
 .hero::after{content:'';position:absolute;right:-90px;bottom:-140px;width:420px;height:420px;
   border-radius:50%;background:rgba(255,255,255,.08)}
 .hero>*{position:relative;z-index:1}
-.hsearch{position:relative;max-width:1200px;margin:-16px auto 26px;padding:0 22px}
-.hsearch input{width:100%;font:inherit;font-size:15px;color:var(--text);background:#fff;
-border:1px solid var(--line);border-radius:12px;padding:13px 16px;
-box-shadow:0 3px 14px rgba(20,40,70,.06)}
-.hsearch input:focus{outline:none;border-color:var(--p1);
-box-shadow:0 0 0 3px rgba(31,95,168,.12)}
+.hsearch{position:relative;display:flex;align-items:center;gap:11px;background:#fff;
+border:1px solid var(--line);border-radius:12px;padding:0 15px;margin:0 0 30px;
+box-shadow:0 3px 14px rgba(20,40,70,.05)}
+.hsearch:focus-within{border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.12)}
+.hsearch .lb{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px;
+white-space:nowrap;display:flex;align-items:center;gap:7px}
+.hsearch .lb::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--p2)}
+.hsearch input{flex:1;min-width:0;font:inherit;font-size:15px;color:var(--text);
+background:none;border:none;padding:13px 2px}
+.hsearch input:focus{outline:none}
+.hsearch .hint{font-size:11.5px;color:var(--muted);white-space:nowrap}
+@media(max-width:760px){.hsearch .hint,.hsearch .lb{display:none}}
 .hres{position:absolute;left:22px;right:22px;top:calc(100% + 6px)}
 .hres{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;
 border-radius:11px;box-shadow:0 14px 38px rgba(0,20,50,.22);overflow:hidden;
@@ -99,7 +105,7 @@ h2 i{width:9px;height:9px;border-radius:50%;display:block;flex-shrink:0}
 /* 单元卡片是折叠的：展开一张会把同排撑高。默认 align-items:stretch 会让
    同排其它卡片一起被拉成空白大块，看起来像"跟着点开了"。改成按内容高度对齐。 */
 #unitList{align-items:start}
-.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 .g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 
@@ -230,6 +236,48 @@ box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
 transition:opacity .18s;z-index:60}
 #toTop.on{opacity:1;pointer-events:auto}
 @media print{#toTop{display:none}}
+
+/* 课程切换 */
+.nav-switch{font-size:12.5px;font-weight:700;color:#4c3a9e;background:#eeebfa;
+  border:1px solid #d8d1f2;border-radius:7px;padding:4px 11px;white-space:nowrap}
+.nav-switch:hover{background:#e3ddf8;text-decoration:none}
+@media(max-width:760px){.nav-switch{display:none}}
+/* 两门课：首页就是启动器（进度 + 继续学习） */
+.csw{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 18px}
+.cc{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:20px 22px;display:flex;gap:15px;align-items:flex-start}
+.cc:hover{border-color:#c3d2e6;box-shadow:0 6px 24px rgba(31,95,168,.08)}
+.cc.on{border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.10)}
+.cc .ic{width:44px;height:44px;border-radius:12px;background:var(--p1bg);color:var(--p1);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13.5px;
+  flex-shrink:0;letter-spacing:.5px}
+.cc.fp .ic{background:#eeebfa;color:#4c3a9e}
+.cc .bd{flex:1;min-width:0}
+.cc .t{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  line-height:1.4}
+.cc .s{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+.cc .pb{margin:14px 0 7px;height:7px;background:#eef1f5;border-radius:99px;overflow:hidden}
+.cc .pb i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--p1),var(--p2));transition:width .3s}
+.cc.fp .pb i{background:linear-gradient(90deg,#4c3a9e,#0e9b78)}
+.cc .meta{display:flex;align-items:baseline;gap:9px;font-size:12px;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.cc .meta b{color:var(--text);font-size:12.5px;font-weight:700}
+.cc .acts{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
+.cc .acts a{font-size:12.5px;font-weight:700;border-radius:8px;padding:7px 14px;white-space:nowrap}
+.cc .acts .pri{color:#fff;background:var(--p1)}
+.cc .acts .pri:hover{background:#18528f;text-decoration:none}
+.cc .acts .sec{color:var(--muted);background:#fff;border:1px solid var(--line)}
+.cc .acts .sec:hover{border-color:var(--p1);color:var(--p1);text-decoration:none}
+.cc.fp .acts .pri{background:#4c3a9e}
+.cc.fp .acts .pri:hover{background:#3f3085}
+.cc .here{font-size:11px;font-weight:700;color:var(--p1);background:var(--p1bg);
+  border-radius:20px;padding:2px 9px}
+@media(max-width:760px){
+  .csw{grid-template-columns:1fr}
+  .cc{padding:16px 16px}
+  .cc .acts a{flex:1;text-align:center}
+}
 </style>
 <script src="web/searchdata.js"></script>
 </head>
@@ -247,6 +295,7 @@ transition:opacity .18s;z-index:60}
     <a href="#method">方法</a>
   </div>
   <div class="nav-prog" id="navProg">0 / 22</div>
+  <a class="nav-switch" href="fluent/index.html">进阶课 →</a>
 </div></nav>
 
 <div class="wrap">
@@ -261,17 +310,49 @@ transition:opacity .18s;z-index:60}
     <div class="stat"><b data-n="units">22</b><span>单元</span></div>
     <div class="stat"><b>29</b><span>周</span></div>
     <div class="stat"><b data-n="lessons">111</b><span>节课 · 每节 90 分钟</span></div>
-    <div class="stat"><b data-n="bank">84</b><span>道练习题</span></div>
+    <div class="stat"><b data-n="bank">120</b><span>道练习题</span></div>
     <div class="stat"><b>3</b><span>个大项目</span></div>
     <div class="stat hi"><b>2</b><span>道关卡</span></div>
   </div>
 </header>
 
+<div class="csw">
+  <div class="cc on">
+    <span class="ic">PY</span>
+    <div class="bd">
+      <div class="t">Python 入门课 <span class="here">你在这里</span></div>
+      <div class="s">22 单元 · 111 节 · 从第一行 print 到独立做项目</div>
+      <div class="pb"><i id="pbPy"></i></div>
+      <div class="meta"><b id="txPy">已学 0 / 111 节</b><span id="pcPy">0%</span></div>
+      <div class="acts">
+        <a class="pri" id="goPy" href="web/lessons/01.html">开始第 1 节 →</a>
+        <a class="sec" href="web/lessons/index.html">全部 111 节</a>
+      </div>
+    </div>
+  </div>
+  <div class="cc fp">
+    <span class="ic">FP</span>
+    <div class="bd">
+      <div class="t">流畅的 Python 精读课</div>
+      <div class="s">12 单元 · 48 节 · 24 章设计取舍 · 进阶与源码阅读</div>
+      <div class="pb"><i id="pbFl"></i></div>
+      <div class="meta"><b id="txFl">已学 0 / 48 节</b><span id="pcFl">0%</span></div>
+      <div class="acts">
+        <a class="pri" id="goFl" href="fluent/index.html">进入进阶课 →</a>
+        <a class="sec" href="fluent/web/lessons/index.html">全部 48 节</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="hsearch">
+  <span class="lb">全站搜索</span>
   <input id="gs" type="search" autocomplete="off" spellcheck="false"
-         placeholder="搜课程内容：继承 / 切片 / 部署 / 装饰器 …    （Ctrl + K）">
+         placeholder="继承 / 切片 / 部署 / 装饰器 …">
+  <span class="hint">课节 · 讲义 · 题库 · 课件 · Ctrl+K</span>
   <div class="hres" id="gsRes"></div>
 </div>
+
 
 
 <!-- ═══ 总览 ═══ -->
@@ -395,7 +476,7 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 题库 ═══ -->
 <section id="bank">
-  <div class="sec-head"><h2><i style="background:var(--p2)"></i>练习题库 · 六档递进 <span data-n="bank">84</span> 题</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p2)"></i>练习题库 · 六档递进 <span data-n="bank">120</span> 题</h2></div>
   <p class="sec-sub">每题含题目 / 完整可运行参考答案 / 解析。卡 15 分钟再看答案，看完必须关掉重写一遍。</p>
   <div class="tw"><table>
     <thead><tr><th style="width:110px">档位</th><th style="width:70px">题量</th><th>覆盖内容</th><th style="width:150px">建议用时</th><th style="width:190px">重点题</th></tr></thead>
@@ -446,15 +527,21 @@ transition:opacity .18s;z-index:60}
     <div class="drow">
       <span class="dlab">题库</span>
       <div class="dbar b2"><i id="dBr"></i></div>
-      <span class="dval" id="dBl">0 / 84 题</span>
+      <span class="dval" id="dBl">0 / 120 题</span>
     </div>
     <div class="drow">
       <span class="dlab">关卡</span>
       <div class="dbar b3"><i id="dGr"></i></div>
       <span class="dval" id="dGl">0 / 24 项</span>
     </div>
+    <div class="drow">
+      <span class="dlab">复习</span>
+      <div class="dbar b2"><i id="rvP"></i></div>
+      <span class="dval" id="rvT">今日 0 项</span>
+    </div>
     <div class="dfoot">
       <a class="lprog-go" id="lgo" href="web/lessons/01.html">继续学习：第 1 节 →</a>
+      <a class="lprog-go" href="web/review.html" style="color:var(--p2)">今日复习计划 →</a>
       <div class="lpt">
         <button type="button" id="expP">导出进度</button>
         <button type="button" id="impP">导入进度</button>
@@ -477,9 +564,23 @@ transition:opacity .18s;z-index:60}
     </a>
     <a class="lib" href="web/bank.html" target="_blank">
       <div class="lib-i" style="background:#5a6b7a">题库</div>
-      <div><h4>分阶练习题库（<span data-n="bank">84</span> 题）</h4>
+      <div><h4>分阶练习题库（<span data-n="bank">120</span> 题）</h4>
         <p>六档递进 · 每题含完整可运行参考答案与解析 · 附 3 道综合挑战</p></div>
       <span class="go">打开 →</span>
+    </a>
+    <a class="lib" href="web/terms.html" target="_blank">
+      <div class="lib-i" style="background:#2f7a63">索引</div>
+      <div><h4>术语索引（499 条）</h4>
+        <p>正文里出现过的函数 / 方法 / 类名，按字母分组 · 每条给人课号直达 ·
+           相当于教材末尾的索引，但点一下就到讲解位置</p></div>
+      <span class="go">查术语 →</span>
+    </a>
+    <a class="lib" href="web/coverage.html" target="_blank">
+      <div class="lib-i" style="background:#1f5fa8">覆盖</div>
+      <div><h4>覆盖与自足性（20 章 + 附录 A–E）</h4>
+        <p>教材每一章对应哪个单元、附录讲到什么程度、多出了什么、不替代什么 ·
+           全部从讲义原文自动汇总，不是手写宣传</p></div>
+      <span class="go">看对照表 →</span>
     </a>
     <a class="lib" href="python-learning-roadmap.html" target="_blank">
       <div class="lib-i" style="background:var(--p1)">路线</div>
@@ -490,8 +591,15 @@ transition:opacity .18s;z-index:60}
     <a class="lib" href="python-course-syllabus.html" target="_blank">
       <div class="lib-i" style="background:#7c5cbf">课表</div>
       <div><h4>课程大纲</h4>
-        <p>12 单元总课表 · 每次课 90 分钟四段式 · 教学三原则 · 综合项目 · 可勾选进度</p></div>
+        <p>22 单元总课表 · 每次课 90 分钟四段式 · 教学三原则 · 综合项目 · 可勾选进度</p></div>
       <span class="go">打开 →</span>
+    </a>
+    <a class="lib" href="web/review.html" target="_blank">
+      <div class="lib-i" style="background:#c46f00">复习</div>
+      <div><h4>复习计划 · 艾宾浩斯遗忘曲线</h4>
+        <p>学完一节课就自动排 6 轮复习（当天 / 2 / 4 / 8 / 16 / 31 天）·
+           今日待复习、逾期提醒、记忆保持率估算，数据只存本机</p></div>
+      <span class="go">打开复习计划 →</span>
     </a>
     <a class="lib" href="web/ppt/u/index.html" target="_blank">
       <div class="lib-i" style="background:var(--p3)">逐节课件</div>
@@ -915,6 +1023,59 @@ readOpen().forEach(function(n){
   else { go.textContent='继续学习：第 '+next+' 节 →'; go.href='web/lessons/'+(next<10?'0':'')+next+'.html'; }
 })();
 
+/* ── 今日复习（艾宾浩斯排程，与 web/review.html 同一套间隔） ── */
+(function(){
+  var STAGES=[0,1,3,7,15,30], DAY=86400000;
+  function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return {}}}
+  function mid(t){var d=new Date(t);d.setHours(0,0,0,0);return d.getTime()}
+  var L=read('lesson-done-v1'), R=read('lesson-review-v1'), today=mid(Date.now());
+  var due=0, later=0, learned=0, k, i;
+  for(k in L){
+    if(!L[k]) continue;
+    learned++;
+    var rs=R[k]||[];
+    for(i=0;i<STAGES.length;i++){
+      if(rs[i]) continue;
+      if(mid(L[k]===true?Date.now():L[k]) + STAGES[i]*DAY <= today) due++; else later++;
+    }
+  }
+  var t=document.getElementById('rvT'), b=document.getElementById('rvP');
+  if(!t) return;
+  t.textContent = learned ? ('今日 '+due+' 项') : '今日 0 项';
+  if(b) b.style.width = Math.min(100, due*10)+'%';
+})();
+
+/* ── 两门课：进度条 + 继续学习（首页当启动器） ── */
+(function(){
+  function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return {}}}
+  function fill(o, total, ids, href){
+    var n=0, next=0, i;
+    for(i=1;i<=total;i++){ if(o[String(i)]) n++; else if(!next) next=i; }
+    var pc = total? Math.round(n/total*100) : 0;
+    var bar=document.getElementById(ids.bar); if(bar) bar.style.width=pc+'%';
+    var tx=document.getElementById(ids.tx);
+    if(tx) tx.textContent='已学 '+n+' / '+total+' 节';
+    var p=document.getElementById(ids.pc); if(p) p.textContent=pc+'%';
+    var go=document.getElementById(ids.go); if(!go) return;
+    if(!next){ go.textContent='已全部学完 ✓'; go.href=ids.done; }
+    else if(!n){ go.href=href(next); go.textContent='开始第 '+next+' 节 →'; }
+    else { go.href=href(next); go.textContent='继续学习：第 '+next+' 节 →'; }
+  }
+  var totalPy=(window.SITE&&window.SITE.lessons)||111;
+  function pyHref(i){ return 'web/lessons/'+(i<10?'0':'')+i+'.html'; }
+  function flHref(i){ return 'fluent/web/lessons/l'+(i<10?'0':'')+i+'.html'; }
+  function paint(){
+    fill(read('lesson-done-v1'), totalPy,
+         {bar:'pbPy',tx:'txPy',pc:'pcPy',go:'goPy',done:'web/lessons/index.html'}, pyHref);
+    fill(read('fl-lesson-v1'), 48,
+         {bar:'pbFl',tx:'txFl',pc:'pcFl',go:'goFl',done:'fluent/web/lessons/index.html'}, flHref);
+  }
+  paint();
+  window.addEventListener('focus', paint);
+  window.addEventListener('storage', paint);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) paint(); });
+})();
+
 /* ── 学习总览：题库与关卡进度（课节那行在上一段已处理） ── */
 (function(){
   function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return {}}}
@@ -1030,7 +1191,7 @@ render();
 
 /* ── 进度导出 / 导入（换电脑、清缓存前先备份） ── */
 (function(){
-  var KEYS=['py-hub-v1','lesson-done-v1','bank-v1','gate1-v1','gate2-v1'];
+  var KEYS=['py-hub-v1','lesson-done-v1','lesson-review-v1','bank-v1','gate1-v1','gate2-v1'];
   var eb=document.getElementById('expP'), ib=document.getElementById('impP'),
       fi=document.getElementById('impFile');
   if(!eb||!ib||!fi) return;

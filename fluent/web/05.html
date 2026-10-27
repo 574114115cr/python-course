@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 5 · 装饰器、闭包与设计模式</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 5 · 装饰器、闭包与设计模式</h1>
+  <a class="tag" href="05.html">单元 5</a>
+  <a class="ppt" href="ppt/u/05.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="17" href="lessons/l17.html"><span class="no">17</span><span class="tx">闭包：捕获的是变量，不是值</span></a><a class="" data-l="18" href="lessons/l18.html"><span class="no">18</span><span class="tx">装饰器：从注册到参数化</span></a><a class="" data-l="19" href="lessons/l19.html"><span class="no">19</span><span class="tx">标准库装饰器：缓存、分派与惰性属性</span></a><a class="" data-l="20" href="lessons/l20.html"><span class="no">20</span><span class="tx">用一等函数重构策略与命令模式</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l17">第 17 课 · 闭包：捕获的是变量，不是值</a>
+<a class="lv2" href="#l18">第 18 课 · 装饰器：从注册到参数化</a>
+<a class="lv2" href="#l19">第 19 课 · 标准库装饰器：缓存、分派与惰性属性</a>
+<a class="lv2" href="#l20">第 20 课 · 用一等函数重构策略与命令模式</a>
+<a class="lv2" href="#case-u05">综合案例：计时、重试、注册：三个装饰器把样板代码收掉</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u5"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/05.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u05.html"><span class="k">走读</span>
+    <span class="v">单元 5 完整程序 · 逐段讲解</span></a>
+  <a href="ch/09.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 9–10 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 5</span>
+        <span class="kwk">第 9–10 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 5 · 装饰器、闭包与设计模式</h1>
+      <p class="goal">闭包 · 装饰器 · 策略与命令模式</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 9–10 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p>闭包是「函数记住定义环境」的能力，装饰器是「在不改函数体的前提下加行为」的语法。两者合起来，支撑了缓存、重试、权限校验、路由注册、日志埋点——几乎所有框架的入口都长这样。</p>
+<p>本单元还会用一等函数重写两个经典设计模式。目的不是背模式，而是看清一件事：<strong>很多模式在 Python 里只需要一个函数或一个字典，不需要一整套类层级</strong>。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>画出闭包的 cell 结构，解释 <code>nonlocal</code> 为什么必要；</li>
+<li>徒手写出带参数、保留元数据、能处理异常的装饰器；</li>
+<li>正确使用 <code>lru_cache</code>、<code>singledispatch</code>、<code>cached_property</code>；</li>
+<li>用函数字典替代策略模式，用可调用对象替代命令模式。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="17" href="lessons/l17.html"><span class="no">17</span><span class="tx">闭包：捕获的是变量，不是值</span></a><a data-l="18" href="lessons/l18.html"><span class="no">18</span><span class="tx">装饰器：从注册到参数化</span></a><a data-l="19" href="lessons/l19.html"><span class="no">19</span><span class="tx">标准库装饰器：缓存、分派与惰性属性</span></a><a data-l="20" href="lessons/l20.html"><span class="no">20</span><span class="tx">用一等函数重构策略与命令模式</span></a></div></div><h2 id="l17">第 17 课 · 闭包：捕获的是变量，不是值</h2><h3 id="讲解">讲解</h3>
+<p>闭包 = 函数 + 它引用的外层变量（cell）。外层函数返回后，这些变量仍然活着：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">make_counter</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">start</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">counter</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">step</span>
+        <span class="k">return</span> <span class="n">n</span>
+
+    <span class="k">return</span> <span class="n">counter</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">make_counter</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">(),</span> <span class="n">c</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>        <span class="c1"># 11 16</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__closure__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cell_contents</span><span class="p">)</span>   <span class="c1"># 16</span>
+</code></pre>
+<p><code>n += step</code> 会赋值，所以必须声明 <code>nonlocal n</code>；不声明的话 Python 认为 <code>n</code> 是局部变量，抛 <code>UnboundLocalError</code>。</p>
+<p>闭包捕获的是<strong>变量本身</strong>，不是创建时的值。这导致循环里的函数全部看到最后一个值：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">f</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">])</span>      <span class="c1"># [2, 2, 2]</span>
+
+<span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>   <span class="c1"># 用默认参数固化</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">f</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">funcs</span><span class="p">])</span>      <span class="c1"># [0, 1, 2]</span>
+</code></pre>
+<h3 id="延伸-闭包变量存在-closure-里">延伸：闭包变量存在 <strong>closure</strong> 里</h3>
+<p>闭包把外层变量存在函数对象的 <code>__closure__</code> 中，每一项是一个 cell：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">counter</span><span class="p">():</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">inc</span><span class="p">():</span>
+        <span class="k">nonlocal</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">inc</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">counter</span><span class="p">()</span>
+<span class="n">c</span><span class="p">();</span> <span class="n">c</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__closure__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cell_contents</span><span class="p">)</span>    <span class="c1"># 2</span>
+</code></pre>
+<p><code>nonlocal</code> 只声明「最近一层」的外层变量：跨两层就要每层各写一次，或者干脆把状态放进 list/dict 里（改内容不算重新绑定，不需要 nonlocal）。只读外层变量不用声明，赋值才需要——忘了写会得到 <code>UnboundLocalError</code>，因为赋值让这个名字在整个函数里变成局部变量。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>LEGB 顺序</strong>：Local → Enclosing → Global → Builtin；闭包变量在 Enclosing 层。</li>
+<li><strong>只有「赋值」才需要 <code>nonlocal</code></strong>；只读外层变量不需要声明。</li>
+<li><strong>闭包持有引用</strong>，会延长对象生命周期；大量闭包 + 大对象要留意内存。</li>
+<li><strong>延迟绑定是特性不是 bug</strong>：它让闭包能共享状态，但循环里要显式固化。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>写 <code>make_accumulator()</code>，连续调用累加，并打印 <code>__closure__</code> 里的 cell 内容。</li>
+<li>复现 <code>[lambda: i for i in range(3)]</code> 的陷阱，用两种方式修复（默认参数、<code>functools.partial</code>）。</li>
+<li>写一个闭包版 <code>rate_limiter(max_calls)</code>，超过次数返回 <code>False</code>。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释闭包变量为什么在外层函数返回后仍然存在</li>
+<li><span class="ck"></span>知道什么时候必须写 <code>nonlocal</code></li>
+<li><span class="ck"></span>能识别并修复循环中 lambda 的延迟绑定</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 9 章 §9.2–9.7</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：闭包变量存在 __closure__ 里</p></div><h2 id="l18">第 18 课 · 装饰器：从注册到参数化</h2><h3 id="讲解-1">讲解</h3>
+<p><code>@deco</code> 只是语法糖：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@deco</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">():</span> <span class="o">...</span>
+
+<span class="c1"># 等价于</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">():</span> <span class="o">...</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">deco</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre>
+<p>最小装饰器：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">logged</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>          <span class="c1"># 保留 __name__ / __doc__ / __wrapped__</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"call"</span><span class="p">,</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@logged</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">add</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>    <span class="c1"># 3 add</span>
+</code></pre>
+<p><code>functools.wraps</code> 不是可选项：没有它，被装饰函数的 <code>__name__</code> 会变成 <code>wrapper</code>，FastAPI、click、pytest 这类靠签名和名字工作的框架会直接失效。</p>
+<p>带参数的装饰器是「三层函数」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">=</span><span class="p">(</span><span class="ne">Exception</span><span class="p">,)):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">exceptions</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">times</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+<span class="nd">@retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"boom"</span><span class="p">)</span>
+</code></pre>
+<p>注册型装饰器不需要包装函数，直接把函数存进注册表：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">HANDLERS</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">route</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">HANDLERS</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
+        <span class="k">return</span> <span class="n">fn</span>                <span class="c1"># 原样返回，不包装</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+<span class="nd">@route</span><span class="p">(</span><span class="s2">"/ping"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ping</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">"pong"</span>
+</code></pre>
+<h3 id="延伸-用类写参数化装饰器-wraps-做了什么">延伸：用类写参数化装饰器，wraps 做了什么</h3>
+<p>三层嵌套（工厂 → 装饰器 → wrapper）可以用类压平，参数放 <code>__init__</code>、被装饰函数交给 <code>__call__</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">retry</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">times</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+</code></pre>
+<p><code>functools.wraps</code> 复制 <code>__name__</code>、<code>__doc__</code>、<code>__module__</code>、<code>__dict__</code>，并写入 <code>__wrapped__</code> 指向原函数；<code>inspect.signature</code> 会顺着 <code>__wrapped__</code> 拿到真实签名。所以漏写 wraps 的典型症状是：文档变 <code>wrapper</code>、路由注册参数丢失、框架读不到注解。用类实现的代价是实例不能被当函数直接调用两次以上的配置场景复用，看需求选。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong>装饰器在导入时执行</strong>，不是调用时；不要在装饰器里做耗时操作。</li>
+<li><strong>一定要 <code>functools.wraps</code></strong>，否则签名、文档、名字全丢。</li>
+<li><strong>多个装饰器从下往上包裹</strong>：<code>@a @b def f</code> 等价于 <code>f = a(b(f))</code>。</li>
+<li><strong>注册型装饰器直接返回原函数</strong>，包装型才返回 wrapper；混用会导致重复注册或行为叠加。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<ol>
+<li>写 <code>@timer</code>，打印函数耗时，要求保留 <code>__name__</code> 与 <code>__doc__</code>。</li>
+<li>写 <code>@retry(times=3, exceptions=(TimeoutError,))</code>，用一个随机失败的函数验证。</li>
+<li>写 <code>@route(path)</code> 注册 3 个处理函数，打印注册表并调用。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能手写带参数的装饰器，并解释三层函数各自的职责</li>
+<li><span class="ck"></span>知道不加 <code>functools.wraps</code> 会造成什么具体故障</li>
+<li><span class="ck"></span>能区分「包装型」与「注册型」装饰器</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 9 章 §9.8–9.10</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：用类写参数化装饰器，wraps 做了什么</p></div><h2 id="l19">第 19 课 · 标准库装饰器：缓存、分派与惰性属性</h2><h3 id="讲解-2">讲解</h3>
+<p><code>functools.lru_cache</code> 按参数缓存返回值，适合纯函数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre>
+<p>参数必须可哈希；<code>maxsize=None</code> 表示不淘汰，长期运行的服务要设上限，否则内存会涨。需要按对象身份缓存时用 <code>functools.cache</code>（3.9+，等价于 <code>lru_cache(maxsize=None)</code>）。</p>
+<p>按类型分派用 <code>singledispatch</code>，避免一长串 <code>isinstance</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">singledispatch</span>
+
+<span class="nd">@singledispatch</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unsupported: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nd">@render</span><span class="o">.</span><span class="n">register</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;b&gt;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&lt;/b&gt;"</span>
+
+<span class="nd">@render</span><span class="o">.</span><span class="n">register</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">"&lt;ul&gt;"</span> <span class="o">+</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&lt;/ul&gt;"</span>
+</code></pre>
+<p><code>cached_property</code> 把开销大的属性算一次后存进实例 <code>__dict__</code>，之后直接读：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Report</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"computing..."</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+</code></pre>
+<h3 id="延伸-lru_cache-的键与-singledispatch-的注册">延伸：lru_cache 的键与 singledispatch 的注册</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span><span class="p">,</span> <span class="n">singledispatch</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">typed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>
+
+<span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">f</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">cache_info</span><span class="p">())</span>      <span class="c1"># misses=2，typed 区分 1 与 1.0</span>
+
+<span class="nd">@singledispatch</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"other"</span>
+
+<span class="nd">@show</span><span class="o">.</span><span class="n">register</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"int"</span>
+
+<span class="nd">@show</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"str"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">show</span><span class="p">(</span><span class="s2">"a"</span><span class="p">),</span> <span class="n">show</span><span class="p">(</span><span class="mf">1.5</span><span class="p">))</span>    <span class="c1"># int str other</span>
+</code></pre>
+<p><code>maxsize=None</code> 等价于 <code>cache</code>，无上限。参数必须可哈希，list 直接 <code>TypeError</code>。带副作用、依赖时间或外部状态的函数不能缓存；把 <code>lru_cache</code> 挂在实例方法上还会把 <code>self</code> 当键，导致实例不被回收——要么用类级别的缓存，要么自己管字典。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong><code>lru_cache</code> 的键是参数的哈希</strong>，传 list/dict 会直接报错。</li>
+<li><strong>缓存不会自动失效</strong>：数据变了要手动 <code>cache_clear()</code>，或改用带版本号的键。</li>
+<li><strong><code>singledispatch</code> 只看第一个参数</strong>的类型，多参数分派要自己组合。</li>
+<li><strong><code>cached_property</code> 需要实例有 <code>__dict__</code></strong>，用 <code>__slots__</code> 的类不支持。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<ol>
+<li>用 <code>lru_cache</code> 优化一个递归函数，比较加缓存前后的调用次数。</li>
+<li>用 <code>singledispatch</code> 实现 <code>to_json</code>，支持 int、str、list、dict 四种类型。</li>
+<li>用 <code>cached_property</code> 缓存一次数据库聚合结果，并手动实现一个 <code>invalidate()</code>。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>知道 <code>lru_cache</code> 对参数的要求与内存风险</li>
+<li><span class="ck"></span>能用 <code>singledispatch</code> 替代 5 个以上分支的 <code>isinstance</code> 链</li>
+<li><span class="ck"></span>能解释 <code>cached_property</code> 与 <code>property</code> 的区别</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 9 章 §9.9</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：lru_cache 的键与 singledispatch 的注册</p></div><h2 id="l20">第 20 课 · 用一等函数重构策略与命令模式</h2><h3 id="讲解-3">讲解</h3>
+<p>经典策略模式会定义 <code>Strategy</code> 基类和多个子类。在 Python 里，策略就是一个函数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">bulk_price</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit</span> <span class="o">*</span> <span class="mf">0.9</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">normal_price</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit</span>
+
+<span class="n">PRICING</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"bulk"</span><span class="p">:</span> <span class="n">bulk_price</span><span class="p">,</span> <span class="s2">"normal"</span><span class="p">:</span> <span class="n">normal_price</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">PRICING</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+    <span class="k">return</span> <span class="n">rule</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+</code></pre>
+<p><code>ch.10</code> 的电商示例还展示了用装饰器注册策略，把「新增一种折扣」变成「加一个函数 + 一个装饰器」，而不是改 <code>if/elif</code>。</p>
+<p>命令模式适合「把操作变成对象」，因为对象能保存参数、能排队、能撤销：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Command</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Append</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre>
+<h3 id="延伸-撤销栈保存命令-不保存快照">延伸：撤销栈保存命令，不保存快照</h3>
+<p>命令模式把「一次操作」变成对象，好处是可排队、可记录、可撤销。用可调用对象实现最省：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Add</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acc</span><span class="p">):</span> <span class="k">return</span> <span class="n">acc</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acc</span><span class="p">):</span> <span class="k">return</span> <span class="n">acc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+
+<span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span><span class="n">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">Add</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cmds</span><span class="p">:</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>                              <span class="c1"># 8</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">cmds</span><span class="p">):</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>                              <span class="c1"># 0</span>
+</code></pre>
+<p>要点是成本差异：保存命令只占一条记录的字节，保存整份状态快照可能是几 MB。只有不可逆的操作（发邮件、扣库存、调第三方）才需要补偿动作或快照。设计时先问「这个操作能不能算逆运算」，能就别存快照。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong>函数字典的键要是可控枚举</strong>，不要用用户输入直接查表。</li>
+<li><strong>策略函数要签名一致</strong>，否则调用方还得判断；可以用 <code>Protocol</code> 约束（第 7 单元）。</li>
+<li><strong>命令对象的价值在「可存储、可撤销、可组合」</strong>，不需要这些能力就别上类。</li>
+<li><strong>模式是手段不是目标</strong>：Python 里能用函数、字典、<code>functools</code> 解决的，不要硬套类层级。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>把一段 6 个分支的 <code>if mode == ...</code> 计费代码改成函数字典，并加一个未知模式的明确异常。</li>
+<li>用装饰器实现策略注册：<code>@pricing("bulk")</code> 自动写入 <code>PRICING</code>。</li>
+<li>实现 <code>Append</code> / <code>Undo</code> 两个命令，用一个栈支持连续撤销。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能把策略分支重构为函数字典，并保持异常信息清晰</li>
+<li><span class="ck"></span>能说出命令模式相比直接调函数的三个额外能力</li>
+<li><span class="ck"></span>能判断一个场景「不需要设计模式」，并说明理由</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 10 章 §10.2–10.4</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：撤销栈保存命令，不保存快照</p></div><h2 id="case-u05">综合案例：计时、重试、注册：三个装饰器把样板代码收掉</h2>
+<blockquote>
+<p>一个抓取任务：要计时、失败要重试、函数要能被插件表找到。先手写，再抽成装饰器。</p>
+</blockquote>
+<h3 id="重构前-每个调用点复制一遍">重构前（每个调用点复制一遍）</h3>
+<p>计时用 <code>time.time()</code> 前后夹，重试用 <code>for</code> + <code>try</code>，注册靠手工往字典里塞。三处调用就有三份几乎一样的代码，改一处忘两处。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">REGISTRY</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fail_times</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""模拟不稳定接口：前 fail_times 次失败。"""</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">():</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">fail_times</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">"transient"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:ok"</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">call</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"fetch </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> took </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">s"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">summarize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">call</span><span class="p">():</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"flaky"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">call</span><span class="p">()</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"summarize took </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">s"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="n">REGISTRY</span><span class="p">[</span><span class="s2">"fetch"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fetch</span>
+<span class="n">REGISTRY</span><span class="p">[</span><span class="s2">"summarize"</span><span class="p">]</span> <span class="o">=</span> <span class="n">summarize</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summarize</span><span class="p">(</span><span class="s2">"hi"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">REGISTRY</span><span class="p">))</span>
+</code></pre>
+<h3 id="重构后-三个装饰器-各管一件事">重构后（三个装饰器，各管一件事）</h3>
+<p><code>timed</code> 用 <code>finally</code> 保证异常也记录耗时；<code>retry</code> 只重试指定异常并<strong>最后一次必须抛出</strong>；<code>register</code> 只登记、不包装，所以名字和签名都是原样。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">REGISTRY</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">timed</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> took </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">s"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">backoff</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">times</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                    <span class="k">if</span> <span class="n">backoff</span><span class="p">:</span>
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">backoff</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">REGISTRY</span><span class="p">[</span><span class="n">name</span> <span class="ow">or</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
+        <span class="k">return</span> <span class="n">fn</span>                  <span class="c1"># 只登记，不包装</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+
+<span class="n">_calls</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+
+<span class="nd">@register</span><span class="p">(</span><span class="s2">"fetch"</span><span class="p">)</span>
+<span class="nd">@timed</span>
+<span class="nd">@retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="ne">OSError</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="n">_calls</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">_calls</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">"transient"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">:ok"</span>
+
+
+<span class="nd">@register</span><span class="p">(</span><span class="s2">"summarize"</span><span class="p">)</span>
+<span class="nd">@timed</span>
+<span class="nd">@retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">summarize</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>          <span class="c1"># fetch took 0.0000s / a:ok</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summarize</span><span class="p">(</span><span class="s2">"hi"</span><span class="p">))</span>     <span class="c1"># summarize took 0.0000s / HI</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">REGISTRY</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fetch</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>      <span class="c1"># fetch，wraps 保住了名字</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计时</td>
+<td>每个函数前后各写一遍</td>
+<td><code>@timed</code> 一行</td>
+<td>不会漏、不会忘 <code>finally</code></td>
+<td>多一层函数调用</td>
+</tr>
+<tr>
+<td>重试</td>
+<td><code>for</code> + <code>try</code> 复制</td>
+<td><code>@retry(times=3, exc=OSError)</code></td>
+<td>只捕指定异常，参数可调</td>
+<td>重试策略藏在装饰器里，读代码要跳一次</td>
+</tr>
+<tr>
+<td>失败语义</td>
+<td>三处各自写 <code>if i == 2: raise</code></td>
+<td>统一在装饰器里抛最后一次</td>
+<td>不会静默返回 <code>None</code></td>
+<td>无</td>
+</tr>
+<tr>
+<td>注册</td>
+<td>手工 <code>REGISTRY[...] = f</code></td>
+<td><code>@register("fetch")</code></td>
+<td>定义即注册，顺序无依赖</td>
+<td>隐式副作用，导入即执行</td>
+</tr>
+<tr>
+<td>元信息</td>
+<td>名字、文档全丢（若包装过）</td>
+<td><code>functools.wraps</code> 全保留</td>
+<td>日志、路由、调试都正常</td>
+<td>无</td>
+</tr>
+<tr>
+<td>叠放顺序</td>
+<td>不存在这个概念</td>
+<td><code>register</code> 最外层、<code>retry</code> 最内层</td>
+<td>重试只影响一次业务调用</td>
+<td>顺序写反会重复计时或重复注册</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>给 <code>retry</code> 加「只对幂等操作重试」的说明与 <code>jitter</code>（随机抖动），避免大量客户端同时重试打爆对方；把 <code>REGISTRY</code> 换成 <code>__init_subclass__</code> 自动登记（单元 12 会做），注册就从「装饰函数」升级为「定义类即注册」。注意装饰器栈顺序：<code>@register</code> 放最外面，注册到的才是最终可调用对象。</p>
+<h2 id="单元验收">单元验收</h2>
+<ul>
+<li><span class="ck"></span><strong>闭包</strong>：写出一个带状态、可重置的闭包，并解释 cell 的生命周期</li>
+<li><span class="ck"></span><strong>装饰器</strong>：实现 <code>@timer</code> 与 <code>@retry(times=...)</code>，均保留元数据</li>
+<li><span class="ck"></span><strong>标准库</strong>：用 <code>lru_cache</code> + <code>singledispatch</code> 各解决一个实际问题</li>
+<li><span class="ck"></span><strong>重构</strong>：把一段 30 行以上的 if/elif 业务分支改成函数字典 + 注册装饰器</li>
+</ul>
+<blockquote>
+<p>下一单元进入对象协议：让你的类像内置类型一样被 <code>len()</code>、<code>for</code>、<code>repr()</code>、<code>==</code> 对待。</p>
+</blockquote>
+    <div class="pn"><a href="04.html"><small>← 上一单元</small><b>单元 4 · 一等函数与类型提示</b></a><a class="nx" href="06.html"><small>下一单元 →</small><b>单元 6 · 对象协议与序列实现</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 9–10 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

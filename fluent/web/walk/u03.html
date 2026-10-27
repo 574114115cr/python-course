@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 03 · 数据类与对象语义：一个发票类踩完五个坑</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 03 · 数据类与对象语义：一个发票类踩完五个坑</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 03</span>
+        <span class="kwk">单元 3 · 数据类与对象语义</span>
+        <span class="ku">第 5–6 章</span></div>
+      <h1>数据类与对象语义：一个发票类踩完五个坑</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 5 章把 <code>dataclass</code> 讲完，第 6 章才讲「Python 里的变量是标签不是盒子」。这里合成一个类，把默认值、可变默认、哈希、拷贝、相等一次踩完。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">replace</span><span class="p">,</span> <span class="n">FrozenInstanceError</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Money</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""不可变值对象：金额 + 币种。frozen 让它可哈希，slots 让它更省内存。"""</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"CNY"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"金额不能为负"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"CNY"</span><span class="p">,</span> <span class="s2">"USD"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"不支持的币种：</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Money</span><span class="p">)</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">currency</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Line</span><span class="p">:</span>
+    <span class="n">sku</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">price</span><span class="p">:</span> <span class="n">Money</span>
+    <span class="n">qty</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>      <span class="c1"># 可变默认值必须用 factory</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="o">.</span><span class="n">amount</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">qty</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Invoice</span><span class="p">:</span>
+    <span class="n">no</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lines</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">price</span><span class="o">.</span><span class="n">currency</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="k">else</span> <span class="s2">"CNY"</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">total</span><span class="o">.</span><span class="n">amount</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">),</span> <span class="n">cur</span><span class="p">)</span>
+
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1990</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"值对象  "</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="s2">"| 相加"</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="s2">"| 相等"</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">==</span> <span class="n">Money</span><span class="p">(</span><span class="mi">3000</span><span class="p">))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">except</span> <span class="n">FrozenInstanceError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"不可变  "</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">l1</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"KB-01"</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="mi">29900</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="s2">"机械键盘"</span><span class="p">])</span>
+<span class="n">l2</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"MS-01"</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="mi">8900</span><span class="p">))</span>
+<span class="n">inv</span> <span class="o">=</span> <span class="n">Invoice</span><span class="p">(</span><span class="s2">"INV-001"</span><span class="p">,</span> <span class="p">[</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"发票合计"</span><span class="p">,</span> <span class="n">inv</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"asdict  "</span><span class="p">,</span> <span class="n">asdict</span><span class="p">(</span><span class="n">l2</span><span class="p">))</span>
+
+<span class="c1"># ② 两个 Line() 的 tags 不是同一个 list</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"独立列表"</span><span class="p">,</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"A"</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">tags</span> <span class="ow">is</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"B"</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+
+<span class="c1"># ③ 浅拷贝 vs 深拷贝：Invoice 的浅拷贝仍然共享 lines</span>
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">inv</span><span class="p">)</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">inv</span><span class="p">)</span>
+<span class="n">shallow</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line</span><span class="p">(</span><span class="s2">"X"</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"浅拷贝  "</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inv</span><span class="o">.</span><span class="n">lines</span><span class="p">),</span> <span class="s2">"行（原对象被改到了）"</span><span class="p">)</span>
+<span class="n">deep</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line</span><span class="p">(</span><span class="s2">"Y"</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"深拷贝  "</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inv</span><span class="o">.</span><span class="n">lines</span><span class="p">),</span> <span class="s2">"行（原对象没被动）"</span><span class="p">)</span>
+
+<span class="c1"># ④ 替换字段：dataclasses.replace 走一遍 __init__ 与 __post_init__</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"replace "</span><span class="p">,</span> <span class="n">replace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">5000</span><span class="p">))</span>
+
+<span class="c1"># ⑤ slots 的代价：实例没有 __dict__，加不了新属性</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"slots   "</span><span class="p">,</span> <span class="s2">"有 __dict__？"</span><span class="p">,</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">"__dict__"</span><span class="p">),</span> <span class="s2">"| 字段"</span><span class="p">,</span> <span class="n">Money</span><span class="o">.</span><span class="vm">__slots__</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">a</span><span class="o">.</span><span class="n">discount</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"加字段  "</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)[:</span><span class="mi">46</span><span class="p">])</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong><code>frozen=True</code> 同时解决三件事。</strong> 属性不可写、自动获得 <code>__hash__</code>、可以放进 <code>set</code> 和当 <code>dict</code> 的键。<code>__post_init__</code> 里仍可校验，因为它在冻结之前执行；一旦冻结，连 <code>self.x = ...</code> 都会抛 <code>FrozenInstanceError</code>。</p>
+</li>
+<li>
+<p><strong><code>slots=True</code> 是省内存的开关，不是免费的。</strong> 每个实例不再带 <code>__dict__</code>（<code>hasattr(a, "__dict__")</code> 为 False），属性固定，因此给 <code>a.discount</code> 赋值会失败（最后一段；frozen 会先拦下，抛的是 <code>FrozenInstanceError</code>，它是 <code>AttributeError</code> 的子类）。数据量大时它省下的内存很可观，代价是灵活性。</p>
+</li>
+<li>
+<p><strong>可变默认值必须 <code>field(default_factory=list)</code>。</strong> 直接写 <code>tags: list = []</code> 会被 <code>dataclass</code> 直接拒绝（<code>ValueError: mutable default</code>）——这是它在帮你拦 bug。对照第二段输出：两个 <code>Line()</code> 的 <code>tags</code> 是不同对象，因为每次构造都调用一次 <code>list()</code>。</p>
+</li>
+<li>
+<p><strong><code>__add__</code> 要检查币种。</strong> 币种不同返回 <code>NotImplemented</code>，Python 会再试对方的 <code>__radd__</code>，最终抛 <code>TypeError</code>，而不是把 100 元加 100 美元算出 200。值对象的运算必须守住语义边界。</p>
+</li>
+<li>
+<p><strong>浅拷贝只复制容器本身。</strong> <code>copy.copy(inv)</code> 得到的 <code>Invoice</code> 是新的，但 <code>lines</code> 指向同一个 list，所以往里 <code>append</code> 会改到原对象；<code>deepcopy</code> 会递归复制，代价是慢，而且遇到不可复制的对象（文件句柄、锁）会失败。</p>
+</li>
+<li>
+<p><strong><code>asdict</code> 是深拷贝。</strong> 它不是简单地把 <code>__dict__</code> 转成 dict，而是递归展开嵌套的数据类；<code>replace(a, amount=5000)</code> 则重新走一遍构造函数和 <code>__post_init__</code>，因此校验依然生效——这两点和「手写 <code>__dict__</code> 复制」有本质区别。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>值对象   Money(amount=1990, currency=&#x27;CNY&#x27;) | 相加 Money(amount=3000, currency=&#x27;CNY&#x27;) | 相等 True
+不可变   FrozenInstanceError
+发票合计 Money(amount=68700, currency=&#x27;CNY&#x27;)
+asdict   {&#x27;sku&#x27;: &#x27;MS-01&#x27;, &#x27;price&#x27;: {&#x27;amount&#x27;: 8900, &#x27;currency&#x27;: &#x27;CNY&#x27;}, &#x27;qty&#x27;: 1, &#x27;tags&#x27;: []}
+独立列表 False
+浅拷贝   3 行（原对象被改到了）
+深拷贝   3 行（原对象没被动）
+replace  Money(amount=5000, currency=&#x27;CNY&#x27;)
+slots    有 __dict__？ False | 字段 (&#x27;amount&#x27;, &#x27;currency&#x27;)
+加字段   cannot assign to field &#x27;discount&#x27;</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>frozen=True</code> 去掉：<code>a.amount = 1</code> 不再报错，但 <code>Money</code> 也不能再放进 <code>set</code>（<code>__hash__</code> 变 <code>None</code>）。</li>
+<li>把 <code>field(default_factory=list)</code> 改回 <code>= []</code>：构造 <code>Line</code> 时直接抛 <code>ValueError</code>。</li>
+<li>把 <code>copy.copy(inv)</code> 换成 <code>copy.deepcopy</code>：第三段输出的行数会变回 2，说明原对象没被改到。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §5.1–5.2 讲 <code>dataclass</code> 的参数与 <code>field</code>，§5.3 讲 <code>namedtuple</code> 与它的取舍，§6.3 讲浅拷贝与深拷贝，§6.1 讲「变量是标签」。这一篇把四处合成一个发票模型；原书用 <code>namedtuple</code> 演示的那部分，在单元讲义第 3 节有对照实验（namedtuple 比裸 tuple 还慢 2–3 倍，见实测页）。</p>
+    <div class="pn"><a href="u02.html"><small>← 上一篇</small><b>单元 2 · 字典与文本：让 dict 学会「找不到时怎么办」</b></a><a class="nx" href="u04.html"><small>下一篇 →</small><b>单元 4 · 一等函数：把函数当数据，拼一条处理管线</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../03.html">单元 3 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

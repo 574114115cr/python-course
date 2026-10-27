@@ -1,0 +1,178 @@
+@@1|把 Deck 从「能跑」做到「好用」
+只有 `__len__` + `__getitem__` 的 Deck 能 `len`、能索引，但三个地方会露馅：`in` 是 O(n) 线性比较、`reversed` 依赖 `__len__` 回退、`random.shuffle` 直接报错（它要求可变序列）。
+
+补四个方法就能全部解决：
+
+```python
+import random
+
+class Deck:
+    ranks = [str(n) for n in range(2, 11)] + list("JQKA")
+    suits = "spades diamonds clubs hearts".split()
+
+    def __init__(self):
+        self._cards = [(r, s) for s in self.suits for r in self.ranks]
+
+    def __len__(self):            # len(deck)
+        return len(self._cards)
+
+    def __getitem__(self, i):     # deck[0]、deck[1:3]
+        return self._cards[i]
+
+    def __contains__(self, card): # "A" in deck 这类判断走这里
+        return card in self._cards
+
+    def __iter__(self):           # for、list()、解包
+        return iter(self._cards)
+
+    def __reversed__(self):       # reversed(deck) 不依赖 len+getitem
+        return reversed(self._cards)
+
+    def __eq__(self, other):
+        if not isinstance(other, Deck):
+            return NotImplemented
+        return self._cards == other._cards
+
+deck = Deck()
+print(len(deck), deck[0], ("A", "hearts") in deck)   # 52 ('2', 'spades') True
+print(list(reversed(deck))[:1])                      # [('A', 'hearts')]
+random.shuffle(deck._cards)                          # 洗牌：改内部列表
+print(len(set(deck)))                                # 52，52 张互不相同
+```
+
+设计取舍：
+
+- `__contains__` 用元组比较，O(n)；如果要 O(1)，把牌放进 `frozenset` 索引，但那样内存翻倍——52 张牌不值得。
+- `__iter__` 返回 `iter(self._cards)`，不是 `self`；返回 `self` 会让 Deck 自己变成迭代器，只能遍历一次（`__next__` 用完就空）。
+- 洗牌改内部列表而不是暴露 `__setitem__`，避免外部随意改牌。真正需要切片赋值时再加 `__setitem__`。
+
+下一步可以做的：给 Deck 加 `pick(n)` 返回新 Deck（而不是改自己），这样它同时是「不可变视图 + 可变操作」，符合 `random.sample` 的思路。
+
+@@2|文本词频：三个坑一次踩完
+任务：统计一段中英文混排文本的词频，输出前十。看似五行代码，实际有三个坑：
+
+```python
+import re
+import unicodedata
+from collections import Counter
+
+def top_words(text, n=10):
+    # 1) NFC 规范化：é 可能是 e+组合符，不统一就会被当成两个词
+    text = unicodedata.normalize("NFC", text)
+    # 2) casefold 比 lower 更彻底（ß → ss），适合做大小写无关比较
+    text = text.casefold()
+    # 3) 中文没有空格，按「连续汉字」或「连续字母数字」切；用 [^\W\d_] 才能吃到 é
+    words = re.findall(r"[\u4e00-\u9fff]+|[^\W\d_]+|\d+", text)
+    return Counter(words).most_common(n)
+
+s = "The café is OPEN. 数据 数据 结构，Python python PYTHON!"
+print(top_words(s))
+```
+
+输出：
+
+```
+[('python', 3), ('数据', 2), ('the', 1), ('café', 1), ('is', 1), ('open', 1), ('结构', 1)]
+```
+
+四个坑分别对应：
+
+- **不规范化**：`"café"` 用 NFD 存是 `cafe` + `◌́`，正则会切成两段，词频悄悄少一半。文件来自 macOS 或网页时尤其常见。
+- **用 `lower`**：土耳其语 `İ`、德语 `ß` 处理不一致；`casefold()` 才是「大小写无关」的正确工具。
+- **按 ASCII 写正则**：如果写成 `[a-z0-9_]+`，`café` 会被切成 `caf` + `é`，词频表里凭空少一个词。要么用 `[^\W\d_]`（任意 Unicode 字母），要么显式开 `re.UNICODE` 并写 `\w`。
+- **中文分词**：正则只能做到「连续汉字整体」，`数据结构` 会被当成一个词。真要分词得上 `jieba` 这类库，但课程示例里按词块统计已经够用。
+
+如果要统计「按文档分别算再合并」，用 `Counter` 的 `+` 与 `most_common`；要按出现顺序保留，用 `dict`（3.7+ 有序）而不是 `Counter`。
+
+@@3|订单模型：不可变数据类怎么改
+需求：订单创建后金额不能改，但有折扣时要生成新订单。直接 `@dataclass` 会得到可变对象，用 `frozen=True` 才是值语义：
+
+```python
+from dataclasses import dataclass, field, replace
+
+@dataclass(frozen=True, slots=True)
+class Line:
+    sku: str
+    qty: int
+    price: float
+
+    def __post_init__(self):
+        if self.qty <= 0:
+            raise ValueError(f"qty must be positive: {self.qty}")
+
+    @property
+    def amount(self):
+        return round(self.qty * self.price, 2)
+
+@dataclass(frozen=True, slots=True)
+class Order:
+    oid: str
+    lines: tuple[Line, ...] = field(default_factory=tuple)
+
+    @property
+    def total(self):
+        return round(sum(l.amount for l in self.lines), 2)
+
+    def with_discount(self, rate):
+        return replace(self, lines=tuple(
+            replace(l, price=round(l.price * (1 - rate), 2)) for l in self.lines))
+
+o = Order("A1", (Line("apple", 2, 3.5), Line("pear", 1, 4.0)))
+print(o.total)                       # 11.0
+print(o.with_discount(0.1).total)    # 9.9
+try:
+    Line("x", 0, 1.0)
+except ValueError as e:
+    print("rejected:", e)             # rejected: qty must be positive: 0
+```
+
+设计取舍：
+
+- **`tuple` 而不是 `list`**：`frozen=True` 只冻结「字段重新绑定」，字段里放 list 仍能改。要真不可变，容器也得用不可变类型。
+- **`slots=True`**：省掉实例 `__dict__`，代价是不能动态加属性；数据类大多不需要动态属性，值得。
+- **`replace` 而不是手写新对象**：字段增删时不用改代码，也自动带上 `__post_init__` 校验。
+- **`__post_init__` 做校验**：`frozen=True` 下要给字段赋值必须 `object.__setattr__`，所以校验逻辑更该放这里而不是 setter。
+
+下一步：把 `Line.price` 换成 `Decimal`，浮点金额在累加时会出现 `0.1+0.2 != 0.3` 这类误差，财务场景必须换。
+
+@@4|可插拔的文本流水线
+需求：清洗 → 替换 → 截断，三步可自由组合、顺序可换。函数是一等对象，直接用「函数列表 + 循环」最直白：
+
+```python
+from typing import Callable, Iterable
+
+Step = Callable[[str], str]
+
+def strip_ws(s: str) -> str:
+    return " ".join(s.split())
+
+def collapse_punct(s: str) -> str:
+    return s.replace("，", ",").replace("。", ".")
+
+def clip(n: int) -> Step:                 # 闭包造一个「带参数」的步骤
+    def step(s: str) -> str:
+        return s if len(s) <= n else s[:n - 1] + "…"
+    return step
+
+def pipeline(steps: Iterable[Step]) -> Step:
+    steps = tuple(steps)                  # 固化，避免生成器被消费两次
+    def run(s: str) -> str:
+        for f in steps:
+            s = f(s)
+        return s
+    return run
+
+clean = pipeline([strip_ws, collapse_punct, clip(16)])
+print(clean("  hello   世界，Python 很好看 。  "))
+```
+
+输出：`hello 世界,Python…`（先清空白，再统一标点，最后按 16 字符截断）。
+
+设计取舍：
+
+- **`Step = Callable[[str], str]`**：类型别名让签名可读；`list[Callable]` 也能写，但读起来费劲。
+- **`steps = tuple(steps)`**：传进来的可能是生成器，`for` 遍历一次就空了，第二次调用 `run` 会静默得到原串。
+- **`clip(16)` 按字符数截断**：中英文混排时「16 个字符」不等于「16 个显示宽度」，中文占两格；要按显示宽度截断得用 `unicodedata.east_asian_width` 自己算。
+- **不加 `functools.reduce`**：`reduce(lambda a, f: f(a), steps, s)` 更短，但调试时看不到中间步；要排查就临时改成显式循环并打印。
+
+下一步：把 `Step` 换成 `Callable[[str], str]` → `Callable[[str], str | None]`，`None` 表示丢弃这条数据，流水线就升级成过滤器。

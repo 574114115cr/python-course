@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 01 · Vector：用一个类把数据模型走一遍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 01 · Vector：用一个类把数据模型走一遍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 01</span>
+        <span class="kwk">单元 1 · 数据模型与序列</span>
+        <span class="ku">第 1–2 章</span></div>
+      <h1>Vector：用一个类把数据模型走一遍</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 1 章靠一个 <code>Vector</code> 从 20 行长到 200 行，把特殊方法讲完。这里保留它的骨架：一个类同时具备表示、比较、哈希、求模、算术、索引、切片、迭代。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Vector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""二维向量：一个类覆盖原书第 1 章的主要特殊方法。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="c1"># ① 表示：__repr__ 给开发者看，__str__ 给用户看</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Vector(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">)"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">)"</span>
+
+    <span class="c1"># ② 比较：__eq__ 按值比较；__hash__ 必须跟着一起定义</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Vector</span><span class="p">)</span> <span class="k">else</span> <span class="bp">NotImplemented</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+
+    <span class="c1"># ③ 数值协议：__abs__ 让 abs() 直接可用</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="c1"># ④ 算术：__add__ 与 __mul__，返回新对象而不是原地改</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
+
+    <span class="c1"># ⑤ 序列协议：__len__ + __getitem__ 就够切片、迭代、in、reversed</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"repr   "</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"str    "</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"abs    "</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bool   "</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">Vector</span><span class="p">()),</span> <span class="nb">bool</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"add    "</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"mul    "</span><span class="p">,</span> <span class="n">v</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"| rmul"</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">v</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"equal  "</span><span class="p">,</span> <span class="n">v</span> <span class="o">==</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">v</span> <span class="o">==</span> <span class="n">w</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"hash   "</span><span class="p">,</span> <span class="nb">len</span><span class="p">({</span><span class="n">v</span><span class="p">,</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">w</span><span class="p">}),</span> <span class="s2">"个不同元素"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"index  "</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"slice  "</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="s2">"| 切片返回新对象："</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">v</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"iter   "</span><span class="p">,</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">v</span><span class="p">],</span> <span class="s2">"| 可解包"</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">v</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"in     "</span><span class="p">,</span> <span class="mf">3.0</span> <span class="ow">in</span> <span class="n">v</span><span class="p">,</span> <span class="mf">9.0</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"len    "</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">sorted</span><span class="p">([</span><span class="n">Vector</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">Vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"sorted "</span><span class="p">,</span> <span class="s2">"TypeError:"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)[:</span><span class="mi">38</span><span class="p">])</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong><code>__repr__</code> 与 <code>__str__</code> 分开写。</strong> <code>repr</code> 的目标是「复制回终端能重建对象」，所以写成 <code>Vector(3, 4)</code>；<code>str</code> 给用户看，写成 <code>(3, 4)</code>。只写 <code>__repr__</code> 时 <code>print()</code> 也会用它，但反过来不成立——只写 <code>__str__</code> 会让交互式环境里的对象显示成 <code>&lt;Vector object at 0x…&gt;</code>。</p>
+</li>
+<li>
+<p><strong><code>__eq__</code> 返回 <code>NotImplemented</code> 而不是 <code>False</code>。</strong> 当对方不是 <code>Vector</code> 时，把决定权交回给 Python，它再去试对方的 <code>__eq__</code>。写 <code>False</code> 会让 <code>Vector(3,4) == 某对象</code> 永远为假，连对方自定义的相等逻辑都跑不到。</p>
+</li>
+<li>
+<p><strong><code>__eq__</code> 与 <code>__hash__</code> 成对出现。</strong> 一旦定义了 <code>__eq__</code>，Python 会把 <code>__hash__</code> 置为 <code>None</code>，对象立刻不可哈希。这里显式按 <code>(x, y)</code> 求哈希，于是两个值相等的向量在 <code>set</code> 里只留一个——上面的 <code>len({v, Vector(3,4), w})</code> 输出 2 就是这个原因。</p>
+</li>
+<li>
+<p><strong><code>abs()</code> 与 <code>bool()</code> 是两件事。</strong> <code>__abs__</code> 返回模长（标量），<code>__bool__</code> 返回真假。没有 <code>__bool__</code> 时 Python 会退回去看 <code>__len__</code>，所以空向量必须让 <code>__len__</code> 或 <code>__bool__</code> 至少一个说「假」。</p>
+</li>
+<li>
+<p><strong>算术返回新对象。</strong> <code>__add__</code> 不修改 <code>self</code>，这是值类型的基本约定；<code>__mul__</code> 同时赋给 <code>__rmul__</code>，于是 <code>2 * v</code> 也能用——左操作数不认识 <code>Vector</code> 时，Python 会来找右操作数的 <code>__rmul__</code>。</p>
+</li>
+<li>
+<p><strong><code>__len__</code> + <code>__getitem__</code> ≈ 序列。</strong> 只要这两个方法存在，<code>in</code>、迭代、<code>reversed</code>、<code>list()</code> 都能工作；<code>__iter__</code> 只是让迭代更快、语义更明确。切片走 <code>__getitem__</code> 的 <code>slice</code> 分支，这里返回<strong>新对象</strong>而不是视图，和 tuple 一致。</p>
+</li>
+<li>
+<p><strong><code>sorted</code> 没有 <code>__lt__</code> 就不能排。</strong> 最后一段故意试了一次：<code>sorted</code> 比较两个 <code>Vector</code> 时找不到 <code>__lt__</code>，抛 <code>TypeError</code>。程序里用 <code>try</code> 抓住它并打印出来——这正是「只实现需要的协议」的另一面：没实现的那一半会明确报错，而不是悄悄给出错误答案。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>repr    Vector(3, 4)
+str     (3, 4)
+abs     5.0
+bool    False True
+add     (4, 6)
+mul     (6, 8) | rmul (6, 8)
+equal   True False
+hash    2 个不同元素
+index   3.0 4.0
+slice   (3, 4) | 切片返回新对象： True
+iter    [3.0, 4.0] | 可解包 3.0 4.0
+in      True False
+len     2
+sorted  TypeError: &#x27;&lt;&#x27; not supported between instances of</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>__eq__</code> 里的 <code>tuple(self)</code> 换成 <code>id(self)</code>：<code>v == Vector(3, 4)</code> 会变成 <code>False</code>，同时解释为什么 <code>hash</code> 也要跟着改成 <code>id</code>。</li>
+<li>删掉 <code>__hash__</code>：<code>{v, Vector(3,4)}</code> 那一行立刻抛 <code>TypeError: unhashable type</code>。</li>
+<li>给 <code>__getitem__</code> 的 <code>slice</code> 分支改成 <code>return [self.x, self.y][i]</code>（返回 list）：切片仍然能用，但 <code>v[0:2] + w</code> 会因为类型不同而崩——这就是「返回同类型」为什么重要。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §1.2 用 <code>Vector</code> 讲 <code>__repr__/__abs__/__bool__/__add__/__mul__</code>，§1.4 的表列了 80+ 个特殊方法，§1.5 讲 <code>__eq__</code> 与 <code>__hash__</code> 的约定。这里省掉了原书的 <code>__format__</code>、<code>__bytes__</code> 和 <code>hypot</code> 的函数式写法，其余按原顺序保留。</p>
+    <div class="pn"><span></span><a class="nx" href="u02.html"><small>下一篇 →</small><b>单元 2 · 字典与文本：让 dict 学会「找不到时怎么办」</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../01.html">单元 1 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

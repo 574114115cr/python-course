@@ -113,7 +113,27 @@ fig.savefig("oo_第一张图.png", dpi=100, bbox_inches="tight")
  ↑ 贴边的点被削掉了      ↑ 点完整，四周留白
 ```
 
-`ax.axis([...])` 这名字很怪——它既设范围又管外观。等价写法是 `ax.set_xlim()` + `ax.set_ylim()`，更直白。**关键是要知道为什么要手动设范围**；更稳的做法是用 `max(数据) * 1.05` 算余量，数据换了也不用改代码（见示例 3）。
+`ax.axis([...])` 这名字很怪——它既设范围又管外观。等价写法是 `ax.set_xlim()` + `ax.set_ylim()`，更直白。**关键是要知道为什么要手动设范围**；更稳的做法是用 `max(数据) * 1.05` 算余量，数据换了也不用改代码（见示例 3）。余量是算出来的，不是猜的：
+
+```python
+# 余量交给函数算：换数据不用改代码
+def axis_range(values, margin=0.05):
+    """返回 [xmin, xmax, ymin, ymax]，四周各留 margin 比例的余量。"""
+    low, high = min(values), max(values)
+    pad = high * margin
+    return [0, high + pad, 0, high + pad]
+
+
+x_values = [1, 2, 3, 4, 5]
+y_values = [1, 8, 27, 64, 125]
+print("数据最大值：", max(y_values))
+print("写死的范围：", [0, 1100, 0, 1_100_000], "（教材的例子，换数据就废）")
+print("算出来的范围：", axis_range(y_values), "-> ax.axis(...) 直接用")
+print("再换一组数据：", axis_range([10, 4400, 250]))
+print("\n为什么要有余量：s=100 的点有直径，贴边的点会被画布切掉一半。")
+```
+
+这段的实跑输出：数据最大值 125 时范围是 `[0, 131.25, 0, 131.25]`；换成 `[10, 4400, 250]` 后自动变成 `[0, 4620.0, 0, 4620.0]`。**你只改了数据，代码一个字没动。**
 
 **定制刻度标记。** 默认刻度由 matplotlib 自选，大数字上会变成 `1.0e6` 科学计数法，或标签挤成一团。`set_xticks()` 是「**刻度放在这些位置**」，`set_xticklabels()` 是「**这些位置显示什么**」（见示例 3）。
 
@@ -486,6 +506,98 @@ fig3.update_layout(barmode="group",
 fig3.write_html("die_六面vs二十面.html")
 print("已生成三张 html：单个骰子平坦，叠加后中间隆起，面数越多越平坦")
 ```
+
+### 示例 6：同一份坐标，画成折线还是散点——先把数据算出来（walk_and_dice.py）
+
+示例 4 和 5 的重点都在 `ax.plot()` 上，容易让人以为「画图」才是难点。其实**这张图对不对，全看 `x_values` / `y_values` 怎么来的**。这个示例把画图那一步整个拿掉，只算数据：随机游走的坐标怎么一步步累加出来、掷骰子的结果怎么变成频次表。跑通它，你再回去看示例 4/5 的绘图代码，会发现那几十行只是「把两个列表交给 ax」。
+
+```python
+# walk_and_dice.py —— 不画图，只算数据：坐标是怎么一步步走出来的
+import random
+from collections import Counter
+
+
+def get_step():
+    """一步的方向：x、y 各自随机取 -1 / 0 / 1。"""
+    return random.choice([-1, 0, 1]), random.choice([-1, 0, 1])
+
+
+class RandomWalk:
+    """随机游走：x_values / y_values 两个列表就是全部数据。"""
+
+    def __init__(self, num_points=5000):
+        self.num_points = num_points
+        self.x_values = [0]
+        self.y_values = [0]
+
+    def fill_walk(self):
+        while len(self.x_values) < self.num_points:
+            x_step, y_step = get_step()
+            if x_step == 0 and y_step == 0:      # ★ and：两个都不动才重来
+                continue
+            self.x_values.append(self.x_values[-1] + x_step)
+            self.y_values.append(self.y_values[-1] + y_step)
+
+
+random.seed(42)                               # 固定种子，输出才可复现
+walk = RandomWalk(500)
+walk.fill_walk()
+print(f"点数：{len(walk.x_values)}（num_points = 500）")
+print("前十步坐标：", list(zip(walk.x_values[:10], walk.y_values[:10])))
+print(f"终点：({walk.x_values[-1]}, {walk.y_values[-1]})")
+print(f"x 的范围：{min(walk.x_values)} ~ {max(walk.x_values)}"
+      f"；y 的范围：{min(walk.y_values)} ~ {max(walk.y_values)}")
+stayed = sum(1 for a, b in zip(walk.x_values, walk.y_values)
+             if (a, b) == (0, 0))
+print(f"经过原点 {stayed} 次（概率模型不同，这个数会变）")
+
+print("\n=== 同一份坐标，换个画法就是不同的图 ===")
+print("折线 --> ax.plot(walk.x_values, walk.y_values)")
+print("散点 --> ax.scatter(walk.x_values, walk.y_values, s=1)")
+print("上色 --> c=range(len(walk.x_values)), cmap=plt.cm.Blues  # 越走越深")
+
+print("\n=== 掷骰子：一堆结果怎么变成频次表 ===")
+random.seed(7)
+results = [random.randint(1, 6) for _ in range(600)]
+counts = Counter(results)                    # 一行数完，等价于 results.count(v)
+print("前 20 次结果：", results[:20])
+print("频次表：", dict(sorted(counts.items())))
+frequencies = [counts[v] for v in range(1, 7)]   # 按面数顺序取，缺的面补 0
+print("按面数排列：", frequencies)
+assert sum(frequencies) == len(results)      # ★ 分布类程序必加：总数必须对上
+print(f"总数校验通过：sum(frequencies) = {len(results)}")
+print(f"出现最多：{counts.most_common(1)[0]}；最少：{counts.most_common()[-1]}")
+print(f"平均点数：{sum(results) / len(results):.3f}（理论 3.5）")
+```
+
+**运行结果**（实跑输出）：
+
+```text
+点数：500（num_points = 500）
+前十步坐标： [(0, 0), (1, -1), (0, 0), (0, -1), (-1, -2), (0, -3), (1, -2), (2, -3), (3, -3), (2, -4)]
+终点：(21, -18)
+x 的范围：-6 ~ 23；y 的范围：-25 ~ 1
+经过原点 3 次（概率模型不同，这个数会变）
+
+=== 同一份坐标，换个画法就是不同的图 ===
+折线 --> ax.plot(walk.x_values, walk.y_values)
+散点 --> ax.scatter(walk.x_values, walk.y_values, s=1)
+上色 --> c=range(len(walk.x_values)), cmap=plt.cm.Blues  # 越走越深
+
+=== 掷骰子：一堆结果怎么变成频次表 ===
+前 20 次结果： [3, 2, 4, 6, 1, 1, 5, 1, 3, 5, 1, 5, 2, 1, 1, 4, 4, 1, 2, 1]
+频次表： {1: 107, 2: 107, 3: 93, 4: 99, 5: 109, 6: 85}
+按面数排列： [107, 107, 93, 99, 109, 85]
+总数校验通过：sum(frequencies) = 600
+出现最多：(5, 109)；最少：(6, 85)
+平均点数：3.418（理论 3.5）
+```
+
+三条解读：
+
+1. **`append(self.x_values[-1] + x_step)` 是整套随机游走的心脏**：每一步都在**上一步的位置**上加位移，所以数据不是「一群随机数」，而是一条连续路径。写成 `append(x_step)` 你会得到一团散沙（每次从原点跳），图还是画得出来，但已经完全不是随机游走了。
+2. **`Counter` 和 `list.count()` 的差别在复杂度**：`Counter` 一趟遍历 O(n) 出全部频次；`[results.count(v) for v in range(1, 7)]` 要扫 6 趟。600 次掷骰子看不出差别，600 万次就是 6 倍时间——示例 5 用 `count()` 是为了跟教材对齐，量大时换 `Counter`。
+3. **把 `num_points` 改成 5000、掷骰子改成 6000 会怎样**（同种子实跑）：游走终点从 (21, -18) 变成 (122, 59)，x 的范围从 `-6 ~ 23` 变成 `-6 ~ 146`；骰子六面的频次从 `85 ~ 109` 收窄到 `953 ~ 1038`，平均点数从 3.418 变成 3.473。**样本越大，随机越像规律**——位移按 √n 增长，频次越来越贴近 `1000` 这条理论线。
 
 ---
 

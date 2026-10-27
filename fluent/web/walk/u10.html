@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 10 · 并发与执行器：线程池、进程池和 GIL 的分界线</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 10 · 并发与执行器：线程池、进程池和 GIL 的分界线</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 10</span>
+        <span class="kwk">单元 10 · 并发模型与执行器</span>
+        <span class="ku">第 19–20 章</span></div>
+      <h1>并发与执行器：线程池、进程池和 GIL 的分界线</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 19、20 章讲并发模型与执行器。这一篇用同一个任务跑三种方式（串行 / 线程池 / 进程池），并在线程里加锁验证竞态——所有结论都能在输出里看到。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+
+
+<span class="c1"># ① 模拟 IO 任务：大部分时间在等，GIL 会在这时释放</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.02</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span>
+
+
+<span class="c1"># ② 模拟 CPU 任务：时间全花在字节码上</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">burn</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="n">total</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">timed</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">fn</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">label</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span> <span class="n">out</span>
+
+
+<span class="n">serial_io</span> <span class="o">=</span> <span class="n">timed</span><span class="p">(</span><span class="s2">"串行 IO"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="n">fetch</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">io_pool</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)))</span>
+
+
+<span class="n">thread_io</span> <span class="o">=</span> <span class="n">timed</span><span class="p">(</span><span class="s2">"线程 IO"</span><span class="p">,</span> <span class="n">io_pool</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"IO 任务 "</span><span class="p">,</span> <span class="n">serial_io</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">serial_io</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"ms |"</span><span class="p">,</span> <span class="n">thread_io</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">thread_io</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+      <span class="s2">"ms | 线程更快？"</span><span class="p">,</span> <span class="n">thread_io</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">serial_io</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"结果一致"</span><span class="p">,</span> <span class="n">serial_io</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">thread_io</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="n">serial_cpu</span> <span class="o">=</span> <span class="n">timed</span><span class="p">(</span><span class="s2">"串行 CPU"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="n">burn</span><span class="p">(</span><span class="mi">300_000</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cpu_pool</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">burn</span><span class="p">,</span> <span class="p">[</span><span class="mi">300_000</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span><span class="p">))</span>
+
+
+<span class="n">thread_cpu</span> <span class="o">=</span> <span class="n">timed</span><span class="p">(</span><span class="s2">"线程 CPU"</span><span class="p">,</span> <span class="n">cpu_pool</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"CPU 任务"</span><span class="p">,</span> <span class="n">serial_cpu</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">serial_cpu</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"ms |"</span><span class="p">,</span> <span class="n">thread_cpu</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">thread_cpu</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+      <span class="s2">"ms | 快到一半？"</span><span class="p">,</span> <span class="n">thread_cpu</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">serial_cpu</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># ③ as_completed：谁先完成谁先处理，结果顺序与提交顺序无关</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">jitter</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">*</span> <span class="p">((</span><span class="mi">5</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">i</span>
+
+
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">jitter</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+    <span class="n">done_order</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"完成顺序"</span><span class="p">,</span> <span class="n">done_order</span><span class="p">,</span> <span class="s2">"| 与提交顺序不同？"</span><span class="p">,</span> <span class="n">done_order</span> <span class="o">!=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+
+<span class="c1"># ④ 线程不安全：读-改-写三步之间可能被切走</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bump</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">counter</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>                            <span class="c1"># 主动让出，把竞态放大到必现</span>
+        <span class="n">counter</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span>
+
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">bump</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">20_000</span><span class="p">,))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"无锁计数"</span><span class="p">,</span> <span class="n">counter</span><span class="p">[</span><span class="s2">"n"</span><span class="p">],</span> <span class="s2">"| 正确结果应为 80000"</span><span class="p">)</span>
+
+<span class="c1"># ⑤ 加锁之后正确</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">counter</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bump_locked</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="n">counter</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">bump_locked</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="mi">20_000</span><span class="p">,))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"加锁计数"</span><span class="p">,</span> <span class="n">counter</span><span class="p">[</span><span class="s2">"n"</span><span class="p">])</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>IO 密集看线程，CPU 密集看进程。</strong> 第一组输出里线程池明显快于串行（8 个 20ms 的等待被重叠），因为 <code>sleep</code> 会释放 GIL；第二组里线程并没有带来加速——纯 Python 字节码同一时刻只能有一个线程在跑。这就是 GIL 的分界线：<strong>等待时可以并发，计算时不能</strong>。</p>
+</li>
+<li>
+<p><strong><code>Executor.map</code> 保序，<code>as_completed</code> 保快。</strong> <code>map</code> 按提交顺序返回（内部会用 future 缓冲），所以第一组能直接比较结果列表；<code>as_completed</code> 谁先好谁先出，第三段里完成顺序和提交顺序不同，正是它的用途——处理「先到先得」的结果。</p>
+</li>
+<li>
+<p><strong>线程池要用 <code>with</code> 或手动 <code>shutdown</code>。</strong> <code>with</code> 退出时会等所有任务跑完再关闭；如果忘了关闭，进程可能挂着不退出。进程池同理，而且它的启动开销大得多（Windows 上是 <code>spawn</code>，会重新导入模块），只适合「任务够重」的场景。</p>
+</li>
+<li>
+<p><strong>不加锁的 <code>+=</code> 会丢更新。</strong> <code>counter["n"] = counter["n"] + 1</code> 是「读 → 加 → 写」三步，线程切换可能发生在任意两步之间，于是两个线程读到同一个旧值。输出里的数字小于 80000 就是证据——这类 bug 不会报错，只会悄悄少算。</p>
+</li>
+<li>
+<p><strong>加锁之后「正确但更慢」。</strong> <code>with lock:</code> 把三步包成临界区，结果精确等于 80000，代价是串行化。并发编程的本质就是这个交换：先保证正确，再谈性能；没有正确性的并发没有意义。</p>
+</li>
+<li>
+<p><strong>进程池不在这段可运行代码里，原因值得记一笔。</strong> 绕开 GIL 要用 <code>ProcessPoolExecutor</code>，写法几乎照抄线程池：</p>
+</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="nb">list</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">burn</span><span class="p">,</span> <span class="p">[</span><span class="mi">100_000</span><span class="p">,</span> <span class="mi">100_000</span><span class="p">]))</span>
+   
+</code></pre>
+<p>但 Windows 的进程启动方式是 <code>spawn</code>：子进程会重新导入主模块。如果这段代码是直接粘贴到交互式环境或用 <code>python -c</code> 跑的，主模块无法被重新导入，就会抛错或卡住。所以它必须写在真实 <code>.py</code> 文件里，并且用 <code>if __name__ == "__main__":</code> 保护入口。另外参数与返回值都要能 pickle——lambda、文件句柄、锁、连接对象都过不去。</p>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>IO 任务  串行 IO 162 ms | 线程 IO 22 ms | 线程更快？ True
+结果一致 True
+CPU 任务 串行 CPU 28 ms | 线程 CPU 29 ms | 快到一半？ False
+完成顺序 [0, 4, 3, 2, 1] | 与提交顺序不同？ True
+无锁计数 20251 | 正确结果应为 80000
+加锁计数 80000</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>fetch</code> 里的 <code>time.sleep(0.02)</code> 换成 <code>burn(100_000)</code>：线程组的「更快？」会变成 <code>False</code>，GIL 的边界立刻显形。</li>
+<li>把 <code>as_completed</code> 换成 <code>pool.map</code>：完成顺序变回 0,1,2,3,4，但总耗时会等最慢的那个。</li>
+<li>把无锁的 <code>bump</code> 改成 <code>counter["n"] += 1</code> 并加大线程数：多数机器仍会丢更新（字节码边界不等于原子操作），说明「一行代码」和「原子」是两件事。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §19.1–19.4 讲 GIL 与并发模型的选择，§20.1–20.5 讲 <code>concurrent.futures</code> 的两种执行器、<code>as_completed</code> 与 <code>map</code> 的区别。这一篇对应 §20 的主线；原书用「下载国旗」的长例子演示 <code>as_completed</code>，这里用 <code>jitter</code> 简化成了纯本地任务。</p>
+    <div class="pn"><a href="u09.html"><small>← 上一篇</small><b>单元 9 · 迭代器、生成器与控制流：从手写类到 yield from</b></a><a class="nx" href="u11.html"><small>下一篇 →</small><b>单元 11 · asyncio：一个事件循环里同时等十件事</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../10.html">单元 10 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

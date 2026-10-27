@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 43 课 · 异步 IO：HTTP、上下文管理器与异步迭代</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="43">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 43 课 · 异步 IO：HTTP、上下文管理器与异步迭代</h1>
+  <a class="tag" href="../11.html">单元 11</a>
+  <a class="ppt" href="../ppt/u/11.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:89.6%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="41" href="l41.html"><span class="no">41</span><span class="tx">协程与事件循环</span></a><a class="" data-l="42" href="l42.html"><span class="no">42</span><span class="tx">任务管理：gather、TaskGroup 与超时</span></a><a class="cur" data-l="43" href="l43.html"><span class="no">43</span><span class="tx">异步 IO：HTTP、上下文管理器与异步迭代</span></a><a class="" data-l="44" href="l44.html"><span class="no">44</span><span class="tx">异步陷阱与选型</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-start_server-与异步迭代协议">延伸：start_server 与异步迭代协议</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../11.html"><span class="k">单元</span>
+    <span class="v">单元 11 · 异步编程</span></a>
+  <a href="../bank.html#u11"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/11.html#s6"><span class="k">课件</span>
+    <span class="v">本单元第 3 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u11.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/21.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 21–21 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 43 课</span>
+        <span class="kwk">单元 11 · 第 21 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>异步 IO：HTTP、上下文管理器与异步迭代</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用异步 HTTP 客户端并发请求，实现异步上下文管理器与异步迭代器，并用 Semaphore 限制并发。</div>
+    <h3 id="讲解">讲解</h3>
+<p>异步 HTTP 客户端（<code>httpx</code>）的基本用法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">urls</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">))</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">([</span><span class="s2">"https://example.com"</span><span class="p">]))</span>
+</code></pre>
+<p><code>async with</code> 对应异步上下文管理器：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Conn</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</code></pre>
+<p>异步迭代器实现 <code>__aiter__</code> / <code>__anext__</code>，用 <code>async for</code> 消费：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Ticker</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopAsyncIteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+</code></pre>
+<p>并发度控制：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">limited</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">sem</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span>
+</code></pre>
+<h3 id="延伸-start_server-与异步迭代协议">延伸：start_server 与异步迭代协议</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">reader</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s2">"echo: "</span> <span class="o">+</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">writer</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>          <span class="c1"># 背压点：等缓冲区可写</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">srv</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8888</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">srv</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">srv</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</code></pre>
+<p><code>start_server</code> 是回调式：每来一个连接，事件循环调一次 <code>handle</code> 生成协程。<code>writer.drain()</code> 是背压点，漏了会在对方读得慢时把数据堆在内存里。</p>
+<p>异步迭代协议是 <code>__aiter__</code> 返回自身、<code>__anext__</code> 是协程，结束时抛 <code>StopAsyncIteration</code>；<code>async for</code> 就是它的语法糖。异步上下文管理器对应 <code>__aenter__</code>/<code>__aexit__</code>。数据库/HTTP 客户端的 <code>async with</code> 全是这两组协议。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>httpx.AsyncClient</code> 要复用</strong>，每次请求新建客户端会丢掉连接池。</li>
+<li><strong><code>async with</code> 与 <code>with</code> 不能混用</strong>，异步资源必须用异步协议。</li>
+<li><strong><code>async for</code> 只接受 <code>__aiter__</code></strong>，普通生成器不行。</li>
+<li><strong>Semaphore 是限制并发不是限速</strong>，需要 QPS 限制得自己加时间窗。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用 <code>httpx.AsyncClient</code> 并发请求 5 个 URL，打印状态码与耗时。</li>
+<li>实现 <code>Conn</code> 异步上下文管理器，验证进入/退出顺序。</li>
+<li>用 <code>Ticker</code> 异步迭代 3 次，再用 <code>Semaphore(2)</code> 限制 10 个任务的并发度。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出 <code>async with</code> 与 <code>async for</code> 的完整例子</li>
+<li><span class="ck"></span>知道为什么要复用 <code>AsyncClient</code></li>
+<li><span class="ck"></span>能用 Semaphore 控制并发度</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 21 章 §21.9–21.12</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：start_server 与异步迭代协议</p></div>
+    <div class="pn"><a href="l42.html"><small>← 第 42 课 · 单元 11</small><b>任务管理：gather、TaskGroup 与超时</b></a><a class="nx" href="l44.html"><small>第 44 课 · 单元 11 →</small><b>异步陷阱与选型</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../11.html">返回单元 11</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=43, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 11 · asyncio：一个事件循环里同时等十件事</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 11 · asyncio：一个事件循环里同时等十件事</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 11</span>
+        <span class="kwk">单元 11 · 异步编程</span>
+        <span class="ku">第 21 章</span></div>
+      <h1>asyncio：一个事件循环里同时等十件事</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 21 章讲异步编程。这一篇不碰网络，只用 <code>asyncio.sleep</code> 把「并发等待」这件事看清楚：任务、<code>gather</code>、信号量、超时、队列，五件套全部跑一遍。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">delay</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>          <span class="c1"># 这里会把控制权交还事件循环</span>
+    <span class="k">return</span> <span class="n">i</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># ① 串行 vs 并发：同样的等待时间，总耗时差一个数量级</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">fetch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">serial</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+    <span class="n">concurrent</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"串行    "</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">serial</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span> <span class="s2">"ms | 并发"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">concurrent</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">),</span>
+          <span class="s2">"ms | 快一倍以上？"</span><span class="p">,</span> <span class="n">concurrent</span> <span class="o">&lt;</span> <span class="n">serial</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"结果    "</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+
+    <span class="c1"># ② create_task：任务在后台跑，await 时才收结果</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="mi">99</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"任务状态"</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"任务结果"</span><span class="p">,</span> <span class="k">await</span> <span class="n">task</span><span class="p">,</span> <span class="s2">"| 完成？"</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">done</span><span class="p">())</span>
+
+    <span class="c1"># ③ 信号量：限制同时进行的数量</span>
+    <span class="n">sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"running"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"peak"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">limited</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">sem</span><span class="p">:</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">"running"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">"peak"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="s2">"peak"</span><span class="p">],</span> <span class="n">state</span><span class="p">[</span><span class="s2">"running"</span><span class="p">])</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+            <span class="n">state</span><span class="p">[</span><span class="s2">"running"</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">i</span>
+
+    <span class="n">order</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">limited</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"信号量  "</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="s2">"| 峰值并发"</span><span class="p">,</span> <span class="n">state</span><span class="p">[</span><span class="s2">"peak"</span><span class="p">])</span>
+
+    <span class="c1"># ④ 超时：等不到就抛 TimeoutError，而不是把整个循环卡死</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"超时    "</span><span class="p">,</span> <span class="s2">"TimeoutError（0.05s 内没等到）"</span><span class="p">)</span>
+
+    <span class="c1"># ⑤ 队列：生产者-消费者，天然的背压</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">producer</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>               <span class="c1"># 结束信号</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">consumer</span><span class="p">():</span>
+        <span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="k">await</span> <span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">got</span>
+            <span class="n">got</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="n">got</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">producer</span><span class="p">(),</span> <span class="n">consumer</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"队列    "</span><span class="p">,</span> <span class="n">got</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># ⑥ 取消：任务可以被取消，CancelledError 会从等待点抛出</span>
+    <span class="n">slow</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">slow</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">slow</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"取消    "</span><span class="p">,</span> <span class="s2">"CancelledError | 已取消？"</span><span class="p">,</span> <span class="n">slow</span><span class="o">.</span><span class="n">cancelled</span><span class="p">())</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong><code>await</code> 是「让出控制权」，不是「开线程」。</strong> 第一段里串行五次 20ms 等待要 100ms，<code>gather</code> 并发只要 20ms 左右——因为 <code>asyncio.sleep</code> 只是把当前协程挂起，事件循环转去跑别的协程。全程只有一个线程，没有任何并行计算。</p>
+</li>
+<li>
+<p><strong><code>create_task</code> 才真正「排进调度」。</strong> 直接写 <code>await fetch(...)</code> 会立刻等到结束；<code>create_task</code> 把协程包装成任务放进循环，后面的代码可以继续跑。要看任务是否完成用 <code>done()</code>，要拿结果用 <code>await</code>——注意未取结果的异常会以「Task exception was never retrieved」告警露出来。</p>
+</li>
+<li>
+<p><strong><code>gather</code> 不取消兄弟任务。</strong> 其中任何一个抛异常，<code>gather</code> 默认会把异常往上抛，但其他任务仍在后台跑。要「一个失败全取消」，用 <code>asyncio.TaskGroup</code>（3.11+），或者自己管理任务列表。</p>
+</li>
+<li>
+<p><strong>信号量是并发上限，不是限速器。</strong> <code>Semaphore(2)</code> 保证最多两个协程同时进入临界区，第③段的「峰值并发 2」就是证据。它的典型用途是控制对下游的并发请求数，避免把对方打挂；要控制速率（每秒 N 个）得用令牌桶。</p>
+</li>
+<li>
+<p><strong>超时要加在等待点上。</strong> <code>wait_for</code> 到期会取消被等待的协程并抛 <code>TimeoutError</code>。不加超时的异步代码最危险的地方在于：对端不响应时，整个任务会安静地挂着，日志里什么都没有。</p>
+</li>
+<li>
+<p><strong><code>Queue</code> 自带背压。</strong> <code>maxsize=2</code> 时，生产者 <code>put</code> 到第 3 个就会挂起，直到消费者取走——这正是「慢消费者不要拖垮内存」的机制。结束信号用 <code>None</code> 是常见约定（也可以用哨兵对象）。</p>
+</li>
+<li>
+<p><strong>取消是协作式的。</strong> <code>cancel()</code> 只是打个标记，真正的 <code>CancelledError</code> 在下一个 <code>await</code> 点抛出；如果协程正在跑一段没有 <code>await</code> 的密集计算，取消不会立刻生效。清理逻辑要放在 <code>finally</code> 里，否则取消会跳过 <code>except</code> 之后的收尾。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>串行     153 ms | 并发 31 ms | 快一倍以上？ True
+结果     [0, 1, 2, 3, 4]
+任务状态 False
+任务结果 99 | 完成？ True
+信号量   [0, 1, 2, 3, 4, 5] | 峰值并发 2
+超时     TimeoutError（0.05s 内没等到）
+队列     [0, 1, 2, 3, 4]
+取消     CancelledError | 已取消？ True</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>gather</code> 换成 <code>for i in range(5): await fetch(...)</code>：耗时回到 100ms 左右，验证「并发」来自调度而不是魔法。</li>
+<li>把 <code>Semaphore(2)</code> 改成 <code>Semaphore(1)</code>：峰值并发变成 1，总耗时接近翻倍。</li>
+<li>把 <code>wait_for</code> 的 <code>timeout=0.05</code> 改成 <code>1</code>：不再抛超时，观察异常分支完全不触发。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §21.1–21.6 讲 <code>asyncio</code> 的协程、任务、<code>gather</code>、<code>wait_for</code> 与队列，§21.7 讲异步与线程的取舍。这一篇覆盖 §21 的主线；原书用 aiohttp 抓取国旗的完整例子，需要网络与第三方库，这里用 <code>sleep</code> 复现同样的调度结构。</p>
+    <div class="pn"><a href="u10.html"><small>← 上一篇</small><b>单元 10 · 并发与执行器：线程池、进程池和 GIL 的分界线</b></a><a class="nx" href="u12.html"><small>下一篇 →</small><b>单元 12 · 元编程：描述符、类钩子与动态建类</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../11.html">单元 11 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

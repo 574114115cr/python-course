@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>总课表 · 标准 14 周 / 轻量 28 周</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>总课表 · 标准 14 周 / 轻量 28 周</h1>
+  
+  
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="wrap">
+  <div class="hero" style="padding:38px 40px">
+    <div class="bdg">SYLLABUS · 总课表</div>
+    <h1>12 个单元，两种配速</h1>
+    <p><b>标准 14 周</b>：每周 1 个单元（4 节 × 90 分钟 + 复习 1 小时，约 7 小时），
+       单元 11–12 各占 2 周。<b>轻量 28 周</b>：每单元 2 周、单元 11–12 各 4 周
+       （每周 3–4 小时）。两条路的<b>内容和检查点完全相同</b>，只差周次——
+       先选能坚持的那条，再谈进度。</p>
+    <div class="st">
+      <div><b>12</b><span>单元</span></div>
+      <div><b>48</b><span>节课</span></div>
+      <div><b>72</b><span>课堂小时</span></div>
+      <div><b>2</b><span>关卡</span></div>
+    </div>
+  </div>
+
+  <h2>三个阶段</h2>
+  <p class="sub">阶段不是装饰：每一段结束都有一个明确的能力门槛，过不了就别进下一段。</p>
+  <div class="grid"><div class="cb"><b>语言地基 · 单元 1–4</b><p>数据模型、序列家族、字典与文本、数据类、一等函数与类型提示。这一段决定你后面读源码时能不能看懂「为什么这行没写 if」。</p><p style="margin-top:8px;font-size:12px;color:var(--muted)">标准第 1–4 周 · 轻量第 1–8 周 · 16 节 · 约 24 小时</p></div><div class="cb"><b>协议与类型 · 单元 5–8</b><p>装饰器与闭包、对象协议与序列实现、接口继承与 ABC/Protocol、运算符重载与类型进阶。这一段是「从会写变成写得像库」的分水岭。</p><p style="margin-top:8px;font-size:12px;color:var(--muted)">标准第 5–8 周 · 轻量第 9–16 周 · 16 节 · 约 24 小时</p></div><div class="cb"><b>并发与元编程 · 单元 9–12</b><p>迭代器与生成器、线程与进程、asyncio、动态属性与描述符、类元编程。这一段最难，也最容易被跳过，所以要配走读与实测一起看。</p><p style="margin-top:8px;font-size:12px;color:var(--muted)">标准第 9–14 周 · 轻量第 17–28 周 · 16 节 · 约 24 小时</p></div></div>
+
+  <h2>每周怎么排</h2>
+  <p class="sub">按「90 分钟一节」排，一次只上一节。四节不要挤在一天——中间那几天是留给复习的。</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>时间</th><th>做什么</th><th>时长</th><th>完成标准</th></tr></thead>
+    <tbody>
+      <tr><td>第 1 次</td><td>本单元第 1–2 节：读讲义 → 跑代码 → 做「动手」</td><td>3 h</td>
+        <td>两节的验收清单能全部勾上</td></tr>
+      <tr><td>第 2 次</td><td>本单元第 3–4 节 + 综合案例</td><td>3 h</td>
+        <td>综合案例能按自己的场景改一版并跑通</td></tr>
+      <tr><td>第 3 次</td><td>题库 3 题 + 走读程序 + <a href="review.html">复习计划</a>当天那轮</td>
+        <td>1 h</td><td>3 题独立做对；走读程序不参考原文能跑通</td></tr>
+      <tr><td>每天 15 分钟</td><td>复习计划里今日到期的条目（含逾期）</td><td>0.5 h / 周</td>
+        <td>今日条目清零，逾期不超过 1 轮</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>逐单元周次</h2>
+  <p class="sub">「产出」一列就是这一单元的过关标准，做不到就不算学完——不要用「看完了」当完成。</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>单元</th><th>标题</th><th>教材</th><th>标准</th><th>轻量</th><th>本单元产出</th></tr></thead>
+    <tbody><tr><td><b>01</b></td><td><a href='01.html'>数据模型与序列</a></td><td class='s'>第 1 章、第 2 章</td><td class='n'>第 1 周</td><td class='n'>第 1–2 周</td><td class='s'>走读 u01 跑通 · 综合案例改一版 · 题库 1 三题全对</td></tr><tr><td><b>02</b></td><td><a href='02.html'>字典、集合与文本</a></td><td class='s'>第 3 章、第 4 章</td><td class='n'>第 2 周</td><td class='n'>第 3–4 周</td><td class='s'>走读 u02 跑通 · 综合案例改一版 · 题库 2 三题全对</td></tr><tr><td><b>03</b></td><td><a href='03.html'>数据类与对象语义</a></td><td class='s'>第 5 章、第 6 章</td><td class='n'>第 3 周</td><td class='n'>第 5–6 周</td><td class='s'>走读 u03 跑通 · 综合案例改一版 · 题库 3 三题全对</td></tr><tr><td><b>04</b></td><td><a href='04.html'>一等函数与类型提示</a></td><td class='s'>第 7 章、第 8 章</td><td class='n'>第 4 周</td><td class='n'>第 7–8 周</td><td class='s'>走读 u04 跑通 · 综合案例改一版 · 题库 4 三题全对</td></tr><tr><td><b>05</b></td><td><a href='05.html'>装饰器、闭包与设计模式</a></td><td class='s'>第 9 章、第 10 章</td><td class='n'>第 5 周</td><td class='n'>第 9–10 周</td><td class='s'>走读 u05 跑通 · 综合案例改一版 · 题库 5 三题全对</td></tr><tr><td><b>06</b></td><td><a href='06.html'>对象协议与序列实现</a><br><span class="tag">关卡 1</span></td><td class='s'>第 11 章、第 12 章</td><td class='n'>第 6 周</td><td class='n'>第 11–12 周</td><td class='s'>走读 u06 跑通 · 综合案例改一版 · 题库 6 三题全对</td></tr><tr><td><b>07</b></td><td><a href='07.html'>接口、协议与继承</a></td><td class='s'>第 13 章、第 14 章</td><td class='n'>第 7 周</td><td class='n'>第 13–14 周</td><td class='s'>走读 u07 跑通 · 综合案例改一版 · 题库 7 三题全对</td></tr><tr><td><b>08</b></td><td><a href='08.html'>类型进阶与运算符重载</a></td><td class='s'>第 15 章、第 16 章</td><td class='n'>第 8 周</td><td class='n'>第 15–16 周</td><td class='s'>走读 u08 跑通 · 综合案例改一版 · 题库 8 三题全对</td></tr><tr><td><b>09</b></td><td><a href='09.html'>迭代器、生成器与控制流</a></td><td class='s'>第 17 章、第 18 章</td><td class='n'>第 9 周</td><td class='n'>第 17–18 周</td><td class='s'>走读 u09 跑通 · 综合案例改一版 · 题库 9 三题全对</td></tr><tr><td><b>10</b></td><td><a href='10.html'>并发模型与执行器</a></td><td class='s'>第 19 章、第 20 章</td><td class='n'>第 10 周</td><td class='n'>第 19–20 周</td><td class='s'>走读 u10 跑通 · 综合案例改一版 · 题库 10 三题全对</td></tr><tr><td><b>11</b></td><td><a href='11.html'>异步编程</a></td><td class='s'>第 21 章</td><td class='n'>第 11–12 周</td><td class='n'>第 21–24 周</td><td class='s'>走读 u11 跑通 · 综合案例改一版 · 题库 11 三题全对</td></tr><tr><td><b>12</b></td><td><a href='12.html'>元编程：动态属性、描述符与元类</a><br><span class="tag">关卡 2</span></td><td class='s'>第 22 章、第 23 章、第 24 章</td><td class='n'>第 13–14 周</td><td class='n'>第 25–28 周</td><td class='s'>走读 u12 跑通 · 综合案例改一版 · 题库 12 三题全对</td></tr></tbody>
+  </table></div>
+
+  <h2>什么时候该停下来</h2>
+  <p class="sub">以下四条是硬规则，触发任意一条就停，不要「先往下学，回头再补」——回头基本不会补。</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>信号</th><th>处理</th></tr></thead>
+    <tbody><tr><td class='w'>题库正确率 &lt; 60%</td><td>不要进下一单元。回本单元讲义重读「关键点」，把错的题抄进笔记再重做一遍。</td></tr><tr><td class='w'>走读程序跑不通</td><td>不要看答案。先只看 traceback 最后一行，定位到具体行，再对照「逐段走读」里对应的那一段。</td></tr><tr><td class='w'>合上讲义讲不出 3 个关键点</td><td>说明只是「看过」不是「学过」。回到复习计划，先做当天复盘那一轮。</td></tr><tr><td class='w'>连续两周完不成计划</td><td>把配速从标准切到轻量（每周 3–4 小时），不要靠熬夜补。计划必须能持续。</td></tr></tbody>
+  </table></div>
+
+  <h2>时间不够时的删减顺序</h2>
+  <div class="grid">
+    <div class="cb"><b>先砍：设计长文 24 章</b>
+      <p>它是「为什么这样设计」的纵深阅读，第一遍可以只挑与本单元相关的 1–2 篇。
+      不影响动手能力，但会少一层判断力。</p></div>
+    <div class="cb"><b>再砍：实测页</b>
+      <p><a href="bench.html">实测</a>是给你「别信口口相传」的证据，第一遍可以只看结论表。
+      做优化时再回来读方法和数据。</p></div>
+    <div class="cb"><b>不能砍：走读 + 题库 + 关卡</b>
+      <p>走读是唯一让你「完整读一个能跑的程序」的地方；题库暴露你以为会了其实不会；
+      关卡是阶段门槛。这三样砍了，这门课就退化成读文章。</p></div>
+  </div>
+
+  <h2>两种配速怎么选</h2>
+  <div class="grid">
+    <div class="cb"><b>选标准 14 周，如果</b>
+      <p>每周能稳定拿出 6–8 小时，且已经能用 Python 写 100 行左右的脚本。
+      这是默认路线，也是和入门课（约 29 周、每周 6–8 小时）节奏一致的那条；
+      总课时 48 节 × 1.5 h ≈ 72 h，摊到 14 周约 5 h/周，留 2 h 给练习与复习。</p></div>
+    <div class="cb"><b>选轻量 28 周，如果</b>
+      <p>在工作日只能挤出 30–60 分钟。把「每周 1 单元」拆成「每两周 1 单元」，
+      周内节奏不变，只是间隔拉长——复习轮次会自动跟着你的完成时间排，不用手动改。</p></div>
+  </div>
+
+  <p style="margin-top:26px;font-size:12.5px;color:var(--muted)">
+    <a href="../index.html">课程首页</a> ·
+    <a href="lessons/index.html">课程目录</a> ·
+    <a href="coverage.html">覆盖与自足性</a> ·
+    <a href="review.html">复习计划</a> ·
+    <a href="gates.html">关卡验收</a></p>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

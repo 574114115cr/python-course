@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="75" data-to="78"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u14"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/14.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u14"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="75" data-to="78"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u14"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/14.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u14"><span class="k">题库</span><span class="v">本单元 5 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-游戏状态机-从-一启动就玩-到-有开始界面">2.1 游戏状态机：从「一启动就玩」到「有开始界面」</a>
 <a class="lv3" href="#2-2-button-类-pygame-的文字不是-画-出来的">2.2 Button 类：Pygame 的文字不是「画」出来的</a>
@@ -41,6 +42,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-3-scoreboard-的-准备图像-模式">示例 3：Scoreboard 的「准备图像」模式</a>
 <a class="lv3" href="#示例-4-游戏状态机完整演示">示例 4：游戏状态机完整演示</a>
 <a class="lv3" href="#示例-5-余下的飞船数-group-ship-复用">示例 5：余下的飞船数——Group + Ship 复用</a>
+<a class="lv3" href="#示例-6-最高分写进文件-跨局还在-high_score_json-py">示例 6：最高分写进文件，跨局还在（high_score_json.py）</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -58,18 +60,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-6-点-play-没加-not-game_active-条件">错误 6：点 Play 没加 not game_active 条件</a>
 <a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-14-play-按钮-难度与记分牌">单元 14：Play 按钮、难度与记分牌</h1>
-<blockquote>
-<p>对应教材第 14 章「记分」
-阶段 2 · 项目 1：外星人入侵（收官篇）
-本单元目标：<strong>给游戏装上开始界面、动态难度和记分牌，真正完成《外星人入侵》</strong></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 14 章「记分」</span></div><p class="bk-k">阶段 2 · 项目 1：外星人入侵（收官篇）
+本单元目标：<strong>给游戏装上开始界面、动态难度和记分牌，真正完成《外星人入侵》</strong></p><a href="coverage.html#u14">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -690,6 +690,89 @@ inactive ─────────────▶ active
 <blockquote>
 <p>每次 <code>prep_ships()</code> 都 <code>Group()</code> 重建：命数会变，旧编组里装着旧数量的图标，必须整个扔掉重来。空编组 <code>draw()</code> 也不报错，只是什么都不画。<strong>借 Ship 的长相，用 Group 的管理</strong>——这就是复用。</p>
 </blockquote>
+<h3 id="示例-6-最高分写进文件-跨局还在-high_score_json-py">示例 6：最高分写进文件，跨局还在（high_score_json.py）</h3>
+<p>2.4 节末尾说过：内存里的 <code>high_score</code> 程序一关就没了。这个示例把它落到磁盘，顺带把 <code>add_score()</code> 的<strong>升级进位</strong>算清楚——两件事常常一起做：写纪录的时机是「游戏结束时」，而游戏结束时分数往往刚刚跳了一级。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># high_score_json.py —— 最高分写进文件，跨局还在；顺便看懂升级进位</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">HIGH_SCORE_FILE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/high_score.json"</span><span class="p">)</span>
+<span class="n">RULES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"alien_points"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">"score_scale"</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span> <span class="s2">"aliens_per_level"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_high_score</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">HIGH_SCORE_FILE</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""第一次运行时文件还不存在——必须兜底成 0，不能让游戏开不了。"""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))[</span><span class="s2">"score"</span><span class="p">])</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">save_high_score</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">HIGH_SCORE_FILE</span><span class="p">):</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">"score"</span><span class="p">:</span> <span class="n">score</span><span class="p">},</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                    <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_score</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">aliens_hit</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""击落 aliens_hit 只外星人：加分、记数、够 3 只就升级并提分。"""</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">rules</span><span class="p">[</span><span class="s2">"alien_points"</span><span class="p">]</span> <span class="o">*</span> <span class="n">aliens_hit</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">"killed"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">aliens_hit</span>
+    <span class="k">while</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"killed"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">rules</span><span class="p">[</span><span class="s2">"aliens_per_level"</span><span class="p">]:</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s2">"killed"</span><span class="p">]</span> <span class="o">-=</span> <span class="n">rules</span><span class="p">[</span><span class="s2">"aliens_per_level"</span><span class="p">]</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">rules</span><span class="p">[</span><span class="s2">"alien_points"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rules</span><span class="p">[</span><span class="s2">"alien_points"</span><span class="p">]</span> <span class="o">*</span> <span class="n">rules</span><span class="p">[</span><span class="s2">"score_scale"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">stats</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">new_round</span><span class="p">(</span><span class="n">high_score</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""一局的初始状态；high_score 从外面传进来，不能在内层被清零。"""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"score"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"level"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"killed"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"high_score"</span><span class="p">:</span> <span class="n">high_score</span><span class="p">}</span>
+
+
+<span class="n">rules</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">RULES</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">new_round</span><span class="p">(</span><span class="n">load_high_score</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"开局："</span><span class="p">,</span> <span class="n">stats</span><span class="p">,</span> <span class="s2">"（文件不存在时 high_score 兜底成 0）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 连打 4 波，每波 2 只，看分数怎么跳级 ==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">wave</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="n">add_score</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">aliens_hit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">wave</span><span class="si">}</span><span class="s2"> 波后：score=</span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;5</span><span class="si">}</span><span class="s2">  level=</span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'level'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+          <span class="sa">f</span><span class="s2">"  本波已收 </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'killed'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 只  下一只值 </span><span class="si">{</span><span class="n">rules</span><span class="p">[</span><span class="s1">'alien_points'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 分"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"high_score"</span><span class="p">]:</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">"high_score"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span>
+    <span class="n">save_high_score</span><span class="p">(</span><span class="n">stats</span><span class="p">[</span><span class="s2">"high_score"</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">新纪录 </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'high_score'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 已写入 </span><span class="si">{</span><span class="n">HIGH_SCORE_FILE</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 关掉程序再启动（重建一局，只从文件拿纪录）==="</span><span class="p">)</span>
+<span class="n">rules</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">RULES</span><span class="p">)</span>                       <span class="c1"># 难度回到初始值</span>
+<span class="n">second</span> <span class="o">=</span> <span class="n">new_round</span><span class="p">(</span><span class="n">load_high_score</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第二局开局："</span><span class="p">,</span> <span class="n">second</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"文件内容：</span><span class="si">{</span><span class="n">HIGH_SCORE_FILE</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">'utf-8'</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">HIGH_SCORE_FILE</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>                  <span class="c1"># 演示完删掉，真项目里要留着</span>
+</code></pre>
+<p><strong>运行结果</strong>（实跑输出）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>开局： {'score': 0, 'level': 1, 'killed': 0, 'high_score': 0} （文件不存在时 high_score 兜底成 0）
+
+=== 连打 4 波，每波 2 只，看分数怎么跳级 ===
+第 1 波后：score=  100  level=1  本波已收 2 只  下一只值 50 分
+第 2 波后：score=  200  level=2  本波已收 1 只  下一只值 75 分
+第 3 波后：score=  350  level=3  本波已收 0 只  下一只值 112 分
+第 4 波后：score=  574  level=3  本波已收 2 只  下一只值 112 分
+
+新纪录 574 已写入 data\high_score.json
+
+=== 关掉程序再启动（重建一局，只从文件拿纪录）===
+第二局开局： {'score': 0, 'level': 1, 'killed': 0, 'high_score': 574}
+文件内容：{"score": 574}
+</code></pre>
+<p>三条解读：</p>
+<ol>
+<li><strong><code>load_high_score()</code> 的四个 except 不是凑数</strong>：<code>OSError</code> 管第一次运行文件不存在，<code>ValueError</code> 管文件被写坏（JSON 语法错），<code>KeyError</code> 管文件里没有 <code>score</code> 键，<code>TypeError</code> 管 <code>score</code> 是 <code>null</code>。少写一个，玩家就会遇到「游戏打不开」。</li>
+<li><strong>升级用 <code>while</code> 而不是 <code>if</code></strong>：一次击落 6 只（比如一颗子弹穿了两只）时 <code>killed</code> 会一次跨过两个 3，用 <code>if</code> 只升一级，分值少乘一次 <code>1.5</code>。<code>while</code> 保证「攒够 3 只就升，剩的继续算下一次」。</li>
+<li><strong>换 <code>aliens_per_level=4</code> 会怎样</strong>（实跑对照）：8 只外星人照样升到 3 级，但提价时机从「第 3 只」推到「第 4 只」——前两波都是 50 分/只，最终 <code>score</code> 从 574 降到 500，<code>alien_points</code> 仍停在 112。<strong>参数一改，节奏全变</strong>，这就是把规则写成常量的价值。</li>
+</ol>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -1132,6 +1215,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关卡验收</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>关卡验收</h1>
+  
+  
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="wrap">
+  <div class="hero" style="padding:38px 40px">
+    <div class="bdg">GATES</div>
+    <h1>两个关卡 · 判定「真的会了」</h1>
+    <p>关卡不是考试，是验收：每条都必须能当场演示或讲清楚。做完勾选，进度存在本机。</p>
+  </div>
+  <div class="gate" data-key="g1">
+  <h2>关卡 1 · 数据结构、函数与对象</h2><div class="gs">覆盖单元 1–6 ｜ 建议在第 12 周完成后验收</div>
+  <label><input type="checkbox" data-g="g1" data-i="0"><span>能自定义一个类，支持 len / 索引 / 切片 / for / repr，并解释调用链</span></label><label><input type="checkbox" data-g="g1" data-i="1"><span>能用 listcomp 与 genexp 各写一版等价代码，并说明内存差异</span></label><label><input type="checkbox" data-g="g1" data-i="2"><span>能解释 dict 的键为什么必须可哈希，以及插入顺序为何被保留</span></label><label><input type="checkbox" data-g="g1" data-i="3"><span>能复现并修复一次 UnicodeDecodeError，说明 bytes 与 str 的边界</span></label><label><input type="checkbox" data-g="g1" data-i="4"><span>能用 @dataclass 定义带默认值、后处理与冻结选项的值对象</span></label><label><input type="checkbox" data-g="g1" data-i="5"><span>能解释浅拷贝、深拷贝与函数传参的引用语义</span></label><label><input type="checkbox" data-g="g1" data-i="6"><span>能把函数当参数/返回值传递，并用 operator / functools 简化代码</span></label><label><input type="checkbox" data-g="g1" data-i="7"><span>能给公开函数写全参数与返回值注解，并通过 mypy 检查</span></label><label><input type="checkbox" data-g="g1" data-i="8"><span>能徒手写出一个带参数的装饰器，并保留被装饰函数的元数据</span></label><label><input type="checkbox" data-g="g1" data-i="9"><span>能用闭包 + 装饰器重构一段策略分支代码</span></label><label><input type="checkbox" data-g="g1" data-i="10"><span>能实现 __repr__ / __eq__ / __hash__ 三者自洽的值类型</span></label><label><input type="checkbox" data-g="g1" data-i="11"><span>能实现一个可切片、可迭代、可格式化的自定义序列</span></label>
+  <div class="gp"><b id="n_g1">0 / 12</b>
+    <div class="dbar" style="flex:1"><i id="b_g1"></i></div>
+    <a href="../index.html#units">回到单元首页</a></div>
+</div>
+  <div class="gate" data-key="g2">
+  <h2>关卡 2 · 类、并发与元编程</h2><div class="gs">覆盖单元 7–12 ｜ 建议在第 24 周完成后验收</div>
+  <label><input type="checkbox" data-g="g2" data-i="0"><span>能区分鸭子类型、静态协议与 ABC，并为同一接口各写一版实现</span></label><label><input type="checkbox" data-g="g2" data-i="1"><span>能画出一次多重继承的 MRO，并解释 super() 的协作式调用</span></label><label><input type="checkbox" data-g="g2" data-i="2"><span>能用 TypeVar / Generic / Protocol 写出可被类型检查器接受的泛型代码</span></label><label><input type="checkbox" data-g="g2" data-i="3"><span>能为自定义类型实现 +、*、@、比较运算符且不破坏交换律</span></label><label><input type="checkbox" data-g="g2" data-i="4"><span>能手写生成器函数与 yield from，说明惰性求值的收益与代价</span></label><label><input type="checkbox" data-g="g2" data-i="5"><span>能实现上下文管理器，并用 match 解构嵌套数据结构</span></label><label><input type="checkbox" data-g="g2" data-i="6"><span>能解释 GIL 对 CPU 密集与 IO 密集任务的不同影响</span></label><label><input type="checkbox" data-g="g2" data-i="7"><span>能用 concurrent.futures 改写串行下载并处理异常与超时</span></label><label><input type="checkbox" data-g="g2" data-i="8"><span>能写出 asyncio 并发任务，正确使用 gather / TaskGroup 与超时</span></label><label><input type="checkbox" data-g="g2" data-i="9"><span>能说明协程、线程、进程三者的适用边界</span></label><label><input type="checkbox" data-g="g2" data-i="10"><span>能用 __getattr__ / property / 描述符分别实现动态属性</span></label><label><input type="checkbox" data-g="g2" data-i="11"><span>能读懂一个元类，并判断何时该用 __init_subclass__ 代替它</span></label>
+  <div class="gp"><b id="n_g2">0 / 12</b>
+    <div class="dbar" style="flex:1"><i id="b_g2"></i></div>
+    <a href="../index.html#units">回到单元首页</a></div>
+</div>
+</div>
+<script>
+(function(){
+  ['g1','g2'].forEach(function(k){
+    var box=document.querySelector('.gate[data-key="'+k+'"]');
+    var st=FL.read('fl-gate'+k.slice(1)+'-v1',{});
+    var ins=[].slice.call(box.querySelectorAll('input'));
+    function paint(){
+      var n=0;ins.forEach(function(x){x.closest('label').classList.toggle('on',x.checked);
+        if(x.checked)n++;});
+      document.getElementById('n_'+k).textContent=n+' / '+ins.length;
+      document.getElementById('b_'+k).style.width=(n/ins.length*100)+'%';
+    }
+    ins.forEach(function(x){x.checked=!!st[x.dataset.i];
+      x.addEventListener('change',function(){
+        if(x.checked)st[x.dataset.i]=1; else delete st[x.dataset.i];
+        try{localStorage.setItem('fl-gate'+k.slice(1)+'-v1',JSON.stringify(st))}catch(e){}
+        paint();
+      })});
+    paint();
+  });
+})();
+</script>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

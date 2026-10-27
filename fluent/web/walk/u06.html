@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 06 · 序列协议：只写五个方法，白拿一整套序列行为</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 06 · 序列协议：只写五个方法，白拿一整套序列行为</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 06</span>
+        <span class="kwk">单元 6 · 对象协议与序列实现</span>
+        <span class="ku">第 11–12 章</span></div>
+      <h1>序列协议：只写五个方法，白拿一整套序列行为</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 12 章用一个 <code>FrenchDeck</code> 和一个继承 <code>MutableSequence</code> 的类说明：实现序列的最小集合是五个方法，其余全部自动获得。这一篇把「白拿的」逐个点名验一遍。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableSequence</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Playlist</span><span class="p">(</span><span class="n">MutableSequence</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""只实现 __getitem__ / __setitem__ / __delitem__ / __len__ / insert，其余靠基类。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Playlist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>       <span class="c1"># 切片返回同类型，而不是 list</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Playlist(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">Playlist</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"初始    "</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># ① 继承来的方法：append / extend / pop / remove / clear / reverse / count / index</span>
+<span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"D"</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"F"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"append+ "</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"pop     "</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">pop</span><span class="p">(),</span> <span class="s2">"| 剩"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="s2">"首"</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">p</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"B"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"remove  "</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"count   "</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"C"</span><span class="p">),</span> <span class="s2">"| index"</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"C"</span><span class="p">))</span>
+<span class="n">p</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"reverse "</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># ② 切片返回同类型：切片后还能继续用 Playlist 的方法</span>
+<span class="n">sub</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"slice   "</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="s2">"| 是 Playlist？"</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">Playlist</span><span class="p">))</span>
+
+<span class="c1"># ③ 协议带来的：in / 迭代 / reversed / 排序视图</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"in      "</span><span class="p">,</span> <span class="s2">"C"</span> <span class="ow">in</span> <span class="n">p</span><span class="p">,</span> <span class="s2">"| iter"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"reversed"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span>
+
+<span class="c1"># ④ 鸭子类型：只要实现了协议，不继承也能当序列用</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Range3</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">3</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span>
+
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Range3</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"鸭子    "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="s2">"| len"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="s2">"| in"</span><span class="p">,</span> <span class="mi">20</span> <span class="ow">in</span> <span class="n">r</span><span class="p">)</span>
+
+<span class="c1"># ⑤ 哪些是自己写的、哪些是白拿的</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">abc</span>
+<span class="n">written</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"__init__"</span><span class="p">,</span> <span class="s2">"__getitem__"</span><span class="p">,</span> <span class="s2">"__setitem__"</span><span class="p">,</span> <span class="s2">"__delitem__"</span><span class="p">,</span> <span class="s2">"__len__"</span><span class="p">,</span>
+           <span class="s2">"insert"</span><span class="p">,</span> <span class="s2">"__repr__"</span><span class="p">]</span>
+<span class="n">inherited</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">Playlist</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)}</span> <span class="o">-</span> <span class="p">{</span><span class="s2">"insert"</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"自己写的"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">written</span><span class="p">),</span> <span class="s2">"个："</span><span class="p">,</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">written</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"白拿的  "</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inherited</span><span class="p">),</span> <span class="s2">"个："</span><span class="p">,</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inherited</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"继承链  "</span><span class="p">,</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">Playlist</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">][:</span><span class="mi">4</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"抽象方法"</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Playlist</span><span class="o">.</span><span class="n">__abstractmethods__</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"无（都实现了）"</span><span class="p">)</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>可变序列的最小集合是 5 个方法。</strong> <code>MutableSequence</code> 要求 <code>__getitem__</code>、<code>__setitem__</code>、<code>__delitem__</code>、<code>__len__</code>、<code>insert</code>——其中 <code>insert</code> 是 <code>append</code>/<code>extend</code>/<code>pop</code>/<code>remove</code>/<code>clear</code>/<code>+=</code> 的基石，因为这几个方法在基类里都是用 <code>insert</code> 和 <code>__delitem__</code> 实现的。只读序列（<code>Sequence</code>）更省：只要 <code>__getitem__</code> 和 <code>__len__</code>。</p>
+</li>
+<li>
+<p><strong>切片必须返回同类型。</strong> <code>p[0:2]</code> 返回 <code>Playlist</code> 而不是 <code>list</code>，这样切片结果还能用 <code>append</code>、还能再切片。原书把这条列为「序列的契约」之一：<code>__getitem__</code> 收到 <code>slice</code> 时，返回值的类型应该和 <code>self</code> 一致（内置 <code>list</code> 也遵守，只是返回的仍是 <code>list</code>）。</p>
+</li>
+<li>
+<p><strong><code>in</code>、迭代、<code>reversed</code> 全是白拿的。</strong> 它们由 <code>__getitem__</code> + <code>__len__</code> 推导：<code>in</code> 靠逐个索引比较（除非你写 <code>__contains__</code>），迭代从 0 开始取到 <code>IndexError</code>（除非你写 <code>__iter__</code>），<code>reversed</code> 靠 <code>__len__</code> 和 <code>__getitem__</code> 倒着走（除非你写 <code>__reversed__</code>）。写不写优化版取决于热路径。</p>
+</li>
+<li>
+<p><strong>鸭子类型不要求继承。</strong> <code>Range3</code> 只实现了 <code>__len__</code> 与 <code>__getitem__</code>，<code>list()</code>、<code>len()</code>、<code>in</code> 全都能用。Python 的协议是「结构」而不是「名义」——但这也意味着 <code>isinstance(r, Sequence)</code> 为 <code>False</code>（没有注册），需要 <code>Sequence.register(Range3)</code> 或继承才认。</p>
+</li>
+<li>
+<p><strong>白拿的方法可能很慢。</strong> 基类的 <code>__contains__</code> 是线性扫描后调用 <code>__eq__</code>；<code>index()</code> 也是线性；<code>__iadd__</code> 会逐个 <code>insert</code>。数据量大时应该自己实现 <code>__contains__</code>（比如用内部 <code>set</code> 做索引）——「白拿」不等于「够用」。</p>
+</li>
+<li>
+<p><strong><code>__abstractmethods__</code> 是检查继承是否完整的工具。</strong> 输出里显示「无（都实现了）」，说明五个必需方法都在。少写一个，实例化时会抛 <code>TypeError: Can't instantiate abstract class</code>，报错直接点名缺哪个方法。最后两行把「自己写的」和「白拿的」列了出来——白拿的那一串正是继承 <code>MutableSequence</code> 换来的收益。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>初始     Playlist([&#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;])
+append+  Playlist([&#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;D&#x27;, &#x27;E&#x27;, &#x27;F&#x27;])
+pop      F | 剩 5 首 A
+remove   Playlist([&#x27;A&#x27;, &#x27;C&#x27;, &#x27;D&#x27;, &#x27;E&#x27;])
+count    1 | index 1
+reverse  Playlist([&#x27;E&#x27;, &#x27;D&#x27;, &#x27;C&#x27;, &#x27;A&#x27;])
+slice    Playlist([&#x27;E&#x27;, &#x27;D&#x27;]) | 是 Playlist？ True
+in       True | iter [&#x27;E&#x27;, &#x27;D&#x27;, &#x27;C&#x27;, &#x27;A&#x27;]
+reversed [&#x27;A&#x27;, &#x27;C&#x27;, &#x27;D&#x27;, &#x27;E&#x27;]
+鸭子     [10, 20, 30] | len 3 | in True
+自己写的 7 个： __init__, __getitem__, __setitem__, __delitem__, __len__, insert, __repr__
+白拿的   8 个： append, clear, count, extend, index, pop, remove, reverse
+继承链   [&#x27;Playlist&#x27;, &#x27;MutableSequence&#x27;, &#x27;Sequence&#x27;, &#x27;Reversible&#x27;]
+抽象方法 无（都实现了）</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>删掉 <code>insert</code>：实例化 <code>Playlist()</code> 立刻抛 <code>TypeError</code>，报错里点名 <code>insert</code>。</li>
+<li>把切片的 <code>Playlist(self._items[i])</code> 改成 <code>self._items[i]</code>：<code>sub</code> 变成普通 list，<code>sub.append</code> 虽然还能用，但类型契约断了。</li>
+<li>给 <code>Range3</code> 负下标：现在 <code>r[-1]</code> 会走 <code>(10,20,30)[-1]</code>，输出 30，但 <code>r[-5]</code> 会抛 <code>IndexError</code>——补齐负索引是自定义序列最容易漏的一条。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §12.1 讲 <code>Vector</code> 的切片与 <code>__getitem__</code>，§12.2 讲 <code>Vector</code> 的完整实现，§12.4 讲 <code>FrenchDeck</code>（只靠 <code>__len__</code> + <code>__getitem__</code>），§12.5 讲「继承 <code>MutableSequence</code> 的代价」。这一篇对应 §12.5 与 §12.4；原书的 <code>Slice</code> 类（自定义切片对象）省掉了，它在真实项目里很少用到。</p>
+    <div class="pn"><a href="u05.html"><small>← 上一篇</small><b>单元 5 · 闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳</b></a><a class="nx" href="u07.html"><small>下一篇 →</small><b>单元 7 · 接口、协议与继承：三种「多态」的边界在哪</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../06.html">单元 6 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

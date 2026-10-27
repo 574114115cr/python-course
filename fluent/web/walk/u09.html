@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 09 · 迭代器、生成器与控制流：从手写类到 yield from</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 09 · 迭代器、生成器与控制流：从手写类到 yield from</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 09</span>
+        <span class="kwk">单元 9 · 迭代器、生成器与控制流</span>
+        <span class="ku">第 17–18 章</span></div>
+      <h1>迭代器、生成器与控制流：从手写类到 yield from</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 17 章的主线：迭代器协议只有 <code>__iter__</code> + <code>__next__</code>，但生成器把它变成了两行代码。这一篇用同一条需求（把嵌套结构拍平）走完四种写法，再比较它们的行为差异。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+
+
+<span class="c1"># ① 手写迭代器：把协议显式写出来</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Countdown</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">start</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"迭代器  "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">Countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="s2">"| 一次性？"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">Countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="o">==</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+
+<span class="c1"># ② 生成器函数：同样的语义，三行</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">countdown</span><span class="p">(</span><span class="n">start</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">start</span>
+        <span class="n">start</span> <span class="o">-=</span> <span class="mi">1</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"生成器  "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+
+<span class="c1"># ③ yield from：把嵌套列表拍平，递归交给 Python 自己的栈</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">x</span>
+
+
+<span class="n">nested</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">5</span><span class="p">]],</span> <span class="mi">6</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"flatten "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">nested</span><span class="p">)))</span>
+
+<span class="c1"># ④ 生成器是惰性的：消费多少算多少</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">noisy</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  产出 </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">i</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"惰性    "</span><span class="p">,</span> <span class="nb">next</span><span class="p">(</span><span class="n">noisy</span><span class="p">()),</span> <span class="s2">"（只产出一个就停了）"</span><span class="p">)</span>
+
+<span class="c1"># ⑤ 生成器也能当协程用：send 把值送进去，yield 把值送出来</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">running_avg</span><span class="p">():</span>
+    <span class="n">total</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">avg</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">avg</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">total</span> <span class="o">/</span> <span class="n">count</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">avg</span> <span class="o">=</span> <span class="n">running_avg</span><span class="p">()</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>                     <span class="c1"># 预激活：先跑到第一个 yield</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"协程    "</span><span class="p">,</span> <span class="p">[</span><span class="n">avg</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">)])</span>
+
+<span class="c1"># ⑥ itertools：组合、切片、分组，都是惰性的</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"chain   "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="s2">"ab"</span><span class="p">,</span> <span class="s2">"cd"</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"islice  "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"groupby "</span><span class="p">,</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span>
+                   <span class="n">itertools</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"aaabbc"</span><span class="p">)])</span>
+
+<span class="c1"># ⑦ for-else 与 break：循环没被打断时才走 else</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_first_even</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"找到 </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"没有偶数"</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"for-else"</span><span class="p">,</span> <span class="n">find_first_even</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="s2">"|"</span><span class="p">,</span> <span class="n">find_first_even</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>迭代器协议的两个方法各有分工。</strong> <code>__iter__</code> 返回迭代器本身（所以迭代器可以反复放进 <code>for</code>），<code>__next__</code> 每次给一个值、耗尽时抛 <code>StopIteration</code>。<code>for</code> 循环本质就是反复调 <code>__next__</code> 并捕获 <code>StopIteration</code>——这也是为什么 <code>for</code> 里手动 <code>raise StopIteration</code> 会被转成 <code>RuntimeError</code>（PEP 479，生成器里尤其常见）。</p>
+</li>
+<li>
+<p><strong>生成器函数「先定义、不执行」。</strong> 调用 <code>countdown(3)</code> 只是创建生成器对象，函数体一行都没跑；第一次 <code>next()</code> 才开始执行到第一个 <code>yield</code>。这个「懒启动」是后面所有特性的基础。</p>
+</li>
+<li>
+<p><strong><code>yield from</code> 一次性委托。</strong> 它等价于 <code>for x in sub: yield x</code>，但额外把 <code>send</code>/<code>throw</code>/<code>close</code> 转发给子生成器，还能拿到子生成器的 <code>return</code> 值。递归拍平用它是标准写法；写成手写循环也能跑，但少了异常与返回值的透传。</p>
+</li>
+<li>
+<p><strong>惰性是可见的。</strong> 第四段里 <code>noisy()</code> 只被取了一个值，打印只有一次「产出 0」。如果把生成器换成列表推导，五条会立刻全部打印——这就是内存与响应速度的差别。</p>
+</li>
+<li>
+<p><strong><code>send</code> 之前必须预激活。</strong> 刚创建的生成器停在函数开头，还没执行到 <code>yield</code>，此时 <code>send</code> 会抛 <code>TypeError: can't send non-None value to a just-started generator</code>。所以要先 <code>next(avg)</code> 一次。<code>running_avg</code> 用 <code>yield avg</code> 同时做「接收」和「输出」，这是协程的原型，也是 <code>asyncio</code> 的前身。</p>
+</li>
+<li>
+<p><strong><code>itertools</code> 全是惰性的。</strong> <code>chain</code> 拼接、<code>islice</code> 截断（可以截无限序列）、<code>groupby</code> 分组（只合并相邻的相同键，所以分组前通常要 <code>sorted</code>）。三者都不会一次性把数据读进内存。</p>
+</li>
+<li>
+<p><strong><code>for-else</code> 里的 <code>else</code> 是「没被 break 打断」。</strong> 这里用 <code>return</code> 提前结束，所以 <code>else</code> 在找得到时不会执行。很多人把它当成「循环正常结束」的语法糖，实际上它的语义是「没有 break」。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>迭代器   [3, 2, 1] | 一次性？ True
+生成器   [3, 2, 1]
+flatten  [1, 2, 3, 4, 5, 6]
+  产出 0
+惰性     0 （只产出一个就停了）
+协程     [10.0, 15.0, 20.0]
+chain    [&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;]
+islice   [10, 15, 20, 25]
+groupby  [(&#x27;a&#x27;, 3), (&#x27;b&#x27;, 2), (&#x27;c&#x27;, 1)]
+for-else 没有偶数 | 找到 4</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>flatten</code> 的 <code>yield from flatten(x)</code> 改成 <code>yield flatten(x)</code>：输出里会出现 <code>&lt;generator object&gt;</code>，因为嵌套生成器没有被展开。</li>
+<li>去掉 <code>next(avg)</code> 直接 <code>send</code>：立刻抛 <code>TypeError</code>，验证「预激活」这一步不能省。</li>
+<li>把 <code>itertools.groupby("aaabbc")</code> 换成 <code>groupby("abab")</code>：输出会变成 4 组，因为 <code>groupby</code> 只合并相邻的相同键。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §17.1–17.3 讲迭代器与生成器函数，§17.4 讲 <code>yield from</code> 与委托，§17.5 讲生成器作为协程（<code>send</code>/<code>throw</code>/<code>close</code>），§17.6 讲 <code>itertools</code> 的用法。这一篇覆盖了前五节的主线；原书的 <code>Sentence</code> 类（把迭代器写进类里）与 <code>arithmetic_progression</code> 生成器在讲义第 9 单元有逐行对照。</p>
+    <div class="pn"><a href="u08.html"><small>← 上一篇</small><b>单元 8 · 运算符重载与类型进阶：让 Money 像数字一样工作</b></a><a class="nx" href="u10.html"><small>下一篇 →</small><b>单元 10 · 并发与执行器：线程池、进程池和 GIL 的分界线</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../09.html">单元 9 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 08 · 运算符重载与类型进阶：让 Money 像数字一样工作</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 08 · 运算符重载与类型进阶：让 Money 像数字一样工作</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 08</span>
+        <span class="kwk">单元 8 · 类型进阶与运算符重载</span>
+        <span class="ku">第 15–16 章</span></div>
+      <h1>运算符重载与类型进阶：让 Money 像数字一样工作</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 16 章讲重载运算符的规则，第 15 章讲类型变量与泛型。这一篇用同一个类把两边接起来：既让 <code>+</code> <code>*</code> <code>-</code> 说得通，也用 <code>TypeVar</code> 与 <code>@overload</code> 把签名写准。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T"</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">"Money"</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Money</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"amount"</span><span class="p">,</span> <span class="s2">"currency"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">currency</span><span class="o">=</span><span class="s2">"CNY"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">amount</span><span class="p">))</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="s2">"0.01"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">currency</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Money(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="si">}</span><span class="s2">, '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="si">}</span><span class="s2">')"</span>
+
+    <span class="c1"># ① 同类相加：返回新对象</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+    <span class="c1"># ② 反向加法：0 + money 时 Python 会来找这里，sum() 的起点就是 0</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">other</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">other</span>
+
+    <span class="c1"># ③ 原地加法：可变对象才需要；值对象直接复用 __add__</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span> <span class="o">+</span> <span class="n">other</span>
+
+    <span class="c1"># ④ 减法与取负：一元运算符不带 other</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+    <span class="c1"># ⑤ 乘法：支持 Money * 数 与 数 * Money</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Money</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
+
+    <span class="c1"># ⑥ 比较：同类比金额，不同类返回 NotImplemented</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Money</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">amount</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Money</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"不能和 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> 运算"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">other</span><span class="o">.</span><span class="n">currency</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"币种不同：</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="si">}</span><span class="s2"> vs </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">currency</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="c1"># ⑦ 泛型函数：TypeVar 让「返回同类型」这件事被类型检查器看见</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="n">acc</span> <span class="o">+</span> <span class="n">x</span>
+    <span class="k">return</span> <span class="n">acc</span>
+
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Money</span><span class="p">(</span><span class="s2">"19.99"</span><span class="p">),</span> <span class="n">Money</span><span class="p">(</span><span class="s2">"0.01"</span><span class="p">),</span> <span class="n">Money</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"加      "</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"零加    "</span><span class="p">,</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="s2">"| 反向；sum 也能用了"</span><span class="p">,</span> <span class="nb">sum</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原地    "</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">+=</span> <span class="n">b</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"减与负  "</span><span class="p">,</span> <span class="n">c</span> <span class="o">-</span> <span class="n">b</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">,</span> <span class="o">-</span><span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"乘      "</span><span class="p">,</span> <span class="n">b</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"比较    "</span><span class="p">,</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">,</span> <span class="s2">"| 相等"</span><span class="p">,</span> <span class="n">a</span> <span class="o">==</span> <span class="n">Money</span><span class="p">(</span><span class="s2">"20.00"</span><span class="p">),</span> <span class="s2">"| 不同类型"</span><span class="p">,</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"求和    "</span><span class="p">,</span> <span class="n">total</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">]))</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="n">Money</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"USD"</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"币种    "</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"类型    "</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="c1"># ⑧ 精度：Decimal 而不是 float</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"精度    "</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="s2">"0.1"</span><span class="p">)</span> <span class="o">+</span> <span class="n">Money</span><span class="p">(</span><span class="s2">"0.2"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"float   "</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"哈希集合"</span><span class="p">,</span> <span class="nb">len</span><span class="p">({</span><span class="n">b</span><span class="p">,</span> <span class="n">Money</span><span class="p">(</span><span class="s2">"0.01"</span><span class="p">)}),</span> <span class="s2">"个不同元素"</span><span class="p">)</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>重载运算符的第一条规则：语义要对得上。</strong> <code>+</code> 应该表示「合并」，<code>*</code> 表示「缩放」，所以 <code>Money + Money</code> 合理、<code>Money + int</code> 不合理。这条不是风格问题——违反直觉的 <code>+</code> 会让调用方无法推理，最终没人敢用这个类。</p>
+</li>
+<li>
+<p><strong><code>__radd__</code> 处理「左边不认识你」的情况。</strong> 写 <code>0 + a</code> 时，<code>int.__add__(0, a)</code> 返回 <code>NotImplemented</code>，Python 转去调 <code>a.__radd__(0)</code>。这里对 <code>other == 0</code> 特判返回 <code>self</code>——因为内置 <code>sum()</code> 的起点就是 <code>0</code>，不特判的话 <code>sum([a, b, c])</code> 会拿 <code>Money + int</code> 直接报错。减法就不能这么偷懒。</p>
+</li>
+<li>
+<p><strong><code>__iadd__</code> 对不可变值对象可以退化成「返回新对象」。</strong> <code>a += b</code> 会先试 <code>__iadd__</code>，拿到的返回值重新绑定给 <code>a</code>。值对象不需要真的原地改，所以返回 <code>self + other</code> 就够了——但要记得写 <code>return</code>，忘了返回会得到 <code>None</code>。</p>
+</li>
+<li>
+<p><strong><code>__eq__</code> 返回 <code>NotImplemented</code> 让比较「可协商」。</strong> <code>a == 20</code> 最终是 <code>False</code>，但路径是：<code>Money.__eq__</code> 返回 <code>NotImplemented</code> → Python 试 <code>int.__eq__(20, a)</code> → 也是 <code>NotImplemented</code> → 回退到 <code>is</code> 比较 → <code>False</code>。如果这里直接 <code>return False</code>，别人写的 <code>int</code> 子类就永远没机会参与比较。</p>
+</li>
+<li>
+<p><strong><code>Decimal(str(x))</code> 是金额的底线。</strong> <code>Decimal(0.1)</code> 会把浮点的二进制误差一起带进来，<code>Decimal("0.1")</code> 才是十进制意义上的 0.1。输出里 <code>0.1 + 0.2</code> 的对比（<code>Decimal</code> 得 0.30、float 得 0.30000000000000004）就是为什么金额不能用 float。</p>
+</li>
+<li>
+<p><strong><code>TypeVar("T", bound="Money")</code> 让泛型函数保住返回类型。</strong> <code>total([a, b, c])</code> 的静态类型是 <code>Money</code>，而不是 <code>Any</code> 或 <code>object</code>。<code>__add__</code> 上写 <code>self: T, other: T) -&gt; T</code> 也是同一目的——让类型检查器知道「加完还是 Money」，链式调用才不会丢类型。</p>
+</li>
+<li>
+<p><strong><code>__slots__</code> 与 <code>__hash__</code> 让值对象能当字典键。</strong> 两个金额与币种相同的 <code>Money</code> 哈希相同、相等为真，所以 <code>{b, Money("0.01")}</code> 只有一个元素。这也是 dataclass 那篇里 <code>frozen=True</code> 做的事情的手写版。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>加       Money(20.00, &#x27;CNY&#x27;)
+零加     Money(19.99, &#x27;CNY&#x27;) | 反向；sum 也能用了 Money(120.00, &#x27;CNY&#x27;)
+原地    Money(20.00, &#x27;CNY&#x27;)
+减与负   Money(99.99, &#x27;CNY&#x27;) | Money(-0.01, &#x27;CNY&#x27;)
+乘       Money(0.03, &#x27;CNY&#x27;) | Money(0.03, &#x27;CNY&#x27;)
+比较     True | 相等 True | 不同类型 False
+求和     Money(120.01, &#x27;CNY&#x27;)
+币种     币种不同：CNY vs USD
+类型     不能和 int 运算
+精度     Money(0.30, &#x27;CNY&#x27;)
+float    0.30000000000000004
+哈希集合 1 个不同元素</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>__eq__</code> 里的 <code>NotImplemented</code> 改成 <code>False</code>：<code>a == 20</code> 结果不变，但再写一个 <code>class MyInt(int)</code> 并自定义相等，你会发现它永远不生效。</li>
+<li>把 <code>Decimal(str(amount))</code> 改成 <code>Decimal(amount)</code>：传入 <code>0.1</code> 时会看到 <code>0.1000000000000000055511151231257827</code>。</li>
+<li>删掉 <code>__hash__</code>：定义过 <code>__eq__</code> 后它自动变成 <code>None</code>，最后一行抛 <code>TypeError: unhashable type</code>。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §16.1–16.6 讲运算符重载的顺序、<code>NotImplemented</code>、<code>__iadd__</code> 与一元运算符，§15.5 讲 <code>TypeVar</code> 与泛型函数，§15.6 讲 <code>@overload</code>。这一篇把 §16 的主线完整走了一遍；<code>@overload</code> 没有实际写进代码（运行时不产生效果），讲义第 8 节有单独示例。</p>
+    <div class="pn"><a href="u07.html"><small>← 上一篇</small><b>单元 7 · 接口、协议与继承：三种「多态」的边界在哪</b></a><a class="nx" href="u09.html"><small>下一篇 →</small><b>单元 9 · 迭代器、生成器与控制流：从手写类到 yield from</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../08.html">单元 8 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

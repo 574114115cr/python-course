@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="10" data-to="13"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u2"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/02.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u2"><span class="k">题库</span><span class="v">本单元 4 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="10" data-to="13"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u2"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/02.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u2"><span class="k">题库</span><span class="v">本单元 6 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-列表-一个名字-一排抽屉">2.1 列表：一个名字，一排抽屉</a>
 <a class="lv3" href="#2-2-索引从-0-开始-为什么不是从-1-开始">2.2 索引从 0 开始：为什么不是从 1 开始</a>
@@ -42,6 +43,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-4-删除元素">示例 4：删除元素</a>
 <a class="lv3" href="#示例-5-引用共享与浅拷贝">示例 5：引用共享与浅拷贝</a>
 <a class="lv3" href="#示例-6-排序与反转-列表自带的小工具">示例 6：排序与反转（列表自带的小工具）</a>
+<a class="lv3" href="#示例-7-copy-到底差在哪">示例 7：=、[:]、.copy() 到底差在哪</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -54,19 +56,19 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-2-6">参考答案 2-6</a>
 <a class="lv3" href="#参考答案-2-7">参考答案 2-7</a>
 <a class="lv3" href="#参考答案-2-8">参考答案 2-8</a>
+<a class="lv3" href="#参考答案-2-9">参考答案 2-9</a>
+<a class="lv3" href="#参考答案-2-10">参考答案 2-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-2-列表简介">单元 2：列表简介</h1>
-<blockquote>
-<p>对应教材第 3 章「列表简介」
-关键词：列表 list、方括号创建、索引（从 0 开始）、负索引、len()、append、insert、remove、pop、del、永久修改性</p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 3 章「列表简介」</span></div><p class="bk-k">关键词：列表 list、方括号创建、索引（从 0 开始）、负索引、len()、append、insert、remove、pop、del、永久修改性</p><a href="coverage.html#u2">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -76,6 +78,7 @@ transition:opacity .18s;z-index:60}
 <li>用 <code>len()</code> 求长度，用索引做<strong>读取</strong>和<strong>赋值</strong>两种操作。</li>
 <li>熟练使用 <code>.append()</code>、<code>.insert()</code>、<code>.remove()</code>、<code>.pop()</code>、<code>del</code> 五种增删改方法，并说清 <code>.pop()</code> 的返回值可以被使用。</li>
 <li>理解列表是<strong>可变对象</strong>，理解"引用共享"现象——两个变量指向同一个列表时，改一个另一个也会变。</li>
+<li>分清 <code>b = a</code>、<code>a[:]</code>、<code>a.copy()</code> 三种写法，能解释浅复制为什么改不动数字却改得动子列表。</li>
 </ol>
 <hr>
 <h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
@@ -374,6 +377,46 @@ transition:opacity .18s;z-index:60}
 <span class="nb">print</span><span class="p">(</span><span class="s2">"橙子在第几个："</span><span class="p">,</span> <span class="n">fruits</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"橙子"</span><span class="p">))</span>  <span class="c1"># 3（索引从 0 开始）</span>
 <span class="c1"># print(fruits.index("葡萄"))     # ValueError: '葡萄' is not in list</span>
 </code></pre>
+<h3 id="示例-7-copy-到底差在哪">示例 7：<code>=</code>、<code>[:]</code>、<code>.copy()</code> 到底差在哪</h3>
+<p>三个写法看起来都像"复制"，结果完全不同。下面这段一次说清：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># copy_demo.py —— 三种"复制"的对照</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>            <span class="c1"># 只是多一个名字，不是复制</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:]</span>         <span class="c1"># 切片复制：新的外层列表</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>     <span class="c1"># 同 c</span>
+
+<span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"a"</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>                  <span class="c1"># [1, 2, 3, 4]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"b"</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>                  <span class="c1"># [1, 2, 3, 4]  ← 跟着变</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"c"</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>                  <span class="c1"># [1, 2, 3]     ← 没变</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"d"</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>                  <span class="c1"># [1, 2, 3]     ← 没变</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"b is a"</span><span class="p">,</span> <span class="n">b</span> <span class="ow">is</span> <span class="n">a</span><span class="p">,</span> <span class="s2">"| c is a"</span><span class="p">,</span> <span class="n">c</span> <span class="ow">is</span> <span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># 但切片复制只复制第一层</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span class="n">g2</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[:]</span>
+<span class="n">g2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"grid"</span><span class="p">,</span> <span class="n">grid</span><span class="p">)</span>            <span class="c1"># [[99, 2], [3, 4]]  ← 原列表也被改了</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"g2  "</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>a [1, 2, 3, 4]
+b [1, 2, 3, 4]
+c [1, 2, 3]
+d [1, 2, 3]
+b is a True | c is a False
+grid [[99, 2], [3, 4]]
+g2   [[99, 2], [3, 4]]
+</code></pre>
+<p>四句话记住这张图：</p>
+<ol>
+<li><strong><code>b = a</code> 不是复制</strong>，是给同一份数据再起一个名字（<code>b is a</code> 为 <code>True</code>）。</li>
+<li><strong><code>a[:]</code> 和 <code>a.copy()</code> 都是浅复制</strong>：外层是新列表，里面的元素还是原来那些对象。</li>
+<li><strong>元素是不可变对象（数字、字符串）时，浅复制够用</strong>——改 <code>c[0] = 9</code> 不会影响 <code>a</code>。</li>
+<li><strong>元素本身是列表/字典时，浅复制不够</strong>：<code>g2[0]</code> 和 <code>grid[0]</code> 还是同一个子列表，改一个另一个跟着变。要彻底独立只能 <code>copy.deepcopy(grid)</code>，或者用推导式重建：<code>[[x for x in row] for row in grid]</code>。</li>
+</ol>
+<p>日常判断标准很简单：<strong>列表里装的是"值"就 <code>[:]</code>，装的是"容器"就要 <code>deepcopy</code> 或重建</strong>。</p>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -438,6 +481,32 @@ transition:opacity .18s;z-index:60}
 3. 找出 <code>3</code> 所在的所有位置（提示：<code>.index()</code> 会返回<strong>第一个</strong>位置，找到后把它替换成一个绝不会出现的标记值，再继续找）
 4. 输出排序后（升序/降序各一次）的列表
 5. 输出反转后的列表（不要破坏原列表）</p>
+<p><strong>练习 2-9【排序但别动原列表】</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">67</span><span class="p">]</span>
+</code></pre>
+<p>依次输出五行：
+① 原列表；② <code>sorted(scores)</code> 的升序结果；③ <code>sorted(scores, reverse=True)</code> 的降序结果；
+④ 对你自己的副本调用 <code>scores.sort()</code> 之后再打印它；⑤ 此时原列表是什么。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">原列表</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">67</span><span class="p">]</span>
+<span class="n">升序</span>   <span class="p">[</span><span class="mi">67</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">降序</span>   <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">67</span><span class="p">]</span>
+<span class="n">原地排序后</span> <span class="p">[</span><span class="mi">67</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">原列表仍是</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">67</span><span class="p">]</span>
+</code></pre>
+<p>关键：<code>sorted()</code> 返回新列表，<code>sort()</code> 原地改且返回 <code>None</code>——<code>x = scores.sort()</code> 会让 <code>x</code> 变成 <code>None</code>。</p>
+<p><strong>练习 2-10【浅复制的陷阱】</strong>
+用两种写法造「2 行 3 列的零矩阵」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">good</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+<span class="n">bad</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+</code></pre>
+<p>分别执行 <code>good[0][0] = 1</code> 和 <code>bad[0][0] = 1</code>，打印两个矩阵，并用 <code>id()</code> 打印 <code>bad[0]</code> 和 <code>bad[1]</code> 证明它们是不是同一个对象。
+期望输出（<code>id</code> 的具体数字会变，重点是两个 id 是否相同）：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">good</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+<span class="n">bad</span>  <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+<span class="n">bad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">bad</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="err">→</span> <span class="kc">True</span>
+</code></pre>
+<p>回答一句话：为什么 <code>[[0] * 3] * 2</code> 会连带改两行？</p>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
 <h3 id="参考答案-2-1">参考答案 2-1</h3>
@@ -655,6 +724,45 @@ transition:opacity .18s;z-index:60}
 <span class="n">flipped</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"原地反转："</span><span class="p">,</span> <span class="n">flipped</span><span class="p">)</span>
 </code></pre>
+<h3 id="参考答案-2-9">参考答案 2-9</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># sort_compare.py —— sorted 与 sort 的区别</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">67</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表"</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"升序  "</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"降序  "</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+<span class="n">mine</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[:]</span>          <span class="c1"># 先复制，再原地排序</span>
+<span class="n">mine</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原地排序后"</span><span class="p">,</span> <span class="n">mine</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表仍是"</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>原列表 [88, 92, 75, 100, 67]
+升序   [67, 75, 88, 92, 100]
+降序   [100, 92, 88, 75, 67]
+原地排序后 [67, 75, 88, 92, 100]
+原列表仍是 [88, 92, 75, 100, 67]
+</code></pre>
+<p><code>print("升序  ", sorted(scores))</code> 里有两个空格，加上 <code>print</code> 自动补的一个，输出就是三个空格——所以对齐看起来是齐的。</p>
+<h3 id="参考答案-2-10">参考答案 2-10</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># matrix.py —— 两种造矩阵的写法</span>
+<span class="n">good</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>     <span class="c1"># 每行都是新建的列表</span>
+<span class="n">bad</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>                    <span class="c1"># 复制的是同一个列表的引用</span>
+
+<span class="n">good</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">bad</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"good"</span><span class="p">,</span> <span class="n">good</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bad "</span><span class="p">,</span> <span class="n">bad</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"bad[0] is bad[1] →"</span><span class="p">,</span> <span class="n">bad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">bad</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>good [[1, 0, 0], [0, 0, 0]]
+bad  [[1, 0, 0], [1, 0, 0]]
+bad[0] is bad[1] → True
+</code></pre>
+<p>原因：<code>[[0] * 3] * 2</code> 先造出<strong>一个</strong>内层列表 <code>[0, 0, 0]</code>，再用 <code>* 2</code> 把这个<strong>引用</strong>复制两份。所以 <code>bad[0]</code>、<code>bad[1]</code> 指向同一个对象，改哪一行都是改同一份数据。推导式 <code>[[0] * 3 for _ in range(2)]</code> 每轮循环都执行一次 <code>[0] * 3</code>，得到两个独立列表，才是正确的二维初始化。</p>
 <hr>
 <h2 id="六-本单元验收自测">六、本单元验收自测</h2>
 <p><strong>1. 简答题</strong>：<code>fruits = ["苹果", "香蕉", "橙子"]</code>，<code>fruits[1]</code> 和 <code>fruits[-2]</code> 分别是什么？为什么它们相同？</p>
@@ -717,6 +825,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

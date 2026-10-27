@@ -464,6 +464,11 @@ def main():
     idx_html = lt.index_page(meta)
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(idx_html)
 
+    # 复习计划页：按艾宾浩斯曲线给全部课节排 6 轮复习（数据来自 lesson-done-v1 时间戳）
+    rv_html = lt.review_page(meta)
+    open(os.path.join(ROOT, "web", "review.html"), "w", encoding="utf-8").write(rv_html)
+    print(f"  复习计划页：web/review.html（{len(meta)} 节 × {len(lt.REVIEW_STAGES)} 轮）")
+
     by_unit = {}
     for m in meta:
         by_unit.setdefault(m["unit"], []).append(m)

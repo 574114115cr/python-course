@@ -20,8 +20,11 @@ for p in pages:
         placeholder += 1
         print(f"  !! {name} 占位符残留 {ph}")
 
-    # 链接检查
-    for href in re.findall(r'href="([^"]+)"', s):
+    # 链接检查（先剥掉 <pre> 代码块与行内 <code>：
+    # 里面的 Django 模板标签、示例 URL 是教学内容，不是真链接）
+    body = re.sub(r"<pre\b.*?</pre>", "", s, flags=re.S)
+    body = re.sub(r"<code\b[^>]*>.*?</code>", "", body, flags=re.S)
+    for href in re.findall(r'href="([^"]+)"', body):
         if href.startswith(("http", "#", "mailto:", "data:")):
             continue
         tgt = href.split("#")[0]
@@ -35,8 +38,8 @@ for p in pages:
             bad_link += 1
             print(f"  !! {name} 死链 -> {href}")
 
-    # 锚点检查（同页目录）
-    for a in re.findall(r'href="#([^"]+)"', s):
+    # 锚点检查（同页目录，同样跳过代码块）
+    for a in re.findall(r'href="#([^"]+)"', body):
         if f'id="{a}"' not in s:
             bad_link += 1
             print(f"  !! {name} 死锚点 -> #{a}")
@@ -61,11 +64,13 @@ print(f"死链/死锚点：{bad_link}")
 print(f"占位符残留：{placeholder}")
 print(f"目录为空的页：{no_toc}   无高亮的页：{no_hl}")
 
-# 索引页必须列出全部课节
+# 索引页必须列出全部课节（课号 1–111，文件名 01.html–111.html）
+lesson_files = {os.path.basename(p) for p in pages
+                if re.fullmatch(r"\d+\.html", os.path.basename(p))}
 idx = open(os.path.join(D, "index.html"), encoding="utf-8").read()
-links = set(re.findall(r'href="(\d\d\.html)"', idx))
-print(f"\n索引页列出课节：{len(links)} / 64")
-missing = {f"{i:02d}.html" for i in range(1, 65)} - links
+links = set(re.findall(r'href="(\d+\.html)"', idx))
+print(f"\n索引页列出课节：{len(links)} / {len(lesson_files)}")
+missing = lesson_files - links
 if missing:
     print(f"  !! 索引页缺失：{sorted(missing)}")
 

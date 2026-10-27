@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 15 课 · 渐进式类型：注解语法与常用类型</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="15">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 15 课 · 渐进式类型：注解语法与常用类型</h1>
+  <a class="tag" href="../04.html">单元 4</a>
+  <a class="ppt" href="../ppt/u/04.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:31.2%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="13" href="l13.html"><span class="no">13</span><span class="tx">函数是对象：高阶函数与可调用对象</span></a><a class="" data-l="14" href="l14.html"><span class="no">14</span><span class="tx">参数形态：位置、关键字与可变参数</span></a><a class="cur" data-l="15" href="l15.html"><span class="no">15</span><span class="tx">渐进式类型：注解语法与常用类型</span></a><a class="" data-l="16" href="l16.html"><span class="no">16</span><span class="tx">mypy 实战与类型边界</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-literal-final-annotated">延伸：Literal、Final、Annotated</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../04.html"><span class="k">单元</span>
+    <span class="v">单元 4 · 一等函数与类型提示</span></a>
+  <a href="../bank.html#u4"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/04.html#s6"><span class="k">课件</span>
+    <span class="v">本单元第 3 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u04.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/07.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 7–8 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 15 课</span>
+        <span class="kwk">单元 4 · 第 7–8 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>渐进式类型：注解语法与常用类型</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能给变量、函数、容器写类型注解，理解 `Optional`、`Union`、`Callable`、`Any` 的含义，并知道注解在运行时不做检查。</div>
+    <h3 id="讲解">讲解</h3>
+<p>Python 的类型提示是「渐进式」的：可以只给关键函数加，也可以全量加，解释器都不会因此改变行为。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre>
+<p>3.10 起可以写 <code>int | None</code> 代替 <code>Optional[int]</code>，3.9 起内置容器可直接下标 <code>list[int]</code>、<code>dict[str, int]</code>。注解保存在 <code>__annotations__</code> 里：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="o">.</span><span class="vm">__annotations__</span><span class="p">)</span>
+<span class="c1"># {'nums': typing.Iterable[float], 'return': float}</span>
+</code></pre>
+<p>但运行时不会校验：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>   <span class="c1"># 'aa'：解释器照跑，mypy 会报错</span>
+</code></pre>
+<p><code>Any</code> 表示「放弃检查」，它会污染调用链——一个 <code>Any</code> 传进去，后面的检查全部失效。优先用 <code>object</code> 表示「任意对象但只能做 object 支持的操作」，只有在对接无类型第三方库时才用 <code>Any</code>。</p>
+<h3 id="延伸-literal-final-annotated">延伸：Literal、Final、Annotated</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Final</span><span class="p">,</span> <span class="n">Annotated</span>
+
+<span class="n">Mode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"r"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">]</span>           <span class="c1"># 只能是这三个字符串</span>
+<span class="n">MAX_LEN</span><span class="p">:</span> <span class="n">Final</span> <span class="o">=</span> <span class="mi">1024</span>                    <span class="c1"># 检查器禁止再赋值</span>
+<span class="n">UserId</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">"primary key"</span><span class="p">]</span>  <span class="c1"># 把运行时元数据挂在类型上</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</code></pre>
+<p><code>Annotated</code> 的元数据在运行时能取到：<code>typing.get_type_hints(fn, include_extras=True)</code>。FastAPI 的参数校验、文档、依赖注入都建在这上面——它先用注解，再用 <code>Annotated</code> 里的元数据，最后看默认值。<code>Literal</code> 和 <code>Final</code> 只影响静态检查，运行时传 <code>"x"</code> 不会报错，别拿它当校验器。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>注解是给静态检查器的</strong>，不是运行时断言；要运行时校验得用 <code>pydantic</code> 或手写检查。</li>
+<li><strong><code>Optional[X]</code> 等价于 <code>X | None</code></strong>，不是「可选参数」的意思。</li>
+<li><strong><code>list[int]</code> 是「元素为 int 的列表」</strong>，不是「长度为 int 的列表」。</li>
+<li><strong><code>Any</code> 会关闭检查</strong>，<code>object</code> 不会；不确定时先用 <code>object</code>。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>给第 13 课的 <code>compose</code> 写完整注解（提示：<code>Callable[[A], B]</code> 需要 <code>TypeVar</code>，可以先写成 <code>Callable</code>）。</li>
+<li>给一个「读 JSON 配置」的函数写注解，返回 <code>dict[str, object]</code>，并说明为什么不用 <code>dict[str, Any]</code>。</li>
+<li>用 <code>reveal_type()</code>（mypy）或编辑器悬停，观察三个变量的推断类型。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出 <code>Optional</code>、<code>Union</code>、<code>Callable</code>、<code>Iterable</code> 四类注解</li>
+<li><span class="ck"></span>知道注解不会在运行时阻止错误参数</li>
+<li><span class="ck"></span>能解释 <code>Any</code> 与 <code>object</code> 的区别，并优先选择 <code>object</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 8 章 §8.2–8.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：Literal、Final、Annotated</p></div>
+    <div class="pn"><a href="l14.html"><small>← 第 14 课 · 单元 4</small><b>参数形态：位置、关键字与可变参数</b></a><a class="nx" href="l16.html"><small>第 16 课 · 单元 4 →</small><b>mypy 实战与类型边界</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../04.html">返回单元 4</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=15, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

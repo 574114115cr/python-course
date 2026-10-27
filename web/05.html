@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="23" data-to="27"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u5"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/05.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s7"><span class="k">大纲</span><span class="v">课程大纲课件 p7</span></a><a href="bank.html#u5"><span class="k">题库</span><span class="v">本单元 1 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="23" data-to="27"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u5"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/05.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s7"><span class="k">大纲</span><span class="v">课程大纲课件 p7</span></a><a href="bank.html#u5"><span class="k">题库</span><span class="v">本单元 3 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-列表按位置找-字典按名字找">2.1 列表按位置找，字典按名字找</a>
 <a class="lv3" href="#2-2-键值对-key-value">2.2 键值对：key → value</a>
@@ -44,6 +45,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-5-遍历与修改的正确姿势">示例 5：遍历与修改的正确姿势</a>
 <a class="lv3" href="#示例-6-嵌套字典与综合提取">示例 6：嵌套字典与综合提取</a>
 <a class="lv3" href="#示例-7-字典的常用-全家桶-方法">示例 7：字典的常用&quot;全家桶&quot;方法</a>
+<a class="lv3" href="#示例-8-列表套字典-真实数据的标准形状">示例 8：列表套字典——真实数据的标准形状</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -55,19 +57,19 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-5-5">参考答案 5-5</a>
 <a class="lv3" href="#参考答案-5-6">参考答案 5-6</a>
 <a class="lv3" href="#参考答案-5-7">参考答案 5-7</a>
+<a class="lv3" href="#参考答案-5-9">参考答案 5-9</a>
+<a class="lv3" href="#参考答案-5-10">参考答案 5-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-5-字典">单元 5：字典</h1>
-<blockquote>
-<p>对应教材第 6 章「字典」
-关键词：字典 dict、键值对、<code>{}</code> 创建、<code>.keys()</code> / <code>.values()</code> / <code>.items()</code>、<code>get()</code>、遍历字典、<code>in</code> 判断键、嵌套字典、OrderedDict 思维</p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 6 章「字典」</span></div><p class="bk-k">关键词：字典 dict、键值对、<code>{}</code> 创建、<code>.keys()</code> / <code>.values()</code> / <code>.items()</code>、<code>get()</code>、遍历字典、<code>in</code> 判断键、嵌套字典、OrderedDict 思维</p><a href="coverage.html#u5">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -77,6 +79,7 @@ transition:opacity .18s;z-index:60}
 <li>熟练使用 <code>.keys()</code> <code>.values()</code> <code>.items()</code> 三种遍历方式，并能说出各自的适用场景。</li>
 <li>用 <code>.get()</code> 安全地取值，并解释它相比 <code>dict[键]</code> 的优势。</li>
 <li>用 <code>in</code> 判断键是否存在，并能遍历嵌套字典完成两层数据提取。</li>
+<li>处理「列表套字典」这种真实数据形状：逐条读取、按字段分组、按条件筛出字段。</li>
 </ol>
 <hr>
 <h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
@@ -499,6 +502,46 @@ transition:opacity .18s;z-index:60}
 <span class="n">name_by_score</span> <span class="o">=</span> <span class="p">{</span><span class="n">score</span><span class="p">:</span> <span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"反向字典："</span><span class="p">,</span> <span class="n">name_by_score</span><span class="p">)</span>   <span class="c1"># {95: '小明', 88: '小红', 72: '小刚'}</span>
 </code></pre>
+<h3 id="示例-8-列表套字典-真实数据的标准形状">示例 8：列表套字典——真实数据的标准形状</h3>
+<p>单个字典只能描述一个对象。真实数据几乎都是<strong>一个列表装很多个字典</strong>（接口返回的 JSON 也是这个形状）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># users.py —— 列表套字典：遍历、分组、筛选</span>
+<span class="n">users</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"上海"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"bob"</span><span class="p">,</span>   <span class="s2">"age"</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"北京"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"carol"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">24</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"上海"</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># ① 逐条读取 + 条件判断</span>
+<span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s2">"成年"</span> <span class="k">if</span> <span class="n">u</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">18</span> <span class="k">else</span> <span class="s2">"未成年"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">u</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">（</span><span class="si">{</span><span class="n">u</span><span class="p">[</span><span class="s1">'city'</span><span class="p">]</span><span class="si">}</span><span class="s2">）</span><span class="si">{</span><span class="n">u</span><span class="p">[</span><span class="s1">'age'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 岁 · </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ② 按城市分组：字典的值是列表</span>
+<span class="n">by_city</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+    <span class="n">city</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="s2">"city"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">city</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">by_city</span><span class="p">:</span>        <span class="c1"># 第一次遇到这个城市，先建空列表</span>
+        <span class="n">by_city</span><span class="p">[</span><span class="n">city</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">by_city</span><span class="p">[</span><span class="n">city</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"按城市"</span><span class="p">,</span> <span class="n">by_city</span><span class="p">)</span>
+
+<span class="c1"># ③ 从字典列表里挑出符合条件的名字</span>
+<span class="n">adults</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">users</span> <span class="k">if</span> <span class="n">u</span><span class="p">[</span><span class="s2">"age"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">18</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"成年人"</span><span class="p">,</span> <span class="n">adults</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>alice（上海）30 岁 · 成年
+bob（北京）17 岁 · 未成年
+carol（上海）24 岁 · 成年
+按城市 {'上海': ['alice', 'carol'], '北京': ['bob']}
+成年人 ['alice', 'carol']
+</code></pre>
+<p>三个要点：</p>
+<ol>
+<li><strong><code>u["city"]</code> 用的是方括号，不是 <code>.city</code></strong>。字典不是对象，没有属性访问；写 <code>u.city</code> 会报 <code>AttributeError</code>。</li>
+<li><strong>分组必须先判断键在不在</strong>：直接 <code>by_city[city].append(...)</code> 会 <code>KeyError</code>，因为第一次遇到某个城市时还没有这个键。<code>by_city.setdefault(city, []).append(name)</code> 是一行版写法，效果相同。</li>
+<li><strong>字典列表天然适合推导式</strong>：<code>[u["name"] for u in users if ...]</code> 就是「筛选 + 取字段」，比 <code>for + append</code> 少两行。</li>
+</ol>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -575,6 +618,40 @@ transition:opacity .18s;z-index:60}
 - 两者都对 → 输出"登录成功，欢迎 XXX"
 另外加一个"注册"功能：允许注册新用户，若用户名已存在则拒绝。
 要求：整个流程用 <code>while</code> 或多次 <code>if</code> 实现均可，<code>while</code> 是单元 6 内容，这里先用一个 <code>for</code> 循环重试 3 次机会。</p>
+<p><strong>练习 5-9【库存盘点】</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">inventory</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"苹果"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">"榴莲"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+</code></pre>
+<p>输出三行：
+① 逐项输出 <code>苹果 有货（12）</code> 或 <code>香蕉 缺货</code>；
+② 缺货商品的列表（用推导式）；
+③ 库存总数与有货品类数。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">苹果</span> <span class="n">有货</span><span class="err">（</span><span class="mi">12</span><span class="err">）</span>
+<span class="n">香蕉</span> <span class="n">缺货</span>
+<span class="n">橙子</span> <span class="n">有货</span><span class="err">（</span><span class="mi">5</span><span class="err">）</span>
+<span class="n">榴莲</span> <span class="n">缺货</span>
+<span class="n">缺货</span> <span class="p">[</span><span class="s1">'香蕉'</span><span class="p">,</span> <span class="s1">'榴莲'</span><span class="p">]</span>
+<span class="n">总数</span> <span class="mi">17</span><span class="err">，</span><span class="n">有货品类</span> <span class="mi">2</span>
+</code></pre>
+<p><strong>练习 5-10【成绩表：列表套字典】</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">students</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"张三"</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">:</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">76</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"李四"</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">:</span> <span class="p">[</span><span class="mi">59</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">70</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"王五"</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">98</span><span class="p">]},</span>
+<span class="p">]</span>
+</code></pre>
+<p>输出：
+① 每个学生的平均分（保留一位小数）与是否及格（平均 ≥ 60）；
+② 班级总平均分；
+③ 平均分最高的学生姓名。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">张三</span> <span class="mf">85.3</span> <span class="n">分</span> <span class="err">·</span> <span class="n">及格</span>
+<span class="n">李四</span> <span class="mf">64.3</span> <span class="n">分</span> <span class="err">·</span> <span class="n">及格</span>
+<span class="n">王五</span> <span class="mf">97.7</span> <span class="n">分</span> <span class="err">·</span> <span class="n">及格</span>
+<span class="n">班级平均</span> <span class="mf">82.4</span> <span class="n">分</span>
+<span class="n">最高分</span> <span class="n">王五</span>
+</code></pre>
+<p>提示：<code>sum(u["scores"]) / len(u["scores"])</code>；找最高分可以先用 <code>max()</code> 求出值，再回头找名字——或者用 <code>max(students, key=...)</code>。</p>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
 <h3 id="参考答案-5-1">参考答案 5-1</h3>
@@ -871,6 +948,65 @@ transition:opacity .18s;z-index:60}
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"三次机会已用完，账户可能被锁定"</span><span class="p">)</span>
 </code></pre>
+<h3 id="参考答案-5-9">参考答案 5-9</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># inventory.py —— 遍历、判断、统计</span>
+<span class="n">inventory</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"苹果"</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s2">"香蕉"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"橙子"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">"榴莲"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">qty</span> <span class="ow">in</span> <span class="n">inventory</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">qty</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> 有货（</span><span class="si">{</span><span class="n">qty</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> 缺货"</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">qty</span> <span class="ow">in</span> <span class="n">inventory</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">qty</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"缺货"</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+
+<span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">inventory</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">in_stock</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">inventory</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总数 </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">，有货品类 </span><span class="si">{</span><span class="n">in_stock</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>苹果 有货（12）
+香蕉 缺货
+橙子 有货（5）
+榴莲 缺货
+缺货 ['香蕉', '榴莲']
+总数 17，有货品类 2
+</code></pre>
+<p><code>inventory.items()</code> 同时给出键和值，是遍历字典最好用的方式；只要键用 <code>for k in inventory</code>，只要值用 <code>for v in inventory.values()</code>。三个都记不住时，先想「我要不要用键」，要就用 <code>items()</code>。</p>
+<h3 id="参考答案-5-10">参考答案 5-10</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># scores.py —— 列表套字典的统计</span>
+<span class="n">students</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"张三"</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">:</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">76</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"李四"</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">:</span> <span class="p">[</span><span class="mi">59</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">70</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"王五"</span><span class="p">,</span> <span class="s2">"scores"</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">95</span><span class="p">,</span> <span class="mi">98</span><span class="p">]},</span>
+<span class="p">]</span>
+
+<span class="n">avgs</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">students</span><span class="p">:</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"scores"</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"scores"</span><span class="p">])</span>
+    <span class="n">avgs</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]]</span> <span class="o">=</span> <span class="n">avg</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="s2">"及格"</span> <span class="k">if</span> <span class="n">avg</span> <span class="o">&gt;=</span> <span class="mi">60</span> <span class="k">else</span> <span class="s2">"不及格"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">avg</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> 分 · </span><span class="si">{</span><span class="n">tag</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">class_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">avgs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">avgs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"班级平均 </span><span class="si">{</span><span class="n">class_avg</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> 分"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"最高分"</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">avgs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">avgs</span><span class="o">.</span><span class="n">get</span><span class="p">))</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>张三 85.3 分 · 及格
+李四 64.3 分 · 及格
+王五 97.7 分 · 及格
+班级平均 82.4 分
+最高分 王五
+</code></pre>
+<p>三处细节：</p>
+<ul>
+<li>先把每人的平均分存进 <code>avgs</code> 字典，后面算班级平均和找最高分都直接复用，不用再遍历一次原始数据。</li>
+<li><code>max(avgs, key=avgs.get)</code> 是「按值找键」的惯用法：<code>max</code> 遍历的是键，<code>key=avgs.get</code> 告诉它「比较时用对应的值」。</li>
+<li><code>:.1f</code> 只在<strong>打印时</strong>四舍五入，<code>avgs</code> 里存的仍是完整精度——所以班级平均用的是 85.333…，不是 85.3。</li>
+</ul>
 <hr>
 <h2 id="六-本单元验收自测">六、本单元验收自测</h2>
 <p><strong>1. 简答题</strong>：</p>
@@ -947,6 +1083,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

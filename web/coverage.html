@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>覆盖与自足性 · Python 入门课</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+.hero{background:linear-gradient(135deg,#f4f8fd,#eef4fb);border:1px solid var(--line);
+border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+.hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;
+color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+.hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+.hero p{margin:0;font-size:14px;color:#41505f;line-height:1.8;max-width:74ch}
+.hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+.hero .st div{display:flex;flex-direction:column}
+.hero .st b{font-size:20px;color:var(--p1)}
+.hero .st span{font-size:11.5px;color:var(--muted)}
+h2{font-size:17px;margin:34px 0 8px}
+h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1);
+border-radius:2px;margin-right:9px;vertical-align:-2px}
+.sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+.fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+.fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);
+border-radius:10px;background:#fff}
+.fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+.fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+.ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+.ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+.ig code{background:#f2f6fb;border-radius:4px;padding:1px 5px;font-size:12px}
+.ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;
+background:var(--p1bg);border-radius:4px;padding:1px 5px}
+.ig a:hover{background:#dbe9f8}
+.ig span{font-size:10.5px;color:var(--muted)}
+.empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+.cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.cb b{display:block;font-size:14px;margin-bottom:6px}
+.cb p{margin:0;font-size:13px;color:#44515e;line-height:1.75}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+table.cov th{background:#f5f8fc;text-align:left;padding:9px 12px;font-size:12px;
+color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+table.cov td{padding:9px 12px;border-bottom:1px solid #eef2f6;vertical-align:top;line-height:1.65}
+table.cov tr:last-child td{border-bottom:none}
+table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.cov td.s{font-size:12px;color:#5a6875}
+table.cov tr[id]{scroll-margin-top:70px}
+table.cov tr:target td{background:#f3f8ff}
+table.cov tr.miss td{background:#fdf7f7;color:#8a5a5a}
+table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+table.cov a:hover{text-decoration:underline}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+.tag.ok{background:#e6f6f0;color:#0b6e54}
+.tag.part{background:#fdf3e2;color:#8a5a00}
+.tag.no{background:#fdeaea;color:#a33}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;
+color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+ .hero{padding:24px 20px}
+ .wrap{padding:0 14px 50px}
+ .hero .st{gap:18px}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>覆盖与自足性</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="lessons/index.html">课程目录</a>
+</div></div>
+<div class="wrap">
+  <div class="hero">
+    <span class="bdg">COVERAGE · 覆盖与自足性</span>
+    <h1>教材 20/20 章 + 附录 A–E，逐项对照</h1>
+    <p>这张表回答一个问题：<b>不翻原书，这套课够不够？</b>
+       左边是教材章节，右边是本课程对应的单元。表格由讲义首部的「对应教材第 X 章」
+       自动生成，改讲义后重跑即可，不会出现「说覆盖了其实没讲」。</p>
+    <div class="st">
+      <div><b>111</b><span>节课</span></div>
+      <div><b>152</b><span>可运行示例</span></div>
+      <div><b>158</b><span>道练习（带答案）</span></div>
+      <div><b>195k</b><span>正文字数</span></div>
+    </div>
+  </div>
+
+  <h2>一、教材章节对照</h2>
+  <p class="sub">「拆成 N 个单元」表示一章被切成多节讲，不是漏讲；点单元号可直达讲义。</p>
+  <div class="tblwrap"><table class="cov">
+    <thead><tr><th>章</th><th>标题</th><th>对应单元</th><th>覆盖方式</th></tr></thead>
+    <tbody><tr><td>1</td><td>搭建环境</td><td><a href='01.html'>单元 1</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>2</td><td>变量与简单数据类型</td><td><a href='01.html'>单元 1</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>3</td><td>列表简介</td><td><a href='02.html'>单元 2</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>4</td><td>操作列表</td><td><a href='03.html'>单元 3</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>5</td><td>if 语句</td><td><a href='04.html'>单元 4</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>6</td><td>字典</td><td><a href='05.html'>单元 5</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>7</td><td>用户输入和 while 循环</td><td><a href='06.html'>单元 6</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>8</td><td>函数</td><td><a href='07.html'>单元 7</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>9</td><td>类</td><td><a href='08.html'>单元 8</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>10</td><td>文件和异常</td><td><a href='09.html'>单元 9</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>11</td><td>测试代码（pytest）</td><td><a href='10.html'>单元 10</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>12</td><td>武装飞船</td><td><a href='12.html'>单元 12</a> <a href='13.html'>单元 13</a></td><td><span class='tag part'>拆成 2 个单元</span></td></tr><tr><td>13</td><td>外星人</td><td><a href='13.html'>单元 13</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>14</td><td>记分</td><td><a href='14.html'>单元 14</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>15</td><td>生成数据</td><td><a href='15.html'>单元 15</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>16</td><td>下载数据</td><td><a href='16.html'>单元 16</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>17</td><td>使用 API</td><td><a href='17.html'>单元 17</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>18</td><td>Django 入门</td><td><a href='18.html'>单元 18</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>19</td><td>用户账户</td><td><a href='19.html'>单元 19</a></td><td><span class='tag ok'>精讲</span></td></tr><tr><td>20</td><td>设置应用程序的样式并部署</td><td><a href='20.html'>单元 20</a></td><td><span class='tag ok'>精讲</span></td></tr></tbody>
+  </table></div>
+
+  <h2>二、附录对照</h2>
+  <p class="sub">附录最容易「以为讲了其实只讲了一条路径」，所以逐条写清讲到什么程度。</p>
+  <div class="tblwrap"><table class="cov">
+    <thead><tr><th>附录</th><th>标题</th><th>位置</th><th>讲到的程度</th></tr></thead>
+    <tbody><tr><td>A</td><td>安装与故障排除</td><td>单元 0</td><td class='s'>讲到「装好 Python + 虚拟环境 + 常见安装报错」，不含 Windows/macOS/Linux 三平台逐步截图</td></tr><tr><td>B</td><td>文本编辑器与 IDE</td><td>单元 0</td><td class='s'>只讲 VS Code 一条路径（装扩展、运行、调试），不含 Sublime/Atom/PyCharm</td></tr><tr><td>C</td><td>寻求帮助</td><td>未单独成节</td><td class='s'>并入单元 0 的「怎么读报错」与单元 10 的「测试失败怎么查」</td></tr><tr><td>D</td><td>使用 Git 进行版本控制</td><td>单元 0</td><td class='s'>讲 init/add/commit/checkout 四条命令，不含分支、合并、远程协作</td></tr><tr><td>E</td><td>部署故障排除</td><td>单元 20</td><td class='s'>只讲本项目 Platform.sh 部署会遇到的日志与静态文件问题</td></tr></tbody>
+  </table></div>
+
+  <h2>三、每个单元的规模</h2>
+  <p class="sub">示例数与练习数都从讲义原文里数出来，不是估算。练习全部带参考答案。</p>
+  <div class="tblwrap"><table class="cov">
+    <thead><tr><th>单元</th><th>标题</th><th>节</th><th>示例</th><th>练习</th><th>正文</th>
+      <th>对应教材</th></tr></thead>
+    <tbody><tr id='u0'><td><a href='00.html'>单元 0</a></td><td>环境搭建与工具链</td><td class='n'>5</td><td class='n'>7</td><td class='n'>7</td><td class='n'>4k</td><td class='s'>—</td></tr><tr id='u1'><td><a href='01.html'>单元 1</a></td><td>变量与简单数据类型</td><td class='n'>4</td><td class='n'>8</td><td class='n'>10</td><td class='n'>7k</td><td class='s'>对应教材第 1 章「搭建环境」+ 第 2 章「变量与简单数据类型」</td></tr><tr id='u2'><td><a href='02.html'>单元 2</a></td><td>列表简介</td><td class='n'>4</td><td class='n'>7</td><td class='n'>10</td><td class='n'>5k</td><td class='s'>对应教材第 3 章「列表简介」</td></tr><tr id='u3'><td><a href='03.html'>单元 3</a></td><td>操作列表</td><td class='n'>5</td><td class='n'>8</td><td class='n'>10</td><td class='n'>5k</td><td class='s'>对应教材第 4 章「操作列表」</td></tr><tr id='u4'><td><a href='04.html'>单元 4</a></td><td>if 语句</td><td class='n'>4</td><td class='n'>8</td><td class='n'>10</td><td class='n'>5k</td><td class='s'>对应教材第 5 章「if 语句」</td></tr><tr id='u5'><td><a href='05.html'>单元 5</a></td><td>字典</td><td class='n'>5</td><td class='n'>8</td><td class='n'>9</td><td class='n'>5k</td><td class='s'>对应教材第 6 章「字典」</td></tr><tr id='u6'><td><a href='06.html'>单元 6</a></td><td>用户输入和 while 循环</td><td class='n'>5</td><td class='n'>8</td><td class='n'>10</td><td class='n'>6k</td><td class='s'>对应教材第 7 章「用户输入和 while 循环」</td></tr><tr id='u7'><td><a href='07.html'>单元 7</a></td><td>函数</td><td class='n'>7</td><td class='n'>8</td><td class='n'>10</td><td class='n'>8k</td><td class='s'>对应教材第 8 章「函数」</td></tr><tr id='u8'><td><a href='08.html'>单元 8</a></td><td>类</td><td class='n'>7</td><td class='n'>8</td><td class='n'>10</td><td class='n'>9k</td><td class='s'>对应教材第 9 章「类」</td></tr><tr id='u9'><td><a href='09.html'>单元 9</a></td><td>文件和异常</td><td class='n'>5</td><td class='n'>7</td><td class='n'>8</td><td class='n'>6k</td><td class='s'>对应教材第 10 章「文件和异常」</td></tr><tr id='u10'><td><a href='10.html'>单元 10</a></td><td>测试代码</td><td class='n'>5</td><td class='n'>7</td><td class='n'>8</td><td class='n'>6k</td><td class='s'>对应教材第 11 章「测试代码（pytest）」</td></tr><tr id='u11'><td><a href='11.html'>单元 11</a></td><td>阶段 1 总复习与关卡验收</td><td class='n'>8</td><td class='n'>4</td><td class='n'>6</td><td class='n'>8k</td><td class='s'>—</td></tr><tr id='u12'><td><a href='12.html'>单元 12</a></td><td>Pygame 起步与飞船驾驶</td><td class='n'>5</td><td class='n'>6</td><td class='n'>6</td><td class='n'>9k</td><td class='s'>对应教材第 12 章「武装飞船」12.1–12.7 节</td></tr><tr id='u13'><td><a href='13.html'>单元 13</a></td><td>射击与外星舰队</td><td class='n'>5</td><td class='n'>6</td><td class='n'>3</td><td class='n'>9k</td><td class='s'>对应教材第 12 章 12.8 节「射击」与第 13 章「外星人」全章</td></tr><tr id='u14'><td><a href='14.html'>单元 14</a></td><td>Play 按钮、难度与记分牌</td><td class='n'>4</td><td class='n'>6</td><td class='n'>4</td><td class='n'>11k</td><td class='s'>对应教材第 14 章「记分」</td></tr><tr id='u15'><td><a href='15.html'>单元 15</a></td><td>Matplotlib 生成数据</td><td class='n'>5</td><td class='n'>6</td><td class='n'>6</td><td class='n'>11k</td><td class='s'>对应教材第 15 章「生成数据」</td></tr><tr id='u16'><td><a href='16.html'>单元 16</a></td><td>下载真实数据</td><td class='n'>4</td><td class='n'>6</td><td class='n'>6</td><td class='n'>10k</td><td class='s'>对应教材第 16 章「下载数据」</td></tr><tr id='u17'><td><a href='17.html'>单元 17</a></td><td>使用 API 与 Plotly</td><td class='n'>4</td><td class='n'>6</td><td class='n'>4</td><td class='n'>11k</td><td class='s'>对应教材第 17 章「使用 API」</td></tr><tr id='u18'><td><a href='18.html'>单元 18</a></td><td>Django 入门</td><td class='n'>6</td><td class='n'>8</td><td class='n'>5</td><td class='n'>11k</td><td class='s'>对应教材第 18 章「Django 入门」</td></tr><tr id='u19'><td><a href='19.html'>单元 19</a></td><td>用户账户</td><td class='n'>5</td><td class='n'>8</td><td class='n'>6</td><td class='n'>9k</td><td class='s'>对应教材第 19 章「用户账户」</td></tr><tr id='u20'><td><a href='20.html'>单元 20</a></td><td>设置应用程序的样式并部署</td><td class='n'>5</td><td class='n'>6</td><td class='n'>6</td><td class='n'>15k</td><td class='s'>对应教材第 20 章「设置应用程序的样式并部署」</td></tr><tr id='u21'><td><a href='21.html'>单元 21</a></td><td>阶段 2 综合与关卡 2 验收</td><td class='n'>4</td><td class='n'>6</td><td class='n'>4</td><td class='n'>15k</td><td class='s'>对应教材第 12–20 章（三期项目）的收官复习 · 无对应教材新章节</td></tr></tbody>
+  </table></div>
+
+  <h2>四、这套课比原书多出来的</h2>
+  <div class="cards">
+    <div class="cb"><b>111 节 × 90 分钟的切分</b>
+      <p>原书按章，一章 30–60 页。这里切成 90 分钟能上完的课节，每节四段：
+      复盘 10 · 讲解 30 · 实操 40 · 讲评 20，并写明「这节课的产出是什么」。</p></div>
+    <div class="cb"><b>158 道分档练习 + 全部答案</b>
+      <p>基础档 / 进阶档分开，答案不是代码片段而是可运行文件，附「为什么这样写」。
+      另有 <a href="bank.html">120 题题库</a>（L1–L6）可标记已掌握 / 待复习。</p></div>
+    <div class="cb"><b>关卡验收</b>
+      <p><a href="gate1.html">关卡 1</a>（基础语法，19 项）与 <a href="gate2.html">关卡 2</a>（项目，5 项）
+      都是可勾选的清单，勾满才算过，不是「大概会了」。</p></div>
+    <div class="cb"><b>复习排程</b>
+      <p><a href="review.html">艾宾浩斯 6 轮复习</a>按课节自动排期，
+      与题库的「待复习」标记联动。原书没有这一层。</p></div>
+    <div class="cb"><b>可检索</b>
+      <p><a href="terms.html">术语索引</a>把正文里的标识符全部抽出来并按字母分组，
+      配全站搜索与深链（<code>#u6</code> / <code>#L2-5</code>），比翻纸质索引快。</p></div>
+    <div class="cb"><b>离线与投屏</b>
+      <p>每单元 10 页课件、整站可离线（PWA / 便携包 / 安卓 APK），
+      不依赖网络，也不依赖某个阅读器。</p></div>
+  </div>
+
+  <h2>五、这套课不替代的部分</h2>
+  <div class="cards">
+    <div class="cb"><b>1. 三个项目的完整演进过程</b>
+      <p>原书第 12–20 章是「一个项目从零长到能部署」的连续叙事，代码在几十页里逐步修改。
+      本课程按单元拆开讲每个机制，项目线仍在（射击游戏 → 数据可视化 → Django 博客），
+      但「同一个文件改了 15 次的中间状态」需要回原书看。</p></div>
+    <div class="cb"><b>2. 附录里的平台细节</b>
+      <p>三平台安装截图、其他编辑器配置、Git 分支与远程协作、部署服务商的控制台界面——
+      这些会随版本变化，课程只给一条能跑通的路径。</p></div>
+    <div class="cb"><b>3. 纸质书的查阅手感</b>
+      <p>术语索引与搜索能替代「翻到某页」，但替代不了在页边写批注。
+      习惯纸书的话，把本课程当「讲解版」，原书当「手册」。</p></div>
+  </div>
+
+  <h2>六、怎么用</h2>
+  <div class="cards">
+    <div class="cb"><b>没有原书</b>
+      <p>按 <a href="lessons/index.html">课程目录</a> 顺序走：讲义 → 动手练习 → 对照参考答案 →
+      单元验收自测。每单元学完做一次 <a href="bank.html">题库</a> 对应单元，
+      再按 <a href="review.html">复习计划</a> 滚动复习。</p></div>
+    <div class="cb"><b>有原书</b>
+      <p>把本表当索引：先看课节，再回原书对应章读长段落。
+      本课程讲得比原书细的地方是「报错怎么读」与「练习答案」；
+      原书更强的地方是项目连续性与平台截图。</p></div>
+  </div>
+
+  <div class="foot">
+    <a href="../index.html">主页</a> ·
+    <a href="lessons/index.html">课程目录</a> ·
+    <a href="terms.html">术语索引</a> ·
+    <a href="bank.html">题库</a> ·
+    <a href="review.html">复习计划</a>
+  </div>
+</div>
+<script></script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>

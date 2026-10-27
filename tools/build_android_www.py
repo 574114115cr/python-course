@@ -2,7 +2,7 @@
 """组装 Capacitor 的 webDir（android/www）。
 
 站点本身是纯静态包，安卓壳直接复用：
-  1. 复制 3 个根入口页 + 整个 web/（课件/题库/关卡/搜索索引全在里面）
+  1. 复制 3 个根入口页 + 整个 web/ + fluent/（进阶课）
   2. index.html 的 pptx 直链改成 HTML 播放器（App 内打不开 pptx）
   3. 每个 HTML 注入 app-chrome.css（Capacitor 8 边缘到边缘，避开状态栏）
   4. 不带 course/ exercises/ python-course-ppt/（App 用不到，省 4MB）
@@ -98,6 +98,13 @@ def main():
     shutil.copytree(os.path.join(ROOT, "web"), os.path.join(WWW, "web"))
     for cur, _dirs, files in os.walk(os.path.join(WWW, "web")):
         n_html += sum(1 for f in files if f.endswith(".html"))
+
+    # 2b) 进阶课整棵树：首页有切换入口，缺了会在 App 内 404
+    fl_src = os.path.join(ROOT, "fluent")
+    if os.path.isdir(fl_src):
+        shutil.copytree(fl_src, os.path.join(WWW, "fluent"), dirs_exist_ok=True)
+        for cur, _dirs, files in os.walk(os.path.join(WWW, "fluent")):
+            n_html += sum(1 for f in files if f.endswith(".html"))
 
     # 3) pptx 直链改写
     idx = os.path.join(WWW, "index.html")

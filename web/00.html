@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="1" data-to="5"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u0"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/00.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s4"><span class="k">大纲</span><span class="v">课程大纲课件 p4</span></a><a href="bank.html#u0"><span class="k">题库</span><span class="v">本单元 1 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="1" data-to="5"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u0"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/00.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s4"><span class="k">大纲</span><span class="v">课程大纲课件 p4</span></a><a href="bank.html#u0"><span class="k">题库</span><span class="v">本单元 1 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-python-解释器-写的是-食材-跑的是-厨师">2.1 Python 解释器：写的是&quot;食材&quot;，跑的是&quot;厨师&quot;</a>
 <a class="lv3" href="#2-2-终端-命令行-和解释器对话的窗口">2.2 终端（命令行）：和解释器对话的窗口</a>
@@ -56,17 +57,15 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-0-8-命令序列说明">参考答案 0-8（命令序列说明）</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-0-环境搭建与工具链">单元 0：环境搭建与工具链</h1>
-<blockquote>
-<p>对应教材附录 A（安装 Python）、附录 B（VS Code）、附录 C（排错）、附录 D（Git）<br>
-阶段 0 · 只花一个下午，但跳过它后面每一步都会疼</p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材附录 A（安装 Python）、附录 B（VS Code）、附录 C（排错）、附录 D（Git）<br></span></div><p class="bk-k">阶段 0 · 只花一个下午，但跳过它后面每一步都会疼</p><a href="coverage.html#u0">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -530,6 +529,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

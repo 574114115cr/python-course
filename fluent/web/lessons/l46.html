@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 46 课 · 描述符：把属性访问变成可复用逻辑</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="46">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 46 课 · 描述符：把属性访问变成可复用逻辑</h1>
+  <a class="tag" href="../12.html">单元 12</a>
+  <a class="ppt" href="../ppt/u/12.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:95.8%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="45" href="l45.html"><span class="no">45</span><span class="tx">动态属性：getattr、setattr 与 property</span></a><a class="cur" data-l="46" href="l46.html"><span class="no">46</span><span class="tx">描述符：把属性访问变成可复用逻辑</span></a><a class="" data-l="47" href="l47.html"><span class="no">47</span><span class="tx">类元编程：__init_subclass__、类装饰器与元类</span></a><a class="" data-l="48" href="l48.html"><span class="no">48</span><span class="tx">综合验收：读懂框架的 200 行</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-函数就是非数据描述符">延伸：函数就是非数据描述符</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../12.html"><span class="k">单元</span>
+    <span class="v">单元 12 · 元编程：动态属性、描述符与元类</span></a>
+  <a href="../bank.html#u12"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/12.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u12.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/22.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 22–24 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 46 课</span>
+        <span class="kwk">单元 12 · 第 22–24 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>描述符：把属性访问变成可复用逻辑</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能写出数据描述符与非数据描述符，解释属性查找优先级，并用描述符实现一个「惰性属性」。</div>
+    <h3 id="讲解">讲解</h3>
+<p>描述符是实现了 <code>__get__</code>、<code>__set__</code>、<code>__delete__</code> 中至少一个的类。它挂在<strong>类</strong>上，控制<strong>实例</strong>的属性访问。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Positive</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__set_name__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">name</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"must be positive"</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Order</span><span class="p">:</span>
+    <span class="n">qty</span> <span class="o">=</span> <span class="n">Positive</span><span class="p">()</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">Positive</span><span class="p">()</span>
+</code></pre>
+<p>查找优先级（简化）：</p>
+<ol>
+<li>类型上的<strong>数据描述符</strong>（有 <code>__set__</code> 或 <code>__delete__</code>）</li>
+<li>实例 <code>__dict__</code></li>
+<li>类型上的<strong>非数据描述符</strong>（只有 <code>__get__</code>）</li>
+<li>类属性</li>
+<li><code>__getattr__</code></li>
+</ol>
+<p>非数据描述符适合做惰性属性，因为第一次计算后写进实例字典，后续直接命中字典：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Lazy</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fn</span> <span class="o">=</span> <span class="n">fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fn</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Report</span><span class="p">:</span>
+    <span class="nd">@Lazy</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"computing"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">42</span>
+</code></pre>
+<h3 id="延伸-函数就是非数据描述符">延伸：函数就是非数据描述符</h3>
+<p>函数只实现 <code>__get__</code>（没有 <code>__set__</code>），属于<strong>非数据描述符</strong>，被存在类上；实例访问时 <code>__get__</code> 返回绑定方法。这解释了两件事：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"method"</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">C</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">m</span><span class="p">())</span>                 <span class="c1"># method</span>
+<span class="n">c</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="s2">"instance"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">m</span><span class="p">())</span>                 <span class="c1"># instance ← 实例字典盖住了方法</span>
+</code></pre>
+<ol>
+<li>为什么实例属性可以「盖住」方法（非数据描述符优先级低于实例字典）。</li>
+<li>为什么 <code>property</code> 盖不住（它是<strong>数据</strong>描述符，优先级最高）。</li>
+</ol>
+<p>完整优先级：<strong>数据描述符 &gt; 实例字典 &gt; 非数据描述符 &gt; 类属性</strong>。这条规则是所有「属性拦截」方案的地基：想拦住赋值就必须实现 <code>__set__</code>（或 <code>__delete__</code>）。</p>
+<p><code>__set_name__</code>（3.6+）在类创建时被调用，描述符靠它知道自己叫 <code>name</code>，不用再手动传名字：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Field</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__set_name__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</code></pre>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>property</code> 本身就是数据描述符</strong>，所以它能覆盖实例字典。</li>
+<li><strong>数据描述符优先于实例字典</strong>，非数据描述符不优先。</li>
+<li><strong><code>__set_name__</code> 在类创建时调用</strong>，用来拿到属性名，避免手写字符串。</li>
+<li><strong>描述符是类属性</strong>，每个实例共享同一个描述符对象，状态要存在实例上。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>实现 <code>Positive</code>，给 <code>Order</code> 的两个字段加校验，测试非法值。</li>
+<li>实现 <code>Lazy</code>，验证第二次访问不再打印 <code>computing</code>。</li>
+<li>把 <code>Lazy</code> 改成数据描述符（加 <code>__set__</code>），观察惰性缓存是否失效，并解释原因。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能背出属性查找的五步优先级</li>
+<li><span class="ck"></span>能区分数据描述符与非数据描述符</li>
+<li><span class="ck"></span>会用 <code>__set_name__</code> 避免硬编码属性名</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 23 章 §23.2–23.6</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：函数就是非数据描述符</p></div>
+    <div class="pn"><a href="l45.html"><small>← 第 45 课 · 单元 12</small><b>动态属性：getattr、setattr 与 property</b></a><a class="nx" href="l47.html"><small>第 47 课 · 单元 12 →</small><b>类元编程：__init_subclass__、类装饰器与元类</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../12.html">返回单元 12</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=46, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

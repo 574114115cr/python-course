@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 07 · 接口、协议与继承：三种「多态」的边界在哪</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 07 · 接口、协议与继承：三种「多态」的边界在哪</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 07</span>
+        <span class="kwk">单元 7 · 接口、协议与继承</span>
+        <span class="ku">第 13–14 章</span></div>
+      <h1>接口、协议与继承：三种「多态」的边界在哪</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 13 章与第 14 章其实在回答同一个问题：什么时候用抽象基类、什么时候用 Protocol、什么时候什么都不用。这一篇让三种写法同时处理同一件事，再比较它们的运行时行为。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+
+<span class="c1"># ① 抽象基类：强制实现，也可以在基类里放共享代码</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Storage</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="o">...</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                      <span class="c1"># 共享实现，子类直接继承</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&gt;"</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MemoryStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">"memory"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+
+<span class="c1"># ② Protocol：只要「长得像」，不要求继承</span>
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KeyValue</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span> <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ThirdParty</span><span class="p">:</span>                            <span class="c1"># 完全不知道 Storage / KeyValue 的存在</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+
+<span class="c1"># ③ 继承中的协作式 super()：菱形里每个父类只初始化一次</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  init A"</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"B"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  init B"</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"C"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  init C"</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">D</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trace</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"D"</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MRO     "</span><span class="p">,</span> <span class="p">[</span><span class="n">k</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">D</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">][:</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"构造顺序"</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"trace   "</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">trace</span><span class="p">)</span>
+
+<span class="c1"># ④ 三种多态的实际效果</span>
+<span class="n">mem</span> <span class="o">=</span> <span class="n">MemoryStorage</span><span class="p">()</span>
+<span class="n">mem</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"k"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">tp</span> <span class="o">=</span> <span class="n">ThirdParty</span><span class="p">()</span>
+<span class="n">tp</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"k"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"ABC     "</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="n">Storage</span><span class="p">),</span> <span class="s2">"| describe:"</span><span class="p">,</span> <span class="n">mem</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Protocol"</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">KeyValue</span><span class="p">),</span> <span class="s2">"| 结构匹配"</span><span class="p">,</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="s2">"put"</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="s2">"get"</span><span class="p">))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">Storage</span><span class="p">(</span><span class="s2">"x"</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"抽象类  "</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)[:</span><span class="mi">52</span><span class="p">])</span>
+
+<span class="c1"># ⑤ 缺方法时的报错时机：ABC 在构造时，Protocol 在调用时</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HalfStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">HalfStorage</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"缺 get  "</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)[:</span><span class="mi">52</span><span class="p">])</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>ABC 的价值是「构造时就拦」和「能放共享代码」。</strong> <code>Storage</code> 里既有抽象方法，也有 <code>describe()</code> 这样的具体方法——这是 ABC 相对 Protocol 的最大优势：它既是接口也是实现。最后一段就是证据：少实现一个方法，<code>HalfStorage()</code> 在<strong>实例化</strong>时直接报错，并点名 <code>get</code>。</p>
+</li>
+<li>
+<p><strong>Protocol 的价值是「不侵入别人的类」。</strong> <code>ThirdParty</code> 是从第三方库拿来的，不能改它的继承链，但它有 <code>put</code>/<code>get</code>，于是 <code>isinstance(tp, KeyValue)</code> 为 <code>True</code>——注意这里必须加 <code>@runtime_checkable</code>，否则 <code>isinstance</code> 会抛 <code>TypeError</code>。代价是运行时检查只看<strong>方法名是否存在</strong>，不看签名和类型，比 ABC 弱。</p>
+</li>
+<li>
+<p><strong>结构匹配（鸭子类型）是三者的公共底座。</strong> 即使不写 <code>isinstance</code>，<code>tp.put(...)</code> 照样能调用。Protocol 只是把「我以为它有这个方法」变成可检查、可被静态类型检查器理解的声明；运行时行为并没有变。</p>
+</li>
+<li>
+<p><strong>协作式 <code>super()</code> 保证菱形只初始化一次。</strong> <code>D(B, C)</code> 的 MRO 是 <code>D → B → C → A → object</code>，<code>super().__init__()</code> 每次都去找 MRO 里的<strong>下一个</strong>类，所以 <code>A.__init__</code> 只执行一次——但注意顺序：先到最底层的 <code>A</code>，再依次回到 <code>C</code>、<code>B</code>、<code>D</code>。输出里的 <code>trace</code> 是 <code>['A', 'C', 'B', 'D']</code>，初始化像栈一样从底往上冒。如果哪个类忘了写 <code>super().__init__()</code>，链条就断了，后面的类不会被初始化（也很少报错，属于隐蔽 bug）。</p>
+</li>
+<li>
+<p><strong>MRO 的顺序由 C3 线性化决定。</strong> 写 <code>class D(B, C)</code> 时，<code>B</code> 的所有祖先必须排在 <code>C</code> 之前，所以是 <code>D B C A</code>。如果 <code>B</code> 和 <code>C</code> 都直接继承 <code>A</code> 且顺序冲突，Python 会拒绝创建类并抛 <code>TypeError: Cannot create a consistent MRO</code>——这是设计层面的保护。</p>
+</li>
+<li>
+<p><strong><code>isinstance</code> 与 <code>issubclass</code> 对 Protocol 有额外规则。</strong> <code>runtime_checkable</code> 的 Protocol 只支持 <code>isinstance</code>，<code>issubclass</code> 对带数据成员的 Protocol 会报错；ABC 则两者都支持，因为它是真的继承关系。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>MRO      [&#x27;D&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;A&#x27;, &#x27;object&#x27;]
+构造顺序
+  init A
+  init C
+  init B
+trace    [&#x27;A&#x27;, &#x27;C&#x27;, &#x27;B&#x27;, &#x27;D&#x27;]
+ABC      True | describe: &lt;MemoryStorage memory&gt;
+Protocol True | 结构匹配 True
+抽象类   Can&#x27;t instantiate abstract class Storage without an 
+缺 get   Can&#x27;t instantiate abstract class HalfStorage without</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>class D(B, C)</code> 改成 <code>class D(C, B)</code>：<code>trace</code> 变成 <code>['A', 'B', 'C', 'D']</code>，说明 MRO 顺序直接决定初始化顺序。</li>
+<li>删掉 <code>B.__init__</code> 里的 <code>super().__init__()</code>：<code>trace</code> 里 <code>A</code> 消失，<code>C</code> 也不会被初始化——断链的后果一目了然。</li>
+<li>去掉 <code>@runtime_checkable</code>：<code>isinstance(tp, KeyValue)</code> 立刻抛 <code>TypeError</code>。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §13.1–13.4 讲「接口即协议」与 <code>isinstance</code> 的鸭子类型，§13.3 讲 ABC 与 <code>__subclasshook__</code>，§14.1–14.3 讲继承的取舍与 MRO。这一篇对应 §13.4（ABC）与 §14.4（协作式 <code>super</code>）；原书的 <code>Tombola</code> 例子与多重继承的「混入类」写法在讲义第 7 单元有对照。</p>
+    <div class="pn"><a href="u06.html"><small>← 上一篇</small><b>单元 6 · 序列协议：只写五个方法，白拿一整套序列行为</b></a><a class="nx" href="u08.html"><small>下一篇 →</small><b>单元 8 · 运算符重载与类型进阶：让 Money 像数字一样工作</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../07.html">单元 7 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

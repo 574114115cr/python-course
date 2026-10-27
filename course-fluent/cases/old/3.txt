@@ -1,0 +1,222 @@
+@@9|惰性 CSV 流水线：不把文件读进内存
+需求：读一个 10 GB 的 CSV，过滤、转换、只取前 5 条。生成器让内存恒定在几十 KB：
+
+```python
+import csv
+import io
+from itertools import islice
+
+RAW = """id,name,score
+1,ann,88
+2,bob,95
+3,cid,72
+4,dee,59
+5,eve,91
+"""
+
+def rows(text):
+    yield from csv.DictReader(io.StringIO(text))
+
+def scored(it, low=60):
+    for r in it:
+        s = int(r["score"])
+        if s >= low:
+            yield {"id": int(r["id"]), "name": r["name"].title(), "score": s}
+
+def stat(it):
+    n = 0
+    total = 0
+    for r in it:
+        n += 1
+        total += r["score"]
+        yield r
+    print("count", n, "avg", round(total / n, 1) if n else 0)
+
+for r in islice(stat(scored(rows(RAW))), 2):
+    print(r)
+```
+
+输出：
+
+```
+{'id': 1, 'name': 'Ann', 'score': 88}
+{'id': 2, 'name': 'Bob', 'score': 95}
+```
+
+注意 `count` 那行**没有打印**。`islice` 取到第 2 条就停了，`stat` 生成器被关闭（`GeneratorExit` 抛进函数体），`for` 循环之后的代码不会执行——所以「边转发边累计、最后 `print`」的写法在提前截断时永远不输出统计。修法是把收尾放进 `finally`：
+
+```python
+def stat(it):
+    n = total = 0
+    try:
+        for r in it:
+            n += 1
+            total += r["score"]
+            yield r
+    finally:
+        print("count", n, "avg", round(total / n, 1) if n else 0)
+
+list(islice(stat(scored(rows(RAW))), 2))     # 先输出 count 2 avg 91.5
+```
+
+这时会输出 `count 2 avg 91.5`：统计范围取决于**被消费了多少条**，不是文件里有多少条。要统计全量，就别在半路 `islice`，或者单独写一个 `summarize()` 完整遍历一次。
+
+其他取舍：
+
+- `yield from csv.DictReader(...)` 比 `for r in reader: yield r` 快，而且透传异常与 `close`。
+- `islice` 不会提前关闭上游，长跑服务里要显式 `close()`，否则文件句柄要等 GC。
+- 逐行读而不是 `read().splitlines()`，内存差两个数量级。
+
+@@10|并发下载：进度、超时、失败重试
+需求：下载 20 个资源，显示进度，个别失败不影响整体，最后汇总。
+
+```python
+import random
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def fetch(url, retries=2):
+    for i in range(retries):
+        time.sleep(random.uniform(0.02, 0.08))       # 模拟网络
+        if random.random() < 0.25:
+            continue                                  # 模拟失败
+        return f"{url}:200"
+    raise RuntimeError(f"{url}: failed after {retries} tries")
+
+urls = [f"/p/{i}" for i in range(20)]
+ok, bad = [], []
+with ThreadPoolExecutor(max_workers=8) as ex:
+    futs = {ex.submit(fetch, u): u for u in urls}
+    for done, f in enumerate(as_completed(futs), 1):
+        try:
+            ok.append(f.result())
+        except Exception as e:
+            bad.append(str(e))
+        print(f"\r{done}/{len(urls)}", end="", flush=True)
+
+print("\nok", len(ok), "failed", len(bad))
+```
+
+设计取舍：
+
+- **`as_completed` 而不是 `map`**：`map` 按输入顺序返回，慢的那个会卡住后面的进度；`as_completed` 谁先好谁先出，进度条才动得自然。
+- **重试放任务内部**：放在提交层会变成「整体重试」，已经成功的任务被重复执行。
+- **`max_workers=8`**：默认是 `min(32, cpu+4)`，对「打外部接口」来说太大，容易触发对方限流。IO 密集的合理值取决于对方配额，不是 CPU 数。
+- **异常在 `f.result()` 处捕获**：`as_completed` 本身不抛任务异常，必须逐個 `result()` 才会暴露。
+- **`with` 退出会等所有任务**：想「超时就撤」需要 `pool.shutdown(wait=False, cancel_futures=True)`，但已经在跑的任务停不下来。
+
+下一步：加 `Semaphore` 控制「同时打对方」的数量（比限制线程数更精确），并把失败项收集成待重试队列，做二次尝试。
+
+@@11|限流异步抓取：超时、重试、并发上限
+需求：1000 个 URL，最多 10 个并发，单个 2 秒超时，失败重试 2 次。
+
+```python
+import asyncio
+import random
+
+async def fetch(client, url, sem, retries=2):
+    async with sem:                                  # 限流：同时最多 10 个
+        for i in range(retries):
+            try:
+                await asyncio.wait_for(client(url), timeout=2)   # 单请求超时
+                return f"{url}:200"
+            except (asyncio.TimeoutError, OSError):
+                if i == retries - 1:
+                    return f"{url}:failed"
+                await asyncio.sleep(0.05 * (2 ** i))     # 指数退避
+
+async def client(url):
+    await asyncio.sleep(random.uniform(0.01, 0.3))       # 模拟网络
+    if random.random() < 0.2:
+        raise OSError("connection reset")
+    return 200
+
+async def main(urls):
+    sem = asyncio.Semaphore(10)
+    results = await asyncio.gather(*(fetch(client, u, sem) for u in urls))
+    ok = sum(1 for r in results if r.endswith("200"))
+    print(f"ok {ok}/{len(results)}")
+
+urls = [f"/p/{i}" for i in range(200)]
+asyncio.run(main(urls))
+```
+
+关键点：
+
+- **`Semaphore` 要 `async with`**：`with sem` 不是异步协议，会直接报错；也不要 `await sem.acquire()` 后忘记在 `finally` 里 `release()`。
+- **`wait_for` 包住单次尝试**，不是包住整个重试循环：包外面会把「总耗时」当超时，重试还没做就被砍掉。
+- **`gather` 建 200 个协程没问题**，但不要建 100 万个——协程对象本身有内存开销，且全部同时可运行没有意义。要处理百万级就分批或改用队列。
+- **`gather` 默认首个异常上抛**，这里内部已经把异常吃掉，所以不会中断整体；如果要保留异常信息，加 `return_exceptions=True`。
+- **退避是必须的**：失败立刻重试等于给对方加压，通常 3 次内退避到 1 秒以上。
+
+下一步：加 `asyncio.timeout()`（3.11+）替代 `wait_for`，语义更清楚；再接 `httpx.AsyncClient` 复用连接池，避免每个请求新建 TCP。
+
+@@12|迷你校验框架：描述符 + 子类注册
+需求：定义模型时声明字段和校验规则，实例化时自动校验，脏数据直接报错；同时所有模型自动登记到一个注册表。三件事分别用三个机制：
+
+```python
+class ValidationError(ValueError):
+    pass
+
+class Field:
+    def __init__(self, *, required=True, min_value=None):
+        self.required = required
+        self.min_value = min_value
+
+    def __set_name__(self, owner, name):      # 类创建时知道自己叫什么
+        self.name = name
+
+    def __get__(self, obj, owner=None):
+        if obj is None:
+            return self
+        return obj.__dict__.get(self.name)
+
+    def __set__(self, obj, value):
+        if value is None and self.required:
+            raise ValidationError(f"{self.name} is required")
+        if self.min_value is not None and value < self.min_value:
+            raise ValidationError(f"{self.name} must be >= {self.min_value}")
+        obj.__dict__[self.name] = value
+
+class Model:
+    registry = {}
+
+    def __init_subclass__(cls, **kw):         # 子类定义时自动注册
+        super().__init_subclass__(**kw)
+        Model.registry[cls.__name__] = cls
+
+    def __init__(self, **data):
+        for name, field in type(self).fields().items():
+            setattr(self, name, data.pop(name, None))
+        if data:
+            raise ValidationError(f"unknown fields: {sorted(data)}")
+
+    @classmethod
+    def fields(cls):
+        return {k: v for k, v in vars(cls).items() if isinstance(v, Field)}
+
+class User(Model):
+    name = Field()
+    age = Field(min_value=0)
+
+print(sorted(Model.registry))                 # ['User']
+u = User(name="Ann", age=3)
+print(u.name, u.age)                          # Ann 3
+try:
+    User(name="Bob", age=-1)
+except ValidationError as e:
+    print("rejected:", e)                     # rejected: age must be >= 0
+try:
+    User(nick="x")
+except ValidationError as e:
+    print("rejected:", e)                     # rejected: name is required
+```
+
+设计取舍：
+
+- **描述符存值用 `obj.__dict__`**，键名和字段同名会打架——因为数据描述符优先级高于实例字典，读取走 `__get__`、写入走 `__set__`，值必须存在另一个键上或单独容器里。上面把值存同名字段能工作，但 `vars(u)` 会看到它；生产实现（pydantic）用 `__dict__` + 私有前缀。
+- **`__init_subclass__` 而不是元类**：这里只需要「子类定义时登记」，用元类属于过度设计。
+- **`fields()` 用 `vars(cls)`**：拿不到父类字段；要支持继承就沿 MRO 合并（`for base in cls.__mro__`）。
+- **未知字段直接报错**：拼错字段名时静默忽略是最难查的 bug，宁可吵。
+
+下一步：加 `default`、`converter`（如 `int`），把校验从「字段级」升级到「模型级」（跨字段规则），再补一个 `to_dict()` 就能当轻量 ORM 用。

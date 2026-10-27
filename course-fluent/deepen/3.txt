@@ -1,0 +1,230 @@
+@@25|__subclasshook__：结构匹配的幕后机制
+`collections.abc` 里的 `Iterable`、`Sized`、`Container` 都实现了 `__subclasshook__`，所以一个类**不必继承**它们，只要实现了对应方法就能通过 `isinstance`：
+
+```python
+from collections.abc import Sized, Iterable
+
+class Bag:
+    def __len__(self): return 3
+    def __iter__(self): return iter([1, 2, 3])
+
+b = Bag()
+print(isinstance(b, Sized), isinstance(b, Iterable))   # True True
+print(issubclass(Bag, Sized))                          # True
+```
+
+机制是：`isinstance` 走 `__instancecheck__` → `__subclasscheck__` → 最终调 `__subclasshook__(cls, C)`，默认实现检查 C 有没有所需方法名。注意它**只检查方法名**，不检查签名，所以「有 `__len__` 但返回字符串」也会通过。`Sequence` 之类更严格的 ABC 会把 `__iter__`、`__len__`、`__getitem__` 都列进检查集。
+
+@@26|Protocol 的运行时检查很浅
+`Protocol` 是给静态检查器看的「结构化类型」，能写 `Iterator[int]` 这类泛型协议；加 `@runtime_checkable` 后才能 `isinstance`：
+
+```python
+from typing import Protocol, runtime_checkable
+
+@runtime_checkable
+class Closeable(Protocol):
+    def close(self) -> None: ...
+
+class Conn:
+    def close(self): pass
+
+print(isinstance(Conn(), Closeable))    # True
+```
+
+关键限制：**运行时只查成员名是否存在，不查签名和类型**。所以下面这个也会返回 True，但用起来就崩：
+
+```python
+class Fake:
+    def close(self, force): pass        # 参数不对
+print(isinstance(Fake(), Closeable))    # 仍然是 True
+```
+
+结论：`runtime_checkable` 只适合做「粗筛」，真正的行为约束靠测试或显式 `isinstance` 对具体基类。泛型协议（`Protocol[T]`）在 3.12 前还不能 `runtime_checkable`。
+
+@@27|dict 子类的 __missing__ 管不到 get
+`__missing__` 只在 `d[k]` 时触发，`get` 和 `in` 都不走它：
+
+```python
+class D(dict):
+    def __missing__(self, key):
+        return f"<{key} 缺失>"
+
+d = D(a=1)
+print(d["b"])        # <b 缺失>
+print(d.get("b"))    # None ← 没走 __missing__
+```
+
+想统一行为就同时重写 `get`；更省事的做法是继承 `collections.UserDict`——它是纯 Python 实现，内部一个 `data` 字典，重写 `__getitem__`、`__setitem__` 时不会遇到 C 实现的绕过问题。子类化 `dict`/`list` 的真实麻烦在于：`dict.update()`、`|=`、`list.__init__`、切片赋值这些 C 层路径**可能不调用你重写的方法**，而 `UserDict`/`UserList` 全走 Python 层。
+
+@@28|混入类不要写 __init__
+混入类（mixin）的职责是「加一小块能力」，不是「初始化状态」。三条铁律：
+
+1. 不写 `__init__`；确实需要时只接受 `**kwargs` 并原样转交 `super().__init__(**kwargs)`。
+2. 只依赖调用方已经有的方法或属性，不假设自己的初始化顺序。
+3. 一层混入别超过 3 个方法，超了说明它是基类，不是混入。
+
+```python
+class JsonMixin:
+    def to_json(self):
+        import json
+        return json.dumps(self.__dict__, ensure_ascii=False, default=str)
+
+class User(JsonMixin):
+    def __init__(self, name):
+        self.name = name
+
+print(User("Ann").to_json())    # {"name": "Ann"}
+```
+
+MRO 是 C3 线性化，`super()` 不是「父类」而是「MRO 里的下一个」。所以混入里调 `super()` 会按 MRO 继续往下走，这也是混入能协作的基础；层级超过两层、开始需要记 MRO 顺序时，换组合更稳。
+
+@@29|TypedDict 的可选键与重载的实现体
+`TypedDict` 描述「带固定键名的 dict」，默认所有键必需；可选键有两种写法：
+
+```python
+from typing import TypedDict, NotRequired, Required   # 3.11+
+
+class Movie(TypedDict):
+    title: str
+    year: NotRequired[int]        # 3.11+；3.10 用 total=False 再补 Required
+
+m: Movie = {"title": "Alien"}     # 合法，year 可省
+```
+
+3.10 及更早只有 `total=False`（全部可选），要用 `Required[...]` 逐个标回必需。`TypedDict` 只约束静态形状，运行时就是普通 dict，多余键不会报错。
+
+关于重载：`@overload` 的多个签名只是给检查器看的，最后一个**实现体**的参数必须能接受所有重载的组合（通常用联合类型或 `*args, **kwargs`），返回类型也要能覆盖。写错实现体签名时检查器会明确报「实现与重载不兼容」，这是最常踩的坑。
+
+@@30|型变只影响静态检查
+```python
+from typing import TypeVar, Generic
+
+T_co = TypeVar("T_co", covariant=True)      # 只读产出，协变
+T_contra = TypeVar("T_contra", contravariant=True)   # 只消费，逆变
+
+class Producer(Generic[T_co]):
+    def get(self) -> T_co: ...
+
+class Consumer(Generic[T_contra]):
+    def put(self, x: T_contra) -> None: ...
+```
+
+规则的直觉：**只往外给**的容器可以协变（`Producer[Dog]` 是 `Producer[Animal]`），**只往里收**的可以逆变，既读又写的必须不变（`list` 就是不变，所以 `list[Dog]` 不能当 `list[Animal]` 用）。这些声明只在静态检查时生效，运行时 `TypeVar` 不产生任何行为差异，也不能据此做 `isinstance` 判断。
+
+@@31|+ 和 @ 都必须返回新对象
+中缀运算符的两个约定：`__add__` 返回**新对象**，不修改操作数；`__matmul__` 同理。`@` 的优先级和 `*` 相同，比 `+` 高，所以 `a @ b + c` 是 `(a @ b) + c`——但别依赖读者记得，加括号。
+
+```python
+class Vec:
+    def __init__(self, x, y): self.x, self.y = x, y
+    def __add__(self, o):
+        return Vec(self.x + o.x, self.y + o.y)      # 新对象
+    def __matmul__(self, o):
+        return self.x * o.x + self.y * o.y          # 点积，标量
+    def __repr__(self):
+        return f"Vec({self.x}, {self.y})"
+
+print(Vec(1, 2) + Vec(3, 4))        # Vec(4, 6)
+print(Vec(1, 2) @ Vec(3, 4))        # 11
+```
+
+返回 `NotImplemented`（不是 `raise`）才能让 Python 尝试对方的反射方法 `__radd__`。类型不匹配时返回 `NotImplemented`，是「我不认识这个类型」的标准回答。
+
+@@32|__iadd__ 返回 self 才算原地
+`c += d` 的语义是「重新绑定 `c`」，但你可以在 `__iadd__` 里选择原地改再返回 `self`，也可以新建对象返回。前者调用方看到的别名会一起变，后者不会：
+
+```python
+class Score:
+    def __init__(self, v): self.v = v
+    def __iadd__(self, n):
+        self.v += n
+        return self                 # 原地：别名同步可见
+    def __repr__(self): return f"Score({self.v})"
+
+a = Score(1); b = a; a += 2
+print(a, b)                         # Score(3) Score(3)
+```
+
+如果 `__iadd__` 忘了 `return`，`a += 2` 会把 `a` 绑成 `None`，这是最隐蔽的 bug 之一。可变对象（list、set、numpy 数组）通常原地，不可变对象（tuple、str、int）必然新建——判断标准就是「这个类型能不能改内容」。
+
+@@33|iter(callable, sentinel) 与接口泛化
+`iter(callable, sentinel)` 反复调用直到返回哨兵值，适合「读一块、到 EOF 停」这类没有现成迭代器的场景：
+
+```python
+import io
+f = io.StringIO("a\nb\n")
+for line in iter(f.readline, ""):
+    print(repr(line))          # 'a\n' 'b\n'
+```
+
+比手写 `while True: line = f.readline(); if not line: break` 短，而且能直接进 `for`、`list()`、生成器表达式。常和 `functools.partial` 配合：`iter(partial(input, "> "), "quit")`。
+
+泛化层面：函数签名收 `Iterable[T]` 而不是 `list[T]`，返回 `Iterator[T]` 而不是具体容器。调用方传生成器、视图、数据库游标都能接，而且不承诺「可重复遍历」——承诺了就得先 `list()`，那是调用方的选择。
+
+@@34|yield from 是委托，不是循环
+`yield from` 会把 `send`、`throw`、`close` 全部转发给子生成器，并作为表达式的值拿到子生成器的 `return`：
+
+```python
+def inner():
+    x = yield 1
+    yield x * 2
+    return "done"
+
+def outer():
+    result = yield from inner()
+    print("inner returned:", result)
+    yield 3
+
+g = outer()
+print(next(g))        # 1
+print(g.send(10))     # 20
+next(g)               # inner returned: done
+```
+
+手写 `for v in inner(): yield v` 做不到三件事：`send` 传不进去、`throw` 不会透传、拿不到 `return` 值。这三件事正是把生成器当协程用的基础，所以「委托生成器」在异步之前的年代就是一等公民。3.3 起 `yield from` 也是为了这条链（`asyncio` 早期实现就靠它）。
+
+@@35|ExitStack：数量不定的资源
+`ExitStack` 管理数量不定的上下文，退出顺序是后进先出：
+
+```python
+from contextlib import ExitStack
+
+def first_bytes(paths):
+    with ExitStack() as stack:
+        files = [stack.enter_context(open(p)) for p in paths]
+        return [f.read(1) for f in files]
+```
+
+`stack.callback(fn, *args)` 注册一个退出时调用的普通函数，适合没有上下文管理器的清理动作（关 socket、删临时目录）。`stack.pop_all()` 把清理责任转交出去，写装饰器或需要延后清理时用。
+
+`__exit__` 返回 `True` 会**吞掉异常**，这是最容易造成「异常静默消失」的写法，除刻意抑制（如 `contextlib.suppress`）外不要这么做。`ExitStack` 里的异常会依次传给每个 `__exit__` 的 `exc_type` 参数，由它们各自决定是否抑制。
+
+@@36|for/else、try/else 与模式匹配解构
+`for ... else` 的 `else` 在「循环正常跑完、没被 break」时执行，找第一个匹配项时最省：
+
+```python
+def find(xs, target):
+    for i, x in enumerate(xs):
+        if x == target:
+            print("found at", i)
+            break
+    else:
+        print("not found")
+```
+
+`try ... else` 的 `else` 只在 `try` 没抛异常时执行，作用是把「不希望在异常处理范围内的代码」挪出去，避免误捕自己逻辑里的同名异常。`while ... else` 同理。
+
+模式匹配写解释器时，`case [op, *args]` 直接解构列表，比 `isinstance` + 下标清晰得多：
+
+```python
+def evaluate(expr):
+    match expr:
+        case ["+", a, b]: return a + b
+        case ["-", a, b]: return a - b
+        case ["neg", a]:  return -a
+        case n:           return n        # 兜底：变量名绑定任意值
+
+print(evaluate(["+", 1, ["neg", 2]]))
+```
+
+注意 `case n` 是**捕获**而不是比较，要比较常量得用 `case 1:` 或 `case Color.RED:`；捕获模式永远不会失败，所以必须放最后。

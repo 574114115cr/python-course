@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 3 · 数据类与对象语义</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 3 · 数据类与对象语义</h1>
+  <a class="tag" href="03.html">单元 3</a>
+  <a class="ppt" href="ppt/u/03.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="9" href="lessons/l09.html"><span class="no">09</span><span class="tx">数据类三件套：namedtuple、NamedTuple、dataclass</span></a><a class="" data-l="10" href="lessons/l10.html"><span class="no">10</span><span class="tx">dataclass 进阶：默认值、校验、冻结与模式匹配</span></a><a class="" data-l="11" href="lessons/l11.html"><span class="no">11</span><span class="tx">变量不是盒子：引用、别名与拷贝</span></a><a class="" data-l="12" href="lessons/l12.html"><span class="no">12</span><span class="tx">可变性、默认参数与对象生命周期</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l09">第 9 课 · 数据类三件套：namedtuple、NamedTuple、dataclass</a>
+<a class="lv2" href="#l10">第 10 课 · dataclass 进阶：默认值、校验、冻结与模式匹配</a>
+<a class="lv2" href="#l11">第 11 课 · 变量不是盒子：引用、别名与拷贝</a>
+<a class="lv2" href="#l12">第 12 课 · 可变性、默认参数与对象生命周期</a>
+<a class="lv2" href="#case-u03">综合案例：订单模型：可变数据类改不出来，换成值语义</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u3"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/03.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u03.html"><span class="k">走读</span>
+    <span class="v">单元 3 完整程序 · 逐段讲解</span></a>
+  <a href="ch/05.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 5–6 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 3</span>
+        <span class="kwk">第 5–6 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 3 · 数据类与对象语义</h1>
+      <p class="goal">dataclass · 具名元组 · 引用 · 可变性</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 5–6 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p>写业务代码时，大量类只是为了「装几个字段」：<code>Point(x, y)</code>、<code>User(id, name, email)</code>。手写 <code>__init__</code>、<code>__repr__</code>、<code>__eq__</code> 既啰嗦又容易漏。Python 提供了三级工具：<code>namedtuple</code>（轻）、<code>typing.NamedTuple</code>（带类型）、<code>@dataclass</code>（可扩展）。</p>
+<p>另一半是对象语义：变量不是盒子，而是贴在对象上的标签；赋值不复制对象，函数传参传的是引用；<code>is</code> 比较身份，<code>==</code> 比较值；浅拷贝只复制第一层。这些规则决定了你的代码会不会出现「改了 A，B 也变了」。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>在 namedtuple / NamedTuple / dataclass 之间按需选型；</li>
+<li>用 <code>field(default_factory=...)</code>、<code>__post_init__</code>、<code>frozen</code> 处理默认值、校验与不可变；</li>
+<li>用「引用图」解释赋值、传参、浅拷贝、深拷贝的差别；</li>
+<li>一眼认出可变默认参数与共享引用的 bug。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="9" href="lessons/l09.html"><span class="no">09</span><span class="tx">数据类三件套：namedtuple、NamedTuple、dataclass</span></a><a data-l="10" href="lessons/l10.html"><span class="no">10</span><span class="tx">dataclass 进阶：默认值、校验、冻结与模式匹配</span></a><a data-l="11" href="lessons/l11.html"><span class="no">11</span><span class="tx">变量不是盒子：引用、别名与拷贝</span></a><a data-l="12" href="lessons/l12.html"><span class="no">12</span><span class="tx">可变性、默认参数与对象生命周期</span></a></div></div><h2 id="l09">第 9 课 · 数据类三件套：namedtuple、NamedTuple、dataclass</h2><h3 id="讲解">讲解</h3>
+<p><code>collections.namedtuple</code> 是最轻的方案：不可变、可迭代、支持按名访问，本质上是 tuple 的子类。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="n">Point</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">"Point"</span><span class="p">,</span> <span class="s2">"x y"</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">)</span>          <span class="c1"># 3 3 Point(x=3, y=4)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>      <span class="c1"># Point(x=10, y=4)</span>
+</code></pre>
+<p><code>typing.NamedTuple</code> 给它加上类型注解，写法更现代：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+</code></pre>
+<p><code>@dataclass</code> 则是一个「代码生成器」：根据字段声明生成 <code>__init__</code>、<code>__repr__</code>、<code>__eq__</code>，并且可变、可继承、可加方法。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">dist</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+</code></pre>
+<p>选型口诀：<strong>只读的小记录 → namedtuple / NamedTuple；需要修改、需要方法、需要默认值工厂 → dataclass</strong>。三者都自动生成 <code>__repr__</code> 和 <code>__eq__</code>，都不自动生成 <code>__hash__</code>（dataclass 在 <code>frozen=True</code> 时才生成）。</p>
+<h3 id="延伸-namedtuple-的三个自省工具">延伸：namedtuple 的三个自省工具</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">"P"</span><span class="p">,</span> <span class="s2">"x y"</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span>          <span class="c1"># ('x', 'y')</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>        <span class="c1"># {'x': 1, 'y': 2}（3.8+ 是普通 dict）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">_make</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span>    <span class="c1"># P(x=3, y=4)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">9</span><span class="p">))</span>    <span class="c1"># P(x=9, y=2)，返回新实例</span>
+</code></pre>
+<p><code>_asdict()</code> 在 3.8 之前返回 <code>OrderedDict</code>，现在返回普通 dict，顺序仍然是字段顺序。<code>_replace</code> 是浅拷贝出新实例，适合做不可变更新；<code>_make</code> 用来把从 CSV/数据库读到的行快速变成对象，比 <code>P(*row)</code> 更能表达意图。<code>_fields</code> 的典型用途是写通用的序列化函数，不用每加一个字段就改代码。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>namedtuple 不可变</strong>，改字段要用 <code>_replace()</code> 生成新对象。</li>
+<li><strong>NamedTuple 的字段默认值必须放在最后</strong>，和函数参数规则一致。</li>
+<li><strong>dataclass 的 <code>eq=True</code> 默认开启</strong>，会比较所有字段；不想参与比较的字段用 <code>field(compare=False)</code>。</li>
+<li><strong>dataclass 不是「免费」的</strong>：字段多、创建频繁时，生成的 <code>__eq__</code> 和 <code>__repr__</code> 有成本，热路径要评估。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用三种方式各定义一次 <code>Point(x, y)</code>，打印 <code>repr</code> 与相等判断结果。</li>
+<li>给 dataclass 版加 <code>dist()</code> 方法，验证 namedtuple 版无法添加实例方法。</li>
+<li>用 <code>dataclasses.fields(Point)</code> 打印字段名与类型，观察默认值。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说出三种数据类工具各自的不可变性与扩展能力</li>
+<li><span class="ck"></span>知道 dataclass 默认生成哪些方法、不生成哪些方法</li>
+<li><span class="ck"></span>能在「只读记录」和「可变业务对象」之间做出选择并说明理由</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 5 章 §5.2–5.4</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：namedtuple 的三个自省工具</p></div><h2 id="l10">第 10 课 · dataclass 进阶：默认值、校验、冻结与模式匹配</h2><h3 id="讲解-1">讲解</h3>
+<p>dataclass 最常踩的坑是可变默认值。直接写 <code>tags: list = []</code> 会抛 <code>ValueError</code>，因为所有实例会共享同一个列表。正确写法是工厂：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Article</span><span class="p">:</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">views</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># 不参与相等比较</span>
+</code></pre>
+<p>需要在初始化后做校验或派生字段，用 <code>__post_init__</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Range</span><span class="p">:</span>
+    <span class="n">lo</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">hi</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lo</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"lo(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lo</span><span class="si">}</span><span class="s2">) &gt; hi(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</code></pre>
+<p><code>frozen=True</code> 让实例不可变，同时生成 <code>__hash__</code>，可以直接放进 set 或做 dict 的键：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+</code></pre>
+<p><code>slots=True</code>（3.10+）让 dataclass 只保留字段槽位，省内存、访问更快，但不能再动态加属性。模式匹配可以直接解构 dataclass：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">match</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"origin"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"on y-axis:"</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre>
+<h3 id="延伸-数据类的代码异味">延伸：数据类的代码异味</h3>
+<p><code>@dataclass</code> 让「只有字段没有行为」的类写起来很省，但字段一多就是信号：3 个字段还行，8 个以上通常说明这个概念该拆。三条判断标准：</p>
+<ul>
+<li>字段是否总是一起出现、一起用？成组出现就抽小类（<code>Address</code>、<code>Money</code>），别让一个类装两套概念。</li>
+<li>有没有一半字段只服务于某一个方法？那些字段属于另一个类，只是暂时寄住在这里。</li>
+<li>是不是到处在写 <code>obj.kind == "a"</code> 的 if 分支？那缺的是行为，不是字段，该换多态或枚举分派。</li>
+</ul>
+<p>原书把这种现象叫 code smell，不是说 dataclass 不好，而是提醒别用它替代设计。判断方法很简单：给这个类加一个方法时，你需要读几个字段？超过 3 个就该拆了。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong>默认值工厂每个实例调用一次</strong>，<code>field(default_factory=list)</code> 不会共享列表。</li>
+<li><strong><code>frozen=True</code> 是浅冻结</strong>：字段本身不可重新赋值，但字段指向的 list 仍可修改。</li>
+<li><strong><code>__post_init__</code> 在 <code>__init__</code> 末尾调用</strong>，此时所有字段都已赋值，适合校验和派生。</li>
+<li><strong><code>slots=True</code> 与 <code>frozen=True</code> 可以同时用</strong>，但继承时会受限制，别在会扩展的基类上开 slots。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<ol>
+<li>定义 <code>Article</code>，两个实例各 append 一个 tag，验证互不影响。</li>
+<li>定义 <code>Range</code>，构造 <code>Range(5, 1)</code> 观察异常信息。</li>
+<li>用 <code>frozen=True</code> 的 <code>Point</code> 做 dict 的键，再用模式匹配写一个 <code>describe(point)</code> 函数，覆盖原点、x 轴、y 轴、普通点四种情况。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释为什么 dataclass 不允许 <code>tags: list = []</code></li>
+<li><span class="ck"></span>会用 <code>__post_init__</code> 做参数校验，并知道它在何时执行</li>
+<li><span class="ck"></span>知道 frozen 只冻结字段绑定，不冻结字段指向的可变对象</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 5 章 §5.5–5.8</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：数据类的代码异味</p></div><h2 id="l11">第 11 课 · 变量不是盒子：引用、别名与拷贝</h2><h3 id="讲解-2">讲解</h3>
+<p>把变量想成盒子，是绝大多数引用 bug 的源头。正确的模型是：<strong>对象在堆上，变量是贴在对象上的标签</strong>。赋值只是贴新标签，不复制对象。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>                 <span class="c1"># 同一个对象的两个标签</span>
+<span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>              <span class="c1"># [1, 2, 3, 4]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>         <span class="c1"># True：身份相同</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>   <span class="c1"># True：值相同</span>
+</code></pre>
+<p><code>is</code> 比较 <code>id()</code>，<code>==</code> 调用 <code>__eq__</code>。判断 <code>None</code> 用 <code>is None</code>，因为 <code>None</code> 是单例；判断数值、字符串内容用 <code>==</code>。</p>
+<p>浅拷贝只复制最外层容器，内部元素仍是共享引用：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>      <span class="c1"># 或 grid[:] / list(grid)</span>
+<span class="n">shallow</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>                    <span class="c1"># [[99, 2], [3, 4]]  ← 内层共享</span>
+
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>     <span class="c1"># 递归复制，互不影响</span>
+</code></pre>
+<h3 id="延伸-浅拷贝返回自身-参数是引用">延伸：浅拷贝返回自身，参数是引用</h3>
+<p><code>copy.copy()</code> 对不可变对象常常直接返回自身，因为没必要复制：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="ow">is</span> <span class="n">t</span><span class="p">)</span>          <span class="c1"># True</span>
+<span class="n">l</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span> <span class="ow">is</span> <span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>       <span class="c1"># False True，内层仍共享</span>
+</code></pre>
+<p>函数参数也是引用：在函数里 <code>x += [1]</code> 会改到调用方的 list，<code>x = x + [1]</code> 只是本地重绑定，外面看不到。要不要防御性复制，取决于这个参数是不是「你的所有物」——如果是调用方传进来、还要继续用的对象，就地修改必须写进文档，否则就是隐形副作用。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong>赋值永不复制</strong>，<code>b = a</code> 只是多一个引用。</li>
+<li><strong>浅拷贝复制容器，不复制元素</strong>；嵌套结构要用 <code>deepcopy</code>。</li>
+<li><strong>不可变对象也可能共享</strong>：小整数、短字符串会被驻留（interning），所以 <code>a is b</code> 偶尔为 True，但不要依赖。</li>
+<li><strong>函数传参是「对象引用传递」</strong>：在函数里改可变参数会影响调用方，重新绑定形参则不会。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<ol>
+<li>预测下面代码的输出，再运行验证：</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+    <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">xs</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
+</code></pre>
+<ol start="2">
+<li>用 <code>id()</code> 打印 <code>a</code>、<code>b = a</code>、<code>copy.copy(a)</code> 三个对象的身份，标出哪些相同。</li>
+<li>构造三层嵌套列表，分别用浅拷贝和深拷贝修改最内层，比较原数据。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用「标签—对象」模型解释一次别名 bug</li>
+<li><span class="ck"></span>能说清 <code>is</code> 与 <code>==</code> 的区别，并知道 <code>None</code> 要用 <code>is</code></li>
+<li><span class="ck"></span>能预测浅拷贝后修改嵌套元素对原对象的影响</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 6 章 §6.2–6.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：浅拷贝返回自身，参数是引用</p></div><h2 id="l12">第 12 课 · 可变性、默认参数与对象生命周期</h2><h3 id="讲解-3">讲解</h3>
+<p>可变默认参数是最经典的坑：默认值在<strong>函数定义时</strong>求值一次，之后所有调用共享。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">bucket</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bucket</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>    <span class="c1"># [1]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>    <span class="c1"># [1, 2]  ← 不是 [2]</span>
+</code></pre>
+<p>正确写法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">bucket</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bucket</span>
+</code></pre>
+<p>同理，类属性如果是可变对象，会被所有实例共享：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Team</span><span class="p">:</span>
+    <span class="n">members</span> <span class="o">=</span> <span class="p">[]</span>          <span class="c1"># 不要这样写</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre>
+<p><code>del</code> 删除的是<strong>名字绑定</strong>，不是对象本身；对象只有在引用计数归零（或被循环 GC 回收）时才释放：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">weakref</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Node</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">()</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>     <span class="c1"># 弱引用：不增加引用计数</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">()</span> <span class="ow">is</span> <span class="n">n</span><span class="p">)</span>        <span class="c1"># True</span>
+<span class="k">del</span> <span class="n">n</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">())</span>             <span class="c1"># None，对象已被回收</span>
+</code></pre>
+<h3 id="延伸-del-删的是名字-不是对象">延伸：del 删的是名字，不是对象</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">getrefcount</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>   <span class="c1"># 3：a、b、和 getrefcount 的临时参数</span>
+<span class="k">del</span> <span class="n">a</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>                    <span class="c1"># 对象还在，因为 b 还引用着它</span>
+</code></pre>
+<p>CPython 靠引用计数立即回收，循环引用交给分代 GC（<code>gc.collect()</code> 可手动触发）。<code>__del__</code> 不是可靠析构钩子：回收时机不确定，解释器退出时也不保证调用，拿它关文件、连数据库一定会漏。要确定性清理就用 <code>with</code>；对象没有上下文管理器，就 <code>contextlib.closing</code> 包一层。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong>默认参数只求值一次</strong>，可变默认值必须用 <code>None</code> 哨兵。</li>
+<li><strong><code>del x</code> 删的是名字</strong>，其他引用仍然有效；<code>del lst[0]</code> 才是删元素。</li>
+<li><strong>循环引用靠分代 GC 回收</strong>，不是引用计数；大量创建对象时可用 <code>gc.collect()</code> 观测。</li>
+<li><strong>弱引用适合做缓存</strong>：<code>WeakValueDictionary</code> 让缓存项在外部不再使用时自动消失。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>复现可变默认参数 bug，改写成 <code>None</code> 哨兵版本，并写一个测试证明两次调用互不影响。</li>
+<li>用 <code>weakref.WeakValueDictionary</code> 实现一个「对象缓存」，删除外部引用后验证缓存自动清空。</li>
+<li>用 <code>sys.getrefcount()</code> 观察一个对象在赋值、传参、删除时的引用计数变化（注意它本身会 +1）。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释默认参数为什么只求值一次</li>
+<li><span class="ck"></span>知道 <code>del</code> 删除的是绑定而不是对象</li>
+<li><span class="ck"></span>能说出弱引用适合解决什么问题，以及它不适合什么场景</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 6 章 §6.6–6.7</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：del 删的是名字，不是对象</p></div><h2 id="case-u03">综合案例：订单模型：可变数据类改不出来，换成值语义</h2>
+<blockquote>
+<p>订单要能打折，但打完折的订单不能影响原订单——先看看可变数据类会怎么坑人。</p>
+</blockquote>
+<h3 id="重构前-能跑但会互相污染">重构前（能跑但会互相污染）</h3>
+<p><code>@dataclass</code> 默认可变，<code>apply_discount</code> 直接改 <code>line.price</code>。看起来「省了一次复制」，实际把历史订单也改了：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Line</span><span class="p">:</span>
+    <span class="n">sku</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">qty</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">price</span><span class="p">:</span> <span class="nb">float</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Order</span><span class="p">:</span>
+    <span class="n">oid</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lines</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">qty</span> <span class="o">*</span> <span class="n">l</span><span class="o">.</span><span class="n">price</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply_discount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">:</span>                 <span class="c1"># 直接改，原订单跟着变</span>
+            <span class="n">l</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rate</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span><span class="s2">"A1"</span><span class="p">,</span> <span class="p">[</span><span class="n">Line</span><span class="p">(</span><span class="s2">"apple"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"pear"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>                               <span class="c1"># 11.0</span>
+
+<span class="n">o</span><span class="o">.</span><span class="n">apply_discount</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>                               <span class="c1"># 9.9</span>
+
+<span class="n">replay</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span><span class="s2">"A1"</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>                <span class="c1"># 想重建原单，拿到的是改过的行</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">replay</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>                          <span class="c1"># 9.9，不是 11.0</span>
+
+<span class="n">bad</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"pear"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>                   <span class="c1"># 数量 0 也照收</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bad</span><span class="o">.</span><span class="n">sku</span><span class="p">,</span> <span class="n">bad</span><span class="o">.</span><span class="n">qty</span><span class="p">,</span> <span class="n">bad</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+</code></pre>
+<h3 id="重构后-不可变-构造时校验">重构后（不可变 + 构造时校验）</h3>
+<p><code>frozen=True</code> 冻结赋值、<code>slots=True</code> 去掉实例字典、行用 <code>tuple</code> 保证「改不动」。改价不原地改，用 <code>dataclasses.replace</code> 生成新订单：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">InvalidOrder</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Line</span><span class="p">:</span>
+    <span class="n">sku</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">qty</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">price</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qty</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidOrder</span><span class="p">(</span><span class="sa">f</span><span class="s2">"qty must be positive: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">qty</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidOrder</span><span class="p">(</span><span class="sa">f</span><span class="s2">"price must be &gt;= 0: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">amount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qty</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_price</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">price</span><span class="p">)</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">slots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Order</span><span class="p">:</span>
+    <span class="n">oid</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lines</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">oid</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidOrder</span><span class="p">(</span><span class="s2">"oid is required"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">amount</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">with_discount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rate</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidOrder</span><span class="p">(</span><span class="sa">f</span><span class="s2">"rate out of range: </span><span class="si">{</span><span class="n">rate</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">new_lines</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">with_price</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rate</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+                          <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="n">new_lines</span><span class="p">)</span>
+
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">Order</span><span class="p">(</span><span class="s2">"A1"</span><span class="p">,</span> <span class="p">(</span><span class="n">Line</span><span class="p">(</span><span class="s2">"apple"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">Line</span><span class="p">(</span><span class="s2">"pear"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)))</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">o</span><span class="o">.</span><span class="n">with_discount</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">total</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>              <span class="c1"># 11.0 9.9，原单没被改</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">price</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>   <span class="c1"># 3.5 3.15</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">Line</span><span class="p">(</span><span class="s2">"pear"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">InvalidOrder</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"rejected:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>            <span class="c1"># rejected: qty must be positive: 0</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打折副作用</td>
+<td>原地改 <code>l.price</code>，原订单被污染</td>
+<td><code>replace</code> 生成新订单</td>
+<td>历史订单、撤销、回放都成立</td>
+<td>每次打折多复制一层</td>
+</tr>
+<tr>
+<td>容器类型</td>
+<td><code>list</code>，外部拿到就能改</td>
+<td><code>tuple</code>，改不了</td>
+<td><code>frozen</code> 才真的冻住</td>
+<td>追加行要重建整个元组</td>
+</tr>
+<tr>
+<td>非法数据</td>
+<td>数量 0、负价都能构造</td>
+<td><code>__post_init__</code> 直接抛</td>
+<td>脏数据进不了系统</td>
+<td>构造开销略增</td>
+</tr>
+<tr>
+<td>错误类型</td>
+<td>没有专用异常，调用方只能捕 <code>ValueError</code></td>
+<td><code>InvalidOrder(ValueError)</code></td>
+<td>可精确捕获，又能被通用处理兜住</td>
+<td>多一个类</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>每实例一个 <code>__dict__</code></td>
+<td><code>slots=True</code> 省掉</td>
+<td>大量订单时省内存</td>
+<td>不能动态加属性</td>
+</tr>
+<tr>
+<td>变价方式</td>
+<td>直接赋值</td>
+<td><code>with_price()</code> 表达意图</td>
+<td>调用点看得懂在做什么</td>
+<td>方法变多</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>金额别用 <code>float</code>：<code>0.1 + 0.2 != 0.3</code>，累加几十行就会差几分钱。把 <code>price</code> 换成 <code>Decimal</code>（构造时传字符串），并在 <code>amount</code> 里做 <code>quantize(Decimal("0.01"))</code>。再进一步是按「分」存整数，展示时再除 100，这是支付系统的通行做法。</p>
+<h2 id="单元验收">单元验收</h2>
+<ul>
+<li><span class="ck"></span><strong>选型</strong>：给定三个需求（只读坐标、可变订单、可哈希缓存键），分别选出数据类工具并说明理由</li>
+<li><span class="ck"></span><strong>dataclass</strong>：写出一个带默认工厂、后处理校验、frozen 的类，并跑通相等与哈希测试</li>
+<li><span class="ck"></span><strong>引用</strong>：画出一个包含别名、浅拷贝、深拷贝的对象引用图</li>
+<li><span class="ck"></span><strong>生命周期</strong>：解释一次「函数改了我的列表」的事故，并给出防御性写法</li>
+</ul>
+<blockquote>
+<p>下一单元进入函数：函数是一等对象，类型提示则是给工具看的契约。</p>
+</blockquote>
+    <div class="pn"><a href="02.html"><small>← 上一单元</small><b>单元 2 · 字典、集合与文本</b></a><a class="nx" href="04.html"><small>下一单元 →</small><b>单元 4 · 一等函数与类型提示</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 5–6 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -6,6 +6,7 @@ on:
     branches: [main, master]
     paths:
       - 'web/**'
+      - 'fluent/**'
       - 'index.html'
       - 'python-course-syllabus.html'
       - 'python-learning-roadmap.html'

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 9 · 迭代器、生成器与控制流</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 9 · 迭代器、生成器与控制流</h1>
+  <a class="tag" href="09.html">单元 9</a>
+  <a class="ppt" href="ppt/u/09.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="33" href="lessons/l33.html"><span class="no">33</span><span class="tx">迭代协议：iter、next 与 StopIteration</span></a><a class="" data-l="34" href="lessons/l34.html"><span class="no">34</span><span class="tx">生成器与 yield from</span></a><a class="" data-l="35" href="lessons/l35.html"><span class="no">35</span><span class="tx">上下文管理器与 with</span></a><a class="" data-l="36" href="lessons/l36.html"><span class="no">36</span><span class="tx">模式匹配与 else 块</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l33">第 33 课 · 迭代协议：iter、next 与 StopIteration</a>
+<a class="lv2" href="#l34">第 34 课 · 生成器与 yield from</a>
+<a class="lv2" href="#l35">第 35 课 · 上下文管理器与 with</a>
+<a class="lv2" href="#l36">第 36 课 · 模式匹配与 else 块</a>
+<a class="lv2" href="#case-u09">综合案例：CSV 流水线：一次性读进内存，还是逐行流过去</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u9"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/09.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u09.html"><span class="k">走读</span>
+    <span class="v">单元 9 完整程序 · 逐段讲解</span></a>
+  <a href="ch/17.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 17–18 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 9</span>
+        <span class="kwk">第 17–18 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 9 · 迭代器、生成器与控制流</h1>
+      <p class="goal">迭代器 · 生成器 · with · match</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 17–18 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p><code>for</code> 循环看起来是语法，背后其实是协议：先 <code>iter()</code> 拿迭代器，再反复 <code>next()</code>，直到 <code>StopIteration</code>。理解这条链，你才能写出惰性、可组合、内存友好的数据处理代码。</p>
+<p>生成器把「函数」变成「按需产出值的机器」。它不一次性算出所有结果，因此在处理大文件、无限序列、管道式转换时不可替代。</p>
+<p>本单元还会补齐两个常被忽略的控制结构：<code>with</code>（资源管理）与 <code>match</code>（结构化解构），以及 <code>for/while/try</code> 后面那个很少有人用对的 <code>else</code>。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>区分可迭代对象与迭代器，手写一个迭代器类；</li>
+<li>用生成器函数与 <code>yield from</code> 写惰性管道；</li>
+<li>用 <code>__enter__</code>/<code>__exit__</code> 或 <code>@contextmanager</code> 管理资源；</li>
+<li>用 <code>match</code> 解构嵌套数据，并正确使用 <code>else</code> 块。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="33" href="lessons/l33.html"><span class="no">33</span><span class="tx">迭代协议：iter、next 与 StopIteration</span></a><a data-l="34" href="lessons/l34.html"><span class="no">34</span><span class="tx">生成器与 yield from</span></a><a data-l="35" href="lessons/l35.html"><span class="no">35</span><span class="tx">上下文管理器与 with</span></a><a data-l="36" href="lessons/l36.html"><span class="no">36</span><span class="tx">模式匹配与 else 块</span></a></div></div><h2 id="l33">第 33 课 · 迭代协议：iter、next 与 StopIteration</h2><h3 id="讲解">讲解</h3>
+<p><code>for x in obj</code> 的等价展开：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>          <span class="c1"># 调 obj.__iter__()</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>    <span class="c1"># 调 it.__next__()</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="o">...</span>
+</code></pre>
+<p>两个概念要分清：</p>
+<ul>
+<li><strong>可迭代对象（iterable）</strong>：实现 <code>__iter__</code>，能返回迭代器；list、str、dict 都是。</li>
+<li><strong>迭代器（iterator）</strong>：实现 <code>__next__</code>，并且 <code>__iter__</code> 返回 <code>self</code>；只能遍历一次。</li>
+</ul>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Countdown</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""可迭代对象：每次 iter() 都返回一个新的迭代器。"""</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">CountdownIter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CountdownIter</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">current</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">n</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>   <span class="c1"># [3, 2, 1]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>   <span class="c1"># [3, 2, 1]，可重复遍历</span>
+</code></pre>
+<h3 id="延伸-iter-callable-sentinel-与接口泛化">延伸：iter(callable, sentinel) 与接口泛化</h3>
+<p><code>iter(callable, sentinel)</code> 反复调用直到返回哨兵值，适合「读一块、到 EOF 停」这类没有现成迭代器的场景：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="s2">"a</span><span class="se">\n</span><span class="s2">b</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>          <span class="c1"># 'a\n' 'b\n'</span>
+</code></pre>
+<p>比手写 <code>while True: line = f.readline(); if not line: break</code> 短，而且能直接进 <code>for</code>、<code>list()</code>、生成器表达式。常和 <code>functools.partial</code> 配合：<code>iter(partial(input, "&gt; "), "quit")</code>。</p>
+<p>泛化层面：函数签名收 <code>Iterable[T]</code> 而不是 <code>list[T]</code>，返回 <code>Iterator[T]</code> 而不是具体容器。调用方传生成器、视图、数据库游标都能接，而且不承诺「可重复遍历」——承诺了就得先 <code>list()</code>，那是调用方的选择。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>迭代器一定可迭代，可迭代对象不一定是迭代器</strong>。</li>
+<li><strong><code>__next__</code> 用 <code>raise StopIteration</code> 表示结束</strong>，不要返回 <code>None</code> 当哨兵。</li>
+<li><strong>迭代器耗尽后不会重置</strong>，需要重新遍历就重新 <code>iter()</code>。</li>
+<li><strong>在生成器里 <code>return value</code></strong> 会成为 <code>StopIteration.value</code>，一般不用。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>手写 <code>Countdown</code> 与 <code>CountdownIter</code>，用 <code>list()</code> 与 <code>for</code> 各遍历一次。</li>
+<li>只实现 <code>__iter__</code> 返回 <code>self</code> 且没有 <code>__next__</code>，观察 <code>for</code> 的报错。</li>
+<li>用 <code>iter(callable, sentinel)</code> 读取一个「直到空字符串为止」的输入序列。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出 <code>for</code> 的等价 <code>while</code> 展开</li>
+<li><span class="ck"></span>能区分可迭代对象与迭代器，并各举一例</li>
+<li><span class="ck"></span>知道迭代器耗尽后的行为</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 17 章 §17.2–17.4、§17.12</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：iter(callable, sentinel) 与接口泛化</p></div><h2 id="l34">第 34 课 · 生成器与 yield from</h2><h3 id="讲解-1">讲解</h3>
+<p>函数体里出现 <code>yield</code>，调用它不会执行函数体，而是返回一个生成器：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">countdown</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>   <span class="c1"># 3 2 1</span>
+</code></pre>
+<p>生成器天然是迭代器，适合表达「无限序列」与「大文件逐行处理」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">read_lines</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p><code>yield from</code> 把子生成器的产出直接转交，省掉一层循环，也能正确传递 <code>send()</code> 与异常：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">flatten</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">item</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">flatten</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="mi">5</span><span class="p">])))</span>   <span class="c1"># [1, 2, 3, 4, 5]</span>
+</code></pre>
+<p>管道式组合：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+
+<span class="n">nums</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1_000_000</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>       <span class="c1"># [0, 1, 4, 9, 16]</span>
+</code></pre>
+<h3 id="延伸-yield-from-是委托-不是循环">延伸：yield from 是委托，不是循环</h3>
+<p><code>yield from</code> 会把 <code>send</code>、<code>throw</code>、<code>close</code> 全部转发给子生成器，并作为表达式的值拿到子生成器的 <code>return</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="k">yield</span> <span class="mi">1</span>
+    <span class="k">yield</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="s2">"done"</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">outer</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">inner</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"inner returned:"</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="mi">3</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">outer</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>        <span class="c1"># 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>     <span class="c1"># 20</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>               <span class="c1"># inner returned: done</span>
+</code></pre>
+<p>手写 <code>for v in inner(): yield v</code> 做不到三件事：<code>send</code> 传不进去、<code>throw</code> 不会透传、拿不到 <code>return</code> 值。这三件事正是把生成器当协程用的基础，所以「委托生成器」在异步之前的年代就是一等公民。3.3 起 <code>yield from</code> 也是为了这条链（<code>asyncio</code> 早期实现就靠它）。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong>生成器只能遍历一次</strong>，需要重复使用就物化成 list。</li>
+<li><strong><code>yield</code> 会暂停整个函数</strong>，包括局部变量；恢复时从暂停点继续。</li>
+<li><strong><code>yield from</code> 不是 <code>for ... yield</code> 的简写</strong>：它还负责 <code>send</code>、<code>throw</code>、<code>close</code> 的委派。</li>
+<li><strong>生成器里的异常在 <code>next()</code> 时抛出</strong>，<code>try/except</code> 要包在迭代处。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<ol>
+<li>写 <code>fib()</code> 生成器，用 <code>islice</code> 取前 10 项。</li>
+<li>用生成器实现「逐行读大文件 + 过滤空行 + 去重」，全程不把文件读进内存。</li>
+<li>用 <code>yield from</code> 实现嵌套列表展平，并处理三层嵌套。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说出调用生成器函数时发生了什么</li>
+<li><span class="ck"></span>知道生成器为什么只能遍历一次</li>
+<li><span class="ck"></span>能用 <code>yield from</code> 展平嵌套结构</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 17 章 §17.5–17.13</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：yield from 是委托，不是循环</p></div><h2 id="l35">第 35 课 · 上下文管理器与 with</h2><h3 id="讲解-2">讲解</h3>
+<p><code>with</code> 保证退出时执行清理，即使中途抛异常：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span>
+        <span class="k">return</span> <span class="kc">False</span>        <span class="c1"># False 表示不吞异常</span>
+
+<span class="k">with</span> <span class="n">Timer</span><span class="p">()</span> <span class="k">as</span> <span class="n">t</span><span class="p">:</span>
+    <span class="nb">sum</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1_000_000</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">s"</span><span class="p">)</span>
+</code></pre>
+<p><code>__exit__</code> 返回 <code>True</code> 会吞掉异常，除非你明确要做「抑制错误」，否则一律返回 <code>False</code> 或不返回。</p>
+<p>用 <code>@contextmanager</code> 写更短：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tag</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&gt;"</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&gt;"</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">tag</span><span class="p">(</span><span class="s2">"p"</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">)</span>
+</code></pre>
+<p>需要同时管理数量不定的资源时，用 <code>ExitStack</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExitStack</span>
+
+<span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
+</code></pre>
+<h3 id="延伸-exitstack-数量不定的资源">延伸：ExitStack：数量不定的资源</h3>
+<p><code>ExitStack</code> 管理数量不定的上下文，退出顺序是后进先出：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExitStack</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">first_bytes</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+</code></pre>
+<p><code>stack.callback(fn, *args)</code> 注册一个退出时调用的普通函数，适合没有上下文管理器的清理动作（关 socket、删临时目录）。<code>stack.pop_all()</code> 把清理责任转交出去，写装饰器或需要延后清理时用。</p>
+<p><code>__exit__</code> 返回 <code>True</code> 会<strong>吞掉异常</strong>，这是最容易造成「异常静默消失」的写法，除刻意抑制（如 <code>contextlib.suppress</code>）外不要这么做。<code>ExitStack</code> 里的异常会依次传给每个 <code>__exit__</code> 的 <code>exc_type</code> 参数，由它们各自决定是否抑制。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong><code>__exit__</code> 的三个参数</strong>是异常类型、异常对象、traceback；无异常时全是 <code>None</code>。</li>
+<li><strong><code>return True</code> 会吞异常</strong>，这是很多「静默失败」的来源。</li>
+<li><strong><code>@contextmanager</code> 的 <code>yield</code> 只能出现一次</strong>，且必须放在 <code>try/finally</code> 里保证清理。</li>
+<li><strong>上下文管理器可以复用</strong>，但每次 <code>with</code> 都是一次新的进入/退出。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<ol>
+<li>实现 <code>Timer</code>，测量一段代码耗时，并验证异常时也能打印。</li>
+<li>用 <code>@contextmanager</code> 实现「临时切换工作目录」，退出时切回。</li>
+<li>用 <code>ExitStack</code> 同时打开 3 个文件，验证异常时全部关闭。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出 <code>__enter__</code> / <code>__exit__</code> 并解释返回值含义</li>
+<li><span class="ck"></span>会用 <code>@contextmanager</code> 改写类版本</li>
+<li><span class="ck"></span>知道 <code>ExitStack</code> 适合什么场景</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 18 章 §18.2</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：ExitStack：数量不定的资源</p></div><h2 id="l36">第 36 课 · 模式匹配与 else 块</h2><h3 id="讲解-3">讲解</h3>
+<p><code>match</code> 不是 <code>switch</code>，它做的是<strong>结构解构 + 绑定</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"go"</span><span class="p">,</span> <span class="n">direction</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"moving </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"drop"</span><span class="p">,</span> <span class="o">*</span><span class="n">items</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"dropping </span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"look"</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s2">"looking around"</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"unknown"</span>
+</code></pre>
+<p>可以匹配映射、类实例，并加守卫条件：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">match</span> <span class="n">point</span><span class="p">:</span>
+    <span class="k">case</span> <span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"origin"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"positive y-axis"</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"point"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre>
+<p><code>else</code> 块在循环正常结束（没 break）时执行，在 <code>try</code> 没抛异常时执行：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"found"</span><span class="p">)</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"not found"</span><span class="p">)</span>     <span class="c1"># 只有没 break 才执行</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">risky</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"bad value"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"no exception"</span><span class="p">)</span>  <span class="c1"># 只有 try 成功才执行</span>
+</code></pre>
+<h3 id="延伸-for-else-try-else-与模式匹配解构">延伸：for/else、try/else 与模式匹配解构</h3>
+<p><code>for ... else</code> 的 <code>else</code> 在「循环正常跑完、没被 break」时执行，找第一个匹配项时最省：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"found at"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"not found"</span><span class="p">)</span>
+</code></pre>
+<p><code>try ... else</code> 的 <code>else</code> 只在 <code>try</code> 没抛异常时执行，作用是把「不希望在异常处理范围内的代码」挪出去，避免误捕自己逻辑里的同名异常。<code>while ... else</code> 同理。</p>
+<p>模式匹配写解释器时，<code>case [op, *args]</code> 直接解构列表，比 <code>isinstance</code> + 下标清晰得多：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">expr</span><span class="p">:</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"+"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]:</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"-"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]:</span> <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"neg"</span><span class="p">,</span> <span class="n">a</span><span class="p">]:</span>  <span class="k">return</span> <span class="o">-</span><span class="n">a</span>
+        <span class="k">case</span> <span class="n">n</span><span class="p">:</span>           <span class="k">return</span> <span class="n">n</span>        <span class="c1"># 兜底：变量名绑定任意值</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">evaluate</span><span class="p">([</span><span class="s2">"+"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">"neg"</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]))</span>
+</code></pre>
+<p>注意 <code>case n</code> 是<strong>捕获</strong>而不是比较，要比较常量得用 <code>case 1:</code> 或 <code>case Color.RED:</code>；捕获模式永远不会失败，所以必须放最后。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong><code>case _</code> 是兜底</strong>，没有它且无匹配时什么都不做（不报错）。</li>
+<li><strong>绑定变量只在分支内有效</strong>，分支结束后不要依赖。</li>
+<li><strong>序列模式区分 tuple/list</strong>：<code>case [a, b]</code> 匹配任何序列，<code>case (a, b)</code> 也是。</li>
+<li><strong>循环 <code>else</code> 容易误读</strong>，团队代码里建议加注释，或改用标志变量。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>用 <code>match</code> 写一个命令解析器，支持 go/drop/look/未知四类。</li>
+<li>用 <code>match</code> 匹配 <code>Point</code> 实例，覆盖原点、x 轴、y 轴、普通点。</li>
+<li>用 <code>for...else</code> 实现「查找第一个满足条件的元素，找不到返回 None」。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用 <code>match</code> 解构序列、映射、类实例三种结构</li>
+<li><span class="ck"></span>知道 <code>case _</code> 缺失时的行为</li>
+<li><span class="ck"></span>能正确解释并写出 <code>for...else</code> 与 <code>try...else</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 18 章 §18.3–18.4</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：for/else、try/else 与模式匹配解构</p></div><h2 id="case-u09">综合案例：CSV 流水线：一次性读进内存，还是逐行流过去</h2>
+<blockquote>
+<p>读一个「可能很大」的 CSV，过滤 + 改名 + 只取前几条。先写成列表版，再改成生成器管道。</p>
+</blockquote>
+<h3 id="重构前-全部读进内存再处理">重构前（全部读进内存再处理）</h3>
+<p><code>splitlines()</code> 建一个列表，解析再用列表推导建第二个，过滤建第三个。文件 10 MB 时能看到内存翻三倍；文件比内存大时直接跑不动。收尾统计也只能等全部处理完。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">RAW</span> <span class="o">=</span> <span class="s2">"""id,name,score</span>
+<span class="s2">1,ann,88</span>
+<span class="s2">2,bob,95</span>
+<span class="s2">3,cid,72</span>
+<span class="s2">4,dee,59</span>
+<span class="s2">5,eve,91</span>
+<span class="s2">"""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">))))</span>
+    <span class="k">return</span> <span class="n">rows</span>
+
+
+<span class="n">rows</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">RAW</span><span class="p">)</span>
+<span class="n">good</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span> <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"score"</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">60</span><span class="p">]</span>
+<span class="n">renamed</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"id"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]),</span> <span class="s2">"name"</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="s2">"score"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"score"</span><span class="p">])}</span>
+           <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">good</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">good</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">renamed</span><span class="p">))</span>       <span class="c1"># 5 4 4</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">renamed</span><span class="p">[:</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"avg"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">renamed</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">renamed</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>   <span class="c1"># avg 86.5</span>
+</code></pre>
+<h3 id="重构后-生成器管道-惰性截断">重构后（生成器管道 + 惰性截断）</h3>
+<p>每一段都是生成器：<code>rows</code> 逐行读、<code>scored</code> 逐条过滤、<code>stat</code> 边转发边累计。<code>islice</code> 只取前 2 条，后面的行根本不会被解析。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+
+<span class="n">RAW</span> <span class="o">=</span> <span class="s2">"""id,name,score</span>
+<span class="s2">1,ann,88</span>
+<span class="s2">2,bob,95</span>
+<span class="s2">3,cid,72</span>
+<span class="s2">4,dee,59</span>
+<span class="s2">5,eve,91</span>
+<span class="s2">"""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rows</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">yield from</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scored</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">60</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"score"</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;=</span> <span class="n">low</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]),</span> <span class="s2">"name"</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span><span class="o">.</span><span class="n">title</span><span class="p">(),</span> <span class="s2">"score"</span><span class="p">:</span> <span class="n">score</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">stat</span><span class="p">(</span><span class="n">it</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">it</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">total</span> <span class="o">+=</span> <span class="n">r</span><span class="p">[</span><span class="s2">"score"</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="n">r</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># 无论是正常结束还是被 islice 提前关闭，都会执行</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"count"</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="s2">"avg"</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">total</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">n</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">stat</span><span class="p">(</span><span class="n">scored</span><span class="p">(</span><span class="n">rows</span><span class="p">(</span><span class="n">RAW</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">pipe</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>                 <span class="c1"># generator，还没有读任何一行</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">pipe</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+<span class="n">pipe</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>          <span class="c1"># 显式关闭：finally 立刻执行</span>
+<span class="c1"># count 2 avg 91.5（只统计被消费的 2 条）</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"--- 全量 ---"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">stat</span><span class="p">(</span><span class="n">scored</span><span class="p">(</span><span class="n">rows</span><span class="p">(</span><span class="n">RAW</span><span class="p">))):</span>
+    <span class="k">pass</span>                                    <span class="c1"># count 4 avg 86.5</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内存</td>
+<td>列表 ×3，随文件线性增长</td>
+<td>常数级（只留当前行）</td>
+<td>大文件、管道、网络流都能处理</td>
+<td>只能遍历一次</td>
+</tr>
+<tr>
+<td>首次输出</td>
+<td>全部处理完才有结果</td>
+<td>第一行立刻可用</td>
+<td>可做进度、可提前停止</td>
+<td>逻辑分散在多个生成器里</td>
+</tr>
+<tr>
+<td>截断</td>
+<td>先全部处理再切前 2 条</td>
+<td><code>islice</code> 之后的行不解析</td>
+<td>省掉 90% 的工作</td>
+<td>要显式 <code>close()</code>，否则 <code>finally</code> 等到 GC 才跑</td>
+</tr>
+<tr>
+<td>统计</td>
+<td>最后统一算</td>
+<td><code>finally</code> 里收尾</td>
+<td>提前关闭也能拿到部分统计</td>
+<td>统计范围是「被消费的部分」</td>
+</tr>
+<tr>
+<td>解析</td>
+<td>手写 <code>split(",")</code></td>
+<td><code>csv.DictReader</code></td>
+<td>引号、逗号、换行都正确</td>
+<td>比 <code>split</code> 慢一点</td>
+</tr>
+<tr>
+<td>错误定位</td>
+<td>列表推导里一处异常，难知第几行</td>
+<td>逐行处理，可带行号</td>
+<td>报错能定位</td>
+<td>需要在生成器里加计数器</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>给 <code>rows</code> 加行号与异常包装（<code>raise ValueError(f"line {i}: ...") from e</code>），让脏数据能定位；把 <code>stat</code> 换成独立聚合器，避免「边转发边打印」这种副作用。真跑大数据时，<code>csv.reader</code> 比 <code>DictReader</code> 快 30% 左右（少了建 dict），需要时用列下标访问。</p>
+<h2 id="单元验收">单元验收</h2>
+<ul>
+<li><span class="ck"></span><strong>迭代器</strong>：手写一个可重复遍历的容器，<code>for</code> 两次结果一致</li>
+<li><span class="ck"></span><strong>生成器</strong>：实现一个惰性管道（读文件 → 过滤 → 转换），内存不随文件增长</li>
+<li><span class="ck"></span><strong>上下文</strong>：实现一个能测量耗时且不吞异常的 <code>Timer</code></li>
+<li><span class="ck"></span><strong>控制流</strong>：用 <code>match</code> 重写一段 8 行以上的 <code>if/elif</code> 解构代码</li>
+</ul>
+<blockquote>
+<p>下一单元进入并发：先分清 CPU 密集与 IO 密集，再决定用线程、进程还是协程。</p>
+</blockquote>
+    <div class="pn"><a href="08.html"><small>← 上一单元</small><b>单元 8 · 类型进阶与运算符重载</b></a><a class="nx" href="10.html"><small>下一单元 →</small><b>单元 10 · 并发模型与执行器</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 17–18 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

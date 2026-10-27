@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="6" data-to="9"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u1"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/01.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u1"><span class="k">题库</span><span class="v">本单元 5 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="6" data-to="9"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u1"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/01.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u1"><span class="k">题库</span><span class="v">本单元 7 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-变量-一个贴了标签的盒子">2.1 变量：一个贴了标签的盒子</a>
 <a class="lv3" href="#2-2-命名规则-为什么-my-var-和-2var-不行">2.2 命名规则：为什么 my-var 和 2var 不行</a>
@@ -35,6 +36,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-4-整数-int-与浮点数-float">2.4 整数 int 与浮点数 float</a>
 <a class="lv3" href="#2-5-布尔值-bool-只有两个取值">2.5 布尔值 bool：只有两个取值</a>
 <a class="lv3" href="#2-6-类型转换-把一种类型的标签换成另一种">2.6 类型转换：把一种类型的标签换成另一种</a>
+<a class="lv3" href="#2-7-字符串方法全家桶-拆分-拼接与去掉前后缀">2.7 字符串方法全家桶：拆分、拼接与去掉前后缀</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-四种类型与-type">示例 1：四种类型与 type()</a>
 <a class="lv3" href="#示例-2-变量重新赋值与命名规范">示例 2：变量重新赋值与命名规范</a>
@@ -43,6 +45,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-5-f-string-格式化输出">示例 5：f-string 格式化输出</a>
 <a class="lv3" href="#示例-6-多行字符串与转义">示例 6：多行字符串与转义</a>
 <a class="lv3" href="#示例-7-注释的正确写法">示例 7：注释的正确写法</a>
+<a class="lv3" href="#示例-8-拆一行日志-再拼回去">示例 8：拆一行日志，再拼回去</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -55,19 +58,19 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-1-6">参考答案 1-6</a>
 <a class="lv3" href="#参考答案-1-7">参考答案 1-7</a>
 <a class="lv3" href="#参考答案-1-8">参考答案 1-8</a>
+<a class="lv3" href="#参考答案-1-9">参考答案 1-9</a>
+<a class="lv3" href="#参考答案-1-10">参考答案 1-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-1-变量与简单数据类型">单元 1：变量与简单数据类型</h1>
-<blockquote>
-<p>对应教材第 1 章「搭建环境」+ 第 2 章「变量与简单数据类型」
-关键词：变量、命名规范、字符串 str、整数 int、浮点数 float、布尔值 bool、类型转换、f-string</p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 1 章「搭建环境」+ 第 2 章「变量与简单数据类型」</span></div><p class="bk-k">关键词：变量、命名规范、字符串 str、整数 int、浮点数 float、布尔值 bool、类型转换、f-string</p><a href="coverage.html#u1">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -76,6 +79,7 @@ transition:opacity .18s;z-index:60}
 <li>独立写出符合 PEP 8 命名规范的变量名，能说出为什么不能用 <code>2myvar</code>、<code>my var</code>、<code>class</code> 这类名字。</li>
 <li>熟练使用 <code>str()</code> <code>int()</code> <code>float()</code> <code>bool()</code> 完成类型转换，能解释 <code>int("3.9")</code> 报错的原因。</li>
 <li>掌握字符串常用方法：<code>.upper()</code> <code>.lower()</code> <code>.title()</code> <code>.strip()</code> <code>.len()</code>，并说明它们<strong>不改变原字符串</strong>。</li>
+<li>会用 <code>split()</code> / <code>join()</code> 在「一行文本」和「列表」之间来回转换，会用 <code>removeprefix()</code> 安全地去前缀。</li>
 <li>用 f-string 拼接输出任意格式的句子，并用 <code>#</code> 写规范的注释。</li>
 </ol>
 <hr>
@@ -153,6 +157,40 @@ transition:opacity .18s;z-index:60}
 - <code>int("3.9")</code> → <code>ValueError</code>（带小数点的字符串不能直接转整数，必须先 <code>float</code> 或 <code>int(float(...))</code>）
 - <code>float("abc")</code> → <code>ValueError</code></p>
 <p>记住这条链：<strong><code>"3.9"</code> → <code>float()</code> 得 <code>3.9</code> → <code>int()</code> 得 <code>3</code></strong>。字符串到整数没有"一步到位"的捷径，因为 <code>3.9</code> 转整数会丢失小数部分，Python 拒绝替你做这个决定。</p>
+<h3 id="2-7-字符串方法全家桶-拆分-拼接与去掉前后缀">2.7 字符串方法全家桶：拆分、拼接与去掉前后缀</h3>
+<p>教材 2.3 讲了 <code>title()</code> / <code>upper()</code> / <code>lower()</code> / <code>strip()</code>。还有三组在真实代码里出现频率更高的方法，书里分散在示例中没集中讲：<code>split()</code> 把一句话拆成列表、<code>join()</code> 把列表拼回字符串、<code>removeprefix()</code> 去掉开头固定的一段。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">line</span> <span class="o">=</span> <span class="s2">"张三,18,北京"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">))</span>        <span class="c1"># ['张三', '18', '北京']</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>     <span class="c1"># ['张三', '18,北京']  ← 最多拆 1 次</span>
+
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"python"</span><span class="p">,</span> <span class="s2">"is"</span><span class="p">,</span> <span class="s2">"fun"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>        <span class="c1"># python is fun</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">words</span><span class="p">))</span>        <span class="c1"># python-is-fun</span>
+</code></pre>
+<p><strong><code>split()</code> 与 <code>join()</code> 是一对反操作</strong>：一个把字符串变列表，一个把列表变字符串。注意 <code>join()</code> 的调用方向——分隔符在前、列表是参数。写反成 <code>words.join(" ")</code> 会报 <code>AttributeError: 'list' object has no attribute 'join'</code>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">filename</span> <span class="o">=</span> <span class="s2">"report_2026_final.csv"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"report_"</span><span class="p">))</span>   <span class="c1"># 2026_final.csv</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">".csv"</span><span class="p">))</span>      <span class="c1"># report_2026_final</span>
+</code></pre>
+<p><code>removeprefix()</code> / <code>removesuffix()</code>（Python 3.9+）解决的是「前缀固定、后面长度不定」的问题。以前只能写切片 <code>filename[len("report_"):]</code>，或者图省事用 <code>lstrip("report_")</code>——而 <code>lstrip</code> 是按<strong>字符集合</strong>删的，会把 <code>report.pdf</code> 删成 <code>.pdf</code>，属于高频 bug：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="s2">"report.pdf"</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"report_"</span><span class="p">))</span>         <span class="c1"># .pdf        ← r/e/p/o/t/_ 都被当字符删掉</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"report.pdf"</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"report_"</span><span class="p">))</span>   <span class="c1"># report.pdf  ← 前缀不匹配就原样返回</span>
+</code></pre>
+<p>查找与替换这一组也常一起出现：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">s</span> <span class="o">=</span> <span class="s2">"to be or not to be"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"be"</span><span class="p">))</span>            <span class="c1"># 3    ← 返回下标</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"xyz"</span><span class="p">))</span>           <span class="c1"># -1   ← 找不到返回 -1，不报错</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"be"</span><span class="p">))</span>           <span class="c1"># 2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"be"</span><span class="p">,</span> <span class="s2">"BE"</span><span class="p">))</span>   <span class="c1"># to BE or not to BE</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"be"</span><span class="p">,</span> <span class="s2">"BE"</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># to BE or not to be  ← 第三个参数限制次数</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>
+- <code>split()</code> 不传参数时按「任意连续空白」拆并丢掉空串；传 <code>","</code> 时连续逗号会拆出空字符串。
+- <code>join()</code> 只能拼<strong>字符串列表</strong>：<code>",".join([1, 2])</code> 报 <code>TypeError</code>，要先 <code>",".join(map(str, nums))</code>。
+- 这几个方法都<strong>返回新字符串</strong>，原字符串不变（同 2.3 的「复印纸条」模型）。
+- <code>find()</code> 找不到返回 <code>-1</code>，<code>index()</code> 找不到才抛 <code>ValueError</code>——判断「有没有」优先用 <code>in</code>。</p>
+</blockquote>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-四种类型与-type">示例 1：四种类型与 type()</h3>
@@ -367,6 +405,46 @@ transition:opacity .18s;z-index:60}
 <span class="sd">"""</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">age</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 </code></pre>
+<h3 id="示例-8-拆一行日志-再拼回去">示例 8：拆一行日志，再拼回去</h3>
+<p><code>split()</code> / <code>join()</code> 最典型的用法是处理「一行一条记录」的文本。下面这行是服务器访问日志，六段用空格隔开：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># log_line.py —— 拆开、取字段、换格式、再拼回去</span>
+<span class="n">line</span> <span class="o">=</span> <span class="s2">"2026-10-26 09:15:33 GET /lessons/29.html 200 4213"</span>
+
+<span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)</span>                 <span class="c1"># 空格分隔，正好 6 段</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"段数  "</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原始  "</span><span class="p">,</span> <span class="n">parts</span><span class="p">)</span>
+
+<span class="n">date</span><span class="p">,</span> <span class="n">clock</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">parts</span>       <span class="c1"># 解包，顺序必须对上</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"日期  </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">clock</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"请求  </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">pure</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"?"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>               <span class="c1"># 去掉查询串；没有 ? 时只有一段</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"纯路径"</span><span class="p">,</span> <span class="n">pure</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"文件名"</span><span class="p">,</span> <span class="n">pure</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"/lessons/"</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"CSV   "</span><span class="p">,</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">date</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">pure</span><span class="p">,</span> <span class="n">status</span><span class="p">]))</span>
+
+<span class="n">kb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span>                   <span class="c1"># size 现在是字符串，必须先转 int</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"大小  </span><span class="si">{</span><span class="n">kb</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> KB"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"成功？"</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"2"</span><span class="p">))</span>
+</code></pre>
+<p>运行结果（<code>print</code> 会按逗号自动加空格，所以对齐看起来是参差的，这是 <code>print</code> 的行为不是 bug）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>段数   6
+原始   ['2026-10-26', '09:15:33', 'GET', '/lessons/29.html', '200', '4213']
+日期   2026-10-26 09:15:33
+请求   GET /lessons/29.html
+纯路径 /lessons/29.html
+文件名 29.html
+CSV    2026-10-26,GET,/lessons/29.html,200
+大小   4.1 KB
+成功？ True
+</code></pre>
+<p>三个值得记住的点：</p>
+<ol>
+<li><strong><code>split()</code> 的段数必须和解包变量个数一致</strong>，多一个少一个都会 <code>ValueError: too many values to unpack</code>。不确定段数时先 <code>print(len(parts))</code>。</li>
+<li><strong><code>split("?")[0]</code> 是「取问号前那段」的惯用法</strong>——没有问号时返回整串，不会报错，所以比 <code>index("?")</code> 安全。</li>
+<li><strong><code>join()</code> 只吃字符串</strong>：<code>size</code> 是从 <code>split()</code> 出来的字符串，要算数必须先 <code>int(size)</code>；反过来，数字要拼回 CSV 必须先 <code>str()</code>。</li>
+</ol>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <blockquote>
@@ -428,6 +506,26 @@ transition:opacity .18s;z-index:60}
 <pre><code class="text"><span class="cl">运行结果</span><span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>     <span class="o">=</span> <span class="kc">False</span> <span class="err">——</span> <span class="n">零被视为假</span>
 <span class="nb">bool</span><span class="p">(</span><span class="s2">"0"</span><span class="p">)</span>   <span class="o">=</span> <span class="kc">True</span>  <span class="err">——</span> <span class="n">非空字符串一律为真</span><span class="err">，</span><span class="n">内容不影响</span>
 </code></pre>
+<p><strong>练习 1-9【文件名批量清理】</strong>
+给定四个文件：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"report_2026_q1.csv"</span><span class="p">,</span> <span class="s2">"report_2026_q2.csv"</span><span class="p">,</span> <span class="s2">"notes.txt"</span><span class="p">,</span> <span class="s2">"report_2026_q3.csv"</span><span class="p">]</span>
+</code></pre>
+<p>只用本单元讲的字符串方法（<code>removeprefix</code> / <code>removesuffix</code> / <code>endswith</code> / <code>join</code>），完成三件事：
+① 打印去掉 <code>report_</code> 前缀后的名字，用 <code>|</code> 连接；
+② 打印去掉扩展名（<code>.csv</code> 或 <code>.txt</code>）后的名字，用 <code>|</code> 连接；
+③ 只挑出 <code>.csv</code> 的文件，用 <code>|</code> 连接。
+输出示例：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">去前缀</span><span class="err">：</span><span class="mi">2026</span><span class="n">_q1</span><span class="o">.</span><span class="n">csv</span> <span class="o">|</span> <span class="mi">2026</span><span class="n">_q2</span><span class="o">.</span><span class="n">csv</span> <span class="o">|</span> <span class="n">notes</span><span class="o">.</span><span class="n">txt</span> <span class="o">|</span> <span class="mi">2026</span><span class="n">_q3</span><span class="o">.</span><span class="n">csv</span>
+<span class="n">去后缀</span><span class="err">：</span><span class="n">report_2026_q1</span> <span class="o">|</span> <span class="n">report_2026_q2</span> <span class="o">|</span> <span class="n">notes</span> <span class="o">|</span> <span class="n">report_2026_q3</span>
+<span class="n">CSV</span>  <span class="err">：</span><span class="n">report_2026_q1</span><span class="o">.</span><span class="n">csv</span> <span class="o">|</span> <span class="n">report_2026_q2</span><span class="o">.</span><span class="n">csv</span> <span class="o">|</span> <span class="n">report_2026_q3</span><span class="o">.</span><span class="n">csv</span>
+</code></pre>
+<p>注意：<code>notes.txt</code> 用 <code>removeprefix("report_")</code> 后<strong>不会变</strong>——前缀不匹配就原样返回，这正是它比 <code>lstrip</code> 安全的地方。</p>
+<p><strong>练习 1-10【键值串 ↔ 字典】</strong>
+给定一行配置：<code>raw = "name=张三;age=18;city=北京"</code>。
+① 用 <code>split(";")</code> 和 <code>split("=", 1)</code> 拆成字典 <code>{"name": "张三", "age": "18", "city": "北京"}</code> 并打印；
+② 按 key 的字母序输出 <code>age=18 | city=北京 | name=张三</code>（用 <code>sorted(d.items())</code>，单元 3 会正式讲排序）；
+③ 把 <code>age</code> 转成 <code>int</code>，输出 <code>张三 今年 18 岁</code>。
+提示：<code>split("=", 1)</code> 的第二个参数不能省——万一值里本身就有 <code>=</code>（比如 base64），只拆一次才不会把值切碎。</p>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
 <h3 id="参考答案-1-1">参考答案 1-1</h3>
@@ -612,6 +710,44 @@ transition:opacity .18s;z-index:60}
 <blockquote>
 <p><code>{value!r:&gt;10}</code> 中的 <code>!r</code> 表示用 <code>repr()</code> 形式显示（带引号，能看清空字符串），<code>:&gt;10</code> 表示右对齐占 10 格。</p>
 </blockquote>
+<h3 id="参考答案-1-9">参考答案 1-9</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># clean_names.py —— 去前缀 / 去后缀 / 按扩展名筛选</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"report_2026_q1.csv"</span><span class="p">,</span> <span class="s2">"report_2026_q2.csv"</span><span class="p">,</span> <span class="s2">"notes.txt"</span><span class="p">,</span> <span class="s2">"report_2026_q3.csv"</span><span class="p">]</span>
+
+<span class="n">noprefix</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"report_"</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"去前缀："</span> <span class="o">+</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">noprefix</span><span class="p">))</span>          <span class="c1"># notes.txt 原样保留</span>
+
+<span class="n">nosuffix</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">".csv"</span><span class="p">)</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">".txt"</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"去后缀："</span> <span class="o">+</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nosuffix</span><span class="p">))</span>
+
+<span class="n">csv_only</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".csv"</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"CSV  ："</span> <span class="o">+</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">csv_only</span><span class="p">))</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>去前缀：2026_q1.csv | 2026_q2.csv | notes.txt | 2026_q3.csv
+去后缀：report_2026_q1 | report_2026_q2 | notes | report_2026_q3
+CSV  ：report_2026_q1.csv | report_2026_q2.csv | report_2026_q3.csv
+</code></pre>
+<p>两种写法都能去掉后缀，各有适用场景：<code>removesuffix(".csv").removesuffix(".txt")</code> 明确知道有哪几种后缀；<code>f.rsplit(".", 1)[0]</code> 则通吃任意扩展名，但会把 <code>archive.tar.gz</code> 变成 <code>archive.tar</code>。真实项目里更稳的是 <code>os.path.splitext(f)[0]</code>（单元 9 会讲 <code>os</code>）。</p>
+<h3 id="参考答案-1-10">参考答案 1-10</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># kv.py —— 一行配置拆成字典，再按 key 排序输出</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="s2">"name=张三;age=18;city=北京"</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">";"</span><span class="p">):</span>
+    <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>          <span class="c1"># 只拆第一个 =，值里再有 = 也不会被切碎</span>
+    <span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2"> 今年 </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">'age'</span><span class="p">])</span><span class="si">}</span><span class="s2"> 岁"</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>{'name': '张三', 'age': '18', 'city': '北京'}
+age=18 | city=北京 | name=张三
+张三 今年 18 岁
+</code></pre>
+<p>注意 <code>d["age"]</code> 是字符串 <code>"18"</code>，<code>f"{d['age']} 岁"</code> 不会做加法，所以"18 岁"这类输出不需要转类型；一旦要参与计算（<code>d["age"] + 1</code>）就必须先 <code>int()</code>。</p>
 <hr>
 <h2 id="六-本单元验收自测">六、本单元验收自测</h2>
 <p><strong>1. 判断题</strong>：<code>name = "Alice"</code> 然后 <code>print(name.upper())</code> 之后，<code>name</code> 的值变成了 <code>"ALICE"</code>。</p>
@@ -646,8 +782,10 @@ transition:opacity .18s;z-index:60}
 <li>[ ] 能默写出四种类型和 <code>type()</code> 的用法</li>
 <li>[ ] 能说出 <code>.upper()</code> 为什么不改变原变量</li>
 <li>[ ] 能解释 <code>bool("0")</code> 为什么是 <code>True</code></li>
+<li>[ ] 能说出 <code>lstrip("report_")</code> 和 <code>removeprefix("report_")</code> 的区别</li>
+<li>[ ] 能把 <code>"a=1;b=2"</code> 这种一行配置拆成字典再拼回去</li>
 <li>[ ] 能写出带 <code>.2f</code>、<code>,</code>、<code>&gt;8</code>、<code>^8</code> 格式说明符的 f-string</li>
-<li>[ ] 练习 1-5、1-8 已跑通</li>
+<li>[ ] 练习 1-5、1-8、1-9、1-10 已跑通</li>
 </ul>
 <p><strong>下一单元预告</strong>：单元 2 讲列表简介——你会认识"一个变量装一串数据"的做法：<code>numbers = [1, 2, 3]</code>、按索引取值、<code>.append()</code> 追加、<code>.insert()</code> 插入、<code>.remove()</code> 删除、<code>.pop()</code> 弹出，以及列表最重要的特性——<strong>它是有序的、可以修改的</strong>。</p></main>
 </div>
@@ -676,6 +814,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

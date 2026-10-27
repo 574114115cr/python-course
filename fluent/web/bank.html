@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>题库 · 36 题</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>题库 · 36 题</h1>
+  
+  
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="wrap">
+  <div class="hero" style="padding:38px 40px">
+    <div class="bdg">BANK</div>
+    <h1>36 题 · 从「看懂」到「写得出」</h1>
+    <p>每个单元 3 题：1 道机制题、1 道代码题、1 道设计题。先自己写，再展开答案对照；
+    标记「待复习」的题可以单独筛出来集中二刷。</p>
+  </div>
+  <div class="fbar" id="fb">
+    <button class="on" data-k="all">全部 36</button>
+    <button data-k="todo">待复习</button>
+    <button data-k="master">已掌握</button>
+    <button data-k="u1">单元 1–3</button>
+    <button data-k="u2">单元 4–6</button>
+    <button data-k="u3">单元 7–9</button>
+    <button data-k="u4">单元 10–12</button>
+  </div>
+  <div class="fbar lvbar" id="lvb">
+    <span class="lvlab">按档位</span>
+    <button class="on" data-lv="">不分档</button>
+    <button data-lv="概念">概念 12</button>
+    <button data-lv="代码">代码 12</button>
+    <button data-lv="设计">设计 12</button>
+  </div>
+  <div class="hashnote" id="hn"><b id="hnT"></b><a href="bank.html">查看全部 36 题</a></div>
+  <div id="list"><div class="qc" id="F1-1" data-u="1" data-lv="概念">
+  <div class="qh"><span class="qid">F1-1</span><span class="qu">概念 · 单元 1</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>为什么 Python 用 <code>len(x)</code> 而不是 <code>x.len()</code>？从数据模型和实现两个角度解释。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><strong>数据模型</strong>：<code>len()</code> 是语言级协议的一部分。任何实现 <code>__len__</code> 的对象都能被 <code>len()</code>、<code>bool()</code>、<code>list()</code> 等内置函数统一处理，调用方不需要知道具体类型。</p>
+<p><strong>实现</strong>：CPython 在 <code>PyObject</code> 的类型槽位里直接缓存了长度函数的指针，<code>len()</code> 走 C 层快路径，不做属性查找，也不创建绑定方法。<code>x.__len__()</code> 反而绕过了这层优化。</p></div>
+</div><div class="qc" id="F1-2" data-u="1" data-lv="代码">
+  <div class="qh"><span class="qid">F1-2</span><span class="qu">代码 · 单元 1</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>实现 <code>Vector</code> 类：支持 <code>len()</code>、下标、切片、<code>for</code>、<code>repr()</code>，且 <code>repr</code> 输出形如 <code>Vector([1, 2, 3])</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Vector</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Vector(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="si">!r}</span><span class="s2">)"</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+</code></pre>
+<p><code>__getitem__</code> 同时接收下标和 <code>slice</code>。如果希望切片仍返回 <code>Vector</code>，必须显式判断 <code>isinstance(i, slice)</code>。</p></div>
+</div><div class="qc" id="F1-3" data-u="1" data-lv="设计">
+  <div class="qh"><span class="qid">F1-3</span><span class="qu">设计 · 单元 1</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>下面的代码为什么三行会联动？给出两种正确写法，并说明各自适用场景。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</code></pre></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><code>[[0] * 3] * 3</code> 只创建了<strong>一个</strong>内层列表，外层三次 <code>*</code> 复制的是同一个引用，所以三行共享。</p>
+<p>写法一（需要独立行）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+</code></pre>
+<p>写法二（只读矩阵）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>   <span class="c1"># 不写入内层时可用</span>
+</code></pre>
+<p>判断标准：只要会写入内层结构，就必须用推导式。</p></div>
+</div><div class="qc" id="F2-1" data-u="2" data-lv="概念">
+  <div class="qh"><span class="qid">F2-1</span><span class="qu">概念 · 单元 2</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>dict</code> 的键为什么必须可哈希？3.7 起为什么可以依赖插入顺序？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><strong>可哈希</strong>：dict 是哈希表，插入和查找都靠 <code>hash(key)</code> 定位槽位，冲突时再用 <code>==</code> 比较。可变对象（list/dict/set）的哈希会随内容变化，一旦变化就再也找不到原来的槽位，所以被设计为不可哈希。</p>
+<p><strong>顺序</strong>：3.6 起 CPython 改用紧凑布局——条目数组按插入顺序连续存放，另有一张稀疏索引表指向条目。3.7 把它写进语言规范，因此可以依赖「遍历顺序 = 插入顺序」。</p></div>
+</div><div class="qc" id="F2-2" data-u="2" data-lv="代码">
+  <div class="qh"><span class="qid">F2-2</span><span class="qu">代码 · 单元 2</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>给定 <code>words</code> 列表：用 <code>Counter</code> 输出词频前 3；用 <code>defaultdict</code> 按首字母分组，只保留组内至少 2 个词的组。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"avocado"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"blueberry"</span><span class="p">,</span>
+         <span class="s2">"cherry"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">groups</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="n">groups</span><span class="p">[</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">})</span>
+</code></pre></div>
+</div><div class="qc" id="F2-3" data-u="2" data-lv="设计">
+  <div class="qh"><span class="qid">F2-3</span><span class="qu">设计 · 单元 2</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>处理用户上传的 CSV：HTTP 层拿到的是 <code>bytes</code>，如何保证中文不乱码？说明每一步的编码边界。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ol>
+<li><strong>HTTP → 文本</strong>：<code>raw.decode("utf-8-sig")</code>，<code>utf-8-sig</code> 会顺带吃掉 BOM；不要用 <code>errors="ignore"</code>，它会静默丢数据。</li>
+<li><strong>解析</strong>：用 <code>csv.reader(io.StringIO(text))</code> 或 <code>io.TextIOWrapper</code>，全程保持 <code>str</code>。</li>
+<li><strong>落库/输出</strong>：统一 UTF-8；如果要给 Excel 打开，写回时用 <code>utf-8-sig</code> 带 BOM。</li>
+<li><strong>失败处理</strong>：捕获 <code>UnicodeDecodeError</code>，记录出错字节位置并提示用户另存为 UTF-8，而不是猜编码。</li>
+</ol>
+<p>关键是：<strong>只在入口解码一次，内部全程 str，出口再编码</strong>。</p></div>
+</div><div class="qc" id="F3-1" data-u="3" data-lv="概念">
+  <div class="qh"><span class="qid">F3-1</span><span class="qu">概念 · 单元 3</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>为什么 <code>@dataclass</code> 不允许 <code>tags: list = []</code>？<code>field(default_factory=list)</code> 解决了什么？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>dataclass 生成的 <code>__init__</code> 会把默认值直接写进函数签名，而函数默认参数<strong>只在定义时求值一次</strong>，所有实例会共享同一个 list。dataclass 检测到 list/dict/set 这类可变默认值会直接抛 <code>ValueError</code>。</p>
+<p><code>field(default_factory=list)</code> 传入的是工厂函数，每次实例化时调用一次，得到独立的 list。</p></div>
+</div><div class="qc" id="F3-2" data-u="3" data-lv="代码">
+  <div class="qh"><span class="qid">F3-2</span><span class="qu">代码 · 单元 3</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>写一个 <code>frozen=True</code> 的 <code>Range(lo, hi)</code>：构造时校验 <code>lo &lt;= hi</code>，支持哈希与模式匹配。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Range</span><span class="p">:</span>
+    <span class="n">lo</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">hi</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lo</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"lo(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lo</span><span class="si">}</span><span class="s2">) &gt; hi(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+
+<span class="k">match</span> <span class="n">r</span><span class="p">:</span>
+    <span class="k">case</span> <span class="n">Range</span><span class="p">(</span><span class="n">lo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">h</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"starts at 1, ends"</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+</code></pre>
+<p>注意 frozen 是浅冻结：字段不能重新赋值，但字段指向的可变对象仍可修改。</p></div>
+</div><div class="qc" id="F3-3" data-u="3" data-lv="设计">
+  <div class="qh"><span class="qid">F3-3</span><span class="qu">设计 · 单元 3</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>函数把内部 list 直接返回给调用方，调用方 append 后内部状态被意外修改。给出三种防御方案及代价。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ol>
+<li><strong>返回副本</strong>：<code>return list(self._items)</code>。最简单，但每次调用都复制，大列表有成本。</li>
+<li><strong>返回不可变视图</strong>：<code>return tuple(self._items)</code>。零拷贝风险，但调用方失去 list 接口，且嵌套元素仍共享。</li>
+<li><strong>返回只读代理</strong>：<code>types.MappingProxyType</code>（映射）或自定义只读序列。语义最清晰，实现成本最高。</li>
+</ol>
+<p>若内部数据会被并发修改，还要考虑加锁或返回快照；方案选择取决于「调用频率 × 数据规模 × 是否需要 list 接口」。</p></div>
+</div><div class="qc" id="F4-1" data-u="4" data-lv="概念">
+  <div class="qh"><span class="qid">F4-1</span><span class="qu">概念 · 单元 4</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>「函数是一等对象」具体体现在哪些操作上？为什么 <code>sorted(key=len)</code> 不能写成 <code>key=len(x)</code>？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>体现在：函数可以赋值给变量、作为参数传递、作为返回值、存进容器、带属性（<code>__name__</code>、<code>__doc__</code>）。</p>
+<p><code>key</code> 接收的是一个<strong>可调用对象</strong>，<code>sorted</code> 会在内部对每个元素调用它。写 <code>key=len(x)</code> 会先求值成一个整数，<code>sorted</code> 拿到 int 后尝试调用，直接 <code>TypeError: 'int' object is not callable</code>。</p></div>
+</div><div class="qc" id="F4-2" data-u="4" data-lv="代码">
+  <div class="qh"><span class="qid">F4-2</span><span class="qu">代码 · 单元 4</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>写 <code>tag(name, /, content, *, cls="", **attrs)</code>：<code>name</code> 仅限位置，<code>cls</code> 仅限关键字，其余关键字变成 HTML 属性。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">tag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">' </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">="</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">"'</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'&lt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> class="</span><span class="si">{</span><span class="bp">cls</span><span class="si">}</span><span class="s1">"</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s1">&gt;</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s1">&lt;/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&gt;'</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s2">"p"</span><span class="p">,</span> <span class="s2">"hi"</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="s2">"lead"</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">"x1"</span><span class="p">))</span>
+<span class="c1"># &lt;p class="lead" id="x1"&gt;hi&lt;/p&gt;</span>
+</code></pre></div>
+</div><div class="qc" id="F4-3" data-u="4" data-lv="设计">
+  <div class="qh"><span class="qid">F4-3</span><span class="qu">设计 · 单元 4</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>给一个没有类型注解的第三方库写包装层，<code>Any</code>、<code>object</code>、<code>cast</code>、<code>Protocol</code> 应该怎么选？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong>Protocol</strong>：先用它描述「我用到的那些方法」，包装层的入参尽量用协议，不绑定具体类。</li>
+<li><strong>object</strong>：确实只需要「任意对象」时用，比 <code>Any</code> 安全，因为它不允许任意属性访问。</li>
+<li><strong>Any</strong>：只在边界处（调用三方库返回值）短暂使用，并立刻用 <code>isinstance</code> 或 <code>cast</code> 收窄。</li>
+<li><strong>cast</strong>：最后手段，等于向检查器承诺；写错只会在运行时炸，必须配测试。</li>
+</ul>
+<p>原则：<code>Any</code> 只出现在最外层的适配函数里，不让它渗进业务代码。</p></div>
+</div><div class="qc" id="F5-1" data-u="5" data-lv="概念">
+  <div class="qh"><span class="qid">F5-1</span><span class="qu">概念 · 单元 5</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>闭包捕获的是变量还是值？<code>[lambda: i for i in range(3)]</code> 输出什么？如何修复？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>捕获的是<strong>变量</strong>（cell），不是创建时的值。三个 lambda 共享同一个 <code>i</code>，循环结束后 <code>i == 2</code>，所以输出 <code>[2, 2, 2]</code>。</p>
+<p>修复一：默认参数固化当前值。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">funcs</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+</code></pre>
+<p>修复二：用 <code>functools.partial</code> 或工厂函数把值包进去。</p></div>
+</div><div class="qc" id="F5-2" data-u="5" data-lv="代码">
+  <div class="qh"><span class="qid">F5-2</span><span class="qu">代码 · 单元 5</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>写 <code>@retry(times=3, exceptions=(TimeoutError,))</code>：失败重试，最后一次仍失败则抛出，必须保留被装饰函数的元数据。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">=</span><span class="p">(</span><span class="ne">TimeoutError</span><span class="p">,)):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">exceptions</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">times</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+<span class="nd">@retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"boom"</span><span class="p">)</span>
+</code></pre>
+<p><code>functools.wraps</code> 保留 <code>__name__</code>、<code>__doc__</code> 与签名，否则框架按名字/签名注入时会失效。</p></div>
+</div><div class="qc" id="F5-3" data-u="5" data-lv="设计">
+  <div class="qh"><span class="qid">F5-3</span><span class="qu">设计 · 单元 5</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>一段 6 个分支的计费 <code>if/elif</code> 如何改成策略注册？新增一种计费方式时改动哪里？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="n">PRICING</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pricing</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">PRICING</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
+        <span class="k">return</span> <span class="n">fn</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+<span class="nd">@pricing</span><span class="p">(</span><span class="s2">"normal"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normal</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit</span>
+
+<span class="nd">@pricing</span><span class="p">(</span><span class="s2">"bulk"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bulk</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit</span> <span class="o">*</span> <span class="mf">0.9</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">charge</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PRICING</span><span class="p">[</span><span class="n">mode</span><span class="p">](</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown pricing mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+</code></pre>
+<p>新增方式只需加一个函数 + 装饰器，不改 <code>charge</code>；<code>if/elif</code> 的修改点则集中在函数体里，越长越容易漏分支。</p></div>
+</div><div class="qc" id="F6-1" data-u="6" data-lv="概念">
+  <div class="qh"><span class="qid">F6-1</span><span class="qu">概念 · 单元 6</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>为什么重写 <code>__eq__</code> 之后 <code>__hash__</code> 会变成 <code>None</code>？相等、哈希、可变三者是什么关系？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>Python 认为：一旦你按值定义相等，默认的「按身份哈希」就不再成立——两个相等对象必须有相同哈希，否则放进 set 会出现两个「相等」元素。</p>
+<p>规则：
+- <code>a == b</code> 为真 ⇒ <code>hash(a) == hash(b)</code> 必须为真；
+- 可哈希对象必须不可变（或至少哈希所依赖的字段不可变）；
+- 重写 <code>__eq__</code> 后需要哈希就显式重写 <code>__hash__</code>，例如 <code>hash((self.x, self.y))</code>。</p></div>
+</div><div class="qc" id="F6-2" data-u="6" data-lv="代码">
+  <div class="qh"><span class="qid">F6-2</span><span class="qu">代码 · 单元 6</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>实现 <code>Playlist</code>：支持 <code>len</code>、下标、切片（返回 <code>Playlist</code>）、<code>for</code>、<code>in</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Playlist</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">songs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_songs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">songs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_songs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Playlist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_songs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_songs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_songs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">song</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">song</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_songs</span>
+</code></pre></div>
+</div><div class="qc" id="F6-3" data-u="6" data-lv="设计">
+  <div class="qh"><span class="qid">F6-3</span><span class="qu">设计 · 单元 6</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>repr</code> 与 <code>str</code> 在日志、调试器、用户界面三处应该怎么分工？给出判断标准。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong>调试器 / 容器打印 / 日志的对象字段</strong>：用 <code>repr</code>，要求准确、可重建、带引号。容器打印元素时调用的就是 <code>repr</code>。</li>
+<li><strong>面向用户的界面</strong>：用 <code>str</code>，要求可读，可以本地化。</li>
+<li><strong>只定义 <code>repr</code></strong>：<code>str</code> 自动回退，适合绝大多数内部对象。</li>
+<li><strong>两者都定义</strong>：当对象既有「开发者视角」又有「用户视角」时，例如 <code>Decimal("1.20")</code> 与 <code>1.20</code>。</li>
+</ul>
+<p>判断标准：这段输出是给「排查问题的人」还是「使用产品的人」看。</p></div>
+</div><div class="qc" id="F7-1" data-u="7" data-lv="概念">
+  <div class="qh"><span class="qid">F7-1</span><span class="qu">概念 · 单元 7</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>鸭子类型、Protocol、ABC 三者的约束强度和侵入性有什么不同？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><div class="tblwrap"><table>
+<thead>
+<tr>
+<th>方式</th>
+<th>约束发生时机</th>
+<th>是否要求继承</th>
+<th>侵入性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>鸭子类型</td>
+<td>运行时（调用到才报错）</td>
+<td>否</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Protocol</td>
+<td>静态检查时（mypy/pyright）</td>
+<td>否（结构化）</td>
+<td>无</td>
+</tr>
+<tr>
+<td>ABC</td>
+<td>实例化时（抽象方法未实现则报错）</td>
+<td>是，或 <code>register()</code></td>
+<td>高</td>
+</tr>
+</tbody>
+</table></div>
+<p>给第三方类加约束用 Protocol；自己掌控的类层级用 ABC 明确契约；脚本和内部工具用鸭子类型即可。</p></div>
+</div><div class="qc" id="F7-2" data-u="7" data-lv="代码">
+  <div class="qh"><span class="qid">F7-2</span><span class="qu">代码 · 单元 7</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>定义 <code>Closeable</code> 协议（含 <code>close()</code>），加 <code>@runtime_checkable</code>，并让一个没有继承关系的 <code>Conn</code> 通过 <code>isinstance</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Closeable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Conn</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"closed"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Conn</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>   <span class="c1"># True</span>
+</code></pre>
+<p><code>runtime_checkable</code> 只检查成员名是否存在，不检查签名与返回类型。</p></div>
+</div><div class="qc" id="F7-3" data-u="7" data-lv="设计">
+  <div class="qh"><span class="qid">F7-3</span><span class="qu">设计 · 单元 7</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>有 <code>class A</code>、<code>class B(A)</code>、<code>class C(A)</code>、<code>class D(B, C)</code>，且 B、C 的 <code>ping()</code> 都调用 <code>super().ping()</code>。写出 MRO 与 <code>D().ping()</code> 的输出，并说明什么时候该改成组合。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>MRO：<code>D → B → C → A → object</code>，输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">B</span>
+<span class="n">C</span>
+<span class="n">A</span>
+</code></pre>
+<p><code>super()</code> 是「沿 MRO 的下一个类」，不是「父类」，所以 B 的 <code>super()</code> 命中 C。</p>
+<p>该改组合的信号：B/C 与 D 不是 is-a 关系、只是为了复用实现、继承层级超过 2 层、父类会独立变化。</p></div>
+</div><div class="qc" id="F8-1" data-u="8" data-lv="概念">
+  <div class="qh"><span class="qid">F8-1</span><span class="qu">概念 · 单元 8</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>为什么 <code>list[Dog]</code> 不能当作 <code>list[Animal]</code> 使用，而 <code>Sequence[Dog]</code> 可以？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><code>list</code> 是**不变（invariant）**的：它既可读又可写。若允许 <code>list[Dog]</code> 冒充 <code>list[Animal]</code>，就能往里 append 一只 <code>Cat</code>，原列表的类型契约被破坏。</p>
+<p><code>Sequence</code> 是**协变（covariant）**的：它只读，不提供写入方法，所以 <code>Sequence[Dog]</code> 可以安全地当 <code>Sequence[Animal]</code> 用。</p>
+<p>记法：只读容器协变，可变容器不变，只作为输入的 Callable 参数逆变。</p></div>
+</div><div class="qc" id="F8-2" data-u="8" data-lv="代码">
+  <div class="qh"><span class="qid">F8-2</span><span class="qu">代码 · 单元 8</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>给 <code>Vector(x, y)</code> 实现 <code>+</code>、标量 <code>*</code>、反射 <code>*</code>、一元 <code>-</code>；类型不匹配时返回 <code>NotImplemented</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Vector</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Vector(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+</code></pre>
+<p>返回 <code>NotImplemented</code> 让解释器去尝试对方的反射方法；直接抛 <code>TypeError</code> 会阻断这条回退链。</p></div>
+</div><div class="qc" id="F8-3" data-u="8" data-lv="设计">
+  <div class="qh"><span class="qid">F8-3</span><span class="qu">设计 · 单元 8</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>TypedDict、dataclass、pydantic BaseModel 三者怎么选？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong>TypedDict</strong>：数据本质是 dict（JSON、API 响应），只需要静态形状检查，不想要运行时开销。</li>
+<li><strong>dataclass</strong>：内部领域对象，需要方法、默认值、相等/哈希，字段可信，不需要运行时校验。</li>
+<li><strong>pydantic</strong>：边界输入（HTTP 请求、配置文件），需要运行时解析、类型转换与详细报错。</li>
+</ul>
+<p>组合用法很常见：HTTP 层用 pydantic 校验，转成 dataclass 进业务层，出站再序列化成 TypedDict/JSON。</p></div>
+</div><div class="qc" id="F9-1" data-u="9" data-lv="概念">
+  <div class="qh"><span class="qid">F9-1</span><span class="qu">概念 · 单元 9</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>可迭代对象与迭代器有什么区别？<code>for</code> 循环的展开步骤是什么？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong>可迭代对象</strong>：实现 <code>__iter__</code>，每次调用返回一个迭代器；可重复遍历。</li>
+<li><strong>迭代器</strong>：实现 <code>__next__</code>，且 <code>__iter__</code> 返回 <code>self</code>；只能遍历一次，耗尽后抛 <code>StopIteration</code>。</li>
+</ul>
+<p><code>for</code> 的展开：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="k">break</span>
+</code></pre></div>
+</div><div class="qc" id="F9-2" data-u="9" data-lv="代码">
+  <div class="qh"><span class="qid">F9-2</span><span class="qu">代码 · 单元 9</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>用生成器展平任意嵌套的 list，再用 <code>islice</code> 取前 5 项。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">flatten</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">it</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">flatten</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="mi">5</span><span class="p">])))</span>       <span class="c1"># [1, 2, 3, 4, 5]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">flatten</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),</span> <span class="mi">5</span><span class="p">)))</span>  <span class="c1"># [1, 2, 3, 4, 5]</span>
+</code></pre>
+<p><code>yield from</code> 不只是省一层循环，它还负责把 <code>send</code>、<code>throw</code>、<code>close</code> 委派给子生成器。</p></div>
+</div><div class="qc" id="F9-3" data-u="9" data-lv="设计">
+  <div class="qh"><span class="qid">F9-3</span><span class="qu">设计 · 单元 9</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>用 <code>@contextmanager</code> 实现「临时切换工作目录」，要求异常时也能切回。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">old</span><span class="p">)</span>
+</code></pre>
+<p><code>yield</code> 必须放在 <code>try/finally</code> 里；否则 <code>with</code> 块内抛异常时不会执行恢复逻辑。上下文管理器不要吞异常——<code>finally</code> 只负责清理，不负责 <code>return True</code>。</p></div>
+</div><div class="qc" id="F10-1" data-u="10" data-lv="概念">
+  <div class="qh"><span class="qid">F10-1</span><span class="qu">概念 · 单元 10</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>GIL 是什么？为什么多线程不能加速纯 Python 计算，却适合 IO 密集任务？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>GIL 是 CPython 解释器的全局锁：同一进程内，同一时刻只有一个线程执行 Python 字节码。</p>
+<ul>
+<li>纯 Python 计算几乎全程持有 GIL，多线程只是轮流执行，还有切换开销，所以不加速。</li>
+<li>IO 操作（网络、文件、<code>sleep</code>）在等待时会释放 GIL，其他线程可以继续跑，所以总等待时间被重叠。</li>
+</ul>
+<p>GIL 不保证线程安全：<code>x += 1</code> 仍是读—改—写三步，可能被切换。</p></div>
+</div><div class="qc" id="F10-2" data-u="10" data-lv="代码">
+  <div class="qh"><span class="qid">F10-2</span><span class="qu">代码 · 单元 10</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>用 <code>ThreadPoolExecutor</code> 并发抓取 10 个 URL：5 秒超时，单个失败不影响整体，最后输出成功数与失败列表。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span><span class="p">,</span> <span class="n">as_completed</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">crawl</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">ok</span><span class="p">,</span> <span class="n">failed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="n">futs</span> <span class="o">=</span> <span class="p">{</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">urls</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futs</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+                <span class="n">ok</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">failed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">futs</span><span class="p">[</span><span class="n">f</span><span class="p">],</span> <span class="nb">repr</span><span class="p">(</span><span class="n">e</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">ok</span><span class="p">,</span> <span class="n">failed</span>
+</code></pre>
+<p>异常存在 Future 里，只有 <code>result()</code> 时才抛出；<code>with</code> 退出会等待所有任务结束。</p></div>
+</div><div class="qc" id="F10-3" data-u="10" data-lv="设计">
+  <div class="qh"><span class="qid">F10-3</span><span class="qu">设计 · 单元 10</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>1000 张图片需要压缩，单张耗时约 0.2 秒，其中 90% 是 CPU。选线程、进程还是协程？说明理由与并发度。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>选<strong>进程池</strong>。压缩是 CPU 密集，GIL 会让多线程退化为串行；协程更不行，阻塞计算会卡死事件循环。</p>
+<ul>
+<li>并发度：<code>max_workers = os.cpu_count()</code>，通常 4–16；IO 写盘占比高时可略高于核数。</li>
+<li>成本：进程启动与 pickle 传输有开销，所以按批提交（每批 20–50 张）比单张提交更划算。</li>
+<li>注意：任务函数要在模块顶层，参数与返回值必须可 pickle；写盘用主进程统一做，避免多进程争抢同一文件。</li>
+</ul></div>
+</div><div class="qc" id="F11-1" data-u="11" data-lv="概念">
+  <div class="qh"><span class="qid">F11-1</span><span class="qu">概念 · 单元 11</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>协程对象、Task、Future 三者的关系是什么？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong>协程对象</strong>：调用 <code>async def</code> 函数得到的东西，本身不会运行，必须被 <code>await</code> 或被调度。</li>
+<li><strong>Task</strong>：把协程包装成「已排入事件循环」的调度单元，创建后立即开始推进，可以取消、可以查询状态。</li>
+<li><strong>Future</strong>：更底层的「未来结果」占位符，Task 是 Future 的子类；一般不用手写，库内部使用。</li>
+</ul>
+<p>关系：<code>Task(coro)</code> 包装协程，事件循环驱动 Task，Task 完成后其结果就是一个 Future 结果。</p></div>
+</div><div class="qc" id="F11-2" data-u="11" data-lv="代码">
+  <div class="qh"><span class="qid">F11-2</span><span class="qu">代码 · 单元 11</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>用 <code>TaskGroup</code> 并发 3 个任务，整体 2 秒超时；其中一个抛 <code>ValueError</code>，捕获 <code>ExceptionGroup</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">work</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">delay</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"bad"</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"boom"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">timeout</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TaskGroup</span><span class="p">()</span> <span class="k">as</span> <span class="n">tg</span><span class="p">:</span>
+                <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">work</span><span class="p">(</span><span class="s2">"a"</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+                <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">work</span><span class="p">(</span><span class="s2">"bad"</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+                <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">work</span><span class="p">(</span><span class="s2">"c"</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"timeout"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ExceptionGroup</span> <span class="k">as</span> <span class="n">eg</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">eg</span><span class="o">.</span><span class="n">exceptions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"value error:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre>
+<p><code>TaskGroup</code> 在任一任务失败时会取消同组其他任务，并把异常包成 <code>ExceptionGroup</code>（Python 3.11+）。要按类型分别处理可以用 <code>except* ValueError</code>，但<strong>不能在同一个 <code>try</code> 里混用 <code>except</code> 和 <code>except*</code></strong>。</p></div>
+</div><div class="qc" id="F11-3" data-u="11" data-lv="设计">
+  <div class="qh"><span class="qid">F11-3</span><span class="qu">设计 · 单元 11</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>异步服务里必须调用一个阻塞库（比如 <code>requests</code> 或 <code>psycopg2</code> 同步驱动），有哪三种处理方式？各自代价是什么？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ol>
+<li><strong><code>await asyncio.to_thread(fn, ...)</code></strong>：把阻塞调用丢到默认线程池。改动最小，代价是占用线程、线程池默认上限较小，高并发时要调大。</li>
+<li><strong>专用 <code>ThreadPoolExecutor</code> + <code>run_in_executor</code></strong>：可以控制池大小、隔离慢调用，代价是要自己管理生命周期。</li>
+<li><strong>换异步库</strong>：<code>httpx</code> / <code>asyncpg</code>。性能最好，代价是改造成本高、生态兼容性要验证。</li>
+</ol>
+<p>不要直接在协程里调用阻塞函数——它会卡住整个事件循环，所有并发任务一起停摆。</p></div>
+</div><div class="qc" id="F12-1" data-u="12" data-lv="概念">
+  <div class="qh"><span class="qid">F12-1</span><span class="qu">概念 · 单元 12</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>obj.x</code> 的属性查找顺序是什么？<code>__getattr__</code> 在哪一步生效？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ol>
+<li>类型上的<strong>数据描述符</strong>（实现 <code>__set__</code> 或 <code>__delete__</code>）</li>
+<li>实例 <code>__dict__</code></li>
+<li>类型上的<strong>非数据描述符</strong>（只实现 <code>__get__</code>）</li>
+<li>类属性</li>
+<li><code>__getattr__</code>（以上全部失败才调用）</li>
+</ol>
+<p><code>__getattribute__</code> 拦截整个流程，<code>__getattr__</code> 只是最后的兜底。<code>property</code> 是数据描述符，所以能覆盖实例字典。</p></div>
+</div><div class="qc" id="F12-2" data-u="12" data-lv="代码">
+  <div class="qh"><span class="qid">F12-2</span><span class="qu">代码 · 单元 12</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>写一个 <code>Positive</code> 描述符：通过 <code>__set_name__</code> 拿到属性名，赋值时校验必须为正数。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Positive</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__set_name__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">name</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"must be positive"</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Order</span><span class="p">:</span>
+    <span class="n">qty</span> <span class="o">=</span> <span class="n">Positive</span><span class="p">()</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">Positive</span><span class="p">()</span>
+
+<span class="n">o</span> <span class="o">=</span> <span class="n">Order</span><span class="p">()</span>
+<span class="n">o</span><span class="o">.</span><span class="n">qty</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">qty</span><span class="p">)</span>      <span class="c1"># 3</span>
+</code></pre>
+<p>数据描述符优先于实例字典，所以 <code>o.qty = -1</code> 一定走 <code>__set__</code>。</p></div>
+</div><div class="qc" id="F12-3" data-u="12" data-lv="设计">
+  <div class="qh"><span class="qid">F12-3</span><span class="qu">设计 · 单元 12</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>__init_subclass__</code>、类装饰器、元类，三者在什么场景下该用哪个？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong><code>__init_subclass__</code></strong>：子类创建时做注册、校验、注入默认值。最轻，优先选它。</li>
+<li><strong>类装饰器</strong>：对已创建的类做批量改造（加 <code>__repr__</code>、包方法），显式、可组合、易测试。</li>
+<li><strong>元类</strong>：需要控制类创建过程本身（改命名空间、<code>__prepare__</code>、强制结构），或框架要兼容多个 Python 版本时。</li>
+</ul>
+<p>判断：能用 <code>__init_subclass__</code> 解决就不写元类；元类应作为实现细节，不要写进公开 API。</p></div>
+</div></div>
+  <p class="qempty" id="qempty">没有符合条件的题目</p>
+</div>
+<script>
+(function(){
+  var st=FL.read('fl-bank-v1',{});
+  document.querySelectorAll('.qc').forEach(function(c){
+    c.querySelector('.qbtn').addEventListener('click',function(){
+      c.classList.toggle('open');
+      this.textContent=c.classList.contains('open')?'收起答案':'显示答案';
+    });
+  });
+  function paintState(){
+    document.querySelectorAll('.qc').forEach(function(c){
+      var id=c.querySelector('.qid').textContent, v=st[id];
+      c.querySelectorAll('.qst button').forEach(function(b){
+        b.classList.toggle('on',String(v)===b.dataset.s);});
+    });
+  }
+  document.querySelectorAll('.qst button').forEach(function(b){
+    b.addEventListener('click',function(){
+      var c=b.closest('.qc'), id=c.querySelector('.qid').textContent;
+      if(st[id]===+b.dataset.s) delete st[id]; else st[id]=+b.dataset.s;
+      try{localStorage.setItem('fl-bank-v1',JSON.stringify(st))}catch(e){}
+      paintState();
+    });
+  });
+  paintState();
+  var fb=document.getElementById('fb'), lvb=document.getElementById('lvb');
+  var k='all', lv='';
+  function applyFilter(){
+    var hn=document.getElementById('hn'); if(hn) hn.style.display='none';
+    var vis=0;
+    document.querySelectorAll('.qc').forEach(function(c){
+      var id=c.querySelector('.qid').textContent, u=+c.dataset.u, show=true;
+      if(k==='todo') show=st[id]===2;
+      else if(k==='master') show=st[id]===1;
+      else if(k==='u1') show=u<=3;
+      else if(k==='u2') show=u>=4&&u<=6;
+      else if(k==='u3') show=u>=7&&u<=9;
+      else if(k==='u4') show=u>=10;
+      if(lv && c.dataset.lv!==lv) show=false;
+      c.style.display=show?'':'none';
+      if(show) vis++;
+    });
+    document.getElementById('qempty').style.display=vis?'none':'block';
+  }
+  fb.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    fb.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});
+    k=b.dataset.k; applyFilter();
+  });
+  lvb.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    lvb.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});
+    lv=b.dataset.lv; applyFilter();
+  });
+  window.BANK_FILTER=function(kk){                       // #review 深链用
+    var b=fb.querySelector('button[data-k="'+kk+'"]');
+    if(b) b.click();
+  };
+})();
+</script>
+<script>
+(function(){
+  var all = [].slice.call(document.querySelectorAll('.qc'));
+  function unit(n){
+    all.forEach(function(c){ c.style.display = (+c.dataset.u === n) ? '' : 'none'; });
+    var note = document.getElementById('hn');
+    note.style.display = 'flex';
+    document.querySelectorAll('#fb button').forEach(function(b){ b.classList.remove('on'); });
+    document.getElementById('hnT').textContent = '只看单元 ' + n + ' 的 3 道题';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  function apply(){
+    var h = location.hash || '';
+    var m = h.match(/^#u(\d+)$/);
+    if (m) { unit(+m[1]); return; }
+    if (h === '#review') { if (window.BANK_FILTER) window.BANK_FILTER('todo'); return; }
+    document.getElementById('hn').style.display = 'none';
+    document.getElementById('qempty').style.display = 'none';
+    all.forEach(function(c){ c.style.display = ''; });
+    if (/^#F\d+-\d+$/.test(h)) {
+      var el = document.getElementById(h.slice(1));
+      if (el) {
+        el.classList.add('hl');
+        el.scrollIntoView({block: 'center'});
+        setTimeout(function(){ el.classList.remove('hl'); }, 2200);
+      }
+    }
+  }
+  window.addEventListener('hashchange', apply);
+  apply();
+})();
+</script>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

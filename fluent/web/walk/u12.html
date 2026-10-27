@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 12 · 元编程：描述符、类钩子与动态建类</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 12 · 元编程：描述符、类钩子与动态建类</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 12</span>
+        <span class="kwk">单元 12 · 元编程：动态属性、描述符与元类</span>
+        <span class="ku">第 22–24 章</span></div>
+      <h1>元编程：描述符、类钩子与动态建类</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 22–24 章讲动态属性、描述符与类元编程。这一篇写一个 40 行的迷你 ORM：字段校验靠描述符，字段收集靠 <code>__init_subclass__</code>，打印靠类装饰器，最后用 <code>type()</code> 现场造一个类。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ① 描述符：把「校验 + 存取」从每个类里抽出来</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Field</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">kind</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__set_name__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>        <span class="c1"># 类创建时自动调用</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storage</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>                          <span class="c1"># 通过类访问，返回描述符本身</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> 需要 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">，"</span>
+                            <span class="sa">f</span><span class="s2">"收到 </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+
+<span class="c1"># ② __init_subclass__：子类定义好时自动收集字段</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">:</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Field</span><span class="p">)}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">default</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
+
+
+<span class="c1"># ③ 类装饰器：补一个 __repr__，不改子类代码</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">printable</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="si">!r}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">body</span><span class="si">}</span><span class="s2">)"</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__repr__</span>
+    <span class="k">return</span> <span class="bp">cls</span>
+
+
+<span class="nd">@printable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="nd">@printable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Product</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Ada"</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">36</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Product</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"键盘"</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="mf">299.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"实例    "</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"字段表  "</span><span class="p">,</span> <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">Product</span><span class="p">)})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"to_dict "</span><span class="p">,</span> <span class="n">u</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"校验    "</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Bob"</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="s2">"老"</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"默认值  "</span><span class="p">,</span> <span class="n">Product</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"鼠标"</span><span class="p">)</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+
+<span class="c1"># ④ 通过类访问描述符，拿到的是描述符本身</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"类访问  "</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">"| 实例访问"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># ⑤ type() 动态建类：等价于 class 语句</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"你好，</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="n">Dynamic</span> <span class="o">=</span> <span class="n">printable</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s2">"Dynamic"</span><span class="p">,</span> <span class="p">(</span><span class="n">Model</span><span class="p">,),</span> <span class="p">{</span>
+    <span class="s2">"name"</span><span class="p">:</span> <span class="n">Field</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+    <span class="s2">"__doc__"</span><span class="p">:</span> <span class="s2">"运行时拼出来的类"</span><span class="p">,</span>
+    <span class="s2">"greet"</span><span class="p">:</span> <span class="n">greet</span><span class="p">,</span>
+<span class="p">}))</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">Dynamic</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"动态"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"动态类  "</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">greet</span><span class="p">(),</span> <span class="s2">"| 是 Model 子类？"</span><span class="p">,</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">Dynamic</span><span class="p">,</span> <span class="n">Model</span><span class="p">))</span>
+
+<span class="c1"># ⑥ __getattr__ 兜底：只在正常查找失败后调用</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Lazy</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  （兜底生成 </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">a</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}{</span><span class="n">a</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="n">lz</span> <span class="o">=</span> <span class="n">Lazy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"兜底    "</span><span class="p">,</span> <span class="n">lz</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"正常属性"</span><span class="p">,</span> <span class="n">lz</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">"（已有属性不会触发 __getattr__）"</span><span class="p">)</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>描述符是「把属性访问变成代码」的钩子。</strong> <code>Field.__get__</code>/<code>__set__</code> 让 <code>user.age = "老"</code> 先经过类型校验。关键前提是<strong>描述符必须是类属性</strong>：写在类体里的是「数据描述符」，写在实例上则完全不起作用。</p>
+</li>
+<li>
+<p><strong><code>__set_name__</code> 解决「描述符不知道自己的名字」。</strong> 类创建时 Python 会自动调用每个描述符的 <code>__set_name__(owner, name)</code>，于是 <code>Field</code> 能知道自己是 <code>age</code> 还是 <code>name</code>，并用 <code>_age</code> 这样的私有名存值。没有它就得在 <code>__init__</code> 里手工传名字，容易漏。</p>
+</li>
+<li>
+<p><strong><code>__get__(None, owner)</code> 是「通过类访问」。</strong> <code>User.age</code> 返回描述符对象本身（所以能看它的配置），<code>u.age</code> 返回真正的值。这个双分支是描述符的标准写法，classmethod/staticmethod/property 内部都是这个机制。</p>
+</li>
+<li>
+<p><strong><code>__init_subclass__</code> 是「类定义完成时的回调」。</strong> 每个继承 <code>Model</code> 的子类创建时都会执行一次，把类体里的 <code>Field</code> 收集进 <code>fields</code>。它比元类轻——不需要 <code>metaclass=</code>，也不影响 MRO，是最常用的「注册表」钩子。</p>
+</li>
+<li>
+<p><strong>类装饰器与 <code>__init_subclass__</code> 的分工。</strong> 前者在外面加工类（加 <code>__repr__</code>），后者在父类里响应子类创建。两者都不需要修改子类源码，但类装饰器的顺序更明确（定义完立刻执行），也更适合「一次性注入」。</p>
+</li>
+<li>
+<p><strong><code>type("Name", bases, namespace)</code> 与 <code>class</code> 语句完全等价。</strong> 第五段拼出来的 <code>Dynamic</code> 是真正的 <code>Model</code> 子类，描述符、<code>to_dict</code>、<code>greet</code> 全部可用；再套上同一个 <code>@printable</code>，连 <code>__repr__</code> 都和 <code>class</code> 写出来的版本一致。所有 <code>class</code> 语句在 CPython 里最终都走这一步——元类就是在这一层介入的。</p>
+</li>
+<li>
+<p><strong><code>__getattr__</code> 只在「正常查找失败」后调用。</strong> 它不拦截已经存在的属性，也不拦截 <code>__getattribute__</code> 能找到的东西。用它做兜底（代理、懒加载）很合适，但别在里面写递归——<code>self.x</code> 找不到会再次触发它。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>实例     User(name=&#x27;Ada&#x27;, age=36)
+字段表   {&#x27;User&#x27;: [&#x27;name&#x27;, &#x27;age&#x27;], &#x27;Product&#x27;: [&#x27;title&#x27;, &#x27;price&#x27;]}
+to_dict  {&#x27;name&#x27;: &#x27;Ada&#x27;, &#x27;age&#x27;: 36}
+校验    age 需要 int，收到 str
+默认值   0.0
+类访问   Field | 实例访问 int
+动态类   Dynamic(name=&#x27;动态&#x27;) | 你好，动态 | 是 Model 子类？ True
+  （兜底生成 render）
+兜底     render(1, 2)
+正常属性 Lazy （已有属性不会触发 __getattr__）</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>删掉 <code>__set_name__</code>：<code>Field.name</code> 为 <code>None</code>，校验报错信息变成「None 需要 str」，存取也全部失效。</li>
+<li>把 <code>User.age</code> 改成 <code>Field(str)</code>：<code>User(name="Ada", age=36)</code> 立刻抛 <code>TypeError</code>。</li>
+<li>把 <code>@printable</code> 去掉：<code>print(u)</code> 输出 <code>&lt;User object at 0x…&gt;</code>，验证装饰器确实注入了 <code>__repr__</code>。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §22.1–22.3 讲 <code>__getattr__</code> 与动态属性，§23.1–23.4 讲描述符协议与 <code>__set_name__</code>，§24.1–24.5 讲类装饰器、<code>__init_subclass__</code> 与元类。这一篇把三章压成一个可运行的小 ORM；原书的 <code>Record</code>/<code>Model</code> 完整实现与元类 <code>Meta</code> 的写法在单元讲义第 12 节有逐段对照。</p>
+    <div class="pn"><a href="u11.html"><small>← 上一篇</small><b>单元 11 · asyncio：一个事件循环里同时等十件事</b></a><span></span></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../12.html">单元 12 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

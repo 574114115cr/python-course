@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 1 课件 · 数据模型与序列</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 1 · 逐节课件</div><h2>单元 1 · 数据模型与序列</h2><div class="sub">第 1–2 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 1 课 · 目标与要点</div><h2>特殊方法：让对象接入语言协议</h2><div class="sub">能说出 len(x)、x[0]、for i in x、repr(x) 分别调用哪个特殊方法，并写出一个可求长、可索引、可迭代、可打印的类。</div><ul><li><b>不要自己调 dunder</b>：写 len(x)，不要写 x.__len__()。前者有 C 层优化，后者绕过了它。</li><li>__repr__ 是开发者视角，理想形式是 Vector2d(3, 4) 这种能重建对象的表达式；__str__ 面向用户。只定义 __repr__ 时，print() 会自动回退到它。</li><li><b>bool(x) 的回退链</b>：先找 __bool__，没有就找 __len__，len(x) == 0 即为假。所以定义了 __len__ 的容器天然有真假值。</li><li><b>算术运算符不会自动交换操作数</b>：a + b 先试 a.__add__(b)，失败或返回 NotImplemented 再试 b.__radd__(a)。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 1 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>import collections
+
+Card = collections.namedtuple(&quot;Card&quot;, [&quot;rank&quot;, &quot;suit&quot;])
+
+
+class FrenchDeck:
+    ranks = [str(n) for n in range(2, 11)] + list(&quot;JQKA&quot;)
+    suits = &quot;spades diamonds clubs hearts&quot;.split()
+
+    def __init__(self):
+        self._cards = [Card(rank, suit)
+                       for suit in self.suits
+                       for rank in self.ranks]
+
+    def __len__(self):
+        return len(self._cards)
+
+    def __getitem__(self, position):
+# ...</code></pre><div class="sub">动手：给 FrenchDeck 加 __repr__，打印成 FrenchDeck(52 cards)。</div></section><section class="slide" data-s="4"><div class="sk">第 2 课 · 目标与要点</div><h2>序列家族与推导式</h2><div class="sub">能按「容器 / 扁平」「可变 / 不可变」给内置序列分类，并在 listcomp、genexp、map/filter 之间选对工具。</div><ul><li>推导式只用来「建序列」，不要在里边 print 或改外部状态；副作用请用普通 for。</li><li><b>生成器表达式省内存但有一次性</b>：g = (x for x in data)，遍历一次就空了；需要重复用就存成 list。</li><li><b>嵌套顺序 = 书写顺序</b>：for c in colors for s in sizes 外层是 colors。写反了不会报错，只会得到错的结果。</li><li>array.array 存的是机器数值，比 list 省 2–8 倍内存（取决于元素类型），但只能放同一种数值类型。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 2 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>symbols = &quot;$¢£¥€¤&quot;
+codes = [ord(s) for s in symbols if ord(s) &gt; 127]
+print(codes)                      # [162, 163, 165, 8364, 164]
+
+# 等价写法，但 map/filter 需要 lambda，可读性通常更差
+codes2 = list(filter(lambda c: c &gt; 127, map(ord, symbols)))</code></pre><div class="sub">动手：用列表推导式取出所有长度大于 5 的单词，转成大写；</div></section><section class="slide" data-s="6"><div class="sk">第 3 课 · 目标与要点</div><h2>元组、拆包、切片与排序</h2><div class="sub">能把元组当「记录」用，熟练使用星号拆包、切片赋值和 key 排序，并知道 list.sort() 为什么返回 None。</div><ul><li><b>元组不可变 ≠ 内容不可变</b>：元组里放 list，list 仍然能改。</li><li>s[a:b:c] 的 c 为负表示反向，s[::-1] 是最常用的反转写法，但它复制了一份数据。</li><li>切片赋值不要求长度相等，这会让列表长度变化；步长不为 1 时则要求长度相等，否则报 ValueError。</li><li>多维切片只对支持它的对象有效（如 NumPy 数组），内置 list 不支持 lst[1:2, 3:4]。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 3 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>city = (&quot;Tokyo&quot;, 35.68, 139.69)
+name, lat, lon = city                     # 拆包
+first, *rest = range(5)                   # first=0, rest=[1,2,3,4]
+a, b = b, a                               # 交换，不需要临时变量
+
+for rank, (name, score) in enumerate([(&quot;Ann&quot;, 90), (&quot;Bob&quot;, 85)], start=1):
+    print(rank, name, score)</code></pre><div class="sub">动手：按分数降序、同分按名字升序排序，输出名字列表；</div></section><section class="slide" data-s="8"><div class="sk">第 4 课 · 目标与要点</div><h2>别名的坑与选型：list 不是万能的</h2><div class="sub">能识别 * 复制、+= 原地修改、可变默认参数三类别名问题，并按数据规模选择 array / deque / memoryview。</div><ul><li><b>* 复制的是引用</b>：[[0] * 3] * 3 三行共享同一个内层列表，写入就会三行联动。</li><li><b>+= 先原地修改，再赋值</b>：tuple 没有 __iadd__，所以 t[2] += [...] 改了列表却仍抛 TypeError。</li><li><b>可变默认参数只求值一次</b>：默认值用 None，在函数体里创建新对象。</li><li><b>list 不是万能</b>：同类型数字用 array，两端增删用 deque，零拷贝读二进制用 memoryview。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 4 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code># 1) * 复制的是引用，不是内容
+grid = [[0] * 3] * 3
+grid[0][0] = 1
+print(grid)          # [[1, 0, 0], [1, 0, 0], [1, 0, 0]]  ← 三行是同一个列表
+
+# 2) 元组里的可变对象仍然能改；+= 先原地改，再赋值
+t = (1, 2, [30, 40])
+try:
+    t[2] += [50, 60]
+except TypeError as e:
+    print(&quot;TypeError:&quot;, e)
+print(t)             # (1, 2, [30, 40, 50, 60])  ← 报错了，但列表已经变了
+
+# 3) 可变默认参数只创建一次
+def append_to(item, bucket=[]):
+    bucket.append(item)
+    return bucket
+
+# ...</code></pre><div class="sub">动手：复现上面三个陷阱，把每个的输出写进注释，再改成正确写法。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>协议：不看资料写出一个类，支持 len()、索引、切片、for、repr()，并解释每个方法由谁调用</li><li>推导式：能写出等价的 listcomp / genexp / map+filter 三种形式，并说明何时只能用 genexp</li><li>切片与排序：完成一次多关键字排序 + 切片赋值 + 反转，代码一次跑通</li><li>别名：独立解释三个别名陷阱的成因，并给出正确写法</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../01.html">← 单元 1</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

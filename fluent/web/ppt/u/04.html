@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 4 课件 · 一等函数与类型提示</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 4 · 逐节课件</div><h2>单元 4 · 一等函数与类型提示</h2><div class="sub">第 7–8 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 13 课 · 目标与要点</div><h2>函数是对象：高阶函数与可调用对象</h2><div class="sub">能把函数赋值、传参、返回、存容器，并说明 sorted(key=...) 与 functools.reduce 的工作原理。</div><ul><li><b>key= 接收的是函数，不是比较结果</b>：写 key=len，不要写 key=len(x)。</li><li><b>operator 模块比 lambda 更清晰</b>：itemgetter(&quot;name&quot;)、attrgetter(&quot;score&quot;)、add。</li><li>map/filter 是惰性的，返回迭代器，需要 list 时显式转换。</li><li>可调用对象能保存状态，但别滥用；能用闭包或 dataclass 表达时优先考虑可读性。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 13 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def shout(text):
+    &quot;&quot;&quot;把文本转成大写并加感叹号。&quot;&quot;&quot;
+    return text.upper() + &quot;!&quot;
+
+f = shout
+print(f.__name__, f.__doc__)
+print(list(map(f, [&quot;hi&quot;, &quot;ok&quot;])))     # [&#x27;HI!&#x27;, &#x27;OK!&#x27;]</code></pre><div class="sub">动手：用 sorted + operator.itemgetter 对一份字典列表按两个字段排序。</div></section><section class="slide" data-s="4"><div class="sk">第 14 课 · 目标与要点</div><h2>参数形态：位置、关键字与可变参数</h2><div class="sub">能写出带 / 和 * 的函数签名，正确解包 *args/**kwargs，并用 inspect.signature 检查契约。</div><ul><li>/ 与 * 是签名的一部分，改动它们属于破坏性变更。</li><li>*args 是 tuple，kwargs 是 dict**；不要再手动拼 list/dict。</li><li>默认参数只求值一次，可变默认值用 None 哨兵（第 12 课）。</li><li>位置参数与关键字参数混用时，位置参数必须在前；f(1, c=2) 合法，f(c=2, 1) 语法错误。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 14 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def func(a, b, /, c, d, *args, e, f=1, **kwargs):
+    ...</code></pre><div class="sub">动手：写 def make_table(data, /, headers=None, *, align=&quot;left&quot;)，实现仅限位置与仅限关键字混用。</div></section><section class="slide" data-s="6"><div class="sk">第 15 课 · 目标与要点</div><h2>渐进式类型：注解语法与常用类型</h2><div class="sub">能给变量、函数、容器写类型注解，理解 Optional、Union、Callable、Any 的含义，并知道注解在运行时不做检查。</div><ul><li>注解是给静态检查器的，不是运行时断言；要运行时校验得用 pydantic 或手写检查。</li><li>Optional[X] 等价于 X | None，不是「可选参数」的意思。</li><li>list[int] 是「元素为 int 的列表」，不是「长度为 int 的列表」。</li><li>Any 会关闭检查，object 不会；不确定时先用 object。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 15 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from typing import Callable, Iterable, Optional
+
+def total(nums: Iterable[float]) -&gt; float:
+    return sum(nums)
+
+def find(name: str, table: dict[str, int]) -&gt; Optional[int]:
+    return table.get(name)
+
+def apply(f: Callable[[int], int], x: int) -&gt; int:
+    return f(x)</code></pre><div class="sub">动手：给第 13 课的 compose 写完整注解（提示：Callable[[A], B] 需要 TypeVar，可以先写成 Callable）。</div></section><section class="slide" data-s="8"><div class="sk">第 16 课 · 目标与要点</div><h2>mypy 实战与类型边界</h2><div class="sub">能为一个小模块建立 mypy 检查，处理第三方库缺失注解、cast 与 # type: ignore 的边界，并知道哪些错误必须靠测试。</div><ul><li><b>--strict 是起点不是终点</b>：它打开 disallow_untyped_defs 等选项，老项目要逐步迁移。</li><li><b># type: ignore 要带原因</b>：# type: ignore[arg-type] # 第三方库签名有误，方便以后清理。</li><li><b>类型检查抓不到</b>：除零、越界、业务规则、并发竞态、cast 撒谎。</li><li>CI 里跑 mypy 才有约束力；只在本地偶尔跑，等于没有。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 16 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from typing import cast
+
+data: dict[str, object] = {&quot;count&quot;: 3}
+n = data[&quot;count&quot;] + 1          # error: Unsupported operand types for + (&quot;object&quot; and &quot;int&quot;)
+
+n = cast(int, data[&quot;count&quot;]) + 1   # 你向检查器保证类型</code></pre><div class="sub">动手：给本单元写的 3 个函数加注解，跑 mypy --strict，把报错逐条修掉。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>一等函数：用函数组合 + sorted(key=...) 完成一次多字段排序，不写类</li><li>参数：写出一个带 /、*、**kwargs 的公开函数，并解释每个符号</li><li>注解：给一个 30 行模块写全注解，mypy 无报错</li><li>边界：说明 Any、cast、# type: ignore 各自的风险与使用条件</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../04.html">← 单元 4</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

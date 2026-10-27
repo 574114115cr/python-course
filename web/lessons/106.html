@@ -18,8 +18,10 @@ transition:opacity .18s;z-index:60}
 <body data-lesson="106">
 <div class="top"><div class="top-in">
   <a class="back" href="index.html">← 课程目录</a>
-  <h1>第 106/111 节 · ★ 三大部署坑</h1>
+  <span class="tno">第 106 节</span>
+  <h1>★ 三大部署坑</h1>
   <span class="sp"></span>
+  <a class="rv" href="../review.html">复习</a>
   <a class="ppt" href="../ppt/u/20.html#s8" title="本课节对应的课件">本课课件 u20·p8</a>
 </div></div>
 <div class="pbar"><i id="pbar"></i></div>
@@ -37,7 +39,18 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-3-400-bad-request-是怎么来的-host_check-py">示例 3：400 Bad Request 是怎么来的（host_check.py）</a>
 <a class="lv3" href="#示例-4-collectstatic-到底在搬什么-static_collect">示例 4：collectstatic 到底在搬什么（static_collector.py）</a>
 <a class="lv3" href="#示例-5-推送到-platform-sh-之前的最后一遍自查-deploy_ch">示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py）</a>
+<a class="lv3" href="#示例-6-上线前-8-道闸门-静态文件清单-deploy_gate-py">示例 6：上线前 8 道闸门 + 静态文件清单（deploy_gate.py）</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk">
+      <h4>单元 20 · 共 5 节</h4>
+      <nav class="nlist"><a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
+<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
+<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
+<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
+<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a></nav>
+      <a class="nall" href="index.html#u20">
+        <span>全部 111 节目录</span><span class="ar">→</span></a>
     </div>
     <div class="sblk pptbox">
       <h4>配套资料 · 单元 20</h4>
@@ -54,124 +67,12 @@ transition:opacity .18s;z-index:60}
         <a href="index.html#u20"><span class="k">课节</span>
           <span class="v">本单元全部课节</span></a>
         <a href="../bank.html#u20"><span class="k">题库</span>
-          <span class="v">本单元 2 题 · 共 84 题</span></a>
+          <span class="v">本单元 4 题 · 共 120 题</span></a>
+        <a href="../review.html"><span class="k">复习</span>
+          <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
       </div>
     </div>
 
-    <details class="sblk nlx" id="nlx" open>
-      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
-      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
-<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
-<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
-<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
-<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
-<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
-<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
-<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
-<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
-<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
-<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
-<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
-<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
-<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
-<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
-<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
-<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
-<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
-<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
-<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
-<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
-<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
-<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
-<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
-<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
-<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
-<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
-<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
-<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
-<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
-<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
-<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
-<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
-<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
-<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
-<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
-<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
-<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
-<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
-<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
-<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
-<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
-<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
-<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
-<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
-<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
-<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
-<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
-<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
-<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
-<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
-<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
-<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
-<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
-<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
-<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
-<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
-<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
-<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
-<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
-<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
-<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
-<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
-<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
-<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
-<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
-<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
-<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
-<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
-<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
-<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
-<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
-<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
-<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
-<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
-<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
-<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
-<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
-<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
-<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
-<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
-<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
-<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
-<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
-<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
-<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
-<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
-<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
-<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
-<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
-<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
-<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
-<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
-<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
-<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
-<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
-<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
-<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
-<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
-<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
-<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
-<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
-<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
-<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
-<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
-<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
-<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
-<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
-<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
-<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
-<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
-    </details>
   </aside>
 
   <main class="main">
@@ -203,6 +104,36 @@ transition:opacity .18s;z-index:60}
     <h3 id="2-7-三大部署坑-allowed_hosts-collectstatic-de">2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2）</h3>
 <p><strong>坑一：ALLOWED_HOSTS 不改，线上直接 400。</strong> Django 会检查每个请求的 <code>Host</code> 头在不在 <code>ALLOWED_HOSTS</code> 名单里，不在就返回 <code>400 Bad Request</code>——<strong>连你的视图代码都不会执行</strong>。默认的 <code>ALLOWED_HOSTS = []</code> 只放行 <code>localhost</code>，线上域名 100% 被拒。修复就是 2.6 里那行 <code>ALLOWED_HOSTS.append('.platformsh.site')</code>（开头带点表示「匹配所有子域名」，你的项目域名类似 <code>xxx.us-3.platformsh.site</code>）。</p>
 <p><strong>坑二：<code>DEBUG = False</code> 之后，不 collectstatic 就是一个白脸页面。</strong> <code>DEBUG = True</code> 时开发服务器会顺带帮你发静态文件；一旦关掉，静态文件必须由真正的 Web 服务器发。所以 app.yaml 的 build 钩子里有 <code>python manage.py collectstatic --noinput</code>：它把<strong>各个应用的 <code>static/</code> 目录全部汇总到 <code>STATIC_ROOT</code></strong>，再由 routes 里 <code>/static</code> 那条规则直接发文件。忘了这一步，HTML 能出来但 CSS/JS 全丢，页面就是个没化妆的素颜。</p>
+<p>「谁在发这个 CSS」决定了页面有没有样式，把四种组合列出来就一目了然：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># DEBUG 与静态文件：谁在发 CSS，决定了页面有没有样式</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">serve_static</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">static_root_files</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 (谁负责发这个文件, 结果)。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"/static/"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"Django 视图"</span><span class="p">,</span> <span class="s2">"200"</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Django 开发服务器（DEBUG=True 才代发）"</span><span class="p">,</span> <span class="s2">"200"</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">"/static/"</span><span class="p">):]</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">static_root_files</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"Web 服务器直接读 STATIC_ROOT"</span><span class="p">,</span> <span class="s2">"200"</span>
+    <span class="k">return</span> <span class="s2">"Web 服务器"</span><span class="p">,</span> <span class="s2">"404（没有样式，白脸页面）"</span>
+
+
+<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"css/styles.css"</span><span class="p">,</span> <span class="s2">"css/login.css"</span><span class="p">,</span> <span class="s2">"js/app.js"</span><span class="p">}</span>
+
+<span class="n">cases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"/static/css/styles.css"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">STATIC_ROOT</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"/static/css/styles.css"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">STATIC_ROOT</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"/static/css/styles.css"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">set</span><span class="p">()),</span>          <span class="c1"># 忘了 collectstatic</span>
+    <span class="p">(</span><span class="s2">"/topics/"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">STATIC_ROOT</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="k">for</span> <span class="n">url</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+    <span class="n">who</span><span class="p">,</span> <span class="n">result</span> <span class="o">=</span> <span class="n">serve_static</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">url</span><span class="si">:</span><span class="s2">&lt;24</span><span class="si">}</span><span class="s2"> DEBUG=</span><span class="si">{</span><span class="n">debug</span><span class="si">!s:</span><span class="s2">&lt;6</span><span class="si">}{</span><span class="n">result</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"   发送方：</span><span class="si">{</span><span class="n">who</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 本地永远正常（DEBUG=True 兜底），线上才会暴露——这就是部署坑的典型形态。"</span><span class="p">)</span>
+</code></pre>
+<p>注意第 3 行：同样的网址、同样的 <code>DEBUG=False</code>，只因为 <code>STATIC_ROOT</code> 里没有那个文件，结果就从 <code>200</code> 变成 <code>404</code>。<strong>这正是「页面能打开但没有样式」的全部原因</strong>——HTML 由 Django 生成（200），CSS 由 Web 服务器读文件（404），两件事彻底解耦了。</p>
 <p><strong>坑三：把本地数据库和虚拟环境传上云。</strong> 必须写 <code>.gitignore</code>：</p>
 <pre><code class="language-text"><span class="cl">示例</span><span class="na">ll_env/            # 虚拟环境：几百 MB，平台要自己建</span>
 <span class="na">__pycache__/       # Python 的编译缓存</span>
@@ -225,6 +156,40 @@ transition:opacity .18s;z-index:60}
 <span class="n">handler500</span> <span class="o">=</span> <span class="s1">'learning_logs.views.my_500'</span>    <span class="c1"># 服务器内部错误时调用这个视图</span>
 </code></pre>
 <p>不写这两个赋值时，Django 的默认行为就是「找 <code>templates/404.html</code> / <code>500.html</code>」，对大多数项目已经够用。<strong>注意：定制错误页只在 <code>DEBUG = False</code> 时生效</strong>——本地默认开着调试模式，看到的仍是详细报错页（练习 20-5 会做本地验证）。</p>
+<p>「找 <code>404.html</code>」这个动作的查找顺序值得单独跑一遍，因为它解释了一个高频困惑——<strong>为什么我把 404.html 放在 app 的 templates 下却没用</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 404/500 模板去哪找：DIRS 先，应用目录后</span>
+<span class="c1"># 用字符串模拟两处目录里各有哪些模板文件</span>
+<span class="n">EXISTING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"templates/404.html"</span><span class="p">,</span>                        <span class="c1"># 项目级 DIRS 里</span>
+    <span class="s2">"learning_logs/templates/learning_logs/topics.html"</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_error_template</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">app_dirs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""按 Django 的顺序找：先 DIRS，再各应用的 templates/。"""</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">.html"</span>
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dirs</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">app_dirs</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">base</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">if</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">EXISTING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="n">DIRS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"templates"</span><span class="p">]</span>
+<span class="n">APP_DIRS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"learning_logs/templates"</span><span class="p">,</span> <span class="s2">"accounts/templates"</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="n">find_error_template</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">DIRS</span><span class="p">,</span> <span class="n">APP_DIRS</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">found</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'没找到 -&gt; 用 Django 自带的默认错误页'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 两个前提条件，缺一个定制页都不生效："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  1. settings.py 的 TEMPLATES['DIRS'] = [BASE_DIR / 'templates']"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  2. DEBUG = False —— 本地默认 True，看到的永远是黄色调试页"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">想更精细地控制（比如 404 时还要查库）："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  ll_project/urls.py 里写 handler404 = 'learning_logs.views.my_404'"</span><span class="p">)</span>
+</code></pre>
+<p>输出里 404 找到了 <code>templates/404.html</code>，500 显示「没找到」——因为那个假项目只放了 404。<strong>这就是为什么两个页面必须成对写</strong>：只做一个，另一个就退回 Django 的默认灰白页，线上看起来像「没做完」。</p>
 <p><strong>「继续开发」的流程</strong>是部署之后最重要的工作流。首次上线只是开始，之后每次改 bug、加功能，都是这一个循环：</p>
 <pre><code class="language-text"><span class="cl">示例</span>① 本地改代码 → ② git add .（有新文件才需要）→ ③ git commit -am "说明"
         ↓                                                          ↓
@@ -477,6 +442,148 @@ transition:opacity .18s;z-index:60}
     <span class="n">report</span><span class="p">(</span><span class="n">check_files</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">+</span> <span class="n">check_contents</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>
     <span class="c1"># 跑完可以删掉 data/ 目录</span>
 </code></pre>
+<h3 id="示例-6-上线前-8-道闸门-静态文件清单-deploy_gate-py">示例 6：上线前 8 道闸门 + 静态文件清单（deploy_gate.py）</h3>
+<p>示例 5 的清单只查「文件在不在」。真正 push 之前，你还想确认<strong>文件内容对不对</strong>：依赖锁没锁版本、两处暗号是否对齐、<code>ALLOWED_HOSTS</code> 有没有放行域名、错误页是不是成对、静态文件到底会被搬几个。这个示例把这三类检查（文件存在 / 内容正确 / 产物清单）压进一个脚本，<strong>并且故意留一个缺口</strong>——让你看见 <code>✗</code> 长什么样，而不是一路 <code>✓</code> 就以为万事大吉。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># deploy_gate.py —— 上线前 8 道闸门 + 静态文件清单，全用标准库</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/ll_project"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">make_demo_project</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">ROOT</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""造一个「差两项」的假项目，这样能同时看到 ✓ 和 ✗。"""</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"requirements.txt"</span><span class="p">:</span> <span class="s2">"asgiref==3.7.2</span><span class="se">\n</span><span class="s2">Django==4.2.10</span><span class="se">\n</span><span class="s2">django-bootstrap5==23.4</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"requirements_remote.txt"</span><span class="p">:</span> <span class="s2">"# 线上专用</span><span class="se">\n</span><span class="s2">gunicorn==21.2.0</span><span class="se">\n</span><span class="s2">psycopg2==2.9.9</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">".platform.app.yaml"</span><span class="p">:</span> <span class="s1">'name: "ll_project"</span><span class="se">\n</span><span class="s1">relationships:</span><span class="se">\n</span><span class="s1">    database: "db:postgresql"</span><span class="se">\n</span><span class="s1">'</span>
+                              <span class="s1">'hooks:</span><span class="se">\n</span><span class="s1">    build: python manage.py collectstatic --noinput</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span>
+        <span class="s2">".platform/routes.yaml"</span><span class="p">:</span> <span class="s1">'"https://</span><span class="si">{default}</span><span class="s1">/":</span><span class="se">\n</span><span class="s1">    upstream: "ll_project:http"</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span>
+        <span class="s2">".platform/services.yaml"</span><span class="p">:</span> <span class="s2">"db:</span><span class="se">\n</span><span class="s2">    type: postgresql:16</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">".gitignore"</span><span class="p">:</span> <span class="s2">"ll_env/</span><span class="se">\n</span><span class="s2">__pycache__/</span><span class="se">\n</span><span class="s2">*.sqlite3</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"ll_project/settings.py"</span><span class="p">:</span> <span class="s2">"ALLOWED_HOSTS = ['localhost', '.platformsh.site']</span><span class="se">\n</span><span class="s2">"</span>
+                                  <span class="s2">"DEBUG = False</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"learning_logs/static/css/styles.css"</span><span class="p">:</span> <span class="s2">".jumbotron { padding: 2rem; }</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"accounts/static/css/login.css"</span><span class="p">:</span> <span class="s2">".form-label { font-weight: bold; }</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"templates/404.html"</span><span class="p">:</span> <span class="s2">"404</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="c1"># ★ 故意不写 templates/500.html，看第 7 项能不能抓出来</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">rel</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">unpinned</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ln</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"=="</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ln</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">checks</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">ROOT</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""八道闸门，每项返回 (是否通过, 说明)。顺序就是踩坑频率的顺序。"""</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">env</span>
+    <span class="n">app_yaml</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">".platform.app.yaml"</span><span class="p">)</span>
+    <span class="n">routes</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">".platform/routes.yaml"</span><span class="p">)</span>
+    <span class="n">services</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">".platform/services.yaml"</span><span class="p">)</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"ll_project/settings.py"</span><span class="p">)</span>
+    <span class="n">gitignore</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">".gitignore"</span><span class="p">)</span>
+    <span class="n">app_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">'name:\s*"([^"]+)"'</span><span class="p">,</span> <span class="n">app_yaml</span><span class="p">)</span>
+    <span class="n">upstream</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">'upstream:\s*"([^":]+)'</span><span class="p">,</span> <span class="n">routes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">"依赖清单锁版本"</span><span class="p">,</span> <span class="ow">not</span> <span class="n">unpinned</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements.txt"</span><span class="p">))</span>
+         <span class="ow">and</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()),</span>
+        <span class="p">(</span><span class="s2">"线上依赖齐全"</span><span class="p">,</span> <span class="nb">all</span><span class="p">(</span><span class="n">pkg</span> <span class="ow">in</span> <span class="n">read</span><span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"requirements_remote.txt"</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"gunicorn"</span><span class="p">,</span> <span class="s2">"psycopg2"</span><span class="p">))),</span>
+        <span class="p">(</span><span class="s2">"路由暗号对齐"</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">app_name</span> <span class="ow">and</span> <span class="n">upstream</span><span class="p">)</span>
+         <span class="ow">and</span> <span class="n">app_name</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">upstream</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">"数据库服务存在"</span><span class="p">,</span> <span class="s2">"postgresql"</span> <span class="ow">in</span> <span class="n">services</span> <span class="ow">and</span> <span class="s2">"db:"</span> <span class="ow">in</span> <span class="n">services</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"忽略清单到位"</span><span class="p">,</span> <span class="s2">"*.sqlite3"</span> <span class="ow">in</span> <span class="n">gitignore</span> <span class="ow">and</span> <span class="s2">"ll_env/"</span> <span class="ow">in</span> <span class="n">gitignore</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"云上放行域名且关调试"</span><span class="p">,</span> <span class="s2">".platformsh.site"</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">and</span> <span class="s2">"DEBUG = False"</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"错误页成对"</span><span class="p">,</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"templates/404.html"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+         <span class="ow">and</span> <span class="p">(</span><span class="n">root</span> <span class="o">/</span> <span class="s2">"templates/500.html"</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()),</span>
+        <span class="p">(</span><span class="s2">"静态文件已收集"</span><span class="p">,</span> <span class="s2">"collectstatic"</span> <span class="ow">in</span> <span class="n">app_yaml</span><span class="p">),</span>
+    <span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">static_inventory</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="n">ROOT</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""pathlib 遍历：collectstatic 到底会把哪些文件搬到 STATIC_ROOT。"""</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">app_dir</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()):</span>
+        <span class="n">static</span> <span class="o">=</span> <span class="n">app_dir</span> <span class="o">/</span> <span class="s2">"static"</span>
+        <span class="k">if</span> <span class="n">static</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">static</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                    <span class="n">found</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">root</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\\</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"/"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">found</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">allowed_hosts_from_env</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""ALLOWED_HOSTS 不该写死：线上域名从环境变量来，本地给默认值。"""</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"DJANGO_ALLOWED_HOSTS"</span><span class="p">,</span> <span class="s2">"localhost,127.0.0.1"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span> <span class="k">if</span> <span class="n">host</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+
+
+<span class="n">make_demo_project</span><span class="p">()</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">checks</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 部署前自查（8 项）==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">ok</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">] [</span><span class="si">{</span><span class="s1">'✓'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'✗'</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">failed</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">ok</span> <span class="ow">in</span> <span class="n">results</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">]</span>
+<span class="n">passed</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">通过 </span><span class="si">{</span><span class="n">passed</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> 项；未通过：</span><span class="si">{</span><span class="s1">'、'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">通过 </span><span class="si">{</span><span class="n">passed</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> 项，可以 platform push。"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 静态文件清单（collectstatic 的搬运目标）==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">rel</span> <span class="ow">in</span> <span class="n">static_inventory</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  共 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">static_inventory</span><span class="p">())</span><span class="si">}</span><span class="s2"> 个文件 -&gt; STATIC_ROOT"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== ALLOWED_HOSTS 从环境变量来，不写死 ==="</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  本地："</span><span class="p">,</span> <span class="n">allowed_hosts_from_env</span><span class="p">({}))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  线上："</span><span class="p">,</span> <span class="n">allowed_hosts_from_env</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"DJANGO_ALLOWED_HOSTS"</span><span class="p">:</span> <span class="s2">"learning-log-abc.us-3.platformsh.site,.platformsh.site"</span><span class="p">}))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>      <span class="c1"># 演示完删掉</span>
+</code></pre>
+<p><strong>运行结果</strong>（实跑输出）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 部署前自查（8 项）===
+  [1] [✓] 依赖清单锁版本
+  [2] [✓] 线上依赖齐全
+  [3] [✓] 路由暗号对齐
+  [4] [✓] 数据库服务存在
+  [5] [✓] 忽略清单到位
+  [6] [✓] 云上放行域名且关调试
+  [7] [✗] 错误页成对
+  [8] [✓] 静态文件已收集
+
+通过 7/8 项；未通过：错误页成对
+
+=== 静态文件清单（collectstatic 的搬运目标）===
+   accounts/static/css/login.css
+   learning_logs/static/css/styles.css
+  共 2 个文件 -&gt; STATIC_ROOT
+
+=== ALLOWED_HOSTS 从环境变量来，不写死 ===
+  本地： ['localhost', '127.0.0.1']
+  线上： ['learning-log-abc.us-3.platformsh.site', '.platformsh.site']
+</code></pre>
+<p>三条解读：</p>
+<ol>
+<li><strong>检查要分三层，只查「文件在不在」是不够的</strong>：<code>requirements.txt</code> 存在但没锁版本、<code>settings.py</code> 存在但没放行域名、<code>routes.yaml</code> 存在但 <code>upstream</code> 写错——这三种「文件齐全、内容不对」的情况，示例 5 的清单一个都抓不到。第 1/3/6 项就是专门补这个洞。</li>
+<li><strong><code>static_inventory()</code> 让你在 push 之前就知道网上会有几个 CSS</strong>：它遍历每个应用的 <code>static/</code> 目录，把相对路径打出来。<strong>线上样式丢失时，第一个该问的就是「这个数是不是 0」</strong>；如果清单是 2 个、线上还是白脸，问题在 <code>/static</code> 路由或 <code>STATIC_ROOT</code>，不在文件本身。</li>
+<li><strong>把 <code>templates/500.html</code> 补上会怎样</strong>：第 7 项立刻从 <code>✗</code> 变 <code>✓</code>，汇总行变成「通过 8/8 项，可以 platform push」。反过来，把 <code>requirements_remote.txt</code> 里的 <code>psycopg2</code> 删掉再跑，第 2 项会变 <code>✗</code> 并提示「线上依赖齐全」不通过——<strong>每条检查都能被构造出的错误单独触发，这才叫测试过。</strong></li>
+</ol>
 <hr>
 
     <div class="blk hw">
@@ -488,6 +595,7 @@ transition:opacity .18s;z-index:60}
 
     <div class="done-bar">
       <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../review.html">复习计划 →</a>
       <a href="../20.html">查看单元 20 完整讲义 →</a>
       <a href="../bank.html">打开练习题库 →</a>
     </div>
@@ -512,10 +620,15 @@ function init(){
   });
   var box=document.getElementById('doneBox');
   if(box){
+    // 迁移：旧版只存布尔 true，没有完成时间；复习排程需要时间戳
+    if(all[n]===true){ all[n]=Date.now(); saveAll(all); }
     box.checked=!!all[n];
     if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
     box.addEventListener('change',function(){
-      var o=getAll(); o[n]=box.checked; saveAll(o);
+      var o=getAll();
+      if(box.checked){ if(o[n]===true) o[n]=Date.now(); if(!o[n]) o[n]=Date.now(); }
+      else delete o[n];
+      saveAll(o);
       document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
       document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
       document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
@@ -539,10 +652,6 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!p.querySelector('.cl')) p.insertBefore(s,c);
   });
   init();
-
-  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
-  var nlx=document.getElementById('nlx');
-  if(nlx&&window.innerWidth<=1000) nlx.open=false;
 
   // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
   document.addEventListener('keydown', function(e){

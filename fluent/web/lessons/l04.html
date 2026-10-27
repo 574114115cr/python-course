@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 4 课 · 别名的坑与选型：list 不是万能的</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="4">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 4 课 · 别名的坑与选型：list 不是万能的</h1>
+  <a class="tag" href="../01.html">单元 1</a>
+  <a class="ppt" href="../ppt/u/01.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:8.3%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="1" href="l01.html"><span class="no">01</span><span class="tx">特殊方法：让对象接入语言协议</span></a><a class="" data-l="2" href="l02.html"><span class="no">02</span><span class="tx">序列家族与推导式</span></a><a class="" data-l="3" href="l03.html"><span class="no">03</span><span class="tx">元组、拆包、切片与排序</span></a><a class="cur" data-l="4" href="l04.html"><span class="no">04</span><span class="tx">别名的坑与选型：list 不是万能的</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-走哪条路-取决于有没有-iadd">延伸：+= 走哪条路，取决于有没有 iadd</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../01.html"><span class="k">单元</span>
+    <span class="v">单元 1 · 数据模型与序列</span></a>
+  <a href="../bank.html#u1"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/01.html#s8"><span class="k">课件</span>
+    <span class="v">本单元第 4 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u01.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/01.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 1–2 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 4 课</span>
+        <span class="kwk">单元 1 · 第 1–2 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>别名的坑与选型：list 不是万能的</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能识别 `*` 复制、`+=` 原地修改、可变默认参数三类别名问题，并按数据规模选择 array / deque / memoryview。</div>
+    <h3 id="讲解">讲解</h3>
+<p>先看三个经典陷阱，它们都源于「变量是引用，不是盒子」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 1) * 复制的是引用，不是内容</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>          <span class="c1"># [[1, 0, 0], [1, 0, 0], [1, 0, 0]]  ← 三行是同一个列表</span>
+
+<span class="c1"># 2) 元组里的可变对象仍然能改；+= 先原地改，再赋值</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"TypeError:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>             <span class="c1"># (1, 2, [30, 40, 50, 60])  ← 报错了，但列表已经变了</span>
+
+<span class="c1"># 3) 可变默认参数只创建一次</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">append_to</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">bucket</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bucket</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">append_to</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># [1]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">append_to</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># [1, 2]  ← 不是 [2]</span>
+</code></pre>
+<p>正确写法分别是：<code>[[0] * 3 for _ in range(3)]</code>、别对元组元素做增量赋值、默认值用 <code>None</code> 再在函数体里创建。</p>
+<p>当 list 不合适时：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>选择</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存大量同类型数字</td>
+<td><code>array.array</code></td>
+<td>连续内存，省空间</td>
+</tr>
+<tr>
+<td>频繁在两端增删</td>
+<td><code>collections.deque</code></td>
+<td>两端 O(1)，list 头部插入 O(n)</td>
+</tr>
+<tr>
+<td>只读、不复制地看二进制</td>
+<td><code>memoryview</code></td>
+<td>零拷贝切片</td>
+</tr>
+<tr>
+<td>频繁按序插入</td>
+<td><code>bisect.insort</code></td>
+<td>保持有序，插入 O(n) 但查找 O(log n)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="延伸-走哪条路-取决于有没有-iadd">延伸：+= 走哪条路，取决于有没有 <strong>iadd</strong></h3>
+<p><code>x += y</code> 先找 <code>__iadd__</code>；没有就退化成 <code>x = x + y</code>。list 有 <code>__iadd__</code>（等价 <code>extend</code>，原地改并返回 <code>self</code>），tuple 没有，所以 <code>t += (4,)</code> 必定新建对象，别名看不到变化：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">a</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>          <span class="c1"># [1, 2, 3] [1, 2, 3]，同一个对象</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="n">u</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="n">t</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>          <span class="c1"># (1, 2, 3) (1, 2)</span>
+</code></pre>
+<p><code>*=</code> 同理：<code>lst *= 2</code> 原地扩展，<code>tup *= 2</code> 新建。可变对象上还有第二个坑：<code>lst *= 2</code> 是同一对象自我复制，<code>[[0]] * 3</code> 则是三个引用指向同一个内层 list，改一个全变。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>*</code> 复制的是引用</strong>：<code>[[0] * 3] * 3</code> 三行共享同一个内层列表，写入就会三行联动。</li>
+<li><strong><code>+=</code> 先原地修改，再赋值</strong>：tuple 没有 <code>__iadd__</code>，所以 <code>t[2] += [...]</code> 改了列表却仍抛 <code>TypeError</code>。</li>
+<li><strong>可变默认参数只求值一次</strong>：默认值用 <code>None</code>，在函数体里创建新对象。</li>
+<li><strong>list 不是万能</strong>：同类型数字用 <code>array</code>，两端增删用 <code>deque</code>，零拷贝读二进制用 <code>memoryview</code>。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>复现上面三个陷阱，把每个的输出写进注释，再改成正确写法。</li>
+<li>用 <code>deque(maxlen=5)</code> 实现「最近 5 条日志」缓冲，连续 push 10 条，打印结果。</li>
+<li>用 <code>array.array("i", range(1_000_000))</code> 与 list 版本比较 <code>sys.getsizeof()</code>，记录倍数。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释 <code>[[0] * 3] * 3</code> 为什么会三行联动</li>
+<li><span class="ck"></span>能说清 <code>t[2] += [...]</code> 为什么「既报错又修改成功」</li>
+<li><span class="ck"></span>面对「尾部追加为主」和「头部插入为主」两种负载，能分别选 list 和 deque</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 2 章 §2.8、§2.10</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：+= 走哪条路，取决于有没有 __iadd__</p></div>
+    <div class="pn"><a href="l03.html"><small>← 第 3 课 · 单元 1</small><b>元组、拆包、切片与排序</b></a><a class="nx" href="l05.html"><small>第 5 课 · 单元 2 →</small><b>哈希表：dict 为什么快，顺序为什么稳定</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../01.html">返回单元 1</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=4, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -10,7 +10,7 @@ const PYTHON = 'C:/Users/57411/.workbuddy/binaries/python/envs/default/Scripts/p
 const ROOT_DIR = path.resolve(import.meta.dirname, '..');
 const PORT = 8091;
 const CDP_PORT = 9785;
-const PROFILE = path.join(os.tmpdir(), 'pwa-verify-profile');
+const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'pwa-verify-'));
 
 const server = spawn(PYTHON, ['tools/serve.py', String(PORT)],
   { cwd: ROOT_DIR, stdio: 'ignore' });
@@ -85,7 +85,7 @@ async function main() {
   const cacheInfo = await evaluate(`caches.keys().then(ks => Promise.all(ks.map(k =>
     caches.open(k).then(c => c.keys().then(rs => k + ':' + rs.length))))).then(a => a.join(' | '))`, true);
   console.log('缓存:', cacheInfo);
-  expect('预缓存 shell 非空', /pycourse-v1:\d+/.test(cacheInfo));
+  expect('预缓存 shell 非空', /pycourse-v\d+:\d+/.test(cacheInfo));
 
   // 3) manifest 可读且图标在
   const mf = await evaluate(`fetch('manifest.webmanifest').then(r => r.json()).then(m =>

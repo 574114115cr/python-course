@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 2 课 · 序列家族与推导式</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="2">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 2 课 · 序列家族与推导式</h1>
+  <a class="tag" href="../01.html">单元 1</a>
+  <a class="ppt" href="../ppt/u/01.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:4.2%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="1" href="l01.html"><span class="no">01</span><span class="tx">特殊方法：让对象接入语言协议</span></a><a class="cur" data-l="2" href="l02.html"><span class="no">02</span><span class="tx">序列家族与推导式</span></a><a class="" data-l="3" href="l03.html"><span class="no">03</span><span class="tx">元组、拆包、切片与排序</span></a><a class="" data-l="4" href="l04.html"><span class="no">04</span><span class="tx">别名的坑与选型：list 不是万能的</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-memoryview-同一块内存的视图">延伸：memoryview：同一块内存的视图</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../01.html"><span class="k">单元</span>
+    <span class="v">单元 1 · 数据模型与序列</span></a>
+  <a href="../bank.html#u1"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/01.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u01.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/01.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 1–2 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 2 课</span>
+        <span class="kwk">单元 1 · 第 1–2 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>序列家族与推导式</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能按「容器 / 扁平」「可变 / 不可变」给内置序列分类，并在 listcomp、genexp、map/filter 之间选对工具。</div>
+    <h3 id="讲解">讲解</h3>
+<p>内置序列按两层维度分类：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>类型</th>
+<th>存什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器序列</td>
+<td>list、tuple、collections.deque</td>
+<td>存<strong>对象引用</strong>，可以放不同类型</td>
+</tr>
+<tr>
+<td>扁平序列</td>
+<td>str、bytes、bytearray、array.array、memoryview</td>
+<td>存<strong>值本身</strong>，只能放字符/数字/字节，更省内存</td>
+</tr>
+<tr>
+<td>可变</td>
+<td>list、bytearray、array、deque</td>
+<td>能原地改</td>
+</tr>
+<tr>
+<td>不可变</td>
+<td>tuple、str、bytes</td>
+<td>改就生成新对象</td>
+</tr>
+</tbody>
+</table></div>
+<p>推导式是「用表达式构造序列」，比 <code>for</code> + <code>append</code> 更快也更难读错：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">symbols</span> <span class="o">=</span> <span class="s2">"$¢£¥€¤"</span>
+<span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">symbols</span> <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">127</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>                      <span class="c1"># [162, 163, 165, 8364, 164]</span>
+
+<span class="c1"># 等价写法，但 map/filter 需要 lambda，可读性通常更差</span>
+<span class="n">codes2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">127</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">symbols</span><span class="p">)))</span>
+</code></pre>
+<p>生成器表达式把方括号换成圆括号，得到的是<strong>惰性</strong>迭代器，一次只产出一个元素，只能遍历一次：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">)</span>      <span class="c1"># 不需要先建列表</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"black"</span><span class="p">,</span> <span class="s2">"white"</span><span class="p">]</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"S"</span><span class="p">,</span> <span class="s2">"M"</span><span class="p">,</span> <span class="s2">"L"</span><span class="p">]</span>
+<span class="n">tshirts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sizes</span><span class="p">]</span>   <span class="c1"># 笛卡尔积：6 种</span>
+</code></pre>
+<h3 id="延伸-memoryview-同一块内存的视图">延伸：memoryview：同一块内存的视图</h3>
+<p><code>lst[:]</code> 一定复制，<code>bytes</code> 切片也复制，但 <code>memoryview</code> 的切片是视图：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s2">"HTTP/1.1 200 OK"</span><span class="p">)</span>
+<span class="n">mv</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">head</span> <span class="o">=</span> <span class="n">mv</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>                 <span class="c1"># 视图，不复制</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>         <span class="c1"># b'HTTP/1.1'</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"9"</span><span class="p">)</span>            <span class="c1"># 改原对象</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>         <span class="c1"># b'HTTP/9.1'，视图跟着变</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mv</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">"HTTP"</span><span class="p">)</span>     <span class="c1"># True，可直接和 bytes 比较</span>
+</code></pre>
+<p>NumPy 的切片同样是视图：<code>arr[1:]</code> 改的是原数组，这和 list 的复制语义相反，是从 list 迁到 NumPy 最常见的 bug。<code>memoryview.cast("I")</code> 还能把同一块内存按 4 字节整数重新解释，解析二进制协议头时省掉所有 unpack 拷贝。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>推导式只用来「建序列」</strong>，不要在里边 <code>print</code> 或改外部状态；副作用请用普通 <code>for</code>。</li>
+<li><strong>生成器表达式省内存但有一次性</strong>：<code>g = (x for x in data)</code>，遍历一次就空了；需要重复用就存成 list。</li>
+<li><strong>嵌套顺序 = 书写顺序</strong>：<code>for c in colors for s in sizes</code> 外层是 colors。写反了不会报错，只会得到错的结果。</li>
+<li><strong><code>array.array</code> 存的是机器数值</strong>，比 list 省 2–8 倍内存（取决于元素类型），但只能放同一种数值类型。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<p>给定一份 20 个单词的列表，完成三件事，并记录每步耗时（用 <code>time.perf_counter()</code>）：</p>
+<ol>
+<li>用列表推导式取出所有长度大于 5 的单词，转成大写；</li>
+<li>用生成器表达式求这些单词的总长度；</li>
+<li>用 <code>array.array("d", ...)</code> 存 100 万个浮点数，和 list 版本比较 <code>sys.getsizeof()</code>。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能举出一个「必须用生成器表达式而不能用列表推导式」的场景（内存受限 / 无限流 / 只需一次归约）</li>
+<li><span class="ck"></span>能解释 <code>[[]] * 3</code> 与 <code>[[] for _ in range(3)]</code> 的区别</li>
+<li><span class="ck"></span>知道 <code>str</code> 属于扁平序列，因此 <code>str</code> 的切片返回新字符串而不是视图</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 2 章 §2.2–2.3、§2.10</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：memoryview：同一块内存的视图</p></div>
+    <div class="pn"><a href="l01.html"><small>← 第 1 课 · 单元 1</small><b>特殊方法：让对象接入语言协议</b></a><a class="nx" href="l03.html"><small>第 3 课 · 单元 1 →</small><b>元组、拆包、切片与排序</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../01.html">返回单元 1</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=2, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

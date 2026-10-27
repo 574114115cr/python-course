@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 26 课 · 静态协议：Protocol 与结构化类型</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="26">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 26 课 · 静态协议：Protocol 与结构化类型</h1>
+  <a class="tag" href="../07.html">单元 7</a>
+  <a class="ppt" href="../ppt/u/07.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:54.2%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="25" href="l25.html"><span class="no">25</span><span class="tx">鸭子类型与抽象基类</span></a><a class="cur" data-l="26" href="l26.html"><span class="no">26</span><span class="tx">静态协议：Protocol 与结构化类型</span></a><a class="" data-l="27" href="l27.html"><span class="no">27</span><span class="tx">继承与 super()：MRO 与协作式构造</span></a><a class="" data-l="28" href="l28.html"><span class="no">28</span><span class="tx">多重继承与混入类：什么时候不该继承</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-protocol-的运行时检查很浅">延伸：Protocol 的运行时检查很浅</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../07.html"><span class="k">单元</span>
+    <span class="v">单元 7 · 接口、协议与继承</span></a>
+  <a href="../bank.html#u7"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/07.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u07.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/13.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 13–14 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 26 课</span>
+        <span class="kwk">单元 7 · 第 13–14 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>静态协议：Protocol 与结构化类型</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用 `Protocol` 描述「长什么样的对象能用」，并用 `runtime_checkable` 做运行时检查。</div>
+    <h3 id="讲解">讲解</h3>
+<p><code>typing.Protocol</code> 是静态检查器的结构化类型：只要对象有对应的方法/属性，就满足协议，不需要继承。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Renderable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">render_all</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Renderable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+</code></pre>
+<p>与 ABC 的区别：ABC 是<strong>名义子类型</strong>（必须继承或注册），Protocol 是<strong>结构子类型</strong>（方法对得上就行）。给第三方库的类加约束时，Protocol 是唯一不侵入的选择。</p>
+<p>需要运行时 <code>isinstance</code> 时加 <code>@runtime_checkable</code>，但它只检查方法是否存在，不检查签名：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Closeable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Conn</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Conn</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>    <span class="c1"># True</span>
+</code></pre>
+<h3 id="延伸-protocol-的运行时检查很浅">延伸：Protocol 的运行时检查很浅</h3>
+<p><code>Protocol</code> 是给静态检查器看的「结构化类型」，能写 <code>Iterator[int]</code> 这类泛型协议；加 <code>@runtime_checkable</code> 后才能 <code>isinstance</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Closeable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Conn</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Conn</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>    <span class="c1"># True</span>
+</code></pre>
+<p>关键限制：<strong>运行时只查成员名是否存在，不查签名和类型</strong>。所以下面这个也会返回 True，但用起来就崩：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Fake</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="p">):</span> <span class="k">pass</span>        <span class="c1"># 参数不对</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Fake</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>    <span class="c1"># 仍然是 True</span>
+</code></pre>
+<p>结论：<code>runtime_checkable</code> 只适合做「粗筛」，真正的行为约束靠测试或显式 <code>isinstance</code> 对具体基类。泛型协议（<code>Protocol[T]</code>）在 3.12 前还不能 <code>runtime_checkable</code>。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>Protocol 不能实例化</strong>，它只描述形状。</li>
+<li><strong><code>runtime_checkable</code> 只检查成员名</strong>，参数类型、返回值都不查。</li>
+<li><strong>协议要小</strong>：一个方法一个协议，组合优于大而全的接口。</li>
+<li><strong>标准库已有大量协议</strong>：<code>Iterable</code>、<code>Sized</code>、<code>SupportsInt</code>，优先复用。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>定义 <code>Closeable</code> 协议，让一个没有继承关系的类通过 <code>isinstance</code> 检查。</li>
+<li>用 <code>mypy</code> 验证：把 <code>render</code> 拼错成 <code>renders</code>，观察类型错误。</li>
+<li>写一个 <code>SupportsAdd</code> 协议，约束「支持 <code>+</code> 的同类型对象」，并解释为什么它比 ABC 更适合数值库。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说清 Protocol 与 ABC 的适用边界</li>
+<li><span class="ck"></span>知道 <code>runtime_checkable</code> 检查的粒度</li>
+<li><span class="ck"></span>能给第三方类加协议约束而不修改它的代码</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 13 章 §13.6</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：Protocol 的运行时检查很浅</p></div>
+    <div class="pn"><a href="l25.html"><small>← 第 25 课 · 单元 7</small><b>鸭子类型与抽象基类</b></a><a class="nx" href="l27.html"><small>第 27 课 · 单元 7 →</small><b>继承与 super()：MRO 与协作式构造</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../07.html">返回单元 7</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=26, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

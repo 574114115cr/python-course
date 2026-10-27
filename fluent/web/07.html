@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 7 · 接口、协议与继承</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 7 · 接口、协议与继承</h1>
+  <a class="tag" href="07.html">单元 7</a>
+  <a class="ppt" href="ppt/u/07.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="25" href="lessons/l25.html"><span class="no">25</span><span class="tx">鸭子类型与抽象基类</span></a><a class="" data-l="26" href="lessons/l26.html"><span class="no">26</span><span class="tx">静态协议：Protocol 与结构化类型</span></a><a class="" data-l="27" href="lessons/l27.html"><span class="no">27</span><span class="tx">继承与 super()：MRO 与协作式构造</span></a><a class="" data-l="28" href="lessons/l28.html"><span class="no">28</span><span class="tx">多重继承与混入类：什么时候不该继承</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l25">第 25 课 · 鸭子类型与抽象基类</a>
+<a class="lv2" href="#l26">第 26 课 · 静态协议：Protocol 与结构化类型</a>
+<a class="lv2" href="#l27">第 27 课 · 继承与 super()：MRO 与协作式构造</a>
+<a class="lv2" href="#l28">第 28 课 · 多重继承与混入类：什么时候不该继承</a>
+<a class="lv2" href="#case-u07">综合案例：存储后端：用 if/else 分派，还是用接口收口</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u7"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/07.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u07.html"><span class="k">走读</span>
+    <span class="v">单元 7 完整程序 · 逐段讲解</span></a>
+  <a href="ch/13.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 13–14 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 7</span>
+        <span class="kwk">第 13–14 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 7 · 接口、协议与继承</h1>
+      <p class="goal">鸭子类型 · 协议 · ABC · 多重继承</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 13–14 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p>「面向接口编程」在 Python 里有三种落地方式：鸭子类型（只看行为）、静态协议（结构化类型检查）、抽象基类（显式契约 + 运行时检查）。它们不是互相替代，而是三种不同强度的约束。</p>
+<p>继承则是被滥用最多的特性。<code>super()</code> 不是「调用父类」，而是「沿 MRO 调用下一个类」；多重继承能解决混入问题，也能制造难以调试的菱形。本单元会给出判断标准：什么时候该继承，什么时候该组合。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>用鸭子类型写不依赖具体类型的函数；</li>
+<li>用 <code>Protocol</code> 给第三方类做结构化约束，不要求对方继承你的基类；</li>
+<li>用 ABC 定义「必须实现」的契约，并理解虚拟子类注册；</li>
+<li>画出 MRO，写出协作式 <code>super().__init__()</code>，判断多重继承是否值得。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="25" href="lessons/l25.html"><span class="no">25</span><span class="tx">鸭子类型与抽象基类</span></a><a data-l="26" href="lessons/l26.html"><span class="no">26</span><span class="tx">静态协议：Protocol 与结构化类型</span></a><a data-l="27" href="lessons/l27.html"><span class="no">27</span><span class="tx">继承与 super()：MRO 与协作式构造</span></a><a data-l="28" href="lessons/l28.html"><span class="no">28</span><span class="tx">多重继承与混入类：什么时候不该继承</span></a></div></div><h2 id="l25">第 25 课 · 鸭子类型与抽象基类</h2><h3 id="讲解">讲解</h3>
+<p>鸭子类型：不检查类型，只调用需要的方法。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">render_all</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+</code></pre>
+<p>任何有 <code>render()</code> 的对象都能传进来。缺点是错误发现得晚——直到运行时才炸。ABC 提供显式契约：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Exporter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batches</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">batches</span><span class="p">)</span>
+</code></pre>
+<p>继承 <code>Exporter</code> 但没实现 <code>export</code> 的类无法实例化，错误提前到创建对象时。标准库的 <code>collections.abc</code> 全是这种契约：<code>Sequence</code>、<code>Mapping</code>、<code>Iterable</code>、<code>Sized</code>。</p>
+<p>ABC 还支持虚拟子类：不继承也能被 <code>isinstance</code> 认可。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bag</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">Sequence</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Bag</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Bag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">Sequence</span><span class="p">))</span>   <span class="c1"># True</span>
+</code></pre>
+<h3 id="延伸-subclasshook-结构匹配的幕后机制">延伸：<strong>subclasshook</strong>：结构匹配的幕后机制</h3>
+<p><code>collections.abc</code> 里的 <code>Iterable</code>、<code>Sized</code>、<code>Container</code> 都实现了 <code>__subclasshook__</code>，所以一个类<strong>不必继承</strong>它们，只要实现了对应方法就能通过 <code>isinstance</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sized</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bag</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="mi">3</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">Bag</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">Sized</span><span class="p">),</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">))</span>   <span class="c1"># True True</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">issubclass</span><span class="p">(</span><span class="n">Bag</span><span class="p">,</span> <span class="n">Sized</span><span class="p">))</span>                          <span class="c1"># True</span>
+</code></pre>
+<p>机制是：<code>isinstance</code> 走 <code>__instancecheck__</code> → <code>__subclasscheck__</code> → 最终调 <code>__subclasshook__(cls, C)</code>，默认实现检查 C 有没有所需方法名。注意它<strong>只检查方法名</strong>，不检查签名，所以「有 <code>__len__</code> 但返回字符串」也会通过。<code>Sequence</code> 之类更严格的 ABC 会把 <code>__iter__</code>、<code>__len__</code>、<code>__getitem__</code> 都列进检查集。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>ABC 的方法用 <code>@abstractmethod</code> 标记</strong>，但只要还有一个抽象方法没实现，类就不能实例化。</li>
+<li><strong>ABC 可以有具体方法</strong>，<code>export_all</code> 就是模板方法，子类只实现变化点。</li>
+<li><strong><code>register()</code> 是承诺不是检查</strong>：注册后 <code>isinstance</code> 通过，但你仍要自己保证方法齐全。</li>
+<li><strong>不要给所有类都套 ABC</strong>，只有「多个实现共享同一契约」时才值得。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>写 <code>Exporter</code> ABC 与两个实现（CSV、JSON），验证未实现抽象方法的子类无法实例化。</li>
+<li>用 <code>Sequence.register</code> 让一个自定义容器通过 <code>isinstance(x, Sequence)</code>。</li>
+<li>写一个只依赖 <code>__len__</code> 与 <code>__getitem__</code> 的函数，分别传 list、str、自定义容器。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说出鸭子类型与 ABC 各自解决什么问题</li>
+<li><span class="ck"></span>会定义带具体方法的 ABC，并解释模板方法</li>
+<li><span class="ck"></span>知道 <code>register()</code> 的语义与风险</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 13 章 §13.3–13.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：__subclasshook__：结构匹配的幕后机制</p></div><h2 id="l26">第 26 课 · 静态协议：Protocol 与结构化类型</h2><h3 id="讲解-1">讲解</h3>
+<p><code>typing.Protocol</code> 是静态检查器的结构化类型：只要对象有对应的方法/属性，就满足协议，不需要继承。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Renderable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">render_all</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Renderable</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span>
+</code></pre>
+<p>与 ABC 的区别：ABC 是<strong>名义子类型</strong>（必须继承或注册），Protocol 是<strong>结构子类型</strong>（方法对得上就行）。给第三方库的类加约束时，Protocol 是唯一不侵入的选择。</p>
+<p>需要运行时 <code>isinstance</code> 时加 <code>@runtime_checkable</code>，但它只检查方法是否存在，不检查签名：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Closeable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Conn</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="o">...</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Conn</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>    <span class="c1"># True</span>
+</code></pre>
+<h3 id="延伸-protocol-的运行时检查很浅">延伸：Protocol 的运行时检查很浅</h3>
+<p><code>Protocol</code> 是给静态检查器看的「结构化类型」，能写 <code>Iterator[int]</code> 这类泛型协议；加 <code>@runtime_checkable</code> 后才能 <code>isinstance</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Closeable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Conn</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">pass</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Conn</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>    <span class="c1"># True</span>
+</code></pre>
+<p>关键限制：<strong>运行时只查成员名是否存在，不查签名和类型</strong>。所以下面这个也会返回 True，但用起来就崩：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Fake</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">force</span><span class="p">):</span> <span class="k">pass</span>        <span class="c1"># 参数不对</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">Fake</span><span class="p">(),</span> <span class="n">Closeable</span><span class="p">))</span>    <span class="c1"># 仍然是 True</span>
+</code></pre>
+<p>结论：<code>runtime_checkable</code> 只适合做「粗筛」，真正的行为约束靠测试或显式 <code>isinstance</code> 对具体基类。泛型协议（<code>Protocol[T]</code>）在 3.12 前还不能 <code>runtime_checkable</code>。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong>Protocol 不能实例化</strong>，它只描述形状。</li>
+<li><strong><code>runtime_checkable</code> 只检查成员名</strong>，参数类型、返回值都不查。</li>
+<li><strong>协议要小</strong>：一个方法一个协议，组合优于大而全的接口。</li>
+<li><strong>标准库已有大量协议</strong>：<code>Iterable</code>、<code>Sized</code>、<code>SupportsInt</code>，优先复用。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<ol>
+<li>定义 <code>Closeable</code> 协议，让一个没有继承关系的类通过 <code>isinstance</code> 检查。</li>
+<li>用 <code>mypy</code> 验证：把 <code>render</code> 拼错成 <code>renders</code>，观察类型错误。</li>
+<li>写一个 <code>SupportsAdd</code> 协议，约束「支持 <code>+</code> 的同类型对象」，并解释为什么它比 ABC 更适合数值库。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说清 Protocol 与 ABC 的适用边界</li>
+<li><span class="ck"></span>知道 <code>runtime_checkable</code> 检查的粒度</li>
+<li><span class="ck"></span>能给第三方类加协议约束而不修改它的代码</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 13 章 §13.6</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：Protocol 的运行时检查很浅</p></div><h2 id="l27">第 27 课 · 继承与 super()：MRO 与协作式构造</h2><h3 id="讲解-2">讲解</h3>
+<p><code>super()</code> 返回的是 MRO 中当前类之后的那个类，不是「父类」。单继承时两者相同，多继承时差别巨大。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">A</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"A"</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">B</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"B"</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"C"</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">D</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="nb">print</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="vm">__name__</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">D</span><span class="o">.</span><span class="vm">__mro__</span><span class="p">])</span>   <span class="c1"># ['D', 'B', 'C', 'A', 'object']</span>
+<span class="n">D</span><span class="p">()</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>                                <span class="c1"># B C A</span>
+</code></pre>
+<p>协作式构造要求每一层都接收 <code>**kwargs</code> 并继续传递，否则链条会断：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Logged</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Tagged</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="n">tag</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Item</span><span class="p">(</span><span class="n">Logged</span><span class="p">,</span> <span class="n">Tagged</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tag</span><span class="o">=</span><span class="s2">"t"</span><span class="p">)))</span>
+<span class="c1"># {'name': 'x', 'verbose': True, 'tag': 't'}</span>
+</code></pre>
+<h3 id="延伸-dict-子类的-missing-管不到-get">延伸：dict 子类的 <strong>missing</strong> 管不到 get</h3>
+<p><code>__missing__</code> 只在 <code>d[k]</code> 时触发，<code>get</code> 和 <code>in</code> 都不走它：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">D</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__missing__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"&lt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> 缺失&gt;"</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"b"</span><span class="p">])</span>        <span class="c1"># &lt;b 缺失&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"b"</span><span class="p">))</span>    <span class="c1"># None ← 没走 __missing__</span>
+</code></pre>
+<p>想统一行为就同时重写 <code>get</code>；更省事的做法是继承 <code>collections.UserDict</code>——它是纯 Python 实现，内部一个 <code>data</code> 字典，重写 <code>__getitem__</code>、<code>__setitem__</code> 时不会遇到 C 实现的绕过问题。子类化 <code>dict</code>/<code>list</code> 的真实麻烦在于：<code>dict.update()</code>、<code>|=</code>、<code>list.__init__</code>、切片赋值这些 C 层路径<strong>可能不调用你重写的方法</strong>，而 <code>UserDict</code>/<code>UserList</code> 全走 Python 层。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong><code>super()</code> 沿 MRO 前进</strong>，不由「父类」决定；菱形继承里每个类只执行一次。</li>
+<li><strong><code>__mro__</code> 是 C3 线性化结果</strong>，可以用 <code>Cls.mro()</code> 查看。</li>
+<li><strong>子类化内置类型要小心</strong>：<code>dict.update()</code>、<code>|=</code> 等 C 实现可能绕过你重写的 <code>__setitem__</code>；需要可靠拦截就改用 <code>UserDict</code>、<code>UserList</code> 或组合。</li>
+<li><strong>协作式构造只传关键字</strong>，位置参数在多层继承里极易错位。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<ol>
+<li>构造上面的 <code>A/B/C/D</code>，打印 MRO 并预测 <code>ping()</code> 输出，再运行验证。</li>
+<li>实现 <code>Item</code> 的多层初始化，打印 <code>vars()</code> 确认字段齐全。</li>
+<li>继承 <code>dict</code> 并重写 <code>__setitem__</code>，观察 <code>update()</code> 是否绕过你的实现；再用 <code>UserDict</code> 复现并对比。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能手工画出四层菱形继承的 MRO</li>
+<li><span class="ck"></span>能解释 <code>super()</code> 在多继承中的实际行为</li>
+<li><span class="ck"></span>知道为什么不该直接继承 <code>dict</code> / <code>list</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 14 章 §14.2–14.3</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：dict 子类的 __missing__ 管不到 get</p></div><h2 id="l28">第 28 课 · 多重继承与混入类：什么时候不该继承</h2><h3 id="讲解-3">讲解</h3>
+<p>混入类（mixin）是「只提供一组方法、不单独实例化」的类，通常不带状态、不做 <code>__init__</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">JsonMixin</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">JsonMixin</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="s2">"Ann"</span><span class="p">)</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>   <span class="c1"># {"name": "Ann"}</span>
+</code></pre>
+<p>判断标准：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>判断项</th>
+<th>倾向继承</th>
+<th>倾向组合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>子类真的是父类的一种？</td>
+<td>✅</td>
+<td>不是就别继承</td>
+</tr>
+<tr>
+<td>需要复用父类的实现？</td>
+<td>可以用混入</td>
+<td>委托通常更灵活</td>
+</tr>
+<tr>
+<td>父类会独立变化？</td>
+<td>不适合</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>继承层级超过 2 层？</td>
+<td>重新设计</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table></div>
+<p>组合通常更灵活：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">JsonCodec</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_json</span> <span class="o">=</span> <span class="n">JsonCodec</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_json</span><span class="o">.</span><span class="n">encode</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">})</span>
+</code></pre>
+<h3 id="延伸-混入类不要写-init">延伸：混入类不要写 <strong>init</strong></h3>
+<p>混入类（mixin）的职责是「加一小块能力」，不是「初始化状态」。三条铁律：</p>
+<ol>
+<li>不写 <code>__init__</code>；确实需要时只接受 <code>**kwargs</code> 并原样转交 <code>super().__init__(**kwargs)</code>。</li>
+<li>只依赖调用方已经有的方法或属性，不假设自己的初始化顺序。</li>
+<li>一层混入别超过 3 个方法，超了说明它是基类，不是混入。</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">JsonMixin</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">JsonMixin</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="s2">"Ann"</span><span class="p">)</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>    <span class="c1"># {"name": "Ann"}</span>
+</code></pre>
+<p>MRO 是 C3 线性化，<code>super()</code> 不是「父类」而是「MRO 里的下一个」。所以混入里调 <code>super()</code> 会按 MRO 继续往下走，这也是混入能协作的基础；层级超过两层、开始需要记 MRO 顺序时，换组合更稳。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong>混入类不写 <code>__init__</code></strong>，也不假设 MRO 的位置。</li>
+<li><strong>「is-a」不成立就不要继承</strong>，哪怕代码看起来能复用。</li>
+<li><strong>继承是编译期最强的耦合</strong>，父类改一个方法可能影响所有子类。</li>
+<li><strong>优先组合 + 协议</strong>：需要多态就实现同一组方法，不需要共享实现。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>找出你写过的一个继承层级，用上表逐条判断是否该改成组合。</li>
+<li>用混入类给 3 个不相关的类加 <code>to_json()</code>，确认它们都不需要改 <code>__init__</code>。</li>
+<li>把一段「继承 + 重写 5 个方法」的代码改成「组合 + 委托 2 个方法」，比较行数与可读性。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说出混入类的三个特征</li>
+<li><span class="ck"></span>能用「is-a / 复用实现 / 变化方向」判断继承是否合理</li>
+<li><span class="ck"></span>完成过一次「继承 → 组合」的重构并说明收益</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 14 章 §14.4–14.7</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：混入类不要写 __init__</p></div><h2 id="case-u07">综合案例：存储后端：用 if/else 分派，还是用接口收口</h2>
+<blockquote>
+<p>业务代码要能换存储：今天内存、明天文件。先写 if/else，再换成抽象基类。</p>
+</blockquote>
+<h3 id="重构前-一个类装两种后端">重构前（一个类装两种后端）</h3>
+<p><code>Store.kind</code> 决定走哪个分支，读写都要 <code>if</code> 一次。加第三种后端（Redis）时，每个方法都要再改一遍；调用方还得知道 <code>kind</code>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Store</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"mem"</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream</span> <span class="o">=</span> <span class="n">stream</span> <span class="ow">or</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"mem"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"file"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stream</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown kind: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"mem"</span><span class="p">,</span> <span class="s2">"file"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown kind: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">mem</span> <span class="o">=</span> <span class="n">Store</span><span class="p">(</span><span class="s2">"mem"</span><span class="p">)</span>
+<span class="n">mem</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"u1"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Ann"</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mem</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"u1"</span><span class="p">))</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">Store</span><span class="p">(</span><span class="s2">"file"</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"u1"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Bob"</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"u1"</span><span class="p">),</span> <span class="n">f</span><span class="o">.</span><span class="n">stream</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">Store</span><span class="p">(</span><span class="s2">"redis"</span><span class="p">)</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"u1"</span><span class="p">,</span> <span class="p">{})</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"失败:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</code></pre>
+<h3 id="重构后-abc-定接口-两个实现各自负责">重构后（ABC 定接口，两个实现各自负责）</h3>
+<p><code>Storage</code> 只声明「必须有什么」，两个实现各自处理序列化。业务函数 <code>save_user</code> 只依赖抽象，连 <code>kind</code> 都不用知道。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Storage</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="o">...</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MemoryStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">StreamStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把整表序列化到任意可写流，测试里用 StringIO，生产里换真文件。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span> <span class="o">=</span> <span class="n">stream</span> <span class="ow">or</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">save_user</span><span class="p">(</span><span class="n">store</span><span class="p">:</span> <span class="n">Storage</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="n">store</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="n">store</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">found</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"刚写进去的读不到"</span>
+    <span class="k">return</span> <span class="n">found</span>
+
+
+<span class="n">mem</span> <span class="o">=</span> <span class="n">MemoryStorage</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">save_user</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="s2">"u1"</span><span class="p">,</span> <span class="s2">"Ann"</span><span class="p">))</span>          <span class="c1"># {'name': 'Ann'}</span>
+
+<span class="n">stream</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+<span class="n">disk</span> <span class="o">=</span> <span class="n">StreamStorage</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">save_user</span><span class="p">(</span><span class="n">disk</span><span class="p">,</span> <span class="s2">"u2"</span><span class="p">,</span> <span class="s2">"Bob"</span><span class="p">))</span>         <span class="c1"># {'name': 'Bob'}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">disk</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>                          <span class="c1"># {"u2": {"name": "Bob"}}</span>
+
+<span class="c1"># 抽象类在实例化阶段就拦住「没实现完」的后端</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">Half</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">Half</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"拒绝实例化:"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)[:</span><span class="mi">60</span><span class="p">])</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新增后端</td>
+<td>每个方法加 <code>elif</code></td>
+<td>新增一个 <code>Storage</code> 子类</td>
+<td>不改老代码</td>
+<td>多一个类</td>
+</tr>
+<tr>
+<td>未实现完整</td>
+<td>运行时才报 <code>unknown kind</code></td>
+<td>实例化时 <code>TypeError</code></td>
+<td>错误提前到启动</td>
+<td>每加方法都要给实现</td>
+</tr>
+<tr>
+<td>调用方耦合</td>
+<td>要知道 <code>kind</code> 字符串</td>
+<td>只依赖 <code>Storage</code></td>
+<td>可替换、可 mock</td>
+<td>需要传对象而不是字符串</td>
+</tr>
+<tr>
+<td>序列化</td>
+<td>混在 <code>put</code> 的 <code>if</code> 里</td>
+<td><code>StreamStorage</code> 自己负责</td>
+<td>关注点分离</td>
+<td>每个后端重复一点逻辑</td>
+</tr>
+<tr>
+<td>存储位置</td>
+<td>硬编码写流</td>
+<td>构造时注入流</td>
+<td>测试用 <code>StringIO</code>，生产换文件</td>
+<td>生命周期要调用方管</td>
+</tr>
+<tr>
+<td>未知后端</td>
+<td>静默降级或运行时报错</td>
+<td>类型系统挡住</td>
+<td>早失败</td>
+<td>需要类型检查器配合</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>把 <code>Storage</code> 换成 <code>Protocol</code>（只要求方法签名）：第三方类不用继承你的基类也能被接受，适合「接口是别人定的」场景；代价是实例化时不再有检查。再进一步加 <code>delete</code>、<code>keys()</code>、<code>__contains__</code>，并把「整表序列化」换成「追加日志 + 定期压缩」，避免每次写都重写全文件。</p>
+<h2 id="单元验收">单元验收</h2>
+<ul>
+<li><span class="ck"></span><strong>契约</strong>：同一个接口分别用 ABC 与 Protocol 实现，说明差异</li>
+<li><span class="ck"></span><strong>MRO</strong>：给出一个多继承类，正确预测属性查找顺序</li>
+<li><span class="ck"></span><strong>super</strong>：写出三层协作式 <code>__init__</code>，字段不丢</li>
+<li><span class="ck"></span><strong>取舍</strong>：为一个真实场景写出「继承版」与「组合版」，并给出选择理由</li>
+</ul>
+<blockquote>
+<p>下一单元进入类型进阶与运算符重载：让类型既能表达复杂约束，也能像内置类型一样运算。</p>
+</blockquote>
+    <div class="pn"><a href="06.html"><small>← 上一单元</small><b>单元 6 · 对象协议与序列实现</b></a><a class="nx" href="08.html"><small>下一单元 →</small><b>单元 8 · 类型进阶与运算符重载</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 13–14 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

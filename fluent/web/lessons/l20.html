@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 20 课 · 用一等函数重构策略与命令模式</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="20">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 20 课 · 用一等函数重构策略与命令模式</h1>
+  <a class="tag" href="../05.html">单元 5</a>
+  <a class="ppt" href="../ppt/u/05.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:41.7%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="17" href="l17.html"><span class="no">17</span><span class="tx">闭包：捕获的是变量，不是值</span></a><a class="" data-l="18" href="l18.html"><span class="no">18</span><span class="tx">装饰器：从注册到参数化</span></a><a class="" data-l="19" href="l19.html"><span class="no">19</span><span class="tx">标准库装饰器：缓存、分派与惰性属性</span></a><a class="cur" data-l="20" href="l20.html"><span class="no">20</span><span class="tx">用一等函数重构策略与命令模式</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-撤销栈保存命令-不保存快照">延伸：撤销栈保存命令，不保存快照</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../05.html"><span class="k">单元</span>
+    <span class="v">单元 5 · 装饰器、闭包与设计模式</span></a>
+  <a href="../bank.html#u5"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/05.html#s8"><span class="k">课件</span>
+    <span class="v">本单元第 4 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u05.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/09.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 9–10 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 20 课</span>
+        <span class="kwk">单元 5 · 第 9–10 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>用一等函数重构策略与命令模式</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能把 if/elif 策略分支改写成函数字典，把「可撤销操作」改写成可调用对象，并判断何时仍需要类。</div>
+    <h3 id="讲解">讲解</h3>
+<p>经典策略模式会定义 <code>Strategy</code> 基类和多个子类。在 Python 里，策略就是一个函数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">bulk_price</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit</span> <span class="o">*</span> <span class="mf">0.9</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">normal_price</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">qty</span> <span class="o">*</span> <span class="n">unit</span>
+
+<span class="n">PRICING</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"bulk"</span><span class="p">:</span> <span class="n">bulk_price</span><span class="p">,</span> <span class="s2">"normal"</span><span class="p">:</span> <span class="n">normal_price</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">PRICING</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown mode: </span><span class="si">{</span><span class="n">mode</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+    <span class="k">return</span> <span class="n">rule</span><span class="p">(</span><span class="n">qty</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+</code></pre>
+<p><code>ch.10</code> 的电商示例还展示了用装饰器注册策略，把「新增一种折扣」变成「加一个函数 + 一个装饰器」，而不是改 <code>if/elif</code>。</p>
+<p>命令模式适合「把操作变成对象」，因为对象能保存参数、能排队、能撤销：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Command</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Append</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span> <span class="o">=</span> <span class="n">doc</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doc</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre>
+<h3 id="延伸-撤销栈保存命令-不保存快照">延伸：撤销栈保存命令，不保存快照</h3>
+<p>命令模式把「一次操作」变成对象，好处是可排队、可记录、可撤销。用可调用对象实现最省：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Add</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acc</span><span class="p">):</span> <span class="k">return</span> <span class="n">acc</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acc</span><span class="p">):</span> <span class="k">return</span> <span class="n">acc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+
+<span class="n">cmds</span> <span class="o">=</span> <span class="p">[</span><span class="n">Add</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">Add</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cmds</span><span class="p">:</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>                              <span class="c1"># 8</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">cmds</span><span class="p">):</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">undo</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">acc</span><span class="p">)</span>                              <span class="c1"># 0</span>
+</code></pre>
+<p>要点是成本差异：保存命令只占一条记录的字节，保存整份状态快照可能是几 MB。只有不可逆的操作（发邮件、扣库存、调第三方）才需要补偿动作或快照。设计时先问「这个操作能不能算逆运算」，能就别存快照。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>函数字典的键要是可控枚举</strong>，不要用用户输入直接查表。</li>
+<li><strong>策略函数要签名一致</strong>，否则调用方还得判断；可以用 <code>Protocol</code> 约束（第 7 单元）。</li>
+<li><strong>命令对象的价值在「可存储、可撤销、可组合」</strong>，不需要这些能力就别上类。</li>
+<li><strong>模式是手段不是目标</strong>：Python 里能用函数、字典、<code>functools</code> 解决的，不要硬套类层级。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>把一段 6 个分支的 <code>if mode == ...</code> 计费代码改成函数字典，并加一个未知模式的明确异常。</li>
+<li>用装饰器实现策略注册：<code>@pricing("bulk")</code> 自动写入 <code>PRICING</code>。</li>
+<li>实现 <code>Append</code> / <code>Undo</code> 两个命令，用一个栈支持连续撤销。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能把策略分支重构为函数字典，并保持异常信息清晰</li>
+<li><span class="ck"></span>能说出命令模式相比直接调函数的三个额外能力</li>
+<li><span class="ck"></span>能判断一个场景「不需要设计模式」，并说明理由</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 10 章 §10.2–10.4</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：撤销栈保存命令，不保存快照</p></div>
+    <div class="pn"><a href="l19.html"><small>← 第 19 课 · 单元 5</small><b>标准库装饰器：缓存、分派与惰性属性</b></a><a class="nx" href="l21.html"><small>第 21 课 · 单元 6 →</small><b>对象表示：repr、str 与 format</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../05.html">返回单元 5</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=20, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

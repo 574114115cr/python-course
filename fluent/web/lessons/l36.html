@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 36 课 · 模式匹配与 else 块</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="36">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 36 课 · 模式匹配与 else 块</h1>
+  <a class="tag" href="../09.html">单元 9</a>
+  <a class="ppt" href="../ppt/u/09.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:75.0%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="33" href="l33.html"><span class="no">33</span><span class="tx">迭代协议：iter、next 与 StopIteration</span></a><a class="" data-l="34" href="l34.html"><span class="no">34</span><span class="tx">生成器与 yield from</span></a><a class="" data-l="35" href="l35.html"><span class="no">35</span><span class="tx">上下文管理器与 with</span></a><a class="cur" data-l="36" href="l36.html"><span class="no">36</span><span class="tx">模式匹配与 else 块</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-for-else-try-else-与模式匹配解构">延伸：for/else、try/else 与模式匹配解构</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../09.html"><span class="k">单元</span>
+    <span class="v">单元 9 · 迭代器、生成器与控制流</span></a>
+  <a href="../bank.html#u9"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/09.html#s8"><span class="k">课件</span>
+    <span class="v">本单元第 4 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u09.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/17.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 17–18 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 36 课</span>
+        <span class="kwk">单元 9 · 第 17–18 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>模式匹配与 else 块</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用 `match` 解构序列、映射与类实例，写出带 guard 的分支，并正确使用 `for/while/try` 的 `else`。</div>
+    <h3 id="讲解">讲解</h3>
+<p><code>match</code> 不是 <code>switch</code>，它做的是<strong>结构解构 + 绑定</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">command</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">command</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"go"</span><span class="p">,</span> <span class="n">direction</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"moving </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"drop"</span><span class="p">,</span> <span class="o">*</span><span class="n">items</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"dropping </span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"look"</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="s2">"looking around"</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"unknown"</span>
+</code></pre>
+<p>可以匹配映射、类实例，并加守卫条件：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">match</span> <span class="n">point</span><span class="p">:</span>
+    <span class="k">case</span> <span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"origin"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"positive y-axis"</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"point"</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre>
+<p><code>else</code> 块在循环正常结束（没 break）时执行，在 <code>try</code> 没抛异常时执行：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"found"</span><span class="p">)</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"not found"</span><span class="p">)</span>     <span class="c1"># 只有没 break 才执行</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">risky</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"bad value"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"no exception"</span><span class="p">)</span>  <span class="c1"># 只有 try 成功才执行</span>
+</code></pre>
+<h3 id="延伸-for-else-try-else-与模式匹配解构">延伸：for/else、try/else 与模式匹配解构</h3>
+<p><code>for ... else</code> 的 <code>else</code> 在「循环正常跑完、没被 break」时执行，找第一个匹配项时最省：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"found at"</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"not found"</span><span class="p">)</span>
+</code></pre>
+<p><code>try ... else</code> 的 <code>else</code> 只在 <code>try</code> 没抛异常时执行，作用是把「不希望在异常处理范围内的代码」挪出去，避免误捕自己逻辑里的同名异常。<code>while ... else</code> 同理。</p>
+<p>模式匹配写解释器时，<code>case [op, *args]</code> 直接解构列表，比 <code>isinstance</code> + 下标清晰得多：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">expr</span><span class="p">:</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"+"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]:</span> <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"-"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]:</span> <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+        <span class="k">case</span> <span class="p">[</span><span class="s2">"neg"</span><span class="p">,</span> <span class="n">a</span><span class="p">]:</span>  <span class="k">return</span> <span class="o">-</span><span class="n">a</span>
+        <span class="k">case</span> <span class="n">n</span><span class="p">:</span>           <span class="k">return</span> <span class="n">n</span>        <span class="c1"># 兜底：变量名绑定任意值</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">evaluate</span><span class="p">([</span><span class="s2">"+"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="s2">"neg"</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]))</span>
+</code></pre>
+<p>注意 <code>case n</code> 是<strong>捕获</strong>而不是比较，要比较常量得用 <code>case 1:</code> 或 <code>case Color.RED:</code>；捕获模式永远不会失败，所以必须放最后。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>case _</code> 是兜底</strong>，没有它且无匹配时什么都不做（不报错）。</li>
+<li><strong>绑定变量只在分支内有效</strong>，分支结束后不要依赖。</li>
+<li><strong>序列模式区分 tuple/list</strong>：<code>case [a, b]</code> 匹配任何序列，<code>case (a, b)</code> 也是。</li>
+<li><strong>循环 <code>else</code> 容易误读</strong>，团队代码里建议加注释，或改用标志变量。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用 <code>match</code> 写一个命令解析器，支持 go/drop/look/未知四类。</li>
+<li>用 <code>match</code> 匹配 <code>Point</code> 实例，覆盖原点、x 轴、y 轴、普通点。</li>
+<li>用 <code>for...else</code> 实现「查找第一个满足条件的元素，找不到返回 None」。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用 <code>match</code> 解构序列、映射、类实例三种结构</li>
+<li><span class="ck"></span>知道 <code>case _</code> 缺失时的行为</li>
+<li><span class="ck"></span>能正确解释并写出 <code>for...else</code> 与 <code>try...else</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 18 章 §18.3–18.4</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：for/else、try/else 与模式匹配解构</p></div>
+    <div class="pn"><a href="l35.html"><small>← 第 35 课 · 单元 9</small><b>上下文管理器与 with</b></a><a class="nx" href="l37.html"><small>第 37 课 · 单元 10 →</small><b>并发全景：GIL、线程、进程</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../09.html">返回单元 9</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=36, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

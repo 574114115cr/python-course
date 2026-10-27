@@ -102,6 +102,9 @@ font-size:12.5px;color:var(--muted);cursor:pointer;font-family:inherit}
 font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
 .pg .resume:hover{background:#1a5296}
 .pg .resume.all-done{background:var(--p2)}
+.pg .rvgo{padding:7px 15px;border-radius:20px;background:var(--p2bg);color:#0b6e54;
+border:1px solid #b8e0d0;font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
+.pg .rvgo:hover{background:#d3efe4}
 
 /* 卡片：链接占主体，完成按钮独立，点链接只跳转不标记 */
 .lc{position:relative}
@@ -136,6 +139,9 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
   <a class="back" href="../../index.html">← 学习主页</a>
   <h1>课程目录 · 111 节课</h1>
   <span class="sp"></span>
+  <a class="rv" href="../terms.html">术语索引</a>
+  <a class="rv" href="../coverage.html">覆盖对照</a>
+  <a class="rv" href="../review.html">复习计划</a>
   <a class="ppt" href="../ppt/index.html">课程课件 23 页</a>
 </div></div>
 
@@ -150,8 +156,8 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
     <div class="st">
       <div><b>111</b><span>节课</span></div>
       <div><b>22</b><span>个单元</span></div>
-      <div><b>13</b><span>周</span></div>
-      <div><b>1</b><span>节课一个产出</span></div>
+      <div><b>29</b><span>周（每周 6–8 h）</span></div>
+      <div><b>90</b><span>分钟 / 节</span></div>
     </div>
   </header>
 
@@ -159,6 +165,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
     <b>学习进度</b>
     <div class="tr"><i id="tr"></i></div>
     <span class="ct" id="ct">0 / 111 节</span>
+    <a class="rvgo" href="../review.html">今日复习 →</a>
     <a class="resume" id="resume" href="01.html">继续学习 →</a>
   </div>
 
@@ -301,7 +308,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="6"
                   aria-label="标记第 6 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="7" data-t="字符串、数值、布尔与类型转换 熟练使用 str 方法与四则运算，掌握 int / float / bool 转换规则 2.4 整数 int 与浮点数 float 2.5 布尔值 bool：只有两个取值 2.6 类型转换：把一种类型的标签换成另一种 三、可运行代码示例 示例 1：四种类型与 type() 示例 2：变量重新赋值与命名规范 示例 3：字符串常用方法 示例 4：类型转换 示例 5：f-string 格式化输出 示例 6：多行字符串与转义 示例 7：注释的正确写法">
+        <div class="lc" data-no="7" data-t="字符串、数值、布尔与类型转换 熟练使用 str 方法与四则运算，掌握 int / float / bool 转换规则 2.4 整数 int 与浮点数 float 2.5 布尔值 bool：只有两个取值 2.6 类型转换：把一种类型的标签换成另一种 2.7 字符串方法全家桶：拆分、拼接与去掉前后缀 三、可运行代码示例 示例 1：四种类型与 type() 示例 2：变量重新赋值与命名规范 示例 3：字符串常用方法 示例 4：类型转换 示例 5：f-string 格式化输出 示例 6：多行字符串与转义 示例 7：注释的正确写法 示例 8：拆一行日志，再拼回去">
           <a class="lc-a" href="07.html">
           <div class="lc-h">
             <span class="lc-n">07</span>
@@ -317,7 +324,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="7"
                   aria-label="标记第 7 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="8" data-t="动手实战与答案讲评 独立完成单元 1 练习，能解释类型转换的报错原因 四、动手练习 基础档 进阶档 五、参考答案 参考答案 1-1 参考答案 1-2 参考答案 1-3 参考答案 1-4 参考答案 1-5 参考答案 1-6 参考答案 1-7 参考答案 1-8">
+        <div class="lc" data-no="8" data-t="动手实战与答案讲评 独立完成单元 1 练习，能解释类型转换的报错原因 四、动手练习 基础档 进阶档 五、参考答案 参考答案 1-1 参考答案 1-2 参考答案 1-3 参考答案 1-4 参考答案 1-5 参考答案 1-6 参考答案 1-7 参考答案 1-8 参考答案 1-9 参考答案 1-10">
           <a class="lc-a" href="08.html">
           <div class="lc-h">
             <span class="lc-n">08</span>
@@ -377,7 +384,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="10"
                   aria-label="标记第 10 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="11" data-t="增删改查、引用共享与排序 掌握五个增删改方法；理解引用共享——本单元最反直觉的一课 2.4 增删改方法：五个主力 2.5 .remove() 与 .pop()：一个删&quot;值&quot;，一个删&quot;位置&quot; 2.6 引用共享：最反直觉的一课 三、可运行代码示例 示例 1：创建列表与基本访问 示例 2：修改元素（列表可变的体现） 示例 3：添加元素 示例 4：删除元素 示例 5：引用共享与浅拷贝 示例 6：排序与反转（列表自带的小工具）">
+        <div class="lc" data-no="11" data-t="增删改查、引用共享与排序 掌握五个增删改方法；理解引用共享——本单元最反直觉的一课 2.4 增删改方法：五个主力 2.5 .remove() 与 .pop()：一个删&quot;值&quot;，一个删&quot;位置&quot; 2.6 引用共享：最反直觉的一课 三、可运行代码示例 示例 1：创建列表与基本访问 示例 2：修改元素（列表可变的体现） 示例 3：添加元素 示例 4：删除元素 示例 5：引用共享与浅拷贝 示例 6：排序与反转（列表自带的小工具） 示例 7：=、[:]、.copy() 到底差在哪">
           <a class="lc-a" href="11.html">
           <div class="lc-h">
             <span class="lc-n">11</span>
@@ -393,7 +400,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="11"
                   aria-label="标记第 11 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="12" data-t="动手实战与答案讲评 独立完成单元 2 练习，能预测任意列表操作的结果 四、动手练习 基础档 进阶档 五、参考答案 参考答案 2-1 参考答案 2-2 参考答案 2-3 参考答案 2-4 参考答案 2-5 参考答案 2-6 参考答案 2-7 参考答案 2-8">
+        <div class="lc" data-no="12" data-t="动手实战与答案讲评 独立完成单元 2 练习，能预测任意列表操作的结果 四、动手练习 基础档 进阶档 五、参考答案 参考答案 2-1 参考答案 2-2 参考答案 2-3 参考答案 2-4 参考答案 2-5 参考答案 2-6 参考答案 2-7 参考答案 2-8 参考答案 2-9 参考答案 2-10">
           <a class="lc-a" href="12.html">
           <div class="lc-h">
             <span class="lc-n">12</span>
@@ -469,7 +476,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="15"
                   aria-label="标记第 15 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="16" data-t="切片、元组与 PEP 8 排版 掌握切片三个参数与元组的不可变性，能按 PEP 8 排版 2.5 切片：一次取出一段 2.6 元组：用括号表示&quot;不可修改&quot; 2.7 PEP 8：让代码能被人读 三、可运行代码示例 示例 1：for 循环基础 示例 2：range 的四种形式 示例 3：常见循环搭档 示例 4：列表推导式 示例 5：切片 示例 6：元组 示例 7：PEP 8 排版示范">
+        <div class="lc" data-no="16" data-t="切片、元组与 PEP 8 排版 掌握切片三个参数与元组的不可变性，能按 PEP 8 排版 2.5 切片：一次取出一段 2.6 元组：用括号表示&quot;不可修改&quot; 2.7 PEP 8：让代码能被人读 三、可运行代码示例 示例 1：for 循环基础 示例 2：range 的四种形式 示例 3：常见循环搭档 示例 4：列表推导式 示例 5：切片 示例 6：元组 示例 7：PEP 8 排版示范 示例 8：切片的第三个参数，与&quot;逆序&quot;这个惯用法">
           <a class="lc-a" href="16.html">
           <div class="lc-h">
             <span class="lc-n">16</span>
@@ -485,7 +492,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="16"
                   aria-label="标记第 16 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="17" data-t="动手实战与答案讲评 独立完成单元 3 练习，巩固循环、推导式与元组 四、动手练习 基础档 进阶档 五、参考答案 参考答案 3-1 参考答案 3-2 参考答案 3-3 参考答案 3-4 参考答案 3-5 参考答案 3-6 参考答案 3-7 参考答案 3-8">
+        <div class="lc" data-no="17" data-t="动手实战与答案讲评 独立完成单元 3 练习，巩固循环、推导式与元组 四、动手练习 基础档 进阶档 五、参考答案 参考答案 3-1 参考答案 3-2 参考答案 3-3 参考答案 3-4 参考答案 3-5 参考答案 3-6 参考答案 3-7 参考答案 3-8 参考答案 3-9 参考答案 3-10">
           <a class="lc-a" href="17.html">
           <div class="lc-h">
             <span class="lc-n">17</span>
@@ -561,7 +568,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="20"
                   aria-label="标记第 20 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="21" data-t="链式比较、is 与条件表达式 能用链式比较、== 与 is、条件表达式写出更干净的判断 2.5 链式比较：Python 的贴心语法 2.6 == 还是 is？ 2.7 条件表达式：把 5 行压成 1 行 三、可运行代码示例 示例 1：if 单分支 示例 2：if / elif / else 三分支 示例 3：顺序的重要性 示例 4：逻辑运算符与短路求值 示例 5：链式比较与字符串比较 示例 6：== 与 is 的区别 示例 7：条件表达式与嵌套">
+        <div class="lc" data-no="21" data-t="链式比较、is 与条件表达式 能用链式比较、== 与 is、条件表达式写出更干净的判断 2.5 链式比较：Python 的贴心语法 2.6 == 还是 is？ 2.7 条件表达式：把 5 行压成 1 行 三、可运行代码示例 示例 1：if 单分支 示例 2：if / elif / else 三分支 示例 3：顺序的重要性 示例 4：逻辑运算符与短路求值 示例 5：链式比较与字符串比较 示例 6：== 与 is 的区别 示例 7：条件表达式与嵌套 示例 8：用 if 处理列表——判断&quot;空&quot;、判断&quot;在不在&quot;、按条件筛选">
           <a class="lc-a" href="21.html">
           <div class="lc-h">
             <span class="lc-n">21</span>
@@ -577,7 +584,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="21"
                   aria-label="标记第 21 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="22" data-t="动手实战、答案与验收 独立完成单元 4 练习，确认条件判断全部过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 4-1 参考答案 4-2 参考答案 4-3 参考答案 4-4 参考答案 4-5 参考答案 4-6 参考答案 4-7 参考答案 4-8 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="22" data-t="动手实战、答案与验收 独立完成单元 4 练习，确认条件判断全部过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 4-1 参考答案 4-2 参考答案 4-3 参考答案 4-4 参考答案 4-5 参考答案 4-6 参考答案 4-7 参考答案 4-8 参考答案 4-9 参考答案 4-10 六、本单元验收自测 本单元小结与产出检查">
           <a class="lc-a" href="22.html">
           <div class="lc-h">
             <span class="lc-n">22</span>
@@ -637,7 +644,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="24"
                   aria-label="标记第 24 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="25" data-t="遍历时修改与嵌套结构 能处理嵌套结构，为后面学 JSON 打基础 2.6 遍历时能修改字典吗 2.7 嵌套结构：字典的真正威力 三、可运行代码示例 示例 1：创建与基本访问 示例 2：新增、修改、删除 示例 3：三种遍历方式 示例 4：get() 安全取值 示例 5：遍历与修改的正确姿势 示例 6：嵌套字典与综合提取 示例 7：字典的常用&quot;全家桶&quot;方法">
+        <div class="lc" data-no="25" data-t="遍历时修改与嵌套结构 能处理嵌套结构，为后面学 JSON 打基础 2.6 遍历时能修改字典吗 2.7 嵌套结构：字典的真正威力 三、可运行代码示例 示例 1：创建与基本访问 示例 2：新增、修改、删除 示例 3：三种遍历方式 示例 4：get() 安全取值 示例 5：遍历与修改的正确姿势 示例 6：嵌套字典与综合提取 示例 7：字典的常用&quot;全家桶&quot;方法 示例 8：列表套字典——真实数据的标准形状">
           <a class="lc-a" href="25.html">
           <div class="lc-h">
             <span class="lc-n">25</span>
@@ -653,7 +660,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="25"
                   aria-label="标记第 25 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="26" data-t="动手实战与答案讲评 独立完成单元 5 练习，能熟练遍历嵌套数据 四、动手练习 基础档 进阶档 五、参考答案 参考答案 5-1 参考答案 5-2 参考答案 5-3 参考答案 5-4 参考答案 5-5 参考答案 5-6 参考答案 5-7">
+        <div class="lc" data-no="26" data-t="动手实战与答案讲评 独立完成单元 5 练习，能熟练遍历嵌套数据 四、动手练习 基础档 进阶档 五、参考答案 参考答案 5-1 参考答案 5-2 参考答案 5-3 参考答案 5-4 参考答案 5-5 参考答案 5-6 参考答案 5-7 参考答案 5-9 参考答案 5-10">
           <a class="lc-a" href="26.html">
           <div class="lc-h">
             <span class="lc-n">26</span>
@@ -729,7 +736,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="29"
                   aria-label="标记第 29 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="30" data-t="交互程序的骨架与收尾 能组装出「提示 → 输入 → 校验 → 处理」的完整交互程序 2.5 while ... else：循环&quot;没被打断&quot;时执行 2.6 交互程序的骨架 三、可运行代码示例 示例 1：input 的类型陷阱与三步模板 示例 2：while 基本循环 示例 3：break 与 continue 示例 4：while ... else 示例 5：标志位 flag 示例 6：交互式程序骨架 示例 7：倒计时与死循环的自救">
+        <div class="lc" data-no="30" data-t="交互程序的骨架与收尾 能组装出「提示 → 输入 → 校验 → 处理」的完整交互程序 2.5 while ... else：循环&quot;没被打断&quot;时执行 2.6 交互程序的骨架 2.7 用 while 处理列表和字典（教材 7.3） 三、可运行代码示例 示例 1：input 的类型陷阱与三步模板 示例 2：while 基本循环 示例 3：break 与 continue 示例 4：while ... else 示例 5：标志位 flag 示例 6：交互式程序骨架 示例 7：倒计时与死循环的自救 示例 8：待办清单——搬元素、丢空值">
           <a class="lc-a" href="30.html">
           <div class="lc-h">
             <span class="lc-n">30</span>
@@ -745,7 +752,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="30"
                   aria-label="标记第 30 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="31" data-t="动手实战与答案讲评 独立完成单元 6 练习，能写带校验的交互循环 四、动手练习 基础档 进阶档 五、参考答案 参考答案 6-1 参考答案 6-2 参考答案 6-3 参考答案 6-4 参考答案 6-5 参考答案 6-6 参考答案 6-7 参考答案 6-8">
+        <div class="lc" data-no="31" data-t="动手实战与答案讲评 独立完成单元 6 练习，能写带校验的交互循环 四、动手练习 基础档 进阶档 五、参考答案 参考答案 6-1 参考答案 6-2 参考答案 6-3 参考答案 6-4 参考答案 6-5 参考答案 6-6 参考答案 6-7 参考答案 6-8 参考答案 6-9 参考答案 6-10">
           <a class="lc-a" href="31.html">
           <div class="lc-h">
             <span class="lc-n">31</span>
@@ -821,7 +828,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="34"
                   aria-label="标记第 34 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="35" data-t="作用域与函数是一等公民 理解局部与全局，知道函数能赋值给变量、能传进别的函数 2.5 作用域：谁能看见谁 2.6 函数是&quot;一等公民&quot;">
+        <div class="lc" data-no="35" data-t="作用域与函数是一等公民 理解局部与全局，知道函数能赋值给变量、能传进别的函数 2.5 作用域：谁能看见谁 2.6 函数是&quot;一等公民&quot; 2.7 把函数存进模块（教材 8.6）">
           <a class="lc-a" href="35.html">
           <div class="lc-h">
             <span class="lc-n">35</span>
@@ -837,7 +844,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="35"
                   aria-label="标记第 35 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="36" data-t="七个示例串讲与拆模块 把课堂示例改成自己的模块，理解导入的四种写法 三、可运行代码示例 示例 1：定义与调用函数 示例 2：return 与 None 示例 3：三种参数写法 示例 4：★ 参数传递的副本语义 示例 5：作用域与 global 示例 6：函数是一等公民 示例 7：默认参数的可变对象陷阱">
+        <div class="lc" data-no="36" data-t="七个示例串讲与拆模块 把课堂示例改成自己的模块，理解导入的四种写法 三、可运行代码示例 示例 1：定义与调用函数 示例 2：return 与 None 示例 3：三种参数写法 示例 4：★ 参数传递的副本语义 示例 5：作用域与 global 示例 6：函数是一等公民 示例 7：默认参数的可变对象陷阱 示例 8：__name__ 的两种身份">
           <a class="lc-a" href="36.html">
           <div class="lc-h">
             <span class="lc-n">36</span>
@@ -853,7 +860,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="36"
                   aria-label="标记第 36 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="37" data-t="动手实战与答案讲评 独立完成单元 7 练习，掌握用函数重构代码 四、动手练习 基础档 进阶档 五、参考答案 参考答案 7-1 参考答案 7-2 参考答案 7-3 参考答案 7-4 参考答案 7-5 参考答案 7-6 参考答案 7-7 参考答案 7-8">
+        <div class="lc" data-no="37" data-t="动手实战与答案讲评 独立完成单元 7 练习，掌握用函数重构代码 四、动手练习 基础档 进阶档 五、参考答案 参考答案 7-1 参考答案 7-2 参考答案 7-3 参考答案 7-4 参考答案 7-5 参考答案 7-6 参考答案 7-7 参考答案 7-8 参考答案 7-9 参考答案 7-10">
           <a class="lc-a" href="37.html">
           <div class="lc-h">
             <span class="lc-n">37</span>
@@ -945,7 +952,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="41"
                   aria-label="标记第 41 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="42" data-t="继承与方法重写 会用 super().__init__()，理解重写与多态 2.6 继承：不重复造轮子 2.7 方法重写与多态">
+        <div class="lc" data-no="42" data-t="继承与方法重写 会用 super().__init__()，理解重写与多态 2.6 继承：不重复造轮子 2.7 方法重写与多态 2.8 导入类与 Python 标准库（教材 9.4 / 9.5）">
           <a class="lc-a" href="42.html">
           <div class="lc-h">
             <span class="lc-n">42</span>
@@ -961,7 +968,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="42"
                   aria-label="标记第 42 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="43" data-t="类的组合与示例串讲 能用组合代替继承，理解何时该用组合、何时该用继承 三、可运行代码示例 示例 1：定义类与 __init__ 示例 2：self 到底是什么 示例 3：__str__ 与属性方法对比 示例 4：类属性与实例属性 示例 5：继承 示例 6：方法重写与多态 示例 7：类的组合与实际项目结构">
+        <div class="lc" data-no="43" data-t="类的组合与示例串讲 能用组合代替继承，理解何时该用组合、何时该用继承 三、可运行代码示例 示例 1：定义类与 __init__ 示例 2：self 到底是什么 示例 3：__str__ 与属性方法对比 示例 4：类属性与实例属性 示例 5：继承 示例 6：方法重写与多态 示例 7：类的组合与实际项目结构 示例 8：随机点名器（seed 可复现）">
           <a class="lc-a" href="43.html">
           <div class="lc-h">
             <span class="lc-n">43</span>
@@ -977,7 +984,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="43"
                   aria-label="标记第 43 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="44" data-t="动手实战与答案讲评 独立完成单元 8 练习，能自己设计一个类 四、动手练习 基础档 进阶档 五、参考答案 参考答案 8-1 参考答案 8-2 参考答案 8-3 参考答案 8-4 参考答案 8-5 参考答案 8-6 参考答案 8-7 参考答案 8-8">
+        <div class="lc" data-no="44" data-t="动手实战与答案讲评 独立完成单元 8 练习，能自己设计一个类 四、动手练习 基础档 进阶档 五、参考答案 参考答案 8-1 参考答案 8-2 参考答案 8-3 参考答案 8-4 参考答案 8-5 参考答案 8-6 参考答案 8-7 参考答案 8-8 参考答案 8-9 参考答案 8-10">
           <a class="lc-a" href="44.html">
           <div class="lc-h">
             <span class="lc-n">44</span>
@@ -1593,7 +1600,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="77"
                   aria-label="标记第 77 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="78" data-t="实战、答案与自查 独立完成单元 14 练习，逐条自查常见错误 三、可运行代码示例 示例 1：完整的 Button 类 + 点击判定 示例 2：动态难度——initialize_dynamic_settings 与 increase_speed 示例 3：Scoreboard 的「准备图像」模式 示例 4：游戏状态机完整演示 示例 5：余下的飞船数——Group + Ship 复用 四、动手练习 基础档 进阶档 五、参考答案 参考答案 14-1 参考答案 14-2 参考答案 14-3 参考答案 14-4 六、常见错误清单（务必逐条自查） 错误 1：★ 改了 score 忘了 prep_score() 错误 2：★ 把 high_score = 0 写进了 reset_stats() 错误 3：font.render() 参数写错 错误 4：Button 里存错了对象 错误 5：increase_speed() 里 alien_points 忘了 int() 错误 6：点 Play 没加 not game_active 条件 七、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="78" data-t="实战、答案与自查 独立完成单元 14 练习，逐条自查常见错误 三、可运行代码示例 示例 1：完整的 Button 类 + 点击判定 示例 2：动态难度——initialize_dynamic_settings 与 increase_speed 示例 3：Scoreboard 的「准备图像」模式 示例 4：游戏状态机完整演示 示例 5：余下的飞船数——Group + Ship 复用 示例 6：最高分写进文件，跨局还在（high_score_json.py） 四、动手练习 基础档 进阶档 五、参考答案 参考答案 14-1 参考答案 14-2 参考答案 14-3 参考答案 14-4 六、常见错误清单（务必逐条自查） 错误 1：★ 改了 score 忘了 prep_score() 错误 2：★ 把 high_score = 0 写进了 reset_stats() 错误 3：font.render() 参数写错 错误 4：Button 里存错了对象 错误 5：increase_speed() 里 alien_points 忘了 int() 错误 6：点 Play 没加 not game_active 条件 七、本单元验收自测 本单元小结与产出检查">
           <a class="lc-a" href="78.html">
           <div class="lc-h">
             <span class="lc-n">78</span>
@@ -1669,7 +1676,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="81"
                   aria-label="标记第 81 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="82" data-t="随机游走 RandomWalk 类 能写 RandomWalk 类并模拟多次游走；理解 fill_walk 拒绝原地不动的逻辑 三、可运行代码示例 示例 1：折线图三连（默认 → 加粗改标签 → 换内置样式） 示例 2：散点图三件套 + 绘制一系列点 示例 3：★ 校正绘图与定制刻度（新手最高频的坑） 示例 4：RandomWalk 类（画一次 + 模拟多次） 示例 5：Die 类 + 两个骰子 + 两种面数对比">
+        <div class="lc" data-no="82" data-t="随机游走 RandomWalk 类 能写 RandomWalk 类并模拟多次游走；理解 fill_walk 拒绝原地不动的逻辑 三、可运行代码示例 示例 1：折线图三连（默认 → 加粗改标签 → 换内置样式） 示例 2：散点图三件套 + 绘制一系列点 示例 3：★ 校正绘图与定制刻度（新手最高频的坑） 示例 4：RandomWalk 类（画一次 + 模拟多次） 示例 5：Die 类 + 两个骰子 + 两种面数对比 示例 6：同一份坐标，画成折线还是散点——先把数据算出来（walk_and_dice.py）">
           <a class="lc-a" href="82.html">
           <div class="lc-h">
             <span class="lc-n">82</span>
@@ -1761,7 +1768,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="86"
                   aria-label="标记第 86 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="87" data-t="实战、答案与验收复盘 独立完成单元 16 练习，处理真实脏数据 三、可运行代码示例 示例 1：造一份教材同款 CSV，并打印表头 示例 2：datetime 解析与格式化 示例 3：提取数据并处理缺失值（死亡谷风格） 示例 4：matplotlib 画温度区间图 示例 5：plotly 画全球地震散点图 四、动手练习 基础档 进阶档 五、参考答案 参考答案 16-1 参考答案 16-2 参考答案 16-3 参考答案 16-4 参考答案 16-5 参考答案 16-6 六、常见错误清单（务必逐条自查） 错误 1：★ 把 coordinates[1] 当成经度（经纬度写反） 错误 2：★ 硬编码列号 row[4] 错误 3：strptime 格式码和字符串不匹配 错误 4：把 append 写进 try 块 错误 5：plt.show() 在无图形界面的环境卡住 错误 6：细节两件套——样式名和 CSV 参数 七、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="87" data-t="实战、答案与验收复盘 独立完成单元 16 练习，处理真实脏数据 三、可运行代码示例 示例 1：造一份教材同款 CSV，并打印表头 示例 2：datetime 解析与格式化 示例 3：提取数据并处理缺失值（死亡谷风格） 示例 4：matplotlib 画温度区间图 示例 5：plotly 画全球地震散点图 示例 6：不下载文件也能练 CSV——StringIO 造表 + 按年统计（csv_stringio.py） 四、动手练习 基础档 进阶档 五、参考答案 参考答案 16-1 参考答案 16-2 参考答案 16-3 参考答案 16-4 参考答案 16-5 参考答案 16-6 六、常见错误清单（务必逐条自查） 错误 1：★ 把 coordinates[1] 当成经度（经纬度写反） 错误 2：★ 硬编码列号 row[4] 错误 3：strptime 格式码和字符串不匹配 错误 4：把 append 写进 try 块 错误 5：plt.show() 在无图形界面的环境卡住 错误 6：细节两件套——样式名和 CSV 参数 七、本单元验收自测 本单元小结与产出检查">
           <a class="lc-a" href="87.html">
           <div class="lc-h">
             <span class="lc-n">87</span>
@@ -1821,7 +1828,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="89"
                   aria-label="标记第 89 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="90" data-t="Plotly 可视化与可点击链接 会用 px.bar 可视化；会用 customdata + hovertemplate 做可点击链接 2.6 ★ 可单击链接：custom_data 与 hovertemplate 2.7 Hacker News API：先拿列表、再取详情的两段式调用 三、可运行代码示例 示例 1：认识 API 网址的结构 + 第一次调用 示例 2：处理响应字典——提取平行列表 示例 3：速率限制守门员 + 缓存响应 示例 4：Plotly 条形图——悬停提示、颜色、可点击链接 示例 5：Hacker News 两段式调用">
+        <div class="lc" data-no="90" data-t="Plotly 可视化与可点击链接 会用 px.bar 可视化；会用 customdata + hovertemplate 做可点击链接 2.6 ★ 可单击链接：custom_data 与 hovertemplate 2.7 Hacker News API：先拿列表、再取详情的两段式调用 三、可运行代码示例 示例 1：认识 API 网址的结构 + 第一次调用 示例 2：处理响应字典——提取平行列表 示例 3：速率限制守门员 + 缓存响应 示例 4：Plotly 条形图——悬停提示、颜色、可点击链接 示例 5：Hacker News 两段式调用 示例 6：把「请求 → JSON → 取字段」拆成纯函数（api_pipeline.py）">
           <a class="lc-a" href="90.html">
           <div class="lc-h">
             <span class="lc-n">90</span>
@@ -2113,7 +2120,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="105"
                   aria-label="标记第 105 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="106" data-t="★ 三大部署坑 记住 ALLOWED_HOSTS / collectstatic / DEBUG 三个坑；能逐条排查 2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2） 2.8 定制错误页面与「继续开发」（对应教材 20.2） 三、可运行代码示例 示例 1：同一份代码，两个环境（config_switcher.py） 示例 2：给 requirements.txt 做入职体检（requirements_tools.py） 示例 3：400 Bad Request 是怎么来的（host_check.py） 示例 4：collectstatic 到底在搬什么（static_collector.py） 示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py）">
+        <div class="lc" data-no="106" data-t="★ 三大部署坑 记住 ALLOWED_HOSTS / collectstatic / DEBUG 三个坑；能逐条排查 2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2） 2.8 定制错误页面与「继续开发」（对应教材 20.2） 三、可运行代码示例 示例 1：同一份代码，两个环境（config_switcher.py） 示例 2：给 requirements.txt 做入职体检（requirements_tools.py） 示例 3：400 Bad Request 是怎么来的（host_check.py） 示例 4：collectstatic 到底在搬什么（static_collector.py） 示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py） 示例 6：上线前 8 道闸门 + 静态文件清单（deploy_gate.py）">
           <a class="lc-a" href="106.html">
           <div class="lc-h">
             <span class="lc-n">106</span>
@@ -2189,7 +2196,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="109"
                   aria-label="标记第 109 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="110" data-t="★ 关卡 2 五项逐条自测 限时自测五条硬指标，明确哪条没过、怎么补 2.5 关卡 2 的五条硬指标 2.6 下一步方向选择 三、可运行代码示例 示例 1：项目目录体检脚本（project_doctor.py） 示例 2：requirements.txt 自动生成（make_requirements.py） 示例 3：代码规模与圈复杂度提示（code_metrics.py） 示例 4：统一日志配置模板（logging_setup.py） 示例 5：陌生项目结构速读（explorer.py）">
+        <div class="lc" data-no="110" data-t="★ 关卡 2 五项逐条自测 限时自测五条硬指标，明确哪条没过、怎么补 2.5 关卡 2 的五条硬指标 2.6 下一步方向选择 三、可运行代码示例 示例 1：项目目录体检脚本（project_doctor.py） 示例 2：requirements.txt 自动生成（make_requirements.py） 示例 3：代码规模与圈复杂度提示（code_metrics.py） 示例 4：统一日志配置模板（logging_setup.py） 示例 5：陌生项目结构速读（explorer.py） 示例 6：三期项目各抽一个纯函数，用 assert 自测（three_projects_core.py）">
           <a class="lc-a" href="110.html">
           <div class="lc-h">
             <span class="lc-n">110</span>
@@ -2230,6 +2237,8 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
       <li><b>实操环节必须动手敲。</b>看懂不等于会写，从空文件敲出来才算。</li>
       <li><b>卡住超过一周就降难度。</b>回到题库对应档位重做，别硬啃。</li>
       <li>每节课都能从底部跳回单元完整讲义或题库，需要查细节时随时回看。</li>
+      <li><b>学完一节课，顺手去「复习计划」页。</b>当天、第 2 天、第 4 天、第 8 天、第 16 天、第 31 天
+          各有一轮 5–15 分钟的复习，页面会按遗忘曲线排好，逾期会标红。</li>
       <li><b>讲评环节不要跳过。</b>那 20 分钟是给你自己检查代码的，对照每一条问句过一遍，
           比多写一小时更有用。</li>
     </ul>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 5 课件 · 装饰器、闭包与设计模式</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 5 · 逐节课件</div><h2>单元 5 · 装饰器、闭包与设计模式</h2><div class="sub">第 9–10 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 17 课 · 目标与要点</div><h2>闭包：捕获的是变量，不是值</h2><div class="sub">能写出带状态的闭包，解释 LEGB 查找与 nonlocal，并识别循环中 lambda 的延迟绑定陷阱。</div><ul><li><b>LEGB 顺序</b>：Local → Enclosing → Global → Builtin；闭包变量在 Enclosing 层。</li><li>只有「赋值」才需要 nonlocal；只读外层变量不需要声明。</li><li>闭包持有引用，会延长对象生命周期；大量闭包 + 大对象要留意内存。</li><li><b>延迟绑定是特性不是 bug</b>：它让闭包能共享状态，但循环里要显式固化。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 17 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def make_counter(start=0):
+    n = start
+
+    def counter(step=1):
+        nonlocal n
+        n += step
+        return n
+
+    return counter
+
+c = make_counter(10)
+print(c(), c(5))        # 11 16
+print(c.__closure__[0].cell_contents)   # 16</code></pre><div class="sub">动手：写 make_accumulator()，连续调用累加，并打印 __closure__ 里的 cell 内容。</div></section><section class="slide" data-s="4"><div class="sk">第 18 课 · 目标与要点</div><h2>装饰器：从注册到参数化</h2><div class="sub">能写出保留元数据、支持参数、可叠加的装饰器，并解释 @deco 的等价展开。</div><ul><li>装饰器在导入时执行，不是调用时；不要在装饰器里做耗时操作。</li><li>一定要 functools.wraps，否则签名、文档、名字全丢。</li><li><b>多个装饰器从下往上包裹</b>：@a @b def f 等价于 f = a(b(f))。</li><li>注册型装饰器直接返回原函数，包装型才返回 wrapper；混用会导致重复注册或行为叠加。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 18 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>@deco
+def f(): ...
+
+# 等价于
+def f(): ...
+f = deco(f)</code></pre><div class="sub">动手：写 @timer，打印函数耗时，要求保留 __name__ 与 __doc__。</div></section><section class="slide" data-s="6"><div class="sk">第 19 课 · 目标与要点</div><h2>标准库装饰器：缓存、分派与惰性属性</h2><div class="sub">能用 lru_cache、singledispatch、cached_property 解决缓存、按类型分派、惰性计算三类问题，并知道各自的边界。</div><ul><li>lru_cache 的键是参数的哈希，传 list/dict 会直接报错。</li><li><b>缓存不会自动失效</b>：数据变了要手动 cache_clear()，或改用带版本号的键。</li><li>singledispatch 只看第一个参数的类型，多参数分派要自己组合。</li><li>cached_property 需要实例有 __dict__，用 __slots__ 的类不支持。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 19 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fib(n):
+    return n if n &lt; 2 else fib(n - 1) + fib(n - 2)</code></pre><div class="sub">动手：用 lru_cache 优化一个递归函数，比较加缓存前后的调用次数。</div></section><section class="slide" data-s="8"><div class="sk">第 20 课 · 目标与要点</div><h2>用一等函数重构策略与命令模式</h2><div class="sub">能把 if/elif 策略分支改写成函数字典，把「可撤销操作」改写成可调用对象，并判断何时仍需要类。</div><ul><li>函数字典的键要是可控枚举，不要用用户输入直接查表。</li><li>策略函数要签名一致，否则调用方还得判断；可以用 Protocol 约束（第 7 单元）。</li><li>命令对象的价值在「可存储、可撤销、可组合」，不需要这些能力就别上类。</li><li><b>模式是手段不是目标</b>：Python 里能用函数、字典、functools 解决的，不要硬套类层级。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 20 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def bulk_price(qty, unit):
+    return qty * unit * 0.9
+
+def normal_price(qty, unit):
+    return qty * unit
+
+PRICING = {&quot;bulk&quot;: bulk_price, &quot;normal&quot;: normal_price}
+
+def checkout(mode, qty, unit):
+    try:
+        rule = PRICING[mode]
+    except KeyError:
+        raise ValueError(f&quot;unknown mode: {mode}&quot;) from None
+    return rule(qty, unit)</code></pre><div class="sub">动手：把一段 6 个分支的 if mode == ... 计费代码改成函数字典，并加一个未知模式的明确异常。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>闭包：写出一个带状态、可重置的闭包，并解释 cell 的生命周期</li><li>装饰器：实现 @timer 与 @retry(times=...)，均保留元数据</li><li>标准库：用 lru_cache + singledispatch 各解决一个实际问题</li><li>重构：把一段 30 行以上的 if/elif 业务分支改成函数字典 + 注册装饰器</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../05.html">← 单元 5</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

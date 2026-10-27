@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 1 课 · 特殊方法：让对象接入语言协议</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="1">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 1 课 · 特殊方法：让对象接入语言协议</h1>
+  <a class="tag" href="../01.html">单元 1</a>
+  <a class="ppt" href="../ppt/u/01.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:2.1%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="cur" data-l="1" href="l01.html"><span class="no">01</span><span class="tx">特殊方法：让对象接入语言协议</span></a><a class="" data-l="2" href="l02.html"><span class="no">02</span><span class="tx">序列家族与推导式</span></a><a class="" data-l="3" href="l03.html"><span class="no">03</span><span class="tx">元组、拆包、切片与排序</span></a><a class="" data-l="4" href="l04.html"><span class="no">04</span><span class="tx">别名的坑与选型：list 不是万能的</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-特殊方法不是清单-是五组操作">延伸：特殊方法不是清单，是五组操作</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../01.html"><span class="k">单元</span>
+    <span class="v">单元 1 · 数据模型与序列</span></a>
+  <a href="../bank.html#u1"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/01.html#s2"><span class="k">课件</span>
+    <span class="v">本单元第 1 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u01.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/01.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 1–2 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 1 课</span>
+        <span class="kwk">单元 1 · 第 1–2 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>特殊方法：让对象接入语言协议</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能说出 `len(x)`、`x[0]`、`for i in x`、`repr(x)` 分别调用哪个特殊方法，并写出一个可求长、可索引、可迭代、可打印的类。</div>
+    <h3 id="讲解">讲解</h3>
+<p>特殊方法（dunder method）不是给你直接调的，而是给<strong>解释器</strong>调的。<code>len(deck)</code> 走的是 C 层的快速路径，最终调用 <code>deck.__len__()</code>；<code>deck[0]</code> 调用 <code>__getitem__(0)</code>；<code>for card in deck</code> 在没有 <code>__iter__</code> 时会退化为「从 0 开始反复 <code>__getitem__</code>，直到 <code>IndexError</code>」。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+
+<span class="n">Card</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">"Card"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"rank"</span><span class="p">,</span> <span class="s2">"suit"</span><span class="p">])</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FrenchDeck</span><span class="p">:</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="s2">"JQKA"</span><span class="p">)</span>
+    <span class="n">suits</span> <span class="o">=</span> <span class="s2">"spades diamonds clubs hearts"</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span> <span class="o">=</span> <span class="p">[</span><span class="n">Card</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">suit</span><span class="p">)</span>
+                       <span class="k">for</span> <span class="n">suit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">suits</span>
+                       <span class="k">for</span> <span class="n">rank</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">[</span><span class="n">position</span><span class="p">]</span>
+
+
+<span class="n">deck</span> <span class="o">=</span> <span class="n">FrenchDeck</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deck</span><span class="p">))</span>       <span class="c1"># 52</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>         <span class="c1"># Card(rank='2', suit='spades')</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>        <span class="c1"># Card(rank='A', suit='hearts')</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="mi">12</span><span class="p">::</span><span class="mi">13</span><span class="p">])</span>    <span class="c1"># 每隔 13 张取一张，切片也自动生效</span>
+</code></pre>
+<p>只实现 <code>__len__</code> 和 <code>__getitem__</code>，这个类就白拿了 <code>len()</code>、下标、负索引、切片、<code>for</code>、<code>random.choice()</code>。这就是「数据模型」的杠杆效应。</p>
+<h3 id="延伸-特殊方法不是清单-是五组操作">延伸：特殊方法不是清单，是五组操作</h3>
+<p>背 80 多个特殊方法没有意义，按操作族分类就不会漏：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>族</th>
+<th>方法</th>
+<th>什么时候被调</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器</td>
+<td><code>__len__ __getitem__ __setitem__ __delitem__ __contains__ __iter__ __reversed__ __missing__</code></td>
+<td><code>len()</code>、<code>obj[k]</code>、<code>k in obj</code>、<code>for</code></td>
+</tr>
+<tr>
+<td>数值</td>
+<td><code>__add__ __radd__ __iadd__ __mul__ __abs__ __round__ __int__ __float__</code></td>
+<td>运算符、<code>round()</code>、<code>float()</code></td>
+</tr>
+<tr>
+<td>比较与哈希</td>
+<td><code>__eq__ __lt__ __hash__ __bool__</code></td>
+<td><code>==</code>、排序、<code>hash()</code>、<code>if obj</code></td>
+</tr>
+<tr>
+<td>表示与转换</td>
+<td><code>__repr__ __str__ __format__ __bytes__</code></td>
+<td><code>repr()</code>、<code>print()</code>、f-string、<code>bytes()</code></td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td><code>__init__ __new__ __del__</code></td>
+<td>构造、回收</td>
+</tr>
+</tbody>
+</table></div>
+<p>三个容易记错的行为：</p>
+<ul>
+<li><code>__reversed__</code> 不定义时，<code>reversed()</code> 会退化成「先 <code>len()</code> 再倒序取 <code>__getitem__</code>」；对象没有 <code>__len__</code> 就直接 <code>TypeError</code>。</li>
+<li><code>__contains__</code> 不定义时，<code>in</code> 退化为迭代比较，O(n)；给 <code>FrenchDeck</code> 加一个 <code>__contains__</code> 就能把「这张牌在不在」变 O(1)。</li>
+<li><code>__missing__</code> 只在 <code>dict</code> 子类里、且只由 <code>d[k]</code> 触发；<code>d.get(k)</code> 永远不会走它。想统一行为得同时重写 <code>get</code>。</li>
+</ul>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>不要自己调 dunder</strong>：写 <code>len(x)</code>，不要写 <code>x.__len__()</code>。前者有 C 层优化，后者绕过了它。</li>
+<li><strong><code>__repr__</code> 是开发者视角</strong>，理想形式是 <code>Vector2d(3, 4)</code> 这种能重建对象的表达式；<code>__str__</code> 面向用户。只定义 <code>__repr__</code> 时，<code>print()</code> 会自动回退到它。</li>
+<li><strong><code>bool(x)</code> 的回退链</strong>：先找 <code>__bool__</code>，没有就找 <code>__len__</code>，<code>len(x) == 0</code> 即为假。所以定义了 <code>__len__</code> 的容器天然有真假值。</li>
+<li><strong>算术运算符不会自动交换操作数</strong>：<code>a + b</code> 先试 <code>a.__add__(b)</code>，失败或返回 <code>NotImplemented</code> 再试 <code>b.__radd__(a)</code>。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>给 <code>FrenchDeck</code> 加 <code>__repr__</code>，打印成 <code>FrenchDeck(52 cards)</code>。</li>
+<li>加一个 <code>pick()</code> 方法，随机返回一张牌，要求只写一行（提示：<code>random.choice(self)</code>）。</li>
+<li>去掉 <code>__len__</code>，观察 <code>len(deck)</code> 的报错信息，再把 <code>__len__</code> 加回来。</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FancyDeck</span><span class="p">(</span><span class="n">FrenchDeck</span><span class="p">):</span>             <span class="c1"># 接上面的 FrenchDeck</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"FrenchDeck(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> cards)"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能不查资料说出 <code>len</code> / <code>[]</code> / <code>for</code> / <code>print</code> 各自触发的方法名</li>
+<li><span class="ck"></span>解释为什么 <code>len(deck)</code> 比 <code>deck.__len__()</code> 更可取</li>
+<li><span class="ck"></span>写出的类在 <code>print()</code> 时输出的是可读的对象表示，而不是 <code>&lt;__main__.X object at 0x...&gt;</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 1 章 §1.2–1.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：特殊方法不是清单，是五组操作</p></div>
+    <div class="pn"><span></span><a class="nx" href="l02.html"><small>第 2 课 · 单元 1 →</small><b>序列家族与推导式</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../01.html">返回单元 1</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=1, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

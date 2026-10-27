@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 4 章 · 文本与字节序列 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 4 章 · 文本与字节序列 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 4 章</span>
+        <span class="kwk">单元 2 · 字典、集合与文本</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>文本与字节序列</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p><code>str</code> 是码位序列，<code>bytes</code> 是字节序列，两者之间只能显式转换。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>Python 3 把文本与字节彻底分开，<code>str</code> 不带编码</td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>Python 2 的 <code>unicode</code>/<code>str</code> 双类型 + 隐式 ASCII 转换</td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>隐式转换在非 ASCII 上静默出错，错误点常常离原因很远</td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>每次 IO 都要指定编码；老代码迁移成本高</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>Python 2 里 <code>str</code> 是字节，<code>unicode</code> 是文本，混用时按 ASCII 隐式解码。只要数据里出现一个中文，就会在某个不相关的位置抛 <code>UnicodeDecodeError</code>。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>继续隐式转换、只保留字节、彻底分离。选彻底分离：<code>str</code> 永远是无编码的码位序列，<code>bytes</code> 永远是字节，边界处必须 <code>encode</code>/<code>decode</code>。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p>因为错误被推到了边界：读文件、收 socket、解析协议时就要决定编码，而不是在业务逻辑深处炸。这也让「文本」这个概念第一次在语言层面干净了。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p>每个文件、每个网络请求都要想编码；<code>open()</code> 的默认编码跟平台走（3.15 起统一 UTF-8）。文件名还有第三套编码（<code>os.fsencode</code> 的 <code>surrogateescape</code>），不是 UTF-8。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>仍然分离，但会把「打开文件必须显式 <code>encoding=</code>」写进代码审查清单，并默认用 <code>errors="strict"</code> 暴露问题而不是 <code>ignore</code>。</p>
+    <div class="pn"><a href="03.html"><small>← 上一章</small><b>第 3 章 · 字典与集合</b></a><a class="nx" href="05.html"><small>下一章 →</small><b>第 5 章 · 数据类构建器</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../02.html">单元 2 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+@@13|可调用对象有九类
+`callable()` 为真的东西不止「函数」：
+
+1. 普通函数　2. lambda　3. 类（调用即构造）　4. 定义了 `__call__` 的实例　5. 生成器函数　6. 协程函数　7. 内置函数 / 内置方法（`len`、`print`）　8. 绑定方法 / 类方法 / 静态方法　9. `functools.partial` 对象
+
+```python
+def f(): pass
+class C:
+    def __call__(self): return "called"
+    def m(self): return "m"
+print([callable(x) for x in (f, C, C(), C.m, C().m, len, print)])   # 全 True
+```
+
+判断「是不是函数」要用 `inspect.isfunction`；`callable` 只回答「能不能加括号」。这条区别在写参数校验时很关键：你要求的是「可回调」，不是「函数」，用 `callable` 才对，用 `isinstance(x, types.FunctionType)` 会把类实例、`partial` 全挡掉。
+
+@@14|仅限关键字参数与 partial 的签名
+`def f(a, *, b)` 里的 `b` 只能按关键字传，防止调用方把两个同类型参数传反。`functools.partial` 绑定参数后再交给 `inspect.signature`，签名会跟着变：
+
+```python
+import inspect
+from functools import partial
+
+def area(w, h, *, unit="cm"):
+    return f"{w * h} {unit}²"
+
+p = partial(area, unit="m")
+print(inspect.signature(p))     # (w, h, *, unit='m')
+print(p(2, 3))                  # 6 m²
+print(p(2, 3, unit="km"))       # 6 km²，后传的覆盖先绑的
+```
+
+`partial` 只能追加关键字或左侧位置参数，不能跳过中间参数——要那样就用 lambda。`functools.partialmethod` 是它给描述符协议准备的版本，用于类方法场景。
+
+@@15|Literal、Final、Annotated
+```python
+from typing import Literal, Final, Annotated
+
+Mode = Literal["r", "w", "a"]           # 只能是这三个字符串
+MAX_LEN: Final = 1024                    # 检查器禁止再赋值
+UserId = Annotated[int, "primary key"]  # 把运行时元数据挂在类型上
+
+def open_file(path: str, mode: Mode = "r") -> None: ...
+```
+
+`Annotated` 的元数据在运行时能取到：`typing.get_type_hints(fn, include_extras=True)`。FastAPI 的参数校验、文档、依赖注入都建在这上面——它先用注解，再用 `Annotated` 里的元数据，最后看默认值。`Literal` 和 `Final` 只影响静态检查，运行时传 `"x"` 不会报错，别拿它当校验器。
+
+@@16|类型检查器看不见的四件事
+- 除零：`a / b` 里 `b == 0` 是运行时错误，注解无能为力。
+- 越界：`list[int]` 只说明元素类型，`xs[5]` 会不会 `IndexError` 检查器不知道。
+- 外部输入：`json.load()` 返回 `Any`，标成 `dict[str, int]` 只是你的断言，不是事实。
+- `cast` 撒谎：`cast(int, "abc")` 检查器全信，运行时是 `str`。
+
+```python
+from typing import cast
+val = cast(int, "not an int")    # 静态通过，运行时是 str
+print(type(val))                 # <class 'str'>
+```
+
+原书的结论是「静态检查 + 测试双轨」：类型解决「形状对不对」，测试解决「行为对不对」。真正的入口校验（HTTP 请求、配置文件、命令行）交给 pydantic 这类运行时校验库，别指望注解。
+
+@@17|闭包变量存在 __closure__ 里
+闭包把外层变量存在函数对象的 `__closure__` 中，每一项是一个 cell：
+
+```python
+def counter():
+    n = 0
+    def inc():
+        nonlocal n
+        n += 1
+        return n
+    return inc
+
+c = counter()
+c(); c()
+print(c.__closure__[0].cell_contents)    # 2
+```
+
+`nonlocal` 只声明「最近一层」的外层变量：跨两层就要每层各写一次，或者干脆把状态放进 list/dict 里（改内容不算重新绑定，不需要 nonlocal）。只读外层变量不用声明，赋值才需要——忘了写会得到 `UnboundLocalError`，因为赋值让这个名字在整个函数里变成局部变量。
+
+@@18|用类写参数化装饰器，wraps 做了什么
+三层嵌套（工厂 → 装饰器 → wrapper）可以用类压平，参数放 `__init__`、被装饰函数交给 `__call__`：
+
+```python
+import functools
+
+class retry:
+    def __init__(self, times=3):
+        self.times = times
+    def __call__(self, fn):
+        @functools.wraps(fn)
+        def wrapper(*a, **kw):
+            for i in range(self.times):
+                try:
+                    return fn(*a, **kw)
+                except Exception:
+                    if i == self.times - 1:
+                        raise
+        return wrapper
+```
+
+`functools.wraps` 复制 `__name__`、`__doc__`、`__module__`、`__dict__`，并写入 `__wrapped__` 指向原函数；`inspect.signature` 会顺着 `__wrapped__` 拿到真实签名。所以漏写 wraps 的典型症状是：文档变 `wrapper`、路由注册参数丢失、框架读不到注解。用类实现的代价是实例不能被当函数直接调用两次以上的配置场景复用，看需求选。
+
+@@19|lru_cache 的键与 singledispatch 的注册
+```python
+from functools import lru_cache, singledispatch
+
+@lru_cache(maxsize=128, typed=True)
+def f(x): return x
+
+f(1); f(1.0)
+print(f.cache_info())      # misses=2，typed 区分 1 与 1.0
+
+@singledispatch
+def show(x): return "other"
+
+@show.register
+def _(x: int): return "int"
+
+@show.register(str)
+def _(x): return "str"
+
+print(show(1), show("a"), show(1.5))    # int str other
+```
+
+`maxsize=None` 等价于 `cache`，无上限。参数必须可哈希，list 直接 `TypeError`。带副作用、依赖时间或外部状态的函数不能缓存；把 `lru_cache` 挂在实例方法上还会把 `self` 当键，导致实例不被回收——要么用类级别的缓存，要么自己管字典。
+
+@@20|撤销栈保存命令，不保存快照
+命令模式把「一次操作」变成对象，好处是可排队、可记录、可撤销。用可调用对象实现最省：
+
+```python
+class Add:
+    def __init__(self, x): self.x = x
+    def __call__(self, acc): return acc + self.x
+    def undo(self, acc): return acc - self.x
+
+cmds = [Add(3), Add(5)]
+acc = 0
+for c in cmds: acc = c(acc)
+print(acc)                              # 8
+for c in reversed(cmds): acc = c.undo(acc)
+print(acc)                              # 0
+```
+
+要点是成本差异：保存命令只占一条记录的字节，保存整份状态快照可能是几 MB。只有不可逆的操作（发邮件、扣库存、调第三方）才需要补偿动作或快照。设计时先问「这个操作能不能算逆运算」，能就别存快照。
+
+@@21|__format__ 收到的是原样 spec
+`f"{x:>8.2f}"` 里的 `>8.2f` 会原样传给 `x.__format__`，所以实现时不能假设格式固定：
+
+```python
+class Money:
+    def __init__(self, v): self.v = v
+    def __format__(self, spec):
+        if not spec:                    # 空 spec 必须有默认行为
+            return f"¥{self.v:.2f}"
+        return format(self.v, spec)     # 交给 float
+
+print(f"{Money(3.5)}")              # ¥3.50
+print(f"{Money(3.5):.1f}")          # 3.5
+print(f"{Money(3.5):>10}")          #        3.5   ← 货币符号丢了
+print(f"{str(Money(3.5)):>10}")     #       ¥3.50  ← 先转字符串再对齐
+```
+
+第三行是真实陷阱：`>10` 原样交给 `float`，得到 `'       3.5'`，货币符号没了。两种处理方式——要么在 `__format__` 里把 spec 拆成「数字部分 + 对齐部分」分别处理，要么文档里写明只支持数字格式，对齐时用 `str()` 包一层。空 spec 一定要有默认分支，否则 `f"{obj}"` 和 `str(obj)` 行为不一致。
+
+@@22|__match_args__ 与 __slots__ 的边界
+类模式 `case Point(x, y):` 的位置参数顺序由 `__match_args__` 决定，没有它就只能写关键字模式：
+
+```python
+class Point:
+    __match_args__ = ("x", "y")
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+
+def where(p):
+    match p:
+        case Point(0, 0): return "origin"
+        case Point(x, 0): return f"x-axis {x}"
+        case Point(0, y): return f"y-axis {y}"
+        case Point(x, y): return f"({x}, {y})"
+
+print(where(Point(0, 0)), where(Point(1, 2)))    # origin (1, 2)
+```
+
+`__slots__` 省的是实例的 `__dict__`：定义后不能再给实例加新属性，也不能和同层 `__dict__` 共存（基类已有 `__dict__` 时它依然存在，省不下来）。它主要省内存，顺带略快，但不是性能银弹；`@dataclass(slots=True)` 在 3.10+ 一步到位。
+
+@@23|退化协议能跑，但语义含糊
+实现了 `__getitem__` 的对象，`iter()` 会自动退化为「从 0 开始索引直到 `IndexError`」；`in` 也退化为线性扫描：
+
+```python
+class Bag:
+    def __init__(self, items): self._items = list(items)
+    def __getitem__(self, i): return self._items[i]
+
+print(list(Bag([1, 2, 3])))    # [1, 2, 3]，靠退化协议
+print(2 in Bag([1, 2, 3]))     # True，逐项比较
+```
+
+显式写 `__iter__` 返回 `iter(self._items)` 更好：语义清楚、`in` 能走 `__contains__` 优化、`reversed` 能走 `__reversed__`、`len` 不必再靠猜。退化协议只适合一次性演示或确实只有下标语义的容器（比如稀疏矩阵）。
+
+@@24|__getattr__ 的递归坑与哈希的缓存
+`__getattr__` 只在常规查找失败时触发，适合惰性构造昂贵属性：
+
+```python
+class Lazy:
+    def __init__(self):
+        self._cache = {}
+    def __getattr__(self, name):
+        if name.startswith("_"):
+            raise AttributeError(name)     # 关键：避免递归
+        if name not in self._cache:
+            self._cache[name] = name.upper()
+        return self._cache[name]
+
+print(Lazy().abc)     # ABC
+```
+
+两个坑：`__getattr__` 里访问 `self.其他属性` 会无限递归（缺失时又进 `__getattr__`），所以要么先判下划线、要么直接读 `self.__dict__`；`hasattr` 也会触发它，可能把拼错的属性名变成 `True`。
+
+哈希：`__hash__` 应基于不可变字段，字段一变哈希就失效，所以可变对象别定义 `__hash__`。大对象的哈希结果值得缓存（`self._hash = hash((...))`），因为 dict 每次查找都会调用它。

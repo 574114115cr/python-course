@@ -18,6 +18,7 @@ const others = [
   `${ROOT}/index.html`, `${ROOT}/python-learning-roadmap.html`, `${ROOT}/python-course-syllabus.html`,
   `${ROOT}/web/lessons/index.html`, `${ROOT}/web/bank.html`, `${ROOT}/web/gate1.html`,
   `${ROOT}/web/gate2.html`, `${ROOT}/web/ppt/index.html`, `${ROOT}/web/ppt/u/index.html`,
+  `${ROOT}/web/review.html`, `${ROOT}/web/terms.html`, `${ROOT}/web/coverage.html`,
 ];
 const ALL = [...lessons, ...units, ...players, ...others];
 
@@ -87,15 +88,14 @@ async function main() {
     await sleep(200);
     const r = await evaluate(`(() => {
       const side = document.querySelector('.side'), main = document.querySelector('.main');
-      const nlx = document.getElementById('nlx');
       const rs = side.getBoundingClientRect(), rm = main.getBoundingClientRect();
       return JSON.stringify({
         side: getComputedStyle(side).display,
         mainFirst: rm.top <= rs.top,
-        nlxOpen: nlx.open,
         toc: !!document.querySelector('.side .toc a'),
         ppt: !!document.querySelector('.side .pptbox'),
-        links: document.querySelectorAll('.side .nlist a').length
+        links: document.querySelectorAll('.side .nlist a').length,
+        allCatalog: !!document.querySelector('.side .nall')
       });
     })()`);
     sideChecks.push([u.split('/').pop(), r]);

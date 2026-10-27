@@ -1,0 +1,303 @@
+[
+ {
+  "id": "u1-listcomp",
+  "unit": 1,
+  "q": "把 0–999999 中能被 3 整除的数翻倍后收集成一个列表",
+  "setup": "N = 1000000",
+  "number": 5,
+  "variants": [
+   {
+    "name": "for + append",
+    "code": "out = []\nfor i in range(N):\n    if i % 3 == 0:\n        out.append(i * 2)"
+   },
+   {
+    "name": "列表推导",
+    "code": "out = [i * 2 for i in range(N) if i % 3 == 0]"
+   },
+   {
+    "name": "filter + map",
+    "code": "out = list(map(lambda i: i * 2, filter(lambda i: i % 3 == 0, range(N))))"
+   }
+  ],
+  "note": "本例列表推导只快 6%——简单转换时三种写法同量级，推导式的优势要等逻辑变复杂才显出来。filter+map 因为两次 lambda 调用稳定慢一倍，而且最不可读：这是「能把循环写成推导式」不等于「必须写」的实例。"
+ },
+ {
+  "id": "u1-genexp-mem",
+  "unit": 1,
+  "q": "只取前 10 个结果，但源数据有 100 万项",
+  "setup": "from itertools import islice\nN = 1000000",
+  "number": 20,
+  "mem": true,
+  "variants": [
+   {
+    "name": "先建完整列表再切片",
+    "code": "out = [i * 2 for i in range(N) if i % 3 == 0][:10]"
+   },
+   {
+    "name": "生成器表达式 + islice",
+    "code": "out = list(islice((i * 2 for i in range(N) if i % 3 == 0), 10))"
+   }
+  ],
+  "note": "生成器版时间和内存都差出几个数量级（上表两列就是实测值）：它取够 10 个就停，根本不会跑完 100 万项，中间结果也不落地。「只需要前几个」「源是流式或长度未知」时，这是唯一正确的写法；反过来要反复遍历或求长度，就必须落到列表。"
+ },
+ {
+  "id": "u1-unpack",
+  "unit": 1,
+  "q": "遍历 20 万个三元组，把三个字段加起来",
+  "setup": "P = [(i, i + 1, i + 2) for i in range(200000)]",
+  "number": 5,
+  "variants": [
+   {
+    "name": "下标访问",
+    "code": "s = 0\nfor t in P:\n    s += t[0] + t[1] + t[2]"
+   },
+   {
+    "name": "元组解包",
+    "code": "s = 0\nfor a, b, c in P:\n    s += a + b + c"
+   }
+  ],
+  "note": "解包用 UNPACK_SEQUENCE 一次拿到三个值，比三次 BINARY_SUBSCR 快一截，而且顺带做了长度校验——元素个数不对会直接报错，反而更安全。"
+ },
+ {
+  "id": "u2-dict-lookup",
+  "unit": 2,
+  "q": "在 2 万个数里判断 1 万个查询各自是否存在",
+  "setup": "import random\nrandom.seed(7)\nL = list(range(20000))\nS = set(L)\nQ = [random.randrange(30000) for _ in range(10000)]",
+  "number": 5,
+  "variants": [
+   {
+    "name": "list in（线性扫）",
+    "code": "hit = 0\nfor x in Q:\n    if x in L:\n        hit += 1"
+   },
+   {
+    "name": "set in（哈希）",
+    "code": "hit = 0\nfor x in Q:\n    if x in S:\n        hit += 1"
+   }
+  ],
+  "note": "list 的 in 是 O(n)，set 的 in 是 O(1)。表再大 10 倍，list 版会慢 10 倍，set 版几乎不变——这就是「先建索引」的意义。"
+ },
+ {
+  "id": "u2-str-join",
+  "unit": 2,
+  "q": "把 10 万个小字符串拼成一个长字符串",
+  "setup": "P = ['abc-%d;' % i for i in range(100000)]",
+  "number": 5,
+  "variants": [
+   {
+    "name": "循环 +=",
+    "code": "s = ''\nfor p in P:\n    s += p"
+   },
+   {
+    "name": "str.join",
+    "code": "s = ''.join(P)"
+   }
+  ],
+  "note": "本机实测 += 仍慢约 18 倍：CPython 的「原地追加」优化只省掉重复分配，每次依然要拷贝已有内容；join 先算好总长度、一次分配一次拷贝。结论没变——拼接交给 join，循环只负责产出片段。"
+ },
+ {
+  "id": "u2-counter",
+  "unit": 2,
+  "q": "统计 10 万次随机选择的词频",
+  "setup": "from collections import Counter\nimport random\nrandom.seed(3)\nW = [random.choice(['a', 'b', 'c', 'd', 'e']) for _ in range(100000)]",
+  "number": 5,
+  "variants": [
+   {
+    "name": "手写 dict + get",
+    "code": "d = {}\nfor w in W:\n    d[w] = d.get(w, 0) + 1"
+   },
+   {
+    "name": "collections.Counter",
+    "code": "d = dict(Counter(W))"
+   },
+   {
+    "name": "dict + try/except",
+    "code": "d = {}\nfor w in W:\n    try:\n        d[w] += 1\n    except KeyError:\n        d[w] = 1"
+   }
+  ],
+  "note": "Counter 由 C 实现的 _count_elements 驱动，比手写循环快三成左右；try/except 版与 get 版几乎打平——本例键命中率极高，异常几乎不触发，一旦 miss 变多它就会明显变慢。日常首选 Counter，热路径再试别的。"
+ },
+ {
+  "id": "u2-bisect",
+  "unit": 2,
+  "q": "在 10 万元素的有序表里查 1000 个键",
+  "setup": "from bisect import bisect_left\nA = list(range(0, 200000, 2))\nK = list(range(0, 200000, 199))",
+  "number": 5,
+  "variants": [
+   {
+    "name": "in 线性扫",
+    "code": "hit = 0\nfor k in K:\n    if k in A:\n        hit += 1"
+   },
+   {
+    "name": "bisect 二分",
+    "code": "hit = 0\nfor k in K:\n    i = bisect_left(A, k)\n    if i < len(A) and A[i] == k:\n        hit += 1"
+   }
+  ],
+  "note": "二分把单次查找从 O(n) 降到 O(log n)：本例 bisect 快约 1400 倍。但二分的前提是数据有序、且查询够多——小表或只查一两次时，线性扫的常数更小，先排序反而亏。bisect 还常用来做限流与分段查找。"
+ },
+ {
+  "id": "u2-deque",
+  "unit": 2,
+  "q": "队列：从头取 1 万次",
+  "setup": "from collections import deque\nN = 10000",
+  "number": 3,
+  "variants": [
+   {
+    "name": "list.pop(0)",
+    "code": "q = list(range(N))\nfor _ in range(N):\n    q.pop(0)"
+   },
+   {
+    "name": "deque.popleft",
+    "code": "q = deque(range(N))\nfor _ in range(N):\n    q.popleft()"
+   }
+  ],
+  "note": "list.pop(0) 每次要移动后面所有元素，整体 O(n²)；deque 是双端链表式结构，popleft 是 O(1)。N 越大差距越夸张——这是全书最值得背下来的一个数量级差异。"
+ },
+ {
+  "id": "u3-dataclass",
+  "unit": 3,
+  "q": "构造 10 万个两点对象",
+  "setup": "from dataclasses import dataclass\nclass Plain:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n@dataclass\nclass DC:\n    x: int\n    y: int\nN = 100000",
+  "number": 5,
+  "variants": [
+   {
+    "name": "手写 __init__",
+    "code": "objs = [Plain(i, i) for i in range(N)]"
+   },
+   {
+    "name": "@dataclass",
+    "code": "objs = [DC(i, i) for i in range(N)]"
+   }
+  ],
+  "note": "本机实测两者几乎打平（差 5% 以内，属噪声）：dataclass 生成的 __init__ 也是纯 Python，并不比手写快。它的价值是把相等比较、repr、字段清单、默认值一次做对，省的是你的时间和 bug，不是 CPU——别为性能选它。"
+ },
+ {
+  "id": "u3-slots",
+  "unit": 3,
+  "q": "读 100 万次属性",
+  "setup": "class WithSlots:\n    __slots__ = ('x',)\n    def __init__(self):\n        self.x = 1\nclass NoSlots:\n    def __init__(self):\n        self.x = 1\na = WithSlots()\nb = NoSlots()\nN = 1000000",
+  "number": 5,
+  "variants": [
+   {
+    "name": "普通类（__dict__）",
+    "code": "for _ in range(N):\n    b.x"
+   },
+   {
+    "name": "__slots__",
+    "code": "for _ in range(N):\n    a.x"
+   }
+  ],
+  "note": "__slots__ 真正的收益是内存：实例不再背一个 __dict__，百万级对象能省下几百 MB。访问速度只快一点，所以「为了快加 slots」基本不划算，「为了省内存」才加。"
+ },
+ {
+  "id": "u3-namedtuple",
+  "unit": 3,
+  "q": "构造 10 万个点",
+  "setup": "from collections import namedtuple\nfrom dataclasses import dataclass\nPt = namedtuple('Pt', 'x y')\n@dataclass\nclass P:\n    x: int\n    y: int\nN = 100000",
+  "number": 5,
+  "variants": [
+   {
+    "name": "裸 tuple",
+    "code": "objs = [(i, i) for i in range(N)]"
+   },
+   {
+    "name": "namedtuple",
+    "code": "objs = [Pt(i, i) for i in range(N)]"
+   },
+   {
+    "name": "dataclass",
+    "code": "objs = [P(i, i) for i in range(N)]"
+   }
+  ],
+  "note": "namedtuple 的 __new__ 是生成的 Python 代码，构造比裸 tuple 慢两三倍，和 dataclass 同量级——它买的是字段名、解包与不可变，不是速度。要纯性能用裸 tuple，要行为用 dataclass，要「带名字的不可变值」用 namedtuple。"
+ },
+ {
+  "id": "u4-map",
+  "unit": 4,
+  "q": "把 20 万个数字字符串转成 int",
+  "setup": "S = [str(i) for i in range(200000)]",
+  "number": 5,
+  "variants": [
+   {
+    "name": "列表推导",
+    "code": "A = [int(s) for s in S]"
+   },
+   {
+    "name": "list(map(...))",
+    "code": "A = list(map(int, S))"
+   }
+  ],
+  "note": "转换函数是内置函数（C 实现）时 map 通常略快，因为它把循环整个搬进 C；一旦换成 lambda，优势就没了。推导式可读性更好，除非性能分析指着这里，否则用它。"
+ },
+ {
+  "id": "u4-scope",
+  "unit": 4,
+  "q": "把 0–999999 加起来",
+  "setup": "N = 1000000",
+  "number": 5,
+  "variants": [
+   {
+    "name": "手写 for 循环",
+    "code": "s = 0\nfor i in range(N):\n    s += i"
+   },
+   {
+    "name": "内置 sum",
+    "code": "s = sum(range(N))"
+   }
+  ],
+  "note": "sum 把整个循环搬进 C，本例快 2.5 倍；能用内置函数就别手写循环，这是性价比最高的一类优化。顺带破个老迷信：旧教程说「把全局量复制成局部变量更快」，在 Python 3.11+ 上实测已看不出来——专门化解释器给热点 LOAD_GLOBAL 加了内联缓存。先测量，再决定要不要写那行别名。"
+ },
+ {
+  "id": "u5-lru-cache",
+  "unit": 5,
+  "q": "递归算第 30 个斐波那契数",
+  "setup": "from functools import lru_cache\nN = 30",
+  "number": 3,
+  "variants": [
+   {
+    "name": "纯递归",
+    "code": "def fib(n):\n    return n if n < 2 else fib(n - 1) + fib(n - 2)\nr = fib(N)"
+   },
+   {
+    "name": "@lru_cache",
+    "code": "@lru_cache(None)\ndef fib2(n):\n    return n if n < 2 else fib2(n - 1) + fib2(n - 2)\nr = fib2(N)"
+   }
+  ],
+  "note": "没有缓存时 fib(30) 要展开约 270 万次调用；加了缓存只剩 31 次。memoization 把指数级变成线性级——但注意缓存按参数持有结果，参数不可哈希或结果该随外部状态变化时不能用。"
+ },
+ {
+  "id": "u8-itemgetter",
+  "unit": 8,
+  "q": "按字典的某个键排序 5 万条记录",
+  "setup": "from operator import itemgetter\nimport random\nrandom.seed(1)\nD = [{'k': random.random(), 'v': i} for i in range(50000)]",
+  "number": 3,
+  "variants": [
+   {
+    "name": "lambda 作 key",
+    "code": "R = sorted(D, key=lambda d: d['k'])"
+   },
+   {
+    "name": "itemgetter 作 key",
+    "code": "R = sorted(D, key=itemgetter('k'))"
+   }
+  ],
+  "note": "itemgetter 是 C 实现的调用器，每次提取 key 省掉一帧 Python 调用；但排序的总成本由比较次数决定，本例只快 13%（约 0.7 ms）。operator 模块的 attrgetter / methodcaller 同理——把常见 lambda 换成 C 版本，数据量大到百万行时才值得专门改。"
+ },
+ {
+  "id": "u9-any",
+  "unit": 9,
+  "q": "10 万个数里有没有大于 99 的（答案是没有，必须扫完）",
+  "setup": "import random\nrandom.seed(2)\nA = [random.randrange(100) for _ in range(100000)]",
+  "number": 5,
+  "variants": [
+   {
+    "name": "for + break",
+    "code": "found = False\nfor x in A:\n    if x > 99:\n        found = True\n        break"
+   },
+   {
+    "name": "any(生成器)",
+    "code": "found = any(x > 99 for x in A)"
+   }
+  ],
+  "note": "都要扫完 10 万项时，any 因为每项多一层生成器切换，反而慢约 1.5 倍。它的价值在短早退：命中靠前时两者都几乎不花时间，差别可以忽略，而 any 省掉了标志位和 break 的样板，意图也更清楚。"
+ }
+]

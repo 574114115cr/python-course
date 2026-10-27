@@ -18,8 +18,10 @@ transition:opacity .18s;z-index:60}
 <body data-lesson="30">
 <div class="top"><div class="top-in">
   <a class="back" href="index.html">← 课程目录</a>
-  <h1>第 30/111 节 · 交互程序的骨架与收尾</h1>
+  <span class="tno">第 30 节</span>
+  <h1>交互程序的骨架与收尾</h1>
   <span class="sp"></span>
+  <a class="rv" href="../review.html">复习</a>
   <a class="ppt" href="../ppt/u/06.html#s6" title="本课节对应的课件">本课课件 u6·p6</a>
 </div></div>
 <div class="pbar"><i id="pbar"></i></div>
@@ -31,6 +33,7 @@ transition:opacity .18s;z-index:60}
       <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
 <a class="lv3" href="#2-5-while-else-循环-没被打断-时执行">2.5 while ... else：循环&quot;没被打断&quot;时执行</a>
 <a class="lv3" href="#2-6-交互程序的骨架">2.6 交互程序的骨架</a>
+<a class="lv3" href="#2-7-用-while-处理列表和字典-教材-7-3">2.7 用 while 处理列表和字典（教材 7.3）</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-input-的类型陷阱与三步模板">示例 1：input 的类型陷阱与三步模板</a>
 <a class="lv3" href="#示例-2-while-基本循环">示例 2：while 基本循环</a>
@@ -39,7 +42,18 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-5-标志位-flag">示例 5：标志位 flag</a>
 <a class="lv3" href="#示例-6-交互式程序骨架">示例 6：交互式程序骨架</a>
 <a class="lv3" href="#示例-7-倒计时与死循环的自救">示例 7：倒计时与死循环的自救</a>
+<a class="lv3" href="#示例-8-待办清单-搬元素-丢空值">示例 8：待办清单——搬元素、丢空值</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk">
+      <h4>单元 6 · 共 5 节</h4>
+      <nav class="nlist"><a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
+<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
+<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
+<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
+<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a></nav>
+      <a class="nall" href="index.html#u6">
+        <span>全部 111 节目录</span><span class="ar">→</span></a>
     </div>
     <div class="sblk pptbox">
       <h4>配套资料 · 单元 6</h4>
@@ -56,124 +70,12 @@ transition:opacity .18s;z-index:60}
         <a href="index.html#u6"><span class="k">课节</span>
           <span class="v">本单元全部课节</span></a>
         <a href="../bank.html#u6"><span class="k">题库</span>
-          <span class="v">本单元 6 题 · 共 84 题</span></a>
+          <span class="v">本单元 8 题 · 共 120 题</span></a>
+        <a href="../review.html"><span class="k">复习</span>
+          <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
       </div>
     </div>
 
-    <details class="sblk nlx" id="nlx" open>
-      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
-      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
-<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
-<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
-<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
-<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
-<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
-<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
-<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
-<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
-<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
-<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
-<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
-<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
-<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
-<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
-<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
-<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
-<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
-<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
-<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
-<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
-<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
-<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
-<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
-<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
-<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
-<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
-<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
-<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
-<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
-<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
-<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
-<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
-<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
-<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
-<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
-<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
-<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
-<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
-<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
-<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
-<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
-<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
-<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
-<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
-<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
-<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
-<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
-<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
-<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
-<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
-<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
-<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
-<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
-<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
-<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
-<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
-<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
-<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
-<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
-<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
-<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
-<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
-<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
-<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
-<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
-<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
-<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
-<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
-<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
-<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
-<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
-<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
-<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
-<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
-<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
-<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
-<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
-<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
-<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
-<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
-<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
-<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
-<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
-<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
-<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
-<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
-<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
-<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
-<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
-<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
-<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
-<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
-<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
-<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
-<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
-<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
-<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
-<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
-<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
-<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
-<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
-<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
-<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
-<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
-<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
-<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
-<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
-<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
-<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
-<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
-    </details>
   </aside>
 
   <main class="main">
@@ -240,6 +142,58 @@ transition:opacity .18s;z-index:60}
 - 所以每一条通向"用户想退出"的路径，都必须有 <code>break</code>。
 - 这也是为什么必须有"退出"这个选项——否则用户被永远困在里面。</p>
 <p>这个骨架在单元 11 的猜数字游戏、投票分析器里会反复出现，请务必掌握到能默写。</p>
+<h3 id="2-7-用-while-处理列表和字典-教材-7-3">2.7 用 while 处理列表和字典（教材 7.3）</h3>
+<p><code>for</code> 适合「每个元素都做一次」，<code>while</code> 适合「一直做，直到某个条件不成立」。教材 7.3 用三个场景说明后者，这三个场景在真实代码里出现频率极高。</p>
+<p><strong>① 在列表之间搬元素。</strong> 一个列表放待处理项，另一个放已完成项，处理完就从原列表里「取走」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">unconfirmed</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"carol"</span><span class="p">]</span>
+<span class="n">confirmed</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">while</span> <span class="n">unconfirmed</span><span class="p">:</span>              <span class="c1"># 空列表为假 → 循环自然结束，不需要计数器</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">unconfirmed</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>    <span class="c1"># 从末尾取走一个</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"正在验证 </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2">…"</span><span class="p">)</span>
+    <span class="n">confirmed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"已验证"</span><span class="p">,</span> <span class="n">confirmed</span><span class="p">)</span>      <span class="c1"># ['carol', 'bob', 'alice']  ← 顺序反了</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"待验证"</span><span class="p">,</span> <span class="n">unconfirmed</span><span class="p">)</span>    <span class="c1"># []</span>
+</code></pre>
+<p>注意输出顺序是反的：<code>pop()</code> 取末尾。要保序用 <code>pop(0)</code>（从头取，元素多时更慢），或者先把原列表反转。</p>
+<p><strong>② 删除所有等于某值的元素。</strong> <code>list.remove(x)</code> 只删<strong>第一个</strong>匹配项，删干净必须靠循环：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">pets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"dog"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"rabbit"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">]</span>
+
+<span class="k">while</span> <span class="s2">"cat"</span> <span class="ow">in</span> <span class="n">pets</span><span class="p">:</span>            <span class="c1"># 条件：列表里还有 cat</span>
+    <span class="n">pets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"cat"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pets</span><span class="p">)</span>                     <span class="c1"># ['dog', 'rabbit']</span>
+</code></pre>
+<p>这里最容易踩的坑是<strong>边 <code>for</code> 边 <code>remove</code></strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">nums</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>                     <span class="c1"># [1, 2, 3]  ← 还剩一个 2！</span>
+</code></pre>
+<p>原因是 <code>for</code> 内部维护着下标，删掉一个元素后后面的元素整体前移，下标正好跳过了一个。规则很简单：<strong>要删元素就别用 <code>for</code> 遍历同一个列表</strong>，改用 <code>while</code>、列表推导式，或者遍历副本 <code>for n in nums[:]</code>。</p>
+<p><strong>③ 用用户输入来填充字典。</strong> 收集问卷、登记报名都是这个结构：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">responses</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">while</span> <span class="n">active</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"姓名（输入 q 结束）："</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
+        <span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">responses</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">"你想学什么："</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">responses</span><span class="p">)</span>
+</code></pre>
+<p><code>active = False</code> 和 <code>break</code> 都能退出，区别是 <code>break</code> 立刻跳出、<code>active = False</code> 要等本轮循环体执行完。上面这种写法里两者等价，但<strong>退出后不能再使用 <code>name</code></strong>——如果用户输入 <code>q</code>，<code>name</code> 就是 <code>"q"</code>，把它写进字典就错了，所以要用 <code>else</code> 把写入包起来。</p>
+<blockquote>
+<p><strong>要点</strong>
+- 判断「列表空没空」直接写 <code>while items:</code>，不要写 <code>while len(items) &gt; 0:</code>。
+- <code>while "x" in items: items.remove("x")</code> 是「删干净」的标准写法；<code>remove()</code> 一次只删一个。
+- 边遍历边改列表是 bug 温床，遍历副本写 <code>for x in items[:]</code>。
+- <code>pop()</code> 取末尾、<code>pop(0)</code> 取开头，后者在长列表上是 O(n)。</p>
+</blockquote>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-input-的类型陷阱与三步模板">示例 1：input 的类型陷阱与三步模板</h3>
@@ -547,6 +501,35 @@ transition:opacity .18s;z-index:60}
 <span class="c1"># 如果输出一直是"当前 i = 0"，说明你根本没写 i += 1，</span>
 <span class="c1"># 或者写在了缩进错误的位置（比如写到了 while 外面）。</span>
 </code></pre>
+<h3 id="示例-8-待办清单-搬元素-丢空值">示例 8：待办清单——搬元素、丢空值</h3>
+<p><code>while</code> 处理列表的两个动作经常同时出现：<strong>取走一个、处理一个</strong>，顺便过滤掉空项。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># todo_move.py —— 从待办搬到已完成，空字符串直接丢掉</span>
+<span class="n">pending</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"写周报"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"回邮件"</span><span class="p">,</span> <span class="s2">"订机票"</span><span class="p">,</span> <span class="s2">""</span><span class="p">]</span>
+<span class="n">done</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">while</span> <span class="n">pending</span><span class="p">:</span>                     <span class="c1"># 列表非空就继续</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">pending</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>          <span class="c1"># 从头取，保持原始顺序</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">task</span><span class="p">:</span>                   <span class="c1"># 空字符串为假 → 这一项不算任务</span>
+        <span class="k">continue</span>
+    <span class="n">done</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"完成：</span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">（还剩 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pending</span><span class="p">)</span><span class="si">}</span><span class="s2"> 项）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"已完成"</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"待办  "</span><span class="p">,</span> <span class="n">pending</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>完成：写周报（还剩 4 项）
+完成：回邮件（还剩 2 项）
+完成：订机票（还剩 1 项）
+已完成 ['写周报', '回邮件', '订机票']
+待办   []
+</code></pre>
+<p>三个细节：</p>
+<ol>
+<li><strong><code>pop(0)</code> 与 <code>pop()</code> 的差别就是顺序</strong>。这里要按用户输入顺序完成，所以从头取；如果不在乎顺序，<code>pop()</code> 更快（不用移动后面的元素）。</li>
+<li><strong>空字符串是「假值」</strong>，<code>if not task</code> 能同时挡住 <code>""</code>、<code>None</code>、<code>0</code>。真实项目里通常还会 <code>task.strip()</code> 再判断，防止用户只敲了空格。</li>
+<li><strong>循环结束时 <code>pending</code> 一定是空列表</strong>，这不是巧合：<code>while pending</code> 的条件就是「非空」，所以退出时必然为空。写这种循环时，条件本身就能当断言用。</li>
+</ol>
 <hr>
 
     <div class="blk hw">
@@ -558,6 +541,7 @@ transition:opacity .18s;z-index:60}
 
     <div class="done-bar">
       <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../review.html">复习计划 →</a>
       <a href="../06.html">查看单元 6 完整讲义 →</a>
       <a href="../bank.html">打开练习题库 →</a>
     </div>
@@ -582,10 +566,15 @@ function init(){
   });
   var box=document.getElementById('doneBox');
   if(box){
+    // 迁移：旧版只存布尔 true，没有完成时间；复习排程需要时间戳
+    if(all[n]===true){ all[n]=Date.now(); saveAll(all); }
     box.checked=!!all[n];
     if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
     box.addEventListener('change',function(){
-      var o=getAll(); o[n]=box.checked; saveAll(o);
+      var o=getAll();
+      if(box.checked){ if(o[n]===true) o[n]=Date.now(); if(!o[n]) o[n]=Date.now(); }
+      else delete o[n];
+      saveAll(o);
       document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
       document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
       document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
@@ -609,10 +598,6 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!p.querySelector('.cl')) p.insertBefore(s,c);
   });
   init();
-
-  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
-  var nlx=document.getElementById('nlx');
-  if(nlx&&window.innerWidth<=1000) nlx.open=false;
 
   // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
   document.addEventListener('keydown', function(e){

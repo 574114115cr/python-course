@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 1 章 · 数据模型 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 1 章 · 数据模型 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 1 章</span>
+        <span class="kwk">单元 1 · 数据模型与序列</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>数据模型</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p>让对象接入语言本身的语法，而不是让调用方记住你的方法名。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>特殊方法协议（<code>__len__</code>、<code>__getitem__</code>、<code>__iter__</code>…）</td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>显式方法：<code>obj.size()</code>、<code>obj.get(i)</code>（Java / C++ 容器风格）</td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>语法位置只认特殊方法：<code>len()</code>、<code>for</code>、<code>[]</code>、<code>+</code>、<code>with</code> 都不会去看 <code>size()</code></td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>调用隐式、栈里看不到调用点；C 层有时绕过你重写的方法</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>Python 从 1991 年就选择了「内置类型与用户类型尽量同权」。如果列表能 <code>len()</code> 而自定义容器只能 <code>.size()</code>，标准库、<code>for</code>、切片、解包就得为两套接口各写一遍。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>一是显式接口方法，调用方自己记名字；二是强制继承某个 <code>Collection</code> 基类；三是特殊方法协议——名字固定、由解释器在语法位置调用。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p>因为「语法位置」本身就是最强的契约：写 <code>for x in obj</code> 的人不需要知道你有没有 <code>.items()</code>。内置函数还带 C 层快速路径，<code>len(x)</code> 比 <code>x.__len__()</code> 快，这是显式方法拿不到的。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p>隐式调用让栈变浅，出问题时要靠 <code>__repr__</code> 和日志。C 实现有时跳过重写的方法：<code>dict.update()</code> 就不一定走你重写的 <code>__setitem__</code>。另外成对协议容易漏：只写 <code>__eq__</code> 不写 <code>__hash__</code>，对象立刻不可哈希。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>仍然是特殊方法，但会把「必须成对实现」写成检查规则（<code>__eq__</code>/<code>__hash__</code>、<code>__enter__</code>/<code>__exit__</code>、<code>__iter__</code>/<code>__next__</code>），并默认给容器类补 <code>__repr__</code>。</p>
+    <div class="pn"><span></span><a class="nx" href="02.html"><small>下一章 →</small><b>第 2 章 · 序列构成的数组</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../01.html">单元 1 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

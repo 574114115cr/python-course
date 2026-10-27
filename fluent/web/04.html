@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 4 · 一等函数与类型提示</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 4 · 一等函数与类型提示</h1>
+  <a class="tag" href="04.html">单元 4</a>
+  <a class="ppt" href="ppt/u/04.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="13" href="lessons/l13.html"><span class="no">13</span><span class="tx">函数是对象：高阶函数与可调用对象</span></a><a class="" data-l="14" href="lessons/l14.html"><span class="no">14</span><span class="tx">参数形态：位置、关键字与可变参数</span></a><a class="" data-l="15" href="lessons/l15.html"><span class="no">15</span><span class="tx">渐进式类型：注解语法与常用类型</span></a><a class="" data-l="16" href="lessons/l16.html"><span class="no">16</span><span class="tx">mypy 实战与类型边界</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l13">第 13 课 · 函数是对象：高阶函数与可调用对象</a>
+<a class="lv2" href="#l14">第 14 课 · 参数形态：位置、关键字与可变参数</a>
+<a class="lv2" href="#l15">第 15 课 · 渐进式类型：注解语法与常用类型</a>
+<a class="lv2" href="#l16">第 16 课 · mypy 实战与类型边界</a>
+<a class="lv2" href="#case-u04">综合案例：文本清洗流水线：三个 if 改不出来的组合</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u4"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/04.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u04.html"><span class="k">走读</span>
+    <span class="v">单元 4 完整程序 · 逐段讲解</span></a>
+  <a href="ch/07.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 7–8 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 4</span>
+        <span class="kwk">第 7–8 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 4 · 一等函数与类型提示</h1>
+      <p class="goal">一等函数 · 高阶函数 · 类型提示</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 7–8 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p>在很多语言里，函数只是「可调用的语法结构」；在 Python 里，函数是对象：有身份、有属性、能赋值、能当参数、能当返回值、能存进容器。这一条决定了 <code>sorted(key=...)</code>、装饰器、回调、策略模式全都成立。</p>
+<p>第二件事是类型提示。它不是运行时检查，而是给编辑器、mypy、pyright 看的「可执行的文档」。用得好，重构时能提前发现 80% 的低级错误；用不好，会写出一堆 <code>Any</code> 和 <code># type: ignore</code>。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>把函数当值传递，写出高阶函数和可调用对象；</li>
+<li>熟练使用仅限位置、仅限关键字、<code>*args</code>、<code>**kwargs</code> 四类参数；</li>
+<li>给公开 API 写全注解，并让 mypy 在 strict 模式下通过；</li>
+<li>知道类型系统的边界：哪些错误它抓不到，必须靠测试。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="13" href="lessons/l13.html"><span class="no">13</span><span class="tx">函数是对象：高阶函数与可调用对象</span></a><a data-l="14" href="lessons/l14.html"><span class="no">14</span><span class="tx">参数形态：位置、关键字与可变参数</span></a><a data-l="15" href="lessons/l15.html"><span class="no">15</span><span class="tx">渐进式类型：注解语法与常用类型</span></a><a data-l="16" href="lessons/l16.html"><span class="no">16</span><span class="tx">mypy 实战与类型边界</span></a></div></div><h2 id="l13">第 13 课 · 函数是对象：高阶函数与可调用对象</h2><h3 id="讲解">讲解</h3>
+<p>函数对象有 <code>__name__</code>、<code>__doc__</code>、<code>__annotations__</code>，也能被赋值和传递：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">shout</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把文本转成大写并加感叹号。"""</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"!"</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">shout</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="s2">"hi"</span><span class="p">,</span> <span class="s2">"ok"</span><span class="p">])))</span>     <span class="c1"># ['HI!', 'OK!']</span>
+</code></pre>
+<p>「接收函数或返回函数」的函数叫高阶函数。<code>sorted</code> 的 <code>key</code> 就是典型：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"fig"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span>              <span class="c1"># 按长度</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>   <span class="c1"># 忽略大小写降序</span>
+</code></pre>
+<p>内置的 <code>map</code>、<code>filter</code> 返回迭代器，<code>functools.reduce</code> 做归约：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">add</span>
+
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">nums</span><span class="p">))</span>          <span class="c1"># 10</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>                  <span class="c1"># 10，能用 sum 就别用 reduce</span>
+</code></pre>
+<p>任何实现了 <code>__call__</code> 的实例也是可调用对象，适合「带状态的函数」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="n">step</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">(),</span> <span class="n">c</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">c</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>             <span class="c1"># 1 6 6</span>
+</code></pre>
+<h3 id="延伸-可调用对象有九类">延伸：可调用对象有九类</h3>
+<p><code>callable()</code> 为真的东西不止「函数」：</p>
+<ol>
+<li>普通函数　2. lambda　3. 类（调用即构造）　4. 定义了 <code>__call__</code> 的实例　5. 生成器函数　6. 协程函数　7. 内置函数 / 内置方法（<code>len</code>、<code>print</code>）　8. 绑定方法 / 类方法 / 静态方法　9. <code>functools.partial</code> 对象</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">():</span> <span class="k">pass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"called"</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"m"</span>
+<span class="nb">print</span><span class="p">([</span><span class="nb">callable</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">C</span><span class="p">(),</span> <span class="n">C</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">C</span><span class="p">()</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="nb">len</span><span class="p">,</span> <span class="nb">print</span><span class="p">)])</span>   <span class="c1"># 全 True</span>
+</code></pre>
+<p>判断「是不是函数」要用 <code>inspect.isfunction</code>；<code>callable</code> 只回答「能不能加括号」。这条区别在写参数校验时很关键：你要求的是「可回调」，不是「函数」，用 <code>callable</code> 才对，用 <code>isinstance(x, types.FunctionType)</code> 会把类实例、<code>partial</code> 全挡掉。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>key=</code> 接收的是函数，不是比较结果</strong>：写 <code>key=len</code>，不要写 <code>key=len(x)</code>。</li>
+<li><strong><code>operator</code> 模块比 lambda 更清晰</strong>：<code>itemgetter("name")</code>、<code>attrgetter("score")</code>、<code>add</code>。</li>
+<li><strong><code>map</code>/<code>filter</code> 是惰性的</strong>，返回迭代器，需要 list 时显式转换。</li>
+<li><strong>可调用对象能保存状态</strong>，但别滥用；能用闭包或 dataclass 表达时优先考虑可读性。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用 <code>sorted</code> + <code>operator.itemgetter</code> 对一份字典列表按两个字段排序。</li>
+<li>写一个 <code>compose(f, g)</code>，返回 <code>lambda x: f(g(x))</code>，并用它组合 <code>str.strip</code> 与 <code>str.upper</code>。</li>
+<li>用可调用类实现一个带计数的 <code>Tagger</code>，每调用一次返回 <code>tag-1</code>、<code>tag-2</code>……</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释「函数是一等对象」在 <code>sorted(key=...)</code> 中的体现</li>
+<li><span class="ck"></span>会用 <code>operator</code> 替代简单 lambda</li>
+<li><span class="ck"></span>知道可调用对象与闭包各自的适用场景</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 7 章 §7.2–7.5、§7.8</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：可调用对象有九类</p></div><h2 id="l14">第 14 课 · 参数形态：位置、关键字与可变参数</h2><h3 id="讲解-1">讲解</h3>
+<p>Python 的参数分为五类，顺序固定：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="o">...</span>
+</code></pre>
+<ul>
+<li><code>a, b</code>：仅限位置（<code>/</code> 之前），不能用 <code>func(a=1)</code> 调用；</li>
+<li><code>c, d</code>：位置或关键字；</li>
+<li><code>*args</code>：多余位置参数，打包成 tuple；</li>
+<li><code>e</code>：仅限关键字（<code>*</code> 之后），必须写 <code>e=</code>；</li>
+<li><code>**kwargs</code>：多余关键字参数，打包成 dict。</li>
+</ul>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">tag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+    <span class="n">attr</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">' </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">="</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">"'</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'&lt;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> class="</span><span class="si">{</span><span class="bp">cls</span><span class="si">}</span><span class="s1">"</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s1">&gt;</span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s1">&lt;/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&gt;'</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tag</span><span class="p">(</span><span class="s2">"p"</span><span class="p">,</span> <span class="s2">"hi"</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="s2">"lead"</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">"x1"</span><span class="p">))</span>
+</code></pre>
+<p>调用时的解包：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"sep"</span><span class="p">:</span> <span class="s2">"-"</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>      <span class="c1"># 1-2</span>
+</code></pre>
+<p><code>inspect.signature</code> 可以读出签名，写装饰器、框架路由、参数校验时都要用：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+<span class="c1"># (name, /, content, *, cls='', **attrs)</span>
+</code></pre>
+<h3 id="延伸-仅限关键字参数与-partial-的签名">延伸：仅限关键字参数与 partial 的签名</h3>
+<p><code>def f(a, *, b)</code> 里的 <code>b</code> 只能按关键字传，防止调用方把两个同类型参数传反。<code>functools.partial</code> 绑定参数后再交给 <code>inspect.signature</code>，签名会跟着变：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"cm"</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">w</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">²"</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"m"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>     <span class="c1"># (w, h, *, unit='m')</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>                  <span class="c1"># 6 m²</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"km"</span><span class="p">))</span>       <span class="c1"># 6 km²，后传的覆盖先绑的</span>
+</code></pre>
+<p><code>partial</code> 只能追加关键字或左侧位置参数，不能跳过中间参数——要那样就用 lambda。<code>functools.partialmethod</code> 是它给描述符协议准备的版本，用于类方法场景。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong><code>/</code> 与 <code>*</code> 是签名的一部分</strong>，改动它们属于破坏性变更。</li>
+<li><strong><code>*args</code> 是 tuple，<code>**kwargs</code> 是 dict</strong>；不要再手动拼 list/dict。</li>
+<li><strong>默认参数只求值一次</strong>，可变默认值用 <code>None</code> 哨兵（第 12 课）。</li>
+<li><strong>位置参数与关键字参数混用时</strong>，位置参数必须在前；<code>f(1, c=2)</code> 合法，<code>f(c=2, 1)</code> 语法错误。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<ol>
+<li>写 <code>def make_table(data, /, headers=None, *, align="left")</code>，实现仅限位置与仅限关键字混用。</li>
+<li>用 <code>*args</code> 写一个 <code>sum_all(*nums)</code>，再传一个列表进去，验证需要 <code>*lst</code> 解包。</li>
+<li>用 <code>inspect.signature</code> 打印三个标准库函数的签名，解释每个符号的含义。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出同时包含 <code>/</code>、<code>*args</code>、<code>*</code>、<code>**kwargs</code> 的合法签名</li>
+<li><span class="ck"></span>知道 <code>*args</code> 与 <code>**kwargs</code> 在函数内部的实际类型</li>
+<li><span class="ck"></span>能用 <code>inspect.signature</code> 读出并解释一个函数的参数契约</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 7 章 §7.6–7.7</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：仅限关键字参数与 partial 的签名</p></div><h2 id="l15">第 15 课 · 渐进式类型：注解语法与常用类型</h2><h3 id="讲解-2">讲解</h3>
+<p>Python 的类型提示是「渐进式」的：可以只给关键函数加，也可以全量加，解释器都不会因此改变行为。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">total</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre>
+<p>3.10 起可以写 <code>int | None</code> 代替 <code>Optional[int]</code>，3.9 起内置容器可直接下标 <code>list[int]</code>、<code>dict[str, int]</code>。注解保存在 <code>__annotations__</code> 里：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="o">.</span><span class="vm">__annotations__</span><span class="p">)</span>
+<span class="c1"># {'nums': typing.Iterable[float], 'return': float}</span>
+</code></pre>
+<p>但运行时不会校验：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="s2">"a"</span><span class="p">))</span>   <span class="c1"># 'aa'：解释器照跑，mypy 会报错</span>
+</code></pre>
+<p><code>Any</code> 表示「放弃检查」，它会污染调用链——一个 <code>Any</code> 传进去，后面的检查全部失效。优先用 <code>object</code> 表示「任意对象但只能做 object 支持的操作」，只有在对接无类型第三方库时才用 <code>Any</code>。</p>
+<h3 id="延伸-literal-final-annotated">延伸：Literal、Final、Annotated</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Final</span><span class="p">,</span> <span class="n">Annotated</span>
+
+<span class="n">Mode</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"r"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">]</span>           <span class="c1"># 只能是这三个字符串</span>
+<span class="n">MAX_LEN</span><span class="p">:</span> <span class="n">Final</span> <span class="o">=</span> <span class="mi">1024</span>                    <span class="c1"># 检查器禁止再赋值</span>
+<span class="n">UserId</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">"primary key"</span><span class="p">]</span>  <span class="c1"># 把运行时元数据挂在类型上</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">open_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Mode</span> <span class="o">=</span> <span class="s2">"r"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</code></pre>
+<p><code>Annotated</code> 的元数据在运行时能取到：<code>typing.get_type_hints(fn, include_extras=True)</code>。FastAPI 的参数校验、文档、依赖注入都建在这上面——它先用注解，再用 <code>Annotated</code> 里的元数据，最后看默认值。<code>Literal</code> 和 <code>Final</code> 只影响静态检查，运行时传 <code>"x"</code> 不会报错，别拿它当校验器。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong>注解是给静态检查器的</strong>，不是运行时断言；要运行时校验得用 <code>pydantic</code> 或手写检查。</li>
+<li><strong><code>Optional[X]</code> 等价于 <code>X | None</code></strong>，不是「可选参数」的意思。</li>
+<li><strong><code>list[int]</code> 是「元素为 int 的列表」</strong>，不是「长度为 int 的列表」。</li>
+<li><strong><code>Any</code> 会关闭检查</strong>，<code>object</code> 不会；不确定时先用 <code>object</code>。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<ol>
+<li>给第 13 课的 <code>compose</code> 写完整注解（提示：<code>Callable[[A], B]</code> 需要 <code>TypeVar</code>，可以先写成 <code>Callable</code>）。</li>
+<li>给一个「读 JSON 配置」的函数写注解，返回 <code>dict[str, object]</code>，并说明为什么不用 <code>dict[str, Any]</code>。</li>
+<li>用 <code>reveal_type()</code>（mypy）或编辑器悬停，观察三个变量的推断类型。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出 <code>Optional</code>、<code>Union</code>、<code>Callable</code>、<code>Iterable</code> 四类注解</li>
+<li><span class="ck"></span>知道注解不会在运行时阻止错误参数</li>
+<li><span class="ck"></span>能解释 <code>Any</code> 与 <code>object</code> 的区别，并优先选择 <code>object</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 8 章 §8.2–8.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：Literal、Final、Annotated</p></div><h2 id="l16">第 16 课 · mypy 实战与类型边界</h2><h3 id="讲解-3">讲解</h3>
+<p>最小工作流：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>mypy
+python<span class="w"> </span>-m<span class="w"> </span>mypy<span class="w"> </span>app/<span class="w"> </span>--strict
+</code></pre>
+<p>典型报错与处理：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+
+<span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"count"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"count"</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>          <span class="c1"># error: Unsupported operand types for + ("object" and "int")</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">"count"</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>   <span class="c1"># 你向检查器保证类型</span>
+</code></pre>
+<p><code>cast</code> 不做任何运行时转换，写错了只会在运行时炸；能不用就不用，优先用 <code>isinstance</code> 收窄：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">v</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"count"</span><span class="p">]</span>
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span>
+</code></pre>
+<p>第三方库没有类型存根时，可以装 <code>types-requests</code> 之类的包，或在 <code>pyproject.toml</code> 里配置：</p>
+<pre><code class="language-toml"><span class="cl">toml</span><span class="k">[tool.mypy]</span>
+<span class="n">python_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"3.12"</span>
+<span class="n">strict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">ignore_missing_imports</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre>
+<h3 id="延伸-类型检查器看不见的四件事">延伸：类型检查器看不见的四件事</h3>
+<ul>
+<li>除零：<code>a / b</code> 里 <code>b == 0</code> 是运行时错误，注解无能为力。</li>
+<li>越界：<code>list[int]</code> 只说明元素类型，<code>xs[5]</code> 会不会 <code>IndexError</code> 检查器不知道。</li>
+<li>外部输入：<code>json.load()</code> 返回 <code>Any</code>，标成 <code>dict[str, int]</code> 只是你的断言，不是事实。</li>
+<li><code>cast</code> 撒谎：<code>cast(int, "abc")</code> 检查器全信，运行时是 <code>str</code>。</li>
+</ul>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cast</span>
+<span class="n">val</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="s2">"not an int"</span><span class="p">)</span>    <span class="c1"># 静态通过，运行时是 str</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>                 <span class="c1"># &lt;class 'str'&gt;</span>
+</code></pre>
+<p>原书的结论是「静态检查 + 测试双轨」：类型解决「形状对不对」，测试解决「行为对不对」。真正的入口校验（HTTP 请求、配置文件、命令行）交给 pydantic 这类运行时校验库，别指望注解。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong><code>--strict</code> 是起点不是终点</strong>：它打开 <code>disallow_untyped_defs</code> 等选项，老项目要逐步迁移。</li>
+<li><strong><code># type: ignore</code> 要带原因</strong>：<code># type: ignore[arg-type]  # 第三方库签名有误</code>，方便以后清理。</li>
+<li><strong>类型检查抓不到</strong>：除零、越界、业务规则、并发竞态、<code>cast</code> 撒谎。</li>
+<li><strong>CI 里跑 mypy</strong> 才有约束力；只在本地偶尔跑，等于没有。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>给本单元写的 3 个函数加注解，跑 <code>mypy --strict</code>，把报错逐条修掉。</li>
+<li>故意写一个 <code>cast(int, "abc")</code>，观察 mypy 通过但运行时崩溃。</li>
+<li>为一个使用第三方库的文件配置 <code>ignore_missing_imports</code>，并记录为什么这样做有风险。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能在本地跑通一次 <code>mypy --strict</code></li>
+<li><span class="ck"></span>知道 <code>cast</code> 是「向检查器承诺」，不是类型转换</li>
+<li><span class="ck"></span>能列出至少三类 mypy 抓不到、必须靠测试覆盖的错误</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 8 章 §8.6–8.7</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：类型检查器看不见的四件事</p></div><h2 id="case-u04">综合案例：文本清洗流水线：三个 if 改不出来的组合</h2>
+<blockquote>
+<p>清洗 → 替换 → 截断，今天三步，明天五步，顺序还要能换。先写死，再抽成流水线。</p>
+</blockquote>
+<h3 id="重构前-能跑但只能这样跑">重构前（能跑但只能这样跑）</h3>
+<p>三步写在一个函数里，用三个布尔开关控制。想加一步就得改函数签名，想换顺序只能改函数体，别处想复用其中一步也拿不到。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"strip"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"punct"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"limit"</span><span class="p">:</span> <span class="mi">16</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">clean</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">CONFIG</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">"strip"</span><span class="p">]:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">"punct"</span><span class="p">]:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"，"</span><span class="p">,</span> <span class="s2">","</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"。"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">"limit"</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">"limit"</span><span class="p">]:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span><span class="n">cfg</span><span class="p">[</span><span class="s2">"limit"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"…"</span>
+    <span class="k">return</span> <span class="n">text</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">clean</span><span class="p">(</span><span class="s2">"  hello   世界，Python 很好看 。  "</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clean</span><span class="p">(</span><span class="s2">"a，b"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"strip"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"punct"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"limit"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clean</span><span class="p">(</span><span class="s2">"a，b"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"strip"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"punct"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"limit"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}))</span>
+
+<span class="c1"># 想「先截断再统一标点」？没有开关能做到，只能再写一个函数。</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_reversed</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">16</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[:</span><span class="mi">15</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"…"</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"，"</span><span class="p">,</span> <span class="s2">","</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"。"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">)</span>
+</code></pre>
+<h3 id="重构后-步骤即函数-顺序即列表">重构后（步骤即函数，顺序即列表）</h3>
+<p>每个步骤是 <code>str -&gt; str</code> 的可调用对象，<code>pipeline()</code> 把它们串起来。带参数的步骤用闭包生成，顺序由列表决定——想换顺序就换列表。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span>
+
+<span class="n">Step</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">strip_ws</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">collapse_punct</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"，"</span><span class="p">,</span> <span class="s2">","</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"。"</span><span class="p">,</span> <span class="s2">"."</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">clip</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Step</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n must be &gt; 1: </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="k">else</span> <span class="n">s</span><span class="p">[:</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"…"</span>
+
+    <span class="k">return</span> <span class="n">step</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pipeline</span><span class="p">(</span><span class="n">steps</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Step</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Step</span><span class="p">:</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>             <span class="c1"># 固化：传生成器时只消费一次</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+    <span class="k">return</span> <span class="n">run</span>
+
+
+<span class="n">TEXT</span> <span class="o">=</span> <span class="s2">"  hello   世界，Python 很好看 。  "</span>
+
+<span class="n">normal</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">([</span><span class="n">strip_ws</span><span class="p">,</span> <span class="n">collapse_punct</span><span class="p">,</span> <span class="n">clip</span><span class="p">(</span><span class="mi">16</span><span class="p">)])</span>
+<span class="n">short</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">([</span><span class="n">strip_ws</span><span class="p">,</span> <span class="n">clip</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">collapse_punct</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">normal</span><span class="p">(</span><span class="n">TEXT</span><span class="p">))</span>     <span class="c1"># hello 世界,Python…</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">short</span><span class="p">(</span><span class="n">TEXT</span><span class="p">))</span>      <span class="c1"># hello 世…</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline</span><span class="p">([</span><span class="n">strip_ws</span><span class="p">])(</span><span class="n">TEXT</span><span class="p">))</span>   <span class="c1"># 只清空白，其余不动</span>
+
+<span class="c1"># 步骤可单独复用，也可运行时拼装</span>
+<span class="n">extra</span> <span class="o">=</span> <span class="p">[</span><span class="n">strip_ws</span><span class="p">,</span> <span class="n">clip</span><span class="p">(</span><span class="mi">12</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline</span><span class="p">(</span><span class="n">extra</span> <span class="o">+</span> <span class="p">[</span><span class="n">collapse_punct</span><span class="p">])(</span><span class="n">TEXT</span><span class="p">))</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>增加步骤</td>
+<td>改 <code>clean</code> 签名和函数体</td>
+<td>往列表里加一个函数</td>
+<td>开闭原则，不动老代码</td>
+<td>步骤多了要有个地方登记</td>
+</tr>
+<tr>
+<td>调整顺序</td>
+<td>只能复制函数再改</td>
+<td>换列表顺序</td>
+<td>用配置表达意图</td>
+<td>顺序错不会报错，只会结果错</td>
+</tr>
+<tr>
+<td>复用单步</td>
+<td>做不到，都藏在 <code>if</code> 里</td>
+<td>每个 <code>str -&gt; str</code> 都是公开函数</td>
+<td>可单独测试、可组合</td>
+<td>命名空间多几个函数</td>
+</tr>
+<tr>
+<td>带参步骤</td>
+<td>全局 <code>CONFIG</code></td>
+<td>闭包 <code>clip(16)</code></td>
+<td>每个实例无状态，可并存</td>
+<td>闭包不好 pickle</td>
+</tr>
+<tr>
+<td>校验</td>
+<td>没有</td>
+<td><code>clip</code> 拒绝 <code>n &lt;= 1</code></td>
+<td>早失败</td>
+<td>多几行</td>
+</tr>
+<tr>
+<td>类型</td>
+<td>无</td>
+<td><code>Step</code> 别名 + 注解</td>
+<td>IDE 能提示、mypy 能查</td>
+<td>需要维护别名</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>一个函数内联，最快</td>
+<td>每步一次函数调用</td>
+<td>步骤多时开销可见</td>
+<td>极热路径要重新内联</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>把 <code>Step</code> 升级成 <code>Callable[[str], str | None]</code>，<code>None</code> 表示「丢弃这条」，流水线就变成过滤器；再加一个 <code>tap(fn)</code> 步骤做无侵入打点（只观察不改值），排查时插进去、上线前摘掉。真做文本 ETL 时，每个步骤应该自带 <code>name</code> 和 <code>describe()</code>，这样失败时能报出「第 3 步 punct 失败」而不是一个光秃秃的异常。</p>
+<h2 id="单元验收">单元验收</h2>
+<ul>
+<li><span class="ck"></span><strong>一等函数</strong>：用函数组合 + <code>sorted(key=...)</code> 完成一次多字段排序，不写类</li>
+<li><span class="ck"></span><strong>参数</strong>：写出一个带 <code>/</code>、<code>*</code>、<code>**kwargs</code> 的公开函数，并解释每个符号</li>
+<li><span class="ck"></span><strong>注解</strong>：给一个 30 行模块写全注解，mypy 无报错</li>
+<li><span class="ck"></span><strong>边界</strong>：说明 <code>Any</code>、<code>cast</code>、<code># type: ignore</code> 各自的风险与使用条件</li>
+</ul>
+<blockquote>
+<p>下一单元进入装饰器与闭包：函数不仅能被传递，还能「记住」定义时的环境。</p>
+</blockquote>
+    <div class="pn"><a href="03.html"><small>← 上一单元</small><b>单元 3 · 数据类与对象语义</b></a><a class="nx" href="05.html"><small>下一单元 →</small><b>单元 5 · 装饰器、闭包与设计模式</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 7–8 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

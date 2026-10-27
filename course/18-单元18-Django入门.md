@@ -178,6 +178,41 @@ templates/learning_logs/topics.html   摆盘
 
 `path()` 接受三个实参：**URL 模式字符串**（比如 `'topics/<int:topic_id>/'`）、**要调用的视图函数**、**这个模式的名字**（`name='topic'`）。名字是给 `{% url %}` 用的——以后改 URL 结构，只需改 `urls.py` 一处，所有链接自动更新，这正是模板标签生成 URL 的价值。
 
+`path()` 里那些 `<int:topic_id>` 在匹配时会被翻成正则，所以「谁先谁后」有讲究。把匹配表写成纯 Python 跑一遍，你能亲眼看到「第一个命中的赢」和「`/topics/abc/` 为什么 404」：
+
+```python
+# URL 匹配表：urlpatterns 的顺序为什么不能乱
+import re
+
+# path('topics/<int:topic_id>/', ...) 在匹配时会被翻成这样的正则
+URLPATTERNS = [
+    (r"^$", "index"),
+    (r"^topics/$", "topics"),
+    (r"^topics/(?P<topic_id>\d+)/$", "topic"),
+    (r"^new_topic/$", "new_topic"),
+    (r"^topics/(?P<topic_id>\d+)/new_entry/$", "new_entry"),
+]
+
+
+def resolve(path):
+    """逐个比对，第一个命中的就是赢家；一个都不中就 404。"""
+    path = path.lstrip("/")          # ★ urlpatterns 里的模式不带开头的斜杠
+    for pattern, view in URLPATTERNS:
+        match = re.match(pattern, path)
+        if match:
+            return view, match.groupdict()
+    return "404", {}
+
+
+for path in ["/", "/topics/", "/topics/3/", "/topics/3/new_entry/",
+             "/topics/abc/", "/new_topic/", "/admin/"]:
+    view, kwargs = resolve(path)
+    extra = f"，参数 {kwargs}" if kwargs else ""
+    print(f"{path:<24}-> {view}{extra}")
+```
+
+这段跑出来是：`/topics/3/` 命中 `topic` 并带出 `{'topic_id': '3'}`，`/topics/3/new_entry/` 命中 `new_entry`（`^topics/\d+/$` 末尾的 `$` 锚住了行尾，所以不会把它误吞），`/topics/abc/` 和 `/admin/` 都落到 `404`。**模式末尾的 `$` 和「更具体的写前面」是最省事的两条纪律**，Django 的 `include()` 也是同一个道理：总路由先按前缀分流，再进各 app 的匹配表。
+
 ### 2.6 模板语法：`{{ }}`、`{% for %}` 与 `{% url %}`
 
 模板里只有三样东西要记：
@@ -201,6 +236,32 @@ templates/learning_logs/topics.html   摆盘
 过滤器用竖线 `|` 表示，在渲染过程中修改变量的值：`{{ entry.date_added|date:'M d, Y H:i' }}` 把时间戳格式化成「May 20, 2022 03:33」，`{{ entry.text|linebreaks }}` 把条目里的换行转换成浏览器认的格式。
 
 `'learning_logs:topic'` 里的**冒号前是命名空间**（来自 `urls.py` 里的 `app_name`，相当于 URL 模式们的「姓」），冒号后是模式名（「名」）。两个 app 都有一叫 `index` 的页面也不打架，靠姓区分。顺带记住教材的提醒：模板里写的是 `topic.id`（取对象的 ID 值），而视图函数里的形参叫 `topic_id`（装这个值的变量）——用错就是 NoReverseMatch。
+
+过滤器看着神秘，其实每个都能在 Python 里找到等价物——**它们只改「怎么显示」，不改 context 里的原始值**：
+
+```python
+# 模板过滤器 |date 的等价物：python 里就是 strftime
+from datetime import datetime
+
+entry = {"date_added": datetime(2022, 5, 20, 3, 33),
+         "text": "今天学了 Django 模板\n第二行要换行"}
+
+print("模板里写 {{ entry.date_added|date:'M d, Y H:i' }}")
+print("  python 等价：", entry["date_added"].strftime("%b %d, %Y %H:%M"))
+print("  对照：%b 是缩写月份（May），%B 是全称（May 在这里一样，December 才有差别）")
+
+print("\n模板里写 {{ entry.text|linebreaks }}")
+print("  python 等价：", "<p>" + entry["text"].replace("\n\n", "</p><p>")
+      .replace("\n", "<br>") + "</p>")
+
+print("\n模板里写 {{ entry.text|truncatewords:4 }}")
+print("  等价：", " ".join(entry["text"].split()[:4]) + " …")
+
+print("\n这些过滤器都只改「显示」，不改 context 里的原始值：")
+print("  原始 date_added 还是：", entry["date_added"])
+```
+
+`|date` 用的格式码和单元 16 的 `strftime` **完全同一套**（`%Y` `%m` `%d` `%H` `%M`）；`|linebreaks` 就是「把换行变成 `<br>`、把空行变成分段」；`|truncatewords:4` 取前 4 个词。想验证一个过滤器到底做了什么，最直接的办法仍是「查看网页源代码」——它输出的就是 HTML 字符串。
 
 ### 2.7 模板继承与 404：别每个页面重复写导航栏 ★
 

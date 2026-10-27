@@ -18,8 +18,10 @@ transition:opacity .18s;z-index:60}
 <body data-lesson="110">
 <div class="top"><div class="top-in">
   <a class="back" href="index.html">← 课程目录</a>
-  <h1>第 110/111 节 · ★ 关卡 2 五项逐条自测</h1>
+  <span class="tno">第 110 节</span>
+  <h1>★ 关卡 2 五项逐条自测</h1>
   <span class="sp"></span>
+  <a class="rv" href="../review.html">复习</a>
   <a class="ppt" href="../ppt/u/21.html#s6" title="本课节对应的课件">本课课件 u21·p6</a>
 </div></div>
 <div class="pbar"><i id="pbar"></i></div>
@@ -37,7 +39,17 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-3-代码规模与圈复杂度提示-code_metrics-py">示例 3：代码规模与圈复杂度提示（code_metrics.py）</a>
 <a class="lv3" href="#示例-4-统一日志配置模板-logging_setup-py">示例 4：统一日志配置模板（logging_setup.py）</a>
 <a class="lv3" href="#示例-5-陌生项目结构速读-explorer-py">示例 5：陌生项目结构速读（explorer.py）</a>
+<a class="lv3" href="#示例-6-三期项目各抽一个纯函数-用-assert-自测-three_proje">示例 6：三期项目各抽一个纯函数，用 assert 自测（three_projects_core.py）</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
+    </div>
+    <div class="sblk">
+      <h4>单元 21 · 共 4 节</h4>
+      <nav class="nlist"><a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
+<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
+<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
+<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
+      <a class="nall" href="index.html#u21">
+        <span>全部 111 节目录</span><span class="ar">→</span></a>
     </div>
     <div class="sblk pptbox">
       <h4>配套资料 · 单元 21</h4>
@@ -54,124 +66,12 @@ transition:opacity .18s;z-index:60}
         <a href="index.html#u21"><span class="k">课节</span>
           <span class="v">本单元全部课节</span></a>
         <a href="../bank.html#u21"><span class="k">题库</span>
-          <span class="v">本单元 3 题 · 共 84 题</span></a>
+          <span class="v">本单元 5 题 · 共 120 题</span></a>
+        <a href="../review.html"><span class="k">复习</span>
+          <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
       </div>
     </div>
 
-    <details class="sblk nlx" id="nlx" open>
-      <summary>全部 111 节<span class="nlx-ar">▶</span></summary>
-      <nav class="nlist"><a href="01.html" data-n="1"><span class="no">01</span><span>装好 Python 与 VS Code</span></a>
-<a href="02.html" data-n="2"><span class="no">02</span><span>第一个报错与 Git 拍快照</span></a>
-<a href="03.html" data-n="3"><span class="no">03</span><span>目录结构、print 与注释</span></a>
-<a href="04.html" data-n="4"><span class="no">04</span><span>动手实战与答案讲评</span></a>
-<a href="05.html" data-n="5"><span class="no">05</span><span>单元 0 验收复盘</span></a>
-<a href="06.html" data-n="6"><span class="no">06</span><span>变量、命名与第一段文字</span></a>
-<a href="07.html" data-n="7"><span class="no">07</span><span>字符串、数值、布尔与类型转换</span></a>
-<a href="08.html" data-n="8"><span class="no">08</span><span>动手实战与答案讲评</span></a>
-<a href="09.html" data-n="9"><span class="no">09</span><span>单元 1 验收复盘</span></a>
-<a href="10.html" data-n="10"><span class="no">10</span><span>列表是什么、索引为什么从 0 开始</span></a>
-<a href="11.html" data-n="11"><span class="no">11</span><span>增删改查、引用共享与排序</span></a>
-<a href="12.html" data-n="12"><span class="no">12</span><span>动手实战与答案讲评</span></a>
-<a href="13.html" data-n="13"><span class="no">13</span><span>单元 2 验收复盘</span></a>
-<a href="14.html" data-n="14"><span class="no">14</span><span>for 循环：把重复交给机器</span></a>
-<a href="15.html" data-n="15"><span class="no">15</span><span>range() 与列表推导式</span></a>
-<a href="16.html" data-n="16"><span class="no">16</span><span>切片、元组与 PEP 8 排版</span></a>
-<a href="17.html" data-n="17"><span class="no">17</span><span>动手实战与答案讲评</span></a>
-<a href="18.html" data-n="18"><span class="no">18</span><span>单元 3 验收复盘</span></a>
-<a href="19.html" data-n="19"><span class="no">19</span><span>条件测试与比较运算</span></a>
-<a href="20.html" data-n="20"><span class="no">20</span><span>三分支结构与逻辑运算符</span></a>
-<a href="21.html" data-n="21"><span class="no">21</span><span>链式比较、is 与条件表达式</span></a>
-<a href="22.html" data-n="22"><span class="no">22</span><span>动手实战、答案与验收</span></a>
-<a href="23.html" data-n="23"><span class="no">23</span><span>字典：按名字找数据</span></a>
-<a href="24.html" data-n="24"><span class="no">24</span><span>三种遍历与 get() 安全取值</span></a>
-<a href="25.html" data-n="25"><span class="no">25</span><span>遍历时修改与嵌套结构</span></a>
-<a href="26.html" data-n="26"><span class="no">26</span><span>动手实战与答案讲评</span></a>
-<a href="27.html" data-n="27"><span class="no">27</span><span>单元 5 验收复盘</span></a>
-<a href="28.html" data-n="28"><span class="no">28</span><span>input() 的铁律与 for/while 之争</span></a>
-<a href="29.html" data-n="29"><span class="no">29</span><span>break / continue / while-else</span></a>
-<a href="30.html" data-n="30"><span class="no">30</span><span>交互程序的骨架与收尾</span></a>
-<a href="31.html" data-n="31"><span class="no">31</span><span>动手实战与答案讲评</span></a>
-<a href="32.html" data-n="32"><span class="no">32</span><span>单元 6 验收复盘</span></a>
-<a href="33.html" data-n="33"><span class="no">33</span><span>定义函数与 return</span></a>
-<a href="34.html" data-n="34"><span class="no">34</span><span>三种参数写法与★ 参数传递的副本语义</span></a>
-<a href="35.html" data-n="35"><span class="no">35</span><span>作用域与函数是一等公民</span></a>
-<a href="36.html" data-n="36"><span class="no">36</span><span>七个示例串讲与拆模块</span></a>
-<a href="37.html" data-n="37"><span class="no">37</span><span>动手实战与答案讲评</span></a>
-<a href="38.html" data-n="38"><span class="no">38</span><span>★ 六个常见错误逐条自查</span></a>
-<a href="39.html" data-n="39"><span class="no">39</span><span>单元 7 验收复盘</span></a>
-<a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
-<a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
-<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
-<a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
-<a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
-<a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
-<a href="46.html" data-n="46"><span class="no">46</span><span>单元 8 验收复盘</span></a>
-<a href="47.html" data-n="47"><span class="no">47</span><span>open() 与三种模式</span></a>
-<a href="48.html" data-n="48"><span class="no">48</span><span>with 语句与四种读取方式</span></a>
-<a href="49.html" data-n="49"><span class="no">49</span><span>写文件与异常处理</span></a>
-<a href="50.html" data-n="50"><span class="no">50</span><span>JSON / CSV 与持久化实战</span></a>
-<a href="51.html" data-n="51"><span class="no">51</span><span>动手实战、答案与验收</span></a>
-<a href="52.html" data-n="52"><span class="no">52</span><span>为什么需要测试与三条命名规则</span></a>
-<a href="53.html" data-n="53"><span class="no">53</span><span>assert 与测试用例设计</span></a>
-<a href="54.html" data-n="54"><span class="no">54</span><span>parametrize、测试类与运行命令</span></a>
-<a href="55.html" data-n="55"><span class="no">55</span><span>测试夹具与示例串讲</span></a>
-<a href="56.html" data-n="56"><span class="no">56</span><span>动手实战、答案与验收</span></a>
-<a href="57.html" data-n="57"><span class="no">57</span><span>知识串讲与能力地图</span></a>
-<a href="58.html" data-n="58"><span class="no">58</span><span>排错思路与项目骨架</span></a>
-<a href="59.html" data-n="59"><span class="no">59</span><span>四个复习示例串讲</span></a>
-<a href="60.html" data-n="60"><span class="no">60</span><span>★ 综合项目 1：待办管理器</span></a>
-<a href="61.html" data-n="61"><span class="no">61</span><span>★ 综合项目 2：成绩分析器</span></a>
-<a href="62.html" data-n="62"><span class="no">62</span><span>★ 综合项目 3：文本统计工具</span></a>
-<a href="63.html" data-n="63"><span class="no">63</span><span>★ 关卡 1 现场测评</span></a>
-<a href="64.html" data-n="64"><span class="no">64</span><span>结业检查与下一阶段</span></a>
-<a href="65.html" data-n="65"><span class="no">65</span><span>项目规划与安装 Pygame</span></a>
-<a href="66.html" data-n="66"><span class="no">66</span><span>主循环、帧率与事件驱动</span></a>
-<a href="67.html" data-n="67"><span class="no">67</span><span>Settings 类与屏幕矩形</span></a>
-<a href="68.html" data-n="68"><span class="no">68</span><span>驾驶飞船：标志位与边界</span></a>
-<a href="69.html" data-n="69"><span class="no">69</span><span>重构、错误自查与验收</span></a>
-<a href="70.html" data-n="70"><span class="no">70</span><span>编组 Group 与精灵 Sprite</span></a>
-<a href="71.html" data-n="71"><span class="no">71</span><span>射击：Bullet 类与开火</span></a>
-<a href="72.html" data-n="72"><span class="no">72</span><span>外星舰队与整体移动</span></a>
-<a href="73.html" data-n="73"><span class="no">73</span><span>碰撞检测与游戏结束</span></a>
-<a href="74.html" data-n="74"><span class="no">74</span><span>实战、答案与验收复盘</span></a>
-<a href="75.html" data-n="75"><span class="no">75</span><span>游戏状态机与 Button 类</span></a>
-<a href="76.html" data-n="76"><span class="no">76</span><span>记分牌与数据格式化</span></a>
-<a href="77.html" data-n="77"><span class="no">77</span><span>动态难度与余下飞船数</span></a>
-<a href="78.html" data-n="78"><span class="no">78</span><span>实战、答案与自查</span></a>
-<a href="79.html" data-n="79"><span class="no">79</span><span>Matplotlib 入门与折线图</span></a>
-<a href="80.html" data-n="80"><span class="no">80</span><span>散点图与自动计算数据</span></a>
-<a href="81.html" data-n="81"><span class="no">81</span><span>★ 校正绘图、刻度与颜色映射</span></a>
-<a href="82.html" data-n="82"><span class="no">82</span><span>随机游走 RandomWalk 类</span></a>
-<a href="83.html" data-n="83"><span class="no">83</span><span>Plotly 掷骰子与动手实战</span></a>
-<a href="84.html" data-n="84"><span class="no">84</span><span>CSV 与 datetime</span></a>
-<a href="85.html" data-n="85"><span class="no">85</span><span>缺失值与温度图</span></a>
-<a href="86.html" data-n="86"><span class="no">86</span><span>GeoJSON 与地震散点图</span></a>
-<a href="87.html" data-n="87"><span class="no">87</span><span>实战、答案与验收复盘</span></a>
-<a href="88.html" data-n="88"><span class="no">88</span><span>API 概念与 Requests</span></a>
-<a href="89.html" data-n="89"><span class="no">89</span><span>GitHub API 与速率限制</span></a>
-<a href="90.html" data-n="90"><span class="no">90</span><span>Plotly 可视化与可点击链接</span></a>
-<a href="91.html" data-n="91"><span class="no">91</span><span>Hacker News API 与动手实战</span></a>
-<a href="92.html" data-n="92"><span class="no">92</span><span>★ 虚拟环境与 Django 项目</span></a>
-<a href="93.html" data-n="93"><span class="no">93</span><span>★ 应用、模型与迁移三步曲</span></a>
-<a href="94.html" data-n="94"><span class="no">94</span><span>★ 一次请求的旅程：URL → 视图 → 模板</span></a>
-<a href="95.html" data-n="95"><span class="no">95</span><span>模板语法与模板继承</span></a>
-<a href="96.html" data-n="96"><span class="no">96</span><span>Django shell 与 404</span></a>
-<a href="97.html" data-n="97"><span class="no">97</span><span>实战、答案与验收复盘</span></a>
-<a href="98.html" data-n="98"><span class="no">98</span><span>表单与数据归属三段式</span></a>
-<a href="99.html" data-n="99"><span class="no">99</span><span>登录、注销与注册三件套</span></a>
-<a href="100.html" data-n="100"><span class="no">100</span><span>★ @login_required 与数据隔离红线</span></a>
-<a href="101.html" data-n="101"><span class="no">101</span><span>edit_entry 的双重保护</span></a>
-<a href="102.html" data-n="102"><span class="no">102</span><span>动手实战、答案与验收复盘</span></a>
-<a href="103.html" data-n="103"><span class="no">103</span><span>django-bootstrap5 与页面改造</span></a>
-<a href="104.html" data-n="104"><span class="no">104</span><span>部署是什么与 requirements.txt</span></a>
-<a href="105.html" data-n="105"><span class="no">105</span><span>★ platformshconfig 与本地线上双环境</span></a>
-<a href="106.html" data-n="106"><span class="no">106</span><span>★ 三大部署坑</span></a>
-<a href="107.html" data-n="107"><span class="no">107</span><span>部署上线、错误页与实战</span></a>
-<a href="108.html" data-n="108"><span class="no">108</span><span>工程流程回顾与技术地图</span></a>
-<a href="109.html" data-n="109"><span class="no">109</span><span>能力跃迁与工程问题速查</span></a>
-<a href="110.html" data-n="110"><span class="no">110</span><span>★ 关卡 2 五项逐条自测</span></a>
-<a href="111.html" data-n="111"><span class="no">111</span><span>综合项目与阶段 2 收尾</span></a></nav>
-    </details>
   </aside>
 
   <main class="main">
@@ -245,6 +145,95 @@ transition:opacity .18s;z-index:60}
 </table>
 <p>★ <strong>为什么第 5 条也算硬指标</strong>：前四条「做过」就能证明，只有第 5 条考「想清楚」。有人照抄教程做出三个项目然后寸步难行，也有人做出三个项目且清楚下一步加什么。<strong>区别不在做过多少，在有没有判断。</strong> 面试和实际工作里后者才真正值钱。</p>
 <p>常见状态与补法：项目能跑但没推仓库 → 练习 21-1；推了但没 README → 必含「是什么 / 怎么装 / 怎么跑」三段；「学习笔记」只在本地跑 → 回单元 20；测试全是抄教材的 → 练习 21-2；看别人的代码就慌 → 按 2.4 五步 + 示例 5 练；说不出能怎么扩展 → 每个项目写三句「未来想法」。</p>
+<p>「还差哪一条」这种判断最容易自我欺骗。写成一张布尔表，缺口就没法赖掉：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 五条硬指标自评：把「感觉差不多了」变成一张缺口清单</span>
+<span class="n">INDICATORS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">"三个项目跑通 + 公开仓库 + README + requirements.txt"</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">"学习笔记已部署，公网可访问，404/500 已定制"</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">"自己的函数写出 pytest 测试并跑绿（≥3 条）"</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s2">"读懂没写过的 500 行项目并定位一个 bug"</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span> <span class="s2">"能说清每个项目解决什么问题、还能怎么扩展"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># 自评：True = 已达标；一条一条对，别客气</span>
+<span class="n">MY_STATUS</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">indicators</span><span class="o">=</span><span class="n">INDICATORS</span><span class="p">):</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">indicators</span> <span class="k">if</span> <span class="n">status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="n">gaps</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">indicators</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">done</span><span class="p">,</span> <span class="n">gaps</span>
+
+
+<span class="n">done</span><span class="p">,</span> <span class="n">gaps</span> <span class="o">=</span> <span class="n">report</span><span class="p">(</span><span class="n">MY_STATUS</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"已达标 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">done</span><span class="p">)</span><span class="si">}</span><span class="s2">/5：</span><span class="si">{</span><span class="n">done</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"还差 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gaps</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">gaps</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">INDICATORS</span><span class="p">[</span><span class="n">number</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">补法（对应练习）："</span><span class="p">)</span>
+<span class="n">FIX</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s2">"练习 21-1（补 README / requirements / 推仓库）"</span><span class="p">,</span>
+       <span class="mi">2</span><span class="p">:</span> <span class="s2">"回单元 20，按 2.7 三大坑排查后重新 push"</span><span class="p">,</span>
+       <span class="mi">3</span><span class="p">:</span> <span class="s2">"练习 21-2（挑 3 个纯逻辑函数，各 2 条断言）"</span><span class="p">,</span>
+       <span class="mi">4</span><span class="p">:</span> <span class="s2">"练习 21-4（2.4 五步 + 示例 5 的 explorer.py）"</span><span class="p">,</span>
+       <span class="mi">5</span><span class="p">:</span> <span class="s2">"每个项目 README 加一节「未来想法」，写清要动哪几个文件"</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">gaps</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">FIX</span><span class="p">[</span><span class="n">number</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 只有第 5 条考「想清楚」，也只有它没法靠照抄过关。"</span><span class="p">)</span>
+</code></pre>
+<p>这份自评里 3/5 达标、缺第 2、4 条——<strong>缺口清单比「差不多了」有用得多</strong>，因为它直接对应到两个练习上。建议每完成一个练习就改一次 <code>MY_STATUS</code>，重跑一遍，看着数字往上走。</p>
+<p>指标 3 最冤的一种翻车方式是<strong>命名写错</strong>：pytest 一条都不报错，只显示 <code>collected 0 items</code>，你以为「测试通过了」。提前查一遍命名，比事后猜省事：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># pytest 收不到测试？先查命名</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">DEMO</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"test_game_functions.py"</span><span class="p">:</span> <span class="s2">"def test_update_score():</span><span class="se">\n</span><span class="s2">    assert True</span><span class="se">\n\n</span><span class="s2">"</span>
+                              <span class="s2">"def check_collision():</span><span class="se">\n</span><span class="s2">    assert True</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+    <span class="s2">"game_functions.py"</span><span class="p">:</span> <span class="s2">"def update_score(score, hits):</span><span class="se">\n</span><span class="s2">    return score + hits</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+    <span class="s2">"tests/test_models.py"</span><span class="p">:</span> <span class="s2">"class TestTopic:</span><span class="se">\n</span><span class="s2">    def test_str(self):</span><span class="se">\n</span><span class="s2">        assert True</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">audit_tests</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 (测试文件数, 会被收走的函数, 收不走的函数, 收不走的函数名)。"""</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">collected</span> <span class="o">=</span> <span class="n">ignored</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bad_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.py"</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"test_"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"tests"</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">files</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+            <span class="n">stripped</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stripped</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"def "</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">stripped</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"("</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"test_"</span><span class="p">):</span>
+                <span class="n">collected</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ignored</span> <span class="o">+=</span> <span class="mi">1</span>                       <span class="c1"># 在测试文件里，但 pytest 不认</span>
+                <span class="n">bad_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">files</span><span class="p">,</span> <span class="n">collected</span><span class="p">,</span> <span class="n">ignored</span><span class="p">,</span> <span class="n">bad_names</span>
+
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/tests_demo"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">DEMO</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+<span class="n">files</span><span class="p">,</span> <span class="n">collected</span><span class="p">,</span> <span class="n">ignored</span><span class="p">,</span> <span class="n">bad</span> <span class="o">=</span> <span class="n">audit_tests</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"测试文件 </span><span class="si">{</span><span class="n">files</span><span class="si">}</span><span class="s2"> 个，pytest 会收走 </span><span class="si">{</span><span class="n">collected</span><span class="si">}</span><span class="s2"> 个 test_ 函数，"</span>
+      <span class="sa">f</span><span class="s2">"另有 </span><span class="si">{</span><span class="n">ignored</span><span class="si">}</span><span class="s2"> 个在测试文件里但名字不以 test_ 开头："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">bad</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ pytest 的规则：文件名 test_*.py 或 *_test.py，函数名 test_* ，类名 Test*"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   名字写错不报错，只显示 collected 0 items —— 最容易白忙半天。"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre>
+<p>输出把一个「看起来写了测试」的文件戳穿了：<code>test_game_functions.py</code> 里 <code>def check_collision():</code> 名字里虽有 test 文件、却没有 <code>test_</code> 前缀，pytest 根本不收。<strong>这个函数里的断言永远不会执行，也永远不会失败</strong>——比报错更危险。</p>
 <h3 id="2-6-下一步方向选择">2.6 下一步方向选择</h3>
 <p>阶段 2 到此结束，接下来不必全都学。<strong>选一条主攻，其余当备用。</strong></p>
 <table>
@@ -661,6 +650,127 @@ transition:opacity .18s;z-index:60}
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </code></pre>
+<h3 id="示例-6-三期项目各抽一个纯函数-用-assert-自测-three_proje">示例 6：三期项目各抽一个纯函数，用 assert 自测（three_projects_core.py）</h3>
+<p>2.3 节说过「逻辑与 I/O 分离」的实际收益是「能写测试」。这个示例就是那个收益的成品：把三个项目里最该被测试的四段逻辑（飞船边界、矩形相交、按年统计、数据归属）各抽成一个纯函数，<strong>不 import pygame、不连数据库</strong>，然后用 <code>assert</code> 当场自测。这四条断言换一种写法就是 pytest 用例（练习 21-2 要求你做的正是这件事）。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># three_projects_core.py —— 三期项目各抽一个纯函数，用 assert 自测</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+
+<span class="c1"># ===== 项目 1：飞船移动的边界钳制（不碰 pygame 也能测）=====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">move_ship</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">screen_width</span><span class="p">,</span> <span class="n">moving_right</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回移动后的 x；碰到左右边缘就停下，不许飞出屏幕。"""</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">speed</span> <span class="k">if</span> <span class="n">moving_right</span> <span class="k">else</span> <span class="o">-</span><span class="n">speed</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">+</span> <span class="n">width</span> <span class="o">&gt;=</span> <span class="n">screen_width</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">screen_width</span> <span class="o">-</span> <span class="n">width</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="c1"># ===== 项目 1：子弹和外星人的矩形相交 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rects_hit</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""a、b 是 (x, y, w, h)；返回 True 表示两个矩形有重叠。"""</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">and</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="ow">and</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="c1"># ===== 项目 2：CSV 数据按年统计最高温 =====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">yearly_max</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s2">"TMAX"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""rows 是 (日期字符串, 温度的字符串或 None) 的列表。"""</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">date_text</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">high</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">continue</span>                       <span class="c1"># 缺失值跳过，但要记数见调用方</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_text</span><span class="p">,</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">year</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">best</span> <span class="ow">or</span> <span class="n">high</span> <span class="o">&gt;</span> <span class="n">best</span><span class="p">[</span><span class="n">year</span><span class="p">]:</span>
+            <span class="n">best</span><span class="p">[</span><span class="n">year</span><span class="p">]</span> <span class="o">=</span> <span class="n">high</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">best</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+
+<span class="c1"># ===== 项目 3：数据归属判断（Django 的 is_owner 纯逻辑版）=====</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_owner</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""resource 是 {"owner": "alice"} 这样的字典；未登录一律 False。"""</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"is_authenticated"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">resource</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"owner"</span><span class="p">)</span> <span class="o">==</span> <span class="n">user</span><span class="p">[</span><span class="s2">"username"</span><span class="p">]</span>
+
+
+<span class="c1"># ================= 以下全是测试，没有一行需要外部库 =================</span>
+<span class="n">ship</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 飞船边界钳制（屏幕宽 800，飞船宽 60，速度 5）==="</span><span class="p">)</span>
+<span class="n">position</span> <span class="o">=</span> <span class="mi">700</span>
+<span class="n">right_trail</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">move_ship</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">right_trail</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  从 700 一路向右走 10 步：</span><span class="si">{</span><span class="n">right_trail</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">position</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">left_trail</span> <span class="o">=</span> <span class="p">[</span><span class="n">position</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="n">move_ship</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">left_trail</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  从 20 一路向左走 5 步：</span><span class="si">{</span><span class="n">left_trail</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">max</span><span class="p">(</span><span class="n">right_trail</span><span class="p">)</span> <span class="o">==</span> <span class="mi">740</span>                     <span class="c1"># 右边缘被钳住：800-60</span>
+<span class="k">assert</span> <span class="nb">min</span><span class="p">(</span><span class="n">left_trail</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>                        <span class="c1"># 左边缘被钳住</span>
+<span class="k">assert</span> <span class="n">move_ship</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="mi">105</span>     <span class="c1"># 中间正常移动</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 矩形相交（子弹 3x15，外星人 50x40）==="</span><span class="p">)</span>
+<span class="n">bullet</span> <span class="o">=</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">alien</span> <span class="ow">in</span> <span class="p">[(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">520</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">480</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">)]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  子弹</span><span class="si">{</span><span class="n">bullet</span><span class="si">}</span><span class="s2"> vs 外星人</span><span class="si">{</span><span class="n">alien</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">rects_hit</span><span class="p">(</span><span class="n">bullet</span><span class="p">,</span><span class="w"> </span><span class="n">alien</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">rects_hit</span><span class="p">(</span><span class="n">bullet</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">490</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">True</span>     <span class="c1"># 有重叠</span>
+<span class="k">assert</span> <span class="n">rects_hit</span><span class="p">(</span><span class="n">bullet</span><span class="p">,</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">515</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">False</span>    <span class="c1"># 刚好错开 1 像素以上</span>
+<span class="k">assert</span> <span class="n">rects_hit</span><span class="p">(</span><span class="n">bullet</span><span class="p">,</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">False</span>    <span class="c1"># 横向不重叠</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== CSV 按年统计 ==="</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"2021-01-01"</span><span class="p">,</span> <span class="s2">"71"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"2021-07-11"</span><span class="p">,</span> <span class="s2">"128"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"2021-12-31"</span><span class="p">,</span> <span class="s2">"64"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"2022-06-17"</span><span class="p">,</span> <span class="s2">""</span><span class="p">),</span> <span class="p">(</span><span class="s2">"2022-07-09"</span><span class="p">,</span> <span class="s2">"127"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"2022-08-01"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span><span class="p">,</span> <span class="n">yearly_max</span><span class="p">(</span><span class="n">rows</span><span class="p">))</span>
+<span class="k">assert</span> <span class="n">yearly_max</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="mi">2021</span><span class="p">:</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">2022</span><span class="p">:</span> <span class="mi">127</span><span class="p">}</span>
+<span class="k">assert</span> <span class="n">yearly_max</span><span class="p">([])</span> <span class="o">==</span> <span class="p">{}</span>                              <span class="c1"># 空输入不炸</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 数据归属判断 ==="</span><span class="p">)</span>
+<span class="n">alice</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"username"</span><span class="p">:</span> <span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"is_authenticated"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="n">bob</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"username"</span><span class="p">:</span> <span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"is_authenticated"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="n">topic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"owner"</span><span class="p">:</span> <span class="s2">"alice"</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">who</span> <span class="ow">in</span> <span class="p">(</span><span class="n">alice</span><span class="p">,</span> <span class="n">bob</span><span class="p">,</span> <span class="p">{</span><span class="s2">"username"</span><span class="p">:</span> <span class="s2">"carol"</span><span class="p">,</span> <span class="s2">"is_authenticated"</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">"未登录"</span> <span class="k">if</span> <span class="n">who</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">who</span><span class="p">[</span><span class="s1">'username'</span><span class="p">]</span><span class="si">}</span><span class="s2">(登录=</span><span class="si">{</span><span class="n">who</span><span class="p">[</span><span class="s1">'is_authenticated'</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> 能看 alice 的主题？</span><span class="si">{</span><span class="n">is_owner</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span><span class="w"> </span><span class="n">who</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">is_owner</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">alice</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+<span class="k">assert</span> <span class="n">is_owner</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">bob</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+<span class="k">assert</span> <span class="n">is_owner</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">全部 assert 通过：这 4 个函数可以直接写进 pytest，不用开窗口、不用连库。"</span><span class="p">)</span>
+</code></pre>
+<p><strong>运行结果</strong>（实跑输出）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 飞船边界钳制（屏幕宽 800，飞船宽 60，速度 5）===
+  从 700 一路向右走 10 步：[700, 705, 710, 715, 720, 725, 730, 735, 740, 740, 740]
+  从 20 一路向左走 5 步：[20, 15, 10, 5, 0, 0]
+
+=== 矩形相交（子弹 3x15，外星人 50x40）===
+  子弹(400, 500, 3, 15) vs 外星人(400, 520, 50, 40) -&gt; False
+  子弹(400, 500, 3, 15) vs 外星人(400, 480, 50, 40) -&gt; True
+  子弹(400, 500, 3, 15) vs 外星人(300, 500, 50, 40) -&gt; False
+
+=== CSV 按年统计 ===
+   {2021: 128, 2022: 127}
+
+=== 数据归属判断 ===
+  alice(登录=True)       能看 alice 的主题？True
+  bob(登录=True)         能看 alice 的主题？False
+  carol(登录=False)      能看 alice 的主题？False
+  未登录                  能看 alice 的主题？False
+
+全部 assert 通过：这 4 个函数可以直接写进 pytest，不用开窗口、不用连库。
+</code></pre>
+<p>三条解读：</p>
+<ol>
+<li><strong><code>move_ship</code> 的两个边界返回的是「贴边后的坐标」而不是 <code>True/False</code></strong>：调用方拿到值直接赋给 <code>ship.rect.x</code>，不需要再判断一次。这是「纯函数」的典型形态——<strong>输入状态、输出新状态，不修改任何外部对象</strong>，所以能反复调用、能随便断言。</li>
+<li><strong><code>rects_hit</code> 的四个不等号方向最容易写反</strong>：<code>a[0] &lt; b[0] + b[2]</code>（a 的左 &lt; b 的右）与 <code>a[0] + a[2] &gt; b[0]</code>（a 的右 &gt; b 的左）<strong>必须同时成立</strong>才算横向重叠，纵向同理。少写一个就把「相交」判成「只要挨着就算」，游戏里表现为「子弹离外星人还有半个身位就爆炸」。</li>
+<li><strong>把 <code>yearly_max</code> 的 <code>try/except</code> 去掉会怎样</strong>：<code>int(None)</code> 抛 <code>TypeError</code>、<code>int("")</code> 抛 <code>ValueError</code>，整个函数在第 4 行数据上崩掉——<strong>而这份数据里确实有两个坏值</strong>。这正是单元 16 讲的「真实数据有缺失」，也是「测试必须覆盖空值」的原因：<code>assert yearly_max([]) == {}</code> 这一条就专门守这个边界。</li>
+</ol>
 <hr>
 
     <div class="blk hw">
@@ -672,6 +782,7 @@ transition:opacity .18s;z-index:60}
 
     <div class="done-bar">
       <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../review.html">复习计划 →</a>
       <a href="../21.html">查看单元 21 完整讲义 →</a>
       <a href="../bank.html">打开练习题库 →</a>
     </div>
@@ -696,10 +807,15 @@ function init(){
   });
   var box=document.getElementById('doneBox');
   if(box){
+    // 迁移：旧版只存布尔 true，没有完成时间；复习排程需要时间戳
+    if(all[n]===true){ all[n]=Date.now(); saveAll(all); }
     box.checked=!!all[n];
     if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
     box.addEventListener('change',function(){
-      var o=getAll(); o[n]=box.checked; saveAll(o);
+      var o=getAll();
+      if(box.checked){ if(o[n]===true) o[n]=Date.now(); if(!o[n]) o[n]=Date.now(); }
+      else delete o[n];
+      saveAll(o);
       document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
       document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
       document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
@@ -723,10 +839,6 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!p.querySelector('.cl')) p.insertBefore(s,c);
   });
   init();
-
-  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
-  var nlx=document.getElementById('nlx');
-  if(nlx&&window.innerWidth<=1000) nlx.open=false;
 
   // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
   document.addEventListener('keydown', function(e){

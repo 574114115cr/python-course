@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 04 · 一等函数：把函数当数据，拼一条处理管线</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 04 · 一等函数：把函数当数据，拼一条处理管线</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 04</span>
+        <span class="kwk">单元 4 · 一等函数与类型提示</span>
+        <span class="ku">第 7–8 章</span></div>
+      <h1>一等函数：把函数当数据，拼一条处理管线</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 7 章的主线是「函数是一等对象」：能赋值、能当参数、能返回、能存进表。这一篇用一条文本处理管线把这四件事全部用上，顺带把类型提示写进去。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">operator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span>
+
+<span class="n">Pipeline</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+
+
+<span class="c1"># ① 函数就是值：三个小函数存进列表和字典</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">strip</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">squeeze</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">lower</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compose</span><span class="p">(</span><span class="o">*</span><span class="n">fns</span><span class="p">:</span> <span class="n">Pipeline</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pipeline</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""从右到左组合：compose(f, g)(x) == f(g(x))。"""</span>
+    <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">fns</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+
+
+<span class="n">clean</span> <span class="o">=</span> <span class="n">compose</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span> <span class="n">squeeze</span><span class="p">,</span> <span class="n">strip</span><span class="p">)</span>          <span class="c1"># 右→左：先 strip，再 squeeze，最后 lower</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="s2">"   Hello   WORLD  </span><span class="se">\t</span><span class="s2">"</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"compose "</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">clean</span><span class="p">(</span><span class="n">raw</span><span class="p">)))</span>
+
+<span class="c1"># ② 高阶函数：把函数当参数传</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_all</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Pipeline</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fns</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"从左    "</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">apply_all</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="p">[</span><span class="n">strip</span><span class="p">,</span> <span class="n">squeeze</span><span class="p">,</span> <span class="n">lower</span><span class="p">])))</span>
+
+<span class="c1"># ③ 用 operator / itemgetter 代替 lambda：更快也更可读</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"键盘"</span><span class="p">,</span> <span class="s2">"price"</span><span class="p">:</span> <span class="mi">299</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">12</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"鼠标"</span><span class="p">,</span> <span class="s2">"price"</span><span class="p">:</span> <span class="mi">89</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"显示器"</span><span class="p">,</span> <span class="s2">"price"</span><span class="p">:</span> <span class="mi">1299</span><span class="p">,</span> <span class="s2">"stock"</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+<span class="p">]</span>
+<span class="n">by_name</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="s2">"name"</span><span class="p">))</span>
+<span class="n">in_stock</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"stock"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rows</span><span class="p">))</span>
+<span class="n">prices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="s2">"price"</span><span class="p">),</span> <span class="n">rows</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"排序    "</span><span class="p">,</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">by_name</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"filter  "</span><span class="p">,</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">in_stock</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"map     "</span><span class="p">,</span> <span class="n">prices</span><span class="p">,</span> <span class="s2">"| 总和"</span><span class="p">,</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">prices</span><span class="p">))</span>
+
+<span class="c1"># ④ partial：固定前几个参数，得到新的可调用对象</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fmt</span><span class="p">(</span><span class="n">tpl</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">tpl</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="n">price</span><span class="p">)</span>
+
+
+<span class="n">cheap</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="s2">"&lt;</span><span class="si">{name}</span><span class="s2">&gt; ¥</span><span class="si">{price}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"partial "</span><span class="p">,</span> <span class="n">cheap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"鼠标"</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="mi">89</span><span class="p">))</span>
+
+<span class="c1"># ⑤ 函数返回函数：闭包记住外层变量</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_tagger</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">s</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="n">tag</span> <span class="o">=</span> <span class="n">make_tagger</span><span class="p">(</span><span class="s2">"SKU-"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"返回函数"</span><span class="p">,</span> <span class="n">tag</span><span class="p">(</span><span class="s2">"A1"</span><span class="p">),</span> <span class="n">tag</span><span class="p">(</span><span class="s2">"B2"</span><span class="p">))</span>
+
+<span class="c1"># ⑥ 可调用对象与函数在调用语法上等价</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Doubler</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span> <span class="o">*</span> <span class="mi">2</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"callable"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Doubler</span><span class="p">(),</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])),</span> <span class="s2">"| 可调用？"</span><span class="p">,</span> <span class="nb">callable</span><span class="p">(</span><span class="n">Doubler</span><span class="p">()))</span>
+
+<span class="c1"># ⑦ 迭代器协议：生成器让管线可以惰性处理</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">take</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">it</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">it</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">yield</span> <span class="n">x</span>
+
+
+<span class="n">gen</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">" a "</span><span class="p">,</span> <span class="s2">" b "</span><span class="p">,</span> <span class="s2">" c "</span><span class="p">,</span> <span class="s2">" d "</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"惰性    "</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">take</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">gen</span><span class="p">)))</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong><code>compose</code> 的方向要先说清楚。</strong> <code>compose(a, b, c)(x)</code> 等价于 <code>a(b(c(x)))</code>——最右边的先执行。所以 <code>compose(lower, squeeze, strip)</code> 的阅读顺序和书写顺序相反，这正是很多人写组合函数时踩的坑；如果想让代码从左往右读，就用第二段的 <code>apply_all</code>。</p>
+</li>
+<li>
+<p><strong><code>functools.reduce</code> 的初始值不能忘。</strong> <code>reduce(f, fns, lambda x: x)</code> 里的第三个参数是起始值（恒等函数）。不给初始值时，空序列会抛 <code>TypeError</code>，而且首元素会被当成累加器，语义容易错。</p>
+</li>
+<li>
+<p><strong><code>operator.itemgetter("name")</code> 与 <code>lambda r: r["name"]</code> 的区别在速度，不在功能。</strong> <code>itemgetter</code> 是 C 实现，<code>sorted</code> 内部大量调用 key 时省下的时间很可观（实测页里 <code>itemgetter</code> 比 lambda 快约 13%）。同理 <code>operator.add</code> 比 <code>lambda a, b: a + b</code> 快。</p>
+</li>
+<li>
+<p><strong><code>partial</code> 是「预填参数」，不是「新建函数」。</strong> 它返回的对象保存了原函数和已填的参数，调用时把剩余参数接上。好处是签名清晰、可序列化；坏处是 <code>__name__</code> 之类的元信息会丢，调试时要留意。</p>
+</li>
+<li>
+<p><strong>闭包记住的是变量，不是值。</strong> <code>make_tagger("SKU-")</code> 返回的 lambda 引用外层的 <code>prefix</code>，每次调用 <code>make_tagger</code> 都会生成一个独立的作用域，所以两个 tagger 互不干扰；如果在外层循环里创建闭包并延迟调用，就会踩到「都引用同一个变量」的经典坑。</p>
+</li>
+<li>
+<p><strong><code>callable()</code> 只看有没有 <code>__call__</code>。</strong> 类和函数都是可调用对象，所以 <code>map(Doubler(), ...)</code> 和 <code>map(doubler, ...)</code> 写法一致。这也是为什么「策略模式」在 Python 里常常不需要类——一个函数就够了。</p>
+</li>
+<li>
+<p><strong>生成器让管线惰性。</strong> <code>take(2, gen)</code> 只消费前两项，后面的字符串根本没被 <code>strip</code>。这一点和列表推导的本质区别在于：前者是「按需生产」，后者是「先全算完」。数据大或源无限时，这是唯一可行的写法。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>compose  &#x27;hello world&#x27;
+从左     &#x27;hello world&#x27;
+排序     [&#x27;显示器&#x27;, &#x27;键盘&#x27;, &#x27;鼠标&#x27;]
+filter   [&#x27;键盘&#x27;, &#x27;显示器&#x27;]
+map      [299, 89, 1299] | 总和 1687
+partial  &lt;鼠标&gt; ¥89
+返回函数 SKU-A1 SKU-B2
+callable [2, 4, 6] | 可调用？ True
+惰性     [&#x27;a&#x27;, &#x27;b&#x27;]</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>compose(lower, squeeze, strip)</code> 改成 <code>compose(strip, squeeze, lower)</code>：输出会变成小写但保留首尾空格——顺序错的典型表现。</li>
+<li>把 <code>operator.itemgetter("price")</code> 换成 <code>lambda r: r["price"]</code>：结果一样，用实测页的脚本量一下差距。</li>
+<li>把 <code>take</code> 里的 <code>yield</code> 改成 <code>return</code>：函数立刻不再是生成器，<code>list(take(2, gen))</code> 会抛 <code>TypeError</code>（<code>NoneType</code> 不可迭代）。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §7.1–7.4 讲一等函数、高阶函数与 <code>functools</code>，§7.5 讲 <code>operator</code>，§7.8 讲函数式编程的取舍，§8.1–8.3 讲闭包与 <code>nonlocal</code>（<code>make_tagger</code> 就是最小版闭包）。类型提示部分对应 §8.5 与第 15 章，这里只用了最常用的 <code>Callable/Iterable/Iterator</code> 三个。</p>
+    <div class="pn"><a href="u03.html"><small>← 上一篇</small><b>单元 3 · 数据类与对象语义：一个发票类踩完五个坑</b></a><a class="nx" href="u05.html"><small>下一篇 →</small><b>单元 5 · 闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../04.html">单元 4 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

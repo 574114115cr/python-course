@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>实测数据 · 16 个取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>实测数据 · 16 个取舍</h1>
+  
+  
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="wrap">
+  <div class="hero" style="padding:38px 42px 34px">
+    <div class="bdg">BENCH · 实测数据</div>
+    <h1>实测数据 · 16 个取舍</h1>
+    <p>课程里每一次「该用哪个写法」的判断，都在本机实跑过。数字本身会随机器和
+    Python 版本变化，<b>倍数关系才是能带走的结论</b>；每个案例下面都写了适用边界。</p>
+    <div class="st">
+      <div><b>16</b><span>个案例</span></div>
+      <div><b>35</b><span>种写法</span></div>
+      <div><b>1</b><span>个含内存测量</span></div>
+    </div>
+  </div>
+
+  <div class="benv">
+    <b>运行环境</b>
+    <span>Python 3.13.14（CPython）</span>
+    <span>Windows 11 · AMD64</span>
+    <span>2026-10-20 22:44</span>
+    <p>计时：<code>timeit</code>，每个写法重复 5 轮取最快一轮；
+    内存：<code>tracemalloc</code> 峰值，跑 跑 3 次取最大。
+    换机器请重新运行 <code>tools/bench_fluent.py</code> 生成本页。</p>
+  </div>
+
+  <div class="bnch">
+  <div class="bh"><span class="bu">单元 1 · 数据模型与序列</span>
+    <b>只取前 10 个结果，但源数据有 100 万项</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th><th>峰值内存</th></tr></thead>
+    <tbody><tr><td>先建完整列表再切片</td><td class="num">24.08 ms</td><td class="num">31682×</td><td class="num">12.97 MB</td></tr><tr><td>生成器表达式 + islice</td><td class="num">0.8 µs</td><td class="num"><b class="fast">最快</b></td><td class="num">0.03 MB</td></tr></tbody>
+  </table></div>
+  <p class="bn">生成器版时间和内存都省下一两个数量级：它取够 10 个就停，根本不会跑完 100 万项，中间结果也不落地。「只需要前几个」「源是流式或长度未知」时，这是唯一正确的写法；反过来要反复遍历或求长度，就必须落到列表。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 1 · 数据模型与序列</span>
+    <b>把 0–999999 中能被 3 整除的数翻倍后收集成一个列表</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>for + append</td><td class="num">25.30 ms</td><td class="num">1.1×</td></tr><tr><td>列表推导</td><td class="num">23.63 ms</td><td class="num"><b class="fast">最快</b></td></tr><tr><td>filter + map</td><td class="num">51.52 ms</td><td class="num">2.2×</td></tr></tbody>
+  </table></div>
+  <p class="bn">本例列表推导只快 6%——简单转换时三种写法同量级，推导式的优势要等逻辑变复杂才显出来。filter+map 因为两次 lambda 调用稳定慢一倍，而且最不可读：这是「能把循环写成推导式」不等于「必须写」的实例。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 1 · 数据模型与序列</span>
+    <b>遍历 20 万个三元组，把三个字段加起来</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>下标访问</td><td class="num">6.98 ms</td><td class="num">1.1×</td></tr><tr><td>元组解包</td><td class="num">6.23 ms</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">解包用 UNPACK_SEQUENCE 一次拿到三个值，比三次 BINARY_SUBSCR 快一截，而且顺带做了长度校验——元素个数不对会直接报错，反而更安全。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 2 · 字典、集合与文本</span>
+    <b>在 10 万元素的有序表里查 1000 个键</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>in 线性扫</td><td class="num">233.41 ms</td><td class="num">1560×</td></tr><tr><td>bisect 二分</td><td class="num">149.6 µs</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">二分把单次查找从 O(n) 降到 O(log n)：本例 bisect 快约 1400 倍。但二分的前提是数据有序、且查询够多——小表或只查一两次时，线性扫的常数更小，先排序反而亏。bisect 还常用来做限流与分段查找。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 2 · 字典、集合与文本</span>
+    <b>统计 10 万次随机选择的词频</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>手写 dict + get</td><td class="num">2.49 ms</td><td class="num">1.4×</td></tr><tr><td>collections.Counter</td><td class="num">1.78 ms</td><td class="num"><b class="fast">最快</b></td></tr><tr><td>dict + try/except</td><td class="num">2.54 ms</td><td class="num">1.4×</td></tr></tbody>
+  </table></div>
+  <p class="bn">Counter 由 C 实现的 _count_elements 驱动，比手写循环快三成左右；try/except 版与 get 版几乎打平——本例键命中率极高，异常几乎不触发，一旦 miss 变多它就会明显变慢。日常首选 Counter，热路径再试别的。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 2 · 字典、集合与文本</span>
+    <b>队列：从头取 1 万次</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>list.pop(0)</td><td class="num">2.06 ms</td><td class="num">11×</td></tr><tr><td>deque.popleft</td><td class="num">182.6 µs</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">list.pop(0) 每次要移动后面所有元素，整体 O(n²)；deque 是双端链表式结构，popleft 是 O(1)。N 越大差距越夸张——这是全书最值得背下来的一个数量级差异。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 2 · 字典、集合与文本</span>
+    <b>在 2 万个数里判断 1 万个查询各自是否存在</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>list in（线性扫）</td><td class="num">410.60 ms</td><td class="num">1727×</td></tr><tr><td>set in（哈希）</td><td class="num">237.8 µs</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">list 的 in 是 O(n)，set 的 in 是 O(1)。表再大 10 倍，list 版会慢 10 倍，set 版几乎不变——这就是「先建索引」的意义。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 2 · 字典、集合与文本</span>
+    <b>把 10 万个小字符串拼成一个长字符串</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>循环 +=</td><td class="num">5.47 ms</td><td class="num">18×</td></tr><tr><td>str.join</td><td class="num">304.2 µs</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">本机实测 += 仍慢约 18 倍：CPython 的「原地追加」优化只省掉重复分配，每次依然要拷贝已有内容；join 先算好总长度、一次分配一次拷贝。结论没变——拼接交给 join，循环只负责产出片段。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 3 · 数据类与对象语义</span>
+    <b>构造 10 万个两点对象</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>手写 __init__</td><td class="num">7.06 ms</td><td class="num"><b class="fast">最快</b></td></tr><tr><td>@dataclass</td><td class="num">7.09 ms</td><td class="num">1.0×</td></tr></tbody>
+  </table></div>
+  <p class="bn">本机实测两者几乎打平（差 5% 以内，属噪声）：dataclass 生成的 __init__ 也是纯 Python，并不比手写快。它的价值是把相等比较、repr、字段清单、默认值一次做对，省的是你的时间和 bug，不是 CPU——别为性能选它。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 3 · 数据类与对象语义</span>
+    <b>构造 10 万个点</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>裸 tuple</td><td class="num">3.38 ms</td><td class="num"><b class="fast">最快</b></td></tr><tr><td>namedtuple</td><td class="num">11.44 ms</td><td class="num">3.4×</td></tr><tr><td>dataclass</td><td class="num">6.74 ms</td><td class="num">2.0×</td></tr></tbody>
+  </table></div>
+  <p class="bn">namedtuple 的 __new__ 是生成的 Python 代码，构造比裸 tuple 慢两三倍，和 dataclass 同量级——它买的是字段名、解包与不可变，不是速度。要纯性能用裸 tuple，要行为用 dataclass，要「带名字的不可变值」用 namedtuple。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 3 · 数据类与对象语义</span>
+    <b>读 100 万次属性</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>普通类（__dict__）</td><td class="num">8.88 ms</td><td class="num"><b class="fast">最快</b></td></tr><tr><td>__slots__</td><td class="num">8.88 ms</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">__slots__ 真正的收益是内存：实例不再背一个 __dict__，百万级对象能省下几百 MB。访问速度只快一点，所以「为了快加 slots」基本不划算，「为了省内存」才加。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 4 · 一等函数与类型提示</span>
+    <b>把 20 万个数字字符串转成 int</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>列表推导</td><td class="num">9.36 ms</td><td class="num">1.4×</td></tr><tr><td>list(map(...))</td><td class="num">6.61 ms</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">转换函数是内置函数（C 实现）时 map 通常略快，因为它把循环整个搬进 C；一旦换成 lambda，优势就没了。推导式可读性更好，除非性能分析指着这里，否则用它。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 4 · 一等函数与类型提示</span>
+    <b>把 0–999999 加起来</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>手写 for 循环</td><td class="num">17.11 ms</td><td class="num">2.6×</td></tr><tr><td>内置 sum</td><td class="num">6.69 ms</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">sum 把整个循环搬进 C，本例快 2.5 倍；能用内置函数就别手写循环，这是性价比最高的一类优化。顺带破个老迷信：旧教程说「把全局量复制成局部变量更快」，在 Python 3.11+ 上实测已看不出来——专门化解释器给热点 LOAD_GLOBAL 加了内联缓存。先测量，再决定要不要写那行别名。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 5 · 装饰器、闭包与设计模式</span>
+    <b>递归算第 30 个斐波那契数</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>纯递归</td><td class="num">65.17 ms</td><td class="num">12949×</td></tr><tr><td>@lru_cache</td><td class="num">5.0 µs</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">没有缓存时 fib(30) 要展开约 270 万次调用；加了缓存只剩 31 次。memoization 把指数级变成线性级——但注意缓存按参数持有结果，参数不可哈希或结果该随外部状态变化时不能用。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 8 · 类型进阶与运算符重载</span>
+    <b>按字典的某个键排序 5 万条记录</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>lambda 作 key</td><td class="num">5.90 ms</td><td class="num">1.1×</td></tr><tr><td>itemgetter 作 key</td><td class="num">5.47 ms</td><td class="num"><b class="fast">最快</b></td></tr></tbody>
+  </table></div>
+  <p class="bn">itemgetter 是 C 实现的调用器，每次提取 key 省掉一帧 Python 调用；但排序的总成本由比较次数决定，本例只快 13%（约 0.7 ms）。operator 模块的 attrgetter / methodcaller 同理——把常见 lambda 换成 C 版本，数据量大到百万行时才值得专门改。</p>
+</div><div class="bnch">
+  <div class="bh"><span class="bu">单元 9 · 迭代器、生成器与控制流</span>
+    <b>10 万个数里有没有大于 99 的（答案是没有，必须扫完）</b></div>
+  <div class="btw"><table>
+    <thead><tr><th>写法</th><th>单次耗时</th><th>相对最快</th></tr></thead>
+    <tbody><tr><td>for + break</td><td class="num">890.2 µs</td><td class="num"><b class="fast">最快</b></td></tr><tr><td>any(生成器)</td><td class="num">1.59 ms</td><td class="num">1.8×</td></tr></tbody>
+  </table></div>
+  <p class="bn">都要扫完 10 万项时，any 因为每项多一层生成器切换，反而慢约 1.5 倍。它的价值在短早退：命中靠前时两者都几乎不花时间，差别可以忽略，而 any 省掉了标志位和 break 的样板，意图也更清楚。</p>
+</div>
+
+  <p style="margin-top:26px;font-size:12.5px;color:var(--muted);line-height:1.9">
+    <b>怎么读这些数字：</b>① 先看倍数，1.0× 是同一案例里最快的写法；
+    ② 小于 1.5× 的差距基本是噪声，按可读性选；③ 内存列只在标注了的案例里出现，
+    用 tracemalloc 量的是 Python 层分配的峰值，不含解释器本身；
+    ④ 所有案例的代码都在 <code>course-fluent/bench.json</code> 里，可以自己改参数重跑。</p>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

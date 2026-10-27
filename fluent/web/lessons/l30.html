@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 30 课 · TypedDict、重载与运行时读取注解</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="30">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 30 课 · TypedDict、重载与运行时读取注解</h1>
+  <a class="tag" href="../08.html">单元 8</a>
+  <a class="ppt" href="../ppt/u/08.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:62.5%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="29" href="l29.html"><span class="no">29</span><span class="tx">泛型：TypeVar、Generic 与型变</span></a><a class="cur" data-l="30" href="l30.html"><span class="no">30</span><span class="tx">TypedDict、重载与运行时读取注解</span></a><a class="" data-l="31" href="l31.html"><span class="no">31</span><span class="tx">运算符重载：一元、算术与 @</span></a><a class="" data-l="32" href="l32.html"><span class="no">32</span><span class="tx">比较、增量赋值与一致性</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-型变只影响静态检查">延伸：型变只影响静态检查</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../08.html"><span class="k">单元</span>
+    <span class="v">单元 8 · 类型进阶与运算符重载</span></a>
+  <a href="../bank.html#u8"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/08.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u08.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/15.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 15–16 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 30 课</span>
+        <span class="kwk">单元 8 · 第 15–16 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>TypedDict、重载与运行时读取注解</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用 TypedDict 描述固定键字典，用 `@overload` 描述多签名，用 `get_type_hints` 在运行时读取注解。</div>
+    <h3 id="讲解">讲解</h3>
+<p><code>TypedDict</code> 适合「本质是 dict，但键固定」的数据，比如 API 响应：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Movie</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">year</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">rating</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="n">m</span><span class="p">:</span> <span class="n">Movie</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Alien"</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">:</span> <span class="mi">1979</span><span class="p">,</span> <span class="s2">"rating"</span><span class="p">:</span> <span class="mf">8.5</span><span class="p">}</span>
+</code></pre>
+<p><code>total=False</code> 让所有键可选；<code>Required</code> / <code>NotRequired</code> 可以逐键控制。</p>
+<p>重载用于「同一个函数，不同输入返回不同类型」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">overload</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</code></pre>
+<p>实现体的签名不对外暴露，调用方只看重载签名；但 mypy 会检查实现体与重载是否兼容。<code>@overload</code> 只在静态检查时生效。</p>
+<p>运行时读取注解用 <code>typing.get_type_hints</code>（会解析字符串注解与前向引用）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_type_hints</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">"int"</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"str"</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+<span class="c1"># {'x': &lt;class 'int'&gt;, 'y': list[str], 'return': NoneType}</span>
+</code></pre>
+<h3 id="延伸-型变只影响静态检查">延伸：型变只影响静态检查</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span>
+
+<span class="n">T_co</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T_co"</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>      <span class="c1"># 只读产出，协变</span>
+<span class="n">T_contra</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T_contra"</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># 只消费，逆变</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Producer</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Consumer</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T_contra</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T_contra</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</code></pre>
+<p>规则的直觉：<strong>只往外给</strong>的容器可以协变（<code>Producer[Dog]</code> 是 <code>Producer[Animal]</code>），<strong>只往里收</strong>的可以逆变，既读又写的必须不变（<code>list</code> 就是不变，所以 <code>list[Dog]</code> 不能当 <code>list[Animal]</code> 用）。这些声明只在静态检查时生效，运行时 <code>TypeVar</code> 不产生任何行为差异，也不能据此做 <code>isinstance</code> 判断。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>TypedDict 不做运行时校验</strong>，它只是给检查器看的形状。</li>
+<li><strong>重载签名必须与实现兼容</strong>，否则 mypy 报 <code>overload</code> 错误。</li>
+<li><strong><code>__annotations__</code> 可能是字符串</strong>（<code>from __future__ import annotations</code>），要用 <code>get_type_hints</code> 求值。</li>
+<li><strong>运行时读注解可以驱动校验、序列化、依赖注入</strong>，但要注意循环导入。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用 TypedDict 描述一个 API 响应，写一个函数返回该类型，并让 mypy 检查。</li>
+<li>用 <code>@overload</code> 实现 <code>double(x)</code>：int 返回 int，str 返回重复字符串。</li>
+<li>写一个 <code>validate(obj)</code>，用 <code>get_type_hints</code> 读取 dataclass 字段类型并做简单校验。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用 TypedDict 替代「键名靠猜」的 dict</li>
+<li><span class="ck"></span>能写出两个重载签名 + 一个实现体</li>
+<li><span class="ck"></span>会用 <code>get_type_hints</code> 处理字符串注解</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 15 章 §15.6–15.8</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：型变只影响静态检查</p></div>
+    <div class="pn"><a href="l29.html"><small>← 第 29 课 · 单元 8</small><b>泛型：TypeVar、Generic 与型变</b></a><a class="nx" href="l31.html"><small>第 31 课 · 单元 8 →</small><b>运算符重载：一元、算术与 @</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../08.html">返回单元 8</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=30, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

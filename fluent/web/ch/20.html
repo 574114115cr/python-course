@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 20 章 · 并发执行器 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 20 章 · 并发执行器 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 20 章</span>
+        <span class="kwk">单元 10 · 并发模型与执行器</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>并发执行器</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p>把「提交任务」和「等待结果」从线程/进程细节里解耦：一套 API，两种执行器。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td><code>concurrent.futures.Executor</code>：<code>submit</code> / <code>Future</code> / <code>map</code> / <code>shutdown</code></td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>裸 <code>threading</code> + <code>queue</code>、<code>multiprocessing.Pool</code>、<code>asyncio</code></td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>裸线程每次都要重写工人队列；<code>Pool</code> 覆盖不了非进程场景；asyncio 要求全异步</td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>Future 是多出来的一层抽象；异常要 <code>result()</code> 才抛出，容易漏看</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>真实的并发代码九成是同一个形状：一组互不相关的任务，派出去，收结果，等全部结束。<code>threading</code> 模块只提供零件——线程、锁、队列——每个项目都要重新拼一遍「起 N 个工人、派活、收结果、等结束、处理异常」，而且拼法各异，review 时互相看不懂。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>继续让用户自己拼；给 <code>multiprocessing.Pool</code> 补上线程版本；引入 Future 概念统一结果对象（Java 的 <code>Future</code> 与 JavaScript 的 <code>Promise</code> 已有先例）。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p><code>submit()</code> 立刻返回 Future，不阻塞；<code>map()</code> 保持输入顺序；<code>as_completed()</code> 支持先到先得；把 <code>ThreadPoolExecutor</code> 换成 <code>ProcessPoolExecutor</code> 只改一个类名。异常被 Future 捕获，主线程在 <code>result()</code> 处统一处理，不会让工人线程静默死掉。这一层抽象买到的是一致性。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p>线程池默认 <code>max_workers = min(32, cpu_count + 4)</code>，一口气提交几千个阻塞任务会在队列里排很久，<code>submit</code> 本身却不报错——界面上看就像卡死。<code>shutdown(wait=True)</code> 不会取消已提交的任务，想中途退出得先逐个 <code>cancel</code>。进程池用 pickle 传递函数，闭包、lambda、局部函数都传不过去，报错信息还很难懂。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>保留 Executor 的骨架，但会让默认 worker 数更保守，把 <code>cancel_futures=True</code> 做成默认，并在文档首页用加粗写明两个坑：pickle 限制，以及「异常只在 <code>result()</code> 抛出」。</p>
+    <div class="pn"><a href="19.html"><small>← 上一章</small><b>第 19 章 · 并发模型</b></a><a class="nx" href="21.html"><small>下一章 →</small><b>第 21 章 · 异步编程</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../10.html">单元 10 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -10,7 +10,7 @@
  *   - 仅在 http(s) 下注册生效；file:// 直接打开便携版时注册会失败，属预期行为
  *   - 站点内容更新后必须升 V（缓存名），否则老用户拿不到新静态资源
  */
-var V = 'pycourse-v1';
+var V = 'pycourse-v20';
 
 var SHELL = [
   './',
@@ -21,6 +21,20 @@ var SHELL = [
   './web/lessons/lessons.css',
   './web/css/unit.css',
   './web/searchdata.js',
+  './web/review.html',
+  './web/terms.html',
+  './web/coverage.html',
+  './fluent/index.html',
+  './fluent/web/css/site.css',
+  './fluent/web/lessons/index.html',
+  './fluent/web/ppt/u/index.html',
+  './fluent/web/coverage.html',
+  './fluent/web/terms.html',
+  './fluent/web/review.html',
+  './fluent/web/bench.html',
+  './fluent/web/syllabus.html',
+  './fluent/web/ch/index.html',
+  './fluent/web/walk/index.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
@@ -64,7 +78,11 @@ self.addEventListener('fetch', function (e) {
         return res;
       }).catch(function () {
         return caches.match(req).then(function (hit) {
-          return hit || caches.match('./index.html');
+          if (hit) return hit;
+          // 进阶课页面回退到进阶课首页，别把用户丢回入门课
+          var fallback = url.pathname.indexOf('/fluent/') >= 0
+            ? './fluent/index.html' : './index.html';
+          return caches.match(fallback);
         });
       })
     );

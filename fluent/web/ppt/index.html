@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大纲课件 · 18 页</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1">
+  <div class="sk">Fluent Python · 2nd Edition</div>
+  <h2>把「能跑」写成「像 Python」</h2>
+  <ul><li>24 章拆成 12 个单元、48 节课</li><li>每节课 90 分钟：讲机制、改代码、做验收</li><li>先修：能写函数与类，用过 pip 和虚拟环境</li></ul>
+</section><section class="slide" data-s="2">
+  <div class="sk">怎么上这门课</div>
+  <h2>四段式课节结构</h2>
+  <ul><li>机制精讲 30 分钟：为什么这样设计</li><li>惯用法 20 分钟：标准库怎么写</li><li>实战改造 30 分钟：把普通代码重构成 Pythonic</li><li>验收 10 分钟：清单逐条过</li></ul>
+</section><section class="slide" data-s="3">
+  <div class="sk">教材坐标</div>
+  <h2>5 部分 · 24 章 → 12 单元</h2>
+  <ul><li>第一部分 数据结构（1–6 章）</li><li>第二部分 函数即对象（7–10 章）</li><li>第三部分 类和协议（11–16 章）</li><li>第四部分 控制流（17–21 章）</li><li>第五部分 元编程（22–24 章）</li></ul>
+</section><section class="slide" data-s="4">
+  <div class="sk">学习者画像</div>
+  <h2>这门课适合谁</h2>
+  <ul><li>写过 1000 行以上 Python，但代码像 Java/JS</li><li>能看懂别人的库，自己设计类时没把握</li><li>准备读框架源码、写中间件或做代码评审</li></ul>
+</section><section class="slide" data-s="5">
+  <div class="sk">单元 1–3</div>
+  <h2>数据与对象：先把地基换成 Python 的</h2>
+  <ul><li>特殊方法是语言协议的入口，不是语法糖</li><li>dict 的顺序与性能都由哈希表决定</li><li>别名、可变性与 Unicode 是 bug 的高发区</li></ul>
+</section><section class="slide" data-s="6">
+  <div class="sk">单元 4–5</div>
+  <h2>函数：从「能调用」到「能组合」</h2>
+  <ul><li>函数是一等对象，可以传、可以返回、可以存</li><li>类型提示是给工具看的文档，不是运行时检查</li><li>闭包捕获的是变量，不是值</li></ul>
+</section><section class="slide" data-s="7">
+  <div class="sk">单元 6–8</div>
+  <h2>类与协议：写出可组合的类型</h2>
+  <ul><li>先有协议，再有继承；鸭子类型优先</li><li>ABC 负责「明确契约」，Protocol 负责「结构化匹配」</li><li>运算符重载必须保持交换律与一致性</li></ul>
+</section><section class="slide" data-s="8">
+  <div class="sk">单元 9</div>
+  <h2>控制流：惰性与上下文</h2>
+  <ul><li>生成器把「计算」变成「按需产出」</li><li>yield from 是委派，不是简写</li><li>with 管理资源，match 解构数据</li></ul>
+</section><section class="slide" data-s="9">
+  <div class="sk">单元 10–11</div>
+  <h2>并发与异步：先判断瓶颈</h2>
+  <ul><li>CPU 密集 → 进程；IO 密集 → 线程或协程</li><li>GIL 保护解释器状态，不等于线程安全</li><li>asyncio 的收益来自「等待时不占线程」</li></ul>
+</section><section class="slide" data-s="10">
+  <div class="sk">单元 12</div>
+  <h2>元编程：把重复交给机制</h2>
+  <ul><li>__getattr__ 处理「运行时才知道的属性」</li><li>描述符把「属性访问」变成可复用的逻辑</li><li>元类只在类创建时介入，优先用 __init_subclass__</li></ul>
+</section><section class="slide" data-s="11">
+  <div class="sk">每节课的产出</div>
+  <h2>不是笔记，是可运行的代码</h2>
+  <ul><li>一段能跑的最小示例</li><li>一次「错误写法 → 正确写法」的对照</li><li>一张验收清单，勾完才算学完</li></ul>
+</section><section class="slide" data-s="12">
+  <div class="sk">代码标准</div>
+  <h2>按团队代码的标准要求自己</h2>
+  <ul><li>公开函数写全类型注解，mypy 无报错</li><li>异常只捕获能处理的类型，不写裸 except</li><li>复杂分支用数据驱动或模式匹配，不堆 if</li></ul>
+</section><section class="slide" data-s="13">
+  <div class="sk">题库设计</div>
+  <h2>36 题：机制 / 代码 / 设计</h2>
+  <ul><li>机制题：解释「为什么」</li><li>代码题：手写可运行片段</li><li>设计题：给定需求选型并说明理由</li></ul>
+</section><section class="slide" data-s="14">
+  <div class="sk">两个关卡</div>
+  <h2>验收而不是考试</h2>
+  <ul><li>关卡 1（第 12 周）：数据结构、函数、对象</li><li>关卡 2（第 24 周）：类、并发、元编程</li><li>每条都能当场演示或讲清楚，才算过关</li></ul>
+</section><section class="slide" data-s="15">
+  <div class="sk">时间预算</div>
+  <h2>24 周 · 每周 2 节课</h2>
+  <ul><li>每节课 90 分钟，课后 1–2 小时代码量</li><li>48 节正好 24 周；元编程可以放慢，但别跳过描述符</li><li>进度落后时先砍练习题，不砍验收</li></ul>
+</section><section class="slide" data-s="16">
+  <div class="sk">常见卡点</div>
+  <h2>大多数人会卡在这五处</h2>
+  <ul><li>把特殊方法当普通方法直接调用</li><li>以为 dict 有序就等于可以排序</li><li>装饰器丢了 functools.wraps</li><li>以为多线程能加速 CPU 密集任务</li><li>描述符与 __getattr__ 的优先级搞混</li></ul>
+</section><section class="slide" data-s="17">
+  <div class="sk">验收标准</div>
+  <h2>学完能做到什么</h2>
+  <ul><li>为一个真实需求设计出 3 层以内的类结构</li><li>读懂 80% 的标准库与框架源码</li><li>写出同事愿意 review、而不是绕开的代码</li></ul>
+</section><section class="slide" data-s="18">
+  <div class="sk">结束</div>
+  <h2>接下来做什么</h2>
+  <ul><li>挑一个你常用的库，读它的核心模块</li><li>把工作里的一个模块按本课标准重构</li><li>回到题库，把「待复习」清零</li></ul>
+</section></div>
+<div class="dprog" id="dp"></div>
+<div class="dthumb" id="dt"><button data-s="1"><b>01</b> · 把「能跑」写成「像 Python」</button><button data-s="2"><b>02</b> · 四段式课节结构</button><button data-s="3"><b>03</b> · 5 部分 · 24 章 → 12 单元</button><button data-s="4"><b>04</b> · 这门课适合谁</button><button data-s="5"><b>05</b> · 数据与对象：先把地基换成 Python 的</button><button data-s="6"><b>06</b> · 函数：从「能调用」到「能组合」</button><button data-s="7"><b>07</b> · 类与协议：写出可组合的类型</button><button data-s="8"><b>08</b> · 控制流：惰性与上下文</button><button data-s="9"><b>09</b> · 并发与异步：先判断瓶颈</button><button data-s="10"><b>10</b> · 元编程：把重复交给机制</button><button data-s="11"><b>11</b> · 不是笔记，是可运行的代码</button><button data-s="12"><b>12</b> · 按团队代码的标准要求自己</button><button data-s="13"><b>13</b> · 36 题：机制 / 代码 / 设计</button><button data-s="14"><b>14</b> · 验收而不是考试</button><button data-s="15"><b>15</b> · 24 周 · 每周 2 节课</button><button data-s="16"><b>16</b> · 大多数人会卡在这五处</button><button data-s="17"><b>17</b> · 学完能做到什么</button><button data-s="18"><b>18</b> · 接下来做什么</button></div>
+<div class="dnav">
+  <button id="prev">←</button><span id="cnt">1 / 18</span>
+  <button id="next">→</button>
+  <button id="ov">目录</button>
+</div>
+<div style="position:fixed;left:14px;top:12px;z-index:7">
+  <a href="../../index.html" style="color:#9b96b8;font-size:12.5px">← 课程首页</a>
+  <span style="color:#55516e">·</span>
+  <a href="u/index.html" style="color:#9b96b8;font-size:12.5px">逐节课件</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=18, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt'),
+      dt=document.getElementById('dt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.getElementById('ov').onclick=function(){dt.classList.toggle('on')};
+  dt.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b)return;
+    go(+b.dataset.s);dt.classList.remove('on');
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+    if(e.key==='Escape'){dt.classList.remove('on')}
+    if(e.key==='o'||e.key==='O'){dt.classList.toggle('on')}
+  });
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+})();
+</script>
+</body></html>

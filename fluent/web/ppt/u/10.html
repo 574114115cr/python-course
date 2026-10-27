@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 10 课件 · 并发模型与执行器</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 10 · 逐节课件</div><h2>单元 10 · 并发模型与执行器</h2><div class="sub">第 19–20 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 37 课 · 目标与要点</div><h2>并发全景：GIL、线程、进程</h2><div class="sub">能解释 GIL 的作用与边界，判断一个任务是 CPU 密集还是 IO 密集，并选出对应的并发模型。</div><ul><li>GIL 不是 Python 语言规范，是 CPython 的实现；3.13 起提供实验性的 free-threaded 构建，但默认构建仍有 GIL。</li><li><b>GIL 不保证线程安全</b>：x += 1 仍是「读—改—写」三步，可能被切换。</li><li>进程有独立内存，通信要序列化（pickle），启动成本高。</li><li>线程适合 IO，不是因为线程快，而是因为等待时不占 CPU。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 37 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>import time
+
+def cpu_task(n):
+    return sum(i * i for i in range(n))
+
+t0 = time.perf_counter()
+for _ in range(4):
+    cpu_task(2_000_000)
+print(&quot;serial&quot;, time.perf_counter() - t0)</code></pre><div class="sub">动手：写一个 cpu_task(n) 与一个 io_task(seconds)，分别用串行、4 线程、4 进程跑，记录耗时表。</div></section><section class="slide" data-s="4"><div class="sk">第 38 课 · 目标与要点</div><h2>线程与锁：竞态、队列与退出</h2><div class="sub">能复现一次竞态，用 Lock 修复，用 Queue 做生产者—消费者，并让线程正确退出。</div><ul><li>锁要尽量短，持锁做 IO 等于把并发退化成串行。</li><li>避免嵌套锁，需要多把锁时固定获取顺序，否则会死锁。</li><li>Queue 的 task_done() 与 join() 配对，忘了会让主线程永远等。</li><li>线程不能强杀，用哨兵或 Event 通知退出，再 join()。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 38 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>import threading
+
+counter = 0
+
+def worker():
+    global counter
+    for _ in range(100_000):
+        counter += 1          # 可能被切换
+
+ts = [threading.Thread(target=worker) for _ in range(4)]
+[t.start() for t in ts]
+[t.join() for t in ts]
+print(counter)                # 通常小于 400000</code></pre><div class="sub">动手：复现计数器竞态，记录 10 次运行结果，再加锁验证稳定在 400000。</div></section><section class="slide" data-s="6"><div class="sk">第 39 课 · 目标与要点</div><h2>执行器：ThreadPoolExecutor 与 ProcessPoolExecutor</h2><div class="sub">能用两种执行器提交任务、收集结果、处理异常，并知道各自的启动成本与限制。</div><ul><li><b>线程池大小不是越大越好</b>：IO 密集可以 2–4 倍 CPU 核数，CPU 密集取核数。</li><li>with 退出会等待所有任务结束；要提前取消用 shutdown(cancel_futures=True)。</li><li>异常存到 Future 里，只有调用 result() 时才抛出。</li><li>进程池启动慢，任务太短（毫秒级）时开销大于收益。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 39 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def fetch(url):
+    ...
+
+with ThreadPoolExecutor(max_workers=8) as pool:
+    futures = {pool.submit(fetch, u): u for u in urls}
+    for fut in as_completed(futures):
+        url = futures[fut]
+        try:
+            print(url, fut.result())
+        except Exception as e:
+            print(url, &quot;failed:&quot;, e)</code></pre><div class="sub">动手：用 ThreadPoolExecutor 并发请求 10 个 URL，打印每个的耗时与总耗时。</div></section><section class="slide" data-s="8"><div class="sk">第 40 课 · 目标与要点</div><h2>实战：并发下载与错误处理</h2><div class="sub">能把一个串行下载脚本改造成并发版，处理超时、重试、限速与部分失败，并给出可观测的进度。</div><ul><li>超时必须显式设置，默认无超时会让线程永久挂起。</li><li>重试要退避，固定间隔会在服务端故障时形成雪崩。</li><li>并发度要有限制，无上限会耗尽文件描述符或被目标限流。</li><li>进度输出要可关闭，日志环境里 \r 会污染输出。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 40 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import urllib.request
+
+def fetch(url, timeout=5, retries=2):
+    for attempt in range(retries + 1):
+        try:
+            with urllib.request.urlopen(url, timeout=timeout) as r:
+                return len(r.read())
+        except Exception:
+            if attempt == retries:
+                raise
+            time.sleep(0.5 * (attempt + 1))
+
+def download_all(urls, workers=8):
+    ok, failed = 0, []
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futures = {pool.submit(fetch, u): u for u in urls}
+# ...</code></pre><div class="sub">动手：把上面的脚本跑在 10 个真实 URL 上（含 1 个故意错误的），记录成功/失败。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>判断：给 6 个任务分类，说明各自该用线程、进程还是协程</li><li>线程安全：复现并修复一次竞态，附 10 次运行结果</li><li>执行器：用两种执行器各完成一个任务，比较耗时</li><li>实战：并发脚本在部分失败时仍能跑完，并输出可读报告</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../10.html">← 单元 10</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

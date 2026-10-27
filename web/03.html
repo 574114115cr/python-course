@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="14" data-to="18"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u3"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/03.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u3"><span class="k">题库</span><span class="v">本单元 7 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="14" data-to="18"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u3"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/03.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s6"><span class="k">大纲</span><span class="v">课程大纲课件 p6</span></a><a href="bank.html#u3"><span class="k">题库</span><span class="v">本单元 9 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-for-循环-把重复交给机器">2.1 for 循环：把重复交给机器</a>
 <a class="lv3" href="#2-2-range-造出一串数字">2.2 range()：造出一串数字</a>
@@ -44,6 +45,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-5-切片">示例 5：切片</a>
 <a class="lv3" href="#示例-6-元组">示例 6：元组</a>
 <a class="lv3" href="#示例-7-pep-8-排版示范">示例 7：PEP 8 排版示范</a>
+<a class="lv3" href="#示例-8-切片的第三个参数-与-逆序-这个惯用法">示例 8：切片的第三个参数，与&quot;逆序&quot;这个惯用法</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -56,19 +58,19 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-3-6">参考答案 3-6</a>
 <a class="lv3" href="#参考答案-3-7">参考答案 3-7</a>
 <a class="lv3" href="#参考答案-3-8">参考答案 3-8</a>
+<a class="lv3" href="#参考答案-3-9">参考答案 3-9</a>
+<a class="lv3" href="#参考答案-3-10">参考答案 3-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-3-操作列表">单元 3：操作列表</h1>
-<blockquote>
-<p>对应教材第 4 章「操作列表」
-关键词：for 循环、range()、while（本单元仅作对比）、列表推导式、切片 slice、元组 tuple、PEP 8</p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 4 章「操作列表」</span></div><p class="bk-k">关键词：for 循环、range()、while（本单元仅作对比）、列表推导式、切片 slice、元组 tuple、PEP 8</p><a href="coverage.html#u3">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，应该能够：</p>
@@ -78,6 +80,7 @@ transition:opacity .18s;z-index:60}
 <li>用一行<strong>列表推导式</strong>写出筛选/变换逻辑，并与等价的多行 <code>for</code> 循环对比。</li>
 <li>正确书写切片 <code>list[start:stop:step]</code>，说清「左闭右开」规则，并预测负索引切片的结果。</li>
 <li>说出元组与列表的三点区别，并解释为什么字典的键必须是元组/字符串这类不可变类型。</li>
+<li>用 <code>[::-1]</code> 逆序、用 <code>[::2]</code> 隔位取，并知道切片越界不报错、<code>[:]</code> 是浅复制。</li>
 </ol>
 <hr>
 <h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
@@ -488,6 +491,42 @@ transition:opacity .18s;z-index:60}
 <span class="c1"># 这是标准注释</span>
 <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># 行尾注释前两个空格</span>
 </code></pre>
+<h3 id="示例-8-切片的第三个参数-与-逆序-这个惯用法">示例 8：切片的第三个参数，与"逆序"这个惯用法</h3>
+<p><code>[start:stop]</code> 只讲了「取一段」。完整写法是 <code>[start:stop:step]</code>，第三个参数是<strong>步长</strong>，它让切片能一次做完「隔几个取一个」和「整段翻转」两件事。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># slice_step.py —— 步长与负索引</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2:5      "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>       <span class="c1"># [2, 3, 4]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">":3       "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>        <span class="c1"># [0, 1, 2]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-3:      "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:])</span>       <span class="c1"># [7, 8, 9]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"::2      "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>       <span class="c1"># [0, 2, 4, 6, 8]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1:8:3    "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>     <span class="c1"># [1, 4, 7]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"[::-1]   "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>      <span class="c1"># [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"越界     "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">99</span><span class="p">])</span>      <span class="c1"># [5, 6, 7, 8, 9]  ← 不报错</span>
+
+<span class="n">copy</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[:]</span>                      <span class="c1"># 切片复制，见单元 2</span>
+<span class="n">copy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"原列表   "</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># 0  ← 没被改</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"副本     "</span><span class="p">,</span> <span class="n">copy</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># 99</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span><span class="na">2</span><span class="o">:</span><span class="s">5       [2, 3, 4]</span>
+<span class="o">:</span><span class="s">3        [0, 1, 2]</span>
+<span class="na">-3</span><span class="o">:</span><span class="w">       </span><span class="s">[7, 8, 9]</span>
+<span class="o">:</span><span class="s">:2       [0, 2, 4, 6, 8]</span>
+<span class="na">1</span><span class="o">:</span><span class="s">8:3     [1, 4, 7]</span>
+<span class="k">[::-1]    [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</span>
+<span class="na">越界      [5, 6, 7, 8, 9]</span>
+<span class="na">原列表    0</span>
+<span class="na">副本      99</span>
+</code></pre>
+<p>四个要点：</p>
+<ol>
+<li><strong><code>nums[::-1]</code> 是 Python 里翻转序列的惯用法</strong>，比自己写循环干净得多。字符串同样适用：<code>"abc"[::-1]</code> 是 <code>"cba"</code>。</li>
+<li><strong>切片不会因为越界报错</strong>，<code>nums[5:99]</code> 只取到末尾；这一点和 <code>nums[99]</code> 完全不同（后者抛 <code>IndexError</code>）。</li>
+<li><strong><code>nums[:]</code> 是浅复制</strong>（单元 2 讲过），要完全独立得 <code>copy.deepcopy</code>。</li>
+<li><strong>步长为负时 start/stop 的方向也反了</strong>：<code>nums[8:2:-2]</code> 是 <code>[8, 6, 4]</code>，只要方向对不上就拿不到东西（返回空列表，也不报错）。</li>
+</ol>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -564,6 +603,28 @@ transition:opacity .18s;z-index:60}
 - 去掉空字符串和 <code>None</code>
 - 保持原有顺序
 - 优先尝试用<strong>列表推导式</strong>一行写出来（提示：<code>if item</code> 可以过滤掉 <code>""</code> 但<strong>过滤不掉 <code>None</code></strong>，所以需要 <code>if item</code> 之外再加一道 <code>is not None</code>；如果卡住了，用普通 <code>for</code> 循环也可以）</p>
+<p><strong>练习 3-9【用切片做四件事】</strong>
+给定 <code>text = "Python 从入门到实践"</code>（注意中间有空格），只用切片完成：
+① 取前 6 个字符；② 取后 2 个字符；③ 每隔 2 个取一个；④ 整串逆序。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">前</span> <span class="mi">6</span> <span class="n">个</span>  <span class="n">Python</span>
+<span class="n">后</span> <span class="mi">2</span> <span class="n">个</span>  <span class="n">实践</span>
+<span class="n">隔一个取</span> <span class="n">Pto</span> <span class="n">入到践</span>
+<span class="n">逆序</span>     <span class="n">践实到门入从</span> <span class="n">nohtyP</span>
+</code></pre>
+<p>提示：先 <code>print(len(text))</code> 看清长度，再决定下标。</p>
+<p><strong>练习 3-10【回文判断】</strong>
+写一个函数 <code>is_palindrome(s)</code>，忽略大小写和空格，判断字符串是否回文（正读反读一样）。
+测试：<code>"上海自来水来自海上"</code> → <code>True</code>；<code>"A man a plan a canal Panama"</code> → <code>True</code>；<code>"python"</code> → <code>False</code>。
+要求：
+① 用 <code>s[::-1]</code> 做反转，不许写循环；
+② 用推导式去掉空格并转小写，不许用 <code>replace</code> 链；
+③ 打印每个测试用例的结果。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">上海自来水来自海上</span> <span class="err">→</span> <span class="kc">True</span>
+<span class="n">A</span> <span class="n">man</span> <span class="n">a</span> <span class="n">plan</span> <span class="n">a</span> <span class="n">canal</span> <span class="n">Panama</span> <span class="err">→</span> <span class="kc">True</span>
+<span class="n">python</span> <span class="err">→</span> <span class="kc">False</span>
+</code></pre>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
 <h3 id="参考答案-3-1">参考答案 3-1</h3>
@@ -791,6 +852,44 @@ transition:opacity .18s;z-index:60}
         <span class="n">unique</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"去重后："</span><span class="p">,</span> <span class="n">unique</span><span class="p">)</span>
 </code></pre>
+<h3 id="参考答案-3-9">参考答案 3-9</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># slices.py —— 四种切片</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Python 从入门到实践"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"前 6 个 "</span><span class="p">,</span> <span class="n">text</span><span class="p">[:</span><span class="mi">6</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"后 2 个 "</span><span class="p">,</span> <span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"隔一个取"</span><span class="p">,</span> <span class="n">text</span><span class="p">[::</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"逆序    "</span><span class="p">,</span> <span class="n">text</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>前 6 个  Python
+后 2 个  实践
+隔一个取 Pto 入到践
+逆序     践实到门入从 nohtyP
+</code></pre>
+<p><code>text[::2]</code> 的结果里有空格，因为原串第 6 位就是空格——<strong>切片不会帮你跳过空白</strong>，要跳觉得先清理。</p>
+<h3 id="参考答案-3-10">参考答案 3-10</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># palindrome.py —— 忽略大小写与空格</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_palindrome</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">s</span> <span class="k">if</span> <span class="n">ch</span> <span class="o">!=</span> <span class="s2">" "</span><span class="p">]</span>   <span class="c1"># 去掉空格并统一小写</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">text</span> <span class="o">==</span> <span class="n">text</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>                          <span class="c1"># 反转后比较</span>
+
+
+<span class="n">cases</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"上海自来水来自海上"</span><span class="p">,</span> <span class="s2">"A man a plan a canal Panama"</span><span class="p">,</span> <span class="s2">"python"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">"→"</span><span class="p">,</span> <span class="n">is_palindrome</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>上海自来水来自海上 → True
+A man a plan a canal Panama → True
+python → False
+</code></pre>
+<p>两处值得注意：</p>
+<ul>
+<li><code>[ch.lower() for ch in s if ch != " "]</code> 一次完成「过滤 + 转换」，比 <code>s.replace(" ", "").lower()</code> 更贴近「先清洗再判断」的思路；两者都对，但推导式在要过滤多种字符（比如标点）时更好扩展。</li>
+<li><code>text[::-1]</code> 是本题的关键：没有它就得写循环从后往前拼，代码会长三倍。<strong>切片反转是 Python 的基本功</strong>，值得背下来。</li>
+</ul>
 <hr>
 <h2 id="六-本单元验收自测">六、本单元验收自测</h2>
 <p><strong>1. 简答题</strong>：下面代码输出什么？</p>
@@ -857,6 +956,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

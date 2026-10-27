@@ -84,6 +84,28 @@ def ppt_entries():
     return out
 
 
+def review_entries():
+    """复习计划页：艾宾浩斯排程入口。"""
+    return [["复习计划 · 艾宾浩斯遗忘曲线",
+             "6 轮间隔重复 · 今日待复习 / 逾期 / 记忆保持率",
+             "review.html",
+             "复习 遗忘曲线 艾宾浩斯 间隔重复 复习计划 记忆保持率"]]
+
+
+def index_entries():
+    """术语索引 + 覆盖矩阵：入门课补齐的两张检索页。"""
+    return [
+        ["术语索引 · 正文标识符",
+         "按字母分组 · 每条给课号直达 · 替代教材末尾索引",
+         "terms.html",
+         "术语 索引 查函数 查方法 append input sorted __init__ 关键字 速查"],
+        ["覆盖与自足性 · 教材 20 章 + 附录 A–E",
+         "逐章对照 / 附录讲到什么程度 / 多出来的 / 不替代的部分",
+         "coverage.html",
+         "覆盖 对照 教材章节 附录 自足 不替代 完整性 大纲 进度 目录"],
+    ]
+
+
 def site_consts():
     """站点规模常量，从产物里数出来，避免页面里再写死 19+5 这类数字。"""
     import site_data
@@ -101,7 +123,8 @@ def site_consts():
 
 def build():
     items = (lesson_entries() + lecture_entries()
-             + bank_entries() + ppt_entries())
+             + bank_entries() + ppt_entries() + review_entries()
+             + index_entries())
     lines = ",\n".join(
         "[" + ",".join(js(str(x)) for x in it) + "]" for it in items)
     import json as _json

@@ -1,0 +1,29 @@
+{
+  "_comment": "24 章「设计取舍」长文 → 单元映射。每章一份 design/chNN.md，由 build_fluent.py 渲染成 fluent/web/ch/NN.html。",
+  "chapters": [
+    {"ch": 1, "unit": 1},
+    {"ch": 2, "unit": 1},
+    {"ch": 3, "unit": 2},
+    {"ch": 4, "unit": 2},
+    {"ch": 5, "unit": 3},
+    {"ch": 6, "unit": 3},
+    {"ch": 7, "unit": 4},
+    {"ch": 8, "unit": 4},
+    {"ch": 9, "unit": 5},
+    {"ch": 10, "unit": 5},
+    {"ch": 11, "unit": 6},
+    {"ch": 12, "unit": 6},
+    {"ch": 13, "unit": 7},
+    {"ch": 14, "unit": 7},
+    {"ch": 15, "unit": 8},
+    {"ch": 16, "unit": 8},
+    {"ch": 17, "unit": 9},
+    {"ch": 18, "unit": 9},
+    {"ch": 19, "unit": 10},
+    {"ch": 20, "unit": 10},
+    {"ch": 21, "unit": 11},
+    {"ch": 22, "unit": 12},
+    {"ch": 23, "unit": 12},
+    {"ch": 24, "unit": 12}
+  ]
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 47 课 · 类元编程：__init_subclass__、类装饰器与元类</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="47">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 47 课 · 类元编程：__init_subclass__、类装饰器与元类</h1>
+  <a class="tag" href="../12.html">单元 12</a>
+  <a class="ppt" href="../ppt/u/12.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:97.9%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="45" href="l45.html"><span class="no">45</span><span class="tx">动态属性：getattr、setattr 与 property</span></a><a class="" data-l="46" href="l46.html"><span class="no">46</span><span class="tx">描述符：把属性访问变成可复用逻辑</span></a><a class="cur" data-l="47" href="l47.html"><span class="no">47</span><span class="tx">类元编程：__init_subclass__、类装饰器与元类</span></a><a class="" data-l="48" href="l48.html"><span class="no">48</span><span class="tx">综合验收：读懂框架的 200 行</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-type-是类工厂-prepare-换命名空间">延伸：type 是类工厂，prepare 换命名空间</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../12.html"><span class="k">单元</span>
+    <span class="v">单元 12 · 元编程：动态属性、描述符与元类</span></a>
+  <a href="../bank.html#u12"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/12.html#s6"><span class="k">课件</span>
+    <span class="v">本单元第 3 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u12.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/22.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 22–24 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 47 课</span>
+        <span class="kwk">单元 12 · 第 22–24 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>类元编程：__init_subclass__、类装饰器与元类</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能注册子类、校验类定义，读懂一个简单元类，并判断何时用 `__init_subclass__` 替代元类。</div>
+    <h3 id="讲解">讲解</h3>
+<p>注册子类最轻的方式是 <code>__init_subclass__</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Plugin</span><span class="p">:</span>
+    <span class="n">registry</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">Plugin</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">JsonPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Plugin</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>     <span class="c1"># {'JsonPlugin': &lt;class ...&gt;}</span>
+</code></pre>
+<p>类装饰器同样能改类，但更灵活、更显式：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_repr</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">fields</span><span class="si">}</span><span class="s2">)"</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__repr__</span>
+    <span class="k">return</span> <span class="bp">cls</span>
+
+<span class="nd">@add_repr</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+</code></pre>
+<p>元类在<strong>类创建时</strong>介入，能改命名空间、强制结构：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">ns</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s2">"Base"</span> <span class="ow">and</span> <span class="s2">"save"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must define save()"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">ns</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Meta</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span>
+</code></pre>
+<p><code>__prepare__</code> 可以替换类命名空间（比如返回一个记录赋值顺序的 dict）。</p>
+<h3 id="延伸-type-是类工厂-prepare-换命名空间">延伸：type 是类工厂，<strong>prepare</strong> 换命名空间</h3>
+<p><code>type(name, bases, ns)</code> 三参数形式就是类工厂，<code>class</code> 语句本质是它的语法糖：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">make</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">(),</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="n">make</span><span class="p">(</span><span class="s2">"P"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>      <span class="c1"># 1 &lt;class 'type'&gt;</span>
+</code></pre>
+<p>元类里三个钩子的分工：</p>
+<ul>
+<li><code>__prepare__(mcls, name, bases)</code>：决定类体写入哪个命名空间，默认普通 dict。返回 <code>OrderedDict</code> 或自定义映射就能记录定义顺序（早期 dataclass 这么干过），甚至做「禁止重复字段名」的检查。</li>
+<li><code>__new__(mcls, name, bases, ns)</code>：真正造类，改类结构（加方法、收集字段）在这里做。</li>
+<li><code>__init__(cls, name, bases, ns)</code>：类造好后的收尾，一般只做注册。</li>
+</ul>
+<p>顺序是 <code>__prepare__</code> → 执行类体 → <code>__new__</code> → <code>__init__</code>。想「在类体执行时就拦截名字」只能用 <code>__prepare__</code> 返回自定义映射，<code>__new__</code> 已经太晚了。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>__init_subclass__</code> 足够解决 90% 的「注册/校验子类」需求</strong>，优先用它。</li>
+<li><strong>类装饰器改的是已创建的类</strong>，元类改的是创建过程。</li>
+<li><strong>一个类只能有一个元类</strong>，冲突会直接报 <code>TypeError</code>。</li>
+<li><strong>元类是实现细节</strong>，不要把它暴露成公开 API，否则使用者会被绑死。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用 <code>__init_subclass__</code> 实现插件注册表，注册 3 个插件并打印。</li>
+<li>用类装饰器给类自动加 <code>__repr__</code>，验证输出格式。</li>
+<li>写一个元类，要求所有子类必须定义 <code>save()</code>，并测试缺少方法时的报错。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用 <code>__init_subclass__</code> 完成子类注册</li>
+<li><span class="ck"></span>知道类装饰器与元类的介入时机差异</li>
+<li><span class="ck"></span>能读懂一个 15 行以内的元类并说明它改了什么</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 24 章 §24.2–24.11</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：type 是类工厂，__prepare__ 换命名空间</p></div>
+    <div class="pn"><a href="l46.html"><small>← 第 46 课 · 单元 12</small><b>描述符：把属性访问变成可复用逻辑</b></a><a class="nx" href="l48.html"><small>第 48 课 · 单元 12 →</small><b>综合验收：读懂框架的 200 行</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../12.html">返回单元 12</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=47, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

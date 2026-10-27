@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="65" data-to="69"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u12"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/12.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u12"><span class="k">题库</span><span class="v">本单元 3 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="65" data-to="69"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u12"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/12.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u12"><span class="k">题库</span><span class="v">本单元 5 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-规划项目-为什么一个游戏要拆成三个文件">2.1 规划项目：为什么一个游戏要拆成三个文件</a>
 <a class="lv3" href="#2-2-安装-pygame-与一个重要的环境提醒">2.2 安装 Pygame 与一个重要的环境提醒</a>
@@ -64,18 +65,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-6-moving_right-和-moving_left-写成-elif">错误 6：moving_right 和 moving_left 写成 elif</a>
 <a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-12-pygame-起步与飞船驾驶">单元 12：Pygame 起步与飞船驾驶</h1>
-<blockquote>
-<p>对应教材第 12 章「武装飞船」12.1–12.7 节
-阶段 2 · 项目 1：外星人入侵（Pygame）
-本单元目标：<strong>用 Pygame 搭出一个真正的游戏窗口，并让飞船响应按键持续、平滑地移动</strong></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 12 章「武装飞船」12.1–12.7 节</span></div><p class="bk-k">阶段 2 · 项目 1：外星人入侵（Pygame）
+本单元目标：<strong>用 Pygame 搭出一个真正的游戏窗口，并让飞船响应按键持续、平滑地移动</strong></p><a href="coverage.html#u12">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -141,21 +140,21 @@ transition:opacity .18s;z-index:60}
 <ol>
 <li>加一个虚拟视频驱动再运行（本讲义所有 Pygame 示例都用这种方式验证过）：</li>
 </ol>
-<pre><code class="language-bash"><span class="cl">终端命令</span><span class="w">   </span><span class="c1"># Windows(Git Bash) / macOS / Linux 通用</span>
-<span class="w">   </span><span class="nv">SDL_VIDEODRIVER</span><span class="o">=</span>dummy<span class="w"> </span>python<span class="w"> </span>alien_invasion.py
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># Windows(Git Bash) / macOS / Linux 通用</span>
+<span class="nv">SDL_VIDEODRIVER</span><span class="o">=</span>dummy<span class="w"> </span>python<span class="w"> </span>alien_invasion.py
 <span class="w">   </span>
 </code></pre>
 <p>窗口不显示，但游戏逻辑照常跑，适合验证代码不报错。
 2. 调试阶段<strong>先把窗口设小</strong>：本讲义统一用 <code>(800, 600)</code>。教材默认 <code>(1200, 800)</code>，大窗口在笔记本上可能一屏放不下，反而看不清飞船有没有出界。</p>
 <h3 id="2-3-游戏主循环-while-true-里的四步">2.3 游戏主循环：<code>while True</code> 里的四步</h3>
 <p>普通程序「从头跑到尾就结束」；游戏要<strong>一直待在原地响应你</strong>。实现方式就是一个死循环，教材叫它<strong>主循环</strong>（main loop）：</p>
-<pre><code class="language-text"><span class="cl">示例</span>        while True:  ← 游戏的心脏，每秒跳动几十次
-            ┌─────────────────────────────────────┐
-            │ 1. 监听事件   pygame.event.get()      │  ← 用户按了什么？
-            │ 2. 更新状态   ship.update()          │  ← 飞船该挪到哪？
-            │ 3. 更新屏幕   fill + blit + flip     │  ← 把新画面画出来
-            │ 4. 控制帧率   clock.tick(60)         │  ← 稳住节奏，别飙车
-            └─────────────────────────────────────┘
+<pre><code class="language-text"><span class="cl">示例</span>while True:  ← 游戏的心脏，每秒跳动几十次
+    ┌─────────────────────────────────────┐
+    │ 1. 监听事件   pygame.event.get()      │  ← 用户按了什么？
+    │ 2. 更新状态   ship.update()          │  ← 飞船该挪到哪？
+    │ 3. 更新屏幕   fill + blit + flip     │  ← 把新画面画出来
+    │ 4. 控制帧率   clock.tick(60)         │  ← 稳住节奏，别飙车
+    └─────────────────────────────────────┘
 </code></pre>
 <p>每一步都不能省，省一个都会出症状：</p>
 <table>
@@ -201,20 +200,33 @@ transition:opacity .18s;z-index:60}
 <span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
 </code></pre>
 <p><code>tick(60)</code> 的意思是：这一圈的活儿 5 毫秒就干完了，就主动睡大约 11.67 毫秒，保证每圈总时长不低于 1/60 秒。生活化类比：<strong>电影放映机</strong>——胶片不是越快越好，而是每秒精确地过 24 帧；<code>tick(60)</code> 就是游戏的放映机快门。</p>
+<p>★ 顺带把另一半说完：<code>tick(60)</code> 里那个 60 不是「最多 60 帧」，而是「<strong>目标 60 帧，慢了就慢，快了就等</strong>」。传 0 表示不设上限，主循环会跑满 CPU——这正是「同一份代码在两台电脑上速度不同」的根源：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）—— 两种节奏控制，差的就是这一行；真项目里只在主循环末尾保留第一种</span>
+<span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
+<span class="c1"># ① 限速：每帧最多"睡"到 1/60 秒，速度与机器无关（教材写法）</span>
+<span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># ② 不限速：跑多快算多快，旧电脑慢、新电脑快（调试时才会临时这么写）</span>
+<span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>          <span class="c1"># 等价于 # clock.tick()</span>
+
+<span class="c1"># 想确认节奏对不对，把实测帧率打出来</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"实测 FPS："</span><span class="p">,</span> <span class="n">clock</span><span class="o">.</span><span class="n">get_fps</span><span class="p">())</span>      <span class="c1"># 稳定在 60 附近才算对</span>
+</code></pre>
 <h3 id="2-5-事件驱动-游戏像一个前台接待">2.5 事件驱动：游戏像一个前台接待</h3>
 <p>新手第一次接触「事件驱动」通常会很懵：我的代码明明在跑循环，怎么用户一按键盘它就有反应？</p>
 <p>把它想成医院前台：</p>
-<pre><code class="language-text"><span class="cl">示例</span>   用户按了一下右方向键
-            │
-            ▼
-   ┌─────────────────┐
-   │  事件队列(event  │   按一下 = 往筐里放一张"访客登记表"
-   │  queue)         │   按住不放 ≠ 一直放表，只放一张！
-   └─────────────────┘
-            │   pygame.event.get() 把筐里的表一次性全部取走
-            ▼
-   for event in pygame.event.get():   ← 前台一张一张处理登记表
-       if event.type == pygame.QUIT:  sys.exit()
+<pre><code class="language-text"><span class="cl">示例</span>用户按了一下右方向键
+         │
+         ▼
+┌─────────────────┐
+│  事件队列(event  │   按一下 = 往筐里放一张"访客登记表"
+│  queue)         │   按住不放 ≠ 一直放表，只放一张！
+└─────────────────┘
+         │   pygame.event.get() 把筐里的表一次性全部取走
+         ▼
+for event in pygame.event.get():   ← 前台一张一张处理登记表
+    if event.type == pygame.QUIT:  sys.exit()
 </code></pre>
 <p>几个关键点：</p>
 <ul>
@@ -423,7 +435,7 @@ transition:opacity .18s;z-index:60}
         <span class="k">return</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"窗口: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">screen_height</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
             <span class="sa">f</span><span class="s2">"背景色: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bg_color</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
-            <span class="sa">f</span><span class="s2">"飞船速度: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ship_speed</span><span class="si">}</span><span class="s2">"</span>
+            <span class="sa">f</span><span class="s2">"飞船速度: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ship_speed</span><span class="si">}</span><span class="s2"> 像素/帧"</span>
         <span class="p">)</span>
 
 
@@ -1210,6 +1222,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

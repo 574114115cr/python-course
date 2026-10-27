@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 7 课件 · 接口、协议与继承</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 7 · 逐节课件</div><h2>单元 7 · 接口、协议与继承</h2><div class="sub">第 13–14 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 25 课 · 目标与要点</div><h2>鸭子类型与抽象基类</h2><div class="sub">能写出只依赖行为的函数，用 ABC 定义显式契约，并解释 isinstance 对 ABC 的特殊处理。</div><ul><li>ABC 的方法用 @abstractmethod 标记，但只要还有一个抽象方法没实现，类就不能实例化。</li><li>ABC 可以有具体方法，export_all 就是模板方法，子类只实现变化点。</li><li><b>register() 是承诺不是检查</b>：注册后 isinstance 通过，但你仍要自己保证方法齐全。</li><li>不要给所有类都套 ABC，只有「多个实现共享同一契约」时才值得。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 25 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def render_all(items):
+    return &quot;&quot;.join(item.render() for item in items)</code></pre><div class="sub">动手：写 Exporter ABC 与两个实现（CSV、JSON），验证未实现抽象方法的子类无法实例化。</div></section><section class="slide" data-s="4"><div class="sk">第 26 课 · 目标与要点</div><h2>静态协议：Protocol 与结构化类型</h2><div class="sub">能用 Protocol 描述「长什么样的对象能用」，并用 runtime_checkable 做运行时检查。</div><ul><li>Protocol 不能实例化，它只描述形状。</li><li>runtime_checkable 只检查成员名，参数类型、返回值都不查。</li><li><b>协议要小</b>：一个方法一个协议，组合优于大而全的接口。</li><li><b>标准库已有大量协议</b>：Iterable、Sized、SupportsInt，优先复用。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 26 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from typing import Protocol
+
+class Renderable(Protocol):
+    def render(self) -&gt; str: ...
+
+def render_all(items: list[Renderable]) -&gt; str:
+    return &quot;&quot;.join(i.render() for i in items)</code></pre><div class="sub">动手：定义 Closeable 协议，让一个没有继承关系的类通过 isinstance 检查。</div></section><section class="slide" data-s="6"><div class="sk">第 27 课 · 目标与要点</div><h2>继承与 super()：MRO 与协作式构造</h2><div class="sub">能画出类的 MRO，解释 super() 为什么不是「父类」而是「下一个」，并写出可协作的多层初始化。</div><ul><li>super() 沿 MRO 前进，不由「父类」决定；菱形继承里每个类只执行一次。</li><li>__mro__ 是 C3 线性化结果，可以用 Cls.mro() 查看。</li><li><b>子类化内置类型要小心</b>：dict.update()、|= 等 C 实现可能绕过你重写的 __setitem__；需要可靠拦截就改用 UserDict、UserList 或组合。</li><li>协作式构造只传关键字，位置参数在多层继承里极易错位。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 27 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class A:
+    def ping(self):
+        print(&quot;A&quot;)
+
+class B(A):
+    def ping(self):
+        print(&quot;B&quot;)
+        super().ping()
+
+class C(A):
+    def ping(self):
+        print(&quot;C&quot;)
+        super().ping()
+
+class D(B, C):
+    pass
+
+print([c.__name__ for c in D.__mro__])   # [&#x27;D&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;A&#x27;, &#x27;object&#x27;]
+# ...</code></pre><div class="sub">动手：构造上面的 A/B/C/D，打印 MRO 并预测 ping() 输出，再运行验证。</div></section><section class="slide" data-s="8"><div class="sk">第 28 课 · 目标与要点</div><h2>多重继承与混入类：什么时候不该继承</h2><div class="sub">能识别混入类的特征，判断一个场景该用继承还是组合，并重构一次滥用继承的代码。</div><ul><li>混入类不写 __init__，也不假设 MRO 的位置。</li><li>「is-a」不成立就不要继承，哪怕代码看起来能复用。</li><li>继承是编译期最强的耦合，父类改一个方法可能影响所有子类。</li><li><b>优先组合 + 协议</b>：需要多态就实现同一组方法，不需要共享实现。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 28 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class JsonMixin:
+    def to_json(self):
+        import json
+        return json.dumps(self.__dict__, ensure_ascii=False)
+
+class User(JsonMixin):
+    def __init__(self, name):
+        self.name = name
+
+print(User(&quot;Ann&quot;).to_json())   # {&quot;name&quot;: &quot;Ann&quot;}</code></pre><div class="sub">动手：找出你写过的一个继承层级，用上表逐条判断是否该改成组合。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>契约：同一个接口分别用 ABC 与 Protocol 实现，说明差异</li><li>MRO：给出一个多继承类，正确预测属性查找顺序</li><li>super：写出三层协作式 __init__，字段不丢</li><li>取舍：为一个真实场景写出「继承版」与「组合版」，并给出选择理由</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../07.html">← 单元 7</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

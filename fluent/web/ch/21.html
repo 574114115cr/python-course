@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 21 章 · 异步编程 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 21 章 · 异步编程 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 21 章</span>
+        <span class="kwk">单元 11 · 异步编程</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>异步编程</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p>单线程协程处理 IO 并发：没有锁，也不需要锁，但整条调用链必须是异步的。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>事件循环 + 协程 + <code>await</code>，在一个线程内并发调度</td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>线程池、回调式事件循环、多进程</td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>线程池每个任务都有栈与切换成本；回调把控制流拆碎；进程对连接级并发太重</td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>一个阻塞调用卡住整个循环；库要同时维护同步/异步两套 API</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>C10K 问题：单机要同时维持上万个连接。一万个线程意味着上万份栈和持续的调度开销，而这些连接 99% 的时间在等数据。要么把等待的成本压到零，要么把并发的单位从「线程」换成「更轻的东西」。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>每连接一个绿色线程（gevent 路线，靠猴补丁让阻塞调用变成协作式让出）、回调式事件循环（Node 与 Twisted 路线）、语言级协程（从 <code>yield from</code> 到 <code>async</code>/<code>await</code>）。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p><code>async</code>/<code>await</code> 让异步代码长得像同步代码：顺序读、<code>try/except</code> 照常、循环就是普通 <code>for</code>。没有线程切换就没有数据竞争，共享状态的加锁问题整类消失——这是它相对线程池最被低估的优势。事件循环本身只做一件事：在 IO 就绪时唤醒对应的协程，单次切换成本是纳秒级。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p>混进一个阻塞调用（<code>time.sleep</code>、同步读文件、同步 requests）整个循环停转，且症状是「莫名其妙全变慢」而不是报错，得靠 <code>asyncio.to_thread</code> 或 <code>run_in_executor</code> 兜底。<code>asyncio.gather</code> 默认一个任务失败就取消其余任务，想「都跑完再统一收异常」要显式 <code>return_exceptions=True</code>。3.11 起的 <code>TaskGroup</code> 是更安全的默认选择：它保证要么全部成功，要么取消并抛出 <code>ExceptionGroup</code>。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>保留 <code>async</code>/<code>await</code>，但会把 <code>asyncio.to_thread</code> 放到文档更显眼的位置，并在教程第一课就讲清「哪些调用会阻塞循环」——这是新手最容易踩、且最难自查的一类坑。</p>
+    <div class="pn"><a href="20.html"><small>← 上一章</small><b>第 20 章 · 并发执行器</b></a><a class="nx" href="22.html"><small>下一章 →</small><b>第 22 章 · 动态属性与特性</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../11.html">单元 11 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

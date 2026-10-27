@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="19" data-to="22"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u4"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/04.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s7"><span class="k">大纲</span><span class="v">课程大纲课件 p7</span></a><a href="bank.html#u4"><span class="k">题库</span><span class="v">本单元 4 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="19" data-to="22"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u4"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/04.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s7"><span class="k">大纲</span><span class="v">课程大纲课件 p7</span></a><a href="bank.html#u4"><span class="k">题库</span><span class="v">本单元 6 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-条件测试-一个只能回答是-否的问题">2.1 条件测试：一个只能回答是/否的问题</a>
 <a class="lv3" href="#2-2-六个比较运算符">2.2 六个比较运算符</a>
@@ -44,6 +45,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-5-链式比较与字符串比较">示例 5：链式比较与字符串比较</a>
 <a class="lv3" href="#示例-6-与-is-的区别">示例 6：== 与 is 的区别</a>
 <a class="lv3" href="#示例-7-条件表达式与嵌套">示例 7：条件表达式与嵌套</a>
+<a class="lv3" href="#示例-8-用-if-处理列表-判断-空-判断-在不在-按条件筛选">示例 8：用 if 处理列表——判断&quot;空&quot;、判断&quot;在不在&quot;、按条件筛选</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -56,19 +58,19 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-4-6">参考答案 4-6</a>
 <a class="lv3" href="#参考答案-4-7">参考答案 4-7</a>
 <a class="lv3" href="#参考答案-4-8">参考答案 4-8</a>
+<a class="lv3" href="#参考答案-4-9">参考答案 4-9</a>
+<a class="lv3" href="#参考答案-4-10">参考答案 4-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-4-if-语句">单元 4：if 语句</h1>
-<blockquote>
-<p>对应教材第 5 章「if 语句」
-关键词：条件测试、布尔表达式、比较运算符、逻辑运算符、if / elif / else、条件表达式、<code>and</code>/<code>or</code> 短路、链式比较、<code>is</code> vs <code>==</code></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 5 章「if 语句」</span></div><p class="bk-k">关键词：条件测试、布尔表达式、比较运算符、逻辑运算符、if / elif / else、条件表达式、<code>and</code>/<code>or</code> 短路、链式比较、<code>is</code> vs <code>==</code></p><a href="coverage.html#u4">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -78,6 +80,7 @@ transition:opacity .18s;z-index:60}
 <li>掌握 6 个比较运算符和 3 个逻辑运算符，能正确写出包含多个条件的判断。</li>
 <li>解释「短路求值」现象，能举出一个靠它避免崩溃的真实例子。</li>
 <li>用条件表达式把 5 行 <code>if/else</code> 压缩成 1 行，并知道什么场景下<strong>不该</strong>压缩。</li>
+<li>把 <code>if</code> 和列表一起用：用 <code>if 列表:</code> 判空、用 <code>in</code> 判成员、用推导式按条件筛选。</li>
 </ol>
 <hr>
 <h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
@@ -486,6 +489,44 @@ transition:opacity .18s;z-index:60}
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2"> 分，等级：</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 85 分，等级：良好</span>
 <span class="c1"># 原则：可读性优先于行数，超过一层嵌套就该用 elif 链</span>
 </code></pre>
+<h3 id="示例-8-用-if-处理列表-判断-空-判断-在不在-按条件筛选">示例 8：用 if 处理列表——判断"空"、判断"在不在"、按条件筛选</h3>
+<p>教材 5.4 讲的是「if 语句和列表一起用」。三个最常见的场景，都是初学者容易写复杂的地方：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># list_if.py —— if 与列表的三个组合</span>
+<span class="n">requested</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"蘑菇"</span><span class="p">,</span> <span class="s2">"芝士"</span><span class="p">,</span> <span class="s2">"榴莲"</span><span class="p">]</span>
+<span class="n">available</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"蘑菇"</span><span class="p">,</span> <span class="s2">"芝士"</span><span class="p">,</span> <span class="s2">"青椒"</span><span class="p">]</span>
+
+<span class="c1"># ① 在不在名单里</span>
+<span class="k">for</span> <span class="n">topping</span> <span class="ow">in</span> <span class="n">requested</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">topping</span> <span class="ow">in</span> <span class="n">available</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"加 </span><span class="si">{</span><span class="n">topping</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"没有 </span><span class="si">{</span><span class="n">topping</span><span class="si">}</span><span class="s2">，这道跳过"</span><span class="p">)</span>
+
+<span class="c1"># ② 列表是不是空的：空列表直接当条件用</span>
+<span class="n">orders</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">if</span> <span class="n">orders</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"有订单要处理"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"购物车是空的"</span><span class="p">)</span>
+
+<span class="c1"># ③ 按多个条件筛选</span>
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
+<span class="n">big_even</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"大于等于 10 的偶数"</span><span class="p">,</span> <span class="n">big_even</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>加 蘑菇
+加 芝士
+没有 榴莲，这道跳过
+购物车是空的
+大于等于 10 的偶数 [12, 30, 18, 42]
+</code></pre>
+<p>三点解释：</p>
+<ol>
+<li><strong><code>if orders:</code> 就是「列表非空」</strong>，等价于 <code>if len(orders) &gt; 0:</code>，但更短更快。空列表、空字符串、空字典、<code>0</code>、<code>None</code> 都是「假」，这是 Python 的统一约定。</li>
+<li><strong><code>in</code> 判断的是"值"不是"下标"</strong>，字符串比较区分大小写：<code>"蘑菇" in available</code> 为真，<code>"蘑菇 "</code>（多一个空格）为假。用户输入要先 <code>strip()</code>。</li>
+<li><strong>筛选优先用推导式</strong>，<code>for + if + append</code> 三行能压成一行。但条件超过两个、或者里面还要做计算时，写回 <code>for</code> 循环反而更好读——可读性优先于短。</li>
+</ol>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -531,6 +572,31 @@ transition:opacity .18s;z-index:60}
 - BMI ≥ 28 → 肥胖，建议咨询医生
 要求：用 <code>if/elif/else</code> 实现，并额外处理两种异常输入：<code>height &lt;= 0</code> 时输出"身高数据无效"，<code>weight &lt;= 0</code> 时输出"体重数据无效"（这两个异常检查要放在最前面）。
 测试：<code>weight=70, height=1.75</code> → BMI 22.86，输出"正常，保持运动"。</p>
+<p><strong>练习 4-9【门禁名单】</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"carol"</span><span class="p">]</span>
+<span class="n">visitors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Alice"</span><span class="p">,</span> <span class="s2">"dave"</span><span class="p">,</span> <span class="s2">"BOB"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"carol"</span><span class="p">]</span>
+</code></pre>
+<p>对每个来访者判断能否进入：忽略大小写、忽略首尾空格后，在 <code>members</code> 里就打印 <code>准入: 名字</code>，否则打印 <code>拒绝: 名字</code>；空名字打印 <code>无效输入</code>。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">准入</span><span class="p">:</span> <span class="n">Alice</span>
+<span class="n">拒绝</span><span class="p">:</span> <span class="n">dave</span>
+<span class="n">准入</span><span class="p">:</span> <span class="n">BOB</span>
+<span class="n">无效输入</span>
+<span class="n">准入</span><span class="p">:</span> <span class="n">carol</span>
+</code></pre>
+<p>提示：先 <code>strip()</code> 再 <code>lower()</code>，然后判断 <code>if not name</code> 处理空串。</p>
+<p><strong>练习 4-10【景区票价】</strong>
+规则：年龄 &lt; 6 免票；6 ≤ 年龄 &lt; 18 半价 40；18 ≤ 年龄 &lt; 60 全价 80；≥ 60 免票。
+对 <code>ages = [3, 6, 17, 18, 59, 60]</code> 逐个输出票价。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="mi">3</span> <span class="n">岁</span> <span class="err">→</span> <span class="mi">0</span> <span class="n">元</span><span class="err">（</span><span class="n">免票</span><span class="err">）</span>
+<span class="mi">6</span> <span class="n">岁</span> <span class="err">→</span> <span class="mi">40</span> <span class="n">元</span><span class="err">（</span><span class="n">半价</span><span class="err">）</span>
+<span class="mi">17</span> <span class="n">岁</span> <span class="err">→</span> <span class="mi">40</span> <span class="n">元</span><span class="err">（</span><span class="n">半价</span><span class="err">）</span>
+<span class="mi">18</span> <span class="n">岁</span> <span class="err">→</span> <span class="mi">80</span> <span class="n">元</span><span class="err">（</span><span class="n">全价</span><span class="err">）</span>
+<span class="mi">59</span> <span class="n">岁</span> <span class="err">→</span> <span class="mi">80</span> <span class="n">元</span><span class="err">（</span><span class="n">全价</span><span class="err">）</span>
+<span class="mi">60</span> <span class="n">岁</span> <span class="err">→</span> <span class="mi">0</span> <span class="n">元</span><span class="err">（</span><span class="n">免票</span><span class="err">）</span>
+</code></pre>
+<p>要求：用 <code>if / elif / else</code> 一条链写完，并说明为什么**边界值（6、18、60）**必须专门测。</p>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
 <h3 id="参考答案-4-1">参考答案 4-1</h3>
@@ -805,6 +871,53 @@ transition:opacity .18s;z-index:60}
             <span class="n">adv</span> <span class="o">=</span> <span class="s2">"肥胖，建议咨询医生"</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"体重</span><span class="si">{</span><span class="n">w</span><span class="si">}</span><span class="s2"> 身高</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2"> -&gt; BMI </span><span class="si">{</span><span class="n">bmi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">，</span><span class="si">{</span><span class="n">adv</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre>
+<h3 id="参考答案-4-9">参考答案 4-9</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># door.py —— 忽略大小写与空格的门禁判断</span>
+<span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"carol"</span><span class="p">]</span>
+<span class="n">visitors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Alice"</span><span class="p">,</span> <span class="s2">"dave"</span><span class="p">,</span> <span class="s2">"BOB"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"carol"</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">raw</span> <span class="ow">in</span> <span class="n">visitors</span><span class="p">:</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>                  <span class="c1"># 先去首尾空格</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>                        <span class="c1"># 空串 → 无效，提前结束本轮</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"无效输入"</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">members</span><span class="p">:</span>         <span class="c1"># 统一小写再比</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"准入: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"拒绝: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>准入: Alice
+拒绝: dave
+准入: BOB
+无效输入
+准入: carol
+</code></pre>
+<p>注意 <code>continue</code> 的用法：空名字不进入后面的判断，避免 <code>"" in members</code> 这种「逻辑上对、语义上没意义」的比较。<strong>先排除无效输入，再处理正常情况</strong>，这个顺序能让后面的代码少一层缩进。</p>
+<h3 id="参考答案-4-10">参考答案 4-10</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ticket.py —— 四段票价</span>
+<span class="n">ages</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">59</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">age</span> <span class="ow">in</span> <span class="n">ages</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">price</span><span class="p">,</span> <span class="n">note</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"免票"</span>
+    <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">:</span>
+        <span class="n">price</span><span class="p">,</span> <span class="n">note</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"半价"</span>
+    <span class="k">elif</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+        <span class="n">price</span><span class="p">,</span> <span class="n">note</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span> <span class="s2">"全价"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">price</span><span class="p">,</span> <span class="n">note</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"免票"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">age</span><span class="si">}</span><span class="s2"> 岁 → </span><span class="si">{</span><span class="n">price</span><span class="si">}</span><span class="s2"> 元（</span><span class="si">{</span><span class="n">note</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>3 岁 → 0 元（免票）
+6 岁 → 40 元（半价）
+17 岁 → 40 元（半价）
+18 岁 → 80 元（全价）
+59 岁 → 80 元（全价）
+60 岁 → 0 元（免票）
+</code></pre>
+<p><strong>边界值必须专门测的原因</strong>：<code>&lt;</code> 和 <code>&lt;=</code> 差一个等号，恰好落在 6、18、60 上的数据就会走错分支。上表里 6 岁拿到半价、18 岁拿到全价、60 岁免票，三个数字正好卡在三个分界点上——如果写成 <code>if age &lt;= 6</code>，6 岁就会变成免票，而这类 bug 在平时的测试数据里根本看不出来。</p>
 <hr>
 <h2 id="六-本单元验收自测">六、本单元验收自测</h2>
 <p><strong>1. 简答题</strong>：下面代码输出什么？</p>
@@ -881,6 +994,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

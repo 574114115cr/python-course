@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 10 章 · 设计模式 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 10 章 · 设计模式 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 10 章</span>
+        <span class="kwk">单元 5 · 装饰器、闭包与设计模式</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>设计模式</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p>很多 GoF 模式在 Python 里被语言特性吸收了，不需要照搬类图。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>用语言特性替代模式：函数替代策略/命令，模块替代单例，<code>__getattr__</code> 替代代理</td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>严格照搬 Java 式类层次（策略接口、命令基类、单例类）</td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>多出来的类没有带来约束力，只带来缩进</td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>「模式名」不再出现在代码里，新人可能认不出意图</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>GoF 成书于 C++/Java 时代，很多模式是为了绕开「函数不是对象」「没有闭包」「不能动态加方法」这些限制。Python 没有这些限制。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>一是照搬类图，二是用函数/模块/协议重新表达，三是用装饰器或元类做框架级实现。选第二条：能用一个函数解决的，不写三个类。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p>因为 Python 的「策略」就是可调用对象，「命令」就是带 <code>__call__</code> 的实例，「单例」就是模块，「观察者」就是回调列表。少一层抽象，测试和调试都更直接。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p>代码里看不到 <code>Strategy</code> 这种名字，意图要靠命名表达（<code>pricing_rule</code>、<code>on_event</code>）。反过来，硬套模式会得到 <code>AbstractStrategyFactoryImpl</code> 这类空壳。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>先问「语言有没有现成机制」，没有再上模式；用模式时在注释里写清它对应哪个问题，而不是只写模式名。</p>
+    <div class="pn"><a href="09.html"><small>← 上一章</small><b>第 9 章 · 装饰器与闭包</b></a><a class="nx" href="11.html"><small>下一章 →</small><b>第 11 章 · 符合 Python 风格的对象</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../05.html">单元 5 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

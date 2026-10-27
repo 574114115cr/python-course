@@ -3,7 +3,7 @@
     padding: 0, position: 'relative', overflow: 'hidden',
 }}>
     <Box style={{ position: 'absolute', left: 64, top: 40, width: '1152px', flexDirection: 'column' }}>
-        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>练习题库 · 六档递进共 84 题</Text>
+        <Text style={{ fontSize: 36, fontWeight: 'bold', color: '#16232E' }}>练习题库 · 六档递进共 120 题</Text>
         <Text style={{ fontSize: 18, color: '#5A6B7A', marginTop: 6 }}>
             每题都有参考答案与解析。卡 15 分钟再看答案，看完必须关掉重写一遍
         </Text>
@@ -14,22 +14,22 @@
             <line x1='20' y1='340' x2='710' y2='340' stroke='#D8E3EE' strokeWidth='2' />
             <rect x='26' y='260' width='86' height='80' rx='6' fill='#1F5FA8' />
             <text x='69' y='290' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L1</text>
-            <text fontFamily='Microsoft YaHei' x='69' y='314' fontSize='13' fill='#CFE2F5' textAnchor='middle'>12 题</text>
+            <text fontFamily='Microsoft YaHei' x='69' y='314' fontSize='13' fill='#CFE2F5' textAnchor='middle'>16 题</text>
             <text fontFamily='Microsoft YaHei' x='69' y='366' fontSize='12' fill='#5A6B7A' textAnchor='middle'>变量 / 列表</text>
             <text fontFamily='Microsoft YaHei' x='69' y='386' fontSize='12' fill='#8A9AAA' textAnchor='middle'>3 小时</text>
             <rect x='140' y='230' width='86' height='110' rx='6' fill='#1F5FA8' />
             <text x='183' y='260' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L2</text>
-            <text fontFamily='Microsoft YaHei' x='183' y='284' fontSize='13' fill='#CFE2F5' textAnchor='middle'>16 题</text>
+            <text fontFamily='Microsoft YaHei' x='183' y='284' fontSize='13' fill='#CFE2F5' textAnchor='middle'>24 题</text>
             <text fontFamily='Microsoft YaHei' x='183' y='366' fontSize='12' fill='#5A6B7A' textAnchor='middle'>循环 / 条件 /</text>
             <text fontFamily='Microsoft YaHei' x='183' y='386' fontSize='12' fill='#8A9AAA' textAnchor='middle'>6 小时</text>
             <rect x='254' y='200' width='86' height='140' rx='6' fill='#2F7BC8' />
             <text x='297' y='230' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L3</text>
-            <text fontFamily='Microsoft YaHei' x='297' y='254' fontSize='13' fill='#EAF3FC' textAnchor='middle'>8 题</text>
+            <text fontFamily='Microsoft YaHei' x='297' y='254' fontSize='13' fill='#EAF3FC' textAnchor='middle'>10 题</text>
             <text fontFamily='Microsoft YaHei' x='297' y='366' fontSize='12' fill='#5A6B7A' textAnchor='middle'>函数 / 递归 /</text>
             <text fontFamily='Microsoft YaHei' x='297' y='386' fontSize='12' fill='#8A9AAA' textAnchor='middle'>4 小时</text>
             <rect x='368' y='170' width='86' height='170' rx='6' fill='#0E9B78' />
             <text x='411' y='200' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L4</text>
-            <text fontFamily='Microsoft YaHei' x='411' y='224' fontSize='13' fill='#D7F0E7' textAnchor='middle'>8 题</text>
+            <text fontFamily='Microsoft YaHei' x='411' y='224' fontSize='13' fill='#D7F0E7' textAnchor='middle'>10 题</text>
             <text fontFamily='Microsoft YaHei' x='411' y='366' fontSize='12' fill='#5A6B7A' textAnchor='middle'>类 / 继承 /</text>
             <text fontFamily='Microsoft YaHei' x='411' y='386' fontSize='12' fill='#8A9AAA' textAnchor='middle'>5 小时</text>
             <rect x='482' y='140' width='86' height='200' rx='6' fill='#E08A15' />
@@ -39,7 +39,7 @@
             <text fontFamily='Microsoft YaHei' x='525' y='386' fontSize='12' fill='#8A9AAA' textAnchor='middle'>6 小时</text>
             <rect x='596' y='110' width='86' height='230' rx='6' fill='#8A5A08' />
             <text x='639' y='140' fontSize='22' fontWeight='bold' fill='#FFFFFF' textAnchor='middle' fontFamily='Inter'>L6</text>
-            <text fontFamily='Microsoft YaHei' x='639' y='164' fontSize='13' fill='#F3E2CC' textAnchor='middle'>30 题</text>
+            <text fontFamily='Microsoft YaHei' x='639' y='164' fontSize='13' fill='#F3E2CC' textAnchor='middle'>50 题</text>
             <text fontFamily='Microsoft YaHei' x='639' y='366' fontSize='12' fill='#5A6B7A' textAnchor='middle'>项目 / 工程 /</text>
             <text fontFamily='Microsoft YaHei' x='639' y='386' fontSize='12' fill='#8A9AAA' textAnchor='middle'>12 小时</text>
         </svg>

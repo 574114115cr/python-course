@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《流畅的 Python》精读课</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="web/css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  
+  <h1>《流畅的 Python》精读课</h1>
+  
+  
+  <a class="switch" href="../index.html">切换课程</a>
+</div></div>
+<div class="wrap">
+  <div class="hero">
+    <div class="bdg">ADVANCED · 第二版</div>
+    <h1>《流畅的 Python》精读课</h1>
+    <p>24 章拆成 12 个单元、48 节 90 分钟课。不背语法，专攻「为什么这样设计」
+    与「代码怎么写得像 Python」。先修：能独立写函数与类。</p>
+    <div class="st">
+      <div><b>12</b><span>单元</span></div>
+      <div><b>48</b><span>节课</span></div>
+      <div><b>36</b><span>道题</span></div>
+      <div><b>2</b><span>个关卡</span></div>
+      <div><b>12</b><span>教学案例</span></div>
+      <div><b>14–28</b><span>周</span></div>
+    </div>
+  </div>
+
+  <div class="csw">
+    <a href="../index.html"><span class="ic">PY</span>
+      <span><span class="t">Python 入门课</span>
+      <span class="s">22 单元 · 111 节 · 从零到独立做项目</span></span></a>
+    <a class="on" href="index.html"><span class="ic">FP</span>
+      <span><span class="t">流畅的 Python 精读课</span>
+      <span class="s">12 单元 · 48 节 · 进阶与源码阅读</span></span>
+      <span class="cur">当前</span></a>
+  </div>
+
+  <div class="hsearch">
+    <input id="fs" type="search" autocomplete="off" spellcheck="false"
+           placeholder="搜单元 / 课节 / 题目：描述符、GIL、dataclass、切片 …（Ctrl + K）"
+           aria-label="站内搜索">
+    <div class="hres" id="fsRes"></div>
+  </div>
+
+  <div class="dash">
+    <div class="dhead"><b>我的进度</b><span>数据只存在本机浏览器</span></div>
+    <div class="drow"><span class="dlab">课节</span><div class="dbar"><i id="pL"></i></div>
+      <span class="dval" id="tL">0 / 48</span></div>
+    <div class="drow"><span class="dlab">单元</span><div class="dbar"><i id="pU"></i></div>
+      <span class="dval" id="tU">0 / 12</span></div>
+    <div class="drow"><span class="dlab">题库</span><div class="dbar"><i id="pB"></i></div>
+      <span class="dval" id="tB">0 / 36</span></div>
+    <div class="dfoot"><a class="rbtn" id="rlink" href="web/lessons/l01.html">开始第 1 课</a>
+      <span id="rtxt">按顺序学，每节 90 分钟</span>
+      <span class="spacer"></span>
+      <button class="mini-btn" id="expBtn" type="button" title="导出为 JSON，换电脑后导入">导出进度</button>
+      <button class="mini-btn" id="impBtn" type="button" title="选择之前导出的 JSON">导入进度</button>
+      <input id="impFile" type="file" accept=".json,application/json" hidden></div>
+  </div>
+
+  <div class="dash">
+    <div class="dhead"><b>今日复习</b><span id="rvHint">按艾宾浩斯曲线排的 6 轮复习</span></div>
+    <div class="drow"><span class="dlab">待复习</span><div class="dbar"><i id="rvP"></i></div>
+      <span class="dval" id="rvT">0 项</span></div>
+    <div class="dfoot"><a class="rbtn" id="rvLink" href="web/review.html">打开复习计划</a>
+      <span id="rvTxt">学完一节课，当天就会自动排第一轮</span></div>
+  </div>
+
+  <div class="q">
+    <a href="web/lessons/index.html"><b>课程目录</b><span>48 节课，按单元排列</span></a>
+    <a href="web/syllabus.html"><b>总课表</b><span>标准 14 周 / 轻量 28 周 · 关卡在第几周</span></a>
+    <a href="web/bank.html"><b>题库</b><span>36 题，答案折叠</span></a>
+    <a href="web/gates.html"><b>关卡验收</b><span>两个阶段，逐条勾选</span></a>
+    <a href="web/ppt/index.html"><b>大纲课件</b><span>18 页，键盘翻页</span></a>
+    <a href="web/ppt/u/index.html"><b>逐节课件</b><span>12 套 · 每套 10 页</span></a>
+    <a href="web/review.html"><b>复习计划</b><span>艾宾浩斯曲线 · 6 轮间隔重复</span></a>
+    <a href="web/bench.html"><b>实测数据</b><span>16 个写法快慢对比 · 本机实跑</span></a>
+    <a href="web/ch/index.html"><b>设计取舍</b><span>24 章 · 每个特性为什么这样设计</span></a>
+    <a href="web/walk/index.html"><b>源码走读</b><span>12 个完整程序 · 逐段讲透</span></a>
+    <a href="web/coverage.html"><b>覆盖与自足性</b><span>24 章逐章对照 + 差异清单</span></a>
+    <a href="web/terms.html"><b>术语索引</b><span>标识符 → 课号，替代原书索引</span></a>
+  </div>
+
+  <div class="sec-h" id="units"><h2>12 个单元</h2><span>按教材五部分分组，点课节直接进</span></div>
+  <div class="part"><b>第一部分 · 数据结构</b><span>第 1–6 章</span></div><div class="grid"><div class="uc">
+  <div class="uh"><div class="un">1</div>
+    <div class="ut">数据模型与序列</div></div>
+  <div class="um">第 1–2 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l01.html"><span class="ln">01</span>特殊方法：让对象接入语言协议</a><a href="web/lessons/l02.html"><span class="ln">02</span>序列家族与推导式</a><a href="web/lessons/l03.html"><span class="ln">03</span>元组、拆包、切片与排序</a><a href="web/lessons/l04.html"><span class="ln">04</span>别名的坑与选型：list 不是万能的</a></div>
+  <div class="uf"><span data-prog="u1">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/01.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">2</div>
+    <div class="ut">字典、集合与文本</div></div>
+  <div class="um">第 3–4 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l05.html"><span class="ln">05</span>哈希表：dict 为什么快，顺序为什么稳定</a><a href="web/lessons/l06.html"><span class="ln">06</span>映射的惯用法：合并、缺失键与视图</a><a href="web/lessons/l07.html"><span class="ln">07</span>集合与不可变映射：用集合运算替代循环</a><a href="web/lessons/l08.html"><span class="ln">08</span>文本与字节：编码、解码与规范化</a></div>
+  <div class="uf"><span data-prog="u2">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/02.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">3</div>
+    <div class="ut">数据类与对象语义</div></div>
+  <div class="um">第 5–6 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l09.html"><span class="ln">09</span>数据类三件套：namedtuple、NamedTuple、dataclass</a><a href="web/lessons/l10.html"><span class="ln">10</span>dataclass 进阶：默认值、校验、冻结与模式匹配</a><a href="web/lessons/l11.html"><span class="ln">11</span>变量不是盒子：引用、别名与拷贝</a><a href="web/lessons/l12.html"><span class="ln">12</span>可变性、默认参数与对象生命周期</a></div>
+  <div class="uf"><span data-prog="u3">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/03.html">单元讲义 →</a></div>
+</div></div><div class="part"><b>第二部分 · 函数即对象</b><span>第 7–10 章</span></div><div class="grid"><div class="uc">
+  <div class="uh"><div class="un">4</div>
+    <div class="ut">一等函数与类型提示</div></div>
+  <div class="um">第 7–8 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l13.html"><span class="ln">13</span>函数是对象：高阶函数与可调用对象</a><a href="web/lessons/l14.html"><span class="ln">14</span>参数形态：位置、关键字与可变参数</a><a href="web/lessons/l15.html"><span class="ln">15</span>渐进式类型：注解语法与常用类型</a><a href="web/lessons/l16.html"><span class="ln">16</span>mypy 实战与类型边界</a></div>
+  <div class="uf"><span data-prog="u4">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/04.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">5</div>
+    <div class="ut">装饰器、闭包与设计模式</div></div>
+  <div class="um">第 9–10 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l17.html"><span class="ln">17</span>闭包：捕获的是变量，不是值</a><a href="web/lessons/l18.html"><span class="ln">18</span>装饰器：从注册到参数化</a><a href="web/lessons/l19.html"><span class="ln">19</span>标准库装饰器：缓存、分派与惰性属性</a><a href="web/lessons/l20.html"><span class="ln">20</span>用一等函数重构策略与命令模式</a></div>
+  <div class="uf"><span data-prog="u5">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/05.html">单元讲义 →</a></div>
+</div></div><div class="part"><b>第三部分 · 类和协议</b><span>第 11–16 章</span></div><div class="grid"><div class="uc">
+  <div class="uh"><div class="un">6</div>
+    <div class="ut">对象协议与序列实现</div></div>
+  <div class="um">第 11–12 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l21.html"><span class="ln">21</span>对象表示：repr、str 与 format</a><a href="web/lessons/l22.html"><span class="ln">22</span>值对象：相等、哈希与不可变</a><a href="web/lessons/l23.html"><span class="ln">23</span>序列协议：len、getitem、iter、contains</a><a href="web/lessons/l24.html"><span class="ln">24</span>实战：实现一个完整的 Vector</a></div>
+  <div class="uf"><span data-prog="u6">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/06.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">7</div>
+    <div class="ut">接口、协议与继承</div></div>
+  <div class="um">第 13–14 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l25.html"><span class="ln">25</span>鸭子类型与抽象基类</a><a href="web/lessons/l26.html"><span class="ln">26</span>静态协议：Protocol 与结构化类型</a><a href="web/lessons/l27.html"><span class="ln">27</span>继承与 super()：MRO 与协作式构造</a><a href="web/lessons/l28.html"><span class="ln">28</span>多重继承与混入类：什么时候不该继承</a></div>
+  <div class="uf"><span data-prog="u7">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/07.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">8</div>
+    <div class="ut">类型进阶与运算符重载</div></div>
+  <div class="um">第 15–16 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l29.html"><span class="ln">29</span>泛型：TypeVar、Generic 与型变</a><a href="web/lessons/l30.html"><span class="ln">30</span>TypedDict、重载与运行时读取注解</a><a href="web/lessons/l31.html"><span class="ln">31</span>运算符重载：一元、算术与 @</a><a href="web/lessons/l32.html"><span class="ln">32</span>比较、增量赋值与一致性</a></div>
+  <div class="uf"><span data-prog="u8">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/08.html">单元讲义 →</a></div>
+</div></div><div class="part"><b>第四部分 · 控制流</b><span>第 17–21 章</span></div><div class="grid"><div class="uc">
+  <div class="uh"><div class="un">9</div>
+    <div class="ut">迭代器、生成器与控制流</div></div>
+  <div class="um">第 17–18 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l33.html"><span class="ln">33</span>迭代协议：iter、next 与 StopIteration</a><a href="web/lessons/l34.html"><span class="ln">34</span>生成器与 yield from</a><a href="web/lessons/l35.html"><span class="ln">35</span>上下文管理器与 with</a><a href="web/lessons/l36.html"><span class="ln">36</span>模式匹配与 else 块</a></div>
+  <div class="uf"><span data-prog="u9">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/09.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">10</div>
+    <div class="ut">并发模型与执行器</div></div>
+  <div class="um">第 19–20 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l37.html"><span class="ln">37</span>并发全景：GIL、线程、进程</a><a href="web/lessons/l38.html"><span class="ln">38</span>线程与锁：竞态、队列与退出</a><a href="web/lessons/l39.html"><span class="ln">39</span>执行器：ThreadPoolExecutor 与 ProcessPoolExecutor</a><a href="web/lessons/l40.html"><span class="ln">40</span>实战：并发下载与错误处理</a></div>
+  <div class="uf"><span data-prog="u10">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/10.html">单元讲义 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">11</div>
+    <div class="ut">异步编程</div></div>
+  <div class="um">第 21 章 ｜ 建议 1–2 周</div>
+  <div class="ul"><a href="web/lessons/l41.html"><span class="ln">41</span>协程与事件循环</a><a href="web/lessons/l42.html"><span class="ln">42</span>任务管理：gather、TaskGroup 与超时</a><a href="web/lessons/l43.html"><span class="ln">43</span>异步 IO：HTTP、上下文管理器与异步迭代</a><a href="web/lessons/l44.html"><span class="ln">44</span>异步陷阱与选型</a></div>
+  <div class="uf"><span data-prog="u11">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/11.html">单元讲义 →</a></div>
+</div></div><div class="part"><b>第五部分 · 元编程</b><span>第 22–24 章</span></div><div class="grid"><div class="uc">
+  <div class="uh"><div class="un">12</div>
+    <div class="ut">元编程：动态属性、描述符与元类</div></div>
+  <div class="um">第 22–24 章 ｜ 建议 2–4 周</div>
+  <div class="ul"><a href="web/lessons/l45.html"><span class="ln">45</span>动态属性：getattr、setattr 与 property</a><a href="web/lessons/l46.html"><span class="ln">46</span>描述符：把属性访问变成可复用逻辑</a><a href="web/lessons/l47.html"><span class="ln">47</span>类元编程：__init_subclass__、类装饰器与元类</a><a href="web/lessons/l48.html"><span class="ln">48</span>综合验收：读懂框架的 200 行</a></div>
+  <div class="uf"><span data-prog="u12">已学 0 / 4</span>
+    <a style="margin-left:auto" href="web/12.html">单元讲义 →</a></div>
+</div></div>
+
+  <p style="margin-top:30px;font-size:12px;color:var(--muted);line-height:1.8">
+    教材：Fluent Python, 2nd Edition（Luciano Ramalho）｜ 课程化重写，
+    示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。<br>
+    本站为纯静态页面，可离线打开；进度写入 localStorage，键前缀 <code>fl-</code>，与入门课互不干扰。</p>
+</div>
+<script>
+(function(){
+
+var IDX = [{"t": "第 1 课 · 特殊方法：让对象接入语言协议", "s": "单元 1 · 数据模型与序列", "u": "web/lessons/l01.html", "k": "课节", "w": "FrenchDeck IndexError NotImplemented TypeError __bool__ __contains__ __getitem__ __iter__ __len__ __missing__ __repr__ __reversed__ __str__ dict for get in len print"}, {"t": "第 2 课 · 序列家族与推导式", "s": "单元 1 · 数据模型与序列", "u": "web/lessons/l02.html", "k": "课节", "w": "append array.array bytes for memoryview print str"}, {"t": "第 3 课 · 元组、拆包、切片与排序", "s": "单元 1 · 数据模型与序列", "u": "web/lessons/l03.html", "k": "课节", "w": "Ellipsis TypeError ValueError __getitem__ is key list rest"}, {"t": "第 4 课 · 别名的坑与选型：list 不是万能的", "s": "单元 1 · 数据模型与序列", "u": "web/lessons/l04.html", "k": "课节", "w": "TypeError __iadd__ array array.array bisect.insort collections.deque deque extend memoryview self"}, {"t": "单元 1 · 数据模型与序列", "s": "第 1–2 章 · 建议 1–2 周 · 4 节课", "u": "web/01.html", "k": "单元"}, {"t": "单元 1 课件 · 数据模型与序列", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/01.html", "k": "课件"}, {"t": "第 5 课 · 哈希表：dict 为什么快，顺序为什么稳定", "s": "单元 2 · 字典、集合与文本", "u": "web/lessons/l05.html", "k": "课节", "w": "Point RuntimeError __eq__ __hash__ __slots__ dict hash"}, {"t": "第 6 课 · 映射的惯用法：合并、缺失键与视图", "s": "单元 2 · 字典、集合与文本", "u": "web/lessons/l06.html", "k": "课节", "w": "ChainMap Counter c.maps collections.ChainMap defaultdict list setdefault shelve str"}, {"t": "第 7 课 · 集合与不可变映射：用集合运算替代循环", "s": "单元 2 · 字典、集合与文本", "u": "web/lessons/l07.html", "k": "课节", "w": "ItemsView MappingProxyType frozenset in types.MappingProxyType"}, {"t": "第 8 课 · 文本与字节：编码、解码与规范化", "s": "单元 2 · 字典、集合与文本", "u": "web/lessons/l08.html", "k": "课节", "w": "UnicodeDecodeError bytes fsdecode ignore locale.strxfrm os.fsdecode os.fsencode replace str surrogateescape unicodedata"}, {"t": "单元 2 · 字典、集合与文本", "s": "第 3–4 章 · 建议 1–2 周 · 4 节课", "u": "web/02.html", "k": "单元"}, {"t": "单元 2 课件 · 字典、集合与文本", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/02.html", "k": "课件"}, {"t": "第 9 课 · 数据类三件套：namedtuple、NamedTuple、dataclass", "s": "单元 3 · 数据类与对象语义", "u": "web/lessons/l09.html", "k": "课节", "w": "OrderedDict __eq__ __hash__ __init__ __repr__ _fields _make _replace collections.namedtuple repr typing.NamedTuple"}, {"t": "第 10 课 · dataclass 进阶：默认值、校验、冻结与模式匹配", "s": "单元 3 · 数据类与对象语义", "u": "web/lessons/l10.html", "k": "课节", "w": "Address Article Money Point Range ValueError __hash__ __init__ __post_init__"}, {"t": "第 11 课 · 变量不是盒子：引用、别名与拷贝", "s": "单元 3 · 数据类与对象语义", "u": "web/lessons/l11.html", "k": "课节", "w": "__eq__ deepcopy is"}, {"t": "第 12 课 · 可变性、默认参数与对象生命周期", "s": "单元 3 · 数据类与对象语义", "u": "web/lessons/l12.html", "k": "课节", "w": "WeakValueDictionary __del__ contextlib.closing del weakref.WeakValueDictionary with"}, {"t": "单元 3 · 数据类与对象语义", "s": "第 5–6 章 · 建议 1–2 周 · 4 节课", "u": "web/03.html", "k": "单元"}, {"t": "单元 3 课件 · 数据类与对象语义", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/03.html", "k": "课件"}, {"t": "第 13 课 · 函数是对象：高阶函数与可调用对象", "s": "单元 4 · 一等函数与类型提示", "u": "web/lessons/l13.html", "k": "课节", "w": "Tagger __annotations__ __call__ __doc__ __name__ add callable filter functools.partial functools.reduce inspect.isfunction key len map operator operator.itemgetter partial print sorted str.strip str.upper"}, {"t": "第 14 课 · 参数形态：位置、关键字与可变参数", "s": "单元 4 · 一等函数与类型提示", "u": "web/lessons/l14.html", "k": "课节", "w": "functools.partial functools.partialmethod inspect.signature partial"}, {"t": "第 15 课 · 渐进式类型：注解语法与常用类型", "s": "单元 4 · 一等函数与类型提示", "u": "web/lessons/l15.html", "k": "课节", "w": "Annotated Any Callable Final Iterable Literal Optional TypeVar Union __annotations__ compose object pydantic"}, {"t": "第 16 课 · mypy 实战与类型边界", "s": "单元 4 · 一等函数与类型提示", "u": "web/lessons/l16.html", "k": "课节", "w": "Any IndexError cast disallow_untyped_defs ignore_missing_imports isinstance pyproject.toml str"}, {"t": "单元 4 · 一等函数与类型提示", "s": "第 7–8 章 · 建议 1–2 周 · 4 节课", "u": "web/04.html", "k": "单元"}, {"t": "单元 4 课件 · 一等函数与类型提示", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/04.html", "k": "课件"}, {"t": "第 17 课 · 闭包：捕获的是变量，不是值", "s": "单元 5 · 装饰器、闭包与设计模式", "u": "web/lessons/l17.html", "k": "课节", "w": "UnboundLocalError __closure__ functools.partial nonlocal"}, {"t": "第 18 课 · 装饰器：从注册到参数化", "s": "单元 5 · 装饰器、闭包与设计模式", "u": "web/lessons/l18.html", "k": "课节", "w": "__call__ __dict__ __doc__ __init__ __module__ __name__ __wrapped__ functools.wraps inspect.signature wrapper"}, {"t": "第 19 课 · 标准库装饰器：缓存、分派与惰性属性", "s": "单元 5 · 装饰器、闭包与设计模式", "u": "web/lessons/l19.html", "k": "课节", "w": "TypeError __dict__ __slots__ cache cached_property functools.cache functools.lru_cache isinstance lru_cache property self singledispatch to_json"}, {"t": "第 20 课 · 用一等函数重构策略与命令模式", "s": "单元 5 · 装饰器、闭包与设计模式", "u": "web/lessons/l20.html", "k": "课节", "w": "Append PRICING Protocol Strategy Undo elif functools if"}, {"t": "单元 5 · 装饰器、闭包与设计模式", "s": "第 9–10 章 · 建议 1–2 周 · 4 节课", "u": "web/05.html", "k": "单元"}, {"t": "单元 5 课件 · 装饰器、闭包与设计模式", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/05.html", "k": "课件"}, {"t": "第 21 课 · 对象表示：repr、str 与 format", "s": "单元 6 · 对象协议与序列实现", "u": "web/lessons/l21.html", "k": "课节", "w": "Point __format__ __repr__ float repr str str.format x.__format__"}, {"t": "第 22 课 · 值对象：相等、哈希与不可变", "s": "单元 6 · 对象协议与序列实现", "u": "web/lessons/l22.html", "k": "课节", "w": "NotImplemented Point __dict__ __eq__ __hash__ __match_args__ __slots__ classmethod cls from_tuple origin staticmethod"}, {"t": "第 23 课 · 序列协议：len、getitem、iter、contains", "s": "单元 6 · 对象协议与序列实现", "u": "web/lessons/l23.html", "k": "课节", "w": "IndexError Playlist __contains__ __getitem__ __iter__ __len__ __reversed__ for in int len list reversed slice"}, {"t": "第 24 课 · 实战：实现一个完整的 Vector", "s": "单元 6 · 对象协议与序列实现", "u": "web/lessons/l24.html", "k": "课节", "w": "NotImplemented Vector __add__ __bool__ __eq__ __getattr__ __hash__ __len__ __mul__ __slots__ hasattr self.__dict__ vector.py"}, {"t": "单元 6 · 对象协议与序列实现", "s": "第 11–12 章 · 建议 1–2 周 · 4 节课", "u": "web/06.html", "k": "单元"}, {"t": "单元 6 课件 · 对象协议与序列实现", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/06.html", "k": "课件"}, {"t": "第 25 课 · 鸭子类型与抽象基类", "s": "单元 7 · 接口、协议与继承", "u": "web/lessons/l25.html", "k": "课节", "w": "Container Exporter Iterable Mapping Sequence Sequence.register Sized __getitem__ __instancecheck__ __iter__ __len__ __subclasscheck__ __subclasshook__ collections.abc export export_all isinstance"}, {"t": "第 26 课 · 静态协议：Protocol 与结构化类型", "s": "单元 7 · 接口、协议与继承", "u": "web/lessons/l26.html", "k": "课节", "w": "Closeable Iterable Protocol Sized SupportsAdd SupportsInt isinstance mypy render renders runtime_checkable typing.Protocol"}, {"t": "第 27 课 · 继承与 super()：MRO 与协作式构造", "s": "单元 7 · 接口、协议与继承", "u": "web/lessons/l27.html", "k": "课节", "w": "A B C D Item UserDict UserList __getitem__ __missing__ __mro__ __setitem__ collections.UserDict data dict dict.get get in list list.__init__"}, {"t": "第 28 课 · 多重继承与混入类：什么时候不该继承", "s": "单元 7 · 接口、协议与继承", "u": "web/lessons/l28.html", "k": "课节", "w": "__init__"}, {"t": "单元 7 · 接口、协议与继承", "s": "第 13–14 章 · 建议 1–2 周 · 4 节课", "u": "web/07.html", "k": "单元"}, {"t": "单元 7 课件 · 接口、协议与继承", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/07.html", "k": "课件"}, {"t": "第 29 课 · 泛型：TypeVar、Generic 与型变", "s": "单元 8 · 类型进阶与运算符重载", "u": "web/lessons/l29.html", "k": "课节", "w": "NotRequired Protocol Required Sequence TypeVar TypedDict bound first int list str"}, {"t": "第 30 课 · TypedDict、重载与运行时读取注解", "s": "单元 8 · 类型进阶与运算符重载", "u": "web/lessons/l30.html", "k": "课节", "w": "NotRequired Required TypeVar TypedDict __annotations__ get_type_hints isinstance list overload typing.get_type_hints"}, {"t": "第 31 课 · 运算符重载：一元、算术与 @", "s": "单元 8 · 类型进阶与运算符重载", "u": "web/lessons/l31.html", "k": "课节", "w": "NotImplemented TypeError Vector __add__ __matmul__ __mul__ __neg__ __radd__ __rmatmul__ __rmul__ a.__add__ raise"}, {"t": "第 32 课 · 比较、增量赋值与一致性", "s": "单元 8 · 类型进阶与运算符重载", "u": "web/lessons/l32.html", "k": "课节", "w": "Bag.__iadd__ __eq__ __iadd__ __lt__ return self total_ordering"}, {"t": "单元 8 · 类型进阶与运算符重载", "s": "第 15–16 章 · 建议 1–2 周 · 4 节课", "u": "web/08.html", "k": "单元"}, {"t": "单元 8 课件 · 类型进阶与运算符重载", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/08.html", "k": "课件"}, {"t": "第 33 课 · 迭代协议：iter、next 与 StopIteration", "s": "单元 9 · 迭代器、生成器与控制流", "u": "web/lessons/l33.html", "k": "课节", "w": "Countdown CountdownIter StopIteration.value __iter__ __next__ for functools.partial self while"}, {"t": "第 34 课 · 生成器与 yield from", "s": "单元 9 · 迭代器、生成器与控制流", "u": "web/lessons/l34.html", "k": "课节", "w": "asyncio close except islice return send throw try yield"}, {"t": "第 35 课 · 上下文管理器与 with", "s": "单元 9 · 迭代器、生成器与控制流", "u": "web/lessons/l35.html", "k": "课节", "w": "ExitStack Timer __enter__ __exit__ contextlib.ExitStack contextlib.suppress exc_type finally try with yield"}, {"t": "第 36 课 · 模式匹配与 else 块", "s": "单元 9 · 迭代器、生成器与控制流", "u": "web/lessons/l36.html", "k": "课节", "w": "Point else for isinstance match switch try"}, {"t": "单元 9 · 迭代器、生成器与控制流", "s": "第 17–18 章 · 建议 1–2 周 · 4 节课", "u": "web/09.html", "k": "单元"}, {"t": "单元 9 课件 · 迭代器、生成器与控制流", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/09.html", "k": "课件"}, {"t": "第 37 课 · 并发全景：GIL、线程、进程", "s": "单元 10 · 并发模型与执行器", "u": "web/lessons/l37.html", "k": "课节", "w": "Py_BEGIN_ALLOW_THREADS hashlib sleep sys.setswitchinterval time.sleep zlib"}, {"t": "第 38 课 · 线程与锁：竞态、队列与退出", "s": "单元 10 · 并发模型与执行器", "u": "web/lessons/l38.html", "k": "课节", "w": "Array Event Queue Value fork multiprocessing queue.Queue shared_memory spawn threading.Event"}, {"t": "第 39 课 · 执行器：ThreadPoolExecutor 与 ProcessPoolExecutor", "s": "单元 10 · 并发模型与执行器", "u": "web/lessons/l39.html", "k": "课节", "w": "Executor.map ProcessPoolExecutor ThreadPoolExecutor TimeoutError __main__ as_completed concurrent.futures map submit with"}, {"t": "第 40 课 · 实战：并发下载与错误处理", "s": "单元 10 · 并发模型与执行器", "u": "web/lessons/l40.html", "k": "课节", "w": "as_completed with"}, {"t": "单元 10 · 并发模型与执行器", "s": "第 19–20 章 · 建议 1–2 周 · 4 节课", "u": "web/10.html", "k": "单元"}, {"t": "单元 10 课件 · 并发模型与执行器", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/10.html", "k": "课件"}, {"t": "第 41 课 · 协程与事件循环", "s": "单元 11 · 异步编程", "u": "web/lessons/l41.html", "k": "课节", "w": "asyncio.run await create_task gather hello new_event_loop run_coroutine_threadsafe"}, {"t": "第 42 课 · 任务管理：gather、TaskGroup 与超时", "s": "单元 11 · 异步编程", "u": "web/lessons/l42.html", "k": "课节", "w": "CancelledError ExceptionGroup Semaphore TaskGroup asyncio.timeout asyncio.to_thread await gather"}, {"t": "第 43 课 · 异步 IO：HTTP、上下文管理器与异步迭代", "s": "单元 11 · 异步编程", "u": "web/lessons/l43.html", "k": "课节", "w": "AsyncClient Conn StopAsyncIteration Ticker __aenter__ __aexit__ __aiter__ __anext__ asyncio.start_server handle httpx httpx.AsyncClient start_server with"}, {"t": "第 44 课 · 异步陷阱与选型", "s": "单元 11 · 异步编程", "u": "web/lessons/l44.html", "k": "课节", "w": "Semaphore asyncio.to_thread await create_task json.loads pandas.read_csv requests.get to_thread"}, {"t": "单元 11 · 异步编程", "s": "第 21 章 · 建议 1–2 周 · 4 节课", "u": "web/11.html", "k": "单元"}, {"t": "单元 11 课件 · 异步编程", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/11.html", "k": "课件"}, {"t": "第 45 课 · 动态属性：getattr、setattr 与 property", "s": "单元 12 · 元编程：动态属性、描述符与元类", "u": "web/lessons/l45.html", "k": "课节", "w": "AttributeError Config __getattr__ __getattribute__ __init__ _data balance hasattr property self._data"}, {"t": "第 46 课 · 描述符：把属性访问变成可复用逻辑", "s": "单元 12 · 元编程：动态属性、描述符与元类", "u": "web/lessons/l46.html", "k": "课节", "w": "Lazy Order Positive __delete__ __dict__ __get__ __getattr__ __set__ __set_name__ computing name property"}, {"t": "第 47 课 · 类元编程：__init_subclass__、类装饰器与元类", "s": "单元 12 · 元编程：动态属性、描述符与元类", "u": "web/lessons/l47.html", "k": "课节", "w": "OrderedDict TypeError __init__ __init_subclass__ __new__ __prepare__ __repr__ class type"}, {"t": "第 48 课 · 综合验收：读懂框架的 200 行", "s": "单元 12 · 元编程：动态属性、描述符与元类", "u": "web/lessons/l48.html", "k": "课节", "w": "Column Field ModelBase ModelMetaclass __call__ __get__ __getattr__ __getattribute__ __init__.py __init_subclass__ __set__ __set_name__ dataclasses.field id user.name"}, {"t": "单元 12 · 元编程：动态属性、描述符与元类", "s": "第 22–24 章 · 建议 2–4 周 · 4 节课", "u": "web/12.html", "k": "单元"}, {"t": "单元 12 课件 · 元编程：动态属性、描述符与元类", "s": "逐节课件 · 10 页（每节 2 页）", "u": "web/ppt/u/12.html", "k": "课件"}, {"t": "F1-1 · 为什么 Python 用 len(x) 而不是 x.len()？从数据模型和", "s": "题库 · 单元 1 · 概念", "u": "web/bank.html#F1-1", "k": "题目", "w": "为什么 Python 用 len(x) 而不是 x.len()？从数据模型和实现两个角度解释。"}, {"t": "F1-2 · 实现 Vector 类：支持 len()、下标、切片、for、repr()，", "s": "题库 · 单元 1 · 代码", "u": "web/bank.html#F1-2", "k": "题目", "w": "实现 Vector 类：支持 len()、下标、切片、for、repr()，且 repr 输出形如 Vector(1, 2, 3)。"}, {"t": "F1-3 · 下面的代码为什么三行会联动？给出两种正确写法，并说明各自适用场景。 pyth", "s": "题库 · 单元 1 · 设计", "u": "web/bank.html#F1-3", "k": "题目", "w": "下面的代码为什么三行会联动？给出两种正确写法，并说明各自适用场景。 python grid = 0  3  3 grid00 = 1"}, {"t": "F2-1 · dict 的键为什么必须可哈希？3.7 起为什么可以依赖插入顺序？", "s": "题库 · 单元 2 · 概念", "u": "web/bank.html#F2-1", "k": "题目", "w": "dict 的键为什么必须可哈希？3.7 起为什么可以依赖插入顺序？"}, {"t": "F2-2 · 给定 words 列表：用 Counter 输出词频前 3；用 defaul", "s": "题库 · 单元 2 · 代码", "u": "web/bank.html#F2-2", "k": "题目", "w": "给定 words 列表：用 Counter 输出词频前 3；用 defaultdict 按首字母分组，只保留组内至少 2 个词的组。"}, {"t": "F2-3 · 处理用户上传的 CSV：HTTP 层拿到的是 bytes，如何保证中文不乱码", "s": "题库 · 单元 2 · 设计", "u": "web/bank.html#F2-3", "k": "题目", "w": "处理用户上传的 CSV：HTTP 层拿到的是 bytes，如何保证中文不乱码？说明每一步的编码边界。"}, {"t": "F3-1 · 为什么 @dataclass 不允许 tags: list = ？field", "s": "题库 · 单元 3 · 概念", "u": "web/bank.html#F3-1", "k": "题目", "w": "为什么 @dataclass 不允许 tags: list = ？field(default_factory=list) 解决了什么？"}, {"t": "F3-2 · 写一个 frozen=True 的 Range(lo, hi)：构造时校验 ", "s": "题库 · 单元 3 · 代码", "u": "web/bank.html#F3-2", "k": "题目", "w": "写一个 frozen=True 的 Range(lo, hi)：构造时校验 lo <= hi，支持哈希与模式匹配。"}, {"t": "F3-3 · 函数把内部 list 直接返回给调用方，调用方 append 后内部状态被意", "s": "题库 · 单元 3 · 设计", "u": "web/bank.html#F3-3", "k": "题目", "w": "函数把内部 list 直接返回给调用方，调用方 append 后内部状态被意外修改。给出三种防御方案及代价。"}, {"t": "F4-1 · 「函数是一等对象」具体体现在哪些操作上？为什么 sorted(key=len", "s": "题库 · 单元 4 · 概念", "u": "web/bank.html#F4-1", "k": "题目", "w": "「函数是一等对象」具体体现在哪些操作上？为什么 sorted(key=len) 不能写成 key=len(x)？"}, {"t": "F4-2 · 写 tag(name, /, content, , cls=\"\", attr", "s": "题库 · 单元 4 · 代码", "u": "web/bank.html#F4-2", "k": "题目", "w": "写 tag(name, /, content, , cls=\"\", attrs)：name 仅限位置，cls 仅限关键字，其余关键字变成 HTML 属性。"}, {"t": "F4-3 · 给一个没有类型注解的第三方库写包装层，Any、object、cast、Pro", "s": "题库 · 单元 4 · 设计", "u": "web/bank.html#F4-3", "k": "题目", "w": "给一个没有类型注解的第三方库写包装层，Any、object、cast、Protocol 应该怎么选？"}, {"t": "F5-1 · 闭包捕获的是变量还是值？lambda: i for i in range(3", "s": "题库 · 单元 5 · 概念", "u": "web/bank.html#F5-1", "k": "题目", "w": "闭包捕获的是变量还是值？lambda: i for i in range(3) 输出什么？如何修复？"}, {"t": "F5-2 · 写 @retry(times=3, exceptions=(TimeoutE", "s": "题库 · 单元 5 · 代码", "u": "web/bank.html#F5-2", "k": "题目", "w": "写 @retry(times=3, exceptions=(TimeoutError,))：失败重试，最后一次仍失败则抛出，必须保留被装饰函数的元数据。"}, {"t": "F5-3 · 一段 6 个分支的计费 if/elif 如何改成策略注册？新增一种计费方式时", "s": "题库 · 单元 5 · 设计", "u": "web/bank.html#F5-3", "k": "题目", "w": "一段 6 个分支的计费 if/elif 如何改成策略注册？新增一种计费方式时改动哪里？"}, {"t": "F6-1 · 为什么重写 __eq__ 之后 __hash__ 会变成 None？相等、哈", "s": "题库 · 单元 6 · 概念", "u": "web/bank.html#F6-1", "k": "题目", "w": "为什么重写 __eq__ 之后 __hash__ 会变成 None？相等、哈希、可变三者是什么关系？"}, {"t": "F6-2 · 实现 Playlist：支持 len、下标、切片（返回 Playlist）、", "s": "题库 · 单元 6 · 代码", "u": "web/bank.html#F6-2", "k": "题目", "w": "实现 Playlist：支持 len、下标、切片（返回 Playlist）、for、in。"}, {"t": "F6-3 · repr 与 str 在日志、调试器、用户界面三处应该怎么分工？给出判断标准", "s": "题库 · 单元 6 · 设计", "u": "web/bank.html#F6-3", "k": "题目", "w": "repr 与 str 在日志、调试器、用户界面三处应该怎么分工？给出判断标准。"}, {"t": "F7-1 · 鸭子类型、Protocol、ABC 三者的约束强度和侵入性有什么不同？", "s": "题库 · 单元 7 · 概念", "u": "web/bank.html#F7-1", "k": "题目", "w": "鸭子类型、Protocol、ABC 三者的约束强度和侵入性有什么不同？"}, {"t": "F7-2 · 定义 Closeable 协议（含 close()），加 @runtime_", "s": "题库 · 单元 7 · 代码", "u": "web/bank.html#F7-2", "k": "题目", "w": "定义 Closeable 协议（含 close()），加 @runtime_checkable，并让一个没有继承关系的 Conn 通过 isinstance。"}, {"t": "F7-3 · 有 class A、class B(A)、class C(A)、class ", "s": "题库 · 单元 7 · 设计", "u": "web/bank.html#F7-3", "k": "题目", "w": "有 class A、class B(A)、class C(A)、class D(B, C)，且 B、C 的 ping() 都调用 super().ping()。写出 MRO 与 D().ping() 的输出，并说明什么时候该改成组合。"}, {"t": "F8-1 · 为什么 listDog 不能当作 listAnimal 使用，而 Seque", "s": "题库 · 单元 8 · 概念", "u": "web/bank.html#F8-1", "k": "题目", "w": "为什么 listDog 不能当作 listAnimal 使用，而 SequenceDog 可以？"}, {"t": "F8-2 · 给 Vector(x, y) 实现 +、标量 、反射 、一元 -；类型不匹配", "s": "题库 · 单元 8 · 代码", "u": "web/bank.html#F8-2", "k": "题目", "w": "给 Vector(x, y) 实现 +、标量 、反射 、一元 -；类型不匹配时返回 NotImplemented。"}, {"t": "F8-3 · TypedDict、dataclass、pydantic BaseModel", "s": "题库 · 单元 8 · 设计", "u": "web/bank.html#F8-3", "k": "题目", "w": "TypedDict、dataclass、pydantic BaseModel 三者怎么选？"}, {"t": "F9-1 · 可迭代对象与迭代器有什么区别？for 循环的展开步骤是什么？", "s": "题库 · 单元 9 · 概念", "u": "web/bank.html#F9-1", "k": "题目", "w": "可迭代对象与迭代器有什么区别？for 循环的展开步骤是什么？"}, {"t": "F9-2 · 用生成器展平任意嵌套的 list，再用 islice 取前 5 项。", "s": "题库 · 单元 9 · 代码", "u": "web/bank.html#F9-2", "k": "题目", "w": "用生成器展平任意嵌套的 list，再用 islice 取前 5 项。"}, {"t": "F9-3 · 用 @contextmanager 实现「临时切换工作目录」，要求异常时也能", "s": "题库 · 单元 9 · 设计", "u": "web/bank.html#F9-3", "k": "题目", "w": "用 @contextmanager 实现「临时切换工作目录」，要求异常时也能切回。"}, {"t": "F10-1 · GIL 是什么？为什么多线程不能加速纯 Python 计算，却适合 IO 密", "s": "题库 · 单元 10 · 概念", "u": "web/bank.html#F10-1", "k": "题目", "w": "GIL 是什么？为什么多线程不能加速纯 Python 计算，却适合 IO 密集任务？"}, {"t": "F10-2 · 用 ThreadPoolExecutor 并发抓取 10 个 URL：5 秒", "s": "题库 · 单元 10 · 代码", "u": "web/bank.html#F10-2", "k": "题目", "w": "用 ThreadPoolExecutor 并发抓取 10 个 URL：5 秒超时，单个失败不影响整体，最后输出成功数与失败列表。"}, {"t": "F10-3 · 1000 张图片需要压缩，单张耗时约 0.2 秒，其中 90% 是 CPU。", "s": "题库 · 单元 10 · 设计", "u": "web/bank.html#F10-3", "k": "题目", "w": "1000 张图片需要压缩，单张耗时约 0.2 秒，其中 90% 是 CPU。选线程、进程还是协程？说明理由与并发度。"}, {"t": "F11-1 · 协程对象、Task、Future 三者的关系是什么？", "s": "题库 · 单元 11 · 概念", "u": "web/bank.html#F11-1", "k": "题目", "w": "协程对象、Task、Future 三者的关系是什么？"}, {"t": "F11-2 · 用 TaskGroup 并发 3 个任务，整体 2 秒超时；其中一个抛 Va", "s": "题库 · 单元 11 · 代码", "u": "web/bank.html#F11-2", "k": "题目", "w": "用 TaskGroup 并发 3 个任务，整体 2 秒超时；其中一个抛 ValueError，捕获 ExceptionGroup。"}, {"t": "F11-3 · 异步服务里必须调用一个阻塞库（比如 requests 或 psycopg2 ", "s": "题库 · 单元 11 · 设计", "u": "web/bank.html#F11-3", "k": "题目", "w": "异步服务里必须调用一个阻塞库（比如 requests 或 psycopg2 同步驱动），有哪三种处理方式？各自代价是什么？"}, {"t": "F12-1 · obj.x 的属性查找顺序是什么？__getattr__ 在哪一步生效？", "s": "题库 · 单元 12 · 概念", "u": "web/bank.html#F12-1", "k": "题目", "w": "obj.x 的属性查找顺序是什么？__getattr__ 在哪一步生效？"}, {"t": "F12-2 · 写一个 Positive 描述符：通过 __set_name__ 拿到属性名", "s": "题库 · 单元 12 · 代码", "u": "web/bank.html#F12-2", "k": "题目", "w": "写一个 Positive 描述符：通过 __set_name__ 拿到属性名，赋值时校验必须为正数。"}, {"t": "F12-3 · __init_subclass__、类装饰器、元类，三者在什么场景下该用哪个", "s": "题库 · 单元 12 · 设计", "u": "web/bank.html#F12-3", "k": "题目", "w": "__init_subclass__、类装饰器、元类，三者在什么场景下该用哪个？"}, {"t": "课程目录 · 48 节课", "s": "按单元排列的课节索引", "u": "web/lessons/index.html", "k": "页面"}, {"t": "题库 · 36 题", "s": "答案折叠、按单元筛选", "u": "web/bank.html", "k": "页面"}, {"t": "关卡验收", "s": "两个阶段共 24 条", "u": "web/gates.html", "k": "页面"}, {"t": "大纲课件", "s": "18 页，键盘翻页", "u": "web/ppt/index.html", "k": "页面"}, {"t": "逐节课件 · 12 套", "s": "每单元一套，每节 2 页", "u": "web/ppt/u/index.html", "k": "页面"}, {"t": "复习计划", "s": "艾宾浩斯遗忘曲线 · 6 轮间隔重复", "u": "web/review.html", "k": "页面"}, {"t": "总课表 · 标准 14 周 / 轻量 28 周", "s": "两种配速、三个阶段、关卡位置、每周节奏", "u": "web/syllabus.html", "k": "页面"}, {"t": "实测数据", "s": "16 个写法快慢对比 · 本机 timeit 实跑", "u": "web/bench.html", "k": "页面"}, {"t": "设计取舍 · 24 章", "s": "每个特性为什么这样设计、代价是什么", "u": "web/ch/index.html", "k": "页面"}, {"t": "源码走读 · 12 篇", "s": "每单元一个完整程序 + 逐段讲解 + 真实输出", "u": "web/walk/index.html", "k": "页面"}, {"t": "覆盖与自足性", "s": "24 章逐章对照、差异清单、怎么用这套课", "u": "web/coverage.html", "k": "页面"}, {"t": "术语索引", "s": "标识符 → 课号，替代原书索引", "u": "web/terms.html", "k": "页面"}, {"t": "走读 01 · Vector：用一个类把数据模型走一遍", "s": "单元 1 · 完整程序 + 逐段讲解", "u": "web/walk/u01.html", "k": "走读"}, {"t": "走读 02 · 字典与文本：让 dict 学会「找不到时怎么办」", "s": "单元 2 · 完整程序 + 逐段讲解", "u": "web/walk/u02.html", "k": "走读"}, {"t": "走读 03 · 数据类与对象语义：一个发票类踩完五个坑", "s": "单元 3 · 完整程序 + 逐段讲解", "u": "web/walk/u03.html", "k": "走读"}, {"t": "走读 04 · 一等函数：把函数当数据，拼一条处理管线", "s": "单元 4 · 完整程序 + 逐段讲解", "u": "web/walk/u04.html", "k": "走读"}, {"t": "走读 05 · 闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳", "s": "单元 5 · 完整程序 + 逐段讲解", "u": "web/walk/u05.html", "k": "走读"}, {"t": "走读 06 · 序列协议：只写五个方法，白拿一整套序列行为", "s": "单元 6 · 完整程序 + 逐段讲解", "u": "web/walk/u06.html", "k": "走读"}, {"t": "走读 07 · 接口、协议与继承：三种「多态」的边界在哪", "s": "单元 7 · 完整程序 + 逐段讲解", "u": "web/walk/u07.html", "k": "走读"}, {"t": "走读 08 · 运算符重载与类型进阶：让 Money 像数字一样工作", "s": "单元 8 · 完整程序 + 逐段讲解", "u": "web/walk/u08.html", "k": "走读"}, {"t": "走读 09 · 迭代器、生成器与控制流：从手写类到 yield from", "s": "单元 9 · 完整程序 + 逐段讲解", "u": "web/walk/u09.html", "k": "走读"}, {"t": "走读 10 · 并发与执行器：线程池、进程池和 GIL 的分界线", "s": "单元 10 · 完整程序 + 逐段讲解", "u": "web/walk/u10.html", "k": "走读"}, {"t": "走读 11 · asyncio：一个事件循环里同时等十件事", "s": "单元 11 · 完整程序 + 逐段讲解", "u": "web/walk/u11.html", "k": "走读"}, {"t": "走读 12 · 元编程：描述符、类钩子与动态建类", "s": "单元 12 · 完整程序 + 逐段讲解", "u": "web/walk/u12.html", "k": "走读"}, {"t": "第 1 章 · 数据模型 · 设计取舍", "s": "单元 1 · 第 1–2 章", "u": "web/ch/01.html", "k": "设计"}, {"t": "第 2 章 · 序列构成的数组 · 设计取舍", "s": "单元 1 · 第 1–2 章", "u": "web/ch/02.html", "k": "设计"}, {"t": "第 3 章 · 字典与集合 · 设计取舍", "s": "单元 2 · 第 3–4 章", "u": "web/ch/03.html", "k": "设计"}, {"t": "第 4 章 · 文本与字节序列 · 设计取舍", "s": "单元 2 · 第 3–4 章", "u": "web/ch/04.html", "k": "设计"}, {"t": "第 5 章 · 数据类构建器 · 设计取舍", "s": "单元 3 · 第 5–6 章", "u": "web/ch/05.html", "k": "设计"}, {"t": "第 6 章 · 对象引用、可变性与垃圾回收 · 设计取舍", "s": "单元 3 · 第 5–6 章", "u": "web/ch/06.html", "k": "设计"}, {"t": "第 7 章 · 函数是一等对象 · 设计取舍", "s": "单元 4 · 第 7–8 章", "u": "web/ch/07.html", "k": "设计"}, {"t": "第 8 章 · 类型提示 · 设计取舍", "s": "单元 4 · 第 7–8 章", "u": "web/ch/08.html", "k": "设计"}, {"t": "第 9 章 · 装饰器与闭包 · 设计取舍", "s": "单元 5 · 第 9–10 章", "u": "web/ch/09.html", "k": "设计"}, {"t": "第 10 章 · 设计模式 · 设计取舍", "s": "单元 5 · 第 9–10 章", "u": "web/ch/10.html", "k": "设计"}, {"t": "第 11 章 · 符合 Python 风格的对象 · 设计取舍", "s": "单元 6 · 第 11–12 章", "u": "web/ch/11.html", "k": "设计"}, {"t": "第 12 章 · 序列的特殊方法 · 设计取舍", "s": "单元 6 · 第 11–12 章", "u": "web/ch/12.html", "k": "设计"}, {"t": "第 13 章 · 接口、协议与抽象基类 · 设计取舍", "s": "单元 7 · 第 13–14 章", "u": "web/ch/13.html", "k": "设计"}, {"t": "第 14 章 · 继承：优劣与替代 · 设计取舍", "s": "单元 7 · 第 13–14 章", "u": "web/ch/14.html", "k": "设计"}, {"t": "第 15 章 · 类型提示进阶 · 设计取舍", "s": "单元 8 · 第 15–16 章", "u": "web/ch/15.html", "k": "设计"}, {"t": "第 16 章 · 运算符重载 · 设计取舍", "s": "单元 8 · 第 15–16 章", "u": "web/ch/16.html", "k": "设计"}, {"t": "第 17 章 · 迭代器、生成器与经典协程 · 设计取舍", "s": "单元 9 · 第 17–18 章", "u": "web/ch/17.html", "k": "设计"}, {"t": "第 18 章 · with、match 与其他语法糖 · 设计取舍", "s": "单元 9 · 第 17–18 章", "u": "web/ch/18.html", "k": "设计"}, {"t": "第 19 章 · 并发模型 · 设计取舍", "s": "单元 10 · 第 19–20 章", "u": "web/ch/19.html", "k": "设计"}, {"t": "第 20 章 · 并发执行器 · 设计取舍", "s": "单元 10 · 第 19–20 章", "u": "web/ch/20.html", "k": "设计"}, {"t": "第 21 章 · 异步编程 · 设计取舍", "s": "单元 11 · 第 21 章", "u": "web/ch/21.html", "k": "设计"}, {"t": "第 22 章 · 动态属性与特性 · 设计取舍", "s": "单元 12 · 第 22–24 章", "u": "web/ch/22.html", "k": "设计"}, {"t": "第 23 章 · 描述符 · 设计取舍", "s": "单元 12 · 第 22–24 章", "u": "web/ch/23.html", "k": "设计"}, {"t": "第 24 章 · 类元编程 · 设计取舍", "s": "单元 12 · 第 22–24 章", "u": "web/ch/24.html", "k": "设计"}], LESSONS = [{"n": 1, "t": "特殊方法：让对象接入语言协议", "u": 1}, {"n": 2, "t": "序列家族与推导式", "u": 1}, {"n": 3, "t": "元组、拆包、切片与排序", "u": 1}, {"n": 4, "t": "别名的坑与选型：list 不是万能的", "u": 1}, {"n": 5, "t": "哈希表：dict 为什么快，顺序为什么稳定", "u": 2}, {"n": 6, "t": "映射的惯用法：合并、缺失键与视图", "u": 2}, {"n": 7, "t": "集合与不可变映射：用集合运算替代循环", "u": 2}, {"n": 8, "t": "文本与字节：编码、解码与规范化", "u": 2}, {"n": 9, "t": "数据类三件套：namedtuple、NamedTuple、dataclass", "u": 3}, {"n": 10, "t": "dataclass 进阶：默认值、校验、冻结与模式匹配", "u": 3}, {"n": 11, "t": "变量不是盒子：引用、别名与拷贝", "u": 3}, {"n": 12, "t": "可变性、默认参数与对象生命周期", "u": 3}, {"n": 13, "t": "函数是对象：高阶函数与可调用对象", "u": 4}, {"n": 14, "t": "参数形态：位置、关键字与可变参数", "u": 4}, {"n": 15, "t": "渐进式类型：注解语法与常用类型", "u": 4}, {"n": 16, "t": "mypy 实战与类型边界", "u": 4}, {"n": 17, "t": "闭包：捕获的是变量，不是值", "u": 5}, {"n": 18, "t": "装饰器：从注册到参数化", "u": 5}, {"n": 19, "t": "标准库装饰器：缓存、分派与惰性属性", "u": 5}, {"n": 20, "t": "用一等函数重构策略与命令模式", "u": 5}, {"n": 21, "t": "对象表示：repr、str 与 format", "u": 6}, {"n": 22, "t": "值对象：相等、哈希与不可变", "u": 6}, {"n": 23, "t": "序列协议：len、getitem、iter、contains", "u": 6}, {"n": 24, "t": "实战：实现一个完整的 Vector", "u": 6}, {"n": 25, "t": "鸭子类型与抽象基类", "u": 7}, {"n": 26, "t": "静态协议：Protocol 与结构化类型", "u": 7}, {"n": 27, "t": "继承与 super()：MRO 与协作式构造", "u": 7}, {"n": 28, "t": "多重继承与混入类：什么时候不该继承", "u": 7}, {"n": 29, "t": "泛型：TypeVar、Generic 与型变", "u": 8}, {"n": 30, "t": "TypedDict、重载与运行时读取注解", "u": 8}, {"n": 31, "t": "运算符重载：一元、算术与 @", "u": 8}, {"n": 32, "t": "比较、增量赋值与一致性", "u": 8}, {"n": 33, "t": "迭代协议：iter、next 与 StopIteration", "u": 9}, {"n": 34, "t": "生成器与 yield from", "u": 9}, {"n": 35, "t": "上下文管理器与 with", "u": 9}, {"n": 36, "t": "模式匹配与 else 块", "u": 9}, {"n": 37, "t": "并发全景：GIL、线程、进程", "u": 10}, {"n": 38, "t": "线程与锁：竞态、队列与退出", "u": 10}, {"n": 39, "t": "执行器：ThreadPoolExecutor 与 ProcessPoolExecutor", "u": 10}, {"n": 40, "t": "实战：并发下载与错误处理", "u": 10}, {"n": 41, "t": "协程与事件循环", "u": 11}, {"n": 42, "t": "任务管理：gather、TaskGroup 与超时", "u": 11}, {"n": 43, "t": "异步 IO：HTTP、上下文管理器与异步迭代", "u": 11}, {"n": 44, "t": "异步陷阱与选型", "u": 11}, {"n": 45, "t": "动态属性：getattr、setattr 与 property", "u": 12}, {"n": 46, "t": "描述符：把属性访问变成可复用逻辑", "u": 12}, {"n": 47, "t": "类元编程：__init_subclass__、类装饰器与元类", "u": 12}, {"n": 48, "t": "综合验收：读懂框架的 200 行", "u": 12}];
+var L = FL.read('fl-lesson-v1', {}), B = FL.read('fl-bank-v1', {});
+var ln = Object.keys(L).length, bn = 0;
+for (var k in B) if (B[k] === 1) bn++;
+
+function set(id, txt, bar, p, total) {
+  document.getElementById(id).textContent = txt;
+  document.getElementById(bar).style.width = (p / total * 100) + '%';
+}
+set('tL', '已学 ' + ln + ' / 48', 'pL', ln, 48);
+set('tB', '掌握 ' + bn + ' / 36', 'pB', bn, 36);
+
+var un = 0;
+for (var u = 1; u <= 12; u++) {
+  var n = 0;
+  for (var i = (u - 1) * 4 + 1; i <= u * 4; i++) if (L[i]) n++;
+  var el = document.querySelector('[data-prog="u' + u + '"]');
+  if (el) el.textContent = '已学 ' + n + ' / 4';
+  if (n === 4) un++;
+}
+set('tU', '完成 ' + un + ' / 12', 'pU', un, 12);
+
+var first = null;
+for (var j = 0; j < LESSONS.length; j++) {
+  if (!L[LESSONS[j].n]) { first = LESSONS[j]; break; }
+}
+var rl = document.getElementById('rlink'), rt = document.getElementById('rtxt');
+if (first) {
+  rl.href = 'web/lessons/l' + String(first.n).padStart(2, '0') + '.html';
+  rl.textContent = (ln === 0 ? '开始第 ' : '继续第 ') + first.n + ' 课';
+  rt.textContent = first.t;
+} else {
+  rl.href = 'web/bank.html';
+  rl.textContent = '48 节全部完成';
+  rt.textContent = '去题库把「待复习」清零';
+}
+
+// 今日复习（与 web/review.html 同一套艾宾浩斯间隔）
+(function(){
+  var STAGES = [0, 1, 3, 7, 15, 30], DAY = 86400000;
+  var R = FL.read('fl-review-v1', {});
+  function mid(t){ var d = new Date(t); d.setHours(0,0,0,0); return d.getTime(); }
+  var today = mid(Date.now()), due = 0, later = 0;
+  for (var k in L) {
+    var learned = mid(L[k] === 1 ? Date.now() : L[k]);
+    var rs = R[k] || [];
+    for (var i = 0; i < STAGES.length; i++) {
+      if (rs[i]) continue;
+      if (learned + STAGES[i] * DAY <= today) due++; else later++;
+    }
+  }
+  document.getElementById('rvT').textContent = due + ' 项';
+  document.getElementById('rvP').style.width = Math.min(100, due * 10) + '%';
+  var txt = document.getElementById('rvTxt');
+  if (!ln) txt.textContent = '学完一节课，当天就会自动排第一轮';
+  else if (due) txt.textContent = '今天到期 ' + due + ' 项，未来还有 ' + later + ' 项';
+  else txt.textContent = '今天没有到期项，未来共 ' + later + ' 项';
+})();
+
+var KEYS = ['fl-lesson-v1', 'fl-bank-v1', 'fl-gate1-v1', 'fl-gate2-v1', 'fl-review-v1'];
+document.getElementById('expBtn').addEventListener('click', function () {
+  var data = { v: 1, at: new Date().toISOString() };
+  KEYS.forEach(function (k) {
+    var raw = localStorage.getItem(k);
+    if (raw) { try { data[k] = JSON.parse(raw); } catch (e) {} }
+  });
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fluent-python-progress.json';
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+});
+document.getElementById('impBtn').addEventListener('click', function () {
+  document.getElementById('impFile').click();
+});
+document.getElementById('impFile').addEventListener('change', function () {
+  var f = this.files && this.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function () {
+    try {
+      var d = JSON.parse(r.result);
+      KEYS.forEach(function (k) {
+        if (d && d[k]) localStorage.setItem(k, JSON.stringify(d[k]));
+      });
+      location.reload();
+    } catch (e) {
+      alert('文件格式不正确，请选择本课程导出的 JSON。');
+    }
+  };
+  r.readAsText(f);
+});
+
+var input = document.getElementById('fs'), res = document.getElementById('fsRes');
+function esc(s) {
+  return s.replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  });
+}
+function run() {
+  var q = input.value.trim().toLowerCase();
+  if (!q) { res.classList.remove('on'); res.innerHTML = ''; return; }
+  var hits = [], seen = {};
+  for (var i = 0; i < IDX.length; i++) {
+    var x = IDX[i];
+    var inT = x.t.toLowerCase().indexOf(q) >= 0;
+    var inW = (x.w || '').toLowerCase().indexOf(q) >= 0;
+    var inS = x.s.toLowerCase().indexOf(q) >= 0;
+    if ((inT || inW || inS) && !seen[x.u]) {
+      seen[x.u] = 1;
+      hits.push({ x: x, score: (inT ? 4 : 0) + (inW ? 2 : 0) + (inS ? 1 : 0) });
+    }
+  }
+  hits.sort(function (a, b) { return b.score - a.score; });
+  hits = hits.slice(0, 10).map(function (h) { return h.x; });
+  res.innerHTML = hits.length
+    ? hits.map(function (x) {
+        return '<a href="' + x.u + '"><span class="k">' + x.k + '</span>' +
+               '<div class="t">' + esc(x.t) + '</div>' +
+               '<div class="s">' + esc(x.s) + '</div></a>';
+      }).join('')
+    : '<div class="none">没有匹配，试试「描述符」「GIL」「dataclass」</div>';
+  res.classList.add('on');
+}
+input.addEventListener('input', run);
+document.addEventListener('keydown', function (e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault(); input.focus(); input.select();
+  }
+});
+input.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    var a = res.querySelector('a');
+    if (a) location.href = a.getAttribute('href');
+  }
+  if (e.key === 'Escape') { res.classList.remove('on'); input.blur(); }
+});
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.hsearch')) res.classList.remove('on');
+});
+
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

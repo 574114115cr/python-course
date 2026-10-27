@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 34 课 · 生成器与 yield from</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="34">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 34 课 · 生成器与 yield from</h1>
+  <a class="tag" href="../09.html">单元 9</a>
+  <a class="ppt" href="../ppt/u/09.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:70.8%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="33" href="l33.html"><span class="no">33</span><span class="tx">迭代协议：iter、next 与 StopIteration</span></a><a class="cur" data-l="34" href="l34.html"><span class="no">34</span><span class="tx">生成器与 yield from</span></a><a class="" data-l="35" href="l35.html"><span class="no">35</span><span class="tx">上下文管理器与 with</span></a><a class="" data-l="36" href="l36.html"><span class="no">36</span><span class="tx">模式匹配与 else 块</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-yield-from-是委托-不是循环">延伸：yield from 是委托，不是循环</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../09.html"><span class="k">单元</span>
+    <span class="v">单元 9 · 迭代器、生成器与控制流</span></a>
+  <a href="../bank.html#u9"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/09.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u09.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/17.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 17–18 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 34 课</span>
+        <span class="kwk">单元 9 · 第 17–18 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>生成器与 yield from</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能写生成器函数、用 `yield from` 委派子生成器，并用 `itertools` 组合惰性管道。</div>
+    <h3 id="讲解">讲解</h3>
+<p>函数体里出现 <code>yield</code>，调用它不会执行函数体，而是返回一个生成器：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">countdown</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>   <span class="c1"># 3 2 1</span>
+</code></pre>
+<p>生成器天然是迭代器，适合表达「无限序列」与「大文件逐行处理」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">read_lines</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p><code>yield from</code> 把子生成器的产出直接转交，省掉一层循环，也能正确传递 <code>send()</code> 与异常：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="n">flatten</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">item</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">flatten</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="mi">5</span><span class="p">])))</span>   <span class="c1"># [1, 2, 3, 4, 5]</span>
+</code></pre>
+<p>管道式组合：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+
+<span class="n">nums</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1_000_000</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>       <span class="c1"># [0, 1, 4, 9, 16]</span>
+</code></pre>
+<h3 id="延伸-yield-from-是委托-不是循环">延伸：yield from 是委托，不是循环</h3>
+<p><code>yield from</code> 会把 <code>send</code>、<code>throw</code>、<code>close</code> 全部转发给子生成器，并作为表达式的值拿到子生成器的 <code>return</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="k">yield</span> <span class="mi">1</span>
+    <span class="k">yield</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="s2">"done"</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">outer</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">inner</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"inner returned:"</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="k">yield</span> <span class="mi">3</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">outer</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>        <span class="c1"># 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>     <span class="c1"># 20</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>               <span class="c1"># inner returned: done</span>
+</code></pre>
+<p>手写 <code>for v in inner(): yield v</code> 做不到三件事：<code>send</code> 传不进去、<code>throw</code> 不会透传、拿不到 <code>return</code> 值。这三件事正是把生成器当协程用的基础，所以「委托生成器」在异步之前的年代就是一等公民。3.3 起 <code>yield from</code> 也是为了这条链（<code>asyncio</code> 早期实现就靠它）。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>生成器只能遍历一次</strong>，需要重复使用就物化成 list。</li>
+<li><strong><code>yield</code> 会暂停整个函数</strong>，包括局部变量；恢复时从暂停点继续。</li>
+<li><strong><code>yield from</code> 不是 <code>for ... yield</code> 的简写</strong>：它还负责 <code>send</code>、<code>throw</code>、<code>close</code> 的委派。</li>
+<li><strong>生成器里的异常在 <code>next()</code> 时抛出</strong>，<code>try/except</code> 要包在迭代处。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>写 <code>fib()</code> 生成器，用 <code>islice</code> 取前 10 项。</li>
+<li>用生成器实现「逐行读大文件 + 过滤空行 + 去重」，全程不把文件读进内存。</li>
+<li>用 <code>yield from</code> 实现嵌套列表展平，并处理三层嵌套。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能说出调用生成器函数时发生了什么</li>
+<li><span class="ck"></span>知道生成器为什么只能遍历一次</li>
+<li><span class="ck"></span>能用 <code>yield from</code> 展平嵌套结构</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 17 章 §17.5–17.13</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：yield from 是委托，不是循环</p></div>
+    <div class="pn"><a href="l33.html"><small>← 第 33 课 · 单元 9</small><b>迭代协议：iter、next 与 StopIteration</b></a><a class="nx" href="l35.html"><small>第 35 课 · 单元 9 →</small><b>上下文管理器与 with</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../09.html">返回单元 9</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=34, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

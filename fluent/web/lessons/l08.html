@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 8 课 · 文本与字节：编码、解码与规范化</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="8">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 8 课 · 文本与字节：编码、解码与规范化</h1>
+  <a class="tag" href="../02.html">单元 2</a>
+  <a class="ppt" href="../ppt/u/02.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:16.7%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="5" href="l05.html"><span class="no">05</span><span class="tx">哈希表：dict 为什么快，顺序为什么稳定</span></a><a class="" data-l="6" href="l06.html"><span class="no">06</span><span class="tx">映射的惯用法：合并、缺失键与视图</span></a><a class="" data-l="7" href="l07.html"><span class="no">07</span><span class="tx">集合与不可变映射：用集合运算替代循环</span></a><a class="cur" data-l="8" href="l08.html"><span class="no">08</span><span class="tx">文本与字节：编码、解码与规范化</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-unicodedata-与文件系统编码">延伸：unicodedata 与文件系统编码</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../02.html"><span class="k">单元</span>
+    <span class="v">单元 2 · 字典、集合与文本</span></a>
+  <a href="../bank.html#u2"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/02.html#s8"><span class="k">课件</span>
+    <span class="v">本单元第 4 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u02.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/03.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 3–4 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 8 课</span>
+        <span class="kwk">单元 2 · 第 3–4 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>文本与字节：编码、解码与规范化</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能区分 str 与 bytes，独立排查 UnicodeDecodeError，并用 NFC/NFD 规范化处理「看起来一样」的字符串。</div>
+    <h3 id="讲解">讲解</h3>
+<p><code>str</code> 是 Unicode 码点序列，<code>bytes</code> 是 0–255 的字节序列。两者之间的唯一通道是编码：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"café"</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>        <span class="c1"># b'caf\xc3\xa9'</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span>        <span class="c1"># 4 5（é 占两个字节）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span>        <span class="c1"># café</span>
+</code></pre>
+<p>中文的差异更明显：<code>"中文".encode("utf-8")</code> 得到 6 个字节，而 <code>len("中文")</code> 是 2。所以「字符数」和「字节数」永远不要混用。</p>
+<p>解码失败通常有两个原因：<strong>用错编码</strong>、<strong>数据被截断</strong>。排查顺序是：先确认来源编码（HTTP 头、文件声明、数据库列），再决定用哪个 codec：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">raw</span> <span class="o">=</span> <span class="s2">"café"</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">raw</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"ascii"</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">UnicodeDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>                      <span class="c1"># 'ascii' codec can't decode byte 0xc3 ...</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"ascii"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">))</span>   <span class="c1"># caf��</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"ascii"</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">))</span>    <span class="c1"># caf</span>
+</code></pre>
+<p><code>errors=</code> 是兜底，不是修复：<code>replace</code> 会留下替换符，<code>ignore</code> 会静默丢数据，只在「展示」场景用，不要用在数据管道里。</p>
+<p>另一类坑是「看起来一样，实际不等」：<code>"café"</code> 可能是 <code>e + ́</code>（组合字符）或 <code>é</code>（预组合字符）。用 <code>unicodedata.normalize("NFC", s)</code> 统一：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">unicodedata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ud</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="s2">"café"</span>                     <span class="c1"># 预组合</span>
+<span class="n">b</span> <span class="o">=</span> <span class="s2">"cafe</span><span class="se">\u0301</span><span class="s2">"</span>               <span class="c1"># e + 组合重音</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>                  <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ud</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFC"</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="n">ud</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFC"</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>   <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ud</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFD"</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>  <span class="c1"># 分解形式，适合做搜索/排序键</span>
+</code></pre>
+<h3 id="延伸-unicodedata-与文件系统编码">延伸：unicodedata 与文件系统编码</h3>
+<p><code>unicodedata</code> 能按名字查字符、查类别、做规范化：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">unicodedata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ud</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ud</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"GREEK SMALL LETTER ALPHA"</span><span class="p">))</span>            <span class="c1"># α</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ud</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s2">"é"</span><span class="p">))</span>                                     <span class="c1"># LATIN SMALL LETTER E WITH ACUTE</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ud</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFC"</span><span class="p">,</span> <span class="s2">"e</span><span class="se">\u0301</span><span class="s2">"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"é"</span><span class="p">)</span>            <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ud</span><span class="o">.</span><span class="n">category</span><span class="p">(</span><span class="s2">"α"</span><span class="p">),</span> <span class="n">ud</span><span class="o">.</span><span class="n">category</span><span class="p">(</span><span class="s2">"1"</span><span class="p">),</span> <span class="n">ud</span><span class="o">.</span><span class="n">category</span><span class="p">(</span><span class="s2">" "</span><span class="p">))</span>   <span class="c1"># Ll Nd Zs</span>
+</code></pre>
+<p><code>os.fsencode</code> / <code>os.fsdecode</code> 处理的是<strong>文件系统编码</strong>，和 <code>str.encode("utf-8")</code> 不是一回事：Linux 上遇到无法解码的文件名字节时，会用 <code>surrogateescape</code> 把原始字节映射成孤立代理字符，来回转换不丢字节。处理「用户传了个奇怪文件名」的路径时必须用它，用 UTF-8 硬编码会抛 <code>UnicodeDecodeError</code>。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>打开文件永远显式写 <code>encoding="utf-8"</code></strong>，不要依赖系统默认（Windows 默认 GBK，Linux 默认 UTF-8）。</li>
+<li><strong>BOM 不是内容</strong>：<code>utf-8-sig</code> 读取会吃掉 BOM；写 CSV 给 Excel 用时才需要加 BOM。</li>
+<li><strong>大小写折叠用 <code>str.casefold()</code></strong>，比 <code>lower()</code> 更适合做不区分大小写的比较（德语 ß、土耳其语 İ 等）。</li>
+<li><strong>排序按码点，不按语言习惯</strong>：中文按拼音排序需要 <code>locale.strxfrm</code> 或第三方库，<code>sorted()</code> 做不到。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>写一个函数 <code>safe_read(path)</code>：用 UTF-8 读文件，遇到 <code>UnicodeDecodeError</code> 时打印出错字节位置和前后各 20 字节，再抛出自定义异常。</li>
+<li>构造 <code>"café"</code> 的两种表示，验证不相等，再用 NFC 规范化后相等。</li>
+<li>统计一段中英混排文本的「字符数」与「UTF-8 字节数」，解释差异来源。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释 <code>len("中文")</code> 与 <code>len("中文".encode())</code> 为什么不同</li>
+<li><span class="ck"></span>遇到 <code>UnicodeDecodeError</code> 会先查来源编码，而不是直接 <code>errors="ignore"</code></li>
+<li><span class="ck"></span>能用 NFC/NFD 解释并修复一次「字符串看起来一样却不相等」</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 4 章 §4.2–4.10</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：unicodedata 与文件系统编码</p></div>
+    <div class="pn"><a href="l07.html"><small>← 第 7 课 · 单元 2</small><b>集合与不可变映射：用集合运算替代循环</b></a><a class="nx" href="l09.html"><small>第 9 课 · 单元 3 →</small><b>数据类三件套：namedtuple、NamedTuple、dataclass</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../02.html">返回单元 2</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=8, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

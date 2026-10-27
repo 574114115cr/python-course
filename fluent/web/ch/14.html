@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 14 章 · 继承：优劣与替代 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 14 章 · 继承：优劣与替代 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 14 章</span>
+        <span class="kwk">单元 7 · 接口、协议与继承</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>继承：优劣与替代</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p>子类化内置类型要和 C 实现打交道，多数时候组合更安全。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>优先组合；必须复用时用 <code>UserDict</code>/<code>UserList</code>/混入类</td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>直接继承 <code>dict</code>/<code>list</code>，或深继承层次</td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>C 实现会绕过重写的方法；深继承导致 MRO 难推理</td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>组合多一层转发；混入类的 MRO 需要理解</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>内置容器是 C 实现，性能好但很多操作不走 Python 层方法。用户想「加一点行为」时，最直觉的做法就是继承，然后发现拦截不到。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>继承内置类型、继承 <code>collections.UserDict</code>（纯 Python 实现）、组合 + 委托、混入类。选后三者。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p><code>UserDict</code> 内部就是一个 <code>data</code> 字典，所有操作都走 Python 层，重写哪个方法都能生效；组合把「有」与「是」分开，父类变化不会震到子类。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p><code>dict</code> 子类的 <code>__missing__</code> 只管 <code>d[k]</code>，<code>get</code> 不走它；<code>|=</code>、<code>update()</code> 可能绕过 <code>__setitem__</code>；混入类写了 <code>__init__</code> 会破坏协作式继承。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>默认组合；确需「是一种」时层级不超过两层；混入类只加方法、不写 <code>__init__</code>，需要参数就 <code>**kwargs</code> 转交 <code>super()</code>。</p>
+    <div class="pn"><a href="13.html"><small>← 上一章</small><b>第 13 章 · 接口、协议与抽象基类</b></a><a class="nx" href="15.html"><small>下一章 →</small><b>第 15 章 · 类型提示进阶</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../07.html">单元 7 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

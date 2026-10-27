@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="70" data-to="74"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u13"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/13.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u13"><span class="k">题库</span><span class="v">本单元 4 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="70" data-to="74"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u13"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/13.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s14"><span class="k">大纲</span><span class="v">课程大纲课件 p14</span></a><a href="bank.html#u13"><span class="k">题库</span><span class="v">本单元 6 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-项目回顾-现在的代码里有什么-13-1">2.1 项目回顾：现在的代码里有什么（13.1）</a>
 <a class="lv3" href="#2-2-编组-group-与精灵-sprite-为什么不用普通列表">2.2 编组 Group 与精灵 Sprite：为什么不用普通列表 ★</a>
@@ -52,18 +53,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-13-3">参考答案 13-3</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-13-射击与外星舰队">单元 13：射击与外星舰队</h1>
-<blockquote>
-<p>对应教材第 12 章 12.8 节「射击」与第 13 章「外星人」全章
-阶段 2 · 项目 1：外星人入侵（Pygame）
-本单元目标：<strong>给游戏加上子弹、外星舰队、碰撞检测和结束条件，做出一个有输赢的外星人入侵</strong></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 12 章 12.8 节「射击」与第 13 章「外星人」全章</span></div><p class="bk-k">阶段 2 · 项目 1：外星人入侵（Pygame）
+本单元目标：<strong>给游戏加上子弹、外星舰队、碰撞检测和结束条件，做出一个有输赢的外星人入侵</strong></p><a href="coverage.html#u13">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -197,6 +196,56 @@ transition:opacity .18s;z-index:60}
 </tr>
 </tbody>
 </table>
+<p>编组不是魔法，它替你做的那三件事用 40 行就能复现。<strong>看懂这个替身，你就再也不会问「为什么 list 不行」</strong>——尤其注意 <code>spritecollideany()</code> 的返回值：它返回的是<strong>那个精灵本身</strong>（直接拿去当条件判断），而不是 <code>True</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 编组替身：用 40 行看懂 Group 到底替你做了什么</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Group</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""把一堆「有 rect 和 update() 的字典」当成一个整体管理。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>          <span class="c1"># ① 批量更新</span>
+            <span class="n">item</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">+=</span> <span class="n">item</span><span class="p">[</span><span class="s2">"vy"</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">]</span>     <span class="c1"># ② 批量绘制</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sprites</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">spritecollideany</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""③ 一个矩形 vs 整个编组：任意一个重叠就返回它，否则 None。"""</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">sprites</span><span class="p">():</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">item</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span> <span class="o">+</span> <span class="n">item</span><span class="p">[</span><span class="s2">"w"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">target</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span> <span class="o">+</span> <span class="n">target</span><span class="p">[</span><span class="s2">"w"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">item</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="n">target</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">item</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">+</span> <span class="n">item</span><span class="p">[</span><span class="s2">"h"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">target</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">+</span> <span class="n">target</span><span class="p">[</span><span class="s2">"h"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">item</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="n">item</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="n">bullets</span> <span class="o">=</span> <span class="n">Group</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">bullets</span><span class="o">.</span><span class="n">add</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"bullet</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">:</span> <span class="mi">100</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">20</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span> <span class="s2">"vy"</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"画一次编组："</span><span class="p">,</span> <span class="n">bullets</span><span class="o">.</span><span class="n">draw</span><span class="p">())</span>
+<span class="n">bullets</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"update 之后全员的 y："</span><span class="p">,</span> <span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bullets</span><span class="o">.</span><span class="n">sprites</span><span class="p">()])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"飞船撞上谁了："</span><span class="p">,</span> <span class="n">spritecollideany</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="mi">120</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="mi">480</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">:</span> <span class="mi">48</span><span class="p">},</span> <span class="n">bullets</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"躲开之后："</span><span class="p">,</span> <span class="n">spritecollideany</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="mi">700</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">:</span> <span class="mi">48</span><span class="p">,</span> <span class="s2">"h"</span><span class="p">:</span> <span class="mi">48</span><span class="p">},</span> <span class="n">bullets</span><span class="p">))</span>
+<span class="n">bullets</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"empty 之后还剩："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bullets</span><span class="o">.</span><span class="n">sprites</span><span class="p">()),</span> <span class="s2">"个"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"普通 list 没有 update()/draw()/empty()，这就是编组存在的理由。"</span><span class="p">)</span>
+</code></pre>
+<p>跑出来是这样：<code>draw()</code> 返回 <code>['bullet0', 'bullet1', 'bullet2']</code>，<code>update()</code> 后三颗子弹的 <code>y</code> 一起从 500 变成 497（因为 <code>vy=-3</code>），飞船撞上的是 <code>bullet1</code>（它的 <code>x=120</code> 正好和飞船重叠），躲开后 <code>spritecollideany</code> 返回 <code>None</code>，<code>empty()</code> 之后剩 0 个。<strong>一张「名单」加上三个批量方法，就是编组的全部。</strong></p>
 <h3 id="2-3-射击-bullet-类与开火-12-8">2.3 射击：<code>Bullet</code> 类与开火（12.8）</h3>
 <p>子弹和飞船最大的区别是：<strong>子弹会不断地产生和消失</strong>。这一节的所有设计都是围绕「一批会生灭的对象」展开的。</p>
 <p><strong>（1）子弹长什么样。</strong> 教材没有给子弹找图片，而是用 <code>pygame.Rect</code> 画一个细长条，再用 <code>pygame.draw.rect()</code> 上色：</p>
@@ -1190,10 +1239,10 @@ fleet_direction=-1 移动一次后 x： 100
       <span class="s2">"速度大于 1 时可能一步跨过精确坐标，用 == 会漏判。"</span><span class="p">)</span>
 </code></pre>
 <p>运行结果：</p>
-<pre><code class="language-text"><span class="cl">示例</span>x=  0 → check_edges=True（期望 True）PASS
-x=740 → check_edges=True（期望 True）PASS
-x=370 → check_edges=False（期望 False）PASS
-x=741 → check_edges=True（期望 True）PASS
+<pre><code class="language-text"><span class="cl">示例</span>x=  0 → check_edges=True（期望 True） PASS
+x=740 → check_edges=True（期望 True） PASS
+x=370 → check_edges=False（期望 False） PASS
+x=741 → check_edges=True（期望 True） PASS
 解释：用 &gt;= 和 &lt;= 是因为'刚好贴上边缘'也算到边；速度大于 1 时可能一步跨过精确坐标，用 == 会漏判。
 </code></pre>
 <hr>
@@ -1269,6 +1318,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

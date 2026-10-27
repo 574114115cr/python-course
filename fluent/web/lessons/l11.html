@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 11 课 · 变量不是盒子：引用、别名与拷贝</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="11">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 11 课 · 变量不是盒子：引用、别名与拷贝</h1>
+  <a class="tag" href="../03.html">单元 3</a>
+  <a class="ppt" href="../ppt/u/03.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:22.9%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="9" href="l09.html"><span class="no">09</span><span class="tx">数据类三件套：namedtuple、NamedTuple、dataclass</span></a><a class="" data-l="10" href="l10.html"><span class="no">10</span><span class="tx">dataclass 进阶：默认值、校验、冻结与模式匹配</span></a><a class="cur" data-l="11" href="l11.html"><span class="no">11</span><span class="tx">变量不是盒子：引用、别名与拷贝</span></a><a class="" data-l="12" href="l12.html"><span class="no">12</span><span class="tx">可变性、默认参数与对象生命周期</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-浅拷贝返回自身-参数是引用">延伸：浅拷贝返回自身，参数是引用</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../03.html"><span class="k">单元</span>
+    <span class="v">单元 3 · 数据类与对象语义</span></a>
+  <a href="../bank.html#u3"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/03.html#s6"><span class="k">课件</span>
+    <span class="v">本单元第 3 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u03.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/05.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 5–6 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 11 课</span>
+        <span class="kwk">单元 3 · 第 5–6 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>变量不是盒子：引用、别名与拷贝</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用「标签—对象」模型解释赋值、`is`/`==`、别名、浅拷贝与深拷贝，并预测一段代码的输出。</div>
+    <h3 id="讲解">讲解</h3>
+<p>把变量想成盒子，是绝大多数引用 bug 的源头。正确的模型是：<strong>对象在堆上，变量是贴在对象上的标签</strong>。赋值只是贴新标签，不复制对象。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>                 <span class="c1"># 同一个对象的两个标签</span>
+<span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>              <span class="c1"># [1, 2, 3, 4]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>         <span class="c1"># True：身份相同</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>   <span class="c1"># True：值相同</span>
+</code></pre>
+<p><code>is</code> 比较 <code>id()</code>，<code>==</code> 调用 <code>__eq__</code>。判断 <code>None</code> 用 <code>is None</code>，因为 <code>None</code> 是单例；判断数值、字符串内容用 <code>==</code>。</p>
+<p>浅拷贝只复制最外层容器，内部元素仍是共享引用：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>      <span class="c1"># 或 grid[:] / list(grid)</span>
+<span class="n">shallow</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">99</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>                    <span class="c1"># [[99, 2], [3, 4]]  ← 内层共享</span>
+
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>     <span class="c1"># 递归复制，互不影响</span>
+</code></pre>
+<h3 id="延伸-浅拷贝返回自身-参数是引用">延伸：浅拷贝返回自身，参数是引用</h3>
+<p><code>copy.copy()</code> 对不可变对象常常直接返回自身，因为没必要复制：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="ow">is</span> <span class="n">t</span><span class="p">)</span>          <span class="c1"># True</span>
+<span class="n">l</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span> <span class="ow">is</span> <span class="n">l</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>       <span class="c1"># False True，内层仍共享</span>
+</code></pre>
+<p>函数参数也是引用：在函数里 <code>x += [1]</code> 会改到调用方的 list，<code>x = x + [1]</code> 只是本地重绑定，外面看不到。要不要防御性复制，取决于这个参数是不是「你的所有物」——如果是调用方传进来、还要继续用的对象，就地修改必须写进文档，否则就是隐形副作用。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>赋值永不复制</strong>，<code>b = a</code> 只是多一个引用。</li>
+<li><strong>浅拷贝复制容器，不复制元素</strong>；嵌套结构要用 <code>deepcopy</code>。</li>
+<li><strong>不可变对象也可能共享</strong>：小整数、短字符串会被驻留（interning），所以 <code>a is b</code> 偶尔为 True，但不要依赖。</li>
+<li><strong>函数传参是「对象引用传递」</strong>：在函数里改可变参数会影响调用方，重新绑定形参则不会。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>预测下面代码的输出，再运行验证：</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+    <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">xs</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
+</code></pre>
+<ol start="2">
+<li>用 <code>id()</code> 打印 <code>a</code>、<code>b = a</code>、<code>copy.copy(a)</code> 三个对象的身份，标出哪些相同。</li>
+<li>构造三层嵌套列表，分别用浅拷贝和深拷贝修改最内层，比较原数据。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用「标签—对象」模型解释一次别名 bug</li>
+<li><span class="ck"></span>能说清 <code>is</code> 与 <code>==</code> 的区别，并知道 <code>None</code> 要用 <code>is</code></li>
+<li><span class="ck"></span>能预测浅拷贝后修改嵌套元素对原对象的影响</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 6 章 §6.2–6.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：浅拷贝返回自身，参数是引用</p></div>
+    <div class="pn"><a href="l10.html"><small>← 第 10 课 · 单元 3</small><b>dataclass 进阶：默认值、校验、冻结与模式匹配</b></a><a class="nx" href="l12.html"><small>第 12 课 · 单元 3 →</small><b>可变性、默认参数与对象生命周期</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../03.html">返回单元 3</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=11, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

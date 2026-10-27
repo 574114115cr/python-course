@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="33" data-to="39"><div class="uprog-h"><b>已学 0 / 7 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u7"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/07.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s8"><span class="k">大纲</span><span class="v">课程大纲课件 p8</span></a><a href="bank.html#u7"><span class="k">题库</span><span class="v">本单元 8 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="33" data-to="39"><div class="uprog-h"><b>已学 0 / 7 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u7"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/07.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s8"><span class="k">大纲</span><span class="v">课程大纲课件 p8</span></a><a href="bank.html#u7"><span class="k">题库</span><span class="v">本单元 10 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-函数-给一段代码起个名字">2.1 函数：给一段代码起个名字</a>
 <a class="lv3" href="#2-2-return-把结果-递出窗口">2.2 return：把结果&quot;递出窗口&quot;</a>
@@ -35,6 +36,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-4-参数传递的副本语义-本单元最重要的概念">2.4 ★ 参数传递的副本语义（本单元最重要的概念）</a>
 <a class="lv3" href="#2-5-作用域-谁能看见谁">2.5 作用域：谁能看见谁</a>
 <a class="lv3" href="#2-6-函数是-一等公民">2.6 函数是&quot;一等公民&quot;</a>
+<a class="lv3" href="#2-7-把函数存进模块-教材-8-6">2.7 把函数存进模块（教材 8.6）</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-定义与调用函数">示例 1：定义与调用函数</a>
 <a class="lv3" href="#示例-2-return-与-none">示例 2：return 与 None</a>
@@ -43,6 +45,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-5-作用域与-global">示例 5：作用域与 global</a>
 <a class="lv3" href="#示例-6-函数是一等公民">示例 6：函数是一等公民</a>
 <a class="lv3" href="#示例-7-默认参数的可变对象陷阱">示例 7：默认参数的可变对象陷阱</a>
+<a class="lv3" href="#示例-8-__name__-的两种身份">示例 8：__name__ 的两种身份</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -55,6 +58,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-7-6">参考答案 7-6</a>
 <a class="lv3" href="#参考答案-7-7">参考答案 7-7</a>
 <a class="lv3" href="#参考答案-7-8">参考答案 7-8</a>
+<a class="lv3" href="#参考答案-7-9">参考答案 7-9</a>
+<a class="lv3" href="#参考答案-7-10">参考答案 7-10</a>
 <a class="lv2" href="#六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</a>
 <a class="lv3" href="#错误-1-忘记写冒号-或缩进错误">错误 1：忘记写冒号，或缩进错误</a>
 <a class="lv3" href="#错误-2-函数修改列表-会改到原列表">错误 2：★ 函数修改列表，会改到原列表</a>
@@ -64,18 +69,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-6-局部变量遮蔽全局变量">错误 6：局部变量遮蔽全局变量</a>
 <a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-7-函数">单元 7：函数</h1>
-<blockquote>
-<p>对应教材第 8 章「函数」
-关键词：<code>def</code> 定义、<code>return</code> 返回值、文档字符串、位置参数、关键字参数、默认参数、<code>*args</code>、<code>**kwargs</code>、作用域、<strong>参数传递的副本语义</strong></p>
-<p>⚠️ <strong>本单元是难点单元</strong>。函数是"从会写代码"到"会组织代码"的分水岭。本单元末尾附有一份<strong>常见错误清单</strong>，请务必逐条对照自查。</p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 8 章「函数」</span></div><p class="bk-k">关键词：<code>def</code> 定义、<code>return</code> 返回值、文档字符串、位置参数、关键字参数、默认参数、<code>*args</code>、<code>**kwargs</code>、作用域、<strong>参数传递的副本语义</strong></p>
+<p>⚠️ <strong>本单元是难点单元</strong>。函数是"从会写代码"到"会组织代码"的分水岭。本单元末尾附有一份<strong>常见错误清单</strong>，请务必逐条对照自查。</p><a href="coverage.html#u7">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -85,6 +88,7 @@ transition:opacity .18s;z-index:60}
 <li>解释<strong>参数传递的副本语义</strong>：整数/字符串传入函数是副本，列表/字典传入是同一份数据，并能写出正确应对方式。</li>
 <li>说出全局变量与局部变量的区别，能判断某个变量在函数内是否可见。</li>
 <li>读懂并修复 5 类高频函数错误（见末尾错误清单）。</li>
+<li>把函数拆到独立模块，用 <code>import</code> / <code>from ... import</code> / <code>as</code> 三种方式取用，并用 <code>if __name__ == "__main__":</code> 区分「被运行」和「被导入」。</li>
 </ol>
 <hr>
 <h2 id="二-核心知识点讲解">二、核心知识点讲解</h2>
@@ -305,6 +309,80 @@ transition:opacity .18s;z-index:60}
 <span class="nb">print</span><span class="p">([</span><span class="n">op</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">operations</span><span class="p">])</span>    <span class="c1"># [13, 7, 30]</span>
 </code></pre>
 <p>这个特性的价值在单元 11 的投票分析器里会充分体现——你可以把"加票"和"投票"两个函数分别交给两个不同的类。</p>
+<h3 id="2-7-把函数存进模块-教材-8-6">2.7 把函数存进模块（教材 8.6）</h3>
+<p>函数越写越多，一个 <code>.py</code> 文件迟早会到几百行：定义、调用、测试混在一起，改一处要滚半天。教材 8.6 的解法是<strong>按用途拆文件</strong>——一个 <code>.py</code> 文件就是一个<strong>模块</strong>，模块名就是文件名去掉 <code>.py</code>。</p>
+<p><strong>最小的模块就是两个文件。</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）pizza.py —— 函数放在这里，文件名就是模块名</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_pizza</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">toppings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""概述要制作的披萨。"""</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">制作 </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> 寸披萨，配料："</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">toppings</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  - </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">make_pizza</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s2">"蘑菇"</span><span class="p">,</span> <span class="s2">"青椒"</span><span class="p">)</span>     <span class="c1"># 只有直接运行 pizza.py 才执行</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）main.py —— 与 pizza.py 放在同一目录</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pizza</span>                        <span class="c1"># ① 导入整个模块</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pizza</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pizza</span>        <span class="c1"># ② 只导入函数</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pizza</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pizza</span> <span class="k">as</span> <span class="n">mp</span>  <span class="c1"># ③ 导入并起别名</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pizza</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">p</span>                   <span class="c1"># ④ 给模块起别名</span>
+
+<span class="n">pizza</span><span class="o">.</span><span class="n">make_pizza</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s2">"芝士"</span><span class="p">)</span>          <span class="c1"># ① 用「模块名.函数名」调用</span>
+<span class="n">make_pizza</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s2">"蘑菇"</span><span class="p">)</span>               <span class="c1"># ② 直接调用</span>
+<span class="n">mp</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="s2">"榴莲"</span><span class="p">)</span>                        <span class="c1"># ③ 用别名调用</span>
+<span class="n">p</span><span class="o">.</span><span class="n">make_pizza</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s2">"玉米"</span><span class="p">)</span>               <span class="c1"># ④ 别名也能点出函数</span>
+</code></pre>
+<p>四种写法没有优劣，区别只在<strong>调用时写多长</strong>和<strong>名字冲突的风险</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>调用时要写</th>
+<th>适合场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>import pizza</code></td>
+<td><code>pizza.make_pizza()</code></td>
+<td>模块名短、函数多，一眼看出函数来自哪</td>
+</tr>
+<tr>
+<td><code>from pizza import make_pizza</code></td>
+<td><code>make_pizza()</code></td>
+<td>只用一两个函数，代码更短</td>
+</tr>
+<tr>
+<td><code>from pizza import make_pizza as mp</code></td>
+<td><code>mp()</code></td>
+<td>函数名太长，或与本地函数重名</td>
+</tr>
+<tr>
+<td><code>from pizza import *</code></td>
+<td><code>make_pizza()</code></td>
+<td><strong>不推荐</strong>：导入了什么看不出来，容易覆盖同名变量</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>if __name__ == "__main__":</code> 到底在防什么？</strong> 每个模块都有一个内置变量 <code>__name__</code>：</p>
+<ul>
+<li>直接运行这个文件时，<code>__name__</code> 的值是 <code>"__main__"</code>；</li>
+<li>被别的文件 <code>import</code> 时，<code>__name__</code> 的值是模块名 <code>"pizza"</code>。</li>
+</ul>
+<p>所以把「只有自己运行时才该做的事」（打印演示、跑一遍自测）放进这个判断里，别人 import 你的函数时就不会被那些 <code>print</code> 打扰。<strong>模块顶层不要写会造成副作用的代码</strong>（打印、<code>input()</code>、删文件），这是 Python 模块的基本礼貌。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）两种结果对照</span>
+<span class="c1"># 直接运行：      python pizza.py   → __name__ == "__main__" → 打印演示</span>
+<span class="c1"># 被别人导入：    import pizza      → __name__ == "pizza"    → 只拿到函数，不打印</span>
+</code></pre>
+<blockquote>
+<p><strong>要点</strong>
+- 模块名不能和标准库重名：自己写一个 <code>random.py</code>，<code>import random</code> 就会导入你自己那个，标准库彻底用不了。
+- 同目录才能直接 <code>import</code>；跨目录要靠包（带 <code>__init__.py</code> 的文件夹）或 <code>sys.path</code>，本课程不展开。
+- 导入是<strong>执行一次</strong>模块顶层代码，之后再用不会重复执行——这也是为什么顶层别写副作用。
+- 模块里的函数照样要遵守 2.1～2.6 的规则：参数、返回值、作用域都不变。</p>
+</blockquote>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-定义与调用函数">示例 1：定义与调用函数</h3>
@@ -709,6 +787,41 @@ transition:opacity .18s;z-index:60}
 <span class="n">add_10</span> <span class="o">=</span> <span class="n">make_adder</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">"add_10(10) ="</span><span class="p">,</span> <span class="n">add_10</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>    <span class="c1"># 20  两者互不影响</span>
 </code></pre>
+<h3 id="示例-8-__name__-的两种身份">示例 8：<code>__name__</code> 的两种身份</h3>
+<p>把下面这段存成 <code>module_demo.py</code> 直接运行，会看到 <code>__name__</code> 是 <code>"__main__"</code>；如果被别的文件 <code>import module_demo</code>，<code>__name__</code> 就变成 <code>"module_demo"</code>，<code>if</code> 里面的三行不会执行。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># module_demo.py —— 直接运行时才跑自测</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""矩形面积。"""</span>
+    <span class="k">return</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">average</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""平均值；空列表返回 None，而不是 ZeroDivisionError。"""</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="k">if</span> <span class="n">nums</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"__name__ ="</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>          <span class="c1"># 直接运行 → __main__</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"面积  "</span><span class="p">,</span> <span class="n">area</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"平均  "</span><span class="p">,</span> <span class="n">average</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"空列表"</span><span class="p">,</span> <span class="n">average</span><span class="p">([]))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>__name__ = __main__
+面积   12
+平均   90.0
+空列表 None
+</code></pre>
+<p>把它当模块用的时候，调用方只要写：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）另一个文件里</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">module_demo</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">module_demo</span><span class="o">.</span><span class="n">area</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>          <span class="c1"># 30</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">module_demo</span><span class="o">.</span><span class="n">average</span><span class="p">([]))</span>         <span class="c1"># None</span>
+<span class="c1"># 上面那三行 print 不会再出现，__name__ 是 "module_demo"</span>
+</code></pre>
+<p>这个模式的实际好处是：<strong>同一个文件既能当脚本跑，又能当库被导入</strong>，而且「跑起来会打印东西」和「被导入时安静」这两件事不用维护两份代码。单元 10 的 pytest 也会用同一种思路——测试文件被 pytest 收集，而不是被直接运行。</p>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -769,6 +882,32 @@ transition:opacity .18s;z-index:60}
 2. 包装后调用，观察输出
 3. 思考：如果把这个 <code>wrapper</code> 的名字改回 <code>func</code> 的名字（<code>wrapper.__name__ = func.__name__</code>），为什么更有用？
 （这其实是 Python 内置 <code>functools.wraps</code> 在做的事，能看懂即可，不要求掌握。）</p>
+<p><strong>练习 7-9【把几何函数拆成模块】</strong>
+把三个函数放进 <code>geometry.py</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>          <span class="c1"># 矩形面积</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">perimeter</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>     <span class="c1"># 矩形周长</span>
+    <span class="o">...</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_square</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>     <span class="c1"># 是否正方形，返回 bool</span>
+    <span class="o">...</span>
+</code></pre>
+<p>再写一个 <code>main.py</code>，用 <strong><code>from geometry import ...</code></strong> 导入三个函数，计算并打印 <code>3×4</code> 的面积、周长，以及它是不是正方形。
+要求：<code>geometry.py</code> 里除了函数定义和注释，<strong>不许有任何 <code>print</code> 或 <code>input</code></strong>；<code>main.py</code> 里不许出现 <code>geometry.</code> 这种前缀（说明你用的是 <code>from ... import</code>）。
+期望输出：</p>
+<pre><code class="text"><span class="cl">代码</span><span class="n">面积</span> <span class="mi">12</span>
+<span class="n">周长</span> <span class="mi">14</span>
+<span class="n">是正方形</span><span class="err">？</span> <span class="kc">False</span>
+</code></pre>
+<p><strong>练习 7-10【模块的两种身份】</strong>
+在练习 7-9 的基础上改造：
+① 给 <code>geometry.py</code> 加一个 <code>if __name__ == "__main__":</code> 自测块，直接运行 <code>geometry.py</code> 时打印三行自测结果，被导入时保持安静；
+② 在 <code>main.py</code> 里改用别名：<code>from geometry import perimeter as peri</code>，并解释为什么函数名长的时候别名更合适；
+③ 回答：如果在本目录下把 <code>geometry.py</code> 改名为 <code>random.py</code>，会发生什么？为什么？
+提示：③ 的答案与「模块名不能和标准库重名」有关，单元 8 的标准库部分会再遇到一次。</p>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
 <h3 id="参考答案-7-1">参考答案 7-1</h3>
@@ -1216,6 +1355,67 @@ transition:opacity .18s;z-index:60}
 <span class="c1"># 如果用户看到一个叫 wrapper 的函数名在报错里，他会完全不知道</span>
 <span class="c1"># 自己调用的是哪个函数。这正是 @装饰器 语法糖要解决的问题。</span>
 </code></pre>
+<h3 id="参考答案-7-9">参考答案 7-9</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）geometry.py —— 只放函数，不放副作用</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""矩形面积。"""</span>
+    <span class="k">return</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">perimeter</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""矩形周长。"""</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_square</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""宽高相等即正方形。"""</span>
+    <span class="k">return</span> <span class="n">w</span> <span class="o">==</span> <span class="n">h</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）main.py —— 与 geometry.py 同目录</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">area</span><span class="p">,</span> <span class="n">perimeter</span><span class="p">,</span> <span class="n">is_square</span>
+
+<span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"面积"</span><span class="p">,</span> <span class="n">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"周长"</span><span class="p">,</span> <span class="n">perimeter</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"是正方形？"</span><span class="p">,</span> <span class="n">is_square</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>面积 12
+周长 14
+是正方形？ False
+</code></pre>
+<p>关键点：<code>geometry.py</code> 里一个 <code>print</code> 都没有。如果它在顶层写了 <code>print("加载成功")</code>，那么<strong>每次</strong> <code>import geometry</code> 都会打印一次——导入本该是安静的。</p>
+<h3 id="参考答案-7-10">参考答案 7-10</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）geometry.py —— 加自测块</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">w</span> <span class="o">*</span> <span class="n">h</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">perimeter</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_square</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">w</span> <span class="o">==</span> <span class="n">h</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="c1"># 直接运行 python geometry.py 时才会执行这三行</span>
+    <span class="k">assert</span> <span class="n">area</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">12</span>
+    <span class="k">assert</span> <span class="n">perimeter</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">14</span>
+    <span class="k">assert</span> <span class="n">is_square</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"geometry.py 自测通过"</span><span class="p">)</span>
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># （片段）main.py —— 长函数名用别名</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">area</span><span class="p">,</span> <span class="n">is_square</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">perimeter</span> <span class="k">as</span> <span class="n">peri</span>
+
+<span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"面积"</span><span class="p">,</span> <span class="n">area</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"周长"</span><span class="p">,</span> <span class="n">peri</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>          <span class="c1"># 少写 7 个字符，但读起来仍然清楚</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"是正方形？"</span><span class="p">,</span> <span class="n">is_square</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+</code></pre>
+<p>③ 的答案：把 <code>geometry.py</code> 改名成 <code>random.py</code> 后，同目录下任何 <code>import random</code> 都会<strong>先导入你自己这个文件</strong>（Python 按 <code>sys.path</code> 顺序找，当前目录排在最前），于是 <code>random.choice</code>、<code>random.shuffle</code> 全部消失，标准库的 <code>random</code> 就再也用不上了。这类「影子模块」是新手最莫名其妙的一类 bug：报错信息只会说 <code>module 'random' has no attribute 'choice'</code>，看着像标准库坏了。</p>
 <hr>
 <h2 id="六-常见错误清单-务必逐条自查">六、常见错误清单（务必逐条自查）</h2>
 <blockquote>
@@ -1426,6 +1626,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

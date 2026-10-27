@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 12 课件 · 元编程：动态属性、描述符与元类</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 12 · 逐节课件</div><h2>单元 12 · 元编程：动态属性、描述符与元类</h2><div class="sub">第 22–24 章 · 4 节课 · 建议 2–4 周</div></section><section class="slide" data-s="2"><div class="sk">第 45 课 · 目标与要点</div><h2>动态属性：getattr、setattr 与 property</h2><div class="sub">能写出 __getattr__ 兜底、property 受控属性，并说清 __getattr__ 与 __getattribute__ 的调用时机。</div><ul><li>__getattr__ 只在找不到时调用，已存在的属性不会进来。</li><li>__getattribute__ 每次访问都调用，容易死循环，慎用。</li><li>property 是数据描述符，优先级高于实例字典，所以能真正拦住赋值。</li><li>__getattr__ 里抛 AttributeError，否则 hasattr() 会误判。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 45 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class Config:
+    def __init__(self, data):
+        self._data = data
+
+    def __getattr__(self, name):
+        try:
+            return self._data[name]
+        except KeyError:
+            raise AttributeError(name) from None
+
+cfg = Config({&quot;host&quot;: &quot;localhost&quot;})
+print(cfg.host)       # localhost
+print(cfg.port)       # AttributeError: port</code></pre><div class="sub">动手：实现 Config，验证存在的键、缺失的键、下划线键三种情况。</div></section><section class="slide" data-s="4"><div class="sk">第 46 课 · 目标与要点</div><h2>描述符：把属性访问变成可复用逻辑</h2><div class="sub">能写出数据描述符与非数据描述符，解释属性查找优先级，并用描述符实现一个「惰性属性」。</div><ul><li>property 本身就是数据描述符，所以它能覆盖实例字典。</li><li>数据描述符优先于实例字典，非数据描述符不优先。</li><li>__set_name__ 在类创建时调用，用来拿到属性名，避免手写字符串。</li><li>描述符是类属性，每个实例共享同一个描述符对象，状态要存在实例上。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 46 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class Positive:
+    def __set_name__(self, owner, name):
+        self.name = &quot;_&quot; + name
+
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        return getattr(obj, self.name)
+
+    def __set__(self, obj, value):
+        if value &lt;= 0:
+            raise ValueError(&quot;must be positive&quot;)
+        setattr(obj, self.name, value)
+
+class Order:
+    qty = Positive()
+    price = Positive()</code></pre><div class="sub">动手：实现 Positive，给 Order 的两个字段加校验，测试非法值。</div></section><section class="slide" data-s="6"><div class="sk">第 47 课 · 目标与要点</div><h2>类元编程：__init_subclass__、类装饰器与元类</h2><div class="sub">能注册子类、校验类定义，读懂一个简单元类，并判断何时用 __init_subclass__ 替代元类。</div><ul><li>__init_subclass__ 足够解决 90% 的「注册/校验子类」需求，优先用它。</li><li>类装饰器改的是已创建的类，元类改的是创建过程。</li><li>一个类只能有一个元类，冲突会直接报 TypeError。</li><li>元类是实现细节，不要把它暴露成公开 API，否则使用者会被绑死。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 47 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class Plugin:
+    registry = {}
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        Plugin.registry[cls.__name__] = cls
+
+class JsonPlugin(Plugin):
+    pass
+
+print(Plugin.registry)     # {&#x27;JsonPlugin&#x27;: &lt;class ...&gt;}</code></pre><div class="sub">动手：用 __init_subclass__ 实现插件注册表，注册 3 个插件并打印。</div></section><section class="slide" data-s="8"><div class="sk">第 48 课 · 目标与要点</div><h2>综合验收：读懂框架的 200 行</h2><div class="sub">能在一个真实框架的核心模块里定位「描述符 / 元类 / __getattr__」三种机制，并说清它们各自解决了什么问题。</div><ul><li>先看公开 API，再看实现，不要一头扎进工具函数。</li><li><b>钩子比流程重要</b>：找到钩子，就找到了框架的扩展点。</li><li>画调用链比读注释有效，尤其是元编程代码。</li><li>看不懂时先写最小复现，把框架剥到 20 行。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 48 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class Field:
+    def __set_name__(self, owner, name):
+        self.name = name
+
+    def __get__(self, obj, owner=None):
+        if obj is None:
+            return self
+        return obj._data.get(self.name)
+
+    def __set__(self, obj, value):
+        obj._data[self.name] = value
+
+
+class ModelMeta(type):
+    def __new__(mcls, name, bases, ns):
+        cls = super().__new__(mcls, name, bases, ns)
+        fields = {}
+        for base in bases:                       # 继承父类字段
+# ...</code></pre><div class="sub">动手：选一个库（Django ORM、SQLAlchemy、pydantic、pytest 任选），定位至少两个钩子。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>动态属性：Config.__getattr__ 与 Account.balance 两个例子都能跑通</li><li>描述符：Positive 能拦住非法赋值，Lazy 只计算一次</li><li>类机制：插件注册表与元类校验各实现一版</li><li>综合：完成一份框架阅读笔记（钩子 + 调用链 + 最小复现）</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../12.html">← 单元 12</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

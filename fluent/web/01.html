@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 1 · 数据模型与序列</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 1 · 数据模型与序列</h1>
+  <a class="tag" href="01.html">单元 1</a>
+  <a class="ppt" href="ppt/u/01.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="1" href="lessons/l01.html"><span class="no">01</span><span class="tx">特殊方法：让对象接入语言协议</span></a><a class="" data-l="2" href="lessons/l02.html"><span class="no">02</span><span class="tx">序列家族与推导式</span></a><a class="" data-l="3" href="lessons/l03.html"><span class="no">03</span><span class="tx">元组、拆包、切片与排序</span></a><a class="" data-l="4" href="lessons/l04.html"><span class="no">04</span><span class="tx">别名的坑与选型：list 不是万能的</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l01">第 1 课 · 特殊方法：让对象接入语言协议</a>
+<a class="lv2" href="#l02">第 2 课 · 序列家族与推导式</a>
+<a class="lv2" href="#l03">第 3 课 · 元组、拆包、切片与排序</a>
+<a class="lv2" href="#l04">第 4 课 · 别名的坑与选型：list 不是万能的</a>
+<a class="lv2" href="#case-u01">综合案例：从「能跑」到「好用」的 Deck</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u1"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/01.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u01.html"><span class="k">走读</span>
+    <span class="v">单元 1 完整程序 · 逐段讲解</span></a>
+  <a href="ch/01.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 1–2 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 1</span>
+        <span class="kwk">第 1–2 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 1 · 数据模型与序列</h1>
+      <p class="goal">数据模型 · 序列 · 推导式 · 切片</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 1–2 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p>Python 的「地道的写法」不是背语法糖，而是<strong>让你的对象接入语言自己的协议</strong>。你写 <code>len(x)</code>、<code>for i in x</code>、<code>x[1:3]</code>、<code>x + y</code>、<code>print(x)</code>，解释器都在找同一组特殊方法。</p>
+<p>本单元先把这套协议打通，再横向铺开内置序列：什么时候用 list、tuple、array、deque，推导式与生成器表达式各自的边界在哪里，切片和 <code>+=</code> 有哪些反直觉行为。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>手写一个支持 <code>len()</code>、索引、切片、<code>for</code>、<code>repr()</code> 的类，并解释每一步是谁在调用；</li>
+<li>在 list / tuple / array / deque 之间做出有理由的选择，而不是默认用 list；</li>
+<li>一眼看出 <code>[[]] * 3</code>、<code>t[2] += [...]</code> 这类别名的坑。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="1" href="lessons/l01.html"><span class="no">01</span><span class="tx">特殊方法：让对象接入语言协议</span></a><a data-l="2" href="lessons/l02.html"><span class="no">02</span><span class="tx">序列家族与推导式</span></a><a data-l="3" href="lessons/l03.html"><span class="no">03</span><span class="tx">元组、拆包、切片与排序</span></a><a data-l="4" href="lessons/l04.html"><span class="no">04</span><span class="tx">别名的坑与选型：list 不是万能的</span></a></div></div><h2 id="l01">第 1 课 · 特殊方法：让对象接入语言协议</h2><h3 id="讲解">讲解</h3>
+<p>特殊方法（dunder method）不是给你直接调的，而是给<strong>解释器</strong>调的。<code>len(deck)</code> 走的是 C 层的快速路径，最终调用 <code>deck.__len__()</code>；<code>deck[0]</code> 调用 <code>__getitem__(0)</code>；<code>for card in deck</code> 在没有 <code>__iter__</code> 时会退化为「从 0 开始反复 <code>__getitem__</code>，直到 <code>IndexError</code>」。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+
+<span class="n">Card</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">"Card"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"rank"</span><span class="p">,</span> <span class="s2">"suit"</span><span class="p">])</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FrenchDeck</span><span class="p">:</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="s2">"JQKA"</span><span class="p">)</span>
+    <span class="n">suits</span> <span class="o">=</span> <span class="s2">"spades diamonds clubs hearts"</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span> <span class="o">=</span> <span class="p">[</span><span class="n">Card</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">suit</span><span class="p">)</span>
+                       <span class="k">for</span> <span class="n">suit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">suits</span>
+                       <span class="k">for</span> <span class="n">rank</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">[</span><span class="n">position</span><span class="p">]</span>
+
+
+<span class="n">deck</span> <span class="o">=</span> <span class="n">FrenchDeck</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deck</span><span class="p">))</span>       <span class="c1"># 52</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>         <span class="c1"># Card(rank='2', suit='spades')</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>        <span class="c1"># Card(rank='A', suit='hearts')</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="mi">12</span><span class="p">::</span><span class="mi">13</span><span class="p">])</span>    <span class="c1"># 每隔 13 张取一张，切片也自动生效</span>
+</code></pre>
+<p>只实现 <code>__len__</code> 和 <code>__getitem__</code>，这个类就白拿了 <code>len()</code>、下标、负索引、切片、<code>for</code>、<code>random.choice()</code>。这就是「数据模型」的杠杆效应。</p>
+<h3 id="延伸-特殊方法不是清单-是五组操作">延伸：特殊方法不是清单，是五组操作</h3>
+<p>背 80 多个特殊方法没有意义，按操作族分类就不会漏：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>族</th>
+<th>方法</th>
+<th>什么时候被调</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器</td>
+<td><code>__len__ __getitem__ __setitem__ __delitem__ __contains__ __iter__ __reversed__ __missing__</code></td>
+<td><code>len()</code>、<code>obj[k]</code>、<code>k in obj</code>、<code>for</code></td>
+</tr>
+<tr>
+<td>数值</td>
+<td><code>__add__ __radd__ __iadd__ __mul__ __abs__ __round__ __int__ __float__</code></td>
+<td>运算符、<code>round()</code>、<code>float()</code></td>
+</tr>
+<tr>
+<td>比较与哈希</td>
+<td><code>__eq__ __lt__ __hash__ __bool__</code></td>
+<td><code>==</code>、排序、<code>hash()</code>、<code>if obj</code></td>
+</tr>
+<tr>
+<td>表示与转换</td>
+<td><code>__repr__ __str__ __format__ __bytes__</code></td>
+<td><code>repr()</code>、<code>print()</code>、f-string、<code>bytes()</code></td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td><code>__init__ __new__ __del__</code></td>
+<td>构造、回收</td>
+</tr>
+</tbody>
+</table></div>
+<p>三个容易记错的行为：</p>
+<ul>
+<li><code>__reversed__</code> 不定义时，<code>reversed()</code> 会退化成「先 <code>len()</code> 再倒序取 <code>__getitem__</code>」；对象没有 <code>__len__</code> 就直接 <code>TypeError</code>。</li>
+<li><code>__contains__</code> 不定义时，<code>in</code> 退化为迭代比较，O(n)；给 <code>FrenchDeck</code> 加一个 <code>__contains__</code> 就能把「这张牌在不在」变 O(1)。</li>
+<li><code>__missing__</code> 只在 <code>dict</code> 子类里、且只由 <code>d[k]</code> 触发；<code>d.get(k)</code> 永远不会走它。想统一行为得同时重写 <code>get</code>。</li>
+</ul>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>不要自己调 dunder</strong>：写 <code>len(x)</code>，不要写 <code>x.__len__()</code>。前者有 C 层优化，后者绕过了它。</li>
+<li><strong><code>__repr__</code> 是开发者视角</strong>，理想形式是 <code>Vector2d(3, 4)</code> 这种能重建对象的表达式；<code>__str__</code> 面向用户。只定义 <code>__repr__</code> 时，<code>print()</code> 会自动回退到它。</li>
+<li><strong><code>bool(x)</code> 的回退链</strong>：先找 <code>__bool__</code>，没有就找 <code>__len__</code>，<code>len(x) == 0</code> 即为假。所以定义了 <code>__len__</code> 的容器天然有真假值。</li>
+<li><strong>算术运算符不会自动交换操作数</strong>：<code>a + b</code> 先试 <code>a.__add__(b)</code>，失败或返回 <code>NotImplemented</code> 再试 <code>b.__radd__(a)</code>。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>给 <code>FrenchDeck</code> 加 <code>__repr__</code>，打印成 <code>FrenchDeck(52 cards)</code>。</li>
+<li>加一个 <code>pick()</code> 方法，随机返回一张牌，要求只写一行（提示：<code>random.choice(self)</code>）。</li>
+<li>去掉 <code>__len__</code>，观察 <code>len(deck)</code> 的报错信息，再把 <code>__len__</code> 加回来。</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FancyDeck</span><span class="p">(</span><span class="n">FrenchDeck</span><span class="p">):</span>             <span class="c1"># 接上面的 FrenchDeck</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"FrenchDeck(</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> cards)"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pick</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能不查资料说出 <code>len</code> / <code>[]</code> / <code>for</code> / <code>print</code> 各自触发的方法名</li>
+<li><span class="ck"></span>解释为什么 <code>len(deck)</code> 比 <code>deck.__len__()</code> 更可取</li>
+<li><span class="ck"></span>写出的类在 <code>print()</code> 时输出的是可读的对象表示，而不是 <code>&lt;__main__.X object at 0x...&gt;</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 1 章 §1.2–1.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：特殊方法不是清单，是五组操作</p></div><h2 id="l02">第 2 课 · 序列家族与推导式</h2><h3 id="讲解-1">讲解</h3>
+<p>内置序列按两层维度分类：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>类型</th>
+<th>存什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器序列</td>
+<td>list、tuple、collections.deque</td>
+<td>存<strong>对象引用</strong>，可以放不同类型</td>
+</tr>
+<tr>
+<td>扁平序列</td>
+<td>str、bytes、bytearray、array.array、memoryview</td>
+<td>存<strong>值本身</strong>，只能放字符/数字/字节，更省内存</td>
+</tr>
+<tr>
+<td>可变</td>
+<td>list、bytearray、array、deque</td>
+<td>能原地改</td>
+</tr>
+<tr>
+<td>不可变</td>
+<td>tuple、str、bytes</td>
+<td>改就生成新对象</td>
+</tr>
+</tbody>
+</table></div>
+<p>推导式是「用表达式构造序列」，比 <code>for</code> + <code>append</code> 更快也更难读错：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">symbols</span> <span class="o">=</span> <span class="s2">"$¢£¥€¤"</span>
+<span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">symbols</span> <span class="k">if</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">127</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>                      <span class="c1"># [162, 163, 165, 8364, 164]</span>
+
+<span class="c1"># 等价写法，但 map/filter 需要 lambda，可读性通常更差</span>
+<span class="n">codes2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mi">127</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">symbols</span><span class="p">)))</span>
+</code></pre>
+<p>生成器表达式把方括号换成圆括号，得到的是<strong>惰性</strong>迭代器，一次只产出一个元素，只能遍历一次：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">)</span>      <span class="c1"># 不需要先建列表</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"black"</span><span class="p">,</span> <span class="s2">"white"</span><span class="p">]</span>
+<span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"S"</span><span class="p">,</span> <span class="s2">"M"</span><span class="p">,</span> <span class="s2">"L"</span><span class="p">]</span>
+<span class="n">tshirts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sizes</span><span class="p">]</span>   <span class="c1"># 笛卡尔积：6 种</span>
+</code></pre>
+<h3 id="延伸-memoryview-同一块内存的视图">延伸：memoryview：同一块内存的视图</h3>
+<p><code>lst[:]</code> 一定复制，<code>bytes</code> 切片也复制，但 <code>memoryview</code> 的切片是视图：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s2">"HTTP/1.1 200 OK"</span><span class="p">)</span>
+<span class="n">mv</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">head</span> <span class="o">=</span> <span class="n">mv</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>                 <span class="c1"># 视图，不复制</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>         <span class="c1"># b'HTTP/1.1'</span>
+<span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"9"</span><span class="p">)</span>            <span class="c1"># 改原对象</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>         <span class="c1"># b'HTTP/9.1'，视图跟着变</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mv</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">"HTTP"</span><span class="p">)</span>     <span class="c1"># True，可直接和 bytes 比较</span>
+</code></pre>
+<p>NumPy 的切片同样是视图：<code>arr[1:]</code> 改的是原数组，这和 list 的复制语义相反，是从 list 迁到 NumPy 最常见的 bug。<code>memoryview.cast("I")</code> 还能把同一块内存按 4 字节整数重新解释，解析二进制协议头时省掉所有 unpack 拷贝。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong>推导式只用来「建序列」</strong>，不要在里边 <code>print</code> 或改外部状态；副作用请用普通 <code>for</code>。</li>
+<li><strong>生成器表达式省内存但有一次性</strong>：<code>g = (x for x in data)</code>，遍历一次就空了；需要重复用就存成 list。</li>
+<li><strong>嵌套顺序 = 书写顺序</strong>：<code>for c in colors for s in sizes</code> 外层是 colors。写反了不会报错，只会得到错的结果。</li>
+<li><strong><code>array.array</code> 存的是机器数值</strong>，比 list 省 2–8 倍内存（取决于元素类型），但只能放同一种数值类型。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<p>给定一份 20 个单词的列表，完成三件事，并记录每步耗时（用 <code>time.perf_counter()</code>）：</p>
+<ol>
+<li>用列表推导式取出所有长度大于 5 的单词，转成大写；</li>
+<li>用生成器表达式求这些单词的总长度；</li>
+<li>用 <code>array.array("d", ...)</code> 存 100 万个浮点数，和 list 版本比较 <code>sys.getsizeof()</code>。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能举出一个「必须用生成器表达式而不能用列表推导式」的场景（内存受限 / 无限流 / 只需一次归约）</li>
+<li><span class="ck"></span>能解释 <code>[[]] * 3</code> 与 <code>[[] for _ in range(3)]</code> 的区别</li>
+<li><span class="ck"></span>知道 <code>str</code> 属于扁平序列，因此 <code>str</code> 的切片返回新字符串而不是视图</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 2 章 §2.2–2.3、§2.10</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：memoryview：同一块内存的视图</p></div><h2 id="l03">第 3 课 · 元组、拆包、切片与排序</h2><h3 id="讲解-2">讲解</h3>
+<p>元组有两个身份：<strong>不可变列表</strong>和<strong>没有字段名的记录</strong>。后者更常用——一行数据 <code>("Tokyo", 35.68, 139.69)</code> 用元组，比 dict 轻，比自定义类省事。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">city</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Tokyo"</span><span class="p">,</span> <span class="mf">35.68</span><span class="p">,</span> <span class="mf">139.69</span><span class="p">)</span>
+<span class="n">name</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">city</span>                     <span class="c1"># 拆包</span>
+<span class="n">first</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                   <span class="c1"># first=0, rest=[1,2,3,4]</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>                               <span class="c1"># 交换，不需要临时变量</span>
+
+<span class="k">for</span> <span class="n">rank</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([(</span><span class="s2">"Ann"</span><span class="p">,</span> <span class="mi">90</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Bob"</span><span class="p">,</span> <span class="mi">85</span><span class="p">)],</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">rank</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+</code></pre>
+<p>切片是「读」的语法，切片赋值是「写」的语法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>        <span class="c1"># [2, 4, 6]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>         <span class="c1"># 反转；会生成新列表</span>
+<span class="n">lst</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>      <span class="c1"># 长度可变：用 2 个元素替换 3 个</span>
+<span class="k">del</span> <span class="n">lst</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</code></pre>
+<p>排序有两套 API，区别不只是「原不原地」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"grape"</span><span class="p">,</span> <span class="s2">"raspberry"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">fruits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span>        <span class="c1"># 返回新列表</span>
+<span class="n">fruits</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span>            <span class="c1"># 原地排序，返回 None</span>
+</code></pre>
+<p><code>list.sort()</code> 返回 <code>None</code> 是刻意设计——防止你误以为拿到了新列表，同时提醒这是原地操作。Python 的排序是稳定的 Timsort，相同 key 的元素保持原相对顺序。</p>
+<h3 id="延伸-ellipsis-与元组下标">延伸：Ellipsis 与元组下标</h3>
+<p><code>...</code>（Ellipsis）是合法的切片占位符，含义是「其余维度全取」。内置 <code>list</code> 只支持一维，写 <code>lst[..., 0]</code> 会 <code>TypeError</code>；但实现了 <code>__getitem__</code> 的自定义类型可以自己解释它。NumPy 里 <code>arr[..., 0]</code>、<code>arr[0, ..., :2]</code> 是日常写法。</p>
+<p>自己实现时，<code>key</code> 可能是单值也可能是元组，要把元组当结构拆：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Grid</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span> <span class="o">=</span> <span class="n">rows</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="bp">Ellipsis</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>     <span class="c1"># 2 [1, 3]</span>
+</code></pre>
+<p>要点：<code>Ellipsis</code> 用 <code>is</code> 比较，不要用 <code>==</code>；切片对象 <code>slice(...)</code> 也要单独放行。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong>元组不可变 ≠ 内容不可变</strong>：元组里放 list，list 仍然能改。</li>
+<li><strong><code>s[a:b:c]</code> 的 c 为负表示反向</strong>，<code>s[::-1]</code> 是最常用的反转写法，但它复制了一份数据。</li>
+<li><strong>切片赋值不要求长度相等</strong>，这会让列表长度变化；步长不为 1 时则要求长度相等，否则报 <code>ValueError</code>。</li>
+<li><strong>多维切片只对支持它的对象有效</strong>（如 NumPy 数组），内置 list 不支持 <code>lst[1:2, 3:4]</code>。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<p>有一份成绩单：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">records</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Ann"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">91</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"Tokyo"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Bob"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">78</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"Osaka"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Cid"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">91</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"Tokyo"</span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre>
+<ol>
+<li>按分数降序、同分按名字升序排序，输出名字列表；</li>
+<li>取出分数最高的前两名（用切片，不要用循环）；</li>
+<li>把第二条记录的城市改成 <code>"Kyoto"</code>，验证原列表被修改。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释 <code>sorted(...)</code> 与 <code>list.sort(...)</code> 的返回值差异</li>
+<li><span class="ck"></span>会用 <code>key=lambda r: (-r["score"], r["name"])</code> 实现多关键字排序</li>
+<li><span class="ck"></span>知道 <code>a, *rest = ...</code> 中 <code>rest</code> 一定是 list</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 2 章 §2.4–2.7、§2.9</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：Ellipsis 与元组下标</p></div><h2 id="l04">第 4 课 · 别名的坑与选型：list 不是万能的</h2><h3 id="讲解-3">讲解</h3>
+<p>先看三个经典陷阱，它们都源于「变量是引用，不是盒子」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 1) * 复制的是引用，不是内容</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>          <span class="c1"># [[1, 0, 0], [1, 0, 0], [1, 0, 0]]  ← 三行是同一个列表</span>
+
+<span class="c1"># 2) 元组里的可变对象仍然能改；+= 先原地改，再赋值</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"TypeError:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>             <span class="c1"># (1, 2, [30, 40, 50, 60])  ← 报错了，但列表已经变了</span>
+
+<span class="c1"># 3) 可变默认参数只创建一次</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">append_to</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">bucket</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bucket</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">append_to</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># [1]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">append_to</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># [1, 2]  ← 不是 [2]</span>
+</code></pre>
+<p>正确写法分别是：<code>[[0] * 3 for _ in range(3)]</code>、别对元组元素做增量赋值、默认值用 <code>None</code> 再在函数体里创建。</p>
+<p>当 list 不合适时：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>选择</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存大量同类型数字</td>
+<td><code>array.array</code></td>
+<td>连续内存，省空间</td>
+</tr>
+<tr>
+<td>频繁在两端增删</td>
+<td><code>collections.deque</code></td>
+<td>两端 O(1)，list 头部插入 O(n)</td>
+</tr>
+<tr>
+<td>只读、不复制地看二进制</td>
+<td><code>memoryview</code></td>
+<td>零拷贝切片</td>
+</tr>
+<tr>
+<td>频繁按序插入</td>
+<td><code>bisect.insort</code></td>
+<td>保持有序，插入 O(n) 但查找 O(log n)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="延伸-走哪条路-取决于有没有-iadd">延伸：+= 走哪条路，取决于有没有 <strong>iadd</strong></h3>
+<p><code>x += y</code> 先找 <code>__iadd__</code>；没有就退化成 <code>x = x + y</code>。list 有 <code>__iadd__</code>（等价 <code>extend</code>，原地改并返回 <code>self</code>），tuple 没有，所以 <code>t += (4,)</code> 必定新建对象，别名看不到变化：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">];</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">a</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>          <span class="c1"># [1, 2, 3] [1, 2, 3]，同一个对象</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="n">u</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span> <span class="n">t</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>          <span class="c1"># (1, 2, 3) (1, 2)</span>
+</code></pre>
+<p><code>*=</code> 同理：<code>lst *= 2</code> 原地扩展，<code>tup *= 2</code> 新建。可变对象上还有第二个坑：<code>lst *= 2</code> 是同一对象自我复制，<code>[[0]] * 3</code> 则是三个引用指向同一个内层 list，改一个全变。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong><code>*</code> 复制的是引用</strong>：<code>[[0] * 3] * 3</code> 三行共享同一个内层列表，写入就会三行联动。</li>
+<li><strong><code>+=</code> 先原地修改，再赋值</strong>：tuple 没有 <code>__iadd__</code>，所以 <code>t[2] += [...]</code> 改了列表却仍抛 <code>TypeError</code>。</li>
+<li><strong>可变默认参数只求值一次</strong>：默认值用 <code>None</code>，在函数体里创建新对象。</li>
+<li><strong>list 不是万能</strong>：同类型数字用 <code>array</code>，两端增删用 <code>deque</code>，零拷贝读二进制用 <code>memoryview</code>。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>复现上面三个陷阱，把每个的输出写进注释，再改成正确写法。</li>
+<li>用 <code>deque(maxlen=5)</code> 实现「最近 5 条日志」缓冲，连续 push 10 条，打印结果。</li>
+<li>用 <code>array.array("i", range(1_000_000))</code> 与 list 版本比较 <code>sys.getsizeof()</code>，记录倍数。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释 <code>[[0] * 3] * 3</code> 为什么会三行联动</li>
+<li><span class="ck"></span>能说清 <code>t[2] += [...]</code> 为什么「既报错又修改成功」</li>
+<li><span class="ck"></span>面对「尾部追加为主」和「头部插入为主」两种负载，能分别选 list 和 deque</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 2 章 §2.8、§2.10</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：+= 走哪条路，取决于有没有 __iadd__</p></div><h2 id="case-u01">综合案例：从「能跑」到「好用」的 Deck</h2>
+<blockquote>
+<p>同一个牌堆，先写只够演示的版本，再补成能进真实代码的版本。</p>
+</blockquote>
+<h3 id="重构前-能跑但粗糙">重构前（能跑但粗糙）</h3>
+<p>只实现 <code>__len__</code> 和 <code>__getitem__</code>。<code>len</code>、索引、切片都能用，但三个操作会立刻露馅：<code>in</code> 退化成逐个比较、<code>reversed</code> 依赖 C 层回退、<code>random.shuffle</code> 直接报错。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Deck</span><span class="p">:</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="s2">"JQKA"</span><span class="p">)</span>
+    <span class="n">suits</span> <span class="o">=</span> <span class="s2">"spades diamonds clubs hearts"</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span> <span class="o">=</span> <span class="p">[(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">suits</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+
+<span class="n">deck</span> <span class="o">=</span> <span class="n">Deck</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deck</span><span class="p">))</span>                       <span class="c1"># 52</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deck</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>                         <span class="c1"># ('2', 'spades')</span>
+<span class="nb">print</span><span class="p">((</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"hearts"</span><span class="p">)</span> <span class="ow">in</span> <span class="n">deck</span><span class="p">)</span>         <span class="c1"># True，但走了 52 次比较</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">deck</span><span class="p">))[:</span><span class="mi">2</span><span class="p">])</span>        <span class="c1"># 靠 len + getitem 倒着取</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">deck</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"shuffle 失败:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>          <span class="c1"># 没有 __setitem__，改不了元素</span>
+</code></pre>
+<h3 id="重构后-可直接用">重构后（可直接用）</h3>
+<p>补上四个协议方法，外加一个「抽 n 张返回新牌堆」的业务方法。注意 <code>__iter__</code> 返回的是<strong>迭代器</strong>而不是 <code>self</code>，否则牌堆会被用成一次性迭代器。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Deck</span><span class="p">:</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="s2">"JQKA"</span><span class="p">)</span>
+    <span class="n">suits</span> <span class="o">=</span> <span class="s2">"spades diamonds clubs hearts"</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cards</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cards</span><span class="p">)</span> <span class="k">if</span> <span class="n">cards</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">suits</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranks</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">card</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__reversed__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Deck</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">_cards</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""抽走 n 张，返回新牌堆；原牌堆不变。"""</span>
+        <span class="n">picked</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cards</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">picked</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Deck</span><span class="p">(</span><span class="n">rest</span><span class="p">),</span> <span class="n">Deck</span><span class="p">(</span><span class="n">picked</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cards</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="n">deck</span> <span class="o">=</span> <span class="n">Deck</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deck</span><span class="p">),</span> <span class="n">deck</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"hearts"</span><span class="p">)</span> <span class="ow">in</span> <span class="n">deck</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">deck</span><span class="p">))[:</span><span class="mi">1</span><span class="p">])</span>        <span class="c1"># [('A', 'hearts')]</span>
+
+<span class="n">rest</span><span class="p">,</span> <span class="n">hand</span> <span class="o">=</span> <span class="n">Deck</span><span class="p">()</span><span class="o">.</span><span class="n">shuffle</span><span class="p">()</span><span class="o">.</span><span class="n">pick</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rest</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">hand</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">rest</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">hand</span><span class="p">))</span>   <span class="c1"># 49 3 52</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Deck</span><span class="p">([(</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"hearts"</span><span class="p">)])</span> <span class="o">==</span> <span class="n">Deck</span><span class="p">([(</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"hearts"</span><span class="p">)]))</span>   <span class="c1"># True</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>成员判断</td>
+<td>没有 <code>__contains__</code>，<code>in</code> 逐个比较</td>
+<td>显式实现</td>
+<td>语义清楚，可换 O(1) 结构</td>
+<td>多 4 行代码</td>
+</tr>
+<tr>
+<td>反向遍历</td>
+<td>靠 <code>len</code> + <code>__getitem__</code> 的 C 层回退</td>
+<td>实现 <code>__reversed__</code></td>
+<td>不依赖对象可索引</td>
+<td>必须先想清楚「反向」的语义</td>
+</tr>
+<tr>
+<td>洗牌</td>
+<td>没有 <code>__setitem__</code>，<code>shuffle</code> 直接抛错</td>
+<td>提供 <code>shuffle()</code> 方法改内部列表</td>
+<td>不暴露可变接口就能打乱</td>
+<td>调用方不能对 Deck 下标赋值</td>
+</tr>
+<tr>
+<td>相等判断</td>
+<td>默认按身份比较，两个内容相同的牌堆不相等</td>
+<td><code>__eq__</code> 逐张比较</td>
+<td>可进集合、可断言</td>
+<td>必须同时想 <code>__hash__</code>（可变对象不该有）</td>
+</tr>
+<tr>
+<td>抽牌</td>
+<td>只能自己 <code>deck[i]</code>，容易和洗牌混在一起</td>
+<td><code>pick(n)</code> 返回两个新牌堆</td>
+<td>不可变风格，便于测试</td>
+<td>每次复制列表，牌多时有开销</td>
+</tr>
+<tr>
+<td>迭代器</td>
+<td>若 <code>__iter__</code> 返回 <code>self</code>，只能遍历一次</td>
+<td>返回 <code>iter(self._cards)</code></td>
+<td>可重复遍历、可嵌套</td>
+<td>无</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>把 <code>_cards</code> 换成 <code>frozenset</code> 索引 + <code>tuple</code> 顺序，<code>__contains__</code> 就变成 O(1)；或者把 <code>pick</code> 改成返回生成器，让「抽牌」也能惰性消费。真要做牌类游戏，牌堆应该是<strong>不可变的值对象</strong>，所有操作返回新牌堆——这样撤销和回放都不用额外记录状态。</p>
+<h2 id="单元验收">单元验收</h2>
+<p>完成下面四项才算过关，任何一项不达标就回到对应课节重做：</p>
+<ul>
+<li><span class="ck"></span><strong>协议</strong>：不看资料写出一个类，支持 <code>len()</code>、索引、切片、<code>for</code>、<code>repr()</code>，并解释每个方法由谁调用</li>
+<li><span class="ck"></span><strong>推导式</strong>：能写出等价的 listcomp / genexp / map+filter 三种形式，并说明何时只能用 genexp</li>
+<li><span class="ck"></span><strong>切片与排序</strong>：完成一次多关键字排序 + 切片赋值 + 反转，代码一次跑通</li>
+<li><span class="ck"></span><strong>别名</strong>：独立解释三个别名陷阱的成因，并给出正确写法</li>
+</ul>
+<blockquote>
+<p>下一单元进入字典与集合：哈希表如何决定 <code>dict</code> 的顺序与性能，以及 Unicode 为什么会让「看起来一样」的两个字符串不相等。</p>
+</blockquote>
+    <div class="pn"><span></span><a class="nx" href="02.html"><small>下一单元 →</small><b>单元 2 · 字典、集合与文本</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 1–2 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

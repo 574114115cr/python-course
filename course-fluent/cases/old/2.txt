@@ -1,0 +1,208 @@
+@@5|三件套装饰器：计时、重试、注册
+三个最常用的装饰器，每个都演示一个关键点：
+
+```python
+import functools
+import time
+
+REGISTRY = {}
+
+def timed(fn):
+    @functools.wraps(fn)
+    def wrapper(*a, **kw):
+        t = time.perf_counter()
+        try:
+            return fn(*a, **kw)
+        finally:
+            print(f"{fn.__name__} took {time.perf_counter() - t:.3f}s")
+    return wrapper
+
+def retry(times=3, exc=Exception):
+    def deco(fn):
+        @functools.wraps(fn)
+        def wrapper(*a, **kw):
+            for i in range(times):
+                try:
+                    return fn(*a, **kw)
+                except exc:
+                    if i == times - 1:
+                        raise
+        return wrapper
+    return deco
+
+def register(name=None):
+    def deco(fn):
+        REGISTRY[name or fn.__name__] = fn
+        return fn                       # 注册类装饰器返回原函数，不包装
+    return deco
+
+@register("upper")
+@timed
+@retry(times=2, exc=ValueError)
+def shout(s):
+    if s == "bad":
+        raise ValueError("boom")
+    return s.upper()
+
+print(shout("hi"), REGISTRY)
+print(shout.__name__)        # shout，wraps 保住了名字
+```
+
+输出：`shout took 0.000s` / `HI {'upper': <function shout ...>}` / `shout`。
+
+关键点：
+
+- **装饰顺序是从下往上应用**：`shout = register("upper")(timed(retry(...)(shout)))`。所以 `retry` 在最内层，重试的是原函数；`timed` 在中间，只统计最终一次（含重试总时长）。
+- **`register` 返回原函数**：注册不需要包装，返回原函数能让 `__name__`、签名、文档全部保留。
+- **`timed` 用 `finally`**：函数抛异常也要打印耗时，否则排查超时问题时会漏掉失败调用。
+- **`retry` 必须 `raise` 最后一次**：否则重试失败会静默返回 `None`，问题被吞掉。
+
+下一步：把 `retry` 加上退避（`time.sleep(0.1 * 2 ** i)`）和「只重试特定异常」，就是生产可用的版本；再加一个 `@cached` 组合时要注意顺序——缓存放在最外层才能缓存住重试后的结果。
+
+@@6|Vector：把协议一次实现完整
+目标：一个二维向量，支持打印、相等、哈希、布尔、绝对值、格式化、加法，且行为与内置类型一致。
+
+```python
+import math
+
+class Vector:
+    __match_args__ = ("x", "y")
+
+    def __init__(self, x, y):
+        self.x, self.y = float(x), float(y)
+
+    def __repr__(self):
+        return f"Vector({self.x:g}, {self.y:g})"
+
+    def __eq__(self, other):
+        if not isinstance(other, Vector):
+            return NotImplemented
+        return (self.x, self.y) == (other.x, other.y)
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __abs__(self):
+        return math.hypot(self.x, self.y)
+
+    def __bool__(self):
+        return bool(abs(self))            # 零向量为假
+
+    def __format__(self, spec):
+        if not spec:
+            return str(self)
+        return f"({format(self.x, spec)}, {format(self.y, spec)})"
+
+    def __add__(self, other):
+        if not isinstance(other, Vector):
+            return NotImplemented
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, k):
+        return Vector(self.x * k, self.y * k)
+
+    __rmul__ = __mul__                    # 3 * v 也成立
+
+    def __str__(self):
+        return f"({self.x:g}, {self.y:g})"
+
+v = Vector(3, 4)
+print(v, repr(v), abs(v), bool(Vector(0, 0)))    # (3, 4) Vector(3, 4) 5.0 False
+print(f"{v:.1f}", v + Vector(1, 1), 2 * v)       # (3.0, 4.0) (4, 5) (6, 8)
+print(len({v, Vector(3, 4)}))                    # 1，相等即可哈希去重
+```
+
+设计取舍：
+
+- **`__eq__` 返回 `NotImplemented`**：让 Python 尝试对方的 `__eq__`，比自己 `raise` 更合作。
+- **定义 `__eq__` 必须一起定义 `__hash__`**：否则类变成不可哈希，进不了 set/dict。
+- **`__bool__` 用 `abs` 而不是 `x or y`**：语义是「长度为零才是假」，`(-1, 0)` 也该为真。
+- **`__repr__` 用 `:g`**：`3.0` 打成 `3`，可读性比 `float` 默认好；但要保证「repr 能重建对象」，`Vector('3', '4')` 也接受字符串，所以没问题。
+- **`__rmul__ = __mul__`**：只写 `__mul__` 时 `3 * v` 会失败，因为 `int.__mul__` 不认识 Vector。
+
+@@7|存储后端：ABC 定接口，Protocol 认结构
+需求：同一套业务代码能换内存存储和文件存储。用 ABC 定「必须实现什么」，用 Protocol 描述「长什么样就行」：
+
+```python
+import json
+from abc import ABC, abstractmethod
+
+class Storage(ABC):
+    @abstractmethod
+    def get(self, key: str) -> dict | None: ...
+    @abstractmethod
+    def put(self, key: str, val: dict) -> None: ...
+
+class MemoryStorage(Storage):
+    def __init__(self):
+        self._d = {}
+    def get(self, key):
+        return self._d.get(key)
+    def put(self, key, val):
+        self._d[key] = val
+
+class JsonStorage(Storage):
+    def __init__(self, path):
+        self.path = path
+        self._d = {}
+    def get(self, key):
+        return self._d.get(key)
+    def put(self, key, val):
+        self._d[key] = val
+        with open(self.path, "w", encoding="utf-8") as f:
+            json.dump(self._d, f, ensure_ascii=False)
+
+def save_user(store: Storage, uid: str, name: str):
+    store.put(uid, {"name": name})
+    return store.get(uid)
+
+print(save_user(MemoryStorage(), "u1", "Ann"))     # {'name': 'Ann'}
+```
+
+为什么两者都要：
+
+- **ABC** 的作用是「强制实现 + 可 `isinstance` 判断 + 在实例化时就报错」。漏实现方法时 `MemoryStorage()` 直接 `TypeError`，而不是运行到一半才发现。
+- **Protocol** 适合「第三方类我没法改」的场景：对方只要方法同名同参，静态检查就通过，不需要继承你的基类。区别是 Protocol 不做实例化检查，只在类型检查时报错。
+
+`Storage` 里用 `@abstractmethod` 而不是 `raise NotImplementedError`：前者在**实例化**阶段就拦，后者要等调用才炸。
+
+下一步：加载 `JsonStorage` 时读回文件、用 `tempfile` 写临时文件再 `os.replace` 原子替换，就补上了「进程崩了不丢数据」。
+
+@@8|类型安全的 Stack：泛型怎么不写歪
+需求：一个栈，放 `int` 时静态检查器要能拦住 `push("a")`，取空时返回 `None`。
+
+```python
+from typing import Generic, TypeVar, Optional
+
+T = TypeVar("T")
+
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self._items: list[T] = []
+
+    def push(self, item: T) -> None:
+        self._items.append(item)
+
+    def pop(self) -> Optional[T]:
+        return self._items.pop() if self._items else None
+
+    def peek(self) -> Optional[T]:
+        return self._items[-1] if self._items else None
+
+    def __len__(self) -> int:
+        return len(self._items)
+
+s: Stack[int] = Stack()
+s.push(1)
+s.push(2)
+print(s.pop(), s.peek(), len(s), s.pop(), s.pop())   # 2 1 1 1 None
+```
+
+关键点：
+
+- **`TypeVar("T")` 是类型变量，不是运行时类型**：`Stack[int]()` 在运行时就是 `Stack()`，`__orig_class__` 能查到但不要依赖它做逻辑。
+- **`Optional[T]` 而不是 `T`**：空栈返回 `None` 必须写进返回类型，否则调用方会在 `None` 上取属性。
+- **`self._items: list[T]`**：不给实例属性加注解，检查器推断不出元素类型，`push` 的参数就变成 `Any`，泛型形同虚设。
+- **3.12+ 可以直接 `class Stack[T]:`**，不再需要 `Generic[T]` 和显式 `TypeVar`（PEP 695），但库要兼容 3.10 时还得用旧写法。
+
+下一步：加 `__iter__` 返回 `Iterator[T]`，`__contains__` 收 `object`（而不是 `T`），这样 `1.0 in stack` 也能传——`in` 的参数类型按惯例放宽到 `object`。

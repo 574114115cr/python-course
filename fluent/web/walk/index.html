@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>源码走读 · 12 篇</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>源码走读 · 12 篇</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="wrap">
+  <div class="hero" style="padding:38px 42px 34px">
+    <div class="bdg">WALKTHROUGH · 源码走读</div>
+    <h1>12 个程序，把整本书跑一遍</h1>
+    <p>原书最值钱的部分是那些长例子：一个类从 20 行长到 200 行，每加一个方法就多一条规则。
+    这里每个单元给一个完整程序——约 60–90 行、能直接跑、输出写在页面上，
+    再逐段讲清楚「这行为什么这样写」。读完讲义跑一遍，比读三遍都牢。</p>
+    <div class="st">
+      <div><b>12</b><span>篇走读</span></div>
+      <div><b>12</b><span>个可运行程序</span></div>
+      <div><b>100%</b><span>输出实跑写回</span></div>
+      <div><b>36</b><span>处改动练习</span></div>
+    </div>
+  </div>
+  <div class="grid"><div class="uc">
+  <div class="uh"><div class="un">1</div>
+    <div class="ut">Vector：用一个类把数据模型走一遍</div></div>
+  <div class="um">单元 1 · 数据模型与序列</div>
+  <div class="wl">原书第 1 章靠一个 Vector 从 20 行长到 200 行，把特殊方法讲完。这里保留它的骨架：一个类同时具备表示、比较、哈希、求模、算术、索引、切片、迭代。</div>
+  <div class="uf"><a href="u01.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">2</div>
+    <div class="ut">字典与文本：让 dict 学会「找不到时怎么办」</div></div>
+  <div class="um">单元 2 · 字典、集合与文本</div>
+  <div class="wl">原书第 3 章的重心不是 dict 的 API，而是两个扩展点：__missing__ 决定查不到时做什么，__set_name__ 之外的规范化决定「看起来一样」是不是真的一样。</div>
+  <div class="uf"><a href="u02.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">3</div>
+    <div class="ut">数据类与对象语义：一个发票类踩完五个坑</div></div>
+  <div class="um">单元 3 · 数据类与对象语义</div>
+  <div class="wl">原书第 5 章把 dataclass 讲完，第 6 章才讲「Python 里的变量是标签不是盒子」。这里合成一个类，把默认值、可变默认、哈希、拷贝、相等一次踩完。</div>
+  <div class="uf"><a href="u03.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">4</div>
+    <div class="ut">一等函数：把函数当数据，拼一条处理管线</div></div>
+  <div class="um">单元 4 · 一等函数与类型提示</div>
+  <div class="wl">原书第 7 章的主线是「函数是一等对象」：能赋值、能当参数、能返回、能存进表。这一篇用一条文本处理管线把这四件事全部用上，顺带把类型提示写进去。</div>
+  <div class="uf"><a href="u04.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">5</div>
+    <div class="ut">闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳</div></div>
+  <div class="um">单元 5 · 装饰器、闭包与设计模式</div>
+  <div class="wl">原书第 9 章的核心不是 @ 语法，而是「装饰器 = 接受函数、返回函数的高阶函数」这一句话。这一篇手写三个：计时、重试、缓存，然后叠在一起。</div>
+  <div class="uf"><a href="u05.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">6</div>
+    <div class="ut">序列协议：只写五个方法，白拿一整套序列行为</div></div>
+  <div class="um">单元 6 · 对象协议与序列实现</div>
+  <div class="wl">原书第 12 章用一个 FrenchDeck 和一个继承 MutableSequence 的类说明：实现序列的最小集合是五个方法，其余全部自动获得。这一篇把「白拿的」逐个点名验一遍。</div>
+  <div class="uf"><a href="u06.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">7</div>
+    <div class="ut">接口、协议与继承：三种「多态」的边界在哪</div></div>
+  <div class="um">单元 7 · 接口、协议与继承</div>
+  <div class="wl">原书第 13 章与第 14 章其实在回答同一个问题：什么时候用抽象基类、什么时候用 Protocol、什么时候什么都不用。这一篇让三种写法同时处理同一件事，再比较它们的运行时行为。</div>
+  <div class="uf"><a href="u07.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">8</div>
+    <div class="ut">运算符重载与类型进阶：让 Money 像数字一样工作</div></div>
+  <div class="um">单元 8 · 类型进阶与运算符重载</div>
+  <div class="wl">原书第 16 章讲重载运算符的规则，第 15 章讲类型变量与泛型。这一篇用同一个类把两边接起来：既让 + * - 说得通，也用 TypeVar 与 @overload 把签名写准。</div>
+  <div class="uf"><a href="u08.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">9</div>
+    <div class="ut">迭代器、生成器与控制流：从手写类到 yield from</div></div>
+  <div class="um">单元 9 · 迭代器、生成器与控制流</div>
+  <div class="wl">原书第 17 章的主线：迭代器协议只有 __iter__ + __next__，但生成器把它变成了两行代码。这一篇用同一条需求（把嵌套结构拍平）走完四种写法，再比较它们的行为差异。</div>
+  <div class="uf"><a href="u09.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">10</div>
+    <div class="ut">并发与执行器：线程池、进程池和 GIL 的分界线</div></div>
+  <div class="um">单元 10 · 并发模型与执行器</div>
+  <div class="wl">原书第 19、20 章讲并发模型与执行器。这一篇用同一个任务跑三种方式（串行 / 线程池 / 进程池），并在线程里加锁验证竞态——所有结论都能在输出里看到。</div>
+  <div class="uf"><a href="u10.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">11</div>
+    <div class="ut">asyncio：一个事件循环里同时等十件事</div></div>
+  <div class="um">单元 11 · 异步编程</div>
+  <div class="wl">原书第 21 章讲异步编程。这一篇不碰网络，只用 asyncio.sleep 把「并发等待」这件事看清楚：任务、gather、信号量、超时、队列，五件套全部跑一遍。</div>
+  <div class="uf"><a href="u11.html">打开走读 →</a></div>
+</div><div class="uc">
+  <div class="uh"><div class="un">12</div>
+    <div class="ut">元编程：描述符、类钩子与动态建类</div></div>
+  <div class="um">单元 12 · 元编程：动态属性、描述符与元类</div>
+  <div class="wl">原书第 22–24 章讲动态属性、描述符与类元编程。这一篇写一个 40 行的迷你 ORM：字段校验靠描述符，字段收集靠 __init_subclass__，打印靠类装饰器，最后用 type() 现场造一个类。</div>
+  <div class="uf"><a href="u12.html">打开走读 →</a></div>
+</div></div>
+  <p style="margin-top:26px;font-size:12.5px;color:var(--muted);line-height:1.9">
+    每篇的代码块由 <code>tools/check_walk.py</code> 实跑通过，「运行输出」里的内容就是那一次的
+    真实 stdout——不是手写的预期结果。改代码后重跑 <code>check_walk.py --write</code> 会自动更新。</p>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

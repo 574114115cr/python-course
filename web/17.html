@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="88" data-to="91"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u17"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/17.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s15"><span class="k">大纲</span><span class="v">课程大纲课件 p15</span></a><a href="bank.html#u17"><span class="k">题库</span><span class="v">本单元 4 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="88" data-to="91"><div class="uprog-h"><b>已学 0 / 4 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u17"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/17.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s15"><span class="k">大纲</span><span class="v">课程大纲课件 p15</span></a><a href="bank.html#u17"><span class="k">题库</span><span class="v">本单元 6 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-api-是什么-餐厅服务员的类比">2.1 API 是什么：餐厅服务员的类比</a>
 <a class="lv3" href="#2-2-requests-get-与响应对象-先看-status_code">2.2 requests.get() 与响应对象：先看 status_code ★</a>
@@ -42,6 +43,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-3-速率限制守门员-缓存响应">示例 3：速率限制守门员 + 缓存响应</a>
 <a class="lv3" href="#示例-4-plotly-条形图-悬停提示-颜色-可点击链接">示例 4：Plotly 条形图——悬停提示、颜色、可点击链接</a>
 <a class="lv3" href="#示例-5-hacker-news-两段式调用">示例 5：Hacker News 两段式调用</a>
+<a class="lv3" href="#示例-6-把-请求-json-取字段-拆成纯函数-api_pipeline-py">示例 6：把「请求 → JSON → 取字段」拆成纯函数（api_pipeline.py）</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -52,18 +54,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-17-4">参考答案 17-4</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-17-使用-api-与-plotly">单元 17：使用 API 与 Plotly</h1>
-<blockquote>
-<p>对应教材第 17 章「使用 API」
-阶段 2 · 项目 2：数据可视化
-本单元目标：<strong>学会向互联网上的数据接口（API）要数据，用 Plotly 把 GitHub 最热门的 Python 仓库和 Hacker News 热帖画成可交互图表</strong></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 17 章「使用 API」</span></div><p class="bk-k">阶段 2 · 项目 2：数据可视化
+本单元目标：<strong>学会向互联网上的数据接口（API）要数据，用 Plotly 把 GitHub 最热门的 Python 仓库和 Hacker News 热帖画成可交互图表</strong></p><a href="coverage.html#u17">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -94,6 +94,28 @@ transition:opacity .18s;z-index:60}
 <p>这个类比精确在三处：<strong>① 你不需要进厨房</strong>，也不必知道宫保鸡丁先爆香还是先下肉——<strong>服务方可以随时换做法，只要端出来的还是那道菜</strong>，这就是「接口稳定、实现可变」；<strong>② 菜单公开、厨房私密</strong>——文档告诉你能点什么，服务器代码不必看；<strong>③ 服务员会拒绝你</strong>——「今天卖完了」「菜不在菜单上」对应程序里的 <strong>403 / 404</strong>，★ <strong>要有被拒绝的心理准备</strong>。</p>
 <p>本单元只碰教材涉及的三个接口：<strong>GitHub search API</strong>（返回仓库搜索结果）、<strong>Hacker News API</strong>（返回 id 列表与帖子详情）、以及单元 16 用过的 <strong>USGS 地震 GeoJSON</strong>。</p>
 <pre><code class="language-bash"><span class="cl">终端命令</span>pip<span class="w"> </span>install<span class="w"> </span>requests<span class="w"> </span>plotly<span class="w">          </span><span class="c1"># requests 是本单元新面孔</span>
+</code></pre>
+<p><strong>先建立一件容易被忽略的事</strong>：<code>response.text</code> 是<strong>字符串</strong>，不是字典。字符串上取 <code>["total_count"]</code> 不会返回 <code>None</code>，而是直接抛 <code>TypeError</code>——<code>.json()</code> 那一步就是把字符串编译成数据结构的过程，它不是一个可省的「顺手调用」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 响应体的两种形态：字符串与字典，差一次 json.loads</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">RAW</span> <span class="o">=</span> <span class="s1">'{"total_count": 4350000, "items": [{"name": "django"}]}'</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"response.text 的类型："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">RAW</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  直接取字段："</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">RAW</span><span class="p">[</span><span class="s2">"total_count"</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">RAW</span><span class="p">)</span>                  <span class="c1"># 等价于 response.json()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">response.json() 之后："</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">"，键："</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  取字段："</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">"total_count"</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">"items"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"name"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  取不存在的键："</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">" "</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">"message"</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"KeyError: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">  &lt;- 403 时往往只有 message，没有 items"</span><span class="p">)</span>
 </code></pre>
 <h3 id="2-2-requests-get-与响应对象-先看-status_code">2.2 requests.get() 与响应对象：先看 status_code ★</h3>
 <p><code>requests</code> 是 Python 里发 HTTP 请求最常用的第三方库（单元 9 讲过「标准库不够用就装第三方库」）。核心只有一个函数 <code>requests.get(url)</code>，它返回一个 <strong><code>Response</code> 响应对象</strong>——像<strong>快递包裹</strong>：拆之前先看面单（<code>status_code</code>）确认送对了没，再拆箱取货。对象上有四个你会反复用的东西：<code>status_code</code>（int，状态码，<strong>判断成败的第一道关卡</strong>）、<code>text</code>（str，响应体原始字符串）、<code>headers</code>（字典，大小写不敏感，能看到剩余配额）、<code>json()</code>（方法，把 JSON 响应体转成 Python 字典）。</p>
@@ -131,6 +153,30 @@ transition:opacity .18s;z-index:60}
 </table>
 <p>★ 关键：<strong>不要先写 <code>response.json()</code> 再想成功失败。</strong> 403 时响应体<strong>也是合法 JSON</strong>（GitHub 返回一段解释原因的 JSON），<code>.json()</code> 照样成功——但内容是错误信息。<strong>顺序：先 <code>status_code</code>，再 <code>.json()</code>。</strong></p>
 <p>取数函数三个要点一个都不能省：<strong>① <code>try/except</code> 包住 <code>requests.get()</code></strong>——网络请求永远可能失败；<strong>② 检查 <code>status_code</code></strong>；<strong>③ 失败要打印，不要静默跳过</strong>——静默跳过会画出「少了 30 个仓库」的图，你还以为它成功了。<strong>失败的请求要留下痕迹。</strong>（完整可运行版本见示例 3 的 <code>get_json</code>。）</p>
+<p>上面那张表可以直接写成一张「状态码 → 下一步」的翻译表，比散落的 <code>if</code> 更好维护：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 先 status_code 再 .json()：一张决策表写成函数</span>
+<span class="n">NEXT_STEP</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">200</span><span class="p">:</span> <span class="s2">"成功：放心调用 response.json()"</span><span class="p">,</span>
+    <span class="mi">403</span><span class="p">:</span> <span class="s2">"被拒绝：多半是配额超了，打印剩余配额后停下，别死循环重试"</span><span class="p">,</span>
+    <span class="mi">404</span><span class="p">:</span> <span class="s2">"网址或资源 ID 写错了：核对 URL 和参数"</span><span class="p">,</span>
+    <span class="mi">429</span><span class="p">:</span> <span class="s2">"请求太多：等一会儿再来（读 Retry-After 头）"</span><span class="p">,</span>
+    <span class="mi">500</span><span class="p">:</span> <span class="s2">"服务器自己出错：稍后重试，别改自己的代码"</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">status_code</span><span class="p">,</span> <span class="n">remaining</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回「下一步该做什么」。任何未知状态码都不许当成功。"""</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">NEXT_STEP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">status_code</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"没见过的状态码 </span><span class="si">{</span><span class="n">status_code</span><span class="si">}</span><span class="s2">：打印 response.text 前 200 字再判断"</span>
+    <span class="k">return</span> <span class="n">step</span>
+
+
+<span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">404</span><span class="p">,</span> <span class="mi">429</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">418</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">handle</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 顺序纪律：if response.status_code != 200: 打印并 return None"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   然后才是 response.json() —— 反过来写，403 的错误 JSON 会被当成数据。"</span><span class="p">)</span>
+</code></pre>
 <h3 id="2-3-json-把响应体变成字典">2.3 .json()：把响应体变成字典 ★</h3>
 <p>这是 API 调用<strong>最关键的一步</strong>：把 JSON 文本解析成 Python 的字典和列表，从此你就能用单元 5 的字典取值、单元 7 的函数来处理它。下面这份「已经拿在手上」的响应字典（真实项目里来自 <code>response.json()</code>）长这样：</p>
 <pre><code class="language-text"><span class="cl">示例</span>response_dict（字典）
@@ -145,6 +191,38 @@ transition:opacity .18s;z-index:60}
     └── [N] ...
 </code></pre>
 <p>取值路线就是<strong>一层层剥</strong>：<code>response_dict["items"][0]["owner"]["login"]</code> → <code>vinta</code>。★ 难在<strong>嵌套的方括号</strong>，四对括号很容易写错。<strong>技巧：拆成中间变量</strong>一层层剥。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 四对括号怎么剥：拆成中间变量，一层层取</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"total_count"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">"items"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"django"</span><span class="p">,</span> <span class="s2">"stargazers_count"</span><span class="p">:</span> <span class="mi">78000</span><span class="p">,</span>
+         <span class="s2">"owner"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"django"</span><span class="p">},</span> <span class="s2">"html_url"</span><span class="p">:</span> <span class="s2">"https://github.com/django/django"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"flask"</span><span class="p">,</span> <span class="s2">"stargazers_count"</span><span class="p">:</span> <span class="mi">67000</span><span class="p">,</span>
+         <span class="s2">"owner"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"pallets"</span><span class="p">}},</span>          <span class="c1"># ★ 故意缺 html_url</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">"items"</span><span class="p">]</span>                          <span class="c1"># ① 先拿列表</span>
+<span class="n">first</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                                  <span class="c1"># ② 再拿第一个仓库</span>
+<span class="n">owner</span> <span class="o">=</span> <span class="n">first</span><span class="p">[</span><span class="s2">"owner"</span><span class="p">]</span>                            <span class="c1"># ③ 再进 owner</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"一行版："</span><span class="p">,</span> <span class="n">payload</span><span class="p">[</span><span class="s2">"items"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"owner"</span><span class="p">][</span><span class="s2">"login"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"拆开写："</span><span class="p">,</span> <span class="n">owner</span><span class="p">[</span><span class="s2">"login"</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">for 循环里剥（真实代码几乎都长这样）："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">repo</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">repo</span><span class="p">[</span><span class="s2">"owner"</span><span class="p">][</span><span class="s2">"login"</span><span class="p">]</span>                <span class="c1"># 字典套字典</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"html_url"</span><span class="p">,</span> <span class="s2">"（没有链接）"</span><span class="p">)</span>     <span class="c1"># 可选字段用 .get</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">repo</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}{</span><span class="n">repo</span><span class="p">[</span><span class="s1">'stargazers_count'</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;7,</span><span class="si">}</span><span class="s2">  "</span>
+          <span class="sa">f</span><span class="s2">"by </span><span class="si">{</span><span class="n">login</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}{</span><span class="n">url</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 核心结构用 []，可选字段用 .get()："</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">payload</span><span class="p">[</span><span class="s2">"message"</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  payload['message'] -&gt; KeyError: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">（说明 API 变了或返回错误）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  payload.get('message', '（没有这个键）') -&gt;"</span><span class="p">,</span>
+      <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"message"</span><span class="p">,</span> <span class="s2">"（没有这个键）"</span><span class="p">))</span>
+</code></pre>
 <h3 id="2-4-github-search-api-请求头与速率限制">2.4 GitHub search API：请求头与速率限制 ★</h3>
 <p>教材 17.1 的实操目标是「概述最受欢迎的仓库」，用的接口是 GitHub search API。这个网址要用问号把「接口地址」和「参数」分开读：</p>
 <pre><code class="language-text"><span class="cl">示例</span>https://api.github.com/search/repositories   ← 接口路径：搜索仓库
@@ -153,10 +231,52 @@ transition:opacity .18s;z-index:60}
 &amp;per_page=10                                 ← 每页 10 条（可选，默认 30）
 </code></pre>
 <p><strong>请求头（headers）是 API 的另一半。</strong> 教材这一步要求带上 <code>headers = {"Accept": "application/vnd.github+json"}</code>。头干什么用？类比<strong>点菜时的备注栏</strong>：「我要微辣、多加葱」——不改你要的菜，而是告诉厨房<strong>要什么格式</strong>。</p>
+<p>头就是一个普通字典，所以可以「拼」：再加认证 token 时用 <code>|</code> 合并两本字典即可。查的时候注意 <strong>HTTP 头名大小写不敏感</strong>，自己比对时先统一 <code>lower()</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 请求头是个字典：用 | 合并，键名大小写不敏感</span>
+<span class="n">ACCEPT_JSON</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Accept"</span><span class="p">:</span> <span class="s2">"application/vnd.github+json"</span><span class="p">}</span>
+<span class="n">AUTH</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"authorization"</span><span class="p">:</span> <span class="s2">"Bearer ghp_xxxx"</span><span class="p">}</span>        <span class="c1"># 小写也能被认出来</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="n">ACCEPT_JSON</span> <span class="o">|</span> <span class="n">AUTH</span>                        <span class="c1"># Python 3.9+ 的字典合并</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"合并后："</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+
+<span class="c1"># HTTP 头名大小写不敏感：查的时候统一 lower() 再比</span>
+<span class="n">lookup</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">headers</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"Accept"</span><span class="p">,</span> <span class="s2">"ACCEPT"</span><span class="p">,</span> <span class="s2">"authorization"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  查 </span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;14</span><span class="si">}</span><span class="s2">-&gt; </span><span class="si">{</span><span class="n">lookup</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span><span class="w"> </span><span class="s1">'（没有）'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">三个必须带的头 / 参数："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  Accept: application/vnd.github+json   # 要 JSON 格式"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  timeout=10                            # 不设就会永远挂着"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  params={'q': 'language:python'}       # 让 requests 帮你拼 &amp; 和编码"</span><span class="p">)</span>
+</code></pre>
 <p>有了字典，接下来就是<strong>提取成几个平行的列表</strong>（Plotly 画图要的就是平行列表，单元 16 画地震图时你已经用过这套路）：<code>repo_names</code> 装 <code>name</code> 当柱子标签、<code>stars</code> 装 <code>stargazers_count</code> 当柱子高度、<code>repo_urls</code> 装 <code>html_url</code> 做可点击链接、<code>descriptions</code> 装 <code>description</code>、<code>owners</code> 装 <code>owner.login</code> 上色。完整循环见示例 2。</p>
 <p>★ 提取时的三个坑：<strong>① <code>items</code> 和 <code>total_count</code> 不是一回事</strong>——后者是「符合条件的有几百万个」，前者才是<strong>这一次实际返回给你的</strong>（默认 30 条，可加 <code>&amp;per_page=100</code>）；<strong>② <code>description</code> 可能是 <code>None</code></strong>，写 <code>repo["description"] or "（没写简介）"</code>；<strong>③ 用 <code>.get()</code> 防缺字段</strong>——<code>.get("forks_count", 0)</code> 拿不到就返回默认值，但 <code>response_dict["items"]</code> 这种「核心结构」就该用 <code>[]</code>，缺了说明 API 变了。</p>
 <p><strong>速率限制。</strong> 任何正经 API 都有速率限制——服务器资源有限，人人每秒请求 1000 次网站就垮了。GitHub 的规矩：<strong>未认证每小时 60 次</strong>，登录后（带 token）5000 次。<strong>超限返回 403 Forbidden</strong>，同时响应头 <code>X-RateLimit-Remaining</code> 告诉你还剩几次、<code>X-RateLimit-Limit</code> 告诉你总配额。完整守门员代码见示例 3。</p>
 <p>★ <strong>新手最容易忽略的一点：配额按「一小时窗口」算，不是「每 60 次后立刻重置」。</strong> 刚发出 3 次请求后 <code>X-RateLimit-Remaining</code> 应该显示 57 而不是 60。要连续取几十条数据时<strong>主动 <code>time.sleep(1)</code> 放慢速度</strong>。</p>
+<p>想多拿几条就得翻页，而翻页的参数是算出来的，不是猜出来的：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 分页：页码怎么算、什么时候该停</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">page_params</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">per_page</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">query</span><span class="o">=</span><span class="s2">"language:python"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把「第几页、每页几条」翻译成 API 认识的参数。"""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span> <span class="s2">"sort"</span><span class="p">:</span> <span class="s2">"stars"</span><span class="p">,</span> <span class="s2">"per_page"</span><span class="p">:</span> <span class="n">per_page</span><span class="p">,</span> <span class="s2">"page"</span><span class="p">:</span> <span class="n">page</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">total_pages</span><span class="p">(</span><span class="n">total_count</span><span class="p">,</span> <span class="n">per_page</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""总命中数 -&gt; 总页数；除不尽要向上取整。"""</span>
+    <span class="k">return</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">total_count</span> <span class="o">//</span> <span class="n">per_page</span><span class="p">)</span>          <span class="c1"># 整数向上取整的惯用写法</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第 1~3 页的参数："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="n">page_params</span><span class="p">(</span><span class="n">page</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">总命中数 23 条、每页 10 条 -&gt;"</span><span class="p">,</span> <span class="n">total_pages</span><span class="p">(</span><span class="mi">23</span><span class="p">),</span> <span class="s2">"页"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"总命中数 20 条、每页 10 条 -&gt;"</span><span class="p">,</span> <span class="n">total_pages</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="s2">"页（整除时不要多算一页）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 三个坑："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  1. total_count 是几百万，不是你这次拿到的条数；别照着它翻几千页"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  2. 每页上限 100；再大也没用，API 会默默截断"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  3. 翻页要 sleep(1)，否则几十页就把 60 次配额打光"</span><span class="p">)</span>
+</code></pre>
 <p><strong>四条必须养成的工程习惯</strong>（教材 17.1 反复强调的）：请求包 <code>try/except</code>（否则断网就崩）、检查 <code>status_code</code>（否则把 403 的错误 JSON 当数据用）、失败请求打印出来（否则数据悄悄少一半你却以为完整）、注意限速主动 sleep（否则被拒甚至被封禁）。</p>
 <p>还有一个特别值得学的做法：<strong>把拿到的数据存下来</strong>（教材存成 <code>github_repos.json</code>，见示例 3）。API 数据随时会变，调图时反复请求既慢又烧配额；有了缓存，画图代码就<strong>完全不依赖网络</strong>。</p>
 <h3 id="2-5-plotly-可视化仓库-悬停提示与颜色">2.5 Plotly 可视化仓库：悬停提示与颜色</h3>
@@ -168,6 +288,33 @@ transition:opacity .18s;z-index:60}
 <p>这是 17.2 最有价值、也最容易卡住的一节。目标：悬停在某根柱子上时，除了名字和 star 数，还显示一行<strong>可以点击的链接</strong>，点一下跳到那个仓库的网页。</p>
 <p><strong>问题在哪？</strong> Plotly 默认只把数据<strong>当纯文本</strong>显示。URL 看着像网址，但<strong>点不动</strong>。解法两步：<code>custom_data=["html_url"]</code> 把 URL 挂到每根柱子的「自定义数据」上 → <code>hovertemplate</code> 里插一个 <code>&lt;a href='%{customdata[0]}'&gt;Open in GitHub&lt;/a&gt;</code> 链接（可运行版见本节末，完整版见示例 4）。</p>
 <p>★ <strong>索引别搞混，这是本节 90% 的错误来源：</strong> <code>%{hovertext}</code> 是 <code>hover_name</code> 的内容，<code>%{y}</code> 是 y 轴数值（<code>:,</code> 是千分位格式），<code>%{customdata[n]</code> 是 <code>custom_data</code> 里的第 n 列，<code>&lt;extra&gt;&lt;/extra&gt;</code> 清空右上角默认显示的 <code>trace 0</code> 之类字样。<strong>写之前先把列和索引一一对齐</strong>；不确定就先 <code>print([list(r) for r in fig.data[0].customdata])</code> 看每一列到底是什么。</p>
+<p>不开浏览器也能做这个「对齐」检查——<code>customdata</code> 就是个二维列表，把模板里的占位符替换一遍，看看填出来的是什么：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># hovertemplate 的索引自检：customdata 到底装了几列</span>
+<span class="n">custom_data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"https://github.com/vinta/awesome-python"</span><span class="p">,</span> <span class="s2">"vinta"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"https://github.com/django/django"</span><span class="p">,</span> <span class="s2">"django"</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"https://github.com/pallets/flask"</span><span class="p">,</span> <span class="s2">"pallets"</span><span class="p">],</span>
+<span class="p">]</span>
+<span class="n">TEMPLATE</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"&lt;b&gt;%</span><span class="si">{hovertext}</span><span class="s2">&lt;/b&gt;&lt;br&gt;"</span>
+            <span class="s2">"作者：%</span><span class="si">{customdata[1]}</span><span class="s2">&lt;br&gt;"</span>
+            <span class="s2">"&lt;a href='%</span><span class="si">{customdata[0]}</span><span class="s2">'&gt;Open in GitHub&lt;/a&gt;&lt;extra&gt;&lt;/extra&gt;"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"每根柱子的 customdata："</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">custom_data</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> 根：</span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  每行列数："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">custom_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s2">"-&gt; 索引只能是 0 和 1"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">模拟 Plotly 填模板（柱子 1）："</span><span class="p">)</span>
+<span class="n">filled</span> <span class="o">=</span> <span class="p">(</span><span class="n">TEMPLATE</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"%</span><span class="si">{hovertext}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"django"</span><span class="p">)</span>
+                  <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"%</span><span class="si">{customdata[1]}</span><span class="s2">"</span><span class="p">,</span> <span class="n">custom_data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                  <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"%</span><span class="si">{customdata[0]}</span><span class="s2">"</span><span class="p">,</span> <span class="n">custom_data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                  <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"&lt;extra&gt;&lt;/extra&gt;"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span><span class="p">,</span> <span class="n">filled</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 先对齐再写模板，别凭记忆数下标："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   custom_data=['html_url']               -&gt; 只有 [0]"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"   custom_data=['html_url', 'owner']      -&gt; [0] 是链接、[1] 是作者"</span><span class="p">)</span>
+</code></pre>
 <p><strong>为什么链接文字是写死的？</strong> HTML 的 <code>&lt;a href='地址'&gt;显示文字&lt;/a&gt;</code> 里地址和文字是两个独立部分。教材把 <code>html_url</code> 在 <code>custom_data</code> 里放两遍分别填这两处，但新版 plotly 不允许重复列名（报 <code>DuplicateError</code>）；本讲义<strong>只传一列填 <code>href</code>，文字写死成 "Open in GitHub"</strong>——效果一样，代码更短。</p>
 <p><strong>链接点了没反应？三个必查项：</strong> ① <code>custom_data</code> 的<strong>列名写错了</strong>（写 <code>url</code> 但 DataFrame 里是 <code>html_url</code>）——Plotly <strong>静默忽略</strong>不存在的列，链接变空白；② 忘了 <code>&lt;extra&gt;&lt;/extra&gt;</code> 或忘了 <code>write_html</code> 保存；③ 导出的不是 HTML（比如 png）——<strong>链接是 HTML 的能力，静态图片不可能有。</strong></p>
 <p>可运行版本见示例 4（数据更完整，还加了配色）。</p>
@@ -192,6 +339,40 @@ https://hacker-news.firebaseio.com/v0/item/{id}.json      ← 单篇文章的详
 </code></pre>
 <p><strong>为什么这么设计？</strong> 因为它<strong>通用又省流量</strong>：一份 id 列表能配不同详情查询，组合出「当前最热」「某作者的帖子」等成百上千种需求。类比<strong>报纸的目录页只印标题和页码</strong>。<code>title</code> 是主标题，<code>score</code>（得分 ≈ 点赞数）当热度，<code>descendants</code> 是评论条数。</p>
 <p>★ 两个坑：<strong>① <code>"by"</code> 是合法 JSON 键，但不能当 Python 变量名</strong>——<code>by = item["by"]</code> 会<strong>语法错误</strong>（<code>by</code> 是 Python 关键字），所以老老实实 <code>item["by"]</code> 直接取值；<strong>② <code>url</code> 可能是 <code>null</code></strong>（Ask HN 帖没有外链）。</p>
+<p>这两处兜底不用等真接口，把「一条详情」写成函数就能测：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 第二段取详情：null 条目要跳过，url 为空要兜底</span>
+<span class="n">SAMPLE</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">101</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Why SQLite"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">142</span><span class="p">,</span> <span class="s2">"url"</span><span class="p">:</span> <span class="s2">"https://sqlite.org/why.html"</span><span class="p">},</span>
+    <span class="mi">102</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Ask HN: 你怎么记笔记"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"url"</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>   <span class="c1"># ★ 没有外链</span>
+    <span class="mi">103</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>                                                          <span class="c1"># ★ 已被删除</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_item</span><span class="p">(</span><span class="n">story_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""真项目里是 requests.get(item_url)，这里用字典冒充。"""</span>
+    <span class="k">return</span> <span class="n">SAMPLE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">story_id</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">to_row</span><span class="p">(</span><span class="n">story_id</span><span class="p">):</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">get_item</span><span class="p">(</span><span class="n">story_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>            <span class="c1"># None = 删除；非字典 = 意外</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"title"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"(无标题)"</span><span class="p">,</span>
+        <span class="s2">"score"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"score"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="s2">"link"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"url"</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="sa">f</span><span class="s2">"https://news.ycombinator.com/item?id=</span><span class="si">{</span><span class="n">story_id</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">for</span> <span class="n">story_id</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">101</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">999</span><span class="p">):</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">to_row</span><span class="p">(</span><span class="n">story_id</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">story_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="s1">'跳过（条目已删除或请求失败）'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="kc">None</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">row</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">★ 两处兜底都是为了「每根柱子都有链接」："</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  item is None      -&gt; continue，别让 item['title'] 抛 TypeError"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  url is None       -&gt; 退回讨论页，链接不会变成空白"</span><span class="p">)</span>
+</code></pre>
 <p>完整写法见示例 5，三个细节：<strong>① <code>story_ids[:5]</code></strong>——列表有 500 个 id，你只想画 5 根柱子，<strong>先切片再请求</strong>省配额；<strong>② <code>item_dict is None</code> 的检查</strong>——对删掉的条目 API 返回 <code>null</code>，不检查的话 <code>item_dict["title"]</code> 抛 <code>TypeError</code>；<strong>③ <code>url</code> 的兜底</strong>——用 <code>https://news.ycombinator.com/item?id={story_id}</code> 顶上。★ 这就是 2.6「可点击链接」技术在真实场景里的意义：<strong>链接可能是空的，你得给它一条退路。</strong></p>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
@@ -417,6 +598,143 @@ https://hacker-news.firebaseio.com/v0/item/{id}.json      ← 单篇文章的详
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">"没有拿到可用数据，跳过画图"</span><span class="p">)</span>
 </code></pre>
+<h3 id="示例-6-把-请求-json-取字段-拆成纯函数-api_pipeline-py">示例 6：把「请求 → JSON → 取字段」拆成纯函数（api_pipeline.py）</h3>
+<p>示例 1–5 的取数代码都长在 <code>try/except</code> 里，一旦没有网络就没法验证「取字段对不对」。真正的工程做法是把链路拆成三段<strong>纯函数</strong>：<code>parse_items(payload)</code> 只吃字典、<code>collect(get_json, ...)</code> 只吃「一个能取页的函数」、<code>get_json_with_retry(fetch, ...)</code> 只吃「一个会失败的调用」。这样用一份假 payload 就能把整条链路测干净——<strong>网络只在最外层出现一次</strong>。这也是练习 17-1/17-3 的骨架。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># api_pipeline.py —— 请求 → JSON → 取字段：全部拆成纯函数，离线也能测</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># ===== 一份"假 payload"，结构和 GitHub search API 的响应一模一样 =====</span>
+<span class="n">PAYLOAD_PAGE_1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"total_count"</span><span class="p">:</span> <span class="mi">4350000</span><span class="p">,</span>
+    <span class="s2">"incomplete_results"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">"items"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"awesome-python"</span><span class="p">,</span> <span class="s2">"stargazers_count"</span><span class="p">:</span> <span class="mi">220000</span><span class="p">,</span>
+         <span class="s2">"html_url"</span><span class="p">:</span> <span class="s2">"https://github.com/vinta/awesome-python"</span><span class="p">,</span>
+         <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"A curated list"</span><span class="p">,</span> <span class="s2">"owner"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"vinta"</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"free-python-games"</span><span class="p">,</span> <span class="s2">"stargazers_count"</span><span class="p">:</span> <span class="mi">95000</span><span class="p">,</span>
+         <span class="s2">"html_url"</span><span class="p">:</span> <span class="s2">"https://github.com/tasnowak/free-python-games"</span><span class="p">,</span>
+         <span class="s2">"description"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"owner"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"tasnowak"</span><span class="p">}},</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+<span class="n">PAYLOAD_PAGE_2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"total_count"</span><span class="p">:</span> <span class="mi">4350000</span><span class="p">,</span>
+    <span class="s2">"items"</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"django"</span><span class="p">,</span> <span class="s2">"stargazers_count"</span><span class="p">:</span> <span class="mi">78000</span><span class="p">,</span>
+         <span class="s2">"html_url"</span><span class="p">:</span> <span class="s2">"https://github.com/django/django"</span><span class="p">,</span>
+         <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Web framework"</span><span class="p">,</span> <span class="s2">"owner"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"django"</span><span class="p">}},</span>
+        <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"awesome-python"</span><span class="p">,</span> <span class="s2">"stargazers_count"</span><span class="p">:</span> <span class="mi">220000</span><span class="p">,</span>   <span class="c1"># ★ 跨页重复</span>
+         <span class="s2">"html_url"</span><span class="p">:</span> <span class="s2">"https://github.com/vinta/awesome-python"</span><span class="p">,</span>
+         <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"A curated list"</span><span class="p">,</span> <span class="s2">"owner"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"vinta"</span><span class="p">}},</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_items</span><span class="p">(</span><span class="n">payload</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""★ 纯函数：输入一个 payload，输出五个平行列表。不碰网络、不碰文件。"""</span>
+    <span class="n">names</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="n">urls</span><span class="p">,</span> <span class="n">owners</span><span class="p">,</span> <span class="n">descs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"items"</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>                       <span class="c1"># 核心结构，缺了就报错</span>
+        <span class="n">stars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"stargazers_count"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>    <span class="c1"># 可选字段用 .get</span>
+        <span class="n">urls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"html_url"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span>
+        <span class="n">owners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"owner"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"login"</span><span class="p">,</span> <span class="s2">"未知"</span><span class="p">))</span>
+        <span class="n">descs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"description"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"（没写简介）"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">names</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="n">urls</span><span class="p">,</span> <span class="n">owners</span><span class="p">,</span> <span class="n">descs</span>
+
+
+<span class="n">names</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="n">urls</span><span class="p">,</span> <span class="n">owners</span><span class="p">,</span> <span class="n">descs</span> <span class="o">=</span> <span class="n">parse_items</span><span class="p">(</span><span class="n">PAYLOAD_PAGE_1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"=== 第一页解析结果 ==="</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="n">owners</span><span class="p">,</span> <span class="n">descs</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;18</span><span class="si">}{</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">&gt;8,</span><span class="si">}</span><span class="s2">  by </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}{</span><span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 分页循环：一个函数取多页，按名字去重 ==="</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">collect</span><span class="p">(</span><span class="n">get_json</span><span class="p">,</span> <span class="n">pages</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">per_page</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">pause</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""参数是「取一页的函数」，所以换成假数据也能测。"""</span>
+    <span class="n">seen</span><span class="p">,</span> <span class="n">merged</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(),</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pages</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pause</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">pause</span><span class="p">)</span>                            <span class="c1"># 真项目里写 pause=1</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">get_json</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">per_page</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">payload</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s2"> 页失败，跳过"</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">page_items</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"items"</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">page_items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>                     <span class="c1"># ★ 跨页重复很常见</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s2"> 页发现重复：</span><span class="si">{</span><span class="n">item</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">，丢弃"</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
+            <span class="n">merged</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s2"> 页：返回 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">page_items</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条，累计 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">merged</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">merged</span>
+
+
+<span class="n">FAKE_PAGES</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="n">PAYLOAD_PAGE_1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="n">PAYLOAD_PAGE_2</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fake_get_json</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">per_page</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">FAKE_PAGES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">collect</span><span class="p">(</span><span class="n">fake_get_json</span><span class="p">)</span>
+<span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">o</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">parse_items</span><span class="p">({</span><span class="s2">"items"</span><span class="p">:</span> <span class="n">merged</span><span class="p">})</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">star</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">s</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">pair</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;18</span><span class="si">}{</span><span class="n">star</span><span class="si">:</span><span class="s2">&gt;8,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 失败重试：同一个请求最多试 3 次 ==="</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_json_with_retry</span><span class="p">(</span><span class="n">fetch</span><span class="p">,</span> <span class="n">attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""fetch() 返回 None 表示失败；成功就立刻返回，别做无意义的等待。"""</span>
+    <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">attempts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">fetch</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">attempt</span><span class="si">}</span><span class="s2"> 次成功"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">payload</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  第 </span><span class="si">{</span><span class="n">attempt</span><span class="si">}</span><span class="s2"> 次失败，</span><span class="si">{</span><span class="s1">'重试'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">attempt</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">attempts</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'放弃'</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="n">calls</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"n"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">flaky</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""前两次装死，第三次才成功——模拟网络抖动。"""</span>
+    <span class="n">calls</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">PAYLOAD_PAGE_2</span> <span class="k">if</span> <span class="n">calls</span><span class="p">[</span><span class="s2">"n"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">get_json_with_retry</span><span class="p">(</span><span class="n">flaky</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  最终拿到："</span><span class="p">,</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">"items"</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  说明：403 不要重试（配额已空，重试只会更糟），网络异常才重试。"</span><span class="p">)</span>
+</code></pre>
+<p><strong>运行结果</strong>（实跑输出）：</p>
+<pre><code class="language-text"><span class="cl">示例</span>=== 第一页解析结果 ===
+  awesome-python     220,000  by vinta     A curated list
+  free-python-games   95,000  by tasnowak  （没写简介）
+
+=== 分页循环：一个函数取多页，按名字去重 ===
+  第 1 页：返回 2 条，累计 2 条
+  第 2 页发现重复：awesome-python，丢弃
+  第 2 页：返回 2 条，累计 3 条
+  awesome-python     220,000
+  free-python-games   95,000
+  django              78,000
+
+=== 失败重试：同一个请求最多试 3 次 ===
+  第 1 次失败，重试
+  第 2 次失败，重试
+  第 3 次成功
+  最终拿到： ['django', 'awesome-python']
+  说明：403 不要重试（配额已空，重试只会更糟），网络异常才重试。
+</code></pre>
+<p>三条解读：</p>
+<ol>
+<li><strong>参数传「函数」而不是「网址」，是这个示例最值钱的设计</strong>。<code>collect(get_json)</code> 里的 <code>get_json</code> 可以是真 requests，也可以是 <code>fake_get_json</code>——<strong>依赖从外部注入，测试就不用联网</strong>。Django 的测试客户端、pytest 的 mock 都是这个思路。</li>
+<li><strong>「重试」和「限速」是两件事，不能混</strong>。<code>get_json_with_retry</code> 处理的是「这次调用意外失败」（网络抖动、超时），所以连试 3 次；而 403 是<strong>确定性失败</strong>，重试只会继续消耗已经为 0 的配额。把两者混成一个大 <code>while</code> 循环，就是新手最常见的「死循环轰炸 API」。</li>
+<li><strong>把 <code>pages=2</code> 改成 <code>pages=6</code> 会怎样</strong>：<code>FAKE_PAGES</code> 只有两页，第 3–6 页会依次打印「第 N 页失败，跳过」，<code>merged</code> 仍是 3 条——<strong>这正是真实翻页到底后该有的行为</strong>：不该崩，也不该静默。若把 <code>per_page</code> 改成 100，<code>page_params</code> 里应同步检查「超过 100 会被 API 截断」。</li>
+</ol>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>
 <h3 id="基础档">基础档</h3>
@@ -770,6 +1088,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

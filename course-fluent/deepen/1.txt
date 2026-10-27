@@ -1,0 +1,174 @@
+@@1|特殊方法不是清单，是五组操作
+背 80 多个特殊方法没有意义，按操作族分类就不会漏：
+
+| 族 | 方法 | 什么时候被调 |
+|---|---|---|
+| 容器 | `__len__ __getitem__ __setitem__ __delitem__ __contains__ __iter__ __reversed__ __missing__` | `len()`、`obj[k]`、`k in obj`、`for` |
+| 数值 | `__add__ __radd__ __iadd__ __mul__ __abs__ __round__ __int__ __float__` | 运算符、`round()`、`float()` |
+| 比较与哈希 | `__eq__ __lt__ __hash__ __bool__` | `==`、排序、`hash()`、`if obj` |
+| 表示与转换 | `__repr__ __str__ __format__ __bytes__` | `repr()`、`print()`、f-string、`bytes()` |
+| 生命周期 | `__init__ __new__ __del__` | 构造、回收 |
+
+三个容易记错的行为：
+
+- `__reversed__` 不定义时，`reversed()` 会退化成「先 `len()` 再倒序取 `__getitem__`」；对象没有 `__len__` 就直接 `TypeError`。
+- `__contains__` 不定义时，`in` 退化为迭代比较，O(n)；给 `FrenchDeck` 加一个 `__contains__` 就能把「这张牌在不在」变 O(1)。
+- `__missing__` 只在 `dict` 子类里、且只由 `d[k]` 触发；`d.get(k)` 永远不会走它。想统一行为得同时重写 `get`。
+
+@@2|memoryview：同一块内存的视图
+`lst[:]` 一定复制，`bytes` 切片也复制，但 `memoryview` 的切片是视图：
+
+```python
+data = bytearray(b"HTTP/1.1 200 OK")
+mv = memoryview(data)
+head = mv[:8]                 # 视图，不复制
+print(head.tobytes())         # b'HTTP/1.1'
+data[5] = ord("9")            # 改原对象
+print(head.tobytes())         # b'HTTP/9.1'，视图跟着变
+print(mv[0:4] == b"HTTP")     # True，可直接和 bytes 比较
+```
+
+NumPy 的切片同样是视图：`arr[1:]` 改的是原数组，这和 list 的复制语义相反，是从 list 迁到 NumPy 最常见的 bug。`memoryview.cast("I")` 还能把同一块内存按 4 字节整数重新解释，解析二进制协议头时省掉所有 unpack 拷贝。
+
+@@3|Ellipsis 与元组下标
+`...`（Ellipsis）是合法的切片占位符，含义是「其余维度全取」。内置 `list` 只支持一维，写 `lst[..., 0]` 会 `TypeError`；但实现了 `__getitem__` 的自定义类型可以自己解释它。NumPy 里 `arr[..., 0]`、`arr[0, ..., :2]` 是日常写法。
+
+自己实现时，`key` 可能是单值也可能是元组，要把元组当结构拆：
+
+```python
+class Grid:
+    def __init__(self, rows):
+        self._rows = rows
+
+    def __getitem__(self, key):
+        if not isinstance(key, tuple):
+            return self._rows[key]
+        row, col = key
+        if row is Ellipsis:
+            return [r[col] for r in self._rows]
+        return self._rows[row][col]
+
+g = Grid([[1, 2], [3, 4]])
+print(g[0, 1], g[..., 0])     # 2 [1, 3]
+```
+
+要点：`Ellipsis` 用 `is` 比较，不要用 `==`；切片对象 `slice(...)` 也要单独放行。
+
+@@4|+= 走哪条路，取决于有没有 __iadd__
+`x += y` 先找 `__iadd__`；没有就退化成 `x = x + y`。list 有 `__iadd__`（等价 `extend`，原地改并返回 `self`），tuple 没有，所以 `t += (4,)` 必定新建对象，别名看不到变化：
+
+```python
+a = [1, 2]; b = a; a += [3]
+print(a, b)          # [1, 2, 3] [1, 2, 3]，同一个对象
+
+t = (1, 2); u = t; t += (3,)
+print(t, u)          # (1, 2, 3) (1, 2)
+```
+
+`*=` 同理：`lst *= 2` 原地扩展，`tup *= 2` 新建。可变对象上还有第二个坑：`lst *= 2` 是同一对象自我复制，`[[0]] * 3` 则是三个引用指向同一个内层 list，改一个全变。
+
+@@5|dict 的扩容：为什么插入偶尔变慢
+dict 是开放寻址哈希表，装载率到约 2/3 就扩容：新建更大的表，把所有键重新插入。单次插入最坏 O(n)，均摊 O(1)。三条工程含义：
+
+- 已知规模就先构造，别边插边扩容。`dict.fromkeys(keys)` 或一次性字面量比循环赋值省。
+- 遍历中改大小会 `RuntimeError: dictionary changed size during iteration`；要改就先 `list(d)` 收集键。
+- 删除键会留下 dummy 标记（墓碑），越删越慢；长期增删的缓存适合定期重建一个新的 dict。
+
+顺带一个事实：`sys.getsizeof({})` 是 64 字节，空 dict 也不便宜。这就是「小对象用 `__slots__` 或元组代替 dict」的动机之一。
+
+@@6|ChainMap 的写落在第一个映射
+`ChainMap` 只是在查找时依次问每个映射，写操作永远落在第一个：
+
+```python
+from collections import ChainMap
+defaults = {"color": "red", "size": 10}
+user = {"color": "blue"}
+c = ChainMap(user, defaults)
+print(c["color"], c["size"])   # blue 10
+c["size"] = 12                 # 写进 user，不动 defaults
+print(user, defaults)          # {'color': 'blue', 'size': 12} {'color': 'red', 'size': 10}
+```
+
+`c.maps` 能拿到映射列表，改优先级就调整顺序。`shelve` 用 pickle 存值，键必须是 `str`；pickle 跨 Python 大版本不保证兼容，长期存档应该换 JSON 或 SQLite。读回来的值已经是副本，改完要显式写回。
+
+@@7|视图做集合运算的前提
+`d.items()` 返回视图，支持 `&`、`|`、`-` 做集合运算，但要求每个键值对可哈希——值里放 list 就直接 `TypeError`：
+
+```python
+a = {"x": 1, "y": 2}; b = {"y": 2, "z": 3}
+print(a.items() & b.items())    # {('y', 2)}
+print(a.keys() | b.keys())      # {'x', 'y', 'z'}
+```
+
+`MappingProxyType` 是只读**代理**，不是快照：底层 dict 一变，代理看到的就是新值。
+
+```python
+from types import MappingProxyType
+cfg = {"debug": True}
+ro = MappingProxyType(cfg)
+cfg["debug"] = False
+print(ro["debug"])      # False
+```
+
+要真快照得 `dict(cfg)` 复制一份。
+
+@@8|unicodedata 与文件系统编码
+`unicodedata` 能按名字查字符、查类别、做规范化：
+
+```python
+import unicodedata as ud
+print(ud.lookup("GREEK SMALL LETTER ALPHA"))            # α
+print(ud.name("é"))                                     # LATIN SMALL LETTER E WITH ACUTE
+print(ud.normalize("NFC", "e\u0301") == "é")            # True
+print(ud.category("α"), ud.category("1"), ud.category(" "))   # Ll Nd Zs
+```
+
+`os.fsencode` / `os.fsdecode` 处理的是**文件系统编码**，和 `str.encode("utf-8")` 不是一回事：Linux 上遇到无法解码的文件名字节时，会用 `surrogateescape` 把原始字节映射成孤立代理字符，来回转换不丢字节。处理「用户传了个奇怪文件名」的路径时必须用它，用 UTF-8 硬编码会抛 `UnicodeDecodeError`。
+
+@@9|namedtuple 的三个自省工具
+```python
+from collections import namedtuple
+P = namedtuple("P", "x y")
+p = P(1, 2)
+print(P._fields)          # ('x', 'y')
+print(p._asdict())        # {'x': 1, 'y': 2}（3.8+ 是普通 dict）
+print(P._make([3, 4]))    # P(x=3, y=4)
+print(p._replace(x=9))    # P(x=9, y=2)，返回新实例
+```
+
+`_asdict()` 在 3.8 之前返回 `OrderedDict`，现在返回普通 dict，顺序仍然是字段顺序。`_replace` 是浅拷贝出新实例，适合做不可变更新；`_make` 用来把从 CSV/数据库读到的行快速变成对象，比 `P(*row)` 更能表达意图。`_fields` 的典型用途是写通用的序列化函数，不用每加一个字段就改代码。
+
+@@10|数据类的代码异味
+`@dataclass` 让「只有字段没有行为」的类写起来很省，但字段一多就是信号：3 个字段还行，8 个以上通常说明这个概念该拆。三条判断标准：
+
+- 字段是否总是一起出现、一起用？成组出现就抽小类（`Address`、`Money`），别让一个类装两套概念。
+- 有没有一半字段只服务于某一个方法？那些字段属于另一个类，只是暂时寄住在这里。
+- 是不是到处在写 `obj.kind == "a"` 的 if 分支？那缺的是行为，不是字段，该换多态或枚举分派。
+
+原书把这种现象叫 code smell，不是说 dataclass 不好，而是提醒别用它替代设计。判断方法很简单：给这个类加一个方法时，你需要读几个字段？超过 3 个就该拆了。
+
+@@11|浅拷贝返回自身，参数是引用
+`copy.copy()` 对不可变对象常常直接返回自身，因为没必要复制：
+
+```python
+import copy
+t = (1, 2, 3)
+print(copy.copy(t) is t)          # True
+l = [[1], [2]]
+c = copy.copy(l)
+print(c is l, c[0] is l[0])       # False True，内层仍共享
+```
+
+函数参数也是引用：在函数里 `x += [1]` 会改到调用方的 list，`x = x + [1]` 只是本地重绑定，外面看不到。要不要防御性复制，取决于这个参数是不是「你的所有物」——如果是调用方传进来、还要继续用的对象，就地修改必须写进文档，否则就是隐形副作用。
+
+@@12|del 删的是名字，不是对象
+```python
+import sys
+a = [1, 2, 3]
+b = a
+print(sys.getrefcount(a))   # 3：a、b、和 getrefcount 的临时参数
+del a
+print(b)                    # 对象还在，因为 b 还引用着它
+```
+
+CPython 靠引用计数立即回收，循环引用交给分代 GC（`gc.collect()` 可手动触发）。`__del__` 不是可靠析构钩子：回收时机不确定，解释器退出时也不保证调用，拿它关文件、连数据库一定会漏。要确定性清理就用 `with`；对象没有上下文管理器，就 `contextlib.closing` 包一层。

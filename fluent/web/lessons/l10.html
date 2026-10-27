@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 10 课 · dataclass 进阶：默认值、校验、冻结与模式匹配</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="10">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 10 课 · dataclass 进阶：默认值、校验、冻结与模式匹配</h1>
+  <a class="tag" href="../03.html">单元 3</a>
+  <a class="ppt" href="../ppt/u/03.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:20.8%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="9" href="l09.html"><span class="no">09</span><span class="tx">数据类三件套：namedtuple、NamedTuple、dataclass</span></a><a class="cur" data-l="10" href="l10.html"><span class="no">10</span><span class="tx">dataclass 进阶：默认值、校验、冻结与模式匹配</span></a><a class="" data-l="11" href="l11.html"><span class="no">11</span><span class="tx">变量不是盒子：引用、别名与拷贝</span></a><a class="" data-l="12" href="l12.html"><span class="no">12</span><span class="tx">可变性、默认参数与对象生命周期</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-数据类的代码异味">延伸：数据类的代码异味</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../03.html"><span class="k">单元</span>
+    <span class="v">单元 3 · 数据类与对象语义</span></a>
+  <a href="../bank.html#u3"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/03.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u03.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/05.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 5–6 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 10 课</span>
+        <span class="kwk">单元 3 · 第 5–6 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>dataclass 进阶：默认值、校验、冻结与模式匹配</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用 `field(default_factory=...)` 处理可变默认值，用 `__post_init__` 做校验，用 `frozen` 与 `slots` 控制可变性和内存。</div>
+    <h3 id="讲解">讲解</h3>
+<p>dataclass 最常踩的坑是可变默认值。直接写 <code>tags: list = []</code> 会抛 <code>ValueError</code>，因为所有实例会共享同一个列表。正确写法是工厂：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Article</span><span class="p">:</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">views</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># 不参与相等比较</span>
+</code></pre>
+<p>需要在初始化后做校验或派生字段，用 <code>__post_init__</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Range</span><span class="p">:</span>
+    <span class="n">lo</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">hi</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lo</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"lo(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lo</span><span class="si">}</span><span class="s2">) &gt; hi(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hi</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+</code></pre>
+<p><code>frozen=True</code> 让实例不可变，同时生成 <code>__hash__</code>，可以直接放进 set 或做 dict 的键：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+</code></pre>
+<p><code>slots=True</code>（3.10+）让 dataclass 只保留字段槽位，省内存、访问更快，但不能再动态加属性。模式匹配可以直接解构 dataclass：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">match</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"origin"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"on y-axis:"</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre>
+<h3 id="延伸-数据类的代码异味">延伸：数据类的代码异味</h3>
+<p><code>@dataclass</code> 让「只有字段没有行为」的类写起来很省，但字段一多就是信号：3 个字段还行，8 个以上通常说明这个概念该拆。三条判断标准：</p>
+<ul>
+<li>字段是否总是一起出现、一起用？成组出现就抽小类（<code>Address</code>、<code>Money</code>），别让一个类装两套概念。</li>
+<li>有没有一半字段只服务于某一个方法？那些字段属于另一个类，只是暂时寄住在这里。</li>
+<li>是不是到处在写 <code>obj.kind == "a"</code> 的 if 分支？那缺的是行为，不是字段，该换多态或枚举分派。</li>
+</ul>
+<p>原书把这种现象叫 code smell，不是说 dataclass 不好，而是提醒别用它替代设计。判断方法很简单：给这个类加一个方法时，你需要读几个字段？超过 3 个就该拆了。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>默认值工厂每个实例调用一次</strong>，<code>field(default_factory=list)</code> 不会共享列表。</li>
+<li><strong><code>frozen=True</code> 是浅冻结</strong>：字段本身不可重新赋值，但字段指向的 list 仍可修改。</li>
+<li><strong><code>__post_init__</code> 在 <code>__init__</code> 末尾调用</strong>，此时所有字段都已赋值，适合校验和派生。</li>
+<li><strong><code>slots=True</code> 与 <code>frozen=True</code> 可以同时用</strong>，但继承时会受限制，别在会扩展的基类上开 slots。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>定义 <code>Article</code>，两个实例各 append 一个 tag，验证互不影响。</li>
+<li>定义 <code>Range</code>，构造 <code>Range(5, 1)</code> 观察异常信息。</li>
+<li>用 <code>frozen=True</code> 的 <code>Point</code> 做 dict 的键，再用模式匹配写一个 <code>describe(point)</code> 函数，覆盖原点、x 轴、y 轴、普通点四种情况。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释为什么 dataclass 不允许 <code>tags: list = []</code></li>
+<li><span class="ck"></span>会用 <code>__post_init__</code> 做参数校验，并知道它在何时执行</li>
+<li><span class="ck"></span>知道 frozen 只冻结字段绑定，不冻结字段指向的可变对象</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 5 章 §5.5–5.8</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：数据类的代码异味</p></div>
+    <div class="pn"><a href="l09.html"><small>← 第 9 课 · 单元 3</small><b>数据类三件套：namedtuple、NamedTuple、dataclass</b></a><a class="nx" href="l11.html"><small>第 11 课 · 单元 3 →</small><b>变量不是盒子：引用、别名与拷贝</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../03.html">返回单元 3</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=10, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

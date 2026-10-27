@@ -30,7 +30,12 @@ border-bottom:1px solid var(--line)}
 .top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
+.top-in .rv{font-size:12.5px;font-weight:700;color:#0b6e54;background:#e6f6f0;
+border:1px solid #b8e0d0;border-radius:6px;padding:4px 10px;white-space:nowrap}
+.top-in .rv:hover{background:#d3efe4;text-decoration:none}
 .back{font-size:13.5px;color:var(--muted);white-space:nowrap}
+.top-in .tno{font-size:11.5px;font-weight:700;color:var(--p1);background:var(--p1bg);
+border-radius:20px;padding:3px 10px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .top h1{font-size:15.5px;margin:0;font-weight:700;flex:1;min-width:0;
 overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
@@ -40,15 +45,16 @@ overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* 布局 */
 .layout{max-width:1300px;margin:0 auto;padding:24px 22px 80px;display:flex;gap:24px;align-items:flex-start}
-.side{width:230px;flex-shrink:0;position:sticky;top:96px;max-height:calc(100vh - 120px);
+.side{width:250px;flex-shrink:0;position:sticky;top:96px;max-height:calc(100vh - 120px);
 overflow-y:auto}
 .sblk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;margin-bottom:12px}
-/* 「全部 N 节」折叠块：桌面默认展开（HTML 带 open），窄屏由 JS 收起 */
-.nlx summary{display:flex;align-items:center;gap:6px;cursor:pointer;list-style:none;
-font-size:11.5px;color:var(--muted);letter-spacing:1px;font-weight:700;margin:0 0 10px}
-.nlx summary::-webkit-details-marker{display:none}
-.nlx .nlx-ar{margin-left:auto;font-size:9px;color:var(--muted);transition:transform .15s}
-.nlx[open] .nlx-ar{transform:rotate(90deg)}
+/* 侧栏底部：通向完整目录的那一条 */
+.nall{display:flex;align-items:center;gap:6px;margin-top:8px;padding:8px 9px;
+border-top:1px dashed var(--line);font-size:12px;font-weight:700;color:var(--p1);
+text-decoration:none}
+.nall .ar{margin-left:auto;transition:transform .15s}
+.nall:hover{text-decoration:none;color:#18528f}
+.nall:hover .ar{transform:translateX(3px)}
 pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;
 font-weight:700;color:var(--p1);background:#fff;border:1px solid var(--line);
 border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
@@ -207,7 +213,107 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
  .sched{flex-wrap:wrap}.sc{min-width:80px}
  .pn{flex-direction:column}
 }
+/* 窄屏顶栏只留「返回 + 标题 + 课件」：课号与复习入口在正文/侧栏都有，避免挤掉标题 */
+@media(max-width:620px){
+ .top-in{gap:10px;padding:0 14px}
+ .top-in .tno,.top-in .rv,.top-in .sp{display:none}
+ /* 90 分钟四段改 2×2，避免 3+1 参差 */
+ .sched{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .sc{min-width:0}
+}
 
+"""
+
+# 复习计划页（web/review.html）专用样式：跟着 unit.css 一起用
+REVIEW_CSS = """
+:root{--p4:#c8443c;--p4bg:#fbeceb}
+.dash{background:#fff;border:1px solid var(--line);border-radius:14px;
+padding:16px 18px;margin:0 0 16px}
+.dhead{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.dhead b{font-size:15px}
+.dhead span{font-size:12px;color:var(--muted)}
+.drow{display:flex;align-items:center;gap:12px;margin:8px 0}
+.dlab{flex:0 0 34px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.dbar{flex:1;height:9px;background:#e6ecf3;border-radius:99px;overflow:hidden}
+.dbar i{display:block;height:100%;width:0;border-radius:99px;
+background:linear-gradient(90deg,#2f6df6,#22a06b);transition:width .25s}
+.dbar.b2 i{background:linear-gradient(90deg,#1f5fa8,#0e9b78)}
+.dbar.b3 i{background:linear-gradient(90deg,#e08a15,#c46f00)}
+.dval{flex:0 0 auto;min-width:110px;text-align:right;font-size:12.5px;
+font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+.top-in .sp{flex:1}
+.rv-hero{background:linear-gradient(135deg,#1f5fa8,#0e9b78);border-radius:16px;
+padding:30px 34px;color:#fff;margin:0 0 20px}
+.rv-hero h1{margin:0 0 8px;font-size:27px;line-height:1.3}
+.rv-hero p{margin:0;font-size:14px;color:#dbe8f5;line-height:1.85;max-width:760px}
+.rv-hero .st{display:flex;gap:34px;flex-wrap:wrap;margin-top:16px}
+.rv-hero .st b{display:block;font-size:24px;font-weight:700;line-height:1.2}
+.rv-hero .st span{font-size:12px;color:#c9dcf0}
+.rv-sec{display:flex;align-items:baseline;gap:12px;margin:32px 0 14px}
+.rv-sec h2{font-size:20px;margin:0}
+.rv-sec span{font-size:12.5px;color:var(--muted)}
+.rv-item{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);
+border-radius:13px;padding:14px 16px;margin:0 0 10px}
+.rv-item.over{border-color:#ecc9c6;background:#fdf7f6}
+.rv-no{flex:0 0 40px;height:40px;border-radius:10px;background:var(--p1bg);color:var(--p1);
+display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;
+font-variant-numeric:tabular-nums}
+.rv-item.over .rv-no{background:var(--p4bg);color:var(--p4)}
+.rv-bd{flex:1;min-width:0}
+.rv-t{font-size:15px;font-weight:700;line-height:1.45}
+.rv-m{font-size:12px;color:var(--muted);margin-top:2px}
+.rv-m .od{color:var(--p4);font-weight:700}
+.rv-task{font-size:13px;color:#33475a;line-height:1.7;margin-top:6px;
+background:#f4f7fb;border-radius:8px;padding:8px 12px}
+.rv-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px;align-items:center}
+.rv-act a{font-size:12px;font-weight:700;color:var(--p1);background:#fff;
+border:1px solid var(--line);border-radius:7px;padding:4px 11px}
+.rv-act a:hover{background:var(--p1bg);text-decoration:none}
+.rv-act button{font:inherit;font-size:12px;font-weight:700;color:#fff;background:var(--p2);
+border:none;border-radius:7px;padding:5px 12px;cursor:pointer}
+.rv-act button:hover{background:#0a7d61}
+.rv-day{display:flex;align-items:baseline;gap:10px;margin:20px 0 9px}
+.rv-day b{font-size:14px}
+.rv-day b::before{content:'';display:inline-block;width:4px;height:13px;background:var(--p1);
+border-radius:2px;margin-right:8px;vertical-align:-1px}
+.rv-c{display:flex;align-items:center;gap:11px;padding:8px 4px;
+border-bottom:1px dashed var(--line);font-size:13px}
+.rv-c:last-child{border-bottom:none}
+.rv-cn{flex:0 0 26px;font-size:12px;font-weight:800;color:var(--muted);
+font-variant-numeric:tabular-nums;text-align:right}
+.rv-cb{flex:1;height:8px;background:#e8edf3;border-radius:99px;overflow:hidden;min-width:40px}
+.rv-cb i{display:block;height:100%;border-radius:99px;background:var(--p2)}
+.rv-cb i.mid{background:var(--p3)}
+.rv-cb i.low{background:var(--p4)}
+.rv-cv{flex:0 0 44px;font-size:12px;font-weight:700;text-align:right;
+font-variant-numeric:tabular-nums}
+.rv-ct{flex:0 0 auto;font-size:12.5px;color:#3d5063;min-width:0;overflow:hidden;
+text-overflow:ellipsis;white-space:nowrap}
+.rv-rule{background:var(--card);border:1px solid var(--line);border-radius:14px;
+padding:20px 24px;margin-top:34px;font-size:13.5px;line-height:1.9;color:#33475a}
+.rv-rule h3{margin:0 0 8px;font-size:15.5px;color:var(--p1)}
+.rv-rule table{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+.rv-rule th{background:#f1f4f8;padding:8px 11px;text-align:left;font-size:12.5px;
+color:var(--muted);border:1px solid var(--line);font-weight:600}
+.rv-rule td{padding:8px 11px;border:1px solid var(--line);vertical-align:top}
+.rv-empty{background:var(--card);border:1px dashed var(--line);border-radius:13px;
+padding:30px 22px;text-align:center;font-size:13.5px;color:var(--muted);line-height:1.9}
+.rv-empty a{font-weight:700}
+.rv-foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:26px;
+font-size:12px;color:var(--muted)}
+.rv-foot button{font:inherit;font-size:12px;font-weight:600;color:var(--p4);background:#fff;
+border:1px solid #ecc9c6;border-radius:7px;padding:5px 11px;cursor:pointer}
+.rv-foot button:hover{background:var(--p4bg)}
+.rv-wrap{max-width:1080px;margin:0 auto;padding:24px 22px 80px}
+@media(max-width:620px){
+ .rv-item{flex-direction:column;gap:9px}
+ .rv-hero{padding:24px 20px}
+ .rv-hero h1{font-size:22px}
+ .rv-ct{flex:1 1 auto;white-space:normal}
+ .rv-c{flex-wrap:wrap}
+ .rv-rule{padding:16px}
+ .rv-rule table{font-size:12px}
+}
 """
 
 JS = """
@@ -225,10 +331,15 @@ function init(){
   });
   var box=document.getElementById('doneBox');
   if(box){
+    // 迁移：旧版只存布尔 true，没有完成时间；复习排程需要时间戳
+    if(all[n]===true){ all[n]=Date.now(); saveAll(all); }
     box.checked=!!all[n];
     if(box.checked) document.getElementById('doneTxt').textContent='本节课已完成';
     box.addEventListener('change',function(){
-      var o=getAll(); o[n]=box.checked; saveAll(o);
+      var o=getAll();
+      if(box.checked){ if(o[n]===true) o[n]=Date.now(); if(!o[n]) o[n]=Date.now(); }
+      else delete o[n];
+      saveAll(o);
       document.getElementById('doneTxt').textContent=box.checked?'本节课已完成':'标记本节课已完成';
       document.querySelector('.nlist a[data-n="'+n+'"]').classList.toggle('done',box.checked);
       document.getElementById('pbar').style.width=(Object.keys(o).filter(function(k){return o[k];}).length/TOTAL*100)+'%';
@@ -252,10 +363,6 @@ document.addEventListener('DOMContentLoaded',function(){
     if(!p.querySelector('.cl')) p.insertBefore(s,c);
   });
   init();
-
-  // 窄屏默认收起「全部 N 节」长列表，点 summary 仍可展开
-  var nlx=document.getElementById('nlx');
-  if(nlx&&window.innerWidth<=1000) nlx.open=false;
 
   // 键盘翻页：← 上一节、→ 下一节（不在输入框里时才生效）
   document.addEventListener('keydown', function(e){
@@ -429,11 +536,15 @@ def lesson_page(no, total, unit, week, title, goal, live, hw, body,
           <span class="v">{("本单元 %d 题 · 共 %d 题" % (bank_map.count(unit), bank_map.TOTAL))
                             if bank_map.count(unit) else
                             ("题库暂未覆盖本单元 · 共 %d 题" % bank_map.TOTAL)}</span></a>
+        <a href="../review.html"><span class="k">复习</span>
+          <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
       </div>
     </div>
 '''
 
     toc = toc_html(body)
+    # 侧栏只列本单元的课节：整册 111 条太长，完整目录给一条直达链接
+    unit_meta = [m for m in all_meta if m["unit"] == unit]
     # 侧栏目录：复盘置顶、讲评收尾，两个环节都能一键跳回
     toc_label = "开课准备" if no == 1 else "复盘上一节"
     toc = (f'<a class="lv2 rc" href="#recap">◆ {toc_label}</a>\n' + toc
@@ -479,8 +590,10 @@ transition:opacity .18s;z-index:60}}
 <body data-lesson="{no}">
 <div class="top"><div class="top-in">
   <a class="back" href="index.html">← 课程目录</a>
-  <h1>第 {no}/{total} 节 · {html.escape(title)}</h1>
+  <span class="tno">第 {no} 节</span>
+  <h1>{html.escape(title)}</h1>
   <span class="sp"></span>
+  <a class="rv" href="../review.html">复习</a>
   {ppt_link}
 </div></div>
 <div class="pbar"><i id="pbar"></i></div>
@@ -491,11 +604,13 @@ transition:opacity .18s;z-index:60}}
       <h4>本节内容</h4>
       <nav class="toc">{toc}</nav>
     </div>
+    <div class="sblk">
+      <h4>单元 {unit} · 共 {len(unit_meta)} 节</h4>
+      <nav class="nlist">{nav_list(unit_meta, no)}</nav>
+      <a class="nall" href="index.html#u{unit}">
+        <span>全部 {total} 节目录</span><span class="ar">→</span></a>
+    </div>
     {ppt_box}
-    <details class="sblk nlx" id="nlx" open>
-      <summary>全部 {total} 节<span class="nlx-ar">▶</span></summary>
-      <nav class="nlist">{nav_list(all_meta, no)}</nav>
-    </details>
   </aside>
 
   <main class="main">
@@ -535,6 +650,7 @@ transition:opacity .18s;z-index:60}}
 
     <div class="done-bar">
       <label><input type="checkbox" id="doneBox"><span id="doneTxt">标记本节课已完成</span></label>
+      <a href="../review.html">复习计划 →</a>
       <a href="../{unit:02d}.html">查看单元 {unit} 完整讲义 →</a>
       <a href="../bank.html">打开练习题库 →</a>
     </div>
@@ -548,6 +664,279 @@ transition:opacity .18s;z-index:60}}
 <script src="../media/bgm.js" defer></script>
 </body>
 </html>"""
+
+
+# 艾宾浩斯复习间隔（学完后的天数）：当天 → 2 → 4 → 8 → 16 → 31 天
+REVIEW_STAGES = [
+    (0,  "当天复盘", "合上讲义，凭记忆写下本节课 3 个要点，再把「课堂实操」的代码重敲一遍"),
+    (1,  "第 2 天",  "重读讲义本小节，然后独立完成「课后作业」，全程不许看答案"),
+    (3,  "第 4 天",  "把本节课的代码故意改错 3 处，试着只凭报错信息定位问题"),
+    (7,  "第 8 天",  "做题库里本单元对应的题，做错的在题库里标成「待复习」"),
+    (15, "第 16 天", "给别人讲一遍这节课（费曼技巧），卡住的地方记下来回看"),
+    (30, "第 31 天", "只看目录复述本节结构，并回顾「讲评」里列出的常见错误"),
+]
+
+
+def review_page(meta):
+    """复习计划页（web/review.html）：按艾宾浩斯曲线给 111 节课排 6 轮复习。"""
+    import json
+    lessons = [{"n": m["no"], "t": m["title"], "u": m["unit"]} for m in meta]
+    n_lessons = len(lessons)
+    n_rounds = n_lessons * len(REVIEW_STAGES)
+    stage_rows = "".join(
+        f"<tr><td>{i}</td><td>{html.escape(lab)}</td><td>学完第 {off} 天</td>"
+        f"<td>{html.escape(task)}</td></tr>"
+        for i, (off, lab, task) in enumerate(REVIEW_STAGES, 1))
+
+    body = """<div class="rv-wrap">
+  <div class="rv-hero">
+    <h1>复习计划 · 艾宾浩斯遗忘曲线</h1>
+    <p>每学完一节课，自动排 6 轮复习：当天 → 第 2 天 → 第 4 天 → 第 8 天 → 第 16 天 → 第 31 天。
+    每轮只花 5–15 分钟，做完点「标记完成」，后面的轮次自动接上；错过时间会标成逾期，越早补上越省力。
+    进度只存本机浏览器，不联网。</p>
+    <div class="st">
+      <div><b>__NR__</b><span>轮复习</span></div>
+      <div><b>__NL__</b><span>节课</span></div>
+      <div><b>__NA__</b><span>个复习点</span></div>
+    </div>
+  </div>
+
+  <div class="dash" id="lprog">
+    <div class="dhead"><b>复习看板</b><span id="rvSum">统计中…</span></div>
+    <div class="drow"><span class="dlab">今日</span><div class="dbar"><i id="rvPT"></i></div>
+      <span class="dval" id="rvTT">0 项</span></div>
+    <div class="drow"><span class="dlab">逾期</span><div class="dbar b3"><i id="rvPO"></i></div>
+      <span class="dval" id="rvTO">0 项</span></div>
+    <div class="drow"><span class="dlab">轮次</span><div class="dbar b2"><i id="rvPR"></i></div>
+      <span class="dval" id="rvTR">0 / __NA__</span></div>
+    <div class="drow"><span class="dlab">掌握</span><div class="dbar"><i id="rvPM"></i></div>
+      <span class="dval" id="rvTM">0 / __NL__ 课</span></div>
+  </div>
+
+  <div class="rv-sec"><h2>今日待复习</h2><span id="nowSub">含逾期未补的</span></div>
+  <div id="rvNow"></div>
+
+  <div class="rv-sec"><h2>未来安排</h2><span>按到期日分组</span></div>
+  <div id="rvPlan"></div>
+
+  <div class="rv-sec"><h2>记忆保持率</h2><span>估算值，越靠前越该先复习</span></div>
+  <div class="dash" style="padding:8px 18px"><div id="rvCurve"></div></div>
+
+  <div class="rv-rule">
+    <h3>为什么是这几个时间点</h3>
+    <p>艾宾浩斯遗忘曲线描述的是「学完后记忆保持率随时间下降」的规律：记住的内容在最初几小时
+    掉得最快，随后趋于平缓。在快要忘掉的时点做一次主动回忆，遗忘速度会明显变慢，这就是间隔重复
+    （spaced repetition）。下表是本课程采用的时间点，来自曲线上「掉得快」与「快掉完」两段密集区。</p>
+    <table>
+      <thead><tr><th>轮次</th><th>时点</th><th>距学完</th><th>做什么（5–15 分钟）</th></tr></thead>
+      <tbody>__ROWS__</tbody>
+    </table>
+    <p><b>记忆保持率怎么算：</b>用指数衰减 R = e<sup>-t/S</sup> 估算。基础稳定期 S = 2 天，
+    每完成一轮复习 S ×2，所以复习得越及时，同一节课后面越难忘。这里的数字只是提醒工具，
+    真正的标准是「合上资料能不能讲出来」。</p>
+    <p><b>使用建议：</b>① 今天排的任务今天清，逾期超过 3 轮建议直接重学该课；
+    ② 复习时先自己回忆再看资料，效果远好过重读；③ 与题库配合：标记「待复习」的题优先做。</p>
+  </div>
+
+  <div class="rv-foot">
+    <a href="lessons/index.html">课程目录</a> ·
+    <a href="bank.html">题库</a> ·
+    <a href="gate1.html">关卡 1</a> ·
+    <a href="../index.html">回主页</a>
+    <span style="flex:1"></span>
+    <button id="rvClear" type="button">清空复习记录</button>
+  </div>
+</div>"""
+
+    body = (body.replace("__NR__", str(len(REVIEW_STAGES)))
+                .replace("__NL__", str(n_lessons))
+                .replace("__NA__", str(n_rounds))
+                .replace("__ROWS__", stage_rows))
+
+    js = """(function(){
+  var LESSONS = __LESSONS__, STAGES = __STAGES__;
+  var LKEY = 'lesson-done-v1', RKEY = 'lesson-review-v1';
+  var DAY = 86400000, WEEK = ['日','一','二','三','四','五','六'];
+
+  function read(k){ try{ var v = JSON.parse(localStorage.getItem(k)); return v == null ? {} : v }catch(e){ return {} } }
+  function write(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
+  function mid(t){ var d = new Date(t); d.setHours(0,0,0,0); return d.getTime(); }
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function lp(n){ return (n < 10 ? '0' : '') + n; }
+  function dlabel(t){ var d = new Date(t); return pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' 周' + WEEK[d.getDay()]; }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  var TODAY = mid(Date.now());
+  var L = read(LKEY), R = read(RKEY), moved = false, pruned = false;
+  for (var k in L) if (L[k] === true) { L[k] = Date.now(); moved = true; }
+  if (moved) write(LKEY, L);
+  for (var k2 in R) if (!L[k2]) { delete R[k2]; pruned = true; }
+  if (pruned) write(RKEY, R);
+
+  function collect(){
+    var due = [], plan = [], rows = [], totalDone = 0, mastered = 0;
+    LESSONS.forEach(function(x){
+      var t = L[x.n];
+      if (!t) return;
+      var learned = mid(t), rs = R[x.n] || [], done = 0, last = t;
+      STAGES.forEach(function(s, i){
+        if (rs[i]) { done++; if (rs[i] > last) last = rs[i]; }
+      });
+      totalDone += done;
+      if (done === STAGES.length) mastered++;
+      var S = 2;
+      for (var i = 0; i < done; i++) S *= 2;
+      var ret = Math.exp(-((TODAY - mid(last)) / DAY) / S);
+      rows.push({ x: x, done: done, ret: ret, last: last });
+      STAGES.forEach(function(s, i){
+        if (rs[i]) return;
+        var d = learned + s[0] * DAY;
+        var item = { x: x, i: i, lab: s[1], task: s[2], due: d,
+                     od: Math.round((TODAY - d) / DAY) };
+        if (d <= TODAY) due.push(item); else plan.push(item);
+      });
+    });
+    due.sort(function(a, b){ return a.due - b.due; });
+    plan.sort(function(a, b){ return a.due - b.due; });
+    rows.sort(function(a, b){ return a.ret - b.ret; });
+    return { due: due, plan: plan, rows: rows, totalDone: totalDone, mastered: mastered };
+  }
+
+  function itemHtml(it, overdue){
+    var when;
+    if (it.od > 0) when = '原定 ' + dlabel(it.due);
+    else if (it.od === 0) when = '今天到期';
+    else when = dlabel(it.due) + ' 到期';
+    var meta = '单元 ' + it.x.u + ' · 第 ' + (it.i + 1) + ' / ' + STAGES.length + ' 轮 · ' + it.lab + ' · ' + when;
+    return '<div class="rv-item' + (overdue ? ' over' : '') + '">'
+      + '<div class="rv-no">' + lp(it.x.n) + '</div><div class="rv-bd">'
+      + '<div class="rv-t">第 ' + it.x.n + ' 节 · ' + esc(it.x.t) + '</div>'
+      + '<div class="rv-m">' + esc(meta)
+      + (it.od > 0 ? ' · <span class="od">逾期 ' + it.od + ' 天</span>' : '') + '</div>'
+      + '<div class="rv-task">任务：' + esc(it.task) + '</div>'
+      + '<div class="rv-act">'
+      + '<a href="lessons/l' + lp(it.x.n) + '.html">去复习</a>'
+      + '<a href="' + lp(it.x.u) + '.html">看讲义</a>'
+      + '<a href="bank.html#u' + it.x.u + '">做本题</a>'
+      + '<button type="button" data-g="' + it.x.n + '" data-i="' + it.i + '">标记完成</button>'
+      + '</div></div></div>';
+  }
+
+  function render(){
+    var d = collect();
+    var todayN = 0, overN = 0;
+    d.due.forEach(function(it){ if (it.od > 0) overN++; else todayN++; });
+
+    document.getElementById('rvTT').textContent = todayN + ' 项';
+    document.getElementById('rvTO').textContent = overN + ' 项';
+    document.getElementById('rvTR').textContent = d.totalDone + ' / ' + (LESSONS.length * STAGES.length);
+    document.getElementById('rvTM').textContent = d.mastered + ' / ' + LESSONS.length + ' 节';
+    document.getElementById('rvPT').style.width = (todayN / Math.max(1, LESSONS.length) * 100) + '%';
+    document.getElementById('rvPO').style.width = (overN / Math.max(1, LESSONS.length) * 100) + '%';
+    document.getElementById('rvPR').style.width = (d.totalDone / (LESSONS.length * STAGES.length) * 100) + '%';
+    document.getElementById('rvPM').style.width = (d.mastered / LESSONS.length * 100) + '%';
+    document.getElementById('rvSum').textContent = d.rows.length
+      ? ('已学 ' + d.rows.length + ' 节 · 待复习 ' + (d.due.length + d.plan.length) + ' 项')
+      : '还没有已学完的课节';
+
+    var now = document.getElementById('rvNow');
+    if (!d.rows.length) {
+      now.innerHTML = '<div class="rv-empty">还没有已学完的课节。去完成'
+        + ' <a href="lessons/01.html">第 1 节</a>，当天就会生成第一轮复习任务。</div>';
+    } else if (!d.due.length) {
+      now.innerHTML = '<div class="rv-empty">今天没有待复习的课，保持住 👍<br>'
+        + '下一批安排见下方「未来安排」。</div>';
+    } else {
+      now.innerHTML = d.due.map(function(it){ return itemHtml(it, it.od > 0); }).join('');
+    }
+
+    var pl = document.getElementById('rvPlan');
+    if (!d.plan.length) {
+      pl.innerHTML = '<div class="rv-empty">未来两周没有新的复习点——要么都复习完了，要么还没开始学。</div>';
+    } else {
+      var html = '', cur = '', shown = 0;
+      d.plan.forEach(function(it){
+        if (shown >= 60) return;
+        var lab = dlabel(it.due);
+        if (lab !== cur) {
+          cur = lab;
+          html += '<div class="rv-day"><b>' + lab + '</b></div>';
+        }
+        html += itemHtml(it, false);
+        shown++;
+      });
+      if (d.plan.length > shown) {
+        html += '<div class="rv-empty">其余 ' + (d.plan.length - shown) + ' 项在更远的日期，学完后面的课再来看。</div>';
+      }
+      pl.innerHTML = html;
+    }
+
+    var cv = document.getElementById('rvCurve');
+    if (!d.rows.length) {
+      cv.innerHTML = '<div class="rv-empty" style="border:none">学完第一节课后，这里会显示每节课的记忆保持率。</div>';
+    } else {
+      cv.innerHTML = d.rows.map(function(r){
+        var pct = Math.round(r.ret * 100);
+        var cls = pct >= 80 ? '' : (pct >= 50 ? ' mid' : ' low');
+        var days = Math.round((TODAY - mid(r.last)) / DAY);
+        return '<div class="rv-c"><div class="rv-cn">' + lp(r.x.n) + '</div>'
+          + '<div class="rv-cb"><i class="' + cls + '" style="width:' + Math.max(3, pct) + '%"></i></div>'
+          + '<div class="rv-cv">' + pct + '%</div>'
+          + '<div class="rv-ct">第 ' + r.x.n + ' 节 · ' + esc(r.x.t)
+          + ' · 已复习 ' + r.done + ' 轮 · 距上次 ' + days + ' 天</div></div>';
+      }).join('');
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-g]');
+    if (!b) return;
+    var g = +b.dataset.g, i = +b.dataset.i;
+    var r = read(RKEY), a = r[g] || (r[g] = []);
+    a[i] = Date.now();
+    write(RKEY, r);
+    R = r;
+    render();
+  });
+  document.getElementById('rvClear').addEventListener('click', function(){
+    if (!confirm('清空全部复习记录？课节进度不受影响，复习轮次会重新排。')) return;
+    write(RKEY, {});
+    R = {};
+    render();
+  });
+  window.addEventListener('focus', render);
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) render();
+  });
+  render();
+})();
+""".replace("__LESSONS__", json.dumps(lessons, ensure_ascii=False)) \
+   .replace("__STAGES__", json.dumps([[o, l, t] for o, l, t in REVIEW_STAGES],
+                                     ensure_ascii=False))
+
+    return """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>复习计划 · 艾宾浩斯遗忘曲线</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>__CSS__</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>复习计划 · 艾宾浩斯遗忘曲线</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="lessons/index.html">课程目录</a>
+</div></div>
+__BODY__
+<script>__JS__</script>
+<script src="media/bgm.js" defer></script>
+</body>
+</html>""".replace("__CSS__", REVIEW_CSS).replace("__BODY__", body).replace("__JS__", js)
 
 
 def index_page(meta):
@@ -718,6 +1107,9 @@ font-size:12.5px;color:var(--muted);cursor:pointer;font-family:inherit}}
 font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}}
 .pg .resume:hover{{background:#1a5296}}
 .pg .resume.all-done{{background:var(--p2)}}
+.pg .rvgo{{padding:7px 15px;border-radius:20px;background:var(--p2bg);color:#0b6e54;
+border:1px solid #b8e0d0;font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}}
+.pg .rvgo:hover{{background:#d3efe4}}
 
 /* 卡片：链接占主体，完成按钮独立，点链接只跳转不标记 */
 .lc{{position:relative}}
@@ -752,6 +1144,9 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
   <a class="back" href="../../index.html">← 学习主页</a>
   <h1>课程目录 · {len(meta)} 节课</h1>
   <span class="sp"></span>
+  <a class="rv" href="../terms.html">术语索引</a>
+  <a class="rv" href="../coverage.html">覆盖对照</a>
+  <a class="rv" href="../review.html">复习计划</a>
   <a class="ppt" href="../ppt/index.html">课程课件 23 页</a>
 </div></div>
 
@@ -766,8 +1161,8 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
     <div class="st">
       <div><b>{len(meta)}</b><span>节课</span></div>
       <div><b>{len(set(m["unit"] for m in meta))}</b><span>个单元</span></div>
-      <div><b>13</b><span>周</span></div>
-      <div><b>1</b><span>节课一个产出</span></div>
+      <div><b>29</b><span>周（每周 6–8 h）</span></div>
+      <div><b>90</b><span>分钟 / 节</span></div>
     </div>
   </header>
 
@@ -775,6 +1170,7 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
     <b>学习进度</b>
     <div class="tr"><i id="tr"></i></div>
     <span class="ct" id="ct">0 / {len(meta)} 节</span>
+    <a class="rvgo" href="../review.html">今日复习 →</a>
     <a class="resume" id="resume" href="01.html">继续学习 →</a>
   </div>
 
@@ -806,6 +1202,8 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
       <li><b>实操环节必须动手敲。</b>看懂不等于会写，从空文件敲出来才算。</li>
       <li><b>卡住超过一周就降难度。</b>回到题库对应档位重做，别硬啃。</li>
       <li>每节课都能从底部跳回单元完整讲义或题库，需要查细节时随时回看。</li>
+      <li><b>学完一节课，顺手去「复习计划」页。</b>当天、第 2 天、第 4 天、第 8 天、第 16 天、第 31 天
+          各有一轮 5–15 分钟的复习，页面会按遗忘曲线排好，逾期会标红。</li>
       <li><b>讲评环节不要跳过。</b>那 20 分钟是给你自己检查代码的，对照每一条问句过一遍，
           比多写一小时更有用。</li>
     </ul>

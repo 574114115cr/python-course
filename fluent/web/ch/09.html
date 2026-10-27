@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 9 章 · 装饰器与闭包 · 设计取舍</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 9 章 · 装饰器与闭包 · 设计取舍</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">第 9 章</span>
+        <span class="kwk">单元 5 · 装饰器、闭包与设计模式</span>
+        <span class="ku">设计取舍</span></div>
+      <h1>装饰器与闭包</h1>
+      <p class="goal">原书这一章的写法，Python 为什么这样选、换别的要付什么代价。</p>
+    </div>
+    <blockquote>
+<p><code>@deco</code> 只是 <code>f = deco(f)</code> 的语法糖，闭包负责记住配置。</p>
+</blockquote>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>选择</td>
+<td>函数装饰器 + 闭包 + <code>functools.wraps</code></td>
+</tr>
+<tr>
+<td>主要替代</td>
+<td>类装饰器、元类、AOP 框架、宏</td>
+</tr>
+<tr>
+<td>替代为何落选</td>
+<td>元类/宏太重；AOP 框架引入隐式调用链</td>
+</tr>
+<tr>
+<td>付出的代价</td>
+<td>包装后签名要靠 <code>wraps</code> 与 <code>__wrapped__</code> 还原；调试栈变深</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="当时的约束">当时的约束</h2>
+<p>需要在「不改调用方代码」的前提下加横切逻辑（日志、缓存、重试、权限）。Python 没有宏，只能在函数对象上做文章。</p>
+<h2 id="候选方案">候选方案</h2>
+<p>装饰器、继承 + 模板方法、显式包装函数、元类。装饰器最轻：作用域就是被装饰的那个函数。</p>
+<h2 id="为什么选它">为什么选它</h2>
+<p>因为它复用了已有的两件事：函数是对象（单元 4）、闭包能记住外层变量（本单元）。零新语法，读起来就是「套了一层」。</p>
+<h2 id="代价与反例">代价与反例</h2>
+<p>漏写 <code>functools.wraps</code> 会让 <code>__name__</code>、<code>__doc__</code>、签名全丢，框架注册和文档生成会莫名失败。装饰顺序也容易搞反：<code>@register</code> 放最里层，注册到的可能是包装后的壳。</p>
+<h2 id="如果重来">如果重来</h2>
+<p>仍是装饰器，但默认模板就带 <code>wraps</code>，并把「装饰器是否改变签名」写进文档；需要参数化时优先用类而不是三层嵌套。</p>
+    <div class="pn"><a href="08.html"><small>← 上一章</small><b>第 8 章 · 类型提示</b></a><a class="nx" href="10.html"><small>下一章 →</small><b>第 10 章 · 设计模式</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">设计取舍总览</a> ·
+      <a href="../05.html">单元 5 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

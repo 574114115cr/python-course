@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 8 课件 · 类型进阶与运算符重载</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 8 · 逐节课件</div><h2>单元 8 · 类型进阶与运算符重载</h2><div class="sub">第 15–16 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 29 课 · 目标与要点</div><h2>泛型：TypeVar、Generic 与型变</h2><div class="sub">能定义泛型类与泛型函数，用 bound 限制类型参数，并解释协变、逆变、不变。</div><ul><li>list 是不变的，Sequence 是协变的；只读场景优先注解为 Sequence。</li><li>TypeVar 只在同一次调用内保持类型一致，不是全局绑定。</li><li>能用 Protocol 就别造基类，泛型 + 协议能覆盖大多数约束。</li><li>别给 TypeVar 加无意义的 bound=object，等于没约束。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 29 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from typing import TypeVar
+
+T = TypeVar(&quot;T&quot;)
+
+def first(items: list[T]) -&gt; T:
+    return items[0]</code></pre><div class="sub">动手：写 pair(a: T, b: T) -&gt; tuple[T, T]，用 mypy 验证混合类型会报错。</div></section><section class="slide" data-s="4"><div class="sk">第 30 课 · 目标与要点</div><h2>TypedDict、重载与运行时读取注解</h2><div class="sub">能用 TypedDict 描述固定键字典，用 @overload 描述多签名，用 get_type_hints 在运行时读取注解。</div><ul><li>TypedDict 不做运行时校验，它只是给检查器看的形状。</li><li>重载签名必须与实现兼容，否则 mypy 报 overload 错误。</li><li>__annotations__ 可能是字符串（from __future__ import annotations），要用 get_type_hints 求值。</li><li>运行时读注解可以驱动校验、序列化、依赖注入，但要注意循环导入。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 30 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from typing import TypedDict
+
+class Movie(TypedDict):
+    title: str
+    year: int
+    rating: float
+
+m: Movie = {&quot;title&quot;: &quot;Alien&quot;, &quot;year&quot;: 1979, &quot;rating&quot;: 8.5}</code></pre><div class="sub">动手：用 TypedDict 描述一个 API 响应，写一个函数返回该类型，并让 mypy 检查。</div></section><section class="slide" data-s="6"><div class="sk">第 31 课 · 目标与要点</div><h2>运算符重载：一元、算术与 @</h2><div class="sub">能为自定义类型实现 -、+、*、@，处理反射运算，并在类型不匹配时返回 NotImplemented。</div><ul><li>返回 NotImplemented，不要抛异常，让解释器有机会尝试另一侧。</li><li>@ 是矩阵乘法，NumPy 用得多；自己实现时要明确维度规则。</li><li>+ 不应修改操作数，返回新对象；原地修改交给 +=。</li><li><b>运算符语义要符合直觉</b>：+ 表示合并/相加，不要拿来表示「删除」。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 31 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class Vector:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+
+    def __add__(self, other):
+        if not isinstance(other, Vector):
+            return NotImplemented
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, scalar):
+        if not isinstance(scalar, (int, float)):
+            return NotImplemented
+        return Vector(self.x * scalar, self.y * scalar)
+
+    __rmul__ = __mul__
+
+    def __neg__(self):
+        return Vector(-self.x, -self.y)
+# ...</code></pre><div class="sub">动手：实现 Vector 的 +、*、-，验证 3 * v 与 v * 3 都可用。</div></section><section class="slide" data-s="8"><div class="sk">第 32 课 · 目标与要点</div><h2>比较、增量赋值与一致性</h2><div class="sub">能用 total_ordering 补齐比较运算符，实现语义正确的 +=，并检查相等/哈希/排序三者是否自洽。</div><ul><li>total_ordering 要求 __eq__ 与 __lt__ 同时存在，否则报错。</li><li>__iadd__ 必须返回 self，返回 None 会让 a 变成 None。</li><li>浮点 NaN 破坏自反性，涉及 NaN 的比较要单独处理。</li><li>比较运算符不要做副作用操作，调用方默认它是纯函数。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 32 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from functools import total_ordering
+
+@total_ordering
+class Version:
+    def __init__(self, text):
+        self.parts = tuple(int(x) for x in text.split(&quot;.&quot;))
+
+    def __eq__(self, other):
+        if not isinstance(other, Version):
+            return NotImplemented
+        return self.parts == other.parts
+
+    def __lt__(self, other):
+        if not isinstance(other, Version):
+            return NotImplemented
+        return self.parts &lt; other.parts</code></pre><div class="sub">动手：用 total_ordering 实现 Version(&quot;1.2.3&quot;) 的比较，验证 &lt;=、&gt;、&gt;= 全部可用。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>泛型：写出 Stack[T] 与 first(Sequence[T])，mypy 通过</li><li>结构类型：用 TypedDict + overload 描述一个真实 API 的输入输出</li><li>运算符：Vector 支持 +、*、@、-，且 3 * v 可用</li><li>一致性：相等、哈希、排序、+= 四项在一组测试里全部自洽</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../08.html">← 单元 8</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

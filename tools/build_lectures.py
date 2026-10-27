@@ -84,6 +84,8 @@ border-bottom:1px solid var(--line)}
 .top-in{max-width:1360px;margin:0 auto;padding:0 22px;height:58px;display:flex;align-items:center;gap:18px}
 .back{font-size:13.5px;color:var(--muted);white-space:nowrap}
 .back:hover{color:var(--p1)}
+.top-in .tno{font-size:11.5px;font-weight:700;color:var(--p1);background:var(--p1bg);
+border-radius:20px;padding:3px 10px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .top h1{font-size:16px;margin:0;font-weight:700;flex:1;min-width:0;
 overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--p1bg);
@@ -92,9 +94,12 @@ color:var(--p1);white-space:nowrap}
 
 /* 布局 */
 .layout{max-width:1360px;margin:0 auto;padding:26px 22px 80px;display:flex;gap:26px;align-items:flex-start}
-.side{width:246px;flex-shrink:0;position:sticky;top:84px;max-height:calc(100vh - 110px);
-overflow-y:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 16px}
-.side h4{margin:0 0 10px;font-size:12px;color:var(--muted);letter-spacing:1px;font-weight:700}
+/* 侧栏本身不再是一张卡：里面放「配套资料」和「本单元目录」两张独立卡片 */
+.side{width:250px;flex-shrink:0;position:sticky;top:84px;max-height:calc(100vh - 110px);
+overflow-y:auto}
+.tocbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
+padding:16px 14px;margin-bottom:12px}
+.tocbox h4{margin:0 0 10px;font-size:11.5px;color:var(--muted);letter-spacing:1px;font-weight:700}
 .toc a{display:block;padding:5px 8px;border-radius:6px;font-size:13px;color:#3d5063;
 border-left:2px solid transparent;margin-bottom:1px}
 .toc a:hover{background:#f2f5f9;text-decoration:none}
@@ -290,6 +295,14 @@ def convert(md_text):
     def stash(m):
         info = m.group(1).strip()
         body = m.group(2)
+        # 列表内嵌的代码块每行都带一层列表缩进（如 3/8 空格），
+        # python-markdown 渲染 <ol>/<ul> 时会原样保留，页面上看着像多缩进一级；
+        # 这里按非空行的公共前缀去掉（顶层代码块没有公共缩进，不受影响）。
+        lines = body.split("\n")
+        indents = [len(l) - len(l.lstrip()) for l in lines if l.strip()]
+        if indents and min(indents) > 0:
+            cut = min(indents)
+            body = "\n".join(l[cut:] if l.strip() else l for l in lines)
         lang = None
         if info.lower().startswith("python"):
             lang = "python"
@@ -394,6 +407,22 @@ UNIT_SLIDE = ppt_map.UNIT_SLIDE
 
 
 def page_shell(title, unit_no, body_html, toc_html, prev_link, next_link, done_block=True):
+    # 讲义首部的「对应教材第 X 章 / 关键词」从裸 blockquote 升级成对照框：
+    # 章节信息一眼可见，并直通覆盖矩阵（该单元对应的那一行）。
+    if unit_no is not None:
+        _m = re.search(r"<blockquote>\s*<p>(对应教材.*?)</p>\s*</blockquote>",
+                       body_html, re.S)
+        if _m:
+            _inner = _m.group(1)
+            _parts = _inner.split("\n", 1)
+            _head = _parts[0].strip()
+            _rest = _parts[1].strip() if len(_parts) > 1 else ""
+            _box = (f'<div class="bkbx"><div class="bk-h"><b>原书对照</b>'
+                    f'<span>{_head}</span></div>'
+                    + (f'<p class="bk-k">{_rest}</p>' if _rest else "")
+                    + f'<a href="coverage.html#u{unit_no}">'
+                      f'这套课覆盖了教材哪些章 →</a></div>')
+            body_html = body_html[:_m.start()] + _box + body_html[_m.end():]
     prev = ""
     if prev_link:
         prev = (f'<a class="pn" href="{prev_link[1]}"><small>← 上一单元</small>'
@@ -430,6 +459,8 @@ def page_shell(title, unit_no, body_html, toc_html, prev_link, next_link, done_b
         _rows.append('<a href="../python-course-syllabus.html">'
                      '<span class="k">课表</span>'
                      '<span class="v">总课表与阶段安排</span></a>')
+        _rows.append('<a href="review.html"><span class="k">复习</span>'
+                     '<span class="v">艾宾浩斯复习计划 · 6 轮</span></a>')
         _lo, _hi = site_data.unit_lesson_range(unit_no)
         _uprog = (f'<div class="uprog" data-from="{_lo}" data-to="{_hi}">'
                   f'<div class="uprog-h"><b>已学 0 / {_hi - _lo + 1} 节</b>'
@@ -481,12 +512,14 @@ transition:opacity .18s;z-index:60}}
 <div class="layout">
   <aside class="side">
     {rel_box}
-    <h4>本单元目录</h4>
-    <nav class="toc">{toc_html}</nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc">{toc_html}</nav>
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main">{body_html}</main>
@@ -516,6 +549,16 @@ pre:hover .cp{{opacity:1}}
 pre .cp.ok{{color:#fff;background:var(--p2);border-color:var(--p2)}}
 .relbox{{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}}
+.bkbx{{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}}
+.bkbx .bk-h{{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}}
+.bkbx .bk-h b{{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}}
+.bkbx .bk-h span{{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}}
+.bkbx .bk-k{{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}}
+.bkbx > a{{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}}
+.bkbx > a:hover{{text-decoration:underline}}
 .relbox h4{{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}}
 .rel{{display:flex;flex-direction:column;gap:2px}}

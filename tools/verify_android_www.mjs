@@ -80,6 +80,24 @@ async function main() {
     'web/08.html',
     'python-course-syllabus.html',
     'python-learning-roadmap.html',
+    'fluent/index.html',
+    'fluent/web/01.html',
+    'fluent/web/lessons/l01.html',
+    'fluent/web/bank.html',
+    'fluent/web/ppt/index.html',
+    'fluent/web/ppt/u/index.html',
+    'fluent/web/ppt/u/01.html',
+    'fluent/web/coverage.html',
+    'fluent/web/terms.html',
+    'fluent/web/review.html',
+    'fluent/web/bench.html',
+    'fluent/web/ch/index.html',
+    'fluent/web/ch/01.html',
+    'fluent/web/ch/24.html',
+    'fluent/web/walk/index.html',
+    'fluent/web/walk/u01.html',
+    'fluent/web/walk/u06.html',
+    'fluent/web/walk/u12.html',
   ];
 
   const pass = [], fail = [];
@@ -109,7 +127,7 @@ async function main() {
   }
 
   // app-native.js 语法有效性（new Function 包裹检查）
-  const jsOk = await evaluate(`fetch('app-native.js').then(r => r.text()).then(t => {
+  const jsOk = await evaluate(`fetch('/app-native.js').then(r => r.text()).then(t => {
     try { new Function(t); return 'OK'; } catch (e) { return 'BAD:' + e.message; }
   })`, true);
   console.log('app-native.js 语法:', jsOk);

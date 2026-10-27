@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 9 课件 · 迭代器、生成器与控制流</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 9 · 逐节课件</div><h2>单元 9 · 迭代器、生成器与控制流</h2><div class="sub">第 17–18 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 33 课 · 目标与要点</div><h2>迭代协议：iter、next 与 StopIteration</h2><div class="sub">能解释 for 的展开过程，区分可迭代对象与迭代器，并手写一个只遍历一次的迭代器类。</div><ul><li>迭代器一定可迭代，可迭代对象不一定是迭代器。</li><li>__next__ 用 raise StopIteration 表示结束，不要返回 None 当哨兵。</li><li>迭代器耗尽后不会重置，需要重新遍历就重新 iter()。</li><li>在生成器里 return value 会成为 StopIteration.value，一般不用。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 33 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>it = iter(obj)          # 调 obj.__iter__()
+while True:
+    try:
+        x = next(it)    # 调 it.__next__()
+    except StopIteration:
+        break
+    ...</code></pre><div class="sub">动手：手写 Countdown 与 CountdownIter，用 list() 与 for 各遍历一次。</div></section><section class="slide" data-s="4"><div class="sk">第 34 课 · 目标与要点</div><h2>生成器与 yield from</h2><div class="sub">能写生成器函数、用 yield from 委派子生成器，并用 itertools 组合惰性管道。</div><ul><li>生成器只能遍历一次，需要重复使用就物化成 list。</li><li>yield 会暂停整个函数，包括局部变量；恢复时从暂停点继续。</li><li><b>yield from 不是 for ... yield 的简写</b>：它还负责 send、throw、close 的委派。</li><li>生成器里的异常在 next() 时抛出，try/except 要包在迭代处。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 34 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def countdown(n):
+    while n &gt; 0:
+        yield n
+        n -= 1
+
+g = countdown(3)
+print(next(g), next(g), next(g))   # 3 2 1</code></pre><div class="sub">动手：写 fib() 生成器，用 islice 取前 10 项。</div></section><section class="slide" data-s="6"><div class="sk">第 35 课 · 目标与要点</div><h2>上下文管理器与 with</h2><div class="sub">能实现 __enter__/__exit__，用 @contextmanager 简化写法，并用 ExitStack 动态管理多个资源。</div><ul><li>__exit__ 的三个参数是异常类型、异常对象、traceback；无异常时全是 None。</li><li>return True 会吞异常，这是很多「静默失败」的来源。</li><li>@contextmanager 的 yield 只能出现一次，且必须放在 try/finally 里保证清理。</li><li>上下文管理器可以复用，但每次 with 都是一次新的进入/退出。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 35 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>class Timer:
+    def __enter__(self):
+        import time
+        self.t0 = time.perf_counter()
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        import time
+        self.elapsed = time.perf_counter() - self.t0
+        return False        # False 表示不吞异常
+
+with Timer() as t:
+    sum(range(1_000_000))
+print(f&quot;{t.elapsed:.4f}s&quot;)</code></pre><div class="sub">动手：实现 Timer，测量一段代码耗时，并验证异常时也能打印。</div></section><section class="slide" data-s="8"><div class="sk">第 36 课 · 目标与要点</div><h2>模式匹配与 else 块</h2><div class="sub">能用 match 解构序列、映射与类实例，写出带 guard 的分支，并正确使用 for/while/try 的 else。</div><ul><li>case _ 是兜底，没有它且无匹配时什么都不做（不报错）。</li><li>绑定变量只在分支内有效，分支结束后不要依赖。</li><li><b>序列模式区分 tuple/list</b>：case [a, b] 匹配任何序列，case (a, b) 也是。</li><li>循环 else 容易误读，团队代码里建议加注释，或改用标志变量。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 36 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def handle(command):
+    match command.split():
+        case [&quot;go&quot;, direction]:
+            return f&quot;moving {direction}&quot;
+        case [&quot;drop&quot;, *items]:
+            return f&quot;dropping {items}&quot;
+        case [&quot;look&quot;]:
+            return &quot;looking around&quot;
+        case _:
+            return &quot;unknown&quot;</code></pre><div class="sub">动手：用 match 写一个命令解析器，支持 go/drop/look/未知四类。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>迭代器：手写一个可重复遍历的容器，for 两次结果一致</li><li>生成器：实现一个惰性管道（读文件 → 过滤 → 转换），内存不随文件增长</li><li>上下文：实现一个能测量耗时且不吞异常的 Timer</li><li>控制流：用 match 重写一段 8 行以上的 if/elif 解构代码</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../09.html">← 单元 9</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

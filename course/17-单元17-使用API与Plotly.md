@@ -50,6 +50,31 @@
 pip install requests plotly          # requests 是本单元新面孔
 ```
 
+**先建立一件容易被忽略的事**：`response.text` 是**字符串**，不是字典。字符串上取 `["total_count"]` 不会返回 `None`，而是直接抛 `TypeError`——`.json()` 那一步就是把字符串编译成数据结构的过程，它不是一个可省的「顺手调用」：
+
+```python
+# 响应体的两种形态：字符串与字典，差一次 json.loads
+import json
+
+RAW = '{"total_count": 4350000, "items": [{"name": "django"}]}'
+
+print("response.text 的类型：", type(RAW).__name__)
+print("  直接取字段：", end=" ")
+try:
+    RAW["total_count"]
+except TypeError as error:
+    print(f"{type(error).__name__}: {error}")
+
+data = json.loads(RAW)                  # 等价于 response.json()
+print("\nresponse.json() 之后：", type(data).__name__, "，键：", list(data))
+print("  取字段：", data["total_count"], data["items"][0]["name"])
+print("  取不存在的键：", end=" ")
+try:
+    data["message"]
+except KeyError as error:
+    print(f"KeyError: {error}  <- 403 时往往只有 message，没有 items")
+```
+
 ### 2.2 requests.get() 与响应对象：先看 status_code ★
 
 `requests` 是 Python 里发 HTTP 请求最常用的第三方库（单元 9 讲过「标准库不够用就装第三方库」）。核心只有一个函数 `requests.get(url)`，它返回一个 **`Response` 响应对象**——像**快递包裹**：拆之前先看面单（`status_code`）确认送对了没，再拆箱取货。对象上有四个你会反复用的东西：`status_code`（int，状态码，**判断成败的第一道关卡**）、`text`（str，响应体原始字符串）、`headers`（字典，大小写不敏感，能看到剩余配额）、`json()`（方法，把 JSON 响应体转成 Python 字典）。
@@ -66,6 +91,33 @@ pip install requests plotly          # requests 是本单元新面孔
 ★ 关键：**不要先写 `response.json()` 再想成功失败。** 403 时响应体**也是合法 JSON**（GitHub 返回一段解释原因的 JSON），`.json()` 照样成功——但内容是错误信息。**顺序：先 `status_code`，再 `.json()`。**
 
 取数函数三个要点一个都不能省：**① `try/except` 包住 `requests.get()`**——网络请求永远可能失败；**② 检查 `status_code`**；**③ 失败要打印，不要静默跳过**——静默跳过会画出「少了 30 个仓库」的图，你还以为它成功了。**失败的请求要留下痕迹。**（完整可运行版本见示例 3 的 `get_json`。）
+
+上面那张表可以直接写成一张「状态码 → 下一步」的翻译表，比散落的 `if` 更好维护：
+
+```python
+# 先 status_code 再 .json()：一张决策表写成函数
+NEXT_STEP = {
+    200: "成功：放心调用 response.json()",
+    403: "被拒绝：多半是配额超了，打印剩余配额后停下，别死循环重试",
+    404: "网址或资源 ID 写错了：核对 URL 和参数",
+    429: "请求太多：等一会儿再来（读 Retry-After 头）",
+    500: "服务器自己出错：稍后重试，别改自己的代码",
+}
+
+
+def handle(status_code, remaining=None):
+    """返回「下一步该做什么」。任何未知状态码都不许当成功。"""
+    step = NEXT_STEP.get(status_code)
+    if step is None:
+        step = f"没见过的状态码 {status_code}：打印 response.text 前 200 字再判断"
+    return step
+
+
+for code in [200, 403, 404, 429, 500, 418]:
+    print(f"{code}: {handle(code)}")
+print("\n★ 顺序纪律：if response.status_code != 200: 打印并 return None")
+print("   然后才是 response.json() —— 反过来写，403 的错误 JSON 会被当成数据。")
+```
 
 ### 2.3 .json()：把响应体变成字典 ★
 
@@ -86,6 +138,40 @@ response_dict（字典）
 
 取值路线就是**一层层剥**：`response_dict["items"][0]["owner"]["login"]` → `vinta`。★ 难在**嵌套的方括号**，四对括号很容易写错。**技巧：拆成中间变量**一层层剥。
 
+```python
+# 四对括号怎么剥：拆成中间变量，一层层取
+payload = {
+    "total_count": 2,
+    "items": [
+        {"name": "django", "stargazers_count": 78000,
+         "owner": {"login": "django"}, "html_url": "https://github.com/django/django"},
+        {"name": "flask", "stargazers_count": 67000,
+         "owner": {"login": "pallets"}},          # ★ 故意缺 html_url
+    ],
+}
+
+items = payload["items"]                          # ① 先拿列表
+first = items[0]                                  # ② 再拿第一个仓库
+owner = first["owner"]                            # ③ 再进 owner
+print("一行版：", payload["items"][0]["owner"]["login"])
+print("拆开写：", owner["login"])
+
+print("\nfor 循环里剥（真实代码几乎都长这样）：")
+for index, repo in enumerate(items, 1):
+    login = repo["owner"]["login"]                # 字典套字典
+    url = repo.get("html_url", "（没有链接）")     # 可选字段用 .get
+    print(f"  {index}. {repo['name']:<8}{repo['stargazers_count']:>7,}  "
+          f"by {login:<8}{url}")
+
+print("\n★ 核心结构用 []，可选字段用 .get()：")
+try:
+    payload["message"]
+except KeyError as error:
+    print(f"  payload['message'] -> KeyError: {error}（说明 API 变了或返回错误）")
+print("  payload.get('message', '（没有这个键）') ->",
+      payload.get("message", "（没有这个键）"))
+```
+
 ### 2.4 GitHub search API：请求头与速率限制 ★
 
 教材 17.1 的实操目标是「概述最受欢迎的仓库」，用的接口是 GitHub search API。这个网址要用问号把「接口地址」和「参数」分开读：
@@ -99,6 +185,27 @@ https://api.github.com/search/repositories   ← 接口路径：搜索仓库
 
 **请求头（headers）是 API 的另一半。** 教材这一步要求带上 `headers = {"Accept": "application/vnd.github+json"}`。头干什么用？类比**点菜时的备注栏**：「我要微辣、多加葱」——不改你要的菜，而是告诉厨房**要什么格式**。
 
+头就是一个普通字典，所以可以「拼」：再加认证 token 时用 `|` 合并两本字典即可。查的时候注意 **HTTP 头名大小写不敏感**，自己比对时先统一 `lower()`：
+
+```python
+# 请求头是个字典：用 | 合并，键名大小写不敏感
+ACCEPT_JSON = {"Accept": "application/vnd.github+json"}
+AUTH = {"authorization": "Bearer ghp_xxxx"}        # 小写也能被认出来
+
+headers = ACCEPT_JSON | AUTH                        # Python 3.9+ 的字典合并
+print("合并后：", headers)
+
+# HTTP 头名大小写不敏感：查的时候统一 lower() 再比
+lookup = {key.lower(): value for key, value in headers.items()}
+for name in ["Accept", "ACCEPT", "authorization"]:
+    print(f"  查 {name:<14}-> {lookup.get(name.lower(), '（没有）')}")
+
+print("\n三个必须带的头 / 参数：")
+print("  Accept: application/vnd.github+json   # 要 JSON 格式")
+print("  timeout=10                            # 不设就会永远挂着")
+print("  params={'q': 'language:python'}       # 让 requests 帮你拼 & 和编码")
+```
+
 有了字典，接下来就是**提取成几个平行的列表**（Plotly 画图要的就是平行列表，单元 16 画地震图时你已经用过这套路）：`repo_names` 装 `name` 当柱子标签、`stars` 装 `stargazers_count` 当柱子高度、`repo_urls` 装 `html_url` 做可点击链接、`descriptions` 装 `description`、`owners` 装 `owner.login` 上色。完整循环见示例 2。
 
 ★ 提取时的三个坑：**① `items` 和 `total_count` 不是一回事**——后者是「符合条件的有几百万个」，前者才是**这一次实际返回给你的**（默认 30 条，可加 `&per_page=100`）；**② `description` 可能是 `None`**，写 `repo["description"] or "（没写简介）"`；**③ 用 `.get()` 防缺字段**——`.get("forks_count", 0)` 拿不到就返回默认值，但 `response_dict["items"]` 这种「核心结构」就该用 `[]`，缺了说明 API 变了。
@@ -106,6 +213,33 @@ https://api.github.com/search/repositories   ← 接口路径：搜索仓库
 **速率限制。** 任何正经 API 都有速率限制——服务器资源有限，人人每秒请求 1000 次网站就垮了。GitHub 的规矩：**未认证每小时 60 次**，登录后（带 token）5000 次。**超限返回 403 Forbidden**，同时响应头 `X-RateLimit-Remaining` 告诉你还剩几次、`X-RateLimit-Limit` 告诉你总配额。完整守门员代码见示例 3。
 
 ★ **新手最容易忽略的一点：配额按「一小时窗口」算，不是「每 60 次后立刻重置」。** 刚发出 3 次请求后 `X-RateLimit-Remaining` 应该显示 57 而不是 60。要连续取几十条数据时**主动 `time.sleep(1)` 放慢速度**。
+
+想多拿几条就得翻页，而翻页的参数是算出来的，不是猜出来的：
+
+```python
+# 分页：页码怎么算、什么时候该停
+def page_params(page, per_page=10, query="language:python"):
+    """把「第几页、每页几条」翻译成 API 认识的参数。"""
+    return {"q": query, "sort": "stars", "per_page": per_page, "page": page}
+
+
+def total_pages(total_count, per_page=10):
+    """总命中数 -> 总页数；除不尽要向上取整。"""
+    return -(-total_count // per_page)          # 整数向上取整的惯用写法
+
+
+print("第 1~3 页的参数：")
+for page in (1, 2, 3):
+    print(" ", page_params(page))
+
+print("\n总命中数 23 条、每页 10 条 ->", total_pages(23), "页")
+print("总命中数 20 条、每页 10 条 ->", total_pages(20), "页（整除时不要多算一页）")
+
+print("\n★ 三个坑：")
+print("  1. total_count 是几百万，不是你这次拿到的条数；别照着它翻几千页")
+print("  2. 每页上限 100；再大也没用，API 会默默截断")
+print("  3. 翻页要 sleep(1)，否则几十页就把 60 次配额打光")
+```
 
 **四条必须养成的工程习惯**（教材 17.1 反复强调的）：请求包 `try/except`（否则断网就崩）、检查 `status_code`（否则把 403 的错误 JSON 当数据用）、失败请求打印出来（否则数据悄悄少一半你却以为完整）、注意限速主动 sleep（否则被拒甚至被封禁）。
 
@@ -124,6 +258,36 @@ https://api.github.com/search/repositories   ← 接口路径：搜索仓库
 **问题在哪？** Plotly 默认只把数据**当纯文本**显示。URL 看着像网址，但**点不动**。解法两步：`custom_data=["html_url"]` 把 URL 挂到每根柱子的「自定义数据」上 → `hovertemplate` 里插一个 `<a href='%{customdata[0]}'>Open in GitHub</a>` 链接（可运行版见本节末，完整版见示例 4）。
 
 ★ **索引别搞混，这是本节 90% 的错误来源：** `%{hovertext}` 是 `hover_name` 的内容，`%{y}` 是 y 轴数值（`:,` 是千分位格式），`%{customdata[n]` 是 `custom_data` 里的第 n 列，`<extra></extra>` 清空右上角默认显示的 `trace 0` 之类字样。**写之前先把列和索引一一对齐**；不确定就先 `print([list(r) for r in fig.data[0].customdata])` 看每一列到底是什么。
+
+不开浏览器也能做这个「对齐」检查——`customdata` 就是个二维列表，把模板里的占位符替换一遍，看看填出来的是什么：
+
+```python
+# hovertemplate 的索引自检：customdata 到底装了几列
+custom_data = [
+    ["https://github.com/vinta/awesome-python", "vinta"],
+    ["https://github.com/django/django", "django"],
+    ["https://github.com/pallets/flask", "pallets"],
+]
+TEMPLATE = ("<b>%{hovertext}</b><br>"
+            "作者：%{customdata[1]}<br>"
+            "<a href='%{customdata[0]}'>Open in GitHub</a><extra></extra>")
+
+print("每根柱子的 customdata：")
+for index, row in enumerate(custom_data):
+    print(f"  第 {index} 根：{row}")
+print("  每行列数：", len(custom_data[0]), "-> 索引只能是 0 和 1")
+
+print("\n模拟 Plotly 填模板（柱子 1）：")
+filled = (TEMPLATE.replace("%{hovertext}", "django")
+                  .replace("%{customdata[1]}", custom_data[1][1])
+                  .replace("%{customdata[0]}", custom_data[1][0])
+                  .replace("<extra></extra>", ""))
+print("  ", filled)
+
+print("\n★ 先对齐再写模板，别凭记忆数下标：")
+print("   custom_data=['html_url']               -> 只有 [0]")
+print("   custom_data=['html_url', 'owner']      -> [0] 是链接、[1] 是作者")
+```
 
 **为什么链接文字是写死的？** HTML 的 `<a href='地址'>显示文字</a>` 里地址和文字是两个独立部分。教材把 `html_url` 在 `custom_data` 里放两遍分别填这两处，但新版 plotly 不允许重复列名（报 `DuplicateError`）；本讲义**只传一列填 `href`，文字写死成 "Open in GitHub"**——效果一样，代码更短。
 
@@ -163,6 +327,43 @@ https://hacker-news.firebaseio.com/v0/item/{id}.json      ← 单篇文章的详
 **为什么这么设计？** 因为它**通用又省流量**：一份 id 列表能配不同详情查询，组合出「当前最热」「某作者的帖子」等成百上千种需求。类比**报纸的目录页只印标题和页码**。`title` 是主标题，`score`（得分 ≈ 点赞数）当热度，`descendants` 是评论条数。
 
 ★ 两个坑：**① `"by"` 是合法 JSON 键，但不能当 Python 变量名**——`by = item["by"]` 会**语法错误**（`by` 是 Python 关键字），所以老老实实 `item["by"]` 直接取值；**② `url` 可能是 `null`**（Ask HN 帖没有外链）。
+
+这两处兜底不用等真接口，把「一条详情」写成函数就能测：
+
+```python
+# 第二段取详情：null 条目要跳过，url 为空要兜底
+SAMPLE = {
+    101: {"title": "Why SQLite", "score": 142, "url": "https://sqlite.org/why.html"},
+    102: {"title": "Ask HN: 你怎么记笔记", "score": 88, "url": None},   # ★ 没有外链
+    103: None,                                                          # ★ 已被删除
+}
+
+
+def get_item(story_id):
+    """真项目里是 requests.get(item_url)，这里用字典冒充。"""
+    return SAMPLE.get(story_id)
+
+
+def to_row(story_id):
+    item = get_item(story_id)
+    if not isinstance(item, dict):            # None = 删除；非字典 = 意外
+        return None
+    return {
+        "title": item.get("title") or "(无标题)",
+        "score": item.get("score", 0),
+        "link": item.get("url")
+                or f"https://news.ycombinator.com/item?id={story_id}",
+    }
+
+
+for story_id in (101, 102, 103, 999):
+    row = to_row(story_id)
+    print(f"{story_id}: {'跳过（条目已删除或请求失败）' if row is None else row}")
+
+print("\n★ 两处兜底都是为了「每根柱子都有链接」：")
+print("  item is None      -> continue，别让 item['title'] 抛 TypeError")
+print("  url is None       -> 退回讨论页，链接不会变成空白")
+```
 
 完整写法见示例 5，三个细节：**① `story_ids[:5]`**——列表有 500 个 id，你只想画 5 根柱子，**先切片再请求**省配额；**② `item_dict is None` 的检查**——对删掉的条目 API 返回 `null`，不检查的话 `item_dict["title"]` 抛 `TypeError`；**③ `url` 的兜底**——用 `https://news.ycombinator.com/item?id={story_id}` 顶上。★ 这就是 2.6「可点击链接」技术在真实场景里的意义：**链接可能是空的，你得给它一条退路。**
 
@@ -405,6 +606,150 @@ if titles:
 else:
     print("没有拿到可用数据，跳过画图")
 ```
+
+### 示例 6：把「请求 → JSON → 取字段」拆成纯函数（api_pipeline.py）
+
+示例 1–5 的取数代码都长在 `try/except` 里，一旦没有网络就没法验证「取字段对不对」。真正的工程做法是把链路拆成三段**纯函数**：`parse_items(payload)` 只吃字典、`collect(get_json, ...)` 只吃「一个能取页的函数」、`get_json_with_retry(fetch, ...)` 只吃「一个会失败的调用」。这样用一份假 payload 就能把整条链路测干净——**网络只在最外层出现一次**。这也是练习 17-1/17-3 的骨架。
+
+```python
+# api_pipeline.py —— 请求 → JSON → 取字段：全部拆成纯函数，离线也能测
+import time
+
+# ===== 一份"假 payload"，结构和 GitHub search API 的响应一模一样 =====
+PAYLOAD_PAGE_1 = {
+    "total_count": 4350000,
+    "incomplete_results": False,
+    "items": [
+        {"name": "awesome-python", "stargazers_count": 220000,
+         "html_url": "https://github.com/vinta/awesome-python",
+         "description": "A curated list", "owner": {"login": "vinta"}},
+        {"name": "free-python-games", "stargazers_count": 95000,
+         "html_url": "https://github.com/tasnowak/free-python-games",
+         "description": None, "owner": {"login": "tasnowak"}},
+    ],
+}
+PAYLOAD_PAGE_2 = {
+    "total_count": 4350000,
+    "items": [
+        {"name": "django", "stargazers_count": 78000,
+         "html_url": "https://github.com/django/django",
+         "description": "Web framework", "owner": {"login": "django"}},
+        {"name": "awesome-python", "stargazers_count": 220000,   # ★ 跨页重复
+         "html_url": "https://github.com/vinta/awesome-python",
+         "description": "A curated list", "owner": {"login": "vinta"}},
+    ],
+}
+
+
+def parse_items(payload):
+    """★ 纯函数：输入一个 payload，输出五个平行列表。不碰网络、不碰文件。"""
+    names, stars, urls, owners, descs = [], [], [], [], []
+    for item in payload.get("items", []):
+        names.append(item["name"])                       # 核心结构，缺了就报错
+        stars.append(item.get("stargazers_count", 0))    # 可选字段用 .get
+        urls.append(item.get("html_url", ""))
+        owners.append(item.get("owner", {}).get("login", "未知"))
+        descs.append(item.get("description") or "（没写简介）")
+    return names, stars, urls, owners, descs
+
+
+names, stars, urls, owners, descs = parse_items(PAYLOAD_PAGE_1)
+print("=== 第一页解析结果 ===")
+for row in zip(names, stars, owners, descs):
+    print(f"  {row[0]:<18}{row[1]:>8,}  by {row[2]:<10}{row[3]}")
+
+print("\n=== 分页循环：一个函数取多页，按名字去重 ===")
+
+
+def collect(get_json, pages=2, per_page=2, pause=0.0):
+    """参数是「取一页的函数」，所以换成假数据也能测。"""
+    seen, merged = set(), []
+    for page in range(1, pages + 1):
+        if pause:
+            time.sleep(pause)                            # 真项目里写 pause=1
+        payload = get_json(page, per_page)
+        if payload is None:
+            print(f"  第 {page} 页失败，跳过")
+            continue
+        page_items = payload.get("items", [])
+        for item in page_items:
+            if item["name"] in seen:                     # ★ 跨页重复很常见
+                print(f"  第 {page} 页发现重复：{item['name']}，丢弃")
+                continue
+            seen.add(item["name"])
+            merged.append(item)
+        print(f"  第 {page} 页：返回 {len(page_items)} 条，累计 {len(merged)} 条")
+    return merged
+
+
+FAKE_PAGES = {1: PAYLOAD_PAGE_1, 2: PAYLOAD_PAGE_2}
+
+
+def fake_get_json(page, per_page):
+    return FAKE_PAGES.get(page)
+
+
+merged = collect(fake_get_json)
+n, s, u, o, d = parse_items({"items": merged})
+for name, star in sorted(zip(n, s), key=lambda pair: pair[1], reverse=True):
+    print(f"  {name:<18}{star:>8,}")
+
+print("\n=== 失败重试：同一个请求最多试 3 次 ===")
+
+
+def get_json_with_retry(fetch, attempts=3):
+    """fetch() 返回 None 表示失败；成功就立刻返回，别做无意义的等待。"""
+    for attempt in range(1, attempts + 1):
+        payload = fetch()
+        if payload is not None:
+            print(f"  第 {attempt} 次成功")
+            return payload
+        print(f"  第 {attempt} 次失败，{'重试' if attempt < attempts else '放弃'}")
+    return None
+
+
+calls = {"n": 0}
+
+
+def flaky():
+    """前两次装死，第三次才成功——模拟网络抖动。"""
+    calls["n"] += 1
+    return PAYLOAD_PAGE_2 if calls["n"] >= 3 else None
+
+
+result = get_json_with_retry(flaky)
+print("  最终拿到：", [item["name"] for item in result["items"]])
+print("  说明：403 不要重试（配额已空，重试只会更糟），网络异常才重试。")
+```
+
+**运行结果**（实跑输出）：
+
+```text
+=== 第一页解析结果 ===
+  awesome-python     220,000  by vinta     A curated list
+  free-python-games   95,000  by tasnowak  （没写简介）
+
+=== 分页循环：一个函数取多页，按名字去重 ===
+  第 1 页：返回 2 条，累计 2 条
+  第 2 页发现重复：awesome-python，丢弃
+  第 2 页：返回 2 条，累计 3 条
+  awesome-python     220,000
+  free-python-games   95,000
+  django              78,000
+
+=== 失败重试：同一个请求最多试 3 次 ===
+  第 1 次失败，重试
+  第 2 次失败，重试
+  第 3 次成功
+  最终拿到： ['django', 'awesome-python']
+  说明：403 不要重试（配额已空，重试只会更糟），网络异常才重试。
+```
+
+三条解读：
+
+1. **参数传「函数」而不是「网址」，是这个示例最值钱的设计**。`collect(get_json)` 里的 `get_json` 可以是真 requests，也可以是 `fake_get_json`——**依赖从外部注入，测试就不用联网**。Django 的测试客户端、pytest 的 mock 都是这个思路。
+2. **「重试」和「限速」是两件事，不能混**。`get_json_with_retry` 处理的是「这次调用意外失败」（网络抖动、超时），所以连试 3 次；而 403 是**确定性失败**，重试只会继续消耗已经为 0 的配额。把两者混成一个大 `while` 循环，就是新手最常见的「死循环轰炸 API」。
+3. **把 `pages=2` 改成 `pages=6` 会怎样**：`FAKE_PAGES` 只有两页，第 3–6 页会依次打印「第 N 页失败，跳过」，`merged` 仍是 3 条——**这正是真实翻页到底后该有的行为**：不该崩，也不该静默。若把 `per_page` 改成 100，`page_params` 里应同步检查「超过 100 会被 API 截断」。
 
 ---
 

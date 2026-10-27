@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 8 · 类型进阶与运算符重载</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 课程首页</a>
+  <h1>单元 8 · 类型进阶与运算符重载</h1>
+  <a class="tag" href="08.html">单元 8</a>
+  <a class="ppt" href="ppt/u/08.html">本单元课件</a>
+  <a class="switch" href="../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="29" href="lessons/l29.html"><span class="no">29</span><span class="tx">泛型：TypeVar、Generic 与型变</span></a><a class="" data-l="30" href="lessons/l30.html"><span class="no">30</span><span class="tx">TypedDict、重载与运行时读取注解</span></a><a class="" data-l="31" href="lessons/l31.html"><span class="no">31</span><span class="tx">运算符重载：一元、算术与 @</span></a><a class="" data-l="32" href="lessons/l32.html"><span class="no">32</span><span class="tx">比较、增量赋值与一致性</span></a></div>
+  <div class="mini"><i id="sideBar"></i></div>
+  <div class="minitxt" id="sideTxt">已学 0 / 4 节</div>
+</div>
+<div class="sblk"><h4>本页目录</h4><div class="toc"><a class="lv2" href="#单元导入">单元导入</a>
+<a class="lv2" href="#l29">第 29 课 · 泛型：TypeVar、Generic 与型变</a>
+<a class="lv2" href="#l30">第 30 课 · TypedDict、重载与运行时读取注解</a>
+<a class="lv2" href="#l31">第 31 课 · 运算符重载：一元、算术与 @</a>
+<a class="lv2" href="#l32">第 32 课 · 比较、增量赋值与一致性</a>
+<a class="lv2" href="#case-u08">综合案例：栈：从「裸列表」到带类型参数的容器</a>
+<a class="lv2" href="#单元验收">单元验收</a></div></div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="bank.html#u8"><span class="k">题库</span>
+    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+  <a href="gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收清单</span></a>
+  <a href="ppt/u/08.html"><span class="k">课件</span>
+    <span class="v">本单元逐节课件 · 10 页</span></a>
+  <a href="ppt/index.html"><span class="k">大纲</span>
+    <span class="v">18 页课程总览</span></a>
+  <a href="review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="syllabus.html"><span class="k">课表</span>
+    <span class="v">标准 14 周 / 轻量 28 周</span></a>
+  <a href="bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="walk/u08.html"><span class="k">走读</span>
+    <span class="v">单元 8 完整程序 · 逐段讲解</span></a>
+  <a href="ch/15.html"><span class="k">设计</span>    <span class="v">设计取舍 · 第 15–16 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">单元 8</span>
+        <span class="kwk">第 15–16 章</span><span class="ku">建议 1–2 周</span></div>
+      <h1>单元 8 · 类型进阶与运算符重载</h1>
+      <p class="goal">泛型 · 型变 · 运算符重载</p>
+    </div>
+    <div class="goalbox"><b>完成标准：</b>本单元四节课的验收清单全部打勾，
+    并完成题库中对应 3 道题，才算过关。<br>
+    每节末尾的「原书对照」标出对应小节与课上未展开的细节。</div>
+    <blockquote>
+<p>教材第 15–16 章 ｜ 4 节课 × 90 分钟 ｜ 建议 1–2 周</p>
+</blockquote>
+<h2 id="单元导入">单元导入</h2>
+<p>类型提示写到一定程度，一定会遇到三个问题：容器里装什么（泛型）、字典的键固定但类型不同（TypedDict）、同一个函数对不同输入返回不同类型（重载）。这一单元把它们补齐，并说明「型变」为什么会让 <code>list[Dog]</code> 不能当 <code>list[Animal]</code> 用。</p>
+<p>运算符重载则是另一条线：让自定义类型支持 <code>+</code>、<code>*</code>、<code>@</code>、<code>&lt;</code>，代码会更接近数学表达。但重载必须遵守约定——不改变运算符的语义、保持交换律、返回新对象，否则调用方会被坑。</p>
+<p>学完本单元，你应该能：</p>
+<ul>
+<li>用 <code>TypeVar</code> / <code>Generic</code> / <code>Protocol</code> 写出通过 mypy 的泛型类；</li>
+<li>用 <code>TypedDict</code> 描述结构化字典，用 <code>@overload</code> 描述多签名函数；</li>
+<li>正确实现一元、算术、矩阵乘与反射运算符；</li>
+<li>用 <code>total_ordering</code> 补齐比较，并让 <code>+=</code> 与 <code>+</code> 语义一致。</li>
+</ul><div class="lessonlist"><h4>本单元四节课</h4><div class="nlist"><a data-l="29" href="lessons/l29.html"><span class="no">29</span><span class="tx">泛型：TypeVar、Generic 与型变</span></a><a data-l="30" href="lessons/l30.html"><span class="no">30</span><span class="tx">TypedDict、重载与运行时读取注解</span></a><a data-l="31" href="lessons/l31.html"><span class="no">31</span><span class="tx">运算符重载：一元、算术与 @</span></a><a data-l="32" href="lessons/l32.html"><span class="no">32</span><span class="tx">比较、增量赋值与一致性</span></a></div></div><h2 id="l29">第 29 课 · 泛型：TypeVar、Generic 与型变</h2><h3 id="讲解">讲解</h3>
+<p><code>TypeVar</code> 是类型变量，让「输入类型」与「输出类型」建立关系：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T"</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">first</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre>
+<p><code>first([1, 2])</code> 推出 <code>int</code>，<code>first(["a"])</code> 推出 <code>str</code>。带约束时用 <code>bound</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sized</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"S"</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Sized</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">longest</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">S</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">S</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">else</span> <span class="n">b</span>
+</code></pre>
+<p>泛型类：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T"</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre>
+<p>型变描述「子类型关系能否传递到容器」：</p>
+<ul>
+<li><strong>不变（invariant）</strong>：<code>list[Dog]</code> 不是 <code>list[Animal]</code>，因为往里塞猫会破坏原列表。</li>
+<li><strong>协变（covariant）</strong>：只读容器可以，<code>Sequence[Dog]</code> 是 <code>Sequence[Animal]</code>。</li>
+<li><strong>逆变（contravariant）</strong>：只作为输入的 Callable 参数可以。</li>
+</ul>
+<h3 id="延伸-typeddict-的可选键与重载的实现体">延伸：TypedDict 的可选键与重载的实现体</h3>
+<p><code>TypedDict</code> 描述「带固定键名的 dict」，默认所有键必需；可选键有两种写法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">NotRequired</span><span class="p">,</span> <span class="n">Required</span>   <span class="c1"># 3.11+</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Movie</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">year</span><span class="p">:</span> <span class="n">NotRequired</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>        <span class="c1"># 3.11+；3.10 用 total=False 再补 Required</span>
+
+<span class="n">m</span><span class="p">:</span> <span class="n">Movie</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Alien"</span><span class="p">}</span>     <span class="c1"># 合法，year 可省</span>
+</code></pre>
+<p>3.10 及更早只有 <code>total=False</code>（全部可选），要用 <code>Required[...]</code> 逐个标回必需。<code>TypedDict</code> 只约束静态形状，运行时就是普通 dict，多余键不会报错。</p>
+<p>关于重载：<code>@overload</code> 的多个签名只是给检查器看的，最后一个<strong>实现体</strong>的参数必须能接受所有重载的组合（通常用联合类型或 <code>*args, **kwargs</code>），返回类型也要能覆盖。写错实现体签名时检查器会明确报「实现与重载不兼容」，这是最常踩的坑。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>list</code> 是不变的</strong>，<code>Sequence</code> 是协变的；只读场景优先注解为 <code>Sequence</code>。</li>
+<li><strong><code>TypeVar</code> 只在同一次调用内保持类型一致</strong>，不是全局绑定。</li>
+<li><strong>能用 <code>Protocol</code> 就别造基类</strong>，泛型 + 协议能覆盖大多数约束。</li>
+<li><strong>别给 <code>TypeVar</code> 加无意义的 <code>bound=object</code></strong>，等于没约束。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>写 <code>pair(a: T, b: T) -&gt; tuple[T, T]</code>，用 mypy 验证混合类型会报错。</li>
+<li>实现 <code>Stack[T]</code>，分别 push 三个 int，验证 <code>pop()</code> 的返回类型被推断为 int。</li>
+<li>用 <code>Sequence</code> 与 <code>list</code> 各写一版 <code>first</code>，比较 mypy 对 <code>list[Dog]</code> 的接受度。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能写出带 <code>bound</code> 的 <code>TypeVar</code> 并解释约束作用</li>
+<li><span class="ck"></span>能解释 <code>list[Dog]</code> 为什么不能传给 <code>list[Animal]</code></li>
+<li><span class="ck"></span>知道只读场景该用 <code>Sequence</code> 而不是 <code>list</code></li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 15 章 §15.2–15.5</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：TypedDict 的可选键与重载的实现体</p></div><h2 id="l30">第 30 课 · TypedDict、重载与运行时读取注解</h2><h3 id="讲解-1">讲解</h3>
+<p><code>TypedDict</code> 适合「本质是 dict，但键固定」的数据，比如 API 响应：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Movie</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">year</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">rating</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="n">m</span><span class="p">:</span> <span class="n">Movie</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Alien"</span><span class="p">,</span> <span class="s2">"year"</span><span class="p">:</span> <span class="mi">1979</span><span class="p">,</span> <span class="s2">"rating"</span><span class="p">:</span> <span class="mf">8.5</span><span class="p">}</span>
+</code></pre>
+<p><code>total=False</code> 让所有键可选；<code>Required</code> / <code>NotRequired</code> 可以逐键控制。</p>
+<p>重载用于「同一个函数，不同输入返回不同类型」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">overload</span>
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="o">...</span>
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+</code></pre>
+<p>实现体的签名不对外暴露，调用方只看重载签名；但 mypy 会检查实现体与重载是否兼容。<code>@overload</code> 只在静态检查时生效。</p>
+<p>运行时读取注解用 <code>typing.get_type_hints</code>（会解析字符串注解与前向引用）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_type_hints</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">"int"</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"str"</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="o">...</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">get_type_hints</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+<span class="c1"># {'x': &lt;class 'int'&gt;, 'y': list[str], 'return': NoneType}</span>
+</code></pre>
+<h3 id="延伸-型变只影响静态检查">延伸：型变只影响静态检查</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Generic</span>
+
+<span class="n">T_co</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T_co"</span><span class="p">,</span> <span class="n">covariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>      <span class="c1"># 只读产出，协变</span>
+<span class="n">T_contra</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T_contra"</span><span class="p">,</span> <span class="n">contravariant</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># 只消费，逆变</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Producer</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T_co</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T_co</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Consumer</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T_contra</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">T_contra</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</code></pre>
+<p>规则的直觉：<strong>只往外给</strong>的容器可以协变（<code>Producer[Dog]</code> 是 <code>Producer[Animal]</code>），<strong>只往里收</strong>的可以逆变，既读又写的必须不变（<code>list</code> 就是不变，所以 <code>list[Dog]</code> 不能当 <code>list[Animal]</code> 用）。这些声明只在静态检查时生效，运行时 <code>TypeVar</code> 不产生任何行为差异，也不能据此做 <code>isinstance</code> 判断。</p>
+<h3 id="关键点-1">关键点</h3>
+<ul>
+<li><strong>TypedDict 不做运行时校验</strong>，它只是给检查器看的形状。</li>
+<li><strong>重载签名必须与实现兼容</strong>，否则 mypy 报 <code>overload</code> 错误。</li>
+<li><strong><code>__annotations__</code> 可能是字符串</strong>（<code>from __future__ import annotations</code>），要用 <code>get_type_hints</code> 求值。</li>
+<li><strong>运行时读注解可以驱动校验、序列化、依赖注入</strong>，但要注意循环导入。</li>
+</ul>
+<h3 id="动手-1">动手</h3>
+<ol>
+<li>用 TypedDict 描述一个 API 响应，写一个函数返回该类型，并让 mypy 检查。</li>
+<li>用 <code>@overload</code> 实现 <code>double(x)</code>：int 返回 int，str 返回重复字符串。</li>
+<li>写一个 <code>validate(obj)</code>，用 <code>get_type_hints</code> 读取 dataclass 字段类型并做简单校验。</li>
+</ol>
+<h3 id="验收清单-1">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用 TypedDict 替代「键名靠猜」的 dict</li>
+<li><span class="ck"></span>能写出两个重载签名 + 一个实现体</li>
+<li><span class="ck"></span>会用 <code>get_type_hints</code> 处理字符串注解</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 15 章 §15.6–15.8</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：型变只影响静态检查</p></div><h2 id="l31">第 31 课 · 运算符重载：一元、算术与 @</h2><h3 id="讲解-2">讲解</h3>
+<p>运算符对应特殊方法：</p>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>方法</th>
+<th>反射版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-v</code></td>
+<td><code>__neg__</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>v + w</code></td>
+<td><code>__add__</code></td>
+<td><code>__radd__</code></td>
+</tr>
+<tr>
+<td><code>v * 3</code></td>
+<td><code>__mul__</code></td>
+<td><code>__rmul__</code></td>
+</tr>
+<tr>
+<td><code>v @ m</code></td>
+<td><code>__matmul__</code></td>
+<td><code>__rmatmul__</code></td>
+</tr>
+</tbody>
+</table></div>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Vector</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scalar</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scalar</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">scalar</span><span class="p">)</span>
+
+    <span class="fm">__rmul__</span> <span class="o">=</span> <span class="fm">__mul__</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Vector</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Vector(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+</code></pre>
+<p>当 <code>a + b</code> 里 <code>a.__add__</code> 返回 <code>NotImplemented</code>，Python 会尝试 <code>b.__radd__(a)</code>。这是 <code>3 * v</code> 能工作的原因。直接抛 <code>TypeError</code> 会阻止反射回退。</p>
+<h3 id="延伸-和-都必须返回新对象">延伸：+ 和 @ 都必须返回新对象</h3>
+<p>中缀运算符的两个约定：<code>__add__</code> 返回<strong>新对象</strong>，不修改操作数；<code>__matmul__</code> 同理。<code>@</code> 的优先级和 <code>*</code> 相同，比 <code>+</code> 高，所以 <code>a @ b + c</code> 是 <code>(a @ b) + c</code>——但别依赖读者记得，加括号。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Vec</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Vec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">o</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">o</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>      <span class="c1"># 新对象</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">o</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">o</span><span class="o">.</span><span class="n">y</span>          <span class="c1"># 点积，标量</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Vec(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Vec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">Vec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>        <span class="c1"># Vec(4, 6)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Vec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">@</span> <span class="n">Vec</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>        <span class="c1"># 11</span>
+</code></pre>
+<p>返回 <code>NotImplemented</code>（不是 <code>raise</code>）才能让 Python 尝试对方的反射方法 <code>__radd__</code>。类型不匹配时返回 <code>NotImplemented</code>，是「我不认识这个类型」的标准回答。</p>
+<h3 id="关键点-2">关键点</h3>
+<ul>
+<li><strong>返回 <code>NotImplemented</code>，不要抛异常</strong>，让解释器有机会尝试另一侧。</li>
+<li><strong><code>@</code> 是矩阵乘法</strong>，NumPy 用得多；自己实现时要明确维度规则。</li>
+<li><strong><code>+</code> 不应修改操作数</strong>，返回新对象；原地修改交给 <code>+=</code>。</li>
+<li><strong>运算符语义要符合直觉</strong>：<code>+</code> 表示合并/相加，不要拿来表示「删除」。</li>
+</ul>
+<h3 id="动手-2">动手</h3>
+<ol>
+<li>实现 <code>Vector</code> 的 <code>+</code>、<code>*</code>、<code>-</code>，验证 <code>3 * v</code> 与 <code>v * 3</code> 都可用。</li>
+<li>故意让 <code>__add__</code> 抛 <code>TypeError</code>，观察 <code>1 + v</code> 的报错变化，再改回 <code>NotImplemented</code>。</li>
+<li>用 <code>@</code> 实现 2×2 矩阵乘向量，写 3 条断言。</li>
+</ol>
+<h3 id="验收清单-2">验收清单</h3>
+<ul>
+<li><span class="ck"></span>知道反射运算符在什么时机被调用</li>
+<li><span class="ck"></span>能解释返回 <code>NotImplemented</code> 与抛 <code>TypeError</code> 的差异</li>
+<li><span class="ck"></span>实现的算术运算符不修改操作数</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 16 章 §16.2–16.6</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：+ 和 @ 都必须返回新对象</p></div><h2 id="l32">第 32 课 · 比较、增量赋值与一致性</h2><h3 id="讲解-3">讲解</h3>
+<p>只需要定义 <code>__eq__</code> 和一个顺序方法，<code>total_ordering</code> 会补齐其余：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">total_ordering</span>
+
+<span class="nd">@total_ordering</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Version</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parts</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Version</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parts</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">parts</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Version</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parts</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">parts</span>
+</code></pre>
+<p>增量赋值 <code>+=</code> 优先调用 <code>__iadd__</code>；没有则退化为 <code>a = a + b</code>。可变类型应实现 <code>__iadd__</code> 并返回 <code>self</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Bag</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+<p>一致性检查清单：</p>
+<ul>
+<li><code>a == b</code> 为真时，<code>hash(a) == hash(b)</code> 必须为真；</li>
+<li><code>a &lt; b</code> 与 <code>b &gt; a</code> 必须一致；</li>
+<li><code>a == a</code> 必须为真（除非对象是 NaN 这类特例）；</li>
+<li>排序结果不能依赖调用顺序（稳定排序另说）。</li>
+</ul>
+<h3 id="延伸-iadd-返回-self-才算原地">延伸：<strong>iadd</strong> 返回 self 才算原地</h3>
+<p><code>c += d</code> 的语义是「重新绑定 <code>c</code>」，但你可以在 <code>__iadd__</code> 里选择原地改再返回 <code>self</code>，也可以新建对象返回。前者调用方看到的别名会一起变，后者不会：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Score</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iadd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="bp">self</span>                 <span class="c1"># 原地：别名同步可见</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s2">"Score(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="si">}</span><span class="s2">)"</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">Score</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">a</span> <span class="o">+=</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>                         <span class="c1"># Score(3) Score(3)</span>
+</code></pre>
+<p>如果 <code>__iadd__</code> 忘了 <code>return</code>，<code>a += 2</code> 会把 <code>a</code> 绑成 <code>None</code>，这是最隐蔽的 bug 之一。可变对象（list、set、numpy 数组）通常原地，不可变对象（tuple、str、int）必然新建——判断标准就是「这个类型能不能改内容」。</p>
+<h3 id="关键点-3">关键点</h3>
+<ul>
+<li><strong><code>total_ordering</code> 要求 <code>__eq__</code> 与 <code>__lt__</code> 同时存在</strong>，否则报错。</li>
+<li><strong><code>__iadd__</code> 必须返回 <code>self</code></strong>，返回 <code>None</code> 会让 <code>a</code> 变成 <code>None</code>。</li>
+<li><strong>浮点 NaN 破坏自反性</strong>，涉及 NaN 的比较要单独处理。</li>
+<li><strong>比较运算符不要做副作用操作</strong>，调用方默认它是纯函数。</li>
+</ul>
+<h3 id="动手-3">动手</h3>
+<ol>
+<li>用 <code>total_ordering</code> 实现 <code>Version("1.2.3")</code> 的比较，验证 <code>&lt;=</code>、<code>&gt;</code>、<code>&gt;=</code> 全部可用。</li>
+<li>实现 <code>Bag.__iadd__</code>，验证 <code>b += [1, 2]</code> 后 <code>b</code> 仍是原对象（用 <code>id</code> 检查）。</li>
+<li>写一个测试，检查相等、哈希、排序三者在 10 组数据上是否自洽。</li>
+</ol>
+<h3 id="验收清单-3">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用 <code>total_ordering</code> 补齐四个比较运算符</li>
+<li><span class="ck"></span>知道 <code>__iadd__</code> 的返回值要求</li>
+<li><span class="ck"></span>能列出相等/哈希/排序一致性的至少三条规则</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 16 章 §16.7–16.9</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：__iadd__ 返回 self 才算原地</p></div><h2 id="case-u08">综合案例：栈：从「裸列表」到带类型参数的容器</h2>
+<blockquote>
+<p>内部用 list 实现栈，先写成最顺手的样子，再看它怎么被外部改坏、怎么在空栈上崩。</p>
+</blockquote>
+<h3 id="重构前-内部状态全暴露">重构前（内部状态全暴露）</h3>
+<p><code>items</code> 是公开属性，外部可以直接 <code>append</code>、<code>clear</code>，绕过后进先出；空栈 <code>pop()</code> 抛 <code>IndexError</code>，调用方得自己 try；没有类型信息，<code>push("a")</code> 进 <code>list[int]</code> 也没人管。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+<span class="n">s</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">pop</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>        <span class="c1"># 2 1</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">Stack</span><span class="p">()</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"空栈:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>           <span class="c1"># pop from empty list</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">))</span>             <span class="c1"># 1：绕过 API 直接看内部</span>
+<span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span>              <span class="c1"># 绕过 push 插队</span>
+<span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>                 <span class="c1"># 直接清空，size 归零但没人知道</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>                 <span class="c1"># 0</span>
+
+<span class="n">s</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s2">"字符串也能进来"</span><span class="p">)</span>          <span class="c1"># 没有类型约束</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+</code></pre>
+<h3 id="重构后-封装-泛型-空栈语义">重构后（封装 + 泛型 + 空栈语义）</h3>
+<p>内部列表改成 <code>_items</code>，对外只暴露方法；<code>pop</code> / <code>peek</code> 在空栈时返回 <code>None</code>（明确写进返回类型），并补 <code>__len__</code>、<code>__iter__</code>、<code>__bool__</code> 让它像内置容器。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">"T"</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Stack</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Stack(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="si">!r}</span><span class="s2">)"</span>
+
+
+<span class="n">s</span><span class="p">:</span> <span class="n">Stack</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">()</span>
+<span class="n">s</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">pop</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">peek</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">bool</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>   <span class="c1"># 2 1 1 True [1]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">pop</span><span class="p">(),</span> <span class="n">s</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>                              <span class="c1"># 1 None</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">Stack</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="n">Stack</span><span class="p">()))</span>                  <span class="c1"># False []</span>
+
+<span class="c1"># 内部状态不再暴露：下面这行会直接 AttributeError</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">items</span>
+<span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"封装生效:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</code></pre>
+<h3 id="差异说明">差异说明</h3>
+<div class="tblwrap"><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>重构前</th>
+<th>重构后</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内部状态</td>
+<td><code>items</code> 公开，可随意改</td>
+<td><code>_items</code> 私有</td>
+<td>不变量（后进先出）守得住</td>
+<td>调试时要看私有属性</td>
+</tr>
+<tr>
+<td>空栈</td>
+<td><code>pop()</code> 抛 <code>IndexError</code></td>
+<td>返回 <code>None</code>，类型写明</td>
+<td>调用方不用 try</td>
+<td>无法区分「空」和「存了 None」</td>
+</tr>
+<tr>
+<td>长度</td>
+<td><code>size()</code> 自定义方法</td>
+<td><code>__len__</code></td>
+<td><code>len(s)</code>、<code>bool(s)</code> 自动可用</td>
+<td>需要额外实现 <code>__bool__</code> 才不依赖 <code>__len__</code></td>
+</tr>
+<tr>
+<td>类型</td>
+<td>无约束</td>
+<td><code>Generic[T]</code> + <code>Optional[T]</code></td>
+<td>静态检查能拦 <code>push("a")</code></td>
+<td>运行时仍是 <code>Any</code>，不会校验</td>
+</tr>
+<tr>
+<td>迭代</td>
+<td>只能 <code>s.items</code></td>
+<td><code>__iter__</code></td>
+<td><code>for</code>、<code>list()</code>、解包都能用</td>
+<td>返回迭代器后不再受栈操作影响</td>
+</tr>
+<tr>
+<td>打印</td>
+<td>默认对象地址</td>
+<td><code>__repr__</code> 显示内容</td>
+<td>日志可读</td>
+<td>元素多时打印很长</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="再往前一步">再往前一步</h3>
+<p>区分「空」与「存了 <code>None</code>」需要一个哨兵对象（<code>_MISSING = object()</code>），或者干脆让 <code>pop</code> 在空栈抛自定义的 <code>EmptyStack</code>——库代码通常后者更安全，脚本代码前者更省事。再进一步：加 <code>maxsize</code> 做成有界栈（满时拒绝），或改用 <code>collections.deque</code> 让 <code>popleft</code> 也 O(1)（当队列用）。</p>
+<h2 id="单元验收">单元验收</h2>
+<ul>
+<li><span class="ck"></span><strong>泛型</strong>：写出 <code>Stack[T]</code> 与 <code>first(Sequence[T])</code>，mypy 通过</li>
+<li><span class="ck"></span><strong>结构类型</strong>：用 TypedDict + overload 描述一个真实 API 的输入输出</li>
+<li><span class="ck"></span><strong>运算符</strong>：<code>Vector</code> 支持 <code>+</code>、<code>*</code>、<code>@</code>、<code>-</code>，且 <code>3 * v</code> 可用</li>
+<li><span class="ck"></span><strong>一致性</strong>：相等、哈希、排序、<code>+=</code> 四项在一组测试里全部自洽</li>
+</ul>
+<blockquote>
+<p>下一单元进入控制流：迭代器与生成器让计算变懒，with 与 match 让控制结构更表达意图。</p>
+</blockquote>
+    <div class="pn"><a href="07.html"><small>← 上一单元</small><b>单元 7 · 接口、协议与继承</b></a><a class="nx" href="09.html"><small>下一单元 →</small><b>单元 9 · 迭代器、生成器与控制流</b></a></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:14px">
+      本页内容依据《流畅的 Python（第 2 版）》第 15–16 章的章节结构课程化重写，
+      示例按 Python 3.10+ 语法编写，3.11+ 特性在正文单独标注。</p>
+  </main>
+</div>
+
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

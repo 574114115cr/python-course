@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元 3 课件 · 数据类与对象语义</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../css/site.css">
+</head><body>
+<div class="deck"><section class="slide on" data-s="1"><div class="sk">UNIT 3 · 逐节课件</div><h2>单元 3 · 数据类与对象语义</h2><div class="sub">第 5–6 章 · 4 节课 · 建议 1–2 周</div></section><section class="slide" data-s="2"><div class="sk">第 9 课 · 目标与要点</div><h2>数据类三件套：namedtuple、NamedTuple、dataclass</h2><div class="sub">能为一个「只有字段」的类选出合适的数据类工具，并说清三者在可变性、类型提示、扩展性上的差异。</div><ul><li>namedtuple 不可变，改字段要用 _replace() 生成新对象。</li><li>NamedTuple 的字段默认值必须放在最后，和函数参数规则一致。</li><li>dataclass 的 eq=True 默认开启，会比较所有字段；不想参与比较的字段用 field(compare=False)。</li><li><b>dataclass 不是「免费」的</b>：字段多、创建频繁时，生成的 __eq__ 和 __repr__ 有成本，热路径要评估。</li></ul></section><section class="slide" data-s="3"><div class="sk">第 9 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from collections import namedtuple
+
+Point = namedtuple(&quot;Point&quot;, &quot;x y&quot;)
+p = Point(3, 4)
+print(p.x, p[0], p)          # 3 3 Point(x=3, y=4)
+print(p._replace(x=10))      # Point(x=10, y=4)</code></pre><div class="sub">动手：用三种方式各定义一次 Point(x, y)，打印 repr 与相等判断结果。</div></section><section class="slide" data-s="4"><div class="sk">第 10 课 · 目标与要点</div><h2>dataclass 进阶：默认值、校验、冻结与模式匹配</h2><div class="sub">能用 field(default_factory=...) 处理可变默认值，用 __post_init__ 做校验，用 frozen 与 slots 控制可变性和内存。</div><ul><li>默认值工厂每个实例调用一次，field(default_factory=list) 不会共享列表。</li><li><b>frozen=True 是浅冻结</b>：字段本身不可重新赋值，但字段指向的 list 仍可修改。</li><li>__post_init__ 在 __init__ 末尾调用，此时所有字段都已赋值，适合校验和派生。</li><li>slots=True 与 frozen=True 可以同时用，但继承时会受限制，别在会扩展的基类上开 slots。</li></ul></section><section class="slide" data-s="5"><div class="sk">第 10 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>from dataclasses import dataclass, field
+
+@dataclass
+class Article:
+    title: str
+    tags: list[str] = field(default_factory=list)
+    views: int = field(default=0, compare=False)   # 不参与相等比较</code></pre><div class="sub">动手：定义 Article，两个实例各 append 一个 tag，验证互不影响。</div></section><section class="slide" data-s="6"><div class="sk">第 11 课 · 目标与要点</div><h2>变量不是盒子：引用、别名与拷贝</h2><div class="sub">能用「标签—对象」模型解释赋值、is/==、别名、浅拷贝与深拷贝，并预测一段代码的输出。</div><ul><li>赋值永不复制，b = a 只是多一个引用。</li><li>浅拷贝复制容器，不复制元素；嵌套结构要用 deepcopy。</li><li><b>不可变对象也可能共享</b>：小整数、短字符串会被驻留（interning），所以 a is b 偶尔为 True，但不要依赖。</li><li><b>函数传参是「对象引用传递」</b>：在函数里改可变参数会影响调用方，重新绑定形参则不会。</li></ul></section><section class="slide" data-s="7"><div class="sk">第 11 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>a = [1, 2, 3]
+b = a                 # 同一个对象的两个标签
+b.append(4)
+print(a)              # [1, 2, 3, 4]
+
+print(a is b)         # True：身份相同
+print(a == [1, 2, 3, 4])   # True：值相同</code></pre><div class="sub">动手：预测下面代码的输出，再运行验证：</div></section><section class="slide" data-s="8"><div class="sk">第 12 课 · 目标与要点</div><h2>可变性、默认参数与对象生命周期</h2><div class="sub">能识别可变默认参数、类属性共享、del 的真实语义，并在需要时用 weakref 管理缓存。</div><ul><li>默认参数只求值一次，可变默认值必须用 None 哨兵。</li><li>del x 删的是名字，其他引用仍然有效；del lst[0] 才是删元素。</li><li>循环引用靠分代 GC 回收，不是引用计数；大量创建对象时可用 gc.collect() 观测。</li><li><b>弱引用适合做缓存</b>：WeakValueDictionary 让缓存项在外部不再使用时自动消失。</li></ul></section><section class="slide" data-s="9"><div class="sk">第 12 课 · 代码与实操</div><h2>看一段，改一段</h2><pre><code>def add(item, bucket=[]):
+    bucket.append(item)
+    return bucket
+
+print(add(1))    # [1]
+print(add(2))    # [1, 2]  ← 不是 [2]</code></pre><div class="sub">动手：复现可变默认参数 bug，改写成 None 哨兵版本，并写一个测试证明两次调用互不影响。</div></section><section class="slide" data-s="10"><div class="sk">单元验收</div><h2>过关清单</h2><ul><li>选型：给定三个需求（只读坐标、可变订单、可哈希缓存键），分别选出数据类工具并说明理由</li><li>dataclass：写出一个带默认工厂、后处理校验、frozen 的类，并跑通相等与哈希测试</li><li>引用：画出一个包含别名、浅拷贝、深拷贝的对象引用图</li><li>生命周期：解释一次「函数改了我的列表」的事故，并给出防御性写法</li></ul></section></div>
+<div class="dprog" id="dp"></div>
+<div class="dnav">
+  <a href="../../03.html">← 单元 3</a>
+  <button id="prev">←</button><span id="cnt">1 / 10</span><button id="next">→</button>
+  <a href="../../../index.html">课程首页</a>
+</div>
+<script>
+(function(){
+  var cur=1, n=10, slides=[].slice.call(document.querySelectorAll('.slide'));
+  var dp=document.getElementById('dp'), cnt=document.getElementById('cnt');
+  function go(i){
+    cur=Math.max(1,Math.min(n,i));
+    slides.forEach(function(s){s.classList.toggle('on',+s.dataset.s===cur)});
+    dp.style.width=(cur/n*100)+'%';
+    cnt.textContent=cur+' / '+n;
+    if(location.hash!=='#s'+cur){try{history.replaceState(null,'','#s'+cur)}catch(e){}}
+  }
+  document.getElementById('prev').onclick=function(){go(cur-1)};
+  document.getElementById('next').onclick=function(){go(cur+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1)}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1)}
+  });
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50) go(cur+(dx<0?1:-1));
+    x0=null;
+  },{passive:true});
+  var m=(location.hash||'').match(/^#s(\d+)$/);
+  go(m?+m[1]:1);
+})();
+</script>
+</body></html>

@@ -25,9 +25,10 @@ transition:opacity .18s;z-index:60}
 
 <div class="layout">
   <aside class="side">
-    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="98" data-to="102"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u19"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/19.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s16"><span class="k">大纲</span><span class="v">课程大纲课件 p16</span></a><a href="bank.html#u19"><span class="k">题库</span><span class="v">本单元 2 题 · 共 84 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a></div></div>
-    <h4>本单元目录</h4>
-    <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
+    <div class="relbox"><h4>本单元配套资料</h4><div class="uprog" data-from="98" data-to="102"><div class="uprog-h"><b>已学 0 / 5 节</b><span>按课节页勾选统计</span></div><div class="track"><i></i></div></div><div class="rel"><a href="lessons/index.html#u19"><span class="k">课节</span><span class="v">本单元全部课节 · 一节一节学</span></a><a href="ppt/u/19.html"><span class="k">课件</span><span class="v">逐节版 · 每节课 2 页</span></a><a href="ppt/index.html#s16"><span class="k">大纲</span><span class="v">课程大纲课件 p16</span></a><a href="bank.html#u19"><span class="k">题库</span><span class="v">本单元 4 题 · 共 120 题</span></a><a href="../python-course-syllabus.html"><span class="k">课表</span><span class="v">总课表与阶段安排</span></a><a href="review.html"><span class="k">复习</span><span class="v">艾宾浩斯复习计划 · 6 轮</span></a></div></div>
+    <div class="tocbox">
+      <h4>本单元目录</h4>
+      <nav class="toc"><a class="lv2" href="#一-学习目标">一、学习目标</a>
 <a class="lv2" href="#二-核心知识点讲解">二、核心知识点讲解</a>
 <a class="lv3" href="#2-1-表单与-modelform-把模型变成表单的捷径">2.1 表单与 ModelForm：把模型变成表单的捷径</a>
 <a class="lv3" href="#2-2-三段式与数据归属-commit-false-的经典手法">2.2 三段式与数据归属：commit=False 的经典手法 ★</a>
@@ -64,18 +65,16 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-6-edit_entry-只查了条目-没查主题归属">错误 6：edit_entry 只查了条目，没查主题归属</a>
 <a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
-    <div class="sidetag">
-      <b>学习提醒</b><br>
-      讲完不超过 10 分钟就要自己敲一遍代码。<br>
-      报错是教材，不要擦掉。
+      <div class="sidetag">
+        <b>学习提醒</b><br>
+        讲完不超过 10 分钟就要自己敲一遍代码。<br>
+        报错是教材，不要擦掉。
+      </div>
     </div>
   </aside>
   <main class="main"><h1 id="单元-19-用户账户">单元 19：用户账户</h1>
-<blockquote>
-<p>对应教材第 19 章「用户账户」
-阶段 2 · 项目 3：学习笔记（Learning Log）
-本单元目标：<strong>给学习笔记装上「人」的维度——注册、登录、注销，并用 @login_required 和 owner 字段守住「每个用户只能看见自己的数据」这条安全红线。</strong></p>
-</blockquote>
+<div class="bkbx"><div class="bk-h"><b>原书对照</b><span>对应教材第 19 章「用户账户」</span></div><p class="bk-k">阶段 2 · 项目 3：学习笔记（Learning Log）
+本单元目标：<strong>给学习笔记装上「人」的维度——注册、登录、注销，并用 @login_required 和 owner 字段守住「每个用户只能看见自己的数据」这条安全红线。</strong></p><a href="coverage.html#u19">这套课覆盖了教材哪些章 →</a></div>
 <hr>
 <h2 id="一-学习目标">一、学习目标</h2>
 <p>完成本单元后，你应该能够：</p>
@@ -159,6 +158,52 @@ transition:opacity .18s;z-index:60}
 {% endif %}
 </code></pre>
 <p>这就是导航栏「已登录显示问候语、未登录显示登录链接」的实现——<strong>同一个变量，两种身份，模板自己判断</strong>。</p>
+<p>「不是 <code>None</code>」这一点值得亲手验证一次，因为它决定了你后面所有视图函数的写法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># request.user 的替身：登录与未登录，差别只在 is_authenticated</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnonymousUser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Django 里未登录时 request.user 就是这个对象——不是 None。"""</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">pk</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">"AnonymousUser"</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_authenticated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">pk</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pk</span> <span class="o">=</span> <span class="n">pk</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_authenticated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">nav_text</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""视图或模板里唯一该用的判断：is_authenticated。"""</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"你好，</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">。"</span>
+    <span class="k">return</span> <span class="s2">"登录"</span>
+
+
+<span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="s2">"alice"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">AnonymousUser</span><span class="p">()):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="si">:</span><span class="s2">&lt;14</span><span class="si">}</span><span class="s2">is_authenticated=</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="si">!s:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">"</span>
+          <span class="sa">f</span><span class="s2">"pk=</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">pk</span><span class="si">!r:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2">导航显示：</span><span class="si">{</span><span class="n">nav_text</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">未登录时 username 是空串、pk 是 None，但对象永远存在——"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"所以 request.user.username 不会 AttributeError，只是显示空字符串。"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"视图里要拿「当前用户的主题」：Topic.objects.filter(owner=request.user)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"未登录还这么查，owner 会匹配到一个 AnonymousUser，结果恒为空集。"</span><span class="p">)</span>
+</code></pre>
+<p>实跑输出里 <code>alice</code> 那行是 <code>is_authenticated=True pk=1</code>，<code>AnonymousUser</code> 那行是 <code>is_authenticated=False pk=None</code>——<strong><code>pk</code> 可以是 <code>None</code>，但 <code>request.user</code> 这个对象本身永远存在</strong>。所以判断登录状态永远写 <code>if request.user.is_authenticated:</code>，不要写 <code>if request.user is not None:</code>（那个条件永远为真）。</p>
 <h3 id="2-4-登录-注销-注册三件套">2.4 登录、注销、注册三件套</h3>
 <p><strong>登录和注销不用自己写视图</strong>——Django 自带的用户身份验证系统（<code>django.contrib.auth</code>）全包了。在 <code>accounts/urls.py</code> 里包含默认 URL：</p>
 <pre><code class="language-python"><span class="cl">Python</span><span class="c1"># accounts/urls.py —— 默认 URL 白拿 login / logout，register 用自己的视图</span>
@@ -1091,6 +1136,16 @@ pre:hover .cp{opacity:1}
 pre .cp.ok{color:#fff;background:var(--p2);border-color:var(--p2)}
 .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;
 padding:14px;margin-bottom:12px}
+.bkbx{background:linear-gradient(135deg,#f6f9fd,#eef4fb);border:1px solid #dbe6f2;
+border-radius:12px;padding:13px 16px;margin:0 0 18px}
+.bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#fff;
+border:1px solid #d5e3f3;border-radius:5px;padding:2px 8px;white-space:nowrap}
+.bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#1b3348;line-height:1.6}
+.bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#54636f;line-height:1.7}
+.bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;
+color:var(--p1);text-decoration:none}
+.bkbx > a:hover{text-decoration:underline}
 .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;
 font-weight:700}
 .rel{display:flex;flex-direction:column;gap:2px}

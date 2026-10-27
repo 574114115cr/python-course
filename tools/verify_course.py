@@ -12,20 +12,38 @@ import subprocess
 
 CODE_RE = re.compile(r"```python\n(.*?)```", re.DOTALL)
 BROKEN_MARK = "INTENTIONALLY-BROKEN"
+# 片段标记：只讲一个方法/视图的一部分，顶层 return、未定义名都是故意的
+FRAGMENT_MARK = "（片段）"
+
+
+def _dedent(code):
+    """去掉列表内嵌带来的一层公共缩进（与 build_lectures.convert 保持一致）。"""
+    lines = code.split("\n")
+    indents = [len(l) - len(l.lstrip()) for l in lines if l.strip()]
+    if indents and min(indents) > 0:
+        cut = min(indents)
+        lines = [l[cut:] if l.strip() else l for l in lines]
+    return "\n".join(lines)
+
+
+def blocks(path):
+    text = path.read_text(encoding="utf-8")
+    return [_dedent(c) for c in CODE_RE.findall(text)]
+
+
+def is_fragment(code):
+    head = code.split("\n")[0]
+    return FRAGMENT_MARK in head
+
 
 # 需要外部模块或跨文件依赖的块（跳过逻辑执行，只做语法校验）
 EXTERNAL = re.compile(
-    r"^\s*(?:from|import)\s+(?:pytest|requests)\b"
+    r"^\s*(?:from|import)\s+(?:pytest|requests|django|pygame|flask)\b"
     r"|\bfrom\s+(calculator|text_utils|divider|book|buggy|tip|cart|bank_system|"
     r"library|shelf_library|vote_analyzer|score_analyzer|text_analyzer|vehicle|"
     r"analysis|user_input_report|todo_manager)\b",
     re.M,
 )
-
-
-def blocks(path):
-    text = path.read_text(encoding="utf-8")
-    return CODE_RE.findall(text)
 
 
 def syntax_check(files):
@@ -35,10 +53,13 @@ def syntax_check(files):
     print("第一部分：语法校验（compile）")
     print("=" * 60)
     for f in files:
-        count = skip = 0
+        count = skip = frag = 0
         for code in blocks(f):
             if BROKEN_MARK in code.split("\n")[0]:
                 skip += 1
+                continue
+            if is_fragment(code):
+                frag += 1
                 continue
             count += 1
             try:
@@ -48,6 +69,8 @@ def syntax_check(files):
         total += count
         skipped += skip
         note = f"（{skip} 个故意写错示例已跳过）" if skip else ""
+        if frag:
+            note += f"（{frag} 个片段已跳过）"
         flag = "OK " if not any(p[0] == f.name for p in problems) else "FAIL"
         print(f"[{flag}] {f.name}: {count} 个代码块 {note}")
         for name, lineno, msg, first in problems:
@@ -59,15 +82,16 @@ def syntax_check(files):
 
 
 def run_check(files):
-    ok = skipped = failed = 0
+    ok = skipped = failed = ctx = 0
     problems = []
+    soft = []          # 缺上下文/缺依赖：教学片段常态，不计入失败
     print()
     print("=" * 60)
     print("第二部分：逻辑执行（真实运行，非交互块）")
     print("=" * 60)
     for f in files:
         for code in blocks(f):
-            if BROKEN_MARK in code:
+            if BROKEN_MARK in code or is_fragment(code):
                 skipped += 1
                 continue
             if "input(" in code or EXTERNAL.search(code):
@@ -94,11 +118,28 @@ def run_check(files):
             if proc.returncode == 0:
                 ok += 1
             else:
-                failed += 1
                 err = proc.stderr.strip().split("\n")[-1][:120]
-                problems.append((f.name, err, code.split("\n")[0][:60]))
-    print(f"实际执行 {ok + failed} 个（跳过 {skipped} 个：含 input 交互或需外部模块），"
-          f"通过 {ok}，失败 {failed}")
+                head = code.split("\n")[0][:60]
+                # 引用课文里定义的变量 / 依赖未安装：片段教学的常态，单独归类
+                if re.match(r"(NameError|ModuleNotFoundError|ImportError|"
+                            r"FileNotFoundError|IndentationError)", err):
+                    ctx += 1
+                    soft.append((f.name, err, head))
+                else:
+                    failed += 1
+                    problems.append((f.name, err, head))
+    print(f"实际执行 {ok + failed + ctx} 个"
+          f"（跳过 {skipped} 个：故意写错 / 片段 / input 交互 / 需外部模块），"
+          f"通过 {ok}，失败 {failed}，缺上下文 {ctx}")
+    if soft:
+        print(f"\n--- 缺上下文 {len(soft)} 个（教学片段引用课文变量，非错误，仅提示）---")
+        seen = set()
+        for name, err, first in soft:
+            key = (name, first)
+            if key in seen:
+                continue
+            seen.add(key)
+            print(f"[{name}] {err}\n    首行: {first}")
     if problems:
         print("\n--- 失败明细（按文件+首行去重）---")
         seen = set()

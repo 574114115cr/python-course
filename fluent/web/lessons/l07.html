@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 7 课 · 集合与不可变映射：用集合运算替代循环</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="7">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 7 课 · 集合与不可变映射：用集合运算替代循环</h1>
+  <a class="tag" href="../02.html">单元 2</a>
+  <a class="ppt" href="../ppt/u/02.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:14.6%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="5" href="l05.html"><span class="no">05</span><span class="tx">哈希表：dict 为什么快，顺序为什么稳定</span></a><a class="" data-l="6" href="l06.html"><span class="no">06</span><span class="tx">映射的惯用法：合并、缺失键与视图</span></a><a class="cur" data-l="7" href="l07.html"><span class="no">07</span><span class="tx">集合与不可变映射：用集合运算替代循环</span></a><a class="" data-l="8" href="l08.html"><span class="no">08</span><span class="tx">文本与字节：编码、解码与规范化</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-视图做集合运算的前提">延伸：视图做集合运算的前提</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../02.html"><span class="k">单元</span>
+    <span class="v">单元 2 · 字典、集合与文本</span></a>
+  <a href="../bank.html#u2"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/02.html#s6"><span class="k">课件</span>
+    <span class="v">本单元第 3 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u02.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/03.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 3–4 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 7 课</span>
+        <span class="kwk">单元 2 · 第 3–4 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>集合与不可变映射：用集合运算替代循环</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能用集合运算完成去重、交并差与成员测试，并知道什么时候该用 frozenset 或 MappingProxyType。</div>
+    <h3 id="讲解">讲解</h3>
+<p>集合的核心价值是<strong>成员测试 O(1)</strong> 和<strong>集合代数</strong>。很多「两层 for 循环 + if」的代码，都可以压成一次集合运算：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"cid"</span><span class="p">}</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"dave"</span><span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">|</span> <span class="n">b</span><span class="p">)</span>      <span class="c1"># 并集</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span>      <span class="c1"># 交集</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span>      <span class="c1"># 差集：在 a 不在 b</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="p">)</span>      <span class="c1"># 对称差</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">&lt;=</span> <span class="p">{</span><span class="s2">"alice"</span><span class="p">,</span> <span class="s2">"bob"</span><span class="p">,</span> <span class="s2">"cid"</span><span class="p">,</span> <span class="s2">"dave"</span><span class="p">})</span>   <span class="c1"># 子集判断</span>
+</code></pre>
+<p>去重并保序是常见需求，标准写法是 <code>list(dict.fromkeys(items))</code>——利用 dict 的去重与插入顺序，而不是 <code>list(set(...))</code>（后者会打乱顺序）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"b"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">items</span><span class="p">)))</span>   <span class="c1"># ['b', 'a', 'c']</span>
+</code></pre>
+<p>集合本身可变，因此不可哈希，不能作为 dict 的键；<code>frozenset</code> 不可变、可哈希，适合做「键」或「缓存标识」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">key</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">"read"</span><span class="p">,</span> <span class="s2">"write"</span><span class="p">})</span>
+<span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"permission-set"</span>
+</code></pre>
+<p>只读映射用 <code>types.MappingProxyType</code> 包一层，外部拿不到写接口：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">({</span><span class="s2">"debug"</span><span class="p">:</span> <span class="kc">False</span><span class="p">})</span>
+<span class="c1"># CONFIG["debug"] = True   → TypeError</span>
+</code></pre>
+<h3 id="延伸-视图做集合运算的前提">延伸：视图做集合运算的前提</h3>
+<p><code>d.items()</code> 返回视图，支持 <code>&amp;</code>、<code>|</code>、<code>-</code> 做集合运算，但要求每个键值对可哈希——值里放 list 就直接 <code>TypeError</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">:</span> <span class="mi">2</span><span class="p">};</span> <span class="n">b</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"y"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">b</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>    <span class="c1"># {('y', 2)}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">|</span> <span class="n">b</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>      <span class="c1"># {'x', 'y', 'z'}</span>
+</code></pre>
+<p><code>MappingProxyType</code> 是只读<strong>代理</strong>，不是快照：底层 dict 一变，代理看到的就是新值。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"debug"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+<span class="n">ro</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+<span class="n">cfg</span><span class="p">[</span><span class="s2">"debug"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ro</span><span class="p">[</span><span class="s2">"debug"</span><span class="p">])</span>      <span class="c1"># False</span>
+</code></pre>
+<p>要真快照得 <code>dict(cfg)</code> 复制一份。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>集合元素必须可哈希</strong>，所以不能把 list 放进 set；需要放就用 tuple 或 frozenset。</li>
+<li><strong><code>&amp;</code>、<code>|</code> 对 set 是集合运算，对 dict 的键视图也能用</strong>：<code>d1.keys() &amp; d2.keys()</code> 直接求共同键。</li>
+<li><strong><code>in</code> 在 set 上是 O(1)，在 list 上是 O(n)</strong>；循环里做成员测试时先转 set。</li>
+<li><strong>空集合只能写 <code>set()</code></strong>，<code>{}</code> 是空字典。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>有两份用户名单（老用户、新用户），求「新增」「流失」「两边都有」三个集合。</li>
+<li>用 <code>frozenset</code> 做缓存键，缓存「两个单词的字母集合是否相同」的判断结果。</li>
+<li>把一个 10 万元素的 list 去重并保持原顺序，比较两种写法的耗时与结果差异。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能用集合运算重写一段「双层循环找共同元素」的代码</li>
+<li><span class="ck"></span>知道 <code>list(set(x))</code> 会丢顺序，并知道替代写法</li>
+<li><span class="ck"></span>能解释为什么 frozenset 能当 dict 的键而 set 不能</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 3 章 §3.7–3.8、§3.10–3.12</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：视图做集合运算的前提</p></div>
+    <div class="pn"><a href="l06.html"><small>← 第 6 课 · 单元 2</small><b>映射的惯用法：合并、缺失键与视图</b></a><a class="nx" href="l08.html"><small>第 8 课 · 单元 2 →</small><b>文本与字节：编码、解码与规范化</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../02.html">返回单元 2</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=7, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

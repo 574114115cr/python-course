@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 38 课 · 线程与锁：竞态、队列与退出</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="38">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 38 课 · 线程与锁：竞态、队列与退出</h1>
+  <a class="tag" href="../10.html">单元 10</a>
+  <a class="ppt" href="../ppt/u/10.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:79.2%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="37" href="l37.html"><span class="no">37</span><span class="tx">并发全景：GIL、线程、进程</span></a><a class="cur" data-l="38" href="l38.html"><span class="no">38</span><span class="tx">线程与锁：竞态、队列与退出</span></a><a class="" data-l="39" href="l39.html"><span class="no">39</span><span class="tx">执行器：ThreadPoolExecutor 与 ProcessPoolExecutor</span></a><a class="" data-l="40" href="l40.html"><span class="no">40</span><span class="tx">实战：并发下载与错误处理</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-进程池的两个硬约束">延伸：进程池的两个硬约束</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../10.html"><span class="k">单元</span>
+    <span class="v">单元 10 · 并发模型与执行器</span></a>
+  <a href="../bank.html#u10"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/10.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u10.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/19.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 19–20 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 38 课</span>
+        <span class="kwk">单元 10 · 第 19–20 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>线程与锁：竞态、队列与退出</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能复现一次竞态，用 Lock 修复，用 Queue 做生产者—消费者，并让线程正确退出。</div>
+    <h3 id="讲解">讲解</h3>
+<p>竞态来自「读—改—写」不是原子操作：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">worker</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">counter</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100_000</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>          <span class="c1"># 可能被切换</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">worker</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span><span class="p">]</span>
+<span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span>                <span class="c1"># 通常小于 400000</span>
+</code></pre>
+<p>加锁修复：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">worker</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">counter</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100_000</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre>
+<p>生产者—消费者用 <code>queue.Queue</code>，它内部已经处理好同步：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">queue</span><span class="o">,</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">producer</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>               <span class="c1"># 哨兵：通知消费者结束</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">consumer</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="n">q</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+</code></pre>
+<h3 id="延伸-进程池的两个硬约束">延伸：进程池的两个硬约束</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">work</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>    <span class="c1"># [0, 1, 4, 9, 16]</span>
+</code></pre>
+<p>两个约束：</p>
+<ol>
+<li><strong>启动方式</strong>：Linux 默认 <code>fork</code>（复制父进程），Windows 与 macOS 默认 <code>spawn</code>（重新导入主模块）。用 spawn 时，启动代码必须放在 <code>if __name__ == "__main__":</code> 下，否则子进程导入模块时会再次创建进程，无限递归。</li>
+<li><strong>必须可 pickle</strong>：参数和返回值都要序列化，所以不能传 lambda、打开的文件、数据库连接、线程锁。函数本身也得是模块级可导入的，定义在函数内部的嵌套函数传不过去。</li>
+</ol>
+<p>进程间默认不共享内存（<code>Value</code>、<code>Array</code>、<code>shared_memory</code> 例外）。这就是「进程绕过 GIL，但贵在序列化」的账：数据量大时，序列化开销可能吃掉并行收益。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>锁要尽量短</strong>，持锁做 IO 等于把并发退化成串行。</li>
+<li><strong>避免嵌套锁</strong>，需要多把锁时固定获取顺序，否则会死锁。</li>
+<li><strong><code>Queue</code> 的 <code>task_done()</code> 与 <code>join()</code> 配对</strong>，忘了会让主线程永远等。</li>
+<li><strong>线程不能强杀</strong>，用哨兵或 <code>Event</code> 通知退出，再 <code>join()</code>。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>复现计数器竞态，记录 10 次运行结果，再加锁验证稳定在 400000。</li>
+<li>用 <code>Queue</code> 实现「2 个生产者 + 3 个消费者」，处理 1000 条任务后主线程退出。</li>
+<li>用 <code>threading.Event</code> 实现一个可停止的后台轮询线程。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释 <code>counter += 1</code> 为什么不是原子操作</li>
+<li><span class="ck"></span>会用 <code>Queue</code> 写生产者—消费者，并知道哨兵的作用</li>
+<li><span class="ck"></span>知道如何让线程安全退出</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 19 章 §19.6–19.7</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：进程池的两个硬约束</p></div>
+    <div class="pn"><a href="l37.html"><small>← 第 37 课 · 单元 10</small><b>并发全景：GIL、线程、进程</b></a><a class="nx" href="l39.html"><small>第 39 课 · 单元 10 →</small><b>执行器：ThreadPoolExecutor 与 ProcessPoolExecutor</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../10.html">返回单元 10</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=38, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

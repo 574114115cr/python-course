@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 13 课 · 函数是对象：高阶函数与可调用对象</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="13">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 13 课 · 函数是对象：高阶函数与可调用对象</h1>
+  <a class="tag" href="../04.html">单元 4</a>
+  <a class="ppt" href="../ppt/u/04.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:27.1%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="cur" data-l="13" href="l13.html"><span class="no">13</span><span class="tx">函数是对象：高阶函数与可调用对象</span></a><a class="" data-l="14" href="l14.html"><span class="no">14</span><span class="tx">参数形态：位置、关键字与可变参数</span></a><a class="" data-l="15" href="l15.html"><span class="no">15</span><span class="tx">渐进式类型：注解语法与常用类型</span></a><a class="" data-l="16" href="l16.html"><span class="no">16</span><span class="tx">mypy 实战与类型边界</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-可调用对象有九类">延伸：可调用对象有九类</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../04.html"><span class="k">单元</span>
+    <span class="v">单元 4 · 一等函数与类型提示</span></a>
+  <a href="../bank.html#u4"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/04.html#s2"><span class="k">课件</span>
+    <span class="v">本单元第 1 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u04.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/07.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 7–8 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 13 课</span>
+        <span class="kwk">单元 4 · 第 7–8 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>函数是对象：高阶函数与可调用对象</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能把函数赋值、传参、返回、存容器，并说明 `sorted(key=...)` 与 `functools.reduce` 的工作原理。</div>
+    <h3 id="讲解">讲解</h3>
+<p>函数对象有 <code>__name__</code>、<code>__doc__</code>、<code>__annotations__</code>，也能被赋值和传递：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">shout</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把文本转成大写并加感叹号。"""</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"!"</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">shout</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="s2">"hi"</span><span class="p">,</span> <span class="s2">"ok"</span><span class="p">])))</span>     <span class="c1"># ['HI!', 'OK!']</span>
+</code></pre>
+<p>「接收函数或返回函数」的函数叫高阶函数。<code>sorted</code> 的 <code>key</code> 就是典型：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"fig"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span>              <span class="c1"># 按长度</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>   <span class="c1"># 忽略大小写降序</span>
+</code></pre>
+<p>内置的 <code>map</code>、<code>filter</code> 返回迭代器，<code>functools.reduce</code> 做归约：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">add</span>
+
+<span class="n">nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">nums</span><span class="p">))</span>          <span class="c1"># 10</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span>                  <span class="c1"># 10，能用 sum 就别用 reduce</span>
+</code></pre>
+<p>任何实现了 <code>__call__</code> 的实例也是可调用对象，适合「带状态的函数」：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="n">step</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">(),</span> <span class="n">c</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">c</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>             <span class="c1"># 1 6 6</span>
+</code></pre>
+<h3 id="延伸-可调用对象有九类">延伸：可调用对象有九类</h3>
+<p><code>callable()</code> 为真的东西不止「函数」：</p>
+<ol>
+<li>普通函数　2. lambda　3. 类（调用即构造）　4. 定义了 <code>__call__</code> 的实例　5. 生成器函数　6. 协程函数　7. 内置函数 / 内置方法（<code>len</code>、<code>print</code>）　8. 绑定方法 / 类方法 / 静态方法　9. <code>functools.partial</code> 对象</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">():</span> <span class="k">pass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">C</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"called"</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">m</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"m"</span>
+<span class="nb">print</span><span class="p">([</span><span class="nb">callable</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">C</span><span class="p">(),</span> <span class="n">C</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="n">C</span><span class="p">()</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="nb">len</span><span class="p">,</span> <span class="nb">print</span><span class="p">)])</span>   <span class="c1"># 全 True</span>
+</code></pre>
+<p>判断「是不是函数」要用 <code>inspect.isfunction</code>；<code>callable</code> 只回答「能不能加括号」。这条区别在写参数校验时很关键：你要求的是「可回调」，不是「函数」，用 <code>callable</code> 才对，用 <code>isinstance(x, types.FunctionType)</code> 会把类实例、<code>partial</code> 全挡掉。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong><code>key=</code> 接收的是函数，不是比较结果</strong>：写 <code>key=len</code>，不要写 <code>key=len(x)</code>。</li>
+<li><strong><code>operator</code> 模块比 lambda 更清晰</strong>：<code>itemgetter("name")</code>、<code>attrgetter("score")</code>、<code>add</code>。</li>
+<li><strong><code>map</code>/<code>filter</code> 是惰性的</strong>，返回迭代器，需要 list 时显式转换。</li>
+<li><strong>可调用对象能保存状态</strong>，但别滥用；能用闭包或 dataclass 表达时优先考虑可读性。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>用 <code>sorted</code> + <code>operator.itemgetter</code> 对一份字典列表按两个字段排序。</li>
+<li>写一个 <code>compose(f, g)</code>，返回 <code>lambda x: f(g(x))</code>，并用它组合 <code>str.strip</code> 与 <code>str.upper</code>。</li>
+<li>用可调用类实现一个带计数的 <code>Tagger</code>，每调用一次返回 <code>tag-1</code>、<code>tag-2</code>……</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释「函数是一等对象」在 <code>sorted(key=...)</code> 中的体现</li>
+<li><span class="ck"></span>会用 <code>operator</code> 替代简单 lambda</li>
+<li><span class="ck"></span>知道可调用对象与闭包各自的适用场景</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 7 章 §7.2–7.5、§7.8</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：可调用对象有九类</p></div>
+    <div class="pn"><a href="l12.html"><small>← 第 12 课 · 单元 3</small><b>可变性、默认参数与对象生命周期</b></a><a class="nx" href="l14.html"><small>第 14 课 · 单元 4 →</small><b>参数形态：位置、关键字与可变参数</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../04.html">返回单元 4</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=13, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

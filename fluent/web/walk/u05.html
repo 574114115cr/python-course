@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>走读 05 · 闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body >
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>走读 05 · 闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳</h1>
+  
+  
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="layout">
+  <main class="main">
+    <div class="head">
+      <div class="kicker"><span class="kno">走读 05</span>
+        <span class="kwk">单元 5 · 装饰器、闭包与设计模式</span>
+        <span class="ku">第 9–10 章</span></div>
+      <h1>闭包与装饰器：把「重试、计时、缓存」写成可叠加的壳</h1>
+      <p class="goal">一个可以整段复制运行的完整程序 + 逐段讲解 + 真实输出。
+        先跑一遍，再对着输出读讲解，最后做文末的三处改动。</p>
+    </div>
+    <blockquote>
+<p>原书第 9 章的核心不是 <code>@</code> 语法，而是「装饰器 = 接受函数、返回函数的高阶函数」这一句话。这一篇手写三个：计时、重试、缓存，然后叠在一起。</p>
+</blockquote>
+<h2 id="程序">程序</h2>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+
+<span class="c1"># ① 最朴素的装饰器：不传参，包一层，用 wraps 保住元信息</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">clock</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="c1"># ② 带参数的装饰器：外面再套一层，返回真正的装饰器</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,)):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">last</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">times</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">i</span>
+                <span class="k">except</span> <span class="n">on</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>                 <span class="c1"># 只重试指定异常</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">e</span>
+            <span class="k">raise</span> <span class="n">last</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">deco</span>
+
+
+<span class="c1"># ③ 缓存装饰器：手写一份，看清楚 lru_cache 到底省了什么</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">memo</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="n">cache</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">cache</span><span class="p">)</span>            <span class="c1"># 顺便把缓存大小暴露出来</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="nd">@clock</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">slow_double</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+
+
+<span class="nd">@retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flaky</span><span class="p">(</span><span class="n">attempts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""前两次抛错，第三次成功。"""</span>
+    <span class="n">flaky</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">flaky</span><span class="p">,</span> <span class="s2">"state"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">flaky</span><span class="o">.</span><span class="n">state</span> <span class="o">&lt;</span> <span class="n">attempts</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">flaky</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="s2"> 次失败"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">"ok"</span>
+
+
+<span class="nd">@memo</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"clock   "</span><span class="p">,</span> <span class="n">slow_double</span><span class="p">(</span><span class="mi">21</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"retry   "</span><span class="p">,</span> <span class="n">flaky</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">fib</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"memo    "</span><span class="p">,</span> <span class="n">fib</span><span class="p">(</span><span class="mi">20</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"| 缓存条目"</span><span class="p">,</span> <span class="n">fib</span><span class="p">(</span><span class="mi">20</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"wraps   "</span><span class="p">,</span> <span class="n">slow_double</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s2">"|"</span><span class="p">,</span> <span class="n">flaky</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</code></pre>
+<h2 id="逐段走读">逐段走读</h2>
+<ol>
+<li>
+<p><strong>装饰器只做两件事：接受一个函数、返回一个函数。</strong> <code>@clock</code> 等价于 <code>slow_double = clock(slow_double)</code>。理解这一句之后，「带参数的装饰器」就只是「先调用一次拿到装饰器，再应用到函数上」——也就是 <code>retry(times=3)</code> 先返回 <code>deco</code>，再由 <code>deco</code> 去包装 <code>flaky</code>。</p>
+</li>
+<li>
+<p><strong><code>functools.wraps</code> 不是装饰性代码。</strong> 它会复制 <code>__name__</code>、<code>__doc__</code>、<code>__module__</code>、<code>__wrapped__</code>，让被包的函数在日志、<code>help()</code>、调试器和类型检查里仍然像原来那个。最后一行输出就是在验证：名字还是 <code>slow_double</code>，文档还是原来那句。</p>
+</li>
+<li>
+<p><strong><code>*args, **kwargs</code> 是包装器的通用壳。</strong> 不写死参数列表，任何函数都能被包；代价是签名信息丢失（<code>inspect.signature</code> 需要靠 <code>__wrapped__</code> 还原），所以给库写装饰器时最好用 <code>functools.wraps</code> 并考虑 <code>ParamSpec</code>。</p>
+</li>
+<li>
+<p><strong>带参数的装饰器多一层，作用是「配置」。</strong> <code>retry(times=3, on=(ValueError,))</code> 把「重试几次」「重试哪些异常」变成参数；只捕获指定异常很关键——把所有异常都重试，会把 <code>KeyboardInterrupt</code> 和编程错误一起吞掉。</p>
+</li>
+<li>
+<p><strong>缓存装饰器靠闭包里的 <code>cache</code> 字典。</strong> 每次调用 <code>memo(fn)</code> 都会生成一个新的 <code>cache</code>，所以不同的 <code>@memo</code> 函数互不共享。标准库的 <code>lru_cache</code> 额外做了：按容量淘汰、按参数类型区分（<code>1</code> 与 <code>1.0</code> 的 key 相同但类型不同）、线程安全。</p>
+</li>
+<li>
+<p><strong>递归 + 缓存是「自顶向下」的加速。</strong> <code>fib</code> 不带缓存是指数级，带上缓存是线性——注意递归里调用的是装饰后的 <code>fib</code>，所以每一层都会查缓存，这正是它能从 2^n 掉到 n 的原因（实测页 u5 有对比数字）。</p>
+</li>
+<li>
+<p><strong>装饰顺序有语义。</strong> 如果写 <code>@clock</code> 在 <code>@retry</code> 外层，计时会把三次重试的时间一起算进去；反过来只算每次尝试。叠加装饰器时，从下往上应用、从上往下生效，这一点和数学里的函数复合一致。</p>
+</li>
+</ol>
+<h2 id="运行输出">运行输出</h2>
+<pre class="out"><code>clock    (42, 10.172)
+retry    (&#x27;ok&#x27;, 3)
+memo     6765 | 缓存条目 21
+wraps    slow_double | 前两次抛错，第三次成功。</code></pre>
+
+<h2 id="跑通之后改三处">跑通之后改三处</h2>
+<ul>
+<li>把 <code>@functools.wraps(fn)</code> 从 <code>clock</code> 里删掉：<code>slow_double.__name__</code> 变成 <code>wrapper</code>，最后一行立刻暴露。</li>
+<li>把 <code>retry</code> 的 <code>on=(ValueError,)</code> 改成 <code>on=(Exception,)</code>：行为不变，但试着让它捕获 <code>KeyError</code> 之外的东西，体会「范围越宽越危险」。</li>
+<li>把 <code>@memo</code> 放到 <code>@clock</code> 外层：输出的缓存条目数不变，但计时会把「命中缓存」的极短耗时也记进去。</li>
+</ul>
+<h2 id="对应原书哪里">对应原书哪里</h2>
+<p>原书 §9.1–9.4 讲装饰器的基本形式与 <code>functools.wraps</code>，§9.6 讲带参数的装饰器，§9.8 讲「装饰器实现的策略模式」，§9.9 讲 <code>lru_cache</code> 与 <code>singledispatch</code>。这一篇保留了前四节的主线，省略了 <code>singledispatch</code> 与类装饰器——类装饰器在单元 12 的走读里出现。</p>
+    <div class="pn"><a href="u04.html"><small>← 上一篇</small><b>单元 4 · 一等函数：把函数当数据，拼一条处理管线</b></a><a class="nx" href="u06.html"><small>下一篇 →</small><b>单元 6 · 序列协议：只写五个方法，白拿一整套序列行为</b></a></div>
+    <p style="font-size:12.5px;color:var(--muted);margin-top:14px">
+      <a href="index.html">走读总览</a> ·
+      <a href="../05.html">单元 5 讲义</a> ·
+      <a href="../../index.html">课程首页</a></p>
+  </main>
+</div>
+
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 22 课 · 值对象：相等、哈希与不可变</title>
+<meta name="theme-color" content="#4c3a9e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
+<script>
+window.FL = { read: function (k, d) {
+  try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
+  catch (e) { return d; }
+} };
+</script>
+<link rel="stylesheet" href="../css/site.css">
+
+</head>
+<body data-g="22">
+<div class="top"><div class="top-in">
+  <a class="back" href="../../index.html">← 课程首页</a>
+  <h1>第 22 课 · 值对象：相等、哈希与不可变</h1>
+  <a class="tag" href="../06.html">单元 6</a>
+  <a class="ppt" href="../ppt/u/06.html">本单元课件</a>
+  <a class="switch" href="../../../index.html">切换课程</a>
+</div></div>
+<div class="pbar"><i style="width:45.8%"></i></div>
+<div class="layout">
+  <aside class="side"><div class="sblk">
+  <h4>本单元课节（4 节）</h4>
+  <div class="nlist"><a class="" data-l="21" href="l21.html"><span class="no">21</span><span class="tx">对象表示：repr、str 与 format</span></a><a class="cur" data-l="22" href="l22.html"><span class="no">22</span><span class="tx">值对象：相等、哈希与不可变</span></a><a class="" data-l="23" href="l23.html"><span class="no">23</span><span class="tx">序列协议：len、getitem、iter、contains</span></a><a class="" data-l="24" href="l24.html"><span class="no">24</span><span class="tx">实战：实现一个完整的 Vector</span></a></div>
+</div>
+<div class="sblk">
+  <h4>本页目录</h4>
+  <div class="toc"><a class="lv3" href="#讲解">讲解</a>
+<a class="lv3" href="#延伸-match_args-与-slots-的边界">延伸：match_args 与 slots 的边界</a>
+<a class="lv3" href="#关键点">关键点</a>
+<a class="lv3" href="#动手">动手</a>
+<a class="lv3" href="#验收清单">验收清单</a></div>
+</div>
+<div class="sblk rel">
+  <h4>配套入口</h4>
+  <a href="../06.html"><span class="k">单元</span>
+    <span class="v">单元 6 · 对象协议与序列实现</span></a>
+  <a href="../bank.html#u6"><span class="k">题库</span>
+    <span class="v">本单元 3 题</span></a>
+  <a href="../gates.html"><span class="k">关卡</span>
+    <span class="v">阶段验收</span></a>
+  <a href="../ppt/u/06.html#s4"><span class="k">课件</span>
+    <span class="v">本单元第 2 课 · 2 页</span></a>
+  <a href="../review.html"><span class="k">复习</span>
+    <span class="v">艾宾浩斯复习计划 · 6 轮</span></a>
+  <a href="../bench.html"><span class="k">实测</span>
+    <span class="v">写法快慢对比 · 本机实跑</span></a>
+  <a href="../walk/u06.html"><span class="k">走读</span>
+    <span class="v">本单元完整程序 · 逐段讲解</span></a>
+  <a href="../ch/11.html"><span class="k">设计</span>
+    <span class="v">设计取舍 · 第 11–12 章</span></a>
+</div></aside>
+  <main class="main">
+    <div class="head">
+      <div class="kicker">
+        <span class="kno">第 22 课</span>
+        <span class="kwk">单元 6 · 第 11–12 章</span>
+        <span class="ku">90 分钟</span>
+      </div>
+      <h1>值对象：相等、哈希与不可变</h1>
+    </div>
+    <div class="goalbox"><b>本节目标：</b>能让 `__eq__`、`__hash__`、不可变三者自洽，并用 `classmethod` 提供备选构造器与 `__slots__` 控制内存。</div>
+    <h3 id="讲解">讲解</h3>
+<p>值对象的核心契约：<strong>相等的对象哈希值必须相等</strong>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Point</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+</code></pre>
+<p>返回 <code>NotImplemented</code> 而不是 <code>False</code>，是为了让 Python 有机会尝试对方的 <code>__eq__</code>（例如 <code>Point == Mock</code>）。如果直接返回 <code>False</code>，反向比较和子类比较都会被堵死。</p>
+<p>备选构造器用 <code>classmethod</code>，它拿到的是类而不是实例，子类继承后也能正确工作：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_tuple</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">origin</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre>
+<p><code>__slots__</code> 去掉实例 <code>__dict__</code>，每个实例省几十字节；代价是不能动态加属性，也不能多继承（除了混入）。</p>
+<h3 id="延伸-match_args-与-slots-的边界">延伸：<strong>match_args</strong> 与 <strong>slots</strong> 的边界</h3>
+<p>类模式 <code>case Point(x, y):</code> 的位置参数顺序由 <code>__match_args__</code> 决定，没有它就只能写关键字模式：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">__match_args__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">where</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="k">match</span> <span class="n">p</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="k">return</span> <span class="s2">"origin"</span>
+        <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s2">"x-axis </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s2">"y-axis </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">case</span> <span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span> <span class="k">return</span> <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">where</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">where</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>    <span class="c1"># origin (1, 2)</span>
+</code></pre>
+<p><code>__slots__</code> 省的是实例的 <code>__dict__</code>：定义后不能再给实例加新属性，也不能和同层 <code>__dict__</code> 共存（基类已有 <code>__dict__</code> 时它依然存在，省不下来）。它主要省内存，顺带略快，但不是性能银弹；<code>@dataclass(slots=True)</code> 在 3.10+ 一步到位。</p>
+<h3 id="关键点">关键点</h3>
+<ul>
+<li><strong>重写 <code>__eq__</code> 后 <code>__hash__</code> 会被设为 <code>None</code></strong>，类立刻不可哈希；需要哈希就显式重写。</li>
+<li><strong>可变对象不应可哈希</strong>：列表、字典都不可哈希，因为它们变了哈希就失效。</li>
+<li><strong><code>classmethod</code> 的第一个参数是 <code>cls</code></strong>，<code>staticmethod</code> 没有隐式参数；备选构造器用前者。</li>
+<li><strong><code>__slots__</code> 只省实例字典</strong>，不含类属性；继承时要重复声明或留 <code>__dict__</code>。</li>
+</ul>
+<h3 id="动手">动手</h3>
+<ol>
+<li>实现 <code>Point</code> 的 <code>__eq__</code> 与 <code>__hash__</code>，把两个相等实例放进 set，验证只剩一个。</li>
+<li>用 <code>from_tuple</code> 与 <code>origin</code> 两种方式创建实例，验证子类调用返回子类实例。</li>
+<li>给 <code>Point</code> 加 <code>__slots__</code>，用 <code>sys.getsizeof()</code> 比较有无 slots 的实例大小。</li>
+</ol>
+<h3 id="验收清单">验收清单</h3>
+<ul>
+<li><span class="ck"></span>能解释「相等对象哈希必须相等」为什么是硬约束</li>
+<li><span class="ck"></span>知道重写 <code>__eq__</code> 会连带把 <code>__hash__</code> 置空</li>
+<li><span class="ck"></span>能区分 <code>classmethod</code> 与 <code>staticmethod</code> 的使用场景</li>
+</ul><div class="bookbox"><div class="bh"><b>教材对照</b><span>第 11 章 §11.4–11.11</span><em>本节自足，无需回查原书</em></div><p>本节额外补充：__match_args__ 与 __slots__ 的边界</p></div>
+    <div class="pn"><a href="l21.html"><small>← 第 21 课 · 单元 6</small><b>对象表示：repr、str 与 format</b></a><a class="nx" href="l23.html"><small>第 23 课 · 单元 6 →</small><b>序列协议：len、getitem、iter、contains</b></a></div>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <label class="mark"><input type="checkbox" id="doneBox"><span>标记本课已学完</span></label>
+      <span style="font-size:12px;color:var(--muted)">完成后自动写入本机进度（不联网）</span>
+      <a style="margin-left:auto;font-size:12.5px;font-weight:700"
+         href="../06.html">返回单元 6</a>
+    </div>
+  </main>
+</div>
+<script>
+(function(){
+  var g=22, box=document.getElementById('doneBox'), lab=box.closest('.mark');
+  var KEY='fl-lesson-v1';
+  var o=FL.read(KEY,{});
+  // 迁移：旧版只存 1，没有完成时间；复习排程需要时间戳
+  var moved=false;
+  for(var k in o){ if(o[k]===1){ o[k]=Date.now(); moved=true; } }
+  if(moved){ try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){} }
+  box.checked=!!o[g]; lab.classList.toggle('on',box.checked);
+  box.addEventListener('change',function(){
+    var m=FL.read(KEY,{});
+    if(box.checked)m[g]=Date.now(); else delete m[g];
+    try{localStorage.setItem(KEY,JSON.stringify(m))}catch(e){}
+    lab.classList.toggle('on',box.checked);
+  });
+})();
+</script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.nlist a'));
+  var uniq=[], seen={};
+  links.forEach(function(a){
+    if(!seen[a.dataset.l]){seen[a.dataset.l]=1;uniq.push(a.dataset.l);}
+  });
+  var bar=document.getElementById('sideBar'), txt=document.getElementById('sideTxt');
+  function paint(){
+    var o=FL.read('fl-lesson-v1',{}), n=0;
+    links.forEach(function(a){a.classList.toggle('done',!!o[a.dataset.l]);});
+    uniq.forEach(function(k){if(o[k])n++;});
+    if(bar)bar.style.width=(n/uniq.length*100)+'%';
+    if(txt)txt.textContent='已学 '+n+' / '+uniq.length+' 节';
+  }
+  paint();window.addEventListener('focus',paint);
+  document.addEventListener('visibilitychange',paint);
+})();
+</script>
+<script>
+(function(){
+  function read(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+  window.FL={read:read};
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    if(pre.querySelector('.cp')) return;
+    var b=document.createElement('button');
+    b.className='cp';b.type='button';b.textContent='复制';
+    b.addEventListener('click',function(){
+      var code=pre.querySelector('code')||pre, txt=code.innerText;
+      function ok(){b.textContent='已复制 ✓';b.classList.add('ok');
+        setTimeout(function(){b.textContent='复制';b.classList.remove('ok')},1500);}
+      function fb(){var t=document.createElement('textarea');t.value=txt;
+        t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);
+        t.select();try{document.execCommand('copy');ok()}catch(e){}
+        document.body.removeChild(t);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(ok,fb);
+      }else fb();
+    });
+    pre.appendChild(b);
+  });
+
+  var top=document.createElement('button');
+  top.id='toTop';top.type='button';top.title='回到顶部';top.textContent='↑';
+  document.body.appendChild(top);
+  function sync(){top.classList.toggle('on',window.scrollY>500)}
+  window.addEventListener('scroll',sync,{passive:true});sync();
+  top.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  // 目录当前项高亮
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  var pairs=links.map(function(a){
+    var t=document.getElementById(a.getAttribute('href').slice(1));
+    return t?[a,t]:null;
+  }).filter(Boolean);
+  function spy(){
+    if(!pairs.length) return;
+    var cur=pairs[0][0];
+    var atBottom = window.innerHeight + window.scrollY
+                   >= document.documentElement.scrollHeight - 4;
+    if(atBottom){
+      cur = pairs[pairs.length-1][0];
+    }else{
+      var y=window.scrollY+150;
+      pairs.forEach(function(p){
+        var top=p[1].getBoundingClientRect().top+window.scrollY;
+        if(top<=y) cur=p[0];
+      });
+    }
+    links.forEach(function(a){ a.classList.toggle('cur',a===cur); });
+  }
+  spy();window.addEventListener('scroll',spy,{passive:true});
+})();
+</script>
+</body>
+</html>
