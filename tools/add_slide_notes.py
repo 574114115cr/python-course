@@ -109,6 +109,31 @@ def put_notes(slide, text):
     tree.append(etree.fromstring(xml))
 
 
+def annotate(src, dst, unit, meta):
+    """给 src 补备注，另存为 dst（不碰 src）。
+
+    为什么要能「另存」：这个环境里每个文件每会话只允许写一次——pptx 一旦被写，
+    立刻被别的进程占住（读得出、写不进）。所以备注必须和 pptx 的创建合并成
+    一次写入：build_all_lesson_ppt 先建临时 deck，这里补好备注，再整体写回正式文件。
+    """
+    prs = Presentation(src)
+    if len(prs.slides) != len(meta):
+        raise ValueError(f"页数不一致：pptx {len(prs.slides)} vs 清单 {len(meta)}")
+    lessons = [(m["no"], m["title"]) for m in meta if m["kind"] == "lesson"]
+    for slide, m in zip(prs.slides, meta):
+        if m["kind"] == "cover":
+            txt = cover_notes(unit, m["title"], lessons)
+        elif m["kind"] == "lesson":
+            txt = lesson_notes(m["no"])
+        elif m["kind"] == "points":
+            txt = points_notes(m["no"])
+        else:
+            txt = summary_notes(unit, m["title"])
+        put_notes(slide, txt)
+    prs.save(dst)
+    return len(meta)
+
+
 def main():
     mani = json.load(open(MANI, encoding="utf-8"))
     total = 0

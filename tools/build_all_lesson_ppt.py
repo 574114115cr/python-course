@@ -102,12 +102,21 @@ def build_unit(unit, meta):
     html_path = os.path.join(WEB_U, f"{unit:02d}.html")
     os.makedirs(OUT_PPT, exist_ok=True)
 
-    # 断点续跑：pptx 页数、图片数、播放器都齐了就直接跳过
+    # 断点续跑：pptx 页数、图片数、播放器都齐了就直接跳过。
+    # 但必须再看一眼 DSL 是否比 pptx 新——页数不变而文字改了（改排版、换要点），
+    # 只看页数会全部跳过，等于什么都没重建（踩过：封面/要点改动没落地）。
     if (os.path.exists(pptx) and os.path.exists(html_path)
             and os.path.isdir(img_dir)):
         n_img = len([f for f in os.listdir(img_dir) if f.endswith(".webp")])
         n_ppt = slide_count(pptx)
-        if n_img == n and n_ppt == n:
+        dsl_dir = os.path.join(DECK_SRC, f"{unit:02d}")
+        dsl_newer = False
+        if os.path.isdir(dsl_dir):
+            newest = max((os.path.getmtime(os.path.join(dsl_dir, f))
+                          for f in os.listdir(dsl_dir) if f.endswith(".slide")),
+                         default=0)
+            dsl_newer = newest > os.path.getmtime(pptx) + 1
+        if n_img == n and n_ppt == n and not dsl_newer:
             print(f"  单元 {unit:>2} 已完成，跳过")
             return {"unit": unit, "pptx": name, "slides": slides}
 
@@ -146,13 +155,27 @@ def build_unit(unit, meta):
         FAILED.append(unit)
         return None
 
-    # 页数对上了才写回正式文件（被占用则另存 .new，不覆盖、不丢内容）
+    # 页数对上了，先把演讲者备注补进临时文件，再整体写回。
+    # 关键：备注必须和 pptx 合并成「一次写入」——这个环境里文件被写一次就会被
+    # 别的进程占住（读得出、写不进），事后单独跑 add_slide_notes 必然失败。
+    src_path = tmp
     try:
-        with open(tmp, "rb") as src, open(pptx, "wb") as dst:
+        import add_slide_notes as notes_mod
+        tmp_notes = tmp.replace(".pptx", "_notes.pptx")
+        n_notes = notes_mod.annotate(tmp, tmp_notes, unit, slides)
+        src_path = tmp_notes
+        print(f"  单元{unit:02d} 备注 {n_notes} 页")
+    except Exception as error:      # 备注不是命脉，写不进去也别毁掉正文
+        print(f"  !! 单元{unit:02d} 备注没补上（{type(error).__name__}: "
+              f"{str(error)[:60]}），本次只写正文")
+
+    # 写回正式文件（被占用则另存 .new，不覆盖、不丢内容）
+    try:
+        with open(src_path, "rb") as src, open(pptx, "wb") as dst:
             dst.write(src.read())
     except PermissionError:
         alt = pptx.replace(".pptx", ".new.pptx")
-        with open(tmp, "rb") as src, open(alt, "wb") as dst:
+        with open(src_path, "rb") as src, open(alt, "wb") as dst:
             dst.write(src.read())
         # 关键：这一步直接返回，不渲染图片。
         # 否则网页图是新的、可下载的 pptx 是旧的，同一份课件自相矛盾

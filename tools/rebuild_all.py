@@ -92,23 +92,24 @@ def main():
     if only_check:
         return 0
 
-    ok = step("1/9 讲义 → DSL", [os.path.join("tools", "build_lesson_dsl.py")] + UNITS)
-    ok = ok and step("2/9 DSL → pptx + 截图",
+    ok = step("1/8 讲义 → DSL", [os.path.join("tools", "build_lesson_dsl.py")] + UNITS)
+    # 注意：备注在这一步里和 pptx 合并成一次写入（build_unit → add_slide_notes.annotate）。
+    # 单独再跑一次 add_slide_notes 是没用的：文件刚被写就已经被占住，写不进第二次。
+    ok = ok and step("2/8 DSL → pptx（含演讲者备注）+ 截图",
                      [os.path.join("tools", "build_all_lesson_ppt.py")] + UNITS)
-    ok = ok and step("3/9 补演讲者备注", [os.path.join("tools", "add_slide_notes.py")])
-    ok = ok and step("4/9 瘦身 + WebP + 总览页",
+    ok = ok and step("3/8 瘦身 + WebP + 总览页",
                      [os.path.join("tools", "finish_lesson_ppt.py")])
-    ok = ok and step("5/9 大纲课件（23 页）", [os.path.join("tools", "rebuild_outline.py")])
+    ok = ok and step("4/8 大纲课件（23 页）", [os.path.join("tools", "rebuild_outline.py")])
     if not ok:
         print("\n课件链路中断，下游打包已跳过（避免把半成品打进去）")
         return 1
 
     if not decks_only:
-        ok = ok and step("6/9 安卓 webDir", [os.path.join("tools", "build_android_www.py")])
-        ok = ok and node_step("7/9 校验安卓 webDir", "verify_android_www.mjs")
-        ok = ok and step("8/9 便携包", [os.path.join("tools", "build_portable.py")])
-        ok = ok and node_step("9/9 校验便携包 / PWA", "verify_portable.mjs")
-        ok = ok and node_step("9/9 PWA", "verify_pwa.mjs")
+        ok = ok and step("5/8 安卓 webDir", [os.path.join("tools", "build_android_www.py")])
+        ok = ok and node_step("校验安卓 webDir", "verify_android_www.mjs")
+        ok = ok and step("6/8 便携包", [os.path.join("tools", "build_portable.py")])
+        ok = ok and node_step("7/8 校验便携包", "verify_portable.mjs")
+        ok = ok and node_step("8/8 PWA", "verify_pwa.mjs")
 
     print("\n=== 末检：站点审计 / 课节 / 输出一致性 / 窄屏")
     for t, a in (("站点审计", ["tools/audit_all.py"]),
@@ -116,6 +117,26 @@ def main():
                  ("运行结果一致性", ["tools/check_outputs.py"])):
         step(t, [os.path.join(*a)])
     node_step("390px 无溢出", "verify_mobile_390.mjs")
+
+    # 备注最容易在重建时被无声抹掉（slidep create 是整份重写），单独核一遍
+    import zipfile
+    import re
+    missing = []
+    for u in range(22):
+        f = os.path.join(DECK_DIR, f"Python讲授课件-单元{u:02d}.pptx")
+        if not os.path.exists(f):
+            continue
+        z = zipfile.ZipFile(f)
+        pages = len([x for x in z.namelist()
+                     if re.match(r"ppt/slides/slide\d+\.xml$", x)])
+        notes = len([x for x in z.namelist() if "notesSlide" in x])
+        if notes < pages:
+            missing.append(f"单元{u:02d} 备注 {notes}/{pages}")
+    if missing:
+        print("\n!! 备注不全：" + "；".join(missing))
+        ok = False
+    else:
+        print("\n备注覆盖：22 个单元全部齐全")
 
     print("\n全部完成" if ok else "\n完成，但有步骤失败（见上）")
     return 0 if ok else 1

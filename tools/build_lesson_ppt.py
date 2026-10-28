@@ -111,8 +111,12 @@ def knowledge_points(frag, max_blocks=4, max_bullets=3):
                 # 只取粗体那半句当要点：整段（含解释）塞进卡片会被排版截断成 "__n…"
                 m2 = re.match(r"^\*\*([^*]{4,})\*\*", s)
                 bold = m2.group(1)
-                # 以冒号收尾的是「引导句」（下面才讲），当要点等于什么也没说
-                if not bold.rstrip().endswith(("：", ":")):
+                # 两类别当要点：
+                # ① 以冒号收尾的「引导句」——下面才讲，摘出来等于什么也没说；
+                # ② 「注意这个模式的关键点」这类元指令——只说「要注意」，没说注意什么。
+                META = ("注意", "记住", "切记", "重点", "关键点", "小结", "提示", "要点", "下面")
+                is_meta = bold.strip().startswith(META) and len(bold.strip()) <= 14
+                if not bold.rstrip().endswith(("：", ":")) and not is_meta:
                     bullets.append(esc(bold, 52))
             if len(bullets) >= max_bullets:
                 break
