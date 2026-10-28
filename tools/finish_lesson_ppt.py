@@ -138,7 +138,10 @@ def verify():
     for u in sorted(int(k) for k in mani):
         want = len(mani[str(u)])
         d = os.path.join(WEB_U, f"{u:02d}")
-        have = len([f for f in os.listdir(d) if f.endswith(".png")]) if os.path.isdir(d) else 0
+        # 页面引用的是 .webp（PNG 转完就删了），数 .png 会永远数到 0。
+        # 踩过两次：这个校验一直假报「图片 0/16」，导致收尾步骤没人敢信。
+        have = (len([f for f in os.listdir(d) if f.endswith(".webp")])
+                if os.path.isdir(d) else 0)
         total_png += have
         if have != want:
             bad.append(f"单元{u:02d} 图片 {have}/{want}")
