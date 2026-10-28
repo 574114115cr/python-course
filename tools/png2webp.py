@@ -29,7 +29,15 @@ def convert_all(delete_png=True):
         before += os.path.getsize(f)
         after += os.path.getsize(webp)
         if delete_png:
-            os.remove(f)
+            # 别用 os.remove：沙箱会把它变成「移入回收站」，一次几十张就撞上
+            # 「每轮删除 > 50 弹确认」，异常直接把整个收尾步骤打断（踩过）。
+            # os.replace 只是改名，不触发那套策略。
+            garbage = os.path.join(ROOT, ".cache", "png_garbage")
+            os.makedirs(garbage, exist_ok=True)
+            try:
+                os.replace(f, os.path.join(garbage, os.path.basename(f)))
+            except OSError:
+                pass
     return len(files), before, after
 
 
