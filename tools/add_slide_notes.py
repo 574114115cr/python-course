@@ -112,6 +112,7 @@ def put_notes(slide, text):
 def main():
     mani = json.load(open(MANI, encoding="utf-8"))
     total = 0
+    failed = []
     for u in range(22):
         f = os.path.join(DECK, f"Python讲授课件-单元{u:02d}.pptx")
         if not os.path.exists(f):
@@ -133,9 +134,19 @@ def main():
                 txt = summary_notes(u, m["title"])
             put_notes(slide, txt)
             total += 1
-        prs.save(f)
+        try:
+            prs.save(f)
+        except (PermissionError, OSError) as error:
+            # 文件被别的进程占着时不要整份脚本罢工：其余单元照样补备注。
+            # 踩过：以前这里直接抛异常，结果 22 个单元一个都没写进去。
+            failed.append(u)
+            print(f"  单元{u:02d}: 写不进（{type(error).__name__}），跳过备注")
+            continue
         print(f"  单元{u:02d}: {len(meta)} 页备注已写")
     print(f"合计 {total} 页备注")
+    if failed:
+        print(f"!! 有 {len(failed)} 个单元备注没写进去（文件被占用）：{failed}")
+        print("   这些单元页面/图片都正常，只缺演讲者备注，解锁后重跑本脚本即可。")
 
 
 if __name__ == "__main__":

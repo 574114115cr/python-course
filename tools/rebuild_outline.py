@@ -15,6 +15,12 @@ import time
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# slidep/swc 需要可写的 TEMP（本机 TEMP 指向 workbuddy-update 目录时会静默失败）
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import slidep_env  # noqa: E402
+slidep_env.prepare()
+
 TOOLS = os.path.join(ROOT, "tools")
 NODE = r"C:\Users\57411\.workbuddy\binaries\node\versions\22.22.2-6\node.exe"
 SLIDEP = (r"C:\Users\57411\.workbuddy\binaries\node\versions\22.22.2-6"
@@ -87,7 +93,10 @@ def render(n):
         else:
             print(f"  第 {i} 页截图失败")
             continue
-        Image.open(png).convert("RGB").save(webp, "WEBP", quality=86, method=6)
+        im = Image.open(png).convert("RGB")
+        if im.width > 1440:      # 与逐节课件统一：1440 宽、q82
+            im = im.resize((1440, int(im.height * 1440 / im.width)), Image.LANCZOS)
+        im.save(webp, "WEBP", quality=82, method=6)
         os.remove(png)
         print(f"  第 {i:02d} 页 OK", end="\r")
     print(f"  渲染完成：{n} 页 → WebP")

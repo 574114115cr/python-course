@@ -52,7 +52,12 @@ def esc(t, limit=None):
     t = t.replace("&", "＆")
     t = re.sub(r"\s+", " ", t).strip()
     if limit and len(t) > limit:
-        t = t[:limit - 1].rstrip("，。；、,;:： ") + "…"
+        cut = t[:limit - 1]
+        # 优先在标点处断句：硬切会把 "__name__" 切成 "__n…"
+        idx = max(cut.rfind(c) for c in "，。；、,;:：")
+        if idx >= limit * 0.5:
+            cut = cut[:idx]
+        t = cut.rstrip("，。；、,;:： ") + "…"
     return t
 
 
@@ -90,6 +95,9 @@ def knowledge_points(frag, max_blocks=4, max_bullets=3):
     out = []
     blocks = re.split(r"^###\s+", frag, flags=re.M)[1:]
     for b in blocks:
+        # 先把代码块整段剔掉：兜底分支按「段落」取要点时，
+        # 代码里的 print(...) 会被当成一句话塞进卡片（踩过）。
+        b = re.sub(r"^```.*?^```", "", b, flags=re.S | re.M)
         lines = b.split("\n")
         head = esc(lines[0], 30)
         if not head or head.startswith("示例"):
@@ -100,14 +108,34 @@ def knowledge_points(frag, max_blocks=4, max_bullets=3):
             if s.startswith(("- ", "* ")) and len(s) > 8:
                 bullets.append(esc(s[2:], 52))
             elif re.match(r"^\*\*[^*]{4,}\*\*", s):
-                bullets.append(esc(s, 52))
+                # 只取粗体那半句当要点：整段（含解释）塞进卡片会被排版截断成 "__n…"
+                m2 = re.match(r"^\*\*([^*]{4,})\*\*", s)
+                bold = m2.group(1)
+                # 以冒号收尾的是「引导句」（下面才讲），当要点等于什么也没说
+                if not bold.rstrip().endswith(("：", ":")):
+                    bullets.append(esc(bold, 52))
             if len(bullets) >= max_bullets:
                 break
         if not bullets:
+            # 兜底：没有列表也没有粗体，就从段落里取「第一句」。
+            # 两条规则是踩出来的：
+            #   ① 以冒号收尾的段落是引导句（「这是一个很优雅的结构：」），跳过去看下一段；
+            #   ② 一句不够，要取到 max_bullets 条，只取一条时卡片里会只剩半句话。
             for l in lines[1:]:
                 s = l.strip()
-                if s and not s.startswith(("#", "```", "|", ">", "!", "```")):
-                    bullets.append(esc(s, 52))
+                if not s or s.startswith(("#", "```", "|", ">", "!", "~~~")):
+                    continue
+                if s.rstrip().endswith(("：", ":")):
+                    continue
+                first = re.split(r"(?<=[。！？])", s)[0].strip() or s
+                # 去掉「生活化类比：」「一句话：」这类前缀——前缀不是信息，
+                # 占着卡片一行反而挤掉了真正的内容。
+                first = re.sub(r"^[^，。；]{2,8}[：:]\s*", "", first) or first
+                first = first.strip("*_ ")
+                if len(first) < 12:
+                    continue
+                bullets.append(esc(first, 52))
+                if len(bullets) >= max_bullets:
                     break
         if bullets:
             out.append((head, bullets))
@@ -131,16 +159,32 @@ def wrap_cjk(text, max_chars, max_lines=99):
         return 0.55 if ord(ch) < 128 else 1.0
 
     text = esc(text)
+    BREAKERS = " ，。；、,;:："
     lines, cur, w = [], "", 0.0
     for ch in text:
         cw = width(ch)
         if w + cw > max_chars and cur:
-            lines.append(cur)
-            cur, w = "", 0.0
+            # 能在空格/标点处断就别硬切：硬切会把 scores.get 断成 "g" + "et)"
+            idx = max(cur.rfind(c) for c in BREAKERS)
+            if idx >= max(2, int(len(cur) * 0.45)):
+                head, tail = cur[:idx + 1], cur[idx + 1:]
+            else:
+                head, tail = cur, ""
+            lines.append(head.rstrip())
+            cur, w = tail, sum(width(c) for c in tail)
         cur += ch
         w += cw
     if cur:
         lines.append(cur)
+    # 行首的收尾标点并回上一行，避免一行只有一个「；」
+    tidy = []
+    for ln in lines:
+        if tidy and ln and ln[0] in "；。，、,;:：）":
+            tidy[-1] += ln[0]
+            ln = ln[1:]
+        if ln:
+            tidy.append(ln)
+    lines = tidy
     if len(lines) > max_lines:
         lines = lines[:max_lines]
         lines[-1] = lines[-1][:-1] + "…"

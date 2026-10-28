@@ -11,6 +11,12 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# slidep/swc 需要可写的 TEMP（本机 TEMP 指向 workbuddy-update 目录时会静默失败）
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import slidep_env  # noqa: E402
+slidep_env.prepare()
+
 WEB_U = os.path.join(ROOT, "web", "ppt", "u")
 PY = sys.executable
 

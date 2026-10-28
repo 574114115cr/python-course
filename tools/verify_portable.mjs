@@ -15,17 +15,20 @@ const ZIP = process.argv[2] || path.join(ROOT_DIR, 'dist', 'Python课程包-便�
 const PORT = 9787;
 
 // 解压到临时目录（去掉 zip 内的顶层文件夹层级由下面定位）
-const TMP = path.join(os.tmpdir(), 'portable-verify');
-if (fs.existsSync(TMP)) fs.rmSync(TMP, { recursive: true, force: true });
+// 不用 os.tmpdir()：本机 TEMP 被指到 workbuddy-update 目录，且 powershell 不在
+// node 的 PATH 里（spawn ENOENT），两项都会让校验直接崩。改用工作区内的唯一目录 +
+// python zipfile 解压（venv 解释器一定有）。目录名带时间戳，不必先删旧目录
+// （递归删除在沙箱里可能被 safe-delete 拦下）。
+const PY = 'C:/Users/57411/.workbuddy/binaries/python/envs/default/Scripts/python.exe';
+const TMP = path.join(ROOT_DIR, '.cache', `portable-verify-${Date.now()}`);
 fs.mkdirSync(TMP, { recursive: true });
 
 function unzip() {
-  // 用 PowerShell 展开（系统自带，无需 python）
   return new Promise((res, rej) => {
-    const p = spawn('powershell', ['-NoProfile', '-Command',
-      `Expand-Archive -LiteralPath '${ZIP}' -DestinationPath '${TMP}' -Force`],
-      { stdio: 'ignore' });
-    p.on('exit', (c) => (c === 0 ? res() : rej(new Error('Expand-Archive exit ' + c))));
+    const code = 'import sys, zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])';
+    const p = spawn(PY, ['-c', code, ZIP, TMP], { stdio: 'ignore' });
+    p.on('error', rej);
+    p.on('exit', (c) => (c === 0 ? res() : rej(new Error('unzip exit ' + c))));
   });
 }
 

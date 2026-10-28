@@ -32,6 +32,10 @@ EXCLUDE_DIRS = {".workbuddy", "tools", "dist", "__pycache__", ".cache", ".slidep
                 "assets", "slides", "node_modules", "_stage", "lessons-deck"}
 EXCLUDE_EXT = {".pyc", ".log", ".jsonl"}
 EXCLUDE_NAME_PREFIX = ("tmp", "_")
+# 单个文件排除：阶段 0-1 大纲课件是旧课程结构（12 单元 / 52 题）的遗留产物，
+# 26 页且找不到能重建它的 DSL（slides/ 17 页、deck2/ 23 页都对不上），
+# 没有页面引用它。留在包里只会让用户看到过期数字，所以不打包。
+EXCLUDE_FILES = {"Python阶段0-1课程大纲.pptx"}
 
 README = """Python 课程包 · 便携版
 ================================================================
@@ -127,6 +131,8 @@ README = """Python 课程包 · 便携版
 
 
 def should_skip(name):
+    if name in EXCLUDE_FILES:
+        return True
     if name in EXCLUDE_DIRS:
         return True
     if os.path.splitext(name)[1] in EXCLUDE_EXT:
