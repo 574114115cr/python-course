@@ -221,22 +221,28 @@ def bullets_svg(x, y, items, avail_w, fs=14.5, max_items=3, max_lines=2,
 # ── Slide 模板 ──
 def slide_cover(unit, unit_title, lessons, week):
     """单元封面：标题 + 本单元课节清单 + 产出物。"""
+    # 课节清单按行数均分行距，撑满 470 高的画布。
+    # 原来写死 y=196（标题在 18），标题与首行之间空出 178px 的大洞——
+    # 那是给「本单元产出物」预留的位置，而那段从没实现过。现在按行数算位置。
+    n_rows = max(1, len(lessons))
+    top, bottom = 56, 452
+    step = (bottom - top) / n_rows
+    row_h = min(48, step - 10)   # 行高随行数变，但留 10px 行距
     rows = []
-    y = 196
     for i, (n, t) in enumerate(lessons):
+        y = top + i * step
         rows.append(
-            f"<rect x='0' y='{y}' width='1152' height='38' rx='7' "
+            f"<rect x='0' y='{y:.1f}' width='1152' height='{row_h:.1f}' rx='7' "
             f"fill='{'#FFFFFF' if i % 2 == 0 else '#F2F7FD'}' />")
         rows.append(
-            f"<text x='16' y='{y + 25}' fontSize='15' fontWeight='bold' "
+            f"<text x='16' y='{y + row_h / 2 + 5:.1f}' fontSize='15' fontWeight='bold' "
             f"fill='{P1}' fontFamily='{CJK}'>第 {n} 节</text>")
         rows.append(
-            f"<text x='96' y='{y + 25}' fontSize='15' fill='{INK}' "
+            f"<text x='96' y='{y + row_h / 2 + 5:.1f}' fontSize='15' fill='{INK}' "
             f"fontFamily='{CJK}'>{esc(t, 40)}</text>")
         rows.append(
-            f"<text x='1080' y='{y + 25}' fontSize='13' fill='{MUTED}' "
+            f"<text x='1080' y='{y + row_h / 2 + 5:.1f}' fontSize='13' fill='{MUTED}' "
             f"textAnchor='end' fontFamily='{CJK}'>{esc(week)}</text>")
-        y += 42
     title2 = esc(unit_title, 22)
     return f"""<Slide style={{{{ width: '1280px', height: '720px', backgroundColor: '{BG}', padding: 0, position: 'relative', overflow: 'hidden' }}}}>
     <Box style={{{{ position: 'absolute', left: 0, top: 0, width: '1280px', height: '150px', background: '{P1}' }}}} />
