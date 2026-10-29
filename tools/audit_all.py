@@ -470,13 +470,20 @@ try:
                     if "/android/" in _fp.replace("\\", "/"):
                         continue
                     _htmls.append(_fp)
-    _no_head, _no_dark, _no_btn = [], [], []
+    _no_head, _no_dark, _no_btn, _broken, _no_nb = [], [], [], [], []
     for _fp in _htmls:
         _s = open(_fp, encoding="utf-8").read()
         if _theme.HEAD_BEGIN not in _s:
             _no_head.append(_fp)
         if "thBtn" not in _s:
             _no_btn.append(_fp)
+        # 结构守卫：曾有注入把块插进 </body> 标签内部，留下 <<!--@theme:body-->
+        # 和缺尖括号的 /body>，浏览器容错照跑、字符串检查全过，实际文件已损坏。
+        if "</body>" not in _s.lower() or \
+           (_theme.BODY_BEGIN in _s) != (_theme.BODY_END in _s):
+            _broken.append(_fp)
+        if "neuron:begin" not in _s:
+            _no_nb.append(_fp)
         # 深色表可能写在外链 CSS 里：页内 <style> 有规则就查页内，否则查它引的 css。
         # 先剔掉 theme 自己注入的那段样式（它本来就不带深色表）。
         _s2 = re.sub(re.escape(_theme.HEAD_BEGIN) + r".*?" + re.escape(_theme.HEAD_END),
@@ -502,6 +509,10 @@ try:
         bad("J", f"{len(_no_dark)} 页没有深色样式表：{_rel(_no_dark)}")
     if _no_btn:
         bad("J", f"{len(_no_btn)} 页没有切换按钮：{_rel(_no_btn)}")
+    if _broken:
+        bad("J", f"{len(_broken)} 页 body 标签损坏（</body> 缺失或 theme 标记不成对）：{_rel(_broken)}")
+    if _no_nb:
+        bad("J", f"{len(_no_nb)} 页没有神经元背景：{_rel(_no_nb)}")
     # 播放器页必须有可用的全屏接线（曾有按钮只有样式没有 JS，点了没反应）
     _u_dir = os.path.join(ROOT, "web", "ppt", "u")
     _no_fs = [f for f in sorted(os.listdir(_u_dir))
@@ -510,9 +521,9 @@ try:
                                          encoding="utf-8").read()]
     if _no_fs:
         bad("J", f"{len(_no_fs)} 个播放器没有全屏接线：{_no_fs}")
-    if not (_no_head or _no_dark or _no_btn or _no_fs):
-        info("J", f"{len(_htmls)} 个页面均带主题脚本 / 深色表 / 切换按钮，"
-                  f"22 个播放器全屏可用")
+    if not (_no_head or _no_dark or _no_btn or _no_fs or _broken or _no_nb):
+        info("J", f"{len(_htmls)} 个页面均带主题脚本 / 深色表 / 切换按钮 / 神经元背景，"
+                  f"body 标签完好，22 个播放器全屏可用")
 except Exception as _e:
     info("J", f"主题检查跳过：{_e}")
 

@@ -107,6 +107,7 @@ def main():
     if not decks_only:
         # 深色表由浅色表派生：打包前必须重跑，否则安卓/便携包里的页面还是上一版配色
         ok = ok and step("5/8 主题派生（浅色 → 深色）", [os.path.join("tools", "theme.py")])
+        ok = ok and step("5b 神经元背景注入", [os.path.join("tools", "neuron.py")])
         ok = ok and step("6/8 安卓 webDir", [os.path.join("tools", "build_android_www.py")])
         ok = ok and node_step("校验安卓 webDir", "verify_android_www.mjs")
         ok = ok and step("7/8 便携包", [os.path.join("tools", "build_portable.py")])
@@ -121,6 +122,7 @@ def main():
     node_step("390px 无溢出", "verify_mobile_390.mjs")
     node_step("深浅两套主题对比度", "verify_dark.mjs")
     node_step("补强项实测（周计划/ETA/答案按需/打印）", "verify_extras.mjs")
+    node_step("神经元背景实测（开关/密度/跟随/打印）", "verify_neuron.mjs")
 
     # 备注最容易在重建时被无声抹掉（slidep create 是整份重写），单独核一遍
     import zipfile

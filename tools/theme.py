@@ -623,8 +623,12 @@ def inject(html):
     else:
         html = html.replace("</head>", head + "</head>", 1)
     body = BODY_BEGIN + "\n" + BODY_JS + "\n" + BODY_END + "\n"
-    idx = html.lower().rfind("</body>")
-    if idx >= 0:
+    # 不能用 html.lower().rfind("</body>") 的位置来切原串：lower() 对个别字符
+    # （如 U+0130 'İ'）会变长，位置整体错位，插入点会落进 </body> 标签内部，
+    # 把文件写坏（039eeab 那次三个 fluent 页面就是这么坏的）。
+    m = re.search(r"</body>", html, re.I)
+    if m:
+        idx = m.start()
         html = html[:idx] + body + html[idx:]
     else:
         html = html + body
@@ -720,6 +724,13 @@ def _selftest():
     chk("html idempotent", p1, p2)
     chk("head js once", p1.count("py-theme-v1"), 2)   # head 脚本 + body 脚本
     chk("button", "thBtn" in p1, True)
+    # U+0130 'İ' lower() 后变两字符：老代码用 lower 串的 rfind 位置切原串，
+    # 插入点错位落进 </body> 内部，文件直接写坏（039eeab 的三个 fluent 页面）。
+    page_i = "<html><head><meta charset=\"utf-8\"></head><body>İstanbul" \
+             "<div class=\"top-in\"></div></body></html>"
+    pi = inject(page_i)
+    chk("turkish-I keeps body tag", pi.lower().count("</body>"), 1)
+    chk("turkish-I no broken tag", "/body>" in pi.replace("</body>", ""), False)
     print("selftest", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
