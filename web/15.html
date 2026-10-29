@@ -1420,8 +1420,10 @@ var W=0,H=0,nodes=[],mx=-1,my=-1,hasM=false,raf=0;
 
 function target(){
   var n=Math.round(W*H/17000*DENSE[cfg.dense]);
-  // 上限要盖住最高档：1440×900 下 ultra 约 221 个节点，卡在 150 会让最高档形同没加
-  return Math.max(16,Math.min(230,n));
+  // 上限要盖住「最高档 × 常见最大屏」：1920×1080 下 ultra 约 354 个节点。
+  // 卡太紧（150/230）会让高档与极档在大屏上撞上限而趋同，加了档却看不出差别。
+  // 再往上（1440p/4K）仍会截断，属刻意的性能兜底：O(n²) 距离计算会掉帧。
+  return Math.max(16,Math.min(360,n));
 }
 function seed(){
   var n=target(),i,pc=PAL.l.length;

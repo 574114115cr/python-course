@@ -137,15 +137,43 @@ async function main() {
   })()`);
   expect('开关 重新打开恢复绘制', onBack > 200, `${onBack} px`);
 
-  /* ───── 3. 密度四档 ───── */
-  const cnt = {};
-  for (const d of ['low', 'mid', 'high', 'ultra']) {
-    await evaluate(`window.__neuron.set('dense','${d}')`);
-    await sleep(150);
-    cnt[d] = await evaluate(`window.__neuron.count()`);
+  /* ───── 3. 密度四档（多视口）───── */
+  // 只在单一尺寸验过会漏事：节点数 = 面积/17000×密度，大屏基数大，
+  // 撞上性能上限后高档与极档会被压平，档位看着有、实际没差别。
+  const viewport = (w, h, mob = false) =>
+    send('Emulation.setDeviceMetricsOverride',
+      { width: w, height: h, deviceScaleFactor: 1, mobile: mob });
+
+  const VIEWS = [
+    { name: '1920×1080', w: 1920, h: 1080, mob: false, inc: true },
+    { name: '1440×900', w: 1440, h: 900, mob: false, inc: true },
+    { name: '390×844', w: 390, h: 844, mob: true, inc: true },
+    // 超大屏允许撞上限，但至少不能出现极档反而比高档少
+    { name: '2560×1440', w: 2560, h: 1440, mob: false, inc: false },
+  ];
+  const counts = {};
+  for (const v of VIEWS) {
+    await viewport(v.w, v.h, v.mob);
+    await open('index.html');
+    const c = {};
+    for (const d of ['low', 'mid', 'high', 'ultra']) {
+      await evaluate(`window.__neuron.set('dense','${d}')`);
+      await sleep(200);
+      c[d] = await evaluate(`window.__neuron.count()`);
+    }
+    counts[v.name] = c;
+    if (v.inc) {
+      expect(`密度 ${v.name} 低<中<高<极`,
+        c.low < c.mid && c.mid < c.high && c.high < c.ultra,
+        `${c.low} / ${c.mid} / ${c.high} / ${c.ultra}`);
+      expect(`密度 ${v.name} 高档→极档增幅 ≥30%`,
+        c.ultra / c.high - 1 >= 0.3,
+        `+${((c.ultra / c.high - 1) * 100).toFixed(0)}%`);
+    } else {
+      expect(`密度 ${v.name} 极档不倒挂`, c.ultra >= c.high, `${c.high} / ${c.ultra}`);
+    }
   }
-  expect('密度 低 < 中 < 高 < 极', cnt.low < cnt.mid && cnt.mid < cnt.high && cnt.high < cnt.ultra,
-    `${cnt.low} / ${cnt.mid} / ${cnt.high} / ${cnt.ultra}`);
+  await viewport(1440, 900, false);
   await evaluate(`window.__neuron.set('dense','mid')`);
 
   /* ───── 3b. 动效四档（速度真的递增） ───── */
