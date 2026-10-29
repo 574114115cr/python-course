@@ -279,7 +279,7 @@ transition:opacity .18s;z-index:60}
   .cc .acts a{flex:1;text-align:center}
 }
 </style>
-<script src="web/searchdata.js"></script>
+<script src="web/site.js"></script>
 </head>
 <body>
 
@@ -570,7 +570,7 @@ transition:opacity .18s;z-index:60}
     </a>
     <a class="lib" href="web/terms.html" target="_blank">
       <div class="lib-i" style="background:#2f7a63">索引</div>
-      <div><h4>术语索引（499 条）</h4>
+      <div><h4>术语索引（501 条）</h4>
         <p>正文里出现过的函数 / 方法 / 类名，按字母分组 · 每条给人课号直达 ·
            相当于教材末尾的索引，但点一下就到讲解位置</p></div>
       <span class="go">查术语 →</span>
@@ -1079,7 +1079,7 @@ readOpen().forEach(function(n){
 /* ── 学习总览：题库与关卡进度（课节那行在上一段已处理） ── */
 (function(){
   function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return {}}}
-  /* 数量一律从 searchdata.js 的 SITE 取（由构建器扫产物生成），页面不再写死 */
+  /* 数量一律从 site.js 的 SITE 取（由构建器扫产物生成），页面不再写死 */
   function bankTotal(){
     if(window.SITE && window.SITE.bank) return window.SITE.bank;
     return (window.SEED||[]).filter(function(e){
@@ -1133,7 +1133,23 @@ render();
 /* ── 全站搜索：课节 / 讲义小节 / 题库 / 课件 ── */
 (function(){
   var box=document.getElementById('gs'), res=document.getElementById('gsRes');
-  if(!box||!res||!window.SEED) return;
+  if(!box||!res) return;
+  /* 索引 167 KB：以前是同步 <script>，不搜索的人也要等它下载解析完。
+     现在改成首次聚焦/输入搜索框才加载（带 ?q= 时立即加载）。 */
+  var started=false;
+  function start(){
+    if(started) return; started=true;
+    if(window.SEED){ init(); return; }
+    var sc=document.createElement('script');
+    sc.src='web/searchdata.js';
+    sc.onload=init;
+    sc.onerror=function(){
+      res.innerHTML='<div class="none">搜索索引加载失败，刷新页面重试。</div>';
+      res.classList.add('on');
+    };
+    document.head.appendChild(sc);
+  }
+  function init(){
   var items=[], sel=-1;
 
   function render(){
@@ -1167,8 +1183,6 @@ render();
     if(links[sel]) links[sel].scrollIntoView({block:'nearest'});
   }
 
-  box.addEventListener('input',render);
-  box.addEventListener('focus',render);
   box.addEventListener('keydown',function(e){
     if(e.key==='ArrowDown'){e.preventDefault();move(1);}
     else if(e.key==='ArrowUp'){e.preventDefault();move(-1);}
@@ -1184,9 +1198,16 @@ render();
   document.addEventListener('keydown',function(e){
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();box.focus();box.select();}
   });
+  // 索引是懒加载的：如果用户在加载完成前就敲了字，加载完要立刻出结果，
+  // 否则要再敲一个字符才出现（踩过）。
+  if(box.value.trim()) render();
+  }   /* init 结束 */
+
+  box.addEventListener('focus',start);
+  box.addEventListener('input',start);
   // 支持 ?q=关键词 直接带查询打开（也方便分享链接）
   var m=location.search.match(/[?&]q=([^&]+)/);
-  if(m){ box.value=decodeURIComponent(m[1].replace(/\+/g,' ')); render(); }
+  if(m){ box.value=decodeURIComponent(m[1].replace(/\+/g,' ')); start(); }
 })();
 
 /* ── 进度导出 / 导入（换电脑、清缓存前先备份） ── */

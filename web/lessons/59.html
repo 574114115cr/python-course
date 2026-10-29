@@ -36,6 +36,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-2-类-继承的完整复习">示例 2：类 + 继承的完整复习</a>
 <a class="lv3" href="#示例-3-文件-异常完整复习">示例 3：文件 + 异常完整复习</a>
 <a class="lv3" href="#示例-4-pytest-复习-可直接运行的测试文件">示例 4：pytest 复习（可直接运行的测试文件）</a>
+<a class="lv3" href="#示例-5-一个小而完整的项目-类-json-异常">示例 5：一个小而完整的项目（类 + JSON + 异常）</a>
+<a class="lv3" href="#示例-6-给上面的项目写-6-条断言-不装-pytest-也能跑">示例 6：给上面的项目写 6 条断言（不装 pytest 也能跑）</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
     <div class="sblk">
@@ -583,6 +585,145 @@ transition:opacity .18s;z-index:60}
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"根本不存在.json"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </code></pre>
+<hr>
+<h3 id="示例-5-一个小而完整的项目-类-json-异常">示例 5：一个小而完整的项目（类 + JSON + 异常）</h3>
+<p>阶段 1 学的东西能不能串起来，用一个 40 行的记账本就看得出来：类负责状态，JSON 负责持久化，
+异常负责「文件不在」「文件坏了」「输入非法」这三种现实情况。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ledger.py —— 换成你自己的路径也能直接跑</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Ledger</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>          <span class="c1"># 第一次运行：没有文件是正常的</span>
+        <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>          <span class="c1"># 文件坏了：不崩，从空账本开始</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"！账本文件损坏，已重置"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"收"</span><span class="p">,</span> <span class="s2">"支"</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"kind 只能是「收」或「支」"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"金额必须大于 0"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"kind"</span><span class="p">:</span> <span class="n">kind</span><span class="p">,</span> <span class="s2">"amount"</span><span class="p">:</span> <span class="n">amount</span><span class="p">,</span> <span class="s2">"note"</span><span class="p">:</span> <span class="n">note</span><span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">income</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"amount"</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">"kind"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"收"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">spend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"amount"</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">"kind"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"支"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">balance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">income</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">spend</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(),</span> <span class="s2">"ledger.json"</span><span class="p">)</span>
+<span class="n">book</span> <span class="o">=</span> <span class="n">Ledger</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"空账本："</span><span class="p">,</span> <span class="n">book</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="s2">"余额"</span><span class="p">,</span> <span class="n">book</span><span class="o">.</span><span class="n">balance</span><span class="p">())</span>
+
+<span class="n">book</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"收"</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="s2">"工资"</span><span class="p">)</span>
+<span class="n">book</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"支"</span><span class="p">,</span> <span class="mi">1200</span><span class="p">,</span> <span class="s2">"房租"</span><span class="p">)</span>
+<span class="n">book</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"支"</span><span class="p">,</span> <span class="mf">35.5</span><span class="p">,</span> <span class="s2">"午饭"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"收入 </span><span class="si">{</span><span class="n">book</span><span class="o">.</span><span class="n">income</span><span class="p">()</span><span class="si">}</span><span class="s2"> 支出 </span><span class="si">{</span><span class="n">book</span><span class="o">.</span><span class="n">spend</span><span class="p">()</span><span class="si">}</span><span class="s2"> 余额 </span><span class="si">{</span><span class="n">book</span><span class="o">.</span><span class="n">balance</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">book</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"写入文件："</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="s2">"字节"</span><span class="p">)</span>
+
+<span class="n">again</span> <span class="o">=</span> <span class="n">Ledger</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>             <span class="c1"># 重新读一次，验证真的落盘了</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"重新读入条数："</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">again</span><span class="o">.</span><span class="n">items</span><span class="p">),</span> <span class="s2">"余额"</span><span class="p">,</span> <span class="n">again</span><span class="o">.</span><span class="n">balance</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"借"</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="p">(</span><span class="s2">"支"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">again</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"拒绝："</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>空账本： [] 余额 0
+收入 8000 支出 1235.5 余额 6764.5
+写入文件： ledger.json 225 字节
+重新读入条数： 3 余额 6764.5
+拒绝： kind 只能是「收」或「支」
+拒绝： 金额必须大于 0
+</code></pre>
+<p>四个值得注意的设计点：</p>
+<ul>
+<li><strong><code>load()</code> 在 <code>__init__</code> 里调</strong>，所以「新建对象」永远等于「拿到当前磁盘状态」，调用方不用记得先加载。</li>
+<li><strong>两个 <code>except</code> 分开写</strong>：<code>FileNotFoundError</code> 是正常的第一次运行，<code>JSONDecodeError</code> 是异常情况——
+  虽然处理方式都是「空账本」，但后者要打印提示，合成一个 <code>except</code> 就把这两种情况混在一起了。</li>
+<li><strong><code>add()</code> 主动抛 <code>ValueError</code></strong>：与其让非法数据进账本、后面算错总额，不如在入口就拦住。</li>
+<li><strong><code>save()</code> 用 <code>ensure_ascii=False</code></strong>：否则文件里存的是 <code>\u5de5\u8d44</code> 这种转义，肉眼没法校对。</li>
+</ul>
+<h3 id="示例-6-给上面的项目写-6-条断言-不装-pytest-也能跑">示例 6：给上面的项目写 6 条断言（不装 pytest 也能跑）</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># check_ledger.py —— 断言就是最小的测试：跑通没报错，就说明这几条不变式成立</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"收"</span><span class="p">,</span> <span class="s2">"支"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"kind"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"amount"</span><span class="p">)</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">"kind"</span><span class="p">:</span> <span class="n">kind</span><span class="p">,</span> <span class="s2">"amount"</span><span class="p">:</span> <span class="n">amount</span><span class="p">})</span>
+
+
+<span class="n">work</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="n">fresh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="s2">"a.json"</span><span class="p">)</span>
+<span class="n">broken</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="s2">"b.json"</span><span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="n">broken</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"{不是 JSON"</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">load</span><span class="p">(</span><span class="n">fresh</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>                  <span class="c1"># 文件不存在 → 空账本，不抛异常</span>
+<span class="k">assert</span> <span class="n">load</span><span class="p">(</span><span class="n">broken</span><span class="p">)</span> <span class="o">==</span> <span class="p">[]</span>                 <span class="c1"># 内容坏了 → 也是空账本</span>
+<span class="k">assert</span> <span class="n">load</span><span class="p">(</span><span class="n">fresh</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">load</span><span class="p">(</span><span class="n">fresh</span><span class="p">)</span>     <span class="c1"># 每次都是新列表，不会共享</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">add</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="s2">"收"</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">add</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="s2">"支"</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"amount"</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">"kind"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"收"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">100</span>
+<span class="k">assert</span> <span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">"amount"</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="s2">"kind"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"支"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">30</span>
+
+<span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">amount</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"借"</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="s2">"支"</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s2">"支"</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">add</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"应该拒绝 </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"6 条断言全部通过，账本仍有 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> 条记录"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>6 条断言全部通过，账本仍有 2 条记录
+</code></pre>
+<p>注意最后那个 <code>raise AssertionError(...)</code>：<strong>它写在 <code>try</code> 里、<code>except ValueError</code> 抓不到它</strong>，
+所以只要 <code>add()</code> 没有拒绝非法输入，这条断言就会真的失败。这是「测异常」的固定套路——
+不是断言「没报错」，而是断言「该报的错报了」。</p>
+<p>上一章用 pytest 写测试，这一章用 <code>assert</code>：两者检查的是同一件事，
+区别只在 pytest 会告诉你哪一条失败、失败在第几行。<strong>没有 pytest 的环境里，assert 也够用。</strong></p>
 <hr>
 
     <div class="blk hw">

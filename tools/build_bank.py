@@ -108,6 +108,12 @@ CSS = """
 :root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
 --p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e8f6f1;--p3:#e08a15;--p3bg:#fdf3e2}
 *{box-sizing:border-box}
+/* 120 题一次全排版很贵（12k 节点 / 30k 像素高）。屏幕外的卡片先跳过排版，
+   滚到附近再算；contain-intrinsic-size 用 auto，浏览器会记住首次量到的真实高度，
+   所以滚动条不会反复跳。 */
+.q{content-visibility:auto;contain-intrinsic-size:auto 212px}
+/* 打印时全部还原：分页媒体里 content-visibility:auto 会让没滚到的卡片留白 */
+@media print{.q{content-visibility:visible}}
 body{margin:0;background:var(--bg);color:var(--text);line-height:1.75;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
 a{color:var(--p1);text-decoration:none}a:hover{text-decoration:underline}

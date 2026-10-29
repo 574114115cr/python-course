@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>题库 · 36 题</title>
+<title>题库 · 48 题</title>
 <meta name="theme-color" content="#4c3a9e">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234c3a9e'/%3E%3Ctext x='16' y='22' font-size='13' font-family='monospace' fill='%23fff' text-anchor='middle'%3EFP%3C/text%3E%3C/svg%3E">
 <script>
@@ -18,7 +18,7 @@ window.FL = { read: function (k, d) {
 <body >
 <div class="top"><div class="top-in">
   <a class="back" href="../index.html">← 课程首页</a>
-  <h1>题库 · 36 题</h1>
+  <h1>题库 · 48 题</h1>
   
   
   <a class="switch" href="../../index.html">切换课程</a>
@@ -26,12 +26,12 @@ window.FL = { read: function (k, d) {
 <div class="wrap">
   <div class="hero" style="padding:38px 40px">
     <div class="bdg">BANK</div>
-    <h1>36 题 · 从「看懂」到「写得出」</h1>
-    <p>每个单元 3 题：1 道机制题、1 道代码题、1 道设计题。先自己写，再展开答案对照；
+    <h1>48 题 · 从「看懂」到「写得出」</h1>
+    <p>每个单元 4 题：机制 / 代码 / 设计各一，另有一道进阶题。先自己写，再展开答案对照；
     标记「待复习」的题可以单独筛出来集中二刷。</p>
   </div>
   <div class="fbar" id="fb">
-    <button class="on" data-k="all">全部 36</button>
+    <button class="on" data-k="all">全部 48</button>
     <button data-k="todo">待复习</button>
     <button data-k="master">已掌握</button>
     <button data-k="u1">单元 1–3</button>
@@ -46,7 +46,7 @@ window.FL = { read: function (k, d) {
     <button data-lv="代码">代码 12</button>
     <button data-lv="设计">设计 12</button>
   </div>
-  <div class="hashnote" id="hn"><b id="hnT"></b><a href="bank.html">查看全部 36 题</a></div>
+  <div class="hashnote" id="hn"><b id="hnT"></b><a href="bank.html">查看全部 48 题</a></div>
   <div id="list"><div class="qc" id="F1-1" data-u="1" data-lv="概念">
   <div class="qh"><span class="qid">F1-1</span><span class="qu">概念 · 单元 1</span>
     <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
@@ -665,6 +665,253 @@ window.FL = { read: function (k, d) {
 <li><strong>元类</strong>：需要控制类创建过程本身（改命名空间、<code>__prepare__</code>、强制结构），或框架要兼容多个 Python 版本时。</li>
 </ul>
 <p>判断：能用 <code>__init_subclass__</code> 解决就不写元类；元类应作为实现细节，不要写进公开 API。</p></div>
+</div><div class="qc" id="F1-4" data-u="1" data-lv="代码">
+  <div class="qh"><span class="qid">F1-4</span><span class="qu">代码 · 单元 1</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>写一个只读序列 <code>Line</code>：底层是 list，外部只能读；<code>line[1:3]</code> 必须返回 <code>Line</code> 而不是 list。
+给出 <code>__len__</code> / <code>__getitem__</code> 的实现，并说明为什么不能只实现 <code>__getitem__</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Line</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="o">=</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>   <span class="c1"># 切片仍返回 Line，链式调用不丢类型</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</code></pre>
+<p><strong>切片参数是 <code>slice</code> 对象</strong>，<code>self._items[i]</code> 天然支持它，但返回的是 list；要再包一层
+<code>type(self)(...)</code> 才保持类型——否则 <code>line[1:3][0]</code> 能用、<code>line[1:3].head()</code> 就没了。</p>
+<p><strong>为什么不只实现 <code>__getitem__</code></strong>：旧式迭代协议只要求 <code>__getitem__</code> 从 0 开始抛 <code>IndexError</code>，
+所以 <code>for</code> 能跑；但 <code>len()</code>、<code>bool()</code>、<code>reversed()</code>、<code>in</code> 都走 <code>__len__</code> / <code>__contains__</code>，
+缺了它们要么报错要么退化成逐项扫描。<code>__len__</code> 还让 <code>bool(line)</code> 在空时正确为 False。</p></div>
+</div><div class="qc" id="F2-4" data-u="2" data-lv="设计">
+  <div class="qh"><span class="qid">F2-4</span><span class="qu">设计 · 单元 2</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>为什么 list 不能当 dict 的键，tuple 可以？说明 <code>__hash__</code> 与 <code>__eq__</code> 必须满足的契约，
+以及自定义类不写这两个方法时默认是什么行为。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>dict 先用 <strong>hash</strong> 定位桶，再用 <strong>==</strong> 确认桶里那一个。键可变时，内容一改 hash 就变，
+原来那条记录再也找不到——所以<strong>可哈希 = 不可变</strong>不是风格问题，是数据结构的前提。</p>
+<p>契约两条：<code>a == b</code> 必须推出 <code>hash(a) == hash(b)</code>（反之不要求，哈希碰撞是允许的）；
+同一个对象在一次运行内 hash 不变。</p>
+<p>自定义类默认继承 <code>object.__hash__</code>（按 id）和 <code>object.__eq__</code>（等价于 is）：
+一致，但「两个内容相同的对象不相等」。一旦你写了 <code>__eq__</code> 却没写 <code>__hash__</code>，
+Python 会把 <code>__hash__</code> 置为 None，对象立刻<strong>不可哈希</strong>——这是很多人第一次遇到
+<code>TypeError: unhashable type</code> 的原因。</p>
+<p>tuple 可哈希的前提是<strong>每个元素都可哈希</strong>：<code>(1, [2])</code> 一样不行。</p></div>
+</div><div class="qc" id="F3-4" data-u="3" data-lv="代码">
+  <div class="qh"><span class="qid">F3-4</span><span class="qu">代码 · 单元 3</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>@dataclass(frozen=True)</code> 和手写只读 property 有什么区别？frozen 的实例能放进 set 吗？
+举一个 frozen 仍然「不冻」的例子。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>frozen=True 做两件事：生成抛 <code>FrozenInstanceError</code> 的 <code>__setattr__</code>，
+并按字段生成 <code>__hash__</code>——所以<strong>实例可以直接放进 set / 当 dict 键</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="p">{</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span>   <span class="c1"># 长度 1：相等且同 hash</span>
+</code></pre>
+<p>手写 property 只拦 <code>obj.x = ...</code>，<code>vars(obj)["x"] = 9</code> 照样能改，而且不会自动得到 <code>__hash__</code>。</p>
+<p><strong>frozen 是浅的</strong>：字段是 list 时，<code>obj.tags.append("x")</code> 依然成功；
+此时 <code>hash(obj)</code> 会抛 TypeError（list 不可哈希），所以 frozen 类的字段也应当是不可变类型。</p></div>
+</div><div class="qc" id="F4-4" data-u="4" data-lv="设计">
+  <div class="qh"><span class="qid">F4-4</span><span class="qu">设计 · 单元 4</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>functools.partial</code>、lambda、<code>__call__</code> 三种「预先绑死一部分参数」的写法，分别什么时候选？
+循环里创建回调时最容易踩的坑是什么？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><ul>
+<li><strong>partial</strong>：语义最清楚、可 pickle、能保留原函数信息，适合「固定前几个参数」。</li>
+<li><strong>lambda</strong>：只适合一次性、一行写得完的场合；签名信息全丢，调试栈里只显示 <code>&lt;lambda&gt;</code>。</li>
+<li><strong><code>__call__</code></strong>：需要<strong>携带状态</strong>（多个绑定点、要缓存、要被别处当对象传递）时才值得写一个类。</li>
+</ul>
+<p>循环里的坑是<strong>闭包按引用捕获</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">fns</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>      <span class="c1"># 三个都返回 2</span>
+<span class="n">fns</span> <span class="o">=</span> <span class="p">[</span><span class="n">partial</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>   <span class="c1"># 0 1 2，正确</span>
+</code></pre>
+<p>用 <code>lambda i=i: i</code> 也能修，但那是在用默认参数「冻结」当前值，语义不如 partial 直白。</p></div>
+</div><div class="qc" id="F5-4" data-u="5" data-lv="代码">
+  <div class="qh"><span class="qid">F5-4</span><span class="qu">代码 · 单元 5</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>写一个可传参的装饰器 <code>@retry(times=3, exc=ValueError)</code>：失败重试，用尽后抛出最后一次异常。
+说明为什么必须用 <code>functools.wraps</code>。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">retry</span><span class="p">(</span><span class="n">times</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="ne">ValueError</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deco</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>          <span class="c1"># 不加这行，函数名会变成 wrapper</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">times</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">times</span><span class="p">:</span>
+                        <span class="k">raise</span>          <span class="c1"># 最后一次：原样抛，保留原栈</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">deco</span>
+</code></pre>
+<p><code>wraps</code> 复制 <code>__module__ / __name__ / __qualname__ / __doc__ / __dict__</code>，并写入 <code>__wrapped__</code>。
+不写的后果很具体：<code>help()</code> 显示 <code>wrapper</code>、日志里全是 <code>wrapper</code>、pytest 收集不到用例、
+Sphinx 文档缺函数——<strong>功能能跑，但所有依赖函数元信息的东西都会错</strong>。</p>
+<p>另一个细节：最后一次要 <code>raise</code> 而不是 <code>raise last_exc</code>，
+前者保留原始 traceback，后者会把错误位置指到装饰器内部。</p></div>
+</div><div class="qc" id="F6-4" data-u="6" data-lv="设计">
+  <div class="qh"><span class="qid">F6-4</span><span class="qu">设计 · 单元 6</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>为什么 list 定义了 <code>__eq__</code> 却没有 <code>__hash__</code>，而 tuple 两者都有？
+自己写一个「相等则同 hash」的类，hash 应该只依赖哪些字段？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>list 的 <code>__hash__</code> 被<strong>显式置为 None</strong>（不是没定义）：<code>hash([1,2])</code> 直接 TypeError。
+原因是它可变——<code>[1,2]</code> 和 <code>[1,3]</code> 是同一个对象，内容变了 hash 必须跟着变，
+而 dict 的桶位置是按旧 hash 算的，改完就永久失联。tuple 不可变，所以两者都能给。</p>
+<p>自己写时，hash <strong>只依赖参与 <code>__eq__</code> 的不可变字段</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Money</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"amount"</span><span class="p">,</span> <span class="s2">"currency"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">currency</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">amount</span><span class="p">,</span> <span class="n">currency</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Money</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">currency</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">currency</span><span class="p">))</span>
+</code></pre>
+<p>用 tuple 包一层是最省事的写法；不要写 <code>hash(self.amount) ^ hash(self.currency)</code>——
+异或对交换对称，<code>(1,2)</code> 和 <code>(2,1)</code> 会撞哈希。</p></div>
+</div><div class="qc" id="F7-4" data-u="7" data-lv="代码">
+  <div class="qh"><span class="qid">F7-4</span><span class="qu">代码 · 单元 7</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>@runtime_checkable</code> 的 Protocol 在 <code>isinstance()</code> 时到底检查什么？
+举一个它「误判为真」的例子，并说明运行时检查应该怎么用。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>只检查<strong>成员名字是否存在</strong>，不检查签名、不检查类型，也不看返回值：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+
+<span class="nd">@runtime_checkable</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Reader</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span> <span class="o">...</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Weird</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>   <span class="c1"># 签名完全不同</span>
+        <span class="k">return</span> <span class="sa">b</span><span class="s2">""</span>
+
+<span class="nb">isinstance</span><span class="p">(</span><span class="n">Weird</span><span class="p">(),</span> <span class="n">Reader</span><span class="p">)</span>    <span class="c1"># True —— 只看有没有 read</span>
+</code></pre>
+<p>所以运行时 isinstance 只能当<strong>粗筛</strong>（比如插件注册时给个友好报错），
+真正的类型保证靠静态检查（mypy）加单元测试。另外带数据成员的 Protocol
+在 <code>isinstance</code> 下只检查属性名，也不校验类型。</p></div>
+</div><div class="qc" id="F8-4" data-u="8" data-lv="设计">
+  <div class="qh"><span class="qid">F8-4</span><span class="qu">设计 · 单元 8</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>__slots__</code> 省的是什么内存？代价有哪些？<code>@dataclass(slots=True)</code> 与手写 <code>__slots__</code> 的坑是什么？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>省的是<strong>每个实例的 <code>__dict__</code></strong>：空 dict 就要 56 字节起，加上哈希表开销；
+槽位改成固定偏移，几十万个小对象时差别是数量级。</p>
+<p>代价：① 不能再动态加属性（<code>obj.extra = 1</code> 直接 AttributeError）；
+② 多继承时多个基类的槽位可能冲突；③ 需要弱引用要显式加 <code>__weakref__</code> 槽；
+④ pickle 默认走 <code>__dict__</code>，要自己写 <code>__getstate__/__setstate__</code>。</p>
+<p><code>dataclass(slots=True)</code> 的坑在于它<strong>新建一个类</strong>替换原类：
+之前拿到的引用、闭包里捕获的类对象仍是没槽的旧类，
+<code>type(x) is Old</code> 会变 False（<code>isinstance</code> 仍成立）。动态创建大量临时对象时建议手写 <code>__slots__</code>。</p></div>
+</div><div class="qc" id="F9-4" data-u="9" data-lv="代码">
+  <div class="qh"><span class="qid">F9-4</span><span class="qu">代码 · 单元 9</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>生成器里 <code>return value</code> 之后，这个 value 去哪了？<code>yield from</code> 怎么把它取出来？
+手写循环的话要怎么写？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><code>return</code> 在生成器里不返回值给调用者，而是变成 <strong><code>StopIteration.value</code></strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">gen</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="s2">"done"</span>
+
+<span class="n">it</span> <span class="o">=</span> <span class="n">gen</span><span class="p">()</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>                  <span class="c1"># 1</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">next</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">StopIteration</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>        <span class="c1"># done</span>
+</code></pre>
+<p><code>yield from</code> 会把子生成器的返回值<strong>当作整个表达式的值</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">outer</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">gen</span><span class="p">()</span>   <span class="c1"># "done"</span>
+    <span class="k">yield</span> <span class="n">result</span>
+</code></pre>
+<p>这正是「生成器当协程用」的基础：<code>yield from</code> 同时转发 <code>send/throw/close</code>，
+比手写 <code>for x in sub: yield x</code> 多做了异常与返回值的传递。</p></div>
+</div><div class="qc" id="F10-4" data-u="10" data-lv="设计">
+  <div class="qh"><span class="qid">F10-4</span><span class="qu">设计 · 单元 10</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>「IO 密集用线程、CPU 密集用进程」这条经验在什么情况下会失效？给出两条判断依据。</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p>失效的两种典型：</p>
+<ol>
+<li><strong>CPU 密集但主要时间在 C 扩展里</strong>——numpy、hashlib、zlib、re 的重活会释放 GIL，
+   这时多线程照样并行，进程反而多付序列化成本。</li>
+<li><strong>进程池的通信成本超过收益</strong>——参数/返回值要 pickle，
+   大 DataFrame、打开的文件、数据库连接、lambda 都过不去；数据量大时进程反而更慢。</li>
+</ol>
+<p>两条判断依据：
+- <strong>能不能 pickle、要不要共享状态</strong>：要共享（计数器、缓存）→ 线程；
+  纯计算且输入输出可序列化 → 进程。
+- <strong>时间花在哪</strong>：<code>cProfile</code> 看热点是否在 C 层；在 C 层就试线程，先测再选。</p>
+<p>Python 3.13 起还有 free-threaded 构建（无 GIL）可试，但生态兼容仍是变量，别当默认。</p></div>
+</div><div class="qc" id="F11-4" data-u="11" data-lv="代码">
+  <div class="qh"><span class="qid">F11-4</span><span class="qu">代码 · 单元 11</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p><code>asyncio.gather(..., return_exceptions=True)</code> 与 <code>asyncio.TaskGroup</code> 的差别是什么？
+其中一个任务抛异常时，另一个任务会怎样？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><strong>gather 默认</strong>：第一个异常立刻向上抛，<strong>其余任务继续在后台跑</strong>（不会自动取消）——
+这是最常见的泄漏来源。<code>return_exceptions=True</code> 则把异常当结果收集，等全部结束。</p>
+<p><strong>TaskGroup（3.11+）是结构化并发</strong>：任一子任务失败 → 其余全部取消，退出 <code>with</code> 时
+抛 <code>ExceptionGroup</code>；正常退出时保证所有任务都已结束。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">async</span> <span class="k">with</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TaskGroup</span><span class="p">()</span> <span class="k">as</span> <span class="n">tg</span><span class="p">:</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">fetch</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="c1"># 到这里两个任务一定都结束了；有异常会包成 ExceptionGroup 抛出</span>
+</code></pre>
+<p>选择标准：<strong>「失败了要不要一起收手」</strong>。互相独立、允许部分成功 → gather；
+一个失败就没有意义（比如同时写两个表）→ TaskGroup。</p></div>
+</div><div class="qc" id="F12-4" data-u="12" data-lv="设计">
+  <div class="qh"><span class="qid">F12-4</span><span class="qu">设计 · 单元 12</span>
+    <div class="qst"><button data-s="1">已掌握</button><button data-s="2">待复习</button></div>
+  </div>
+  <div class="qt"><p>描述符的 <code>__set_name__</code> 解决什么问题？用描述符做字段校验，比在 <code>__setattr__</code> 里写 if 好在哪？</p></div>
+  <button class="qbtn">显示答案</button>
+  <div class="qa"><p><code>__set_name__(self, owner, name)</code> 在<strong>类创建时</strong>被调用，描述符借此知道自己绑到了哪个属性名，
+不必在 <code>__init__</code> 里手传名字：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Positive</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__set_name__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">name</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> 必须为正"</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</code></pre>
+<p>相比在 <code>__setattr__</code> 里堆 <code>if name == "price": ... elif name == "qty": ...</code>：
+校验规则跟着字段走、可复用、加字段不用改一处大 if，也不会漏掉继承来的字段。
+代价是描述符是<strong>数据描述符</strong>，优先级高于实例 <code>__dict__</code>，
+调试时栈更深一层；字段很少时直接写 <code>__setattr__</code> 更省事。</p></div>
 </div></div>
   <p class="qempty" id="qempty">没有符合条件的题目</p>
 </div>

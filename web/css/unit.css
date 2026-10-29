@@ -2,6 +2,11 @@
 /* 窄屏防溢出：flex 子项默认 min-width:auto，代码块会把整页撑宽 */
 .main{min-width:0}
 pre{max-width:100%}
+/* 单元页 26k 像素高、课节页 160 KB：屏幕外的代码块/表格先跳过排版，
+   滚到附近再算。contain-intrinsic-size 用 auto —— 量过一次就记住真实高度，
+   所以滚动条不会越滚越短。锚点跳转由浏览器自己按需渲染，不影响 #示例-5 之类定位。 */
+.main pre,.main .tblwrap{content-visibility:auto;contain-intrinsic-size:auto 220px}
+@media print{.main pre,.main .tblwrap{content-visibility:visible}}
 .top-in{min-width:0}
 .top-in h1{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:1000px){

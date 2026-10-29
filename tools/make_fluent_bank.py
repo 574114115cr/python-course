@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""生成 course-fluent/bank.json（36 题：每单元 3 题，概念/代码/设计各一）。
+"""生成 course-fluent/bank.json（48 题：每单元 4 题，概念/代码/设计各一 + 一道进阶）。
 
 单独成脚本是为了让答案里的代码块保持可读；改题改这里，再运行本脚本。
 """
@@ -614,15 +614,289 @@ print(o.qty)      # 3
 
 判断：能用 `__init_subclass__` 解决就不写元类；元类应作为实现细节，不要写进公开 API。
 """),
+    # ── 2026-10-29 补：每单元 3 → 4 题（36 → 48），档位轮流 ──
+    Q("F1-4", 1, "代码", """
+        写一个只读序列 `Line`：底层是 list，外部只能读；`line[1:3]` 必须返回 `Line` 而不是 list。
+        给出 `__len__` / `__getitem__` 的实现，并说明为什么不能只实现 `__getitem__`。
+    """, """
+        ```python
+        class Line:
+            def __init__(self, items=()):
+                self._items = list(items)
+
+            def __len__(self):
+                return len(self._items)
+
+            def __getitem__(self, i):
+                if isinstance(i, slice):
+                    return Line(self._items[i])   # 切片仍返回 Line，链式调用不丢类型
+                return self._items[i]
+        ```
+
+        **切片参数是 `slice` 对象**，`self._items[i]` 天然支持它，但返回的是 list；要再包一层
+        `type(self)(...)` 才保持类型——否则 `line[1:3][0]` 能用、`line[1:3].head()` 就没了。
+
+        **为什么不只实现 `__getitem__`**：旧式迭代协议只要求 `__getitem__` 从 0 开始抛 `IndexError`，
+        所以 `for` 能跑；但 `len()`、`bool()`、`reversed()`、`in` 都走 `__len__` / `__contains__`，
+        缺了它们要么报错要么退化成逐项扫描。`__len__` 还让 `bool(line)` 在空时正确为 False。
+    """),
+
+    Q("F2-4", 2, "设计", """
+        为什么 list 不能当 dict 的键，tuple 可以？说明 `__hash__` 与 `__eq__` 必须满足的契约，
+        以及自定义类不写这两个方法时默认是什么行为。
+    """, """
+        dict 先用 **hash** 定位桶，再用 **==** 确认桶里那一个。键可变时，内容一改 hash 就变，
+        原来那条记录再也找不到——所以**可哈希 = 不可变**不是风格问题，是数据结构的前提。
+
+        契约两条：`a == b` 必须推出 `hash(a) == hash(b)`（反之不要求，哈希碰撞是允许的）；
+        同一个对象在一次运行内 hash 不变。
+
+        自定义类默认继承 `object.__hash__`（按 id）和 `object.__eq__`（等价于 is）：
+        一致，但「两个内容相同的对象不相等」。一旦你写了 `__eq__` 却没写 `__hash__`，
+        Python 会把 `__hash__` 置为 None，对象立刻**不可哈希**——这是很多人第一次遇到
+        `TypeError: unhashable type` 的原因。
+
+        tuple 可哈希的前提是**每个元素都可哈希**：`(1, [2])` 一样不行。
+    """),
+
+    Q("F3-4", 3, "代码", """
+        `@dataclass(frozen=True)` 和手写只读 property 有什么区别？frozen 的实例能放进 set 吗？
+        举一个 frozen 仍然「不冻」的例子。
+    """, """
+        frozen=True 做两件事：生成抛 `FrozenInstanceError` 的 `__setattr__`，
+        并按字段生成 `__hash__`——所以**实例可以直接放进 set / 当 dict 键**：
+
+        ```python
+        @dataclass(frozen=True)
+        class Point:
+            x: int
+            y: int
+
+        s = {Point(1, 2), Point(1, 2)}   # 长度 1：相等且同 hash
+        ```
+
+        手写 property 只拦 `obj.x = ...`，`vars(obj)["x"] = 9` 照样能改，而且不会自动得到 `__hash__`。
+
+        **frozen 是浅的**：字段是 list 时，`obj.tags.append("x")` 依然成功；
+        此时 `hash(obj)` 会抛 TypeError（list 不可哈希），所以 frozen 类的字段也应当是不可变类型。
+    """),
+
+    Q("F4-4", 4, "设计", """
+        `functools.partial`、lambda、`__call__` 三种「预先绑死一部分参数」的写法，分别什么时候选？
+        循环里创建回调时最容易踩的坑是什么？
+    """, """
+        - **partial**：语义最清楚、可 pickle、能保留原函数信息，适合「固定前几个参数」。
+        - **lambda**：只适合一次性、一行写得完的场合；签名信息全丢，调试栈里只显示 `<lambda>`。
+        - **`__call__`**：需要**携带状态**（多个绑定点、要缓存、要被别处当对象传递）时才值得写一个类。
+
+        循环里的坑是**闭包按引用捕获**：
+
+        ```python
+        fns = [lambda: i for i in range(3)]      # 三个都返回 2
+        fns = [partial(lambda n: n, i) for i in range(3)]   # 0 1 2，正确
+        ```
+
+        用 `lambda i=i: i` 也能修，但那是在用默认参数「冻结」当前值，语义不如 partial 直白。
+    """),
+
+    Q("F5-4", 5, "代码", """
+        写一个可传参的装饰器 `@retry(times=3, exc=ValueError)`：失败重试，用尽后抛出最后一次异常。
+        说明为什么必须用 `functools.wraps`。
+    """, """
+        ```python
+        import functools
+
+        def retry(times=3, exc=ValueError):
+            def deco(fn):
+                @functools.wraps(fn)          # 不加这行，函数名会变成 wrapper
+                def wrapper(*args, **kwargs):
+                    for i in range(1, times + 1):
+                        try:
+                            return fn(*args, **kwargs)
+                        except exc:
+                            if i == times:
+                                raise          # 最后一次：原样抛，保留原栈
+                return wrapper
+            return deco
+        ```
+
+        `wraps` 复制 `__module__ / __name__ / __qualname__ / __doc__ / __dict__`，并写入 `__wrapped__`。
+        不写的后果很具体：`help()` 显示 `wrapper`、日志里全是 `wrapper`、pytest 收集不到用例、
+        Sphinx 文档缺函数——**功能能跑，但所有依赖函数元信息的东西都会错**。
+
+        另一个细节：最后一次要 `raise` 而不是 `raise last_exc`，
+        前者保留原始 traceback，后者会把错误位置指到装饰器内部。
+    """),
+
+    Q("F6-4", 6, "设计", """
+        为什么 list 定义了 `__eq__` 却没有 `__hash__`，而 tuple 两者都有？
+        自己写一个「相等则同 hash」的类，hash 应该只依赖哪些字段？
+    """, """
+        list 的 `__hash__` 被**显式置为 None**（不是没定义）：`hash([1,2])` 直接 TypeError。
+        原因是它可变——`[1,2]` 和 `[1,3]` 是同一个对象，内容变了 hash 必须跟着变，
+        而 dict 的桶位置是按旧 hash 算的，改完就永久失联。tuple 不可变，所以两者都能给。
+
+        自己写时，hash **只依赖参与 `__eq__` 的不可变字段**：
+
+        ```python
+        class Money:
+            __slots__ = ("amount", "currency")
+            def __init__(self, amount, currency):
+                self.amount, self.currency = amount, currency
+            def __eq__(self, other):
+                return (isinstance(other, Money)
+                        and (self.amount, self.currency) == (other.amount, other.currency))
+            def __hash__(self):
+                return hash((self.amount, self.currency))
+        ```
+
+        用 tuple 包一层是最省事的写法；不要写 `hash(self.amount) ^ hash(self.currency)`——
+        异或对交换对称，`(1,2)` 和 `(2,1)` 会撞哈希。
+    """),
+
+    Q("F7-4", 7, "代码", """
+        `@runtime_checkable` 的 Protocol 在 `isinstance()` 时到底检查什么？
+        举一个它「误判为真」的例子，并说明运行时检查应该怎么用。
+    """, """
+        只检查**成员名字是否存在**，不检查签名、不检查类型，也不看返回值：
+
+        ```python
+        from typing import Protocol, runtime_checkable
+
+        @runtime_checkable
+        class Reader(Protocol):
+            def read(self) -> bytes: ...
+
+        class Weird:
+            def read(self, n, mode):   # 签名完全不同
+                return b""
+
+        isinstance(Weird(), Reader)    # True —— 只看有没有 read
+        ```
+
+        所以运行时 isinstance 只能当**粗筛**（比如插件注册时给个友好报错），
+        真正的类型保证靠静态检查（mypy）加单元测试。另外带数据成员的 Protocol
+        在 `isinstance` 下只检查属性名，也不校验类型。
+    """),
+
+    Q("F8-4", 8, "设计", """
+        `__slots__` 省的是什么内存？代价有哪些？`@dataclass(slots=True)` 与手写 `__slots__` 的坑是什么？
+    """, """
+        省的是**每个实例的 `__dict__`**：空 dict 就要 56 字节起，加上哈希表开销；
+        槽位改成固定偏移，几十万个小对象时差别是数量级。
+
+        代价：① 不能再动态加属性（`obj.extra = 1` 直接 AttributeError）；
+        ② 多继承时多个基类的槽位可能冲突；③ 需要弱引用要显式加 `__weakref__` 槽；
+        ④ pickle 默认走 `__dict__`，要自己写 `__getstate__/__setstate__`。
+
+        `dataclass(slots=True)` 的坑在于它**新建一个类**替换原类：
+        之前拿到的引用、闭包里捕获的类对象仍是没槽的旧类，
+        `type(x) is Old` 会变 False（`isinstance` 仍成立）。动态创建大量临时对象时建议手写 `__slots__`。
+    """),
+
+    Q("F9-4", 9, "代码", """
+        生成器里 `return value` 之后，这个 value 去哪了？`yield from` 怎么把它取出来？
+        手写循环的话要怎么写？
+    """, """
+        `return` 在生成器里不返回值给调用者，而是变成 **`StopIteration.value`**：
+
+        ```python
+        def gen():
+            yield 1
+            return "done"
+
+        it = gen()
+        next(it)                  # 1
+        try:
+            next(it)
+        except StopIteration as e:
+            print(e.value)        # done
+        ```
+
+        `yield from` 会把子生成器的返回值**当作整个表达式的值**：
+
+        ```python
+        def outer():
+            result = yield from gen()   # "done"
+            yield result
+        ```
+
+        这正是「生成器当协程用」的基础：`yield from` 同时转发 `send/throw/close`，
+        比手写 `for x in sub: yield x` 多做了异常与返回值的传递。
+    """),
+
+    Q("F10-4", 10, "设计", """
+        「IO 密集用线程、CPU 密集用进程」这条经验在什么情况下会失效？给出两条判断依据。
+    """, """
+        失效的两种典型：
+
+        1. **CPU 密集但主要时间在 C 扩展里**——numpy、hashlib、zlib、re 的重活会释放 GIL，
+           这时多线程照样并行，进程反而多付序列化成本。
+        2. **进程池的通信成本超过收益**——参数/返回值要 pickle，
+           大 DataFrame、打开的文件、数据库连接、lambda 都过不去；数据量大时进程反而更慢。
+
+        两条判断依据：
+        - **能不能 pickle、要不要共享状态**：要共享（计数器、缓存）→ 线程；
+          纯计算且输入输出可序列化 → 进程。
+        - **时间花在哪**：`cProfile` 看热点是否在 C 层；在 C 层就试线程，先测再选。
+
+        Python 3.13 起还有 free-threaded 构建（无 GIL）可试，但生态兼容仍是变量，别当默认。
+    """),
+
+    Q("F11-4", 11, "代码", """
+        `asyncio.gather(..., return_exceptions=True)` 与 `asyncio.TaskGroup` 的差别是什么？
+        其中一个任务抛异常时，另一个任务会怎样？
+    """, """
+        **gather 默认**：第一个异常立刻向上抛，**其余任务继续在后台跑**（不会自动取消）——
+        这是最常见的泄漏来源。`return_exceptions=True` 则把异常当结果收集，等全部结束。
+
+        **TaskGroup（3.11+）是结构化并发**：任一子任务失败 → 其余全部取消，退出 `with` 时
+        抛 `ExceptionGroup`；正常退出时保证所有任务都已结束。
+
+        ```python
+        async with asyncio.TaskGroup() as tg:
+            t1 = tg.create_task(fetch(1))
+            t2 = tg.create_task(fetch(2))
+        # 到这里两个任务一定都结束了；有异常会包成 ExceptionGroup 抛出
+        ```
+
+        选择标准：**「失败了要不要一起收手」**。互相独立、允许部分成功 → gather；
+        一个失败就没有意义（比如同时写两个表）→ TaskGroup。
+    """),
+
+    Q("F12-4", 12, "设计", """
+        描述符的 `__set_name__` 解决什么问题？用描述符做字段校验，比在 `__setattr__` 里写 if 好在哪？
+    """, """
+        `__set_name__(self, owner, name)` 在**类创建时**被调用，描述符借此知道自己绑到了哪个属性名，
+        不必在 `__init__` 里手传名字：
+
+        ```python
+        class Positive:
+            def __set_name__(self, owner, name):
+                self.name = "_" + name
+            def __get__(self, obj, objtype=None):
+                return getattr(obj, self.name, 0)
+            def __set__(self, obj, value):
+                if value <= 0:
+                    raise ValueError(f"{self.name} 必须为正")
+                setattr(obj, self.name, value)
+        ```
+
+        相比在 `__setattr__` 里堆 `if name == "price": ... elif name == "qty": ...`：
+        校验规则跟着字段走、可复用、加字段不用改一处大 if，也不会漏掉继承来的字段。
+        代价是描述符是**数据描述符**，优先级高于实例 `__dict__`，
+        调试时栈更深一层；字段很少时直接写 `__setattr__` 更省事。
+    """),
 ]
 
 
+
 def main():
-    assert len(DATA) == 36, len(DATA)
+    assert len(DATA) == 48, len(DATA)
     units = sorted({d["unit"] for d in DATA})
     assert units == list(range(1, 13)), units
     for u in units:
-        assert sum(1 for d in DATA if d["unit"] == u) == 3, u
+        assert sum(1 for d in DATA if d["unit"] == u) == 4, u
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(DATA, f, ensure_ascii=False, indent=2)
     print(f"写入 {OUT}：{len(DATA)} 题")

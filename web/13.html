@@ -51,6 +51,9 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-13-1">参考答案 13-1</a>
 <a class="lv3" href="#参考答案-13-2">参考答案 13-2</a>
 <a class="lv3" href="#参考答案-13-3">参考答案 13-3</a>
+<a class="lv3" href="#参考答案-13-4">参考答案 13-4</a>
+<a class="lv3" href="#参考答案-13-5">参考答案 13-5</a>
+<a class="lv3" href="#参考答案-13-6">参考答案 13-6</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
@@ -1245,6 +1248,104 @@ x=370 → check_edges=False（期望 False） PASS
 x=741 → check_edges=True（期望 True） PASS
 解释：用 &gt;= 和 &lt;= 是因为'刚好贴上边缘'也算到边；速度大于 1 时可能一步跨过精确坐标，用 == 会漏判。
 </code></pre>
+<hr>
+<h3 id="参考答案-13-4">参考答案 13-4</h3>
+<p>不用开窗口，把「算几个」这件事单独抽成函数就能验证——这也是这一章反复强调的：
+<strong>把逻辑从 pygame 里拿出来，才能不靠眼睛判断对错。</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># fleet_layout.py —— 只算数量，不画图</span>
+<span class="n">SCREEN_W</span><span class="p">,</span> <span class="n">SCREEN_H</span> <span class="o">=</span> <span class="mi">1200</span><span class="p">,</span> <span class="mi">800</span>
+<span class="n">ALIEN_W</span><span class="p">,</span> <span class="n">ALIEN_H</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">50</span>
+<span class="n">SHIP_H</span> <span class="o">=</span> <span class="mi">60</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">layout</span><span class="p">(</span><span class="n">per_row_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rows_delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="c1"># 和 Settings 里的算法一致：左右各留一个身位，纵向留 3 行给飞船和边距</span>
+    <span class="n">avail_x</span> <span class="o">=</span> <span class="n">SCREEN_W</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ALIEN_W</span>
+    <span class="n">per_row</span> <span class="o">=</span> <span class="n">avail_x</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ALIEN_W</span><span class="p">)</span> <span class="o">+</span> <span class="n">per_row_delta</span>
+    <span class="n">avail_y</span> <span class="o">=</span> <span class="n">SCREEN_H</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">ALIEN_H</span> <span class="o">-</span> <span class="n">SHIP_H</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">avail_y</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ALIEN_H</span><span class="p">)</span> <span class="o">+</span> <span class="n">rows_delta</span>
+    <span class="k">return</span> <span class="n">per_row</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">per_row</span> <span class="o">*</span> <span class="n">rows</span>
+
+
+<span class="n">before</span> <span class="o">=</span> <span class="n">layout</span><span class="p">()</span>
+<span class="n">after</span> <span class="o">=</span> <span class="n">layout</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"改动前：每行 </span><span class="si">{</span><span class="n">before</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> 个，</span><span class="si">{</span><span class="n">before</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> 行，共 </span><span class="si">{</span><span class="n">before</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> 个"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"改动后：每行 </span><span class="si">{</span><span class="n">after</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> 个，</span><span class="si">{</span><span class="n">after</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> 行，共 </span><span class="si">{</span><span class="n">after</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> 个"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"少了 </span><span class="si">{</span><span class="n">before</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">after</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> 个外星人（</span><span class="si">{</span><span class="p">(</span><span class="n">before</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">after</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">before</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>改动前：每行 9 个，5 行，共 45 个
+改动后：每行 8 个，4 行，共 32 个
+少了 13 个外星人（29%）
+</code></pre>
+<p>难度上不是「少了 13 个」这么简单：<strong>每行少 1 个意味着横向推进一轮的时间变长</strong>（整队横移到底再下移，
+行数少 1 则下移次数少），玩家被压到底部的总时长明显拉长，所以是「更容易」，不是「更简单」。
+写答案时要能说出这一层，而不是只报两个数字。</p>
+<h3 id="参考答案-13-5">参考答案 13-5</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># lives.py —— 把 _ship_hit 的逻辑抽成纯函数，撞 4 次看状态</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameStats</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_limit</span> <span class="o">=</span> <span class="n">limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="n">limit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ship_hit</span><span class="p">(</span><span class="n">stats</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 False 表示这一撞被忽略（游戏已经结束）。"""</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">stats</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">game_active</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="n">st</span> <span class="o">=</span> <span class="n">GameStats</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="n">ship_hit</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">hit</span><span class="si">}</span><span class="s2"> 次撞击：ships_left=</span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">ships_left</span><span class="si">}</span><span class="s2"> game_active=</span><span class="si">{</span><span class="n">st</span><span class="o">.</span><span class="n">game_active</span><span class="si">}</span><span class="s2">"</span>
+          <span class="o">+</span> <span class="p">(</span><span class="s2">""</span> <span class="k">if</span> <span class="n">ok</span> <span class="k">else</span> <span class="s2">"  ← 已经结束，不再变化"</span><span class="p">))</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>第 1 次撞击：ships_left=2 game_active=True
+第 2 次撞击：ships_left=1 game_active=True
+第 3 次撞击：ships_left=0 game_active=False
+第 4 次撞击：ships_left=0 game_active=False  ← 已经结束，不再变化
+</code></pre>
+<p>关键在第 3 条：<strong><code>ships_left</code> 减到 0 的那一次就要把 <code>game_active</code> 置 False</strong>，
+不能等下一次撞击。否则会出现「0 条命还能动」的一帧，玩家会以为程序没反应。
+真实项目里 <code>_ship_hit()</code> 还要在 <code>ships_left &gt; 0</code> 时清空子弹、重置飞船位置——那部分依赖 pygame 对象，
+但<strong>判断逻辑就是上面这 8 行</strong>，可以先脱开框架测通。</p>
+<h3 id="参考答案-13-6">参考答案 13-6</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># speedup.py —— 击落加速（封顶 6.0）+ 结束简报</span>
+<span class="n">bullet_speed</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">killed</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">ships_left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span>
+
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>          <span class="c1"># 模拟 10 帧，每 3 帧击落一个</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="k">if</span> <span class="n">f</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">killed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">bullet_speed</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">6.0</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">bullet_speed</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"帧 </span><span class="si">{</span><span class="n">f</span><span class="si">:</span><span class="s2">&gt;2</span><span class="si">}</span><span class="s2">：击落 </span><span class="si">{</span><span class="n">killed</span><span class="si">}</span><span class="s2"> 速度 </span><span class="si">{</span><span class="n">bullet_speed</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"本局击落 </span><span class="si">{</span><span class="n">killed</span><span class="si">}</span><span class="s2"> 个外星人、坚持了 </span><span class="si">{</span><span class="n">frames</span><span class="si">}</span><span class="s2"> 帧、剩余 </span><span class="si">{</span><span class="n">ships_left</span><span class="si">}</span><span class="s2"> 条命"</span><span class="p">)</span>
+</code></pre>
+<p>输出：</p>
+<pre><code class="language-text"><span class="cl">示例</span>帧  1：击落 0 速度 2.0
+帧  2：击落 0 速度 2.0
+帧  3：击落 1 速度 2.5
+帧  4：击落 1 速度 2.5
+帧  5：击落 1 速度 2.5
+帧  6：击落 2 速度 3.0
+帧  7：击落 2 速度 3.0
+帧  8：击落 2 速度 3.0
+帧  9：击落 3 速度 3.5
+帧 10：击落 3 速度 3.5
+本局击落 3 个外星人、坚持了 10 帧、剩余 3 条命
+</code></pre>
+<p>两个容易写错的点：
+- <strong>封顶用 <code>min(6.0, ...)</code>，不要写 <code>if speed &lt; 6: speed += 0.5</code></strong>——后者在 5.8 时会加到 6.3，冲过上限。
+- 简报里的「坚持了 Y 帧」要用<strong>结束时的帧号</strong>，不是循环变量重置后的 0；把 <code>frames</code> 提到循环外就是这个原因。</p>
 <hr>
 <h2 id="六-本单元验收自测">六、本单元验收自测</h2>
 <p><strong>1. 判断题</strong>：子弹列表可以用 <code>self.bullets.pop()</code> 直接删除，因为它就是个普通列表。</p>

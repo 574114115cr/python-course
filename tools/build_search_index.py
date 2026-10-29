@@ -23,6 +23,7 @@ import ppt_map                  # noqa: E402
 import bank_map                 # noqa: E402
 
 OUT = os.path.join(ROOT, "web", "searchdata.js")
+SITE_OUT = os.path.join(ROOT, "web", "site.js")
 
 
 def js(s):
@@ -129,11 +130,21 @@ def build():
         "[" + ",".join(js(str(x)) for x in it) + "]" for it in items)
     import json as _json
     site = _json.dumps(site_consts(), ensure_ascii=False)
+    # 拆成两个文件：
+    #   site.js  —— 只有规模数字（几百字节），每页同步加载，页面上的数量靠它；
+    #   searchdata.js —— 整个搜索索引（160+ KB），首页**首次聚焦搜索框才加载**。
+    # 以前合成一个同步 <script>，首页要等 166 KB 下载+解析完才能继续，
+    # 而是这些字节对「不搜索的人」完全没用。
+    site_js = ("/* 由 tools/build_search_index.py 生成，勿手改。 */\n"
+               "window.SITE=" + site + ";\n")
+    open(SITE_OUT, "w", encoding="utf-8").write(site_js)
+
     data = ("/* 由 tools/build_search_index.py 生成，勿手改。\n"
             "   条目：[标题, 副标题, 链接(相对 web/), 关键词] */\n"
-            "window.SITE=" + site + ";\n"
             "window.SEED=[\n" + lines + "\n];\n")
     open(OUT, "w", encoding="utf-8").write(data)
+    print(f"  site.js {len(site_js)//1024} KB（同步）/ "
+          f"searchdata.js {len(data)//1024} KB（懒加载）")
     return len(items), len(data)
 
 

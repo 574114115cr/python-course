@@ -10,7 +10,7 @@
  *   - 仅在 http(s) 下注册生效；file:// 直接打开便携版时注册会失败，属预期行为
  *   - 站点内容更新后必须升 V（缓存名），否则老用户拿不到新静态资源
  */
-var V = 'pycourse-v24';
+var V = 'pycourse-v25';
 
 var SHELL = [
   './',
@@ -20,6 +20,7 @@ var SHELL = [
   './web/lessons/index.html',
   './web/lessons/lessons.css',
   './web/css/unit.css',
+  './web/site.js',
   './web/searchdata.js',
   './web/review.html',
   './web/terms.html',

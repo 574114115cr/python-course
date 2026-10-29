@@ -48,6 +48,7 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
 <a class="lv2" href="#五-参考答案">五、参考答案</a>
+<a class="lv3" href="#参考答案-0-1">参考答案 0-1</a>
 <a class="lv3" href="#参考答案-0-2">参考答案 0-2</a>
 <a class="lv3" href="#参考答案-0-3-两种写法">参考答案 0-3（两种写法）</a>
 <a class="lv3" href="#参考答案-0-4">参考答案 0-4</a>
@@ -344,6 +345,24 @@ git<span class="w"> </span>log
 <p>要求：① 仓库根目录生成一个 <code>.git</code> 文件夹；② <code>git log</code> 能看到你那条提交记录（含哈希值、时间和说明）；③ 截图或复制保存输出作为本单元的作业凭证。</p>
 <hr>
 <h2 id="五-参考答案">五、参考答案</h2>
+<h3 id="参考答案-0-1">参考答案 0-1</h3>
+<p>终端里的输出随安装版本不同而不同，<strong>关键是确认版本号 ≥ 3.12</strong>，形如：</p>
+<pre><code class="language-text"><span class="cl">示例</span>$ python --version
+Python 3.12.4
+
+$ python -c "print('命令行直接执行')"
+命令行直接执行
+</code></pre>
+<p><code>-c</code> 的意思是 <strong>command</strong>：把后面引号里的那一段直接当作程序执行，不写文件、不留 <code>.py</code>。
+它最适合「只验证一句话」的场景——比如确认装对了、确认某个库能导入：</p>
+<pre><code class="language-text"><span class="cl">示例</span>$ python -c "import sys; print(sys.version_info[:2])"
+(3, 12)
+</code></pre>
+<p>三条自查：
+- 如果是 <code>Python 3.11.x</code> 或更低 → 本课程要求 3.12+（<code>removeprefix</code>、更好的错误信息都用得上），先升级。
+- 如果报 <code>'python' 不是内部或外部命令</code> → 装的时候没勾「Add Python to PATH」，重装或手动加环境变量。
+- 如果输出的是 <code>Python 2.7</code> → 你机器上有两套 Python，用 <code>python3 --version</code> 确认，后面统一用 <code>python3</code>。</p>
+<hr>
 <h3 id="参考答案-0-2">参考答案 0-2</h3>
 <pre><code class="language-python"><span class="cl">Python</span><span class="c1"># me.py —— 认识变量与四种基本类型</span>
 

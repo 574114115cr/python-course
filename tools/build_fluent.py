@@ -51,6 +51,13 @@ BOOK = json.load(open(os.path.join(SRC, "bookmap.json"), encoding="utf-8"))
 
 # 由 main 用 fluent_syllabus.totals() 填：两种配速总周数（侧栏/首页/搜索共用）
 SYL_TXT = "标准 12 周 / 轻量 24 周"
+
+# 题库数量一律由 bank.json 推出来，别再写死（写死过 36，加题后要改 8 处）
+BANK = json.load(open(os.path.join(SRC, "bank.json"), encoding="utf-8"))
+BANK_N = len(BANK)
+BANK_PER_UNIT = {}
+for _q in BANK:
+    BANK_PER_UNIT[_q["unit"]] = BANK_PER_UNIT.get(_q["unit"], 0) + 1
 SYL_RANGE = "12–24"
 
 # 24 章「设计取舍」长文 → 单元映射（side_block / 课节页侧栏要用，构建早期就加载）
@@ -912,7 +919,7 @@ def side_block(unit, lesson_no=None, toc=""):
 <div class="sblk rel">
   <h4>配套入口</h4>
   <a href="bank.html#u{unit['no']}"><span class="k">题库</span>
-    <span class="v">本单元 3 题 · 全站 36 题</span></a>
+    <span class="v">本单元 {BANK_PER_UNIT.get(unit['no'], 0)} 题 · 全站 {BANK_N} 题</span></a>
   <a href="gates.html"><span class="k">关卡</span>
     <span class="v">阶段验收清单</span></a>
   <a href="ppt/u/{unit['no']:02d}.html"><span class="k">课件</span>
@@ -1157,12 +1164,12 @@ def build_lessons(units):
 
 def build_bank(units):
     data = json.load(open(os.path.join(SRC, "bank.json"), encoding="utf-8"))
-    if len(data) != 36:
-        raise SystemExit(f"题库应有 36 题，实际 {len(data)} 题")
+    if len(data) != BANK_N:
+        raise SystemExit(f"题库应有 {BANK_N} 题，实际 {len(data)} 题")
     for u in units:
         n = sum(1 for q in data if q["unit"] == u["no"])
-        if n != 3:
-            raise SystemExit(f"单元 {u['no']} 有 {n} 题，应为 3 题")
+        if n < 3:
+            raise SystemExit(f"单元 {u['no']} 只有 {n} 题，每单元至少 3 题")
     cards = []
     for q in data:
         u = q["unit"]
@@ -1179,12 +1186,12 @@ def build_bank(units):
     body = f"""<div class="wrap">
   <div class="hero" style="padding:38px 40px">
     <div class="bdg">BANK</div>
-    <h1>36 题 · 从「看懂」到「写得出」</h1>
-    <p>每个单元 3 题：1 道机制题、1 道代码题、1 道设计题。先自己写，再展开答案对照；
+    <h1>{BANK_N} 题 · 从「看懂」到「写得出」</h1>
+    <p>每个单元 {BANK_PER_UNIT[1]} 题：机制 / 代码 / 设计各一，另有一道进阶题。先自己写，再展开答案对照；
     标记「待复习」的题可以单独筛出来集中二刷。</p>
   </div>
   <div class="fbar" id="fb">
-    <button class="on" data-k="all">全部 36</button>
+    <button class="on" data-k="all">全部 {BANK_N}</button>
     <button data-k="todo">待复习</button>
     <button data-k="master">已掌握</button>
     <button data-k="u1">单元 1–3</button>
@@ -1199,7 +1206,7 @@ def build_bank(units):
     <button data-lv="代码">代码 12</button>
     <button data-lv="设计">设计 12</button>
   </div>
-  <div class="hashnote" id="hn"><b id="hnT"></b><a href="bank.html">查看全部 36 题</a></div>
+  <div class="hashnote" id="hn"><b id="hnT"></b><a href="bank.html">查看全部 {BANK_N} 题</a></div>
   <div id="list">{''.join(cards)}</div>
   <p class="qempty" id="qempty">没有符合条件的题目</p>
 </div>
@@ -1296,7 +1303,7 @@ def build_bank(units):
   apply();
 })();
 </script>"""
-    out = page("题库 · 36 题", body + bank_js, where="web")
+    out = page(f"题库 · {BANK_N} 题", body + bank_js, where="web")
     open(os.path.join(WEB, "bank.html"), "w", encoding="utf-8").write(out)
 
 
@@ -1396,7 +1403,7 @@ SLIDES = [
         "公开函数写全类型注解，mypy 无报错",
         "异常只捕获能处理的类型，不写裸 except",
         "复杂分支用数据驱动或模式匹配，不堆 if"]),
-    ("题库设计", "36 题：机制 / 代码 / 设计", [
+    ("题库设计", f"{BANK_N} 题：机制 / 代码 / 设计", [
         "机制题：解释「为什么」", "代码题：手写可运行片段",
         "设计题：给定需求选型并说明理由"]),
     ("两个关卡", "验收而不是考试", [
@@ -1514,7 +1521,7 @@ function set(id, txt, bar, p, total) {
   document.getElementById(bar).style.width = (p / total * 100) + '%';
 }
 set('tL', '已学 ' + ln + ' / 48', 'pL', ln, 48);
-set('tB', '掌握 ' + bn + ' / 36', 'pB', bn, 36);
+set('tB', '掌握 ' + bn + ' / __BANKN__', 'pB', bn, __BANKN__);
 
 var un = 0;
 for (var u = 1; u <= 12; u++) {
@@ -1869,7 +1876,7 @@ def build_home(units):
     idx += [
         {"t": "课程目录 · 48 节课", "s": "按单元排列的课节索引",
          "u": "web/lessons/index.html", "k": "页面"},
-        {"t": "题库 · 36 题", "s": "答案折叠、按单元筛选",
+        {"t": f"题库 · {BANK_N} 题", "s": "答案折叠、按单元筛选",
          "u": "web/bank.html", "k": "页面"},
         {"t": "关卡验收", "s": "两个阶段共 24 条",
          "u": "web/gates.html", "k": "页面"},
@@ -1949,7 +1956,7 @@ def build_home(units):
     <div class="drow"><span class="dlab">单元</span><div class="dbar"><i id="pU"></i></div>
       <span class="dval" id="tU">0 / 12</span></div>
     <div class="drow"><span class="dlab">题库</span><div class="dbar"><i id="pB"></i></div>
-      <span class="dval" id="tB">0 / 36</span></div>
+      <span class="dval" id="tB">0 / {BANK_N}</span></div>
     <div class="dfoot"><a class="rbtn" id="rlink" href="web/lessons/l01.html">开始第 1 课</a>
       <span id="rtxt">按顺序学，每节 90 分钟</span>
       <span class="spacer"></span>
@@ -1969,7 +1976,7 @@ def build_home(units):
   <div class="q">
     <a href="web/lessons/index.html"><b>课程目录</b><span>48 节课，按单元排列</span></a>
     <a href="web/syllabus.html"><b>总课表</b><span>{SYL_TXT} · 关卡在第几周</span></a>
-    <a href="web/bank.html"><b>题库</b><span>36 题，答案折叠</span></a>
+    <a href="web/bank.html"><b>题库</b><span>{BANK_N} 题，答案折叠</span></a>
     <a href="web/gates.html"><b>关卡验收</b><span>两个阶段，逐条勾选</span></a>
     <a href="web/ppt/index.html"><b>大纲课件</b><span>18 页，键盘翻页</span></a>
     <a href="web/ppt/u/index.html"><b>逐节课件</b><span>12 套 · 每套 10 页</span></a>
@@ -1991,7 +1998,7 @@ def build_home(units):
 </div>"""
     js = ("<script>\n(function(){\n" + HOME_JS
           .replace("__IDX__", json.dumps(idx, ensure_ascii=False))
-          .replace("__LESSONS__", json.dumps(lesson_js, ensure_ascii=False))
+          .replace("__LESSONS__", json.dumps(lesson_js, ensure_ascii=False)).replace("__BANKN__", str(BANK_N))
           + "\n})();\n</script>")
     out = page("《流畅的 Python》精读课", body, where="home", extra_body=js)
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(out)
@@ -2117,7 +2124,7 @@ def build_coverage(units):
     <div class="cb"><b>可检索</b><p>全站搜索（Ctrl+K）+ 术语索引 + 本覆盖表。
       原书靠纸质索引，这里靠关键词与课号。</p></div>
     <div class="cb"><b>可验收</b><p>每节有可验证的动手项，每单元有勾选清单，两章一个关卡，
-      题库 36 题带折叠答案。</p></div>
+      题库 {BANK_N} 题带折叠答案。</p></div>
     <div class="cb"><b>复习排程</b><p>按艾宾浩斯遗忘曲线自动排 6 轮复习（学完当天 / 1 / 3 / 7 / 15 / 30 天），
       <a href="review.html">复习计划页</a>给出今日待复习、逾期清单与记忆保持率估算。</p></div>
     <div class="cb"><b>实跑基准</b><p>35 种写法用 <code>timeit</code> best-of-N 与 <code>tracemalloc</code> 在同一台机器上对比，
