@@ -67,6 +67,13 @@ list-style:none}
 .det summary::before{content:"▸ ";font-size:12px}
 .det[open] summary::before{content:"▾ "}
 .fld{display:flex;gap:10px;margin:8px 0;font-size:14px;align-items:baseline}
+.fld.scb{display:block;background:#16232e;border-radius:10px;padding:12px 14px;margin:14px 0}
+.fld.scb>b{display:block;color:#9fd0ff;font-size:12.5px;letter-spacing:.5px;margin-bottom:8px}
+.scl{display:grid;gap:8px}
+.sc{display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.sc code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#e8f2ff;background:#0f1a23;border:1px solid #24384a;border-radius:6px;padding:6px 9px;overflow-x:auto;white-space:pre}
+.sc span{font-size:12px;color:#8fb3cc;padding-left:2px}
+@media(max-width:620px){.sc code{font-size:11.5px}}
 .fld b{flex:0 0 84px;font-size:12.5px;color:#fff;background:var(--p1);
 border-radius:5px;text-align:center;padding:2px 0;font-weight:700}
 .fld.warn b{background:var(--p3)}
@@ -153,6 +160,7 @@ flex-wrap:wrap;gap:8px}.hero,.prog,.wrap,.after{padding:0 14px}}
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"恭喜猜对了！答案是 </span><span class="si">{</span><span class="n">secret</span><span class="si">}</span><span class="s2">，你一共猜了 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> 次"</span><span class="p">)</span>
         <span class="k">break</span>
 </code></pre></details>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>python -m py_compile guess.py</code><span>无任何输出 = 语法通过</span></div><div class='sc'><code>python guess.py</code><span>能连玩 3 轮，其中一次猜对后退出码为 0</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-1-0"><span>能一次运行成功，没有语法错误</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-1-1"><span>输入非数字不会崩溃</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-1-2"><span>能通过输入 <code>q</code> 退出</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-1-3"><span>猜测次数统计正确</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">2</span><h3>手写一个含继承的类</h3></div>
@@ -228,6 +236,7 @@ flex-wrap:wrap;gap:8px}.hero,.prog,.wrap,.after{padding:0 14px}}
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"重写的方法：ElectricCar.fuel_cost 是 Car.fuel_cost 吗？"</span>
       <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ElectricCar</span><span class="o">.</span><span class="n">fuel_cost</span><span class="w"> </span><span class="ow">is</span><span class="w"> </span><span class="n">Car</span><span class="o">.</span><span class="n">fuel_cost</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></details>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>python -c &quot;from vehicle import ElectricCar as E; print(E(&#x27;比亚迪&#x27;,&#x27;汉&#x27;,2024).describe())&quot;</code><span>打印一行描述（不是报错）</span></div><div class='sc'><code>python -c &quot;from vehicle import ElectricCar as E; print([c.__name__ for c in E.__mro__])&quot;</code><span>列表里能看到父类名字，说明真的继承了</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-2-0"><span>至少三层（基类 + 两个子类）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-1"><span>子类的 <code>__init__</code> 调用了 <code>super().__init__()</code></span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-2"><span>至少一个方法被重写，且重写后行为确实不同</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-3"><span>能用 <code>isinstance</code> 验证继承关系</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-2-4"><span>能说明「为什么用继承而不是复制粘贴」</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">3</span><h3>用 pytest 写 3 条测试并全部通过</h3></div>
@@ -286,6 +295,7 @@ flex-wrap:wrap;gap:8px}.hero,.prog,.wrap,.after{padding:0 14px}}
 
 <span class="o">=============================</span> <span class="mi">4</span> <span class="n">passed</span> <span class="ow">in</span> <span class="mf">0.31</span><span class="n">s</span> <span class="o">=============================</span>
 </code></pre></details>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>python -m pytest -q</code><span>结尾是 3 passed（不是 no tests ran）</span></div><div class='sc'><code>python -m pytest -q --collect-only | tail -3</code><span>能列出 3 个用例名</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-3-0"><span>文件名 <code>test_xxx.py</code>、函数名 <code>test_xxx</code>（不写 <code>test_</code> 就不会被执行）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-1"><span>测试里断言了<strong>具体数值</strong>，不是只断言 <code>not None</code></span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-2"><span>至少有一条测试覆盖<strong>边界情况</strong>（0、空、异常输入）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-3"><span><code>pytest -v</code> 输出显示全部 passed</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-3-4"><span>能解释每条测试在验证什么</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">4</span><h3>修复 IndentationError / NameError</h3></div>
@@ -407,6 +417,7 @@ flex-wrap:wrap;gap:8px}.hero,.prog,.wrap,.after{padding:0 14px}}
 <span class="nb">print</span><span class="p">(</span><span class="n">average</span><span class="p">)</span>      <span class="c1"># 输出 2.0</span>
 </code></pre></div>
   
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>python -m py_compile broken.py</code><span>报错信息里带行号，能对上你改的那一行</span></div><div class='sc'><code>python broken.py</code><span>修完后正常输出，不再有 traceback</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate1-v1-4-0"><span>能不看答案就找出 3 个错误</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-1"><span>修复后能正确输出期望结果</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-2"><span>能说出每个错误的<strong>类型</strong>（SyntaxError / IndentationError / NameError）</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-3"><span>能解释"先赋值后使用"这条规则</span></label><label class="ck"><input type="checkbox" data-k="gate1-v1-4-4"><span>能举出自己写代码时遇到过的同类错误</span></label></div>
 </section>
 </main>

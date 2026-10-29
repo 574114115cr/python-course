@@ -132,6 +132,21 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
 @page{margin:14mm}
 
 @media(max-width:700px){.wrap{padding:0 14px 60px}.hero{padding:30px 22px}.hero h1{font-size:27px}}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 </head>
 <body>
@@ -264,7 +279,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="4"
                   aria-label="标记第 4 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="5" data-t="单元 0 验收复盘 确认环境、终端、Git、目录结构四项都掌握 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="5" data-t="单元 0 验收复盘 确认环境、终端、Git、目录结构四项都掌握 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：&#x27;python&#x27; 不是内部或外部命令 错误 2：按 3.12 的教程写，removeprefix 却报 AttributeError 错误 3：pip install requests 成功，import requests 却 ModuleNotFoundError 错误 4：改了代码，运行结果没变 错误 5：git checkout 之后代码没了 本单元小结与产出检查">
           <a class="lc-a" href="05.html">
           <div class="lc-h">
             <span class="lc-n">05</span>
@@ -340,7 +355,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="8"
                   aria-label="标记第 8 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="9" data-t="单元 1 验收复盘 确认四种类型、命名规范、类型转换都过关 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="9" data-t="单元 1 验收复盘 确认四种类型、命名规范、类型转换都过关 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：SyntaxError: unterminated string literal 错误 2：int(&quot;3.9&quot;) 报 ValueError 错误 3：bool(&quot;0&quot;) 竟然是 True 错误 4：if x = 1: 语法错误 错误 5：变量名 class / 2myvar 报错 本单元小结与产出检查">
           <a class="lc-a" href="09.html">
           <div class="lc-h">
             <span class="lc-n">09</span>
@@ -416,7 +431,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="12"
                   aria-label="标记第 12 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="13" data-t="单元 2 验收复盘 确认增删改查、引用共享、排序都过关 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="13" data-t="单元 2 验收复盘 确认增删改查、引用共享、排序都过关 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：IndexError: list index out of range 错误 2：空列表上 x[-1] 也崩 错误 3：cars = cars.sort() 之后列表变成 None 错误 4：b = a 之后改 b，a 也变了 错误 5：cars.remove(&quot;bmw&quot;) 只删掉一个 本单元小结与产出检查">
           <a class="lc-a" href="13.html">
           <div class="lc-h">
             <span class="lc-n">13</span>
@@ -508,7 +523,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="17"
                   aria-label="标记第 17 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="18" data-t="单元 3 验收复盘 确认循环、range、推导式、切片、元组都过关 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="18" data-t="单元 3 验收复盘 确认循环、range、推导式、切片、元组都过关 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：边 for 边 remove，元素漏删 错误 2：切片越界却不报错 错误 3：for i in range(len(x)) 里 append 错误 4：sorted(x, reverse=True) 与 x[::-1] 混用 错误 5：t[0] = 1 报 TypeError 本单元小结与产出检查">
           <a class="lc-a" href="18.html">
           <div class="lc-h">
             <span class="lc-n">18</span>
@@ -584,7 +599,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="21"
                   aria-label="标记第 21 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="22" data-t="动手实战、答案与验收 独立完成单元 4 练习，确认条件判断全部过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 4-1 参考答案 4-2 参考答案 4-3 参考答案 4-4 参考答案 4-5 参考答案 4-6 参考答案 4-7 参考答案 4-8 参考答案 4-9 参考答案 4-10 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="22" data-t="动手实战、答案与验收 独立完成单元 4 练习，确认条件判断全部过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 4-1 参考答案 4-2 参考答案 4-3 参考答案 4-4 参考答案 4-5 参考答案 4-6 参考答案 4-7 参考答案 4-8 参考答案 4-9 参考答案 4-10 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：IndentationError: expected an indented block 错误 2：if x = 1: 或 elif 写成 else if 错误 3：if answer == &quot;Yes&quot; 对 &quot;yes&quot; 不成立 错误 4：elif 顺序写反，永远进第一个分支 错误 5：if items: 判空却把 0 当成空 本单元小结与产出检查">
           <a class="lc-a" href="22.html">
           <div class="lc-h">
             <span class="lc-n">22</span>
@@ -676,7 +691,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="26"
                   aria-label="标记第 26 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="27" data-t="单元 5 验收复盘 确认字典增删改查、三种遍历、嵌套都过关 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="27" data-t="单元 5 验收复盘 确认字典增删改查、三种遍历、嵌套都过关 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：KeyError: &#x27;name&#x27; 错误 2：遍历字典时增删键 → RuntimeError 错误 3：拿列表当键 → TypeError: unhashable type 错误 4：以为 d.keys() 是列表，能下标 错误 5：嵌套字典层层 []，中间缺一层就崩 本单元小结与产出检查">
           <a class="lc-a" href="27.html">
           <div class="lc-h">
             <span class="lc-n">27</span>
@@ -768,7 +783,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="31"
                   aria-label="标记第 31 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="32" data-t="单元 6 验收复盘 确认 input 转换、循环控制、交互骨架都过关 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="32" data-t="单元 6 验收复盘 确认 input 转换、循环控制、交互骨架都过关 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：input() 拿到的数字当数字用 错误 2：while 忘了改条件，死循环 错误 3：while &quot;x&quot; in items: items.remove(&quot;x&quot;) 写成 if 错误 4：break 只跳出最内层 错误 5：while True: 里没留退出路径 本单元小结与产出检查">
           <a class="lc-a" href="32.html">
           <div class="lc-h">
             <span class="lc-n">32</span>
@@ -1108,7 +1123,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="50"
                   aria-label="标记第 50 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="51" data-t="动手实战、答案与验收 独立完成单元 9 练习，确认文件与异常都过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 9-1 参考答案 9-2 参考答案 9-3 参考答案 9-4 参考答案 9-5 参考答案 9-6 参考答案 9-7 参考答案 9-8 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="51" data-t="动手实战、答案与验收 独立完成单元 9 练习，确认文件与异常都过关 四、动手练习 基础档 进阶档 五、参考答案 参考答案 9-1 参考答案 9-2 参考答案 9-3 参考答案 9-4 参考答案 9-5 参考答案 9-6 参考答案 9-7 参考答案 9-8 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：open() 之后忘了 close() 错误 2：UnicodeDecodeError: &#x27;gbk&#x27; codec can&#x27;t decode 错误 3：except: 裸捕获吞掉了所有 bug 错误 4：相对路径在人家的机器上找不到文件 错误 5：json.load() 在空文件上崩 本单元小结与产出检查">
           <a class="lc-a" href="51.html">
           <div class="lc-h">
             <span class="lc-n">51</span>
@@ -1200,7 +1215,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="55"
                   aria-label="标记第 55 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="56" data-t="动手实战、答案与验收 独立完成单元 10 练习，能为函数写出完整测试套件 四、动手练习 基础档 进阶档 五、参考答案 参考答案 10-1 参考答案 10-2 参考答案 10-3 参考答案 10-4 参考答案 10-5 参考答案 10-6 参考答案 10-7 参考答案 10-8 七、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="56" data-t="动手实战、答案与验收 独立完成单元 10 练习，能为函数写出完整测试套件 四、动手练习 基础档 进阶档 五、参考答案 参考答案 10-1 参考答案 10-2 参考答案 10-3 参考答案 10-4 参考答案 10-5 参考答案 10-6 参考答案 10-7 参考答案 10-8 七、本单元验收自测 八、常见错误清单（务必逐条自查） 错误 1：pytest 报 no tests ran 错误 2：断言写反 错误 3：浮点数直接用 == 错误 4：测试之间互相依赖 错误 5：只测「正常路径」 本单元小结与产出检查">
           <a class="lc-a" href="56.html">
           <div class="lc-h">
             <span class="lc-n">56</span>
@@ -1340,7 +1355,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="63"
                   aria-label="标记第 63 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="64" data-t="结业检查与下一阶段 确认四条验收是否全通过，明确阶段 1 的能力边界与下一步 七、本单元验收自测（综合 10 题） 八、结业检查与下一阶段 完成情况自查 如果四条验收全部通过 如果某条没通过">
+        <div class="lc" data-no="64" data-t="结业检查与下一阶段 确认四条验收是否全通过，明确阶段 1 的能力边界与下一步 七、本单元验收自测（综合 10 题） 九、常见错误清单（务必逐条自查） 错误 1：报错只看第一行 错误 2：一次写 200 行再运行 错误 3：靠注释掉代码来找 bug 错误 4：把「能跑」当成「对了」 错误 5：项目换台机器就跑不起来 八、结业检查与下一阶段 完成情况自查 如果四条验收全部通过 如果某条没通过">
           <a class="lc-a" href="64.html">
           <div class="lc-h">
             <span class="lc-n">64</span>
@@ -1524,7 +1539,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="73"
                   aria-label="标记第 73 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="74" data-t="实战、答案与验收复盘 独立完成单元 13 练习，能讲清每处遍历删除的写法 四、动手练习 基础档 进阶档 五、参考答案 参考答案 13-1 参考答案 13-2 参考答案 13-3 参考答案 13-4 参考答案 13-5 参考答案 13-6 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="74" data-t="实战、答案与验收复盘 独立完成单元 13 练习，能讲清每处遍历删除的写法 四、动手练习 基础档 进阶档 五、参考答案 参考答案 13-1 参考答案 13-2 参考答案 13-3 参考答案 13-4 参考答案 13-5 参考答案 13-6 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：碰撞检测前没更新位置 错误 2：遍历 bullets 时 remove → 漏删或跳过 错误 3：外星人出屏不删，内存一直涨 错误 4：新建的 sprite 没 add 进 group，画不出来 错误 5：边界判断没减飞船宽度，卡在屏幕外 本单元小结与产出检查">
           <a class="lc-a" href="74.html">
           <div class="lc-h">
             <span class="lc-n">74</span>
@@ -1844,7 +1859,7 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
           <button class="lc-ck" type="button" data-no="90"
                   aria-label="标记第 90 节课完成">标记完成</button>
         </div>
-        <div class="lc" data-no="91" data-t="Hacker News API 与动手实战 掌握「先拿列表再取详情」的两段式调用；给 API 调用加容错 四、动手练习 基础档 进阶档 五、参考答案 参考答案 17-1 参考答案 17-2 参考答案 17-3 参考答案 17-4 六、本单元验收自测 本单元小结与产出检查">
+        <div class="lc" data-no="91" data-t="Hacker News API 与动手实战 掌握「先拿列表再取详情」的两段式调用；给 API 调用加容错 四、动手练习 基础档 进阶档 五、参考答案 参考答案 17-1 参考答案 17-2 参考答案 17-3 参考答案 17-4 六、本单元验收自测 七、常见错误清单（务必逐条自查） 错误 1：不检查状态码就 .json() 错误 2：没设超时，程序一直挂着 错误 3：只取了第一页 错误 4：直接 data[&quot;items&quot;] → 偶尔 KeyError 错误 5：被 403/429 拦了还继续打 本单元小结与产出检查">
           <a class="lc-a" href="91.html">
           <div class="lc-h">
             <span class="lc-n">91</span>

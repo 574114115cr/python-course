@@ -116,6 +116,13 @@ list-style:none}
 .det summary::before{content:"▸ ";font-size:12px}
 .det[open] summary::before{content:"▾ "}
 .fld{display:flex;gap:10px;margin:8px 0;font-size:14px;align-items:baseline}
+.fld.scb{display:block;background:#16232e;border-radius:10px;padding:12px 14px;margin:14px 0}
+.fld.scb>b{display:block;color:#9fd0ff;font-size:12.5px;letter-spacing:.5px;margin-bottom:8px}
+.scl{display:grid;gap:8px}
+.sc{display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.sc code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#e8f2ff;background:#0f1a23;border:1px solid #24384a;border-radius:6px;padding:6px 9px;overflow-x:auto;white-space:pre}
+.sc span{font-size:12px;color:#8fb3cc;padding-left:2px}
+@media(max-width:620px){.sc code{font-size:11.5px}}
 .fld b{flex:0 0 84px;font-size:12.5px;color:#fff;background:var(--p1);
 border-radius:5px;text-align:center;padding:2px 0;font-weight:700}
 .fld.warn b{background:var(--p3)}
@@ -218,6 +225,45 @@ def checklist_to_inputs(md_text):
     return items
 
 
+# 每张卡片配「自查命令」：先跑、再勾。关卡是自查清单，不是考试——
+# 但「勾完就过」太容易自我放水，所以每条给能复制粘贴的命令 + 期望输出。
+SELFCHECK = {
+    (1, 1): [("python -m py_compile guess.py", "无任何输出 = 语法通过"),
+             ("python guess.py", "能连玩 3 轮，其中一次猜对后退出码为 0")],
+    (1, 2): [("python -c \"from vehicle import ElectricCar as E; "
+              "print(E('比亚迪','汉',2024).describe())\"", "打印一行描述（不是报错）"),
+             ("python -c \"from vehicle import ElectricCar as E; "
+              "print([c.__name__ for c in E.__mro__])\"", "列表里能看到父类名字，说明真的继承了")],
+    (1, 3): [("python -m pytest -q", "结尾是 3 passed（不是 no tests ran）"),
+             ("python -m pytest -q --collect-only | tail -3", "能列出 3 个用例名")],
+    (1, 4): [("python -m py_compile broken.py", "报错信息里带行号，能对上你改的那一行"),
+             ("python broken.py", "修完后正常输出，不再有 traceback")],
+    (2, 1): [("git remote -v", "有 origin 地址（说明真推上去了）"),
+             ("git status --short", "空 = 全部已提交"),
+             ("ls README.md requirements.txt", "两个文件都存在")],
+    (2, 2): [("curl -I https://你的域名/", "HTTP/2 200 或 301"),
+             ("curl -s https://你的域名/no-such-page | head -5", "返回自定义 404 页面，不是 Django 调试页")],
+    (2, 3): [("python -m pytest -q --collect-only | tail -5", "用例名是你自己起的函数名"),
+             ("python -m pytest -q", "全部 passed；删掉一个断言应该变红（证明测的是自己的代码）")],
+    (2, 4): [("python -m cProfile -s cumtime main.py 2>&1 | head -15", "能说出耗时最多的三个函数"),
+             ("python -m trace --count -m main 2>&1 | tail -5", "能看到哪些行被执行过")],
+    (2, 5): [("grep -c '^##' README.md", "≥3：说明写了「做什么 / 怎么跑 / 还能怎么扩展」"),
+             ("python -c \"import json;print(len(json.load(open('data.json'))))\"",
+              "能报出项目真实数据规模，而不是「大概几十条」")],
+}
+
+
+def _selfcheck(gate_n, idx):
+    """渲染「自查命令」块；没有配置的卡片返回空串。"""
+    items = SELFCHECK.get((gate_n, idx))
+    if not items:
+        return ""
+    rows = "".join(f"<div class='sc'><code>{html.escape(c)}</code>"
+                   f"<span>{html.escape(e)}</span></div>" for c, e in items)
+    return (f"<div class='fld scb'><b>自查命令（跑通再勾）</b>"
+            f"<div class='scl'>{rows}</div></div>")
+
+
 def card_checklist(idx, title, body, key, gate):
     """关卡 1：要求 + 必须包含 + 参考实现（折叠）+ 自检清单（可勾选）。"""
     checks = checklist_to_inputs(body)
@@ -243,6 +289,7 @@ def card_checklist(idx, title, body, key, gate):
   <div class="ch"><span class="cn">{idx}</span><h3>{inline(title)}</h3></div>
   <div class="bd">{prose}</div>
   {code}
+  {_selfcheck(gate["n"], idx)}
   {('<div class="cks">' + ck + '</div>') if checks else ''}
 </section>"""
 
@@ -271,6 +318,7 @@ def card_evidence(idx, title, body, key, gate):
   <div class="ch"><span class="cn">{idx}</span><h3>{inline(title)}</h3></div>
   <div class="bd">{tail}</div>
   {''.join(rows)}
+  {_selfcheck(gate["n"], idx)}
   <div class="cks">{ck}</div>
 </section>"""
 

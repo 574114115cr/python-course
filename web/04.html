@@ -61,6 +61,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-4-9">参考答案 4-9</a>
 <a class="lv3" href="#参考答案-4-10">参考答案 4-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-indentationerror-expected-an-indent">错误 1：IndentationError: expected an indented block</a>
+<a class="lv3" href="#错误-2-if-x-1-或-elif-写成-else-if">错误 2：if x = 1: 或 elif 写成 else if</a>
+<a class="lv3" href="#错误-3-if-answer-yes-对-yes-不成立">错误 3：if answer == &quot;Yes&quot; 对 &quot;yes&quot; 不成立</a>
+<a class="lv3" href="#错误-4-elif-顺序写反-永远进第一个分支">错误 4：elif 顺序写反，永远进第一个分支</a>
+<a class="lv3" href="#错误-5-if-items-判空却把-0-当成空">错误 5：if items: 判空却把 0 当成空</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -959,6 +965,28 @@ transition:opacity .18s;z-index:60}
 <p><strong>要点</strong>：优先用 <code>is None</code>。<code>None</code> 是表示"没有值"的唯一对象，用 <code>is</code> 表达的是"身份/状态"判断，语义准确且速度快。如果某个自定义类重写了 <code>__eq__</code> 允许自己等于 <code>None</code>，<code>== None</code> 就会意外成立；而 <code>is None</code> 永远只在真的是 <code>None</code> 时成立。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-indentationerror-expected-an-indent">错误 1：<code>IndentationError: expected an indented block</code></h3>
+<p><strong>症状</strong>：<code>if</code> 后面那行没缩进。
+<strong>原因</strong>：Python 用缩进表示代码块，<code>if</code>/<code>for</code>/<code>def</code> 后面必须缩进一层。
+<strong>改法</strong>：统一 4 个空格（不要混 Tab）；VS Code 里开 <code>Render Whitespace</code> 能看见空格与 Tab 的区别。</p>
+<h3 id="错误-2-if-x-1-或-elif-写成-else-if">错误 2：<code>if x = 1:</code> 或 <code>elif</code> 写成 <code>else if</code></h3>
+<p><strong>症状</strong>：<code>SyntaxError</code>。
+<strong>原因</strong>：条件用 <code>==</code>；Python 没有 <code>else if</code>，是 <code>elif</code>。
+<strong>改法</strong>：<code>if x == 1:</code>；多分支写 <code>if / elif / else</code>。</p>
+<h3 id="错误-3-if-answer-yes-对-yes-不成立">错误 3：<code>if answer == "Yes"</code> 对 <code>"yes"</code> 不成立</h3>
+<p><strong>症状</strong>：用户输入 <code>yes</code> 却走了 else。
+<strong>原因</strong>：字符串比较区分大小写。
+<strong>改法</strong>：比较前统一 <code>answer.strip().lower()</code>；需要更宽松就用 <code>answer.lower() in ("y", "yes")</code>。</p>
+<h3 id="错误-4-elif-顺序写反-永远进第一个分支">错误 4：<code>elif</code> 顺序写反，永远进第一个分支</h3>
+<p><strong>症状</strong>：分数 95 只拿到「及格」。
+<strong>原因</strong>：<code>if score &gt; 60: ... elif score &gt; 90: ...</code>——90 分也满足 <code>&gt; 60</code>，第一个分支就截住了。
+<strong>改法</strong>：从窄到宽排：先 <code>&gt;= 90</code>，再 <code>&gt;= 60</code>，最后 <code>else</code>。</p>
+<h3 id="错误-5-if-items-判空却把-0-当成空">错误 5：<code>if items:</code> 判空却把 0 当成空</h3>
+<p><strong>症状</strong>：数量是 0 时走了「没有数据」分支，但 0 是合法值。
+<strong>原因</strong>：<code>0</code>、<code>""</code>、<code>[]</code>、<code>None</code> 在条件里都为假。
+<strong>改法</strong>：要区分「没有」和「是 0」就显式判：<code>if items is None:</code>、<code>if len(items) == 0:</code>。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能不查资料写出完整的 <code>if / elif / else</code> 结构（不漏冒号、不漏缩进）</li>
@@ -1021,6 +1049,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

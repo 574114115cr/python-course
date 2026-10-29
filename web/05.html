@@ -60,6 +60,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-5-9">参考答案 5-9</a>
 <a class="lv3" href="#参考答案-5-10">参考答案 5-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-keyerror-name">错误 1：KeyError: &#x27;name&#x27;</a>
+<a class="lv3" href="#错误-2-遍历字典时增删键-runtimeerror">错误 2：遍历字典时增删键 → RuntimeError</a>
+<a class="lv3" href="#错误-3-拿列表当键-typeerror-unhashable-type">错误 3：拿列表当键 → TypeError: unhashable type</a>
+<a class="lv3" href="#错误-4-以为-d-keys-是列表-能下标">错误 4：以为 d.keys() 是列表，能下标</a>
+<a class="lv3" href="#错误-5-嵌套字典层层-中间缺一层就崩">错误 5：嵌套字典层层 []，中间缺一层就崩</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -1048,6 +1054,27 @@ carol（上海）24 岁 · 成年
 <p><strong>要点</strong>：作用完全一样。<code>for key in d</code> 是 <code>for key in d.keys()</code> 的简写形式，Python 允许直接遍历字典的键。这不是巧合——<code>dict.keys()</code> 返回的视图对象本身就代表键。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-keyerror-name">错误 1：<code>KeyError: 'name'</code></h3>
+<p><strong>症状</strong>：取一个不存在的键就崩。
+<strong>原因</strong>：<code>d["name"]</code> 在键缺失时抛异常（这是设计，不是 bug）。
+<strong>改法</strong>：可能缺的键用 <code>d.get("name", "默认值")</code>；确实必须有就让它崩，但要在上层 <code>try/except KeyError</code> 给出可读提示。</p>
+<h3 id="错误-2-遍历字典时增删键-runtimeerror">错误 2：遍历字典时增删键 → RuntimeError</h3>
+<p><strong>症状</strong>：<code>dictionary changed size during iteration</code>。
+<strong>原因</strong>：迭代器依赖内部结构，边遍历边改会让它失效。
+<strong>改法</strong>：先取快照 <code>for k in list(d):</code>，再改 <code>d</code>；或先用推导式算出要删的键，循环外统一删。</p>
+<h3 id="错误-3-拿列表当键-typeerror-unhashable-type">错误 3：拿列表当键 → TypeError: unhashable type</h3>
+<p><strong>症状</strong>：<code>d[[1, 2]] = "x"</code> 报不可哈希。
+<strong>原因</strong>：字典靠 hash 定位，键必须不可变。
+<strong>改法</strong>：用元组 <code>d[(1, 2)]</code>，或把列表 <code>tuple(lst)</code> 转一下。</p>
+<h3 id="错误-4-以为-d-keys-是列表-能下标">错误 4：以为 <code>d.keys()</code> 是列表，能下标</h3>
+<p><strong>症状</strong>：<code>d.keys()[0]</code> 报 <code>'dict_keys' object is not subscriptable</code>。
+<strong>原因</strong>：<code>keys()</code>/<code>values()</code>/<code>items()</code> 返回的是<strong>视图</strong>，不是列表。
+<strong>改法</strong>：要下标就 <code>list(d.keys())[0]</code>；只是遍历直接用 <code>for k in d:</code>。</p>
+<h3 id="错误-5-嵌套字典层层-中间缺一层就崩">错误 5：嵌套字典层层 <code>[]</code>，中间缺一层就崩</h3>
+<p><strong>症状</strong>：<code>d["a"]["b"]["c"]</code> 里 <code>d["a"]</code> 不存在时 KeyError。
+<strong>改法</strong>：逐层 <code>get</code>：<code>d.get("a", {}).get("b", {}).get("c")</code>；层次深就写个小函数或用 <code>defaultdict</code>。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能说清「列表按位置找、字典按名字找」的差异及性能含义</li>
@@ -1110,6 +1137,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

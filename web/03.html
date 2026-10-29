@@ -61,6 +61,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-3-9">参考答案 3-9</a>
 <a class="lv3" href="#参考答案-3-10">参考答案 3-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-边-for-边-remove-元素漏删">错误 1：边 for 边 remove，元素漏删</a>
+<a class="lv3" href="#错误-2-切片越界却不报错">错误 2：切片越界却不报错</a>
+<a class="lv3" href="#错误-3-for-i-in-range-len-x-里-append">错误 3：for i in range(len(x)) 里 append</a>
+<a class="lv3" href="#错误-4-sorted-x-reverse-true-与-x-1-混用">错误 4：sorted(x, reverse=True) 与 x[::-1] 混用</a>
+<a class="lv3" href="#错误-5-t-0-1-报-typeerror">错误 5：t[0] = 1 报 TypeError</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -921,6 +927,28 @@ python → False
 <p><strong>要点</strong>：会报 <code>SyntaxError</code>。<code>for</code> 语句末尾<strong>漏写了冒号 <code>:</code></strong>。这和括号不匹配是同一类问题——Python 语法上读不下去，代码一行都不会被执行。修复方法：<code>for number in numbers:</code>。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-边-for-边-remove-元素漏删">错误 1：边 <code>for</code> 边 <code>remove</code>，元素漏删</h3>
+<p><strong>症状</strong>：列表里 3 个 <code>"x"</code>，循环后还剩 1 个。
+<strong>原因</strong>：删除会让后面的元素前移，而循环下标继续往后走，正好跳过下一个。
+<strong>改法</strong>：<code>while "x" in items: items.remove("x")</code>，或倒序遍历 <code>for i in reversed(range(len(items)))</code>，或直接列表推导。</p>
+<h3 id="错误-2-切片越界却不报错">错误 2：切片越界却不报错</h3>
+<p><strong>症状</strong>：<code>nums[2:99]</code> 没崩，但结果比预期短。
+<strong>原因</strong>：切片是「容错」的，越界只截到末尾。
+<strong>改法</strong>：这是特性不是 bug；要严格校验长度就自己 <code>if len(nums) &lt; 3: raise ValueError</code>。</p>
+<h3 id="错误-3-for-i-in-range-len-x-里-append">错误 3：<code>for i in range(len(x))</code> 里 <code>append</code></h3>
+<p><strong>症状</strong>：循环次数比预期多，甚至死循环。
+<strong>原因</strong>：<code>range(len(x))</code> 在循环开始时就把长度算好了；若在循环里删除，下标与元素就错位。
+<strong>改法</strong>：不要在遍历时改长度；需要新列表就新建 <code>out = []</code> 再 <code>out.append(...)</code>。</p>
+<h3 id="错误-4-sorted-x-reverse-true-与-x-1-混用">错误 4：<code>sorted(x, reverse=True)</code> 与 <code>x[::-1]</code> 混用</h3>
+<p><strong>症状</strong>：以为两者等价，结果顺序不同。
+<strong>原因</strong>：<code>sorted(reverse=True)</code> 是<strong>按大小降序</strong>；<code>[::-1]</code> 只是<strong>把原顺序倒过来</strong>。
+<strong>改法</strong>：要排序用 <code>sorted()</code>；只想倒序用 <code>reversed(x)</code> 或 <code>x[::-1]</code>。</p>
+<h3 id="错误-5-t-0-1-报-typeerror">错误 5：<code>t[0] = 1</code> 报 TypeError</h3>
+<p><strong>症状</strong>：<code>'tuple' object does not support item assignment</code>。
+<strong>原因</strong>：元组不可变，创建后不能改元素。
+<strong>改法</strong>：要改就换成列表；确实要「改一个值」就重建：<code>t = t[:1] + (9,) + t[2:]</code>。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能默写 <code>range</code> 的三种形式并算出长度</li>
@@ -983,6 +1011,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

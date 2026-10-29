@@ -57,6 +57,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-0-7">参考答案 0-7</a>
 <a class="lv3" href="#参考答案-0-8-命令序列说明">参考答案 0-8（命令序列说明）</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-python-不是内部或外部命令">错误 1：&#x27;python&#x27; 不是内部或外部命令</a>
+<a class="lv3" href="#错误-2-按-3-12-的教程写-removeprefix-却报-attribu">错误 2：按 3.12 的教程写，removeprefix 却报 AttributeError</a>
+<a class="lv3" href="#错误-3-pip-install-requests-成功-import-requ">错误 3：pip install requests 成功，import requests 却 ModuleNotFoundError</a>
+<a class="lv3" href="#错误-4-改了代码-运行结果没变">错误 4：改了代码，运行结果没变</a>
+<a class="lv3" href="#错误-5-git-checkout-之后代码没了">错误 5：git checkout 之后代码没了</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -511,6 +517,28 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 <p><strong>要点</strong>：它是一份"永远不要记录"的清单，通常放虚拟环境（<code>venv/</code>）、Python 缓存（<code>__pycache__/</code>、<code>*.pyc</code>）等。缺少它时，虚拟环境里成千上万个文件会被一起提交，仓库体积暴涨、提交记录被噪音淹没，且不同电脑的缓存文件会造成大量无意义差异。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-python-不是内部或外部命令">错误 1：<code>'python' 不是内部或外部命令</code></h3>
+<p><strong>症状</strong>：终端里敲 <code>python --version</code> 报这一句，但明明装过了。
+<strong>原因</strong>：安装时没勾「Add Python to PATH」，系统找不到解释器。
+<strong>改法</strong>：重新运行安装包选 Modify 勾上 PATH，或手动把 <code>...\Python312\</code> 与 <code>...\Scripts\</code> 加进环境变量，然后<strong>重开终端</strong>（旧窗口不会刷新 PATH）。</p>
+<h3 id="错误-2-按-3-12-的教程写-removeprefix-却报-attribu">错误 2：按 3.12 的教程写，<code>removeprefix</code> 却报 AttributeError</h3>
+<p><strong>症状</strong>：<code>str</code> 没有 <code>removeprefix</code>。
+<strong>原因</strong>：装的是 3.8/3.9，这个方法是 3.9 才有的（<code>match</code> 语法是 3.10）。
+<strong>改法</strong>：<code>python --version</code> 确认版本；低于 3.12 就升级——本课程按 3.12 写，前面的单元还能凑合，到单元 8 之后会到处踩坑。</p>
+<h3 id="错误-3-pip-install-requests-成功-import-requ">错误 3：<code>pip install requests</code> 成功，<code>import requests</code> 却 ModuleNotFoundError</h3>
+<p><strong>症状</strong>：装完导不进来。
+<strong>原因</strong>：机器上有两个 Python，<code>pip</code> 属于另一个，VS Code 用的又是第三个。
+<strong>改法</strong>：一律用 <code>python -m pip install 包名</code>（跟着当前解释器走）；VS Code 里 <code>Ctrl+Shift+P</code> → <code>Python: Select Interpreter</code> 选同一个解释器。</p>
+<h3 id="错误-4-改了代码-运行结果没变">错误 4：改了代码，运行结果没变</h3>
+<p><strong>症状</strong>：明明保存了，输出还是旧的。
+<strong>原因</strong>：跑的是另一个文件（同目录下有同名 <code>.py</code>），或终端里跑的是缓存的 <code>.pyc</code>。
+<strong>改法</strong>：看 VS Code 标题栏的文件名与路径；终端里用 <code>python 完整路径/文件名.py</code>，或先 <code>cd</code> 到文件所在目录。</p>
+<h3 id="错误-5-git-checkout-之后代码没了">错误 5：<code>git checkout</code> 之后代码没了</h3>
+<p><strong>症状</strong>：想撤销修改，结果改的内容被覆盖。
+<strong>原因</strong>：<code>git checkout -- 文件</code> 是「用最近一次提交覆盖工作区」，不是「撤销上一次 checkout」。
+<strong>改法</strong>：先 <code>git status</code> 看清改了什么；只想临时回退就先 <code>git stash</code>（可 <code>git stash pop</code> 找回），别直接 checkout。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <p>学完本单元，你手上应该有：</p>
 <ul>
@@ -575,6 +603,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

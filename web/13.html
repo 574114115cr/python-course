@@ -55,6 +55,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-13-5">参考答案 13-5</a>
 <a class="lv3" href="#参考答案-13-6">参考答案 13-6</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-碰撞检测前没更新位置">错误 1：碰撞检测前没更新位置</a>
+<a class="lv3" href="#错误-2-遍历-bullets-时-remove-漏删或跳过">错误 2：遍历 bullets 时 remove → 漏删或跳过</a>
+<a class="lv3" href="#错误-3-外星人出屏不删-内存一直涨">错误 3：外星人出屏不删，内存一直涨</a>
+<a class="lv3" href="#错误-4-新建的-sprite-没-add-进-group-画不出来">错误 4：新建的 sprite 没 add 进 group，画不出来</a>
+<a class="lv3" href="#错误-5-边界判断没减飞船宽度-卡在屏幕外">错误 5：边界判断没减飞船宽度，卡在屏幕外</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -1383,6 +1389,28 @@ x=741 → check_edges=True（期望 True） PASS
 <p><strong>要点</strong>：<strong>检查了碰撞，却没把子弹挪出循环</strong>。命中判定已经把子弹和外星人移出编组了，但 <code>for</code> 仍在遍历这份<strong>快照</strong>。此时 <code>bullet</code> 对象虽然已不在 <code>self.bullets</code> 里，循环体却还会继续对它调 <code>bullet.update()</code>。更要命的是 <code>self._create_fleet()</code> 在每次碰撞时都会执行——如果同一颗子弹在同一帧击落多个外星人，或者子弹数量多，就会连续重建舰队。正确写法见正文：拿到碰撞列表后先判断 <code>if collisions:</code>，只在确实命中时才重建舰队并加速。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-碰撞检测前没更新位置">错误 1：碰撞检测前没更新位置</h3>
+<p><strong>症状</strong>：子弹明明打中了，却不算命中（或反过来）。
+<strong>原因</strong>：改了 <code>self.x</code> 但没同步到 <code>rect</code>；<code>sprite.rect</code> 才是碰撞用的。
+<strong>改法</strong>：移动后执行 <code>self.rect.x = self.x</code>（或直接用 <code>self.rect.x += speed</code>）。</p>
+<h3 id="错误-2-遍历-bullets-时-remove-漏删或跳过">错误 2：遍历 <code>bullets</code> 时 <code>remove</code> → 漏删或跳过</h3>
+<p><strong>症状</strong>：子弹飞出屏幕后还剩一两个，越积越多。
+<strong>原因</strong>：和列表删除同一个坑——删除让后面的元素前移。
+<strong>改法</strong>：用 <code>pygame.sprite.Group</code> 的 <code>for b in bullets.copy():</code>，或倒序遍历。</p>
+<h3 id="错误-3-外星人出屏不删-内存一直涨">错误 3：外星人出屏不删，内存一直涨</h3>
+<p><strong>症状</strong>：跑几分钟越来越卡。
+<strong>原因</strong>：只移出屏幕，没从 group 里删。
+<strong>改法</strong>：<code>if alien.rect.bottom &gt;= screen_height: alien.kill()</code>；<code>Group</code> 会自动清理。</p>
+<h3 id="错误-4-新建的-sprite-没-add-进-group-画不出来">错误 4：新建的 sprite 没 <code>add</code> 进 group，画不出来</h3>
+<p><strong>症状</strong>：逻辑在跑，屏幕上看不见。
+<strong>原因</strong>：忘了 <code>self.aliens.add(alien)</code>，绘制循环遍历不到它。
+<strong>改法</strong>：创建后立刻 <code>group.add(...)</code>；调试时 <code>print(len(group))</code> 确认数量。</p>
+<h3 id="错误-5-边界判断没减飞船宽度-卡在屏幕外">错误 5：边界判断没减飞船宽度，卡在屏幕外</h3>
+<p><strong>症状</strong>：飞船右半边能开出屏幕。
+<strong>原因</strong>：只判了 <code>rect.right &lt; screen_width</code>，用的是左上角坐标。
+<strong>改法</strong>：用 <code>rect.right</code>/<code>rect.bottom</code> 判断，或 <code>x = min(x, screen_w - ship_w)</code>。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能说清 <code>pygame.sprite.Group</code> 和普通 list 的三点差别（<code>add</code> / <code>update</code> / <code>draw</code> 自动、<code>copy()</code> 才能安全遍历、<code>remove</code> 接受对象而非下标）</li>
@@ -1446,6 +1474,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

@@ -2,6 +2,14 @@
 :root{--bg:#f7f7fb;--card:#fff;--line:#e4e4ef;--text:#1a1a2b;--muted:#64647a;
 --p1:#4c3a9e;--p1bg:#eeebfa;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#d4880c;--p3bg:#fdf3e2;
 --p4:#c8443c;--p4bg:#fbeceb;--r:14px}
+/* 暗色：与入门课同一套做法——覆盖变量，再补写死的浅色块。 */
+@media (prefers-color-scheme: dark){
+:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
+--p1:#9d8cf0;--p1bg:#231f3d;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
+--p4:#ff8792;--p4bg:#3a1d22}
+body{background:var(--bg);color:var(--text)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;

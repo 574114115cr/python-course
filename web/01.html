@@ -61,6 +61,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-1-9">参考答案 1-9</a>
 <a class="lv3" href="#参考答案-1-10">参考答案 1-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-syntaxerror-unterminated-string-lit">错误 1：SyntaxError: unterminated string literal</a>
+<a class="lv3" href="#错误-2-int-3-9-报-valueerror">错误 2：int(&quot;3.9&quot;) 报 ValueError</a>
+<a class="lv3" href="#错误-3-bool-0-竟然是-true">错误 3：bool(&quot;0&quot;) 竟然是 True</a>
+<a class="lv3" href="#错误-4-if-x-1-语法错误">错误 4：if x = 1: 语法错误</a>
+<a class="lv3" href="#错误-5-变量名-class-2myvar-报错">错误 5：变量名 class / 2myvar 报错</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -777,6 +783,28 @@ age=18 | city=北京 | name=张三
 <p><strong>要点</strong>：<code>2nd_place</code> 以数字开头（语法层面名称必须以字母或下划线开头）；<code>my name</code> 中间有空格（名称是一个整体，不能拆开）；<code>class</code> 是 Python 关键字，已被语言本身占用（正确写法 <code>class_name = "三班"</code>）。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-syntaxerror-unterminated-string-lit">错误 1：<code>SyntaxError: unterminated string literal</code></h3>
+<p><strong>症状</strong>：字符串那行报「未闭合」。
+<strong>原因</strong>：引号不成对——常见是中文引号 <code>“”</code>，或字符串里本身有引号没转义。
+<strong>改法</strong>：统一用英文 <code>"</code> <code>'</code>；字符串里要引号就用另一种，或 <code>\"</code>。</p>
+<h3 id="错误-2-int-3-9-报-valueerror">错误 2：<code>int("3.9")</code> 报 ValueError</h3>
+<p><strong>症状</strong>：把用户输入转整数崩了。
+<strong>原因</strong>：<code>int()</code> 只认整数字面量，<code>"3.9"</code> 是浮点写法。
+<strong>改法</strong>：先 <code>float("3.9")</code> 再 <code>int(...)</code>（会截断成 3）；要四舍五入用 <code>round()</code>，别指望 <code>int()</code>。</p>
+<h3 id="错误-3-bool-0-竟然是-true">错误 3：<code>bool("0")</code> 竟然是 <code>True</code></h3>
+<p><strong>症状</strong>：以为 <code>"0"</code> 是假值。
+<strong>原因</strong>：<code>bool()</code> 对字符串只看「空不空」，非空字符串一律为真。
+<strong>改法</strong>：要判断「是不是数字 0」得先转换：<code>int(s) == 0</code>；或用 <code>s in ("0", "")</code> 这类显式判断。</p>
+<h3 id="错误-4-if-x-1-语法错误">错误 4：<code>if x = 1:</code> 语法错误</h3>
+<p><strong>症状</strong>：<code>SyntaxError: invalid syntax</code> 指向等号。
+<strong>原因</strong>：<code>=</code> 是赋值，<code>==</code> 才是比较。
+<strong>改法</strong>：条件里一律 <code>==</code>；想同时赋值用海象运算符 <code>if (n := len(s)) &gt; 3:</code>（3.8+）。</p>
+<h3 id="错误-5-变量名-class-2myvar-报错">错误 5：变量名 <code>class</code> / <code>2myvar</code> 报错</h3>
+<p><strong>症状</strong>：<code>SyntaxError</code> 或变量莫名其妙是别的东西。
+<strong>原因</strong>：<code>class</code> 是关键字；标识符不能以数字开头。
+<strong>改法</strong>：避开 Python 关键字（<code>import keyword; print(keyword.kwlist)</code> 可查），名字用 <code>my_var</code> 这种下划线风格。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能默写出四种类型和 <code>type()</code> 的用法</li>
@@ -841,6 +869,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

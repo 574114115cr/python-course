@@ -14,6 +14,15 @@
   --danger:#d1394b; --dangerbg:#fdeef0;
   --r:14px;
 }
+/* 暗色：学生晚上看长页面，白底刺眼。变量覆盖 + 顶栏/进度条补色。 */
+@media (prefers-color-scheme: dark){
+:root{--bg:#0f1620; --card:#16202b; --line:#243342; --text:#e6edf5; --muted:#93a6b8;
+  --p1:#63a9ee; --p1bg:#16283b; --p2:#3ecf9e; --p2bg:#0f2c26; --p3:#f0a94a; --p3bg:#33260f;
+  --danger:#ff8792; --dangerbg:#3a1d22}
+body{background:var(--bg);color:var(--text)}
+.lprog-bar,.dbar{background:#22303e}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);
@@ -539,6 +548,10 @@ transition:opacity .18s;z-index:60}
       <div class="dbar b2"><i id="rvP"></i></div>
       <span class="dval" id="rvT">今日 0 项</span>
     </div>
+    <div class="drow">
+      <span class="dlab">节奏</span>
+      <span class="dval" id="stk" style="margin-left:auto;text-align:right">连续 0 天 · 本周 0 小时</span>
+    </div>
     <div class="dfoot">
       <a class="lprog-go" id="lgo" href="web/lessons/01.html">继续学习：第 1 节 →</a>
       <a class="lprog-go" href="web/review.html" style="color:var(--p2)">今日复习计划 →</a>
@@ -570,7 +583,7 @@ transition:opacity .18s;z-index:60}
     </a>
     <a class="lib" href="web/terms.html" target="_blank">
       <div class="lib-i" style="background:#2f7a63">索引</div>
-      <div><h4>术语索引（501 条）</h4>
+      <div><h4>术语索引（511 条）</h4>
         <p>正文里出现过的函数 / 方法 / 类名，按字母分组 · 每条给人课号直达 ·
            相当于教材末尾的索引，但点一下就到讲解位置</p></div>
       <span class="go">查术语 →</span>
@@ -1021,6 +1034,30 @@ readOpen().forEach(function(n){
   ct.textContent=n+' / '+TOTAL+' 节';
   if(!next){ go.textContent='全部完成 ✓'; go.classList.add('done'); go.href='web/lessons/index.html'; }
   else { go.textContent='继续学习：第 '+next+' 节 →'; go.href='web/lessons/'+(next<10?'0':'')+next+'.html'; }
+
+  /* 节奏：连续打卡天数 + 本周投入（lesson-done-v1 存的是完成时间戳，
+     所以这两项能从已有数据直接算，不需要另存任何东西）。 */
+  (function(){
+    var el=document.getElementById('stk'); if(!el) return;
+    var DAY=86400000, HOURLY=1.5;      // 每节按 90 分钟估
+    function mid(t){ var d=new Date(t); d.setHours(0,0,0,0); return d.getTime(); }
+    var stamps=[], k;
+    for(k in o){ if(o[k]) stamps.push(typeof o[k]==='number'?o[k]:Number(o[k])||0); }
+    stamps=stamps.filter(function(t){ return t>0; });
+    if(!stamps.length){ el.textContent='连续 0 天 · 本周 0 小时'; return; }
+
+    // 连续天数：从今天往回数；今天没学但昨天学了，连续天数仍然算（避免早上打开就归零）
+    var days={}, i;
+    for(i=0;i<stamps.length;i++) days[mid(stamps[i])]=1;
+    var t0=mid(Date.now()), streak=0, cur=days[t0]?t0:(days[t0-DAY]?t0-DAY:0);
+    while(cur && days[cur]){ streak++; cur-=DAY; }
+
+    // 本周：以周一为一周起点，按「节数」累加（不是按天数——一天学 3 节不能只算 1.5 小时）
+    var now=new Date(t0), dow=(now.getDay()+6)%7;   // 0=周一
+    var monday=t0-dow*DAY, weekN=0, t;
+    for(i=0;i<stamps.length;i++){ t=stamps[i]; if(t>=monday && t<t0+DAY) weekN++; }
+    el.textContent='连续 '+streak+' 天 · 本周约 '+(weekN*HOURLY).toFixed(1).replace(/\.0$/,'')+' 小时';
+  })();
 })();
 
 /* ── 今日复习（艾宾浩斯排程，与 web/review.html 同一套间隔） ── */

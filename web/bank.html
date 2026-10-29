@@ -8,6 +8,19 @@
 <style>
 :root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
 --p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e8f6f1;--p3:#e08a15;--p3bg:#fdf3e2}
+/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
+   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
+@media (prefers-color-scheme: dark){
+:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
+--p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
+--danger:#ff8792;--dangerbg:#3a1d22}
+body{background:var(--bg);color:var(--text)}
+.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
+.lprog-bar,.dbar,.pbar{background:#22303e}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+a{color:var(--p1)}
+}
+
 *{box-sizing:border-box}
 /* 120 题一次全排版很贵（12k 节点 / 30k 像素高）。屏幕外的卡片先跳过排版，
    滚到附近再算；contain-intrinsic-size 用 auto，浏览器会记住首次量到的真实高度，
@@ -141,7 +154,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>变量与类型</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-1-变量-一个贴了标签的盒子"
+       title="直达「2 1 变量 一个贴了标签的盒子」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-1" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -164,7 +178,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>字符串常用方法</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-7-字符串方法全家桶-拆分-拼接与去掉前后缀"
+       title="直达「2 7 字符串方法全家桶 拆分 拼接与去掉前后缀」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-2" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -188,7 +203,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>f-string 格式化</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-3-字符串-str-带引号的文字"
+       title="直达「2 3 字符串 str 带引号的文字」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-3" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -210,7 +226,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>列表基础操作</h2>
-    <a class="qu" href="02.html" title="回到本单元讲义">单元 2 · 列表简介</a>
+    <a class="qu" href="02.html#2-1-列表-一个名字-一排抽屉"
+       title="直达「2 1 列表 一个名字 一排抽屉」">单元 2 · 列表简介</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-4" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -237,7 +254,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>索引与切片</h2>
-    <a class="qu" href="02.html" title="回到本单元讲义">单元 2 · 列表简介</a>
+    <a class="qu" href="02.html#2-2-索引从-0-开始-为什么不是从-1-开始"
+       title="直达「2 2 索引从 0 开始 为什么不是从 1 开始」">单元 2 · 列表简介</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-5" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -261,7 +279,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>元组与不可变性</h2>
-    <a class="qu" href="02.html" title="回到本单元讲义">单元 2 · 列表简介</a>
+    <a class="qu" href="02.html#2-3-列表是可变的-能直接改"
+       title="直达「2 3 列表是可变的 能直接改」">单元 2 · 列表简介</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-6" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -289,7 +308,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>数字类型陷阱</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-4-整数-int-与浮点数-float"
+       title="直达「2 4 整数 int 与浮点数 float」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-7" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -311,7 +331,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>字符串与列表互转</h2>
-    <a class="qu" href="02.html" title="回到本单元讲义">单元 2 · 列表简介</a>
+    <a class="qu" href="02.html#2-4-增删改方法-五个主力"
+       title="直达「2 4 增删改方法 五个主力」">单元 2 · 列表简介</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-8" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -333,7 +354,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>逻辑值与真值判断</h2>
-    <a class="qu" href="04.html" title="回到本单元讲义">单元 4 · if 语句</a>
+    <a class="qu" href="04.html#2-1-条件测试-一个只能回答是-否的问题"
+       title="直达「2 1 条件测试 一个只能回答是 否的问题」">单元 4 · if 语句</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-9" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -355,7 +377,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>PEP 8 格式化实战</h2>
-    <a class="qu" href="00.html" title="回到本单元讲义">单元 0 · 环境与工具链</a>
+    <a class="qu" href="00.html#2-3-vs-code-python-扩展-写代码的写字板"
+       title="直达「2 3 vs code python 扩展 写代码的写字板」">单元 0 · 环境与工具链</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-10" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -382,7 +405,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>运算符优先级</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-4-整数-int-与浮点数-float"
+       title="直达「2 4 整数 int 与浮点数 float」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-11" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -405,7 +429,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>猜数游戏（综合）</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-6-交互程序的骨架"
+       title="直达「2 6 交互程序的骨架」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-12" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -441,7 +466,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>一行日志拆开再拼回去</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-7-字符串方法全家桶-拆分-拼接与去掉前后缀"
+       title="直达「2 7 字符串方法全家桶 拆分 拼接与去掉前后缀」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-13" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -471,7 +497,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>批量清理文件名</h2>
-    <a class="qu" href="01.html" title="回到本单元讲义">单元 1 · 变量与简单数据类型</a>
+    <a class="qu" href="01.html#2-7-字符串方法全家桶-拆分-拼接与去掉前后缀"
+       title="直达「2 7 字符串方法全家桶 拆分 拼接与去掉前后缀」">单元 1 · 变量与简单数据类型</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-14" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -501,7 +528,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>sorted 与 sort 到底差在哪</h2>
-    <a class="qu" href="02.html" title="回到本单元讲义">单元 2 · 列表简介</a>
+    <a class="qu" href="02.html#2-3-列表是可变的-能直接改"
+       title="直达「2 3 列表是可变的 能直接改」">单元 2 · 列表简介</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-15" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -531,7 +559,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L1</span>
     <h2>`[[0] * 3] * 2` 的陷阱</h2>
-    <a class="qu" href="02.html" title="回到本单元讲义">单元 2 · 列表简介</a>
+    <a class="qu" href="02.html#2-6-引用共享-最反直觉的一课"
+       title="直达「2 6 引用共享 最反直觉的一课」">单元 2 · 列表简介</a>
     <div class="st">
       <button type="button" class="sb" data-id="L1-16" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -561,7 +590,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>for 循环累加</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-1-for-循环-把重复交给机器"
+       title="直达「2 1 for 循环 把重复交给机器」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-1" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -586,7 +616,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>range 的三种用法</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-2-range-造出一串数字"
+       title="直达「2 2 range 造出一串数字」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-2" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -606,7 +637,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>列表推导式</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-4-列表推导式-一行搞定筛选"
+       title="直达「2 4 列表推导式 一行搞定筛选」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-3" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -630,7 +662,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>嵌套列表</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-3-循环的常见搭档"
+       title="直达「2 3 循环的常见搭档」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-4" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -652,7 +685,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>切片引用陷阱（重点）</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-5-切片-一次取出一段"
+       title="直达「2 5 切片 一次取出一段」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-5" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -693,7 +727,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>if-elif 票价分级</h2>
-    <a class="qu" href="04.html" title="回到本单元讲义">单元 4 · if 语句</a>
+    <a class="qu" href="04.html#2-3-三分支结构-if-elif-else"
+       title="直达「2 3 三分支结构 if elif else」">单元 4 · if 语句</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-6" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -723,7 +758,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>逻辑运算符优先级</h2>
-    <a class="qu" href="04.html" title="回到本单元讲义">单元 4 · if 语句</a>
+    <a class="qu" href="04.html#2-4-逻辑运算符-把条件组合起来"
+       title="直达「2 4 逻辑运算符 把条件组合起来」">单元 4 · if 语句</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-7" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -746,7 +782,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>in 与 not in</h2>
-    <a class="qu" href="04.html" title="回到本单元讲义">单元 4 · if 语句</a>
+    <a class="qu" href="04.html#2-2-六个比较运算符"
+       title="直达「2 2 六个比较运算符」">单元 4 · if 语句</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-8" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -769,7 +806,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>while 与标志</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-3-while-的核心-条件先行"
+       title="直达「2 3 while 的核心 条件先行」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-9" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -804,7 +842,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>break / continue</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-4-break-与-continue"
+       title="直达「2 4 break 与 continue」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-10" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -831,7 +870,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>while 处理列表</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-7-用-while-处理列表和字典-教材-7-3"
+       title="直达「2 7 用 while 处理列表和字典 教材 7 3」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-11" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -857,7 +897,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>投票统计</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-6-交互程序的骨架"
+       title="直达「2 6 交互程序的骨架」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-12" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -888,7 +929,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>斐波那契</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-3-循环的常见搭档"
+       title="直达「2 3 循环的常见搭档」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-13" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -912,7 +954,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>猜数字游戏（带次数限制）</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-5-while-else-循环-没被打断-时执行"
+       title="直达「2 5 while else 循环 没被打断 时执行」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-14" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -942,7 +985,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>九九乘法表</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-3-循环的常见搭档"
+       title="直达「2 3 循环的常见搭档」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-15" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -965,7 +1009,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>文本词频统计</h2>
-    <a class="qu" href="05.html" title="回到本单元讲义">单元 5 · 字典</a>
+    <a class="qu" href="05.html#2-2-键值对-key-value"
+       title="直达「2 2 键值对 key value」">单元 5 · 字典</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-16" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -989,7 +1034,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>切片步长：隔位取、逆序、越界</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-5-切片-一次取出一段"
+       title="直达「2 5 切片 一次取出一段」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-17" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1015,7 +1061,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>回文判断（忽略大小写与空格）</h2>
-    <a class="qu" href="03.html" title="回到本单元讲义">单元 3 · 操作列表</a>
+    <a class="qu" href="03.html#2-5-切片-一次取出一段"
+       title="直达「2 5 切片 一次取出一段」">单元 3 · 操作列表</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-18" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1044,7 +1091,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>分段票价与边界值</h2>
-    <a class="qu" href="04.html" title="回到本单元讲义">单元 4 · if 语句</a>
+    <a class="qu" href="04.html#2-3-三分支结构-if-elif-else"
+       title="直达「2 3 三分支结构 if elif else」">单元 4 · if 语句</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-19" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1078,7 +1126,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>门禁名单：strip + lower + in</h2>
-    <a class="qu" href="04.html" title="回到本单元讲义">单元 4 · if 语句</a>
+    <a class="qu" href="04.html#2-2-六个比较运算符"
+       title="直达「2 2 六个比较运算符」">单元 4 · if 语句</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-20" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1104,7 +1153,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>库存盘点</h2>
-    <a class="qu" href="05.html" title="回到本单元讲义">单元 5 · 字典</a>
+    <a class="qu" href="05.html#2-7-嵌套结构-字典的真正威力"
+       title="直达「2 7 嵌套结构 字典的真正威力」">单元 5 · 字典</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-21" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1133,7 +1183,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>列表套字典：班级平均与最高分</h2>
-    <a class="qu" href="05.html" title="回到本单元讲义">单元 5 · 字典</a>
+    <a class="qu" href="05.html#2-7-嵌套结构-字典的真正威力"
+       title="直达「2 7 嵌套结构 字典的真正威力」">单元 5 · 字典</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-22" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1166,7 +1217,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>把一个值删干净</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-7-用-while-处理列表和字典-教材-7-3"
+       title="直达「2 7 用 while 处理列表和字典 教材 7 3」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-23" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1195,7 +1247,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L2</span>
     <h2>while + input 登记报名</h2>
-    <a class="qu" href="06.html" title="回到本单元讲义">单元 6 · 用户输入与 while 循环</a>
+    <a class="qu" href="06.html#2-7-用-while-处理列表和字典-教材-7-3"
+       title="直达「2 7 用 while 处理列表和字典 教材 7 3」">单元 6 · 用户输入与 while 循环</a>
     <div class="st">
       <button type="button" class="sb" data-id="L2-24" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1225,7 +1278,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>参数传递三种方式</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-3-三种参数写法"
+       title="直达「2 3 三种参数写法」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-1" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1251,7 +1305,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>返回值：字典与可选参数</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-2-return-把结果-递出窗口"
+       title="直达「2 2 return 把结果 递出窗口」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-2" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1277,7 +1332,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>列表传参：改 vs 不改</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-4-参数传递的副本语义-本单元最重要的概念"
+       title="直达「2 4 参数传递的副本语义 本单元最重要的概念」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-3" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1314,7 +1370,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>*args 与 **kwargs</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-3-三种参数写法"
+       title="直达「2 3 三种参数写法」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-4" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1339,7 +1396,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>模块与导入（4 种写法）</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-7-把函数存进模块-教材-8-6"
+       title="直达「2 7 把函数存进模块 教材 8 6」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-5" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1375,7 +1433,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>递归</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-2-return-把结果-递出窗口"
+       title="直达「2 2 return 把结果 递出窗口」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-6" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1415,7 +1474,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>函数闭包与装饰器</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-6-函数是-一等公民"
+       title="直达「2 6 函数是 一等公民」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-7" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1454,7 +1514,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>类型注解</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-1-函数-给一段代码起个名字"
+       title="直达「2 1 函数 给一段代码起个名字」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-8" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1496,7 +1557,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>把三个函数拆到 geometry.py</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-7-把函数存进模块-教材-8-6"
+       title="直达「2 7 把函数存进模块 教材 8 6」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-9" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1536,7 +1598,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L3</span>
     <h2>自测块与 `__name__`</h2>
-    <a class="qu" href="07.html" title="回到本单元讲义">单元 7 · 函数</a>
+    <a class="qu" href="07.html#2-7-把函数存进模块-教材-8-6"
+       title="直达「2 7 把函数存进模块 教材 8 6」">单元 7 · 函数</a>
     <div class="st">
       <button type="button" class="sb" data-id="L3-10" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1565,7 +1628,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>最基本的类</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-1-类-从-一堆变量-到-一类事物"
+       title="直达「2 1 类 从 一堆变量 到 一类事物」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-1" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1606,7 +1670,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>属性默认值与修改</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-3-__init__-对象的出生证明"
+       title="直达「2 3 __init__ 对象的出生证明」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-2" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1648,7 +1713,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>属性私有化</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-4-属性-vs-方法"
+       title="直达「2 4 属性 vs 方法」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-3" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1699,7 +1765,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>继承</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-6-继承-不重复造轮子"
+       title="直达「2 6 继承 不重复造轮子」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-4" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1730,7 +1797,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>方法重写</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-7-方法重写与多态"
+       title="直达「2 7 方法重写与多态」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-5" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1759,7 +1827,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>实例作为属性（组合）</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-6-继承-不重复造轮子"
+       title="直达「2 6 继承 不重复造轮子」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-6" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1811,7 +1880,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>自定义异常类</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-6-继承-不重复造轮子"
+       title="直达「2 6 继承 不重复造轮子」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-7" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1848,7 +1918,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>类的标准库</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-8-导入类与-python-标准库-教材-9-4-9-5"
+       title="直达「2 8 导入类与 python 标准库 教材 9 4 9 5」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-8" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1886,7 +1957,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>从 car.py 导入 Car 与 ElectricCar</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-8-导入类与-python-标准库-教材-9-4-9-5"
+       title="直达「2 8 导入类与 python 标准库 教材 9 4 9 5」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-9" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1935,7 +2007,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L4</span>
     <h2>抽奖：不重复且可复现</h2>
-    <a class="qu" href="08.html" title="回到本单元讲义">单元 8 · 类</a>
+    <a class="qu" href="08.html#2-8-导入类与-python-标准库-教材-9-4-9-5"
+       title="直达「2 8 导入类与 python 标准库 教材 9 4 9 5」">单元 8 · 类</a>
     <div class="st">
       <button type="button" class="sb" data-id="L4-10" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1965,7 +2038,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>读写文件</h2>
-    <a class="qu" href="09.html" title="回到本单元讲义">单元 9 · 文件与异常</a>
+    <a class="qu" href="09.html#2-5-写文件"
+       title="直达「2 5 写文件」">单元 9 · 文件与异常</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-1" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -1999,7 +2073,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>with 的多文件上下文</h2>
-    <a class="qu" href="09.html" title="回到本单元讲义">单元 9 · 文件与异常</a>
+    <a class="qu" href="09.html#2-3-with-open-不只是语法糖"
+       title="直达「2 3 with open 不只是语法糖」">单元 9 · 文件与异常</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-2" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2024,7 +2099,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>异常处理</h2>
-    <a class="qu" href="09.html" title="回到本单元讲义">单元 9 · 文件与异常</a>
+    <a class="qu" href="09.html#2-6-异常-让程序优雅地摔倒而不是死掉"
+       title="直达「2 6 异常 让程序优雅地摔倒而不是死掉」">单元 9 · 文件与异常</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-3" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2062,7 +2138,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>自定义异常 + 链式抛出</h2>
-    <a class="qu" href="09.html" title="回到本单元讲义">单元 9 · 文件与异常</a>
+    <a class="qu" href="09.html#2-7-异常处理的实用模式"
+       title="直达「2 7 异常处理的实用模式」">单元 9 · 文件与异常</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-4" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2102,7 +2179,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>JSON 持久化</h2>
-    <a class="qu" href="09.html" title="回到本单元讲义">单元 9 · 文件与异常</a>
+    <a class="qu" href="09.html#2-8-json-让数据能被记住"
+       title="直达「2 8 json 让数据能被记住」">单元 9 · 文件与异常</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-5" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2138,7 +2216,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>统计词频存成 JSON</h2>
-    <a class="qu" href="09.html" title="回到本单元讲义">单元 9 · 文件与异常</a>
+    <a class="qu" href="09.html#2-8-json-让数据能被记住"
+       title="直达「2 8 json 让数据能被记住」">单元 9 · 文件与异常</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-6" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2175,7 +2254,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>pytest 测试函数</h2>
-    <a class="qu" href="10.html" title="回到本单元讲义">单元 10 · 测试代码</a>
+    <a class="qu" href="10.html#2-3-三条硬性命名规则"
+       title="直达「2 3 三条硬性命名规则」">单元 10 · 测试代码</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-7" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2225,7 +2305,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>测试类与 fixture</h2>
-    <a class="qu" href="10.html" title="回到本单元讲义">单元 10 · 测试代码</a>
+    <a class="qu" href="10.html#2-6-测试用例的设计-正常-边界"
+       title="直达「2 6 测试用例的设计 正常 边界」">单元 10 · 测试代码</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-8" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2314,7 +2395,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>综合：统计日志里的错误</h2>
-    <a class="qu" href="11.html" title="回到本单元讲义">单元 11 · 阶段 1 总复习 + 关卡验收</a>
+    <a class="qu" href="11.html#2-3-一个完整项目的骨架"
+       title="直达「2 3 一个完整项目的骨架」">单元 11 · 阶段 1 总复习 + 关卡验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-9" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2357,7 +2439,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L5</span>
     <h2>综合：给统计函数写测试</h2>
-    <a class="qu" href="11.html" title="回到本单元讲义">单元 11 · 阶段 1 总复习 + 关卡验收</a>
+    <a class="qu" href="11.html#2-3-一个完整项目的骨架"
+       title="直达「2 3 一个完整项目的骨架」">单元 11 · 阶段 1 总复习 + 关卡验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L5-10" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2400,7 +2483,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>最小主循环与帧率</h2>
-    <a class="qu" href="12.html" title="回到本单元讲义">单元 12 · Pygame 起步与飞船驾驶</a>
+    <a class="qu" href="12.html#2-4-帧率-为什么你的游戏在别人电脑上会-加速"
+       title="直达「2 4 帧率 为什么你的游戏在别人电脑上会 加速」">单元 12 · Pygame 起步与飞船驾驶</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-1" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2436,7 +2520,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>事件驱动：按住方向键移动飞船</h2>
-    <a class="qu" href="12.html" title="回到本单元讲义">单元 12 · Pygame 起步与飞船驾驶</a>
+    <a class="qu" href="12.html#2-5-事件驱动-游戏像一个前台接待"
+       title="直达「2 5 事件驱动 游戏像一个前台接待」">单元 12 · Pygame 起步与飞船驾驶</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-2" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2483,7 +2568,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>屏幕坐标与矩形对齐</h2>
-    <a class="qu" href="12.html" title="回到本单元讲义">单元 12 · Pygame 起步与飞船驾驶</a>
+    <a class="qu" href="12.html#2-7-screen_rect-让飞船知道自己-站在哪"
+       title="直达「2 7 screen_rect 让飞船知道自己 站在哪」">单元 12 · Pygame 起步与飞船驾驶</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-3" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2507,7 +2593,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>子弹组：越界删除</h2>
-    <a class="qu" href="13.html" title="回到本单元讲义">单元 13 · 射击与外星舰队</a>
+    <a class="qu" href="13.html#2-3-射击-bullet-类与开火-12-8"
+       title="直达「2 3 射击 bullet 类与开火 12 8」">单元 13 · 射击与外星舰队</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-4" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2530,7 +2617,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>精灵类：Bullet</h2>
-    <a class="qu" href="13.html" title="回到本单元讲义">单元 13 · 射击与外星舰队</a>
+    <a class="qu" href="13.html#2-2-编组-group-与精灵-sprite-为什么不用普通列表"
+       title="直达「2 2 编组 group 与精灵 sprite 为什么不用普通列表」">单元 13 · 射击与外星舰队</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-5" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2563,7 +2651,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>外星舰队行列生成</h2>
-    <a class="qu" href="13.html" title="回到本单元讲义">单元 13 · 射击与外星舰队</a>
+    <a class="qu" href="13.html#2-5-创建外星舰队-13-3"
+       title="直达「2 5 创建外星舰队 13 3」">单元 13 · 射击与外星舰队</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-6" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2588,7 +2677,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>子弹与外星人碰撞</h2>
-    <a class="qu" href="13.html" title="回到本单元讲义">单元 13 · 射击与外星舰队</a>
+    <a class="qu" href="13.html#2-7-碰撞检测与游戏结束-13-5-13-7"
+       title="直达「2 7 碰撞检测与游戏结束 13 5 13 7」">单元 13 · 射击与外星舰队</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-7" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2611,7 +2701,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>Play 按钮</h2>
-    <a class="qu" href="14.html" title="回到本单元讲义">单元 14 · Play 按钮与记分</a>
+    <a class="qu" href="14.html#2-2-button-类-pygame-的文字不是-画-出来的"
+       title="直达「2 2 button 类 pygame 的文字不是 画 出来的」">单元 14 · Play 按钮与记分</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-8" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2654,7 +2745,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>记分板</h2>
-    <a class="qu" href="14.html" title="回到本单元讲义">单元 14 · Play 按钮与记分</a>
+    <a class="qu" href="14.html#2-4-记分牌-数据与显示分离-格式化与最高分"
+       title="直达「2 4 记分牌 数据与显示分离 格式化与最高分」">单元 14 · Play 按钮与记分</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-9" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2680,7 +2772,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>飞船剩余数量与重开</h2>
-    <a class="qu" href="14.html" title="回到本单元讲义">单元 14 · Play 按钮与记分</a>
+    <a class="qu" href="14.html#2-6-余下的飞船数-group-ship-的复用"
+       title="直达「2 6 余下的飞船数 group ship 的复用」">单元 14 · Play 按钮与记分</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-10" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2709,7 +2802,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>Matplotlib 折线图与保存</h2>
-    <a class="qu" href="15.html" title="回到本单元讲义">单元 15 · Matplotlib 生成数据</a>
+    <a class="qu" href="15.html#2-3-折线图细节-线宽-标签-样式"
+       title="直达「2 3 折线图细节 线宽 标签 样式」">单元 15 · Matplotlib 生成数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-11" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2738,7 +2832,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>scatter 随机漫步</h2>
-    <a class="qu" href="15.html" title="回到本单元讲义">单元 15 · Matplotlib 生成数据</a>
+    <a class="qu" href="15.html#2-4-散点图三件套-s-c-cmap"
+       title="直达「2 4 散点图三件套 s c cmap」">单元 15 · Matplotlib 生成数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-12" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2768,7 +2863,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>中文显示与负号</h2>
-    <a class="qu" href="15.html" title="回到本单元讲义">单元 15 · Matplotlib 生成数据</a>
+    <a class="qu" href="15.html#2-5-校正绘图-给坐标轴留边距"
+       title="直达「2 5 校正绘图 给坐标轴留边距」">单元 15 · Matplotlib 生成数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-13" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2794,7 +2890,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>CSV 读取并画图</h2>
-    <a class="qu" href="16.html" title="回到本单元讲义">单元 16 · 下载真实数据</a>
+    <a class="qu" href="16.html#2-2-csv-三件套读表头"
+       title="直达「2 2 csv 三件套读表头」">单元 16 · 下载真实数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-14" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2827,7 +2924,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>JSON 取震级</h2>
-    <a class="qu" href="16.html" title="回到本单元讲义">单元 16 · 下载真实数据</a>
+    <a class="qu" href="16.html#2-6-geojson-带地理位置的-json"
+       title="直达「2 6 geojson 带地理位置的 json」">单元 16 · 下载真实数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-15" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2857,7 +2955,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>日期字符串转换</h2>
-    <a class="qu" href="16.html" title="回到本单元讲义">单元 16 · 下载真实数据</a>
+    <a class="qu" href="16.html#2-3-datetime-把字符串变成日期"
+       title="直达「2 3 datetime 把字符串变成日期」">单元 16 · 下载真实数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-16" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2880,7 +2979,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>调 GitHub API 取前 5 个仓库</h2>
-    <a class="qu" href="17.html" title="回到本单元讲义">单元 17 · 使用 API 与 Plotly</a>
+    <a class="qu" href="17.html#2-4-github-search-api-请求头与速率限制"
+       title="直达「2 4 github search api 请求头与速率限制」">单元 17 · 使用 API 与 Plotly</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-17" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2911,7 +3011,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>Plotly 横向条形图</h2>
-    <a class="qu" href="17.html" title="回到本单元讲义">单元 17 · 使用 API 与 Plotly</a>
+    <a class="qu" href="17.html#2-5-plotly-可视化仓库-悬停提示与颜色"
+       title="直达「2 5 plotly 可视化仓库 悬停提示与颜色」">单元 17 · 使用 API 与 Plotly</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-18" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2936,7 +3037,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>Plotly 悬停与标题</h2>
-    <a class="qu" href="17.html" title="回到本单元讲义">单元 17 · 使用 API 与 Plotly</a>
+    <a class="qu" href="17.html#2-5-plotly-可视化仓库-悬停提示与颜色"
+       title="直达「2 5 plotly 可视化仓库 悬停提示与颜色」">单元 17 · 使用 API 与 Plotly</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-19" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2958,7 +3060,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>Plotly 离线使用</h2>
-    <a class="qu" href="17.html" title="回到本单元讲义">单元 17 · 使用 API 与 Plotly</a>
+    <a class="qu" href="17.html#2-5-plotly-可视化仓库-悬停提示与颜色"
+       title="直达「2 5 plotly 可视化仓库 悬停提示与颜色」">单元 17 · 使用 API 与 Plotly</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-20" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -2980,7 +3083,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>Django 最小视图</h2>
-    <a class="qu" href="18.html" title="回到本单元讲义">单元 18 · Django 入门</a>
+    <a class="qu" href="18.html#2-5-一次请求的旅程-url-视图-模板"
+       title="直达「2 5 一次请求的旅程 url 视图 模板」">单元 18 · Django 入门</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-21" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3011,7 +3115,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>模板继承</h2>
-    <a class="qu" href="18.html" title="回到本单元讲义">单元 18 · Django 入门</a>
+    <a class="qu" href="18.html#2-7-模板继承与-404-别每个页面重复写导航栏"
+       title="直达「2 7 模板继承与 404 别每个页面重复写导航栏」">单元 18 · Django 入门</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-22" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3044,7 +3149,8 @@ font-size:13.5px}
   <header class="qh">
     <span class="qn">L6</span>
     <h2>模型与迁移</h2>
-    <a class="qu" href="18.html" title="回到本单元讲义">单元 18 · Django 入门</a>
+    <a class="qu" href="18.html#2-3-模型-迁移-数据库-改数据的-三步曲"
+       title="直达「2 3 模型 迁移 数据库 改数据的 三步曲」">单元 18 · Django 入门</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-23" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3073,7 +3179,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
   <header class="qh">
     <span class="qn">L6</span>
     <h2>用户注册</h2>
-    <a class="qu" href="19.html" title="回到本单元讲义">单元 19 · 用户账户</a>
+    <a class="qu" href="19.html#2-4-登录-注销-注册三件套"
+       title="直达「2 4 登录 注销 注册三件套」">单元 19 · 用户账户</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-24" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3105,7 +3212,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
   <header class="qh">
     <span class="qn">L6</span>
     <h2>登录保护</h2>
-    <a class="qu" href="19.html" title="回到本单元讲义">单元 19 · 用户账户</a>
+    <a class="qu" href="19.html#2-5-login_required-视图的门卫"
+       title="直达「2 5 login_required 视图的门卫」">单元 19 · 用户账户</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-25" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3131,7 +3239,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
   <header class="qh">
     <span class="qn">L6</span>
     <h2>静态文件与 collectstatic</h2>
-    <a class="qu" href="20.html" title="回到本单元讲义">单元 20 · 样式与部署</a>
+    <a class="qu" href="20.html#2-2-改造-学习笔记-的界面-对应教材-20-1-各小节"
+       title="直达「2 2 改造 学习笔记 的界面 对应教材 20 1 各小节」">单元 20 · 样式与部署</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-26" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3153,7 +3262,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
   <header class="qh">
     <span class="qn">L6</span>
     <h2>DEBUG=False 后的三处必改</h2>
-    <a class="qu" href="20.html" title="回到本单元讲义">单元 20 · 样式与部署</a>
+    <a class="qu" href="20.html#2-7-三大部署坑-allowed_hosts-collectstatic-de"
+       title="直达「2 7 三大部署坑 allowed_hosts collectstatic de」">单元 20 · 样式与部署</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-27" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3175,7 +3285,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
   <header class="qh">
     <span class="qn">L6</span>
     <h2>requirements.txt</h2>
-    <a class="qu" href="21.html" title="回到本单元讲义">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
+    <a class="qu" href="21.html#2-1-三个项目的工程流程回顾"
+       title="直达「2 1 三个项目的工程流程回顾」">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-28" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3194,7 +3305,8 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
   <header class="qh">
     <span class="qn">L6</span>
     <h2>README 三段结构</h2>
-    <a class="qu" href="21.html" title="回到本单元讲义">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
+    <a class="qu" href="21.html#2-1-三个项目的工程流程回顾"
+       title="直达「2 1 三个项目的工程流程回顾」">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-29" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3224,7 +3336,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>陌生项目定位 bug</h2>
-    <a class="qu" href="21.html" title="回到本单元讲义">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
+    <a class="qu" href="21.html#2-4-常见工程问题速查"
+       title="直达「2 4 常见工程问题速查」">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-30" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3248,7 +3361,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>飞船边界钳制</h2>
-    <a class="qu" href="12.html" title="回到本单元讲义">单元 12 · Pygame 起步与飞船驾驶</a>
+    <a class="qu" href="12.html#2-8-驾驶飞船-moving_right-标志位与持续移动"
+       title="直达「2 8 驾驶飞船 moving_right 标志位与持续移动」">单元 12 · Pygame 起步与飞船驾驶</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-31" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3272,7 +3386,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>设置类：改一个属性，全游戏生效</h2>
-    <a class="qu" href="12.html" title="回到本单元讲义">单元 12 · Pygame 起步与飞船驾驶</a>
+    <a class="qu" href="12.html#2-6-settings-类-把-会变的数值-集中管理"
+       title="直达「2 6 settings 类 把 会变的数值 集中管理」">单元 12 · Pygame 起步与飞船驾驶</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-32" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3303,7 +3418,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>子弹与外星人的矩形相交</h2>
-    <a class="qu" href="13.html" title="回到本单元讲义">单元 13 · 射击与外星舰队</a>
+    <a class="qu" href="13.html#2-7-碰撞检测与游戏结束-13-5-13-7"
+       title="直达「2 7 碰撞检测与游戏结束 13 5 13 7」">单元 13 · 射击与外星舰队</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-33" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3330,7 +3446,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>舰队整体下移与反向</h2>
-    <a class="qu" href="13.html" title="回到本单元讲义">单元 13 · 射击与外星舰队</a>
+    <a class="qu" href="13.html#2-6-让外星舰队移动-13-4"
+       title="直达「2 6 让外星舰队移动 13 4」">单元 13 · 射击与外星舰队</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-34" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3358,7 +3475,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>得分与升级进位</h2>
-    <a class="qu" href="14.html" title="回到本单元讲义">单元 14 · Play 按钮与记分</a>
+    <a class="qu" href="14.html#2-5-动态难度-speedup_scale-与-score_scale"
+       title="直达「2 5 动态难度 speedup_scale 与 score_scale」">单元 14 · Play 按钮与记分</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-35" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3387,7 +3505,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>最高分：只在新高时写盘</h2>
-    <a class="qu" href="14.html" title="回到本单元讲义">单元 14 · Play 按钮与记分</a>
+    <a class="qu" href="14.html#2-4-记分牌-数据与显示分离-格式化与最高分"
+       title="直达「2 4 记分牌 数据与显示分离 格式化与最高分」">单元 14 · Play 按钮与记分</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-36" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3426,7 +3545,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>随机漫步：坐标怎么长出来</h2>
-    <a class="qu" href="15.html" title="回到本单元讲义">单元 15 · Matplotlib 生成数据</a>
+    <a class="qu" href="15.html#2-6-随机游走-randomwalk-类"
+       title="直达「2 6 随机游走 randomwalk 类」">单元 15 · Matplotlib 生成数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-37" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3458,7 +3578,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>掷骰子：频次与占比</h2>
-    <a class="qu" href="15.html" title="回到本单元讲义">单元 15 · Matplotlib 生成数据</a>
+    <a class="qu" href="15.html#2-7-plotly-掷骰子-die-类"
+       title="直达「2 7 plotly 掷骰子 die 类」">单元 15 · Matplotlib 生成数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-38" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3486,7 +3607,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>用 DictReader 解析 CSV 文本</h2>
-    <a class="qu" href="16.html" title="回到本单元讲义">单元 16 · 下载真实数据</a>
+    <a class="qu" href="16.html#2-2-csv-三件套读表头"
+       title="直达「2 2 csv 三件套读表头」">单元 16 · 下载真实数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-39" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3522,7 +3644,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>统计结果转 JSON 再读回</h2>
-    <a class="qu" href="16.html" title="回到本单元讲义">单元 16 · 下载真实数据</a>
+    <a class="qu" href="16.html#2-6-geojson-带地理位置的-json"
+       title="直达「2 6 geojson 带地理位置的 json」">单元 16 · 下载真实数据</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-40" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3548,7 +3671,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>从响应里取字段：缺字段不能崩</h2>
-    <a class="qu" href="17.html" title="回到本单元讲义">单元 17 · 使用 API 与 Plotly</a>
+    <a class="qu" href="17.html#2-3-json-把响应体变成字典"
+       title="直达「2 3 json 把响应体变成字典」">单元 17 · 使用 API 与 Plotly</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-41" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3582,7 +3706,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>分页抓取：失败跳过、结果合并</h2>
-    <a class="qu" href="17.html" title="回到本单元讲义">单元 17 · 使用 API 与 Plotly</a>
+    <a class="qu" href="17.html#2-4-github-search-api-请求头与速率限制"
+       title="直达「2 4 github search api 请求头与速率限制」">单元 17 · 使用 API 与 Plotly</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-42" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3626,7 +3751,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>URL 正则 → 视图名</h2>
-    <a class="qu" href="18.html" title="回到本单元讲义">单元 18 · Django 入门</a>
+    <a class="qu" href="18.html#2-5-一次请求的旅程-url-视图-模板"
+       title="直达「2 5 一次请求的旅程 url 视图 模板」">单元 18 · Django 入门</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-43" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3663,7 +3789,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>GET 参数与模板填充</h2>
-    <a class="qu" href="18.html" title="回到本单元讲义">单元 18 · Django 入门</a>
+    <a class="qu" href="18.html#2-6-模板语法-for-与-url"
+       title="直达「2 6 模板语法 for 与 url」">单元 18 · Django 入门</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-44" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3693,7 +3820,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>权限判断：只能改自己的</h2>
-    <a class="qu" href="19.html" title="回到本单元讲义">单元 19 · 用户账户</a>
+    <a class="qu" href="19.html#2-6-数据隔离的安全红线"
+       title="直达「2 6 数据隔离的安全红线」">单元 19 · 用户账户</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-45" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3719,7 +3847,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>注册表单校验</h2>
-    <a class="qu" href="19.html" title="回到本单元讲义">单元 19 · 用户账户</a>
+    <a class="qu" href="19.html#2-1-表单与-modelform-把模型变成表单的捷径"
+       title="直达「2 1 表单与 modelform 把模型变成表单的捷径」">单元 19 · 用户账户</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-46" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3753,7 +3882,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>上线前的 7 道闸门</h2>
-    <a class="qu" href="20.html" title="回到本单元讲义">单元 20 · 样式与部署</a>
+    <a class="qu" href="20.html#2-7-三大部署坑-allowed_hosts-collectstatic-de"
+       title="直达「2 7 三大部署坑 allowed_hosts collectstatic de」">单元 20 · 样式与部署</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-47" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3787,7 +3917,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>环境变量：配置不能写死</h2>
-    <a class="qu" href="20.html" title="回到本单元讲义">单元 20 · 样式与部署</a>
+    <a class="qu" href="20.html#2-5-三个配置文件-一个描述应用-一个描述路由-对应教材-20-2"
+       title="直达「2 5 三个配置文件 一个描述应用 一个描述路由 对应教材 20 2」">单元 20 · 样式与部署</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-48" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3818,7 +3949,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>三个项目的核心逻辑串成一条流水线</h2>
-    <a class="qu" href="21.html" title="回到本单元讲义">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
+    <a class="qu" href="21.html#2-2-三个项目的技术地图"
+       title="直达「2 2 三个项目的技术地图」">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-49" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -3855,7 +3987,8 @@ python manage.py runserver
   <header class="qh">
     <span class="qn">L6</span>
     <h2>给四个纯函数写自测</h2>
-    <a class="qu" href="21.html" title="回到本单元讲义">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
+    <a class="qu" href="21.html#2-2-三个项目的技术地图"
+       title="直达「2 2 三个项目的技术地图」">单元 21 · 阶段 2 综合 + 关卡 2 验收</a>
     <div class="st">
       <button type="button" class="sb" data-id="L6-50" data-s="1"
               aria-pressed="false">已掌握</button>

@@ -67,6 +67,16 @@ def plain(md):
     return re.sub(r"\s+", " ", t).strip()
 
 
+# 题号 → 单元页里的具体小节锚点（由 tools/make_bank_anchor.py 生成，可手改）。
+# 缺映射时退回「单元页顶部」，不要瞎猜。
+_ANCHOR_PATH = os.path.join(HERE, "bank_anchor.json")
+try:
+    import json as _json
+    ANCHOR = _json.load(open(_ANCHOR_PATH, encoding="utf-8"))
+except (OSError, ValueError):
+    ANCHOR = {}
+
+
 def card(q):
     qid, title = q["id"], q["title"]
     lv = int(qid[1])
@@ -89,7 +99,8 @@ def card(q):
   <header class="qh">
     <span class="qn">L{lv}</span>
     <h2>{html.escape(title)}</h2>
-    <a class="qu" href="{unit:02d}.html" title="回到本单元讲义">单元 {unit} · {ut}</a>
+    <a class="qu" href="{unit:02d}.html{('#' + ANCHOR[qid]) if ANCHOR.get(qid) else ''}"
+       title="{('直达「' + ANCHOR[qid].replace('-', ' ') + '」') if ANCHOR.get(qid) else '回到本单元讲义'}">单元 {unit} · {ut}</a>
     <div class="st">
       <button type="button" class="sb" data-id="{qid}" data-s="1"
               aria-pressed="false">已掌握</button>
@@ -107,6 +118,19 @@ def card(q):
 CSS = """
 :root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
 --p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e8f6f1;--p3:#e08a15;--p3bg:#fdf3e2}
+/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
+   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
+@media (prefers-color-scheme: dark){
+:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
+--p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
+--danger:#ff8792;--dangerbg:#3a1d22}
+body{background:var(--bg);color:var(--text)}
+.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
+.lprog-bar,.dbar,.pbar{background:#22303e}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+a{color:var(--p1)}
+}
+
 *{box-sizing:border-box}
 /* 120 题一次全排版很贵（12k 节点 / 30k 像素高）。屏幕外的卡片先跳过排版，
    滚到附近再算；contain-intrinsic-size 用 auto，浏览器会记住首次量到的真实高度，

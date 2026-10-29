@@ -53,6 +53,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-17-3">参考答案 17-3</a>
 <a class="lv3" href="#参考答案-17-4">参考答案 17-4</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-不检查状态码就-json">错误 1：不检查状态码就 .json()</a>
+<a class="lv3" href="#错误-2-没设超时-程序一直挂着">错误 2：没设超时，程序一直挂着</a>
+<a class="lv3" href="#错误-3-只取了第一页">错误 3：只取了第一页</a>
+<a class="lv3" href="#错误-4-直接-data-items-偶尔-keyerror">错误 4：直接 data[&quot;items&quot;] → 偶尔 KeyError</a>
+<a class="lv3" href="#错误-5-被-403-429-拦了还继续打">错误 5：被 403/429 拦了还继续打</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -1048,6 +1054,28 @@ https://hacker-news.firebaseio.com/v0/item/{id}.json      ← 单篇文章的详
 <p><strong>要点</strong>：第一段请求 <code>topstories.json</code> 拿到一串 id（只有数字）；第二段对每个 id 请求 <code>item/{id}.json</code> 拿详情。这么设计<strong>省流量又通用</strong>：一份 id 列表能配不同详情查询，组合出「当前最热」「某作者的帖子」等成百上千种需求。返回 <code>null</code>（Python 的 <code>None</code>）表示条目已删除，必须 <code>if not isinstance(item_dict, dict): continue</code> 检查，否则 <code>item_dict["title"]</code> 抛 <code>TypeError</code>；这属于「失败的请求」，要<strong>打印出来</strong>，不能静默跳过。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-不检查状态码就-json">错误 1：不检查状态码就 <code>.json()</code></h3>
+<p><strong>症状</strong>：<code>JSONDecodeError</code>，或者拿到 <code>{"message": "rate limit"}</code> 还在解析。
+<strong>原因</strong>：4xx/5xx 的响应体不是你要的数据。
+<strong>改法</strong>：先 <code>if r.status_code != 200:</code> 打印状态与响应前 200 字，再决定是否解析；或 <code>r.raise_for_status()</code>。</p>
+<h3 id="错误-2-没设超时-程序一直挂着">错误 2：没设超时，程序一直挂着</h3>
+<p><strong>症状</strong>：脚本卡住不动，也不报错。
+<strong>原因</strong>：<code>requests.get(url)</code> 默认不超时（可能等几分钟）。
+<strong>改法</strong>：<code>requests.get(url, timeout=10)</code>；批量抓取时循环里加 <code>time.sleep(0.5)</code>。</p>
+<h3 id="错误-3-只取了第一页">错误 3：只取了第一页</h3>
+<p><strong>症状</strong>：明明有 1000 条，只拿到 30 条。
+<strong>原因</strong>：分页参数没处理。
+<strong>改法</strong>：看响应里的 <code>next</code>/<code>Link</code> 头或 <code>page</code> 字段，循环取到没有下一页为止。</p>
+<h3 id="错误-4-直接-data-items-偶尔-keyerror">错误 4：直接 <code>data["items"]</code> → 偶尔 KeyError</h3>
+<p><strong>症状</strong>：平时正常，偶尔崩一次。
+<strong>原因</strong>：接口在出错/限流时返回的字段不一样。
+<strong>改法</strong>：<code>data.get("items", [])</code>；每个 item 也用 <code>.get("name", "?")</code>。</p>
+<h3 id="错误-5-被-403-429-拦了还继续打">错误 5：被 403/429 拦了还继续打</h3>
+<p><strong>症状</strong>：越跑越慢，最后全 429。
+<strong>原因</strong>：请求太密，触发限流。
+<strong>改法</strong>：读 <code>Retry-After</code> 头、加 <code>time.sleep</code> 退避（1s→2s→4s）；带上 <code>User-Agent</code>，别裸奔。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能用「餐厅服务员」类比说清 API，解释「不必知道厨房怎么做」</li>
@@ -1115,6 +1143,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

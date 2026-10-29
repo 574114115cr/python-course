@@ -59,6 +59,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-2-9">参考答案 2-9</a>
 <a class="lv3" href="#参考答案-2-10">参考答案 2-10</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-indexerror-list-index-out-of-range">错误 1：IndexError: list index out of range</a>
+<a class="lv3" href="#错误-2-空列表上-x-1-也崩">错误 2：空列表上 x[-1] 也崩</a>
+<a class="lv3" href="#错误-3-cars-cars-sort-之后列表变成-none">错误 3：cars = cars.sort() 之后列表变成 None</a>
+<a class="lv3" href="#错误-4-b-a-之后改-b-a-也变了">错误 4：b = a 之后改 b，a 也变了</a>
+<a class="lv3" href="#错误-5-cars-remove-bmw-只删掉一个">错误 5：cars.remove(&quot;bmw&quot;) 只删掉一个</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -791,6 +797,28 @@ bad[0] is bad[1] → True
 <p><strong>要点</strong>：<code>append()</code> 只能加到<strong>末尾</strong>（不传位置）；<code>insert(位置, 值)</code> 可以加到<strong>任意位置</strong>，该位置及其后的元素会自动后移。实现：<code>nums.insert(1, 2)</code> → <code>[1, 2, 4]</code>。若用 append 则只能是 <code>nums.append(2)</code> → <code>[1, 4, 2]</code>。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-indexerror-list-index-out-of-range">错误 1：<code>IndexError: list index out of range</code></h3>
+<p><strong>症状</strong>：<code>cars[3]</code> 崩了，列表明明有 3 个元素。
+<strong>原因</strong>：下标从 0 开始，3 个元素的下标是 0/1/2。
+<strong>改法</strong>：最后一项用 <code>cars[-1]</code>；要按下标循环就 <code>range(len(cars))</code>，别手写上限。</p>
+<h3 id="错误-2-空列表上-x-1-也崩">错误 2：空列表上 <code>x[-1]</code> 也崩</h3>
+<p><strong>症状</strong>：<code>IndexError</code> 出现在取最后一项时。
+<strong>原因</strong>：空列表没有任何元素，<code>-1</code> 一样越界。
+<strong>改法</strong>：先判 <code>if cars:</code>（空列表为假），或用 <code>cars[-1] if cars else None</code>。</p>
+<h3 id="错误-3-cars-cars-sort-之后列表变成-none">错误 3：<code>cars = cars.sort()</code> 之后列表变成 None</h3>
+<p><strong>症状</strong>：排序后再用就 <code>TypeError: 'NoneType' object is not subscriptable</code>。
+<strong>原因</strong>：<code>sort()</code> 原地排序、返回 <code>None</code>；<code>sorted()</code> 才返回新列表。
+<strong>改法</strong>：<code>cars.sort()</code> 单独一行；要保留原列表就 <code>new = sorted(cars)</code>。</p>
+<h3 id="错误-4-b-a-之后改-b-a-也变了">错误 4：<code>b = a</code> 之后改 b，a 也变了</h3>
+<p><strong>症状</strong>：明明只改了副本。
+<strong>原因</strong>：<code>b = a</code> 只是给同一个列表起了个别名，不是复制。
+<strong>改法</strong>：<code>b = a.copy()</code> 或 <code>b = a[:]</code>（浅复制）；列表里还套列表时要用 <code>copy.deepcopy(a)</code>。</p>
+<h3 id="错误-5-cars-remove-bmw-只删掉一个">错误 5：<code>cars.remove("bmw")</code> 只删掉一个</h3>
+<p><strong>症状</strong>：列表里有两个 <code>"bmw"</code>，只少了一个。
+<strong>原因</strong>：<code>remove()</code> 只删第一个匹配项，且没有返回值。
+<strong>改法</strong>：要删干净用循环 <code>while "bmw" in cars: cars.remove("bmw")</code>，或列表推导 <code>cars = [c for c in cars if c != "bmw"]</code>。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能解释「索引从 0 开始」和负索引的用法</li>
@@ -852,6 +880,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

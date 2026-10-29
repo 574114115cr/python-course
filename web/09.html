@@ -60,6 +60,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-9-7">参考答案 9-7</a>
 <a class="lv3" href="#参考答案-9-8">参考答案 9-8</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-open-之后忘了-close">错误 1：open() 之后忘了 close()</a>
+<a class="lv3" href="#错误-2-unicodedecodeerror-gbk-codec-can-t-">错误 2：UnicodeDecodeError: &#x27;gbk&#x27; codec can&#x27;t decode</a>
+<a class="lv3" href="#错误-3-except-裸捕获吞掉了所有-bug">错误 3：except: 裸捕获吞掉了所有 bug</a>
+<a class="lv3" href="#错误-4-相对路径在人家的机器上找不到文件">错误 4：相对路径在人家的机器上找不到文件</a>
+<a class="lv3" href="#错误-5-json-load-在空文件上崩">错误 5：json.load() 在空文件上崩</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -1704,6 +1710,28 @@ transition:opacity .18s;z-index:60}
 <p><strong>要点</strong>：对应关系是 <code>object → dict</code>、<code>array → list</code>、<code>string → str</code>、<code>number → int/float</code>、<code>true/false → True/False</code>、<code>null → None</code>。不加 <code>ensure_ascii=False</code> 时，中文字符会被转义成 <code>\u5c0f\u660e</code> 这样的形式——程序能正常读回，但人完全看不懂，文件体积也更大。注意 JSON 用<strong>小写</strong> <code>true/false/null</code>，与 Python 的 <code>True/False/None</code> 不同。</p>
 </blockquote>
 <hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-open-之后忘了-close">错误 1：<code>open()</code> 之后忘了 <code>close()</code></h3>
+<p><strong>症状</strong>：文件写完是空的，或 Windows 上删不掉。
+<strong>原因</strong>：没关闭时缓冲区没刷盘。
+<strong>改法</strong>：一律 <code>with open(...) as f:</code>——退出代码块自动关闭，异常时也关。</p>
+<h3 id="错误-2-unicodedecodeerror-gbk-codec-can-t-">错误 2：<code>UnicodeDecodeError: 'gbk' codec can't decode</code></h3>
+<p><strong>症状</strong>：读中文文本崩。
+<strong>原因</strong>：Windows 默认用 GBK 打开，文件是 UTF-8。
+<strong>改法</strong>：显式 <code>open(path, encoding="utf-8")</code>；写文件也一样加。</p>
+<h3 id="错误-3-except-裸捕获吞掉了所有-bug">错误 3：<code>except:</code> 裸捕获吞掉了所有 bug</h3>
+<p><strong>症状</strong>：程序不报错了，但结果不对，也查不出原因。
+<strong>原因</strong>：<code>except:</code> 连 <code>KeyboardInterrupt</code> 和拼写错误都吃掉。
+<strong>改法</strong>：只捕你处理得了的类型（<code>except (ValueError, KeyError) as e:</code>），其余让它崩。</p>
+<h3 id="错误-4-相对路径在人家的机器上找不到文件">错误 4：相对路径在人家的机器上找不到文件</h3>
+<p><strong>症状</strong>：<code>FileNotFoundError</code>，本机却跑得好好的。
+<strong>原因</strong>：相对路径是按「当前工作目录」算的，从别的目录启动就变了。
+<strong>改法</strong>：用 <code>pathlib.Path(__file__).parent / "data.txt"</code> 锚定脚本所在目录。</p>
+<h3 id="错误-5-json-load-在空文件上崩">错误 5：<code>json.load()</code> 在空文件上崩</h3>
+<p><strong>症状</strong>：<code>json.decoder.JSONDecodeError: Expecting value: line 1 column 1</code>。
+<strong>原因</strong>：文件是空的或不是 JSON（比如写了一半）。
+<strong>改法</strong>：读之前判空，或 <code>try/except (json.JSONDecodeError, OSError)</code> 兜底给默认值。</p>
+<hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>
 <li>[ ] 能默写 <code>with open("x.txt", "a", encoding="utf-8") as f:</code> 并说清每个参数的作用</li>
@@ -1768,6 +1796,21 @@ border-radius:4px;text-align:center;line-height:17px}
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){
+.uprog{background:#1a2632}
+.uprog .track{background:#26343f}
+.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
+.bkbx .bk-h b{background:#243342;color:var(--p1)}
+.main code{background:#22303e;color:#dbe7f3}
+.main th{background:#1e2b36}
+.main pre{background:#0c141c}
+.toc a:hover{background:#1b2733}
+.pn a,.rel,.relbox,.tocbox{background:#16202b}
+.card,.goal,.live,.hw,.rbox{background:var(--card)}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */

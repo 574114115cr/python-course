@@ -44,6 +44,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#参考答案-10-7">参考答案 10-7</a>
 <a class="lv3" href="#参考答案-10-8">参考答案 10-8</a>
 <a class="lv2" href="#七-本单元验收自测">七、本单元验收自测</a>
+<a class="lv2" href="#八-常见错误清单-务必逐条自查">八、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-pytest-报-no-tests-ran">错误 1：pytest 报 no tests ran</a>
+<a class="lv3" href="#错误-2-断言写反">错误 2：断言写反</a>
+<a class="lv3" href="#错误-3-浮点数直接用">错误 3：浮点数直接用 ==</a>
+<a class="lv3" href="#错误-4-测试之间互相依赖">错误 4：测试之间互相依赖</a>
+<a class="lv3" href="#错误-5-只测-正常路径">错误 5：只测「正常路径」</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
@@ -1094,6 +1100,28 @@ transition:opacity .18s;z-index:60}
 <blockquote>
 <p><strong>要点</strong>：<code>-v</code>（verbose）用详细模式显示每个测试的名字和 PASSED/FAILED 状态，方便定位是哪一条失败了。<code>-k "divide"</code> 是按<strong>测试名字</strong>筛选，只运行名字里含 <code>divide</code> 的测试，在测试文件变多后能大幅缩短反馈时间。<code>-x</code> 是遇到第一个失败就停止（fail-fast），适合"CI 里快速发现问题"的场景。加上 <code>pytest test_bank.py::TestBook::test_borrow</code> 这样的完整路径，可以精确运行单个测试。</p>
 </blockquote>
+<hr>
+<h2 id="八-常见错误清单-务必逐条自查">八、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-pytest-报-no-tests-ran">错误 1：<code>pytest</code> 报 <code>no tests ran</code></h3>
+<p><strong>症状</strong>：明明写了测试，一条都没跑。
+<strong>原因</strong>：文件名不是 <code>test_*.py</code>，或函数名不是 <code>test_</code> 开头。
+<strong>改法</strong>：文件 <code>test_xxx.py</code>、函数 <code>def test_xxx():</code>；<code>pytest -q --collect-only</code> 先看有没有被收集到。</p>
+<h3 id="错误-2-断言写反">错误 2：断言写反</h3>
+<p><strong>症状</strong>：代码明明有 bug，测试却绿了。
+<strong>原因</strong>：<code>assert 结果 == 3</code> 里条件为真才通过；写成 <code>assert 结果 != 3</code> 就是反的。
+<strong>改法</strong>：写完故意改坏一行实现，确认测试<strong>变红</strong>——不会红的就是无效测试。</p>
+<h3 id="错误-3-浮点数直接用">错误 3：浮点数直接用 <code>==</code></h3>
+<p><strong>症状</strong>：<code>0.1 + 0.2 == 0.3</code> 是 False。
+<strong>原因</strong>：二进制浮点有精度误差。
+<strong>改法</strong>：<code>math.isclose(a, b)</code> 或 <code>abs(a-b) &lt; 1e-9</code>；金额用 <code>Decimal</code>。</p>
+<h3 id="错误-4-测试之间互相依赖">错误 4：测试之间互相依赖</h3>
+<p><strong>症状</strong>：单独跑通过，一起跑失败（或反过来）。
+<strong>原因</strong>：共用了全局变量/同一个文件，执行顺序变了结果就变。
+<strong>改法</strong>：每个测试自己准备数据（fixture 里创建临时目录），不依赖别的测试留下的状态。</p>
+<h3 id="错误-5-只测-正常路径">错误 5：只测「正常路径」</h3>
+<p><strong>症状</strong>：覆盖率挺高，但用户一输入空值就崩。
+<strong>原因</strong>：只测了理想输入，没测边界与非法值。
+<strong>改法</strong>：每个函数至少三条：正常、边界（空/0/最大）、非法（类型错/负数）——用 <code>pytest.raises</code> 测异常。</p>
 <hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>

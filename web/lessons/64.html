@@ -32,6 +32,12 @@ transition:opacity .18s;z-index:60}
       <h4>本节内容</h4>
       <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
 <a class="lv2" href="#七-本单元验收自测-综合-10-题">七、本单元验收自测（综合 10 题）</a>
+<a class="lv2" href="#九-常见错误清单-务必逐条自查">九、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-报错只看第一行">错误 1：报错只看第一行</a>
+<a class="lv3" href="#错误-2-一次写-200-行再运行">错误 2：一次写 200 行再运行</a>
+<a class="lv3" href="#错误-3-靠注释掉代码来找-bug">错误 3：靠注释掉代码来找 bug</a>
+<a class="lv3" href="#错误-4-把-能跑-当成-对了">错误 4：把「能跑」当成「对了」</a>
+<a class="lv3" href="#错误-5-项目换台机器就跑不起来">错误 5：项目换台机器就跑不起来</a>
 <a class="lv2" href="#八-结业检查与下一阶段">八、结业检查与下一阶段</a>
 <a class="lv3" href="#完成情况自查">完成情况自查</a>
 <a class="lv3" href="#如果四条验收全部通过">如果四条验收全部通过</a>
@@ -161,6 +167,28 @@ transition:opacity .18s;z-index:60}
 B. 因为列表是引用类型，修改它就是修改原对象；整数赋值只是让局部名字指向了新对象
 <strong>要点</strong>：<strong>B</strong> 更准确。A 是对的但不完整——真正的原因是：Python 传递的是"指向对象的引用"。列表这个对象可变，改它的内容 = 改原件；整数不可变，<code>n = n + 1</code> 只是让局部变量 <code>n</code> 指向了一个<strong>新</strong>的整数对象，原来的整数完全没动。</p>
 </blockquote>
+<hr>
+<h2 id="九-常见错误清单-务必逐条自查">九、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-报错只看第一行">错误 1：报错只看第一行</h3>
+<p><strong>症状</strong>：对着 <code>Traceback (most recent call last)</code> 发呆。
+<strong>原因</strong>：真正的原因在<strong>最后一行</strong>（异常类型 + 消息），中间是调用链。
+<strong>改法</strong>：从下往上读：最后一行说什么错，倒数第二段指出哪一行、哪个文件。</p>
+<h3 id="错误-2-一次写-200-行再运行">错误 2：一次写 200 行再运行</h3>
+<p><strong>症状</strong>：一跑几十个错，不知道从哪改。
+<strong>原因</strong>：错误叠加，后面的报错往往是前面的连锁反应。
+<strong>改法</strong>：写 10–20 行就跑一次；每加一个函数先单独调用验证，再拼进主流程。</p>
+<h3 id="错误-3-靠注释掉代码来找-bug">错误 3：靠注释掉代码来找 bug</h3>
+<p><strong>症状</strong>：越注释越乱，最后不知道哪版是对的。
+<strong>原因</strong>：没有可回退的基线。
+<strong>改法</strong>：先 <code>git commit</code> 一次；用 <code>git diff</code> 看改了什么；二分法定位（注释一半）。</p>
+<h3 id="错误-4-把-能跑-当成-对了">错误 4：把「能跑」当成「对了」</h3>
+<p><strong>症状</strong>：程序不报错，但结果算错。
+<strong>原因</strong>：没写断言，只看了输出「像那么回事」。
+<strong>改法</strong>：给关键函数写 2–3 条 <code>assert</code>（或 pytest）；用一组已知答案的输入验证。</p>
+<h3 id="错误-5-项目换台机器就跑不起来">错误 5：项目换台机器就跑不起来</h3>
+<p><strong>症状</strong>：<code>ModuleNotFoundError</code>，或者版本不兼容。
+<strong>原因</strong>：依赖没记录。
+<strong>改法</strong>：<code>python -m pip freeze &gt; requirements.txt</code>；README 里写清 Python 版本与启动命令。</p>
 <hr>
 <h2 id="八-结业检查与下一阶段">八、结业检查与下一阶段</h2>
 <h3 id="完成情况自查">完成情况自查</h3>

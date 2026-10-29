@@ -32,6 +32,12 @@ transition:opacity .18s;z-index:60}
       <h4>本节内容</h4>
       <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
 <a class="lv2" href="#六-本单元验收自测">六、本单元验收自测</a>
+<a class="lv2" href="#七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</a>
+<a class="lv3" href="#错误-1-input-拿到的数字当数字用">错误 1：input() 拿到的数字当数字用</a>
+<a class="lv3" href="#错误-2-while-忘了改条件-死循环">错误 2：while 忘了改条件，死循环</a>
+<a class="lv3" href="#错误-3-while-x-in-items-items-remove-x-写成-">错误 3：while &quot;x&quot; in items: items.remove(&quot;x&quot;) 写成 if</a>
+<a class="lv3" href="#错误-4-break-只跳出最内层">错误 4：break 只跳出最内层</a>
+<a class="lv3" href="#错误-5-while-true-里没留退出路径">错误 5：while True: 里没留退出路径</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
@@ -123,6 +129,28 @@ transition:opacity .18s;z-index:60}
 <blockquote>
 <p><strong>要点</strong>：因为 <code>while True</code> 的条件永远是真，循环<strong>没有任何自动出口</strong>，唯一的出口是 <code>break</code>。如果不提供退出方式，用户会被永久困在循环里，程序也无法结束。骨架四个部分：① <code>while True:</code> 开始无限循环；② 用 <code>input()</code> 读取用户输入；③ <code>if 输入 == "退出"</code> 则 <code>break</code>；④ <code>if 输入无效</code> 则 <code>continue</code>（或 <code>continue</code> 让流程回到循环开头），末尾放一句"程序结束"作为 break 之后的出口标记。</p>
 </blockquote>
+<hr>
+<h2 id="七-常见错误清单-务必逐条自查">七、常见错误清单（务必逐条自查）</h2>
+<h3 id="错误-1-input-拿到的数字当数字用">错误 1：<code>input()</code> 拿到的数字当数字用</h3>
+<p><strong>症状</strong>：<code>if age &gt; 18:</code> 报 <code>TypeError: '&gt;' not supported between 'str' and 'int'</code>。
+<strong>原因</strong>：<code>input()</code> 永远返回<strong>字符串</strong>，<code>"18" &gt; 18</code> 不成立。
+<strong>改法</strong>：<code>age = int(input("年龄："))</code>；不确定输入合法就先 <code>try: age = int(s) except ValueError:</code> 提示重输。</p>
+<h3 id="错误-2-while-忘了改条件-死循环">错误 2：<code>while</code> 忘了改条件，死循环</h3>
+<p><strong>症状</strong>：程序卡住不动，CPU 占满。
+<strong>原因</strong>：<code>while i &lt; 5:</code> 里没写 <code>i += 1</code>，条件永远成立。
+<strong>改法</strong>：循环体里必须有能让条件变假的语句；临时排查在循环里加 <code>print(i)</code>（<code>Ctrl+C</code> 停）。</p>
+<h3 id="错误-3-while-x-in-items-items-remove-x-写成-">错误 3：<code>while "x" in items: items.remove("x")</code> 写成 <code>if</code></h3>
+<p><strong>症状</strong>：删了一个还剩俩。
+<strong>原因</strong>：<code>if</code> 只判断一次；要删干净得反复判断。
+<strong>改法</strong>：用 <code>while ... in ...</code>；或 <code>items = [i for i in items if i != "x"]</code>。</p>
+<h3 id="错误-4-break-只跳出最内层">错误 4：<code>break</code> 只跳出最内层</h3>
+<p><strong>症状</strong>：两层循环里 <code>break</code> 之后外层还在跑。
+<strong>原因</strong>：<code>break</code> 只结束它所在的那一层。
+<strong>改法</strong>：用标志位 <code>done = True</code> 让外层也退出，或把内层抽成函数 <code>return</code>。</p>
+<h3 id="错误-5-while-true-里没留退出路径">错误 5：<code>while True:</code> 里没留退出路径</h3>
+<p><strong>症状</strong>：必须强制关窗口。
+<strong>原因</strong>：只写了 <code>break</code> 的条件永远不会满足（比如没处理「退出」关键字）。
+<strong>改法</strong>：明确列出所有结束条件；<code>while True</code> 里至少有一条 <code>break</code> 与用户输入相关。</p>
 <hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <ul>

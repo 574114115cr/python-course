@@ -16,6 +16,19 @@ pre{max-width:100%}
 :root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
 --p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#e08a15;--p3bg:#fdf3e2;
 --r:14px}
+/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
+   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
+@media (prefers-color-scheme: dark){
+:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
+--p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
+--danger:#ff8792;--dangerbg:#3a1d22}
+body{background:var(--bg);color:var(--text)}
+.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
+.lprog-bar,.dbar,.pbar{background:#22303e}
+input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+a{color:var(--p1)}
+}
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.75}
@@ -220,6 +233,21 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
  /* 90 分钟四段改 2×2，避免 3+1 参差 */
  .sched{display:grid;grid-template-columns:1fr 1fr;gap:8px}
  .sc{min-width:0}
+}
+
+/* 课节页还有几处写死的浅色（卡片底、场景卡、上下课节），暗色下必须逐条覆盖 */
+@media (prefers-color-scheme: dark){
+.blk{background:var(--card)}
+.sc,.pn a{background:#1b2733;border-color:var(--line)}
+.head .goal{color:#bac9d8}
+.side,.side a{color:var(--text)}
+code{background:#22303e;color:#dbe7f3}
+th{background:#1e2b36}
+/* 四种内容块的底色/边框在浅色主题里是写死的，暗色要逐个换掉 */
+.blk.live{background:#0f2c26;border-color:#1f5044}
+.blk.hw{background:#2a2213;border-color:#4a3a1c}
+.blk.recap{background:#221d33;border-color:#3a3358}
+.blk.review{background:#2a2318;border-color:#4c3d22}
 }
 
 """
@@ -1137,6 +1165,21 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
 @page{{margin:14mm}}
 
 @media(max-width:700px){{.wrap{{padding:0 14px 60px}}.hero{{padding:30px 22px}}.hero h1{{font-size:27px}}}}
+/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
+   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
+@media (prefers-color-scheme: dark){{
+.uprog{{background:#1a2632}}
+.uprog .track{{background:#26343f}}
+.bkbx{{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}}
+.bkbx .bk-h b{{background:#243342;color:var(--p1)}}
+.main code{{background:#22303e;color:#dbe7f3}}
+.main th{{background:#1e2b36}}
+.main pre{{background:#0c141c}}
+.toc a:hover{{background:#1b2733}}
+.pn a,.rel,.relbox,.tocbox{{background:#16202b}}
+.card,.goal,.live,.hw,.rbox{{background:var(--card)}}
+input,select,textarea{{background:var(--card);color:var(--text);border-color:var(--line)}}
+}}
 </style>
 </head>
 <body>

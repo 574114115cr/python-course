@@ -67,6 +67,13 @@ list-style:none}
 .det summary::before{content:"▸ ";font-size:12px}
 .det[open] summary::before{content:"▾ "}
 .fld{display:flex;gap:10px;margin:8px 0;font-size:14px;align-items:baseline}
+.fld.scb{display:block;background:#16232e;border-radius:10px;padding:12px 14px;margin:14px 0}
+.fld.scb>b{display:block;color:#9fd0ff;font-size:12.5px;letter-spacing:.5px;margin-bottom:8px}
+.scl{display:grid;gap:8px}
+.sc{display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.sc code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#e8f2ff;background:#0f1a23;border:1px solid #24384a;border-radius:6px;padding:6px 9px;overflow-x:auto;white-space:pre}
+.sc span{font-size:12px;color:#8fb3cc;padding-left:2px}
+@media(max-width:620px){.sc code{font-size:11.5px}}
 .fld b{flex:0 0 84px;font-size:12.5px;color:#fff;background:var(--p1);
 border-radius:5px;text-align:center;padding:2px 0;font-weight:700}
 .fld.warn b{background:var(--p3)}
@@ -116,27 +123,32 @@ flex-wrap:wrap;gap:8px}.hero,.prog,.wrap,.after{padding:0 14px}}
   <div class="ch"><span class="cn">1</span><h3>三个项目全部跑通，且已推到公开仓库，每个都有 README + requirements.txt</h3></div>
   <div class="bd"></div>
   <div class="fld ok"><b>怎么算达标</b><div><p>三个仓库链接都拿到了；每个仓库首页能看到 README；每个仓库里有 <code>requirements.txt</code> 且依赖都带 <code>==</code>；把任意一个仓库 clone 到<strong>另一台机器</strong>，照 README 能跑起来。</p></div></div><div class="fld "><b>怎么验证</b><div><p>跑一遍示例 1 的 <code>project_doctor.py</code>，问题数为 0。</p></div></div><div class="fld warn"><b>没过怎么办</b><div><p>README 照参考答案 21-1 的三段结构写；requirements.txt 在虚拟环境里重新 <code>pip freeze &gt; requirements.txt</code>；仓库还没有就 <code>git init</code> → <code>git add .</code> → <code>git commit</code> → 建远程仓库 → <code>git push</code>。</p></div></div>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>git remote -v</code><span>有 origin 地址（说明真推上去了）</span></div><div class='sc'><code>git status --short</code><span>空 = 全部已提交</span></div><div class='sc'><code>ls README.md requirements.txt</code><span>两个文件都存在</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate2-v1-1-0"><span>这条已达标（按「怎么验证」实测过，不是凭感觉）</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">2</span><h3>「学习笔记」已部署上线，公网可访问，错误页已定制</h3></div>
   <div class="bd"></div>
   <div class="fld ok"><b>怎么算达标</b><div><p><code>platform url</code> 给出的网址在<strong>手机流量</strong>（不是同一个 WiFi）下能打开；访问不存在的网址返回你定制的 404 页；服务器出错时 500 页也是定制的，不是 Django 调试页。</p></div></div><div class="fld "><b>怎么验证</b><div><p>重点测首页、<code>/不存在/</code>、<code>/accounts/login/</code> 三个 URL。</p></div></div><div class="fld warn"><b>没过怎么办</b><div><p>回单元 20，按 2.7 节三大坑（<code>ALLOWED_HOSTS</code>、<code>collectstatic</code>、<code>DEBUG</code>）逐项排查，改完 <code>git commit</code> + <code>platform push</code>。</p></div></div><div class="fld warn"><b>注意</b><div><p>定制错误页只在 <code>DEBUG = False</code> 时生效，本地默认看不到。</p></div></div>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>curl -I https://你的域名/</code><span>HTTP/2 200 或 301</span></div><div class='sc'><code>curl -s https://你的域名/no-such-page | head -5</code><span>返回自定义 404 页面，不是 Django 调试页</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate2-v1-2-0"><span>这条已达标（按「怎么验证」实测过，不是凭感觉）</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">3</span><h3>能用<strong>自己的</strong>函数写出 pytest 测试并跑过（不是抄教材的）</h3></div>
   <div class="bd"></div>
   <div class="fld ok"><b>怎么算达标</b><div><p>≥ 3 条测试针对你自己项目里的纯逻辑函数；每条断言具体数值；至少一条覆盖边界（0 / 空 / 非法输入）；<code>pytest -v</code> 全绿。</p></div></div><div class="fld "><b>怎么验证</b><div><p>关掉讲义和教材，只留项目代码和 pytest，问自己：<strong>这三条测试的断言值我能自己算出来吗？</strong> 算不出来就是抄的。</p></div></div><div class="fld warn"><b>没过怎么办</b><div><p>先按 2.3 标准一把纯逻辑从「界面/数据库代码」里拆出来（这是前提），再照参考答案 21-2 写。记住：文件名和函数名都要 <code>test_</code> 前缀，命名不对 pytest 显示 <code>collected 0 items</code> 而<strong>不报错</strong>。</p></div></div>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>python -m pytest -q --collect-only | tail -5</code><span>用例名是你自己起的函数名</span></div><div class='sc'><code>python -m pytest -q</code><span>全部 passed；删掉一个断言应该变红（证明测的是自己的代码）</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate2-v1-3-0"><span>这条已达标（按「怎么验证」实测过，不是凭感觉）</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">4</span><h3>接手一个没写过的 500 行 Python 项目，能读懂结构并定位一个 bug</h3></div>
   <div class="bd"></div>
   <div class="fld ok"><b>怎么算达标</b><div><p>能在 30 分钟内画出结构图、指出入口、找到至少一处 bug（或明确的改进点）并说明理由；能判断项目属于哪一类（脚本 / 事件驱动 / 数据处理 / Web）。</p></div></div><div class="fld "><b>怎么验证</b><div><p>按 2.4 的五步走一遍，用 <code>grep -rn</code> 搜关键字。</p></div></div><div class="fld warn"><b>没过怎么办</b><div><p><strong>找不到入口</strong>就搜 <code>if __name__</code>；<strong>读不懂逻辑</strong>就画调用图（grep 搜函数名看谁调用谁）；<strong>不敢确定是 bug</strong>就看上游有没有 open 的 issue。</p></div></div>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>python -m cProfile -s cumtime main.py 2&gt;&amp;1 | head -15</code><span>能说出耗时最多的三个函数</span></div><div class='sc'><code>python -m trace --count -m main 2&gt;&amp;1 | tail -5</code><span>能看到哪些行被执行过</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate2-v1-4-0"><span>这条已达标（按「怎么验证」实测过，不是凭感觉）</span></label></div>
 </section><section class="card">
   <div class="ch"><span class="cn">5</span><h3>能说清每个项目「解决了什么问题、还能怎么扩展」</h3></div>
   <div class="bd"></div>
   <div class="fld ok"><b>怎么算达标</b><div><p>对三个项目各能回答两问——① 它解决什么真实问题（不是「练了 xxx API」）；② 至少说得出三条扩展方向，<strong>并能说明每条要动哪几个文件</strong>。</p></div></div><div class="fld "><b>怎么验证</b><div><p>录一段 3 分钟口述，或写进每个项目 README 的「未来想法」一节。</p></div></div><div class="fld warn"><b>没过怎么办</b><div><p>这题问的是<strong>判断力</strong>，只能自己想。万能模板（以数据看板为例）：① 数据源换更细的粒度；② 加一个导出报告的功能；③ 每天定时跑并把结果推给你。<strong>能说出「要动哪几个文件」，就说明你真懂它的结构。</strong></p>
 <hr></div></div>
+  <div class='fld scb'><b>自查命令（跑通再勾）</b><div class='scl'><div class='sc'><code>grep -c &#x27;^##&#x27; README.md</code><span>≥3：说明写了「做什么 / 怎么跑 / 还能怎么扩展」</span></div><div class='sc'><code>python -c &quot;import json;print(len(json.load(open(&#x27;data.json&#x27;))))&quot;</code><span>能报出项目真实数据规模，而不是「大概几十条」</span></div></div></div>
   <div class="cks"><label class="ck"><input type="checkbox" data-k="gate2-v1-5-0"><span>这条已达标（按「怎么验证」实测过，不是凭感觉）</span></label></div>
 </section>
 </main>
