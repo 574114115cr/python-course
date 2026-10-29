@@ -172,6 +172,57 @@ async function main() {
   expect('鼠标跟随 关 → 同位置圆盘消失', noDisk < disk, `${noDisk} px（开时 ${disk}）`);
   await evaluate(`window.__neuron.set('follow',1)`);
 
+  /* ───── 4b. 配色 多彩/单色 + 绘制性能 ───── */
+  // 色相按 30° 分桶，只统计 alpha≥40 的明显像素（光晕 alpha≈0.1，不会混进来）
+  const HUES = `(() => {
+    const c = document.getElementById('neuronCv');
+    const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    const hues = {};
+    for (let i = 0; i < d.length; i += 4) {
+      if (d[i + 3] < 40) continue;
+      const r = d[i] / 255, g = d[i + 1] / 255, b = d[i + 2] / 255;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+      if (mx - mn < 0.06) continue;           // 近灰白（单色蓝也会被排除，改在下面兜底）
+      let h;
+      if (mx === r) h = ((g - b) / (mx - mn)) % 6;
+      else if (mx === g) h = (b - r) / (mx - mn) + 2;
+      else h = (r - g) / (mx - mn) + 4;
+      h = Math.round(((h * 60) + 360) % 360 / 30);
+      hues[h] = (hues[h] || 0) + 1;
+    }
+    return Object.keys(hues).length;
+  })()`;
+  const fps = `(() => new Promise(res => {
+    let n = 0; const t0 = performance.now();
+    (function loop() {
+      n++;
+      if (performance.now() - t0 < 1000) requestAnimationFrame(loop);
+      else res(n);
+    })();
+  }))()`;
+  await evaluate(`window.__neuron.set('dense','high')`);
+  await evaluate(`window.__theme.set('light')`);
+  await evaluate(`window.__neuron.set('color','multi')`);
+  await sleep(700);
+  const huL = Number(await evaluate(HUES));
+  const fpsMulti = Number(await evaluate(fps, true));
+  await evaluate(`window.__neuron.set('color','mono')`);
+  await sleep(700);
+  const huM = Number(await evaluate(HUES));
+  const fpsMono = Number(await evaluate(fps, true));
+  expect('配色 浅色多彩色相 ≥4 种', huL >= 4, `${huL} 个色相桶`);
+  expect('配色 单色色相远少于多彩', huM <= 3 && huM < huL, `${huM} 个色相桶`);
+  expect('性能 多彩渐变不掉帧（≥40fps）', fpsMulti >= 40, `${fpsMulti} fps`);
+  expect('性能 多彩不比单色慢太多（≥60%）', fpsMulti >= fpsMono * 0.6,
+    `多彩 ${fpsMulti} / 单色 ${fpsMono}`);
+  await evaluate(`window.__theme.set('dark')`);
+  await evaluate(`window.__neuron.set('color','multi')`);
+  await sleep(700);
+  const huD = Number(await evaluate(HUES));
+  expect('配色 深色多彩色相 ≥4 种', huD >= 4, `${huD} 个色相桶`);
+  await evaluate(`window.__theme.set('light')`);
+  await evaluate(`window.__neuron.set('dense','mid')`);
+
   /* ───── 5. 选项选中态 + 持久化 ───── */
   await evaluate(`window.__neuron.set('speed','fast')`);
   await evaluate(`window.__neuron.set('dense','high')`);
