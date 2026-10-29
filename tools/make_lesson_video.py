@@ -625,8 +625,8 @@ def build_scenes():
 WHALE_X, WHALE_Y, WHALE_W, WHALE_H = 972, 336, 274, 304
 CHAR_PATH = os.path.join(ROOT, "tools", "assets", "whale-girl.png")
 CHAR_H = 280            # 立绘显示高度
-# 立绘原图里嘴的中心（按肤色掩码+两眼定位量出，原图 461×620）
-MOUTH_ASSET = (204, 276)
+# 立绘原图里嘴的中心（视觉实测：微笑弧线中心，原图 523×620；两眼 y≈284）
+MOUTH_ASSET = (252, 332)
 MOUTH_ASSET_H = 620.0
 _CHAR = {}
 
@@ -676,17 +676,16 @@ def draw_char(canvas, t, mouth, dx=0):
     ddx, ddy = mx0 - cxf, my0 - cyf
     mpx = x + cxf + ddx * math.cos(th) + ddy * math.sin(th)
     mpy = y + cyf - ddx * math.sin(th) + ddy * math.cos(th)
-    mw = 13.5
-    oh = 1.8 + mouth * 7.6
+    mw = 14.0
+    oh = 1.5 + mouth * 7.5
     d2 = ImageDraw.Draw(canvas)
+    # 新立绘自带微笑弧线：闭嘴时不叠任何东西（画 arc 会与原线重影），
+    # 只在说话时叠张开的口腔+舌
     if mouth > .08:
         d2.ellipse([mpx - mw / 2, mpy - oh, mpx + mw / 2, mpy + oh],
                    fill=(96, 34, 52))
         d2.ellipse([mpx - mw * .32, mpy + oh * .2, mpx + mw * .32, mpy + oh * .92],
                    fill=(216, 110, 120))
-    else:
-        d2.arc([mpx - mw / 2, mpy - 4, mpx + mw / 2, mpy + 5], start=25, end=155,
-               fill=(122, 54, 68), width=2)
     # 说话音波：头侧三条弧，开度越大越亮
     if mouth > .1:
         d2 = ImageDraw.Draw(canvas)
