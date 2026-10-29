@@ -55,8 +55,8 @@ GATES = [
 ]
 
 CSS = """
-:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e8f6f1;--p3:#e08a15;--p3bg:#fdf3e2}
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p2bg:#e8f6f1;--p3:#a06009;--p3bg:#fdf3e2}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);line-height:1.75;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
@@ -67,7 +67,7 @@ font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 pre{background:#f7f9fc;border:1px solid var(--line);border-radius:9px;padding:12px 14px;
 overflow:auto;position:relative;margin:10px 0}
 pre code{background:none;padding:0;font-size:13px;line-height:1.62}
-.cl{position:absolute;top:6px;right:10px;font-size:11px;color:#8a9aaa;background:#fff;
+.cl{position:absolute;top:6px;right:10px;font-size:11px;color:var(--muted);background:#fff;
 border:1px solid var(--line);border-radius:5px;padding:1px 7px}
 .top{position:sticky;top:0;z-index:40;background:rgba(246,248,251,.96);
 backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
@@ -117,7 +117,7 @@ list-style:none}
 .det[open] summary::before{content:"▾ "}
 .fld{display:flex;gap:10px;margin:8px 0;font-size:14px;align-items:baseline}
 .fld.scb{display:block;background:#16232e;border-radius:10px;padding:12px 14px;margin:14px 0}
-.fld.scb>b{display:block;color:#9fd0ff;font-size:12.5px;letter-spacing:.5px;margin-bottom:8px}
+.fld.scb>b{display:block;background:none;color:#9fd0ff;font-size:12.5px;letter-spacing:.5px;margin-bottom:8px}
 .scl{display:grid;gap:8px}
 .sc{display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
 .sc code{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:#e8f2ff;background:#0f1a23;border:1px solid #24384a;border-radius:6px;padding:6px 9px;overflow-x:auto;white-space:pre}
@@ -403,3 +403,5 @@ def build():
 if __name__ == "__main__":
     for f, n, size in build():
         print(f"{f}: {n} 条验收勾选，{size} 字节")
+    import theme  # 主题派生：把浅色样式表翻成深色表并注入切换按钮
+    theme.sweep([OUT])

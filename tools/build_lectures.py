@@ -75,20 +75,8 @@ pre{max-width:100%}
   pre{max-width:100%;overflow-x:auto}
 }
 
-:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p3:#e08a15;--p3bg:#fdf3e2}
-/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
-   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
-@media (prefers-color-scheme: dark){
-:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
---p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
---danger:#ff8792;--dangerbg:#3a1d22}
-body{background:var(--bg);color:var(--text)}
-.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
-.lprog-bar,.dbar,.pbar{background:#22303e}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-a{color:var(--p1)}
-}
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p3:#a06009;--p3bg:#fdf3e2}
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
@@ -152,12 +140,14 @@ color:var(--muted);border:1px solid var(--line);font-weight:600}
 .main pre{background:#1e2a35;border-radius:10px;padding:0;margin:16px 0;overflow:hidden;
 position:relative}
 .main pre code{display:block;padding:16px 18px;font-size:13.5px;line-height:1.65;
-font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto}
-.main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#6b7f92;
+font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto;
+/* 终端底色两种主题都是深色 → 文字必须显式浅色（否则继承 .main code 的深绿，1.1:1） */
+color:#e6edf5}
+.main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#a8b6c4;
 letter-spacing:.5px;background:rgba(255,255,255,.07);padding:2px 8px;border-radius:4px}
 .main pre.broken{border:2px dashed var(--p3)}
-.main pre.broken .cl{background:rgba(224,138,21,.22);color:var(--p3);font-weight:700}
-.badge-broken{display:inline-block;background:var(--p3bg);color:#a86a0c;font-size:11.5px;
+.main pre.broken .cl{background:rgba(240,169,74,.24);color:#f5bd68;font-weight:700}
+.badge-broken{display:inline-block;background:var(--p3bg);color:#8f5a0a;font-size:11.5px;
 font-weight:700;padding:4px 11px;border-radius:5px;margin:4px 0 0}
 
 /* 底部导航 */
@@ -223,7 +213,6 @@ JS = """
   window.addEventListener('storage',paint);
 })();
 
-
 /* 长页回到顶部 */
 (function(){
   var b=document.createElement('button');
@@ -262,7 +251,7 @@ document.addEventListener('DOMContentLoaded',function(){
   function onScroll(){
     var y=window.scrollY+140, cur=0;
     targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
-    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'var(--p1bg)':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
   }
   onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
   // 代码块加标签
@@ -276,7 +265,6 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 });
 """
-
 
 def highlight_html(code, lang):
     """返回高亮后的 HTML，lang 为 None 时表示故意写错的示例。"""
@@ -303,7 +291,6 @@ def highlight_html(code, lang):
         return highlight(code, lexer, fmt)
     except Exception:
         return html.escape(code)
-
 
 def convert(md_text):
     """Markdown -> HTML，含代码高亮、错误示例标记、标题锚点。"""
@@ -387,7 +374,6 @@ def convert(md_text):
     out = re.sub(r"<p>@@CODE(\d+)@@</p>", fill, out)
     return out
 
-
 def add_heading_ids(body_html):
     """给 h1/h2/h3 注入唯一 id，python-markdown 默认不加锚点。"""
     used = {}
@@ -405,7 +391,6 @@ def add_heading_ids(body_html):
 
     return re.sub(r"<h([123])>(.*?)</h\1>", repl, body_html, flags=re.S)
 
-
 def toc_from_html(body_html):
     """从转换后的 HTML 提取 h2/h3 生成目录。"""
     items = []
@@ -414,7 +399,6 @@ def toc_from_html(body_html):
         items.append(f'<a class="lv{lvl}" href="#{aid}">{html.escape(txt)}</a>')
     return "\n".join(items)
 
-
 # 课件映射统一来自 tools/ppt_map.py，避免多处维护漂移
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
@@ -422,7 +406,6 @@ import ppt_map
 import bank_map
 import site_data
 UNIT_SLIDE = ppt_map.UNIT_SLIDE
-
 
 def page_shell(title, unit_no, body_html, toc_html, prev_link, next_link, done_block=True):
     # 讲义首部的「对应教材第 X 章 / 关键词」从裸 blockquote 升级成对照框：
@@ -587,34 +570,18 @@ text-decoration:none;color:inherit}}
 border-radius:4px;text-align:center;line-height:17px}}
 .rel a:nth-child(2) .k{{background:var(--p3)}}
 .rel a:nth-child(3) .k{{background:var(--p2)}}
-.rel a:nth-child(4) .k{{background:#7a8b9a}}
-.rel a:nth-child(5) .k{{background:#9a7a7a}}
+.rel a:nth-child(4) .k{{background:#5e6f7e}}
+.rel a:nth-child(5) .k{{background:#7d5e5e}}
 .rel .v{{font-size:12px;color:var(--text);line-height:1.45}}
 .top-in .ppt{{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}}
 .top-in .ppt:hover{{background:#fbe9cc;text-decoration:none}}
 .dd.on span{{color:var(--p2);font-weight:700}}
-/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
-   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
-@media (prefers-color-scheme: dark){{
-.uprog{{background:#1a2632}}
-.uprog .track{{background:#26343f}}
-.bkbx{{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}}
-.bkbx .bk-h b{{background:#243342;color:var(--p1)}}
-.main code{{background:#22303e;color:#dbe7f3}}
-.main th{{background:#1e2b36}}
-.main pre{{background:#0c141c}}
-.toc a:hover{{background:#1b2733}}
-.pn a,.rel,.relbox,.tocbox{{background:#16202b}}
-.card,.goal,.live,.hw,.rbox{{background:var(--card)}}
-input,select,textarea{{background:var(--card);color:var(--text);border-color:var(--line)}}
-}}
 </style>
 <script>{JS}</script>
 <script src="media/bgm.js" defer></script>
 </body>
 </html>"""
-
 
 def main():
     os.makedirs(OUT, exist_ok=True)
@@ -664,6 +631,7 @@ def main():
     print(f"{'合计':<14}{total_b:>9}{total_c:>8}{total_x:>8}{total_t:>8}")
     print(f"\n输出目录：{OUT}")
 
-
 if __name__ == "__main__":
     main()
+    import theme  # 主题派生：把浅色样式表翻成深色表并注入切换按钮
+    theme.sweep([OUT])

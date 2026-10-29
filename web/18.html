@@ -1,7 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><!--@theme:head-->
+<style>
+/* 主题切换按钮 + 原生控件配色（由 tools/theme.py 注入，勿手改） */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+/* 强调色的「原色版」：浅色下等于强调色本身，深色下由派生表换成压暗后的实心底色。
+   凡是把强调色当实心底、上面压白字的地方都用 --p1s 这类变量（否则白字会糊）。 */
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;--p1:#1f5fa8;
+--p1s:var(--p1);--p2s:var(--p2);--p3s:var(--p3);--p4s:var(--p4);--dangers:var(--danger)}
+html[data-theme="dark"]{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;
+--muted:#93a6b8;--p1:#63a9ee}
+body{transition:background-color .18s,color .18s}
+::selection{background:rgba(99,169,238,.32)}
+.thbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;
+border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);
+font:inherit;font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;
+white-space:nowrap;flex:0 0 auto}
+.thbtn:hover{color:var(--text);border-color:var(--p1)}
+.thbtn:focus-visible{outline:2px solid var(--p1);outline-offset:2px}
+.thbtn .thi svg{width:15px;height:15px;display:block}
+.thbtn .thlbl{display:inline}
+/* 窄屏顶栏本来就挤（返回 / 标题 / 课件 / 勾选），再塞按钮会横向溢出 14px，
+   所以窄屏由脚本把按钮挪到 body 上变成右下角悬浮（顶栏有 backdrop-filter，
+   直接给它 position:fixed 会被顶栏接管定位，跑到屏幕外）。 */
+.thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
+box-shadow:0 6px 20px rgba(0,0,0,.28)}
+@media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+</style>
+<script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
+<!--/@theme:head-->
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>单元 18 · Django入门</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
@@ -13,6 +43,9 @@ box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;
 transition:opacity .18s;z-index:60}
 #toTop.on{opacity:1;pointer-events:auto}
 @media print{#toTop{display:none}}
+/*@theme-dark*/
+:where(html[data-theme="dark"]) #toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+:where(html[data-theme="dark"]) #toTop.on{opacity:1;pointer-events:auto}
 </style>
 </head>
 <body data-unit="18">
@@ -1194,28 +1227,45 @@ text-decoration:none;color:inherit}
 border-radius:4px;text-align:center;line-height:17px}
 .rel a:nth-child(2) .k{background:var(--p3)}
 .rel a:nth-child(3) .k{background:var(--p2)}
-.rel a:nth-child(4) .k{background:#7a8b9a}
-.rel a:nth-child(5) .k{background:#9a7a7a}
+.rel a:nth-child(4) .k{background:#5e6f7e}
+.rel a:nth-child(5) .k{background:#7d5e5e}
 .rel .v{font-size:12px;color:var(--text);line-height:1.45}
 .top-in .ppt{font-size:12.5px;font-weight:700;color:#8a5a00;background:#fdf3e2;
 border:1px solid #f0d8a8;border-radius:6px;padding:4px 10px;white-space:nowrap}
 .top-in .ppt:hover{background:#fbe9cc;text-decoration:none}
 .dd.on span{color:var(--p2);font-weight:700}
-/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
-   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
-@media (prefers-color-scheme: dark){
-.uprog{background:#1a2632}
-.uprog .track{background:#26343f}
-.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
-.bkbx .bk-h b{background:#243342;color:var(--p1)}
-.main code{background:#22303e;color:#dbe7f3}
-.main th{background:#1e2b36}
-.main pre{background:#0c141c}
-.toc a:hover{background:#1b2733}
-.pn a,.rel,.relbox,.tocbox{background:#16202b}
-.card,.goal,.live,.hw,.rbox{background:var(--card)}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-}
+/*@theme-dark*/
+:where(html[data-theme="dark"]) .dd{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap}
+:where(html[data-theme="dark"]) .dd input{width:17px;height:17px;accent-color:var(--p2);cursor:pointer}
+:where(html[data-theme="dark"]) .uprog{margin:0 0 10px;padding:9px 10px;background:#121922;border-radius:9px}
+:where(html[data-theme="dark"]) .uprog-h{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--muted);line-height:1.5}
+:where(html[data-theme="dark"]) .uprog-h b{color:var(--p2);font-size:13px;white-space:nowrap}
+:where(html[data-theme="dark"]) .uprog .track{margin-top:6px;height:7px;background:#121821;border-radius:99px;overflow:hidden}
+:where(html[data-theme="dark"]) .uprog .track i{display:block;height:100%;width:0;background:var(--p2s);border-radius:99px;transition:width .2s}
+:where(html[data-theme="dark"]) pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;font-weight:700;color:var(--p1);background:#182129;border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+:where(html[data-theme="dark"]) pre:hover .cp{opacity:1}
+:where(html[data-theme="dark"]) pre .cp.ok{color:#fff;background:var(--p2s);border-color:var(--p2)}
+:where(html[data-theme="dark"]) .relbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+:where(html[data-theme="dark"]) .bkbx{background:linear-gradient(135deg,#121922,#121921);border:1px solid #273648;border-radius:12px;padding:13px 16px;margin:0 0 18px}
+:where(html[data-theme="dark"]) .bkbx .bk-h{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .bkbx .bk-h b{font-size:11px;letter-spacing:1px;color:var(--p1);background:#182129;border:1px solid #263547;border-radius:5px;padding:2px 8px;white-space:nowrap}
+:where(html[data-theme="dark"]) .bkbx .bk-h span{font-size:13.5px;font-weight:700;color:#90b5d5;line-height:1.6}
+:where(html[data-theme="dark"]) .bkbx .bk-k{margin:7px 0 0;font-size:12.5px;color:#b2bcc5;line-height:1.7}
+:where(html[data-theme="dark"]) .bkbx > a{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--p1);text-decoration:none}
+:where(html[data-theme="dark"]) .bkbx > a:hover{text-decoration:underline}
+:where(html[data-theme="dark"]) .relbox h4{margin:0 0 8px;font-size:11.5px;color:var(--muted);letter-spacing:1px;font-weight:700}
+:where(html[data-theme="dark"]) .rel{display:flex;flex-direction:column;gap:2px}
+:where(html[data-theme="dark"]) .rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;text-decoration:none;color:inherit}
+:where(html[data-theme="dark"]) .rel a:hover{background:#121922}
+:where(html[data-theme="dark"]) .rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1s);border-radius:4px;text-align:center;line-height:17px}
+:where(html[data-theme="dark"]) .rel a:nth-child(2) .k{background:var(--p3s)}
+:where(html[data-theme="dark"]) .rel a:nth-child(3) .k{background:var(--p2s)}
+:where(html[data-theme="dark"]) .rel a:nth-child(4) .k{background:#5e6f7e}
+:where(html[data-theme="dark"]) .rel a:nth-child(5) .k{background:#7d5e5e}
+:where(html[data-theme="dark"]) .rel .v{font-size:12px;color:var(--text);line-height:1.45}
+:where(html[data-theme="dark"]) .top-in .ppt{font-size:12.5px;font-weight:700;color:#eec577;background:#211b12;border:1px solid #413723;border-radius:6px;padding:4px 10px;white-space:nowrap}
+:where(html[data-theme="dark"]) .top-in .ppt:hover{background:#201a11;text-decoration:none}
+:where(html[data-theme="dark"]) .dd.on span{color:var(--p2);font-weight:700}
 </style>
 <script>
 /* 代码块一键复制：111 节课每节都有代码，手动选中太费劲 */
@@ -1260,7 +1310,6 @@ input,select,textarea{background:var(--card);color:var(--text);border-color:var(
   window.addEventListener('storage',paint);
 })();
 
-
 /* 长页回到顶部 */
 (function(){
   var b=document.createElement('button');
@@ -1299,7 +1348,7 @@ document.addEventListener('DOMContentLoaded',function(){
   function onScroll(){
     var y=window.scrollY+140, cur=0;
     targets.forEach(function(t,i){ if(t&&t.offsetTop<=y) cur=i; });
-    links.forEach(function(a,i){ a.style.background = (i===cur)?'#eaf1fb':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
+    links.forEach(function(a,i){ a.style.background = (i===cur)?'var(--p1bg)':''; a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent'; });
   }
   onScroll(); window.addEventListener('scroll',onScroll, {passive:true});
   // 代码块加标签
@@ -1314,5 +1363,65 @@ document.addEventListener('DOMContentLoaded',function(){
 });
 </script>
 <script src="media/bgm.js" defer></script>
+<!--@theme:body-->
+<script>(function(){
+var KEY='py-theme-v1',ORDER=['auto','light','dark'];
+var LABEL={auto:'跟随系统',light:'浅色',dark:'深色'};
+var ICON={
+auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>',
+dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3z"/></svg>'};
+var root=document.documentElement;
+var q=window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)'):null;
+function mode(){var m=root.getAttribute('data-theme-mode');return ORDER.indexOf(m)<0?'auto':m}
+function sync(m){
+  var b=document.getElementById('thBtn');
+  root.setAttribute('data-theme-mode',m);
+  var d=root.getAttribute('data-theme')==='dark';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
+  if(!b)return;
+  b.title='主题：'+LABEL[m]+'　点一下切换（跟随系统 → 浅色 → 深色）';
+  b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
+  var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
+  if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
+}
+function apply(m,save){
+  var d=m==='dark'||(m==='auto'&&q&&q.matches);
+  root.setAttribute('data-theme',d?'dark':'light');
+  if(save){try{localStorage.setItem(KEY,m)}catch(e){}}
+  sync(m);
+}
+function build(){
+  var b=document.createElement('button');
+  b.type='button';b.id='thBtn';b.className='thbtn';
+  b.innerHTML='<span class="thi"></span><span class="thlbl"></span>';
+  var host=document.querySelector('.top-in')||document.querySelector('.nav-in');
+  var mq=window.matchMedia?window.matchMedia('(max-width:640px)'):null;
+  if(host){host.appendChild(b)}else{document.body.appendChild(b)}
+  function home(){
+    var el=document.getElementById('thBtn');if(!el)return;
+    var small=mq&&mq.matches;
+    if(!host||small){
+      if(el.parentElement!==document.body)document.body.appendChild(el);
+      el.classList.add('fixed');
+    }else{
+      if(el.parentElement!==host)host.appendChild(el);
+      el.classList.remove('fixed');
+    }
+  }
+  home();
+  if(mq&&mq.addEventListener)mq.addEventListener('change',home);
+  window.__thHome=home;
+  b.addEventListener('click',function(){apply(ORDER[(ORDER.indexOf(mode())+1)%3],true)});
+  return b;
+}
+build();sync(mode());
+if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
+  q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
+window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
+  set:function(m){apply(m,true)}};
+})();</script>
+<!--/@theme:body-->
 </body>
 </html>

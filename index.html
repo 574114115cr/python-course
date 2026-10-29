@@ -1,7 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><!--@theme:head-->
+<style>
+/* 主题切换按钮 + 原生控件配色（由 tools/theme.py 注入，勿手改） */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+/* 强调色的「原色版」：浅色下等于强调色本身，深色下由派生表换成压暗后的实心底色。
+   凡是把强调色当实心底、上面压白字的地方都用 --p1s 这类变量（否则白字会糊）。 */
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;--p1:#1f5fa8;
+--p1s:var(--p1);--p2s:var(--p2);--p3s:var(--p3);--p4s:var(--p4);--dangers:var(--danger)}
+html[data-theme="dark"]{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;
+--muted:#93a6b8;--p1:#63a9ee}
+body{transition:background-color .18s,color .18s}
+::selection{background:rgba(99,169,238,.32)}
+.thbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;
+border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);
+font:inherit;font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;
+white-space:nowrap;flex:0 0 auto}
+.thbtn:hover{color:var(--text);border-color:var(--p1)}
+.thbtn:focus-visible{outline:2px solid var(--p1);outline-offset:2px}
+.thbtn .thi svg{width:15px;height:15px;display:block}
+.thbtn .thlbl{display:inline}
+/* 窄屏顶栏本来就挤（返回 / 标题 / 课件 / 勾选），再塞按钮会横向溢出 14px，
+   所以窄屏由脚本把按钮挪到 body 上变成右下角悬浮（顶栏有 backdrop-filter，
+   直接给它 position:fixed 会被顶栏接管定位，跑到屏幕外）。 */
+.thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
+box-shadow:0 6px 20px rgba(0,0,0,.28)}
+@media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+</style>
+<script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
+<!--/@theme:head-->
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Python 学习中枢 · 从入门到独立做项目</title>
 <meta name="theme-color" content="#1f5fa8">
@@ -9,20 +39,15 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#f6f8fb; --card:#ffffff; --line:#e3e8ef; --text:#16232e; --muted:#5f7183;
-  --p1:#1f5fa8; --p1bg:#eaf1fb; --p2:#0e9b78; --p2bg:#e6f6f0; --p3:#e08a15; --p3bg:#fdf3e2;
-  --danger:#d1394b; --dangerbg:#fdeef0;
+  --bg:#f6f8fb; --card:#ffffff; --line:#e3e8ef; --text:#16232e; --muted:#55687a;
+  --p1:#1f5fa8; --p1bg:#eaf1fb; --p2:#0a7d63; --p2bg:#e6f6f0; --p3:#985a08; --p3bg:#fdf3e2;
+  --danger:#c02b3d; --dangerbg:#fdeef0;
+  --p3ink:#5a4a20;   /* 琥珀底上的正文字，深色下由主题派生提亮 */
   --r:14px;
 }
 /* 暗色：学生晚上看长页面，白底刺眼。变量覆盖 + 顶栏/进度条补色。 */
-@media (prefers-color-scheme: dark){
-:root{--bg:#0f1620; --card:#16202b; --line:#243342; --text:#e6edf5; --muted:#93a6b8;
-  --p1:#63a9ee; --p1bg:#16283b; --p2:#3ecf9e; --p2bg:#0f2c26; --p3:#f0a94a; --p3bg:#33260f;
-  --danger:#ff8792; --dangerbg:#3a1d22}
-body{background:var(--bg);color:var(--text)}
-.lprog-bar,.dbar{background:#22303e}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-}
+
+
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);
@@ -148,8 +173,12 @@ border:1px solid var(--line);border-radius:7px;padding:4px 11px;cursor:pointer}
 .chk{flex-shrink:0;margin-top:12px;width:19px;height:19px;accent-color:var(--p2);cursor:pointer}
 .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.3px}
 .tag.core{background:var(--p1bg);color:var(--p1)}
-.tag.hard{background:var(--p3bg);color:#a86a0c}
+.tag.hard{background:var(--p3bg);color:#8f5a0a}
 .tag.gate{background:var(--dangerbg);color:var(--danger)}
+/* 关卡入口小按钮：颜色写进样式表（写成内联的话深色模式翻不过来） */
+.gatebtn{display:inline-block;margin-top:9px;font-weight:700;color:#8a5a00;background:#fdf3e2;
+border:1px solid #f0d8a8;border-radius:7px;padding:5px 12px}
+.gatebtn.g2{color:#0a6b52;background:#e8f6f1;border-color:#bfe3d6}
 .tag.gate2{background:var(--p2bg);color:#0a7a5f}
 .caret{flex-shrink:0;margin-top:11px;width:18px;height:18px;border-right:2px solid var(--muted);
   border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin-right:6px}
@@ -213,7 +242,7 @@ font-size:12.5px;font-weight:600;white-space:nowrap}
 .tip h4{margin:0 0 10px;font-size:15.5px}
 .tip.blue{background:var(--p1bg)} .tip.blue h4{color:var(--p1)}
 .tip.green{background:var(--p2bg)} .tip.green h4{color:#0a7a5f}
-.tip.amber{background:var(--p3bg)} .tip.amber h4{color:#a86a0c}
+.tip.amber{background:var(--p3bg)} .tip.amber h4{color:#8f5a0a}
 .tip.red{background:var(--dangerbg)} .tip.red h4{color:var(--danger)}
 .tip ul{margin:0;padding-left:19px} .tip li{margin:5px 0}
 .tip ol{margin:0;padding-left:20px} .tip ol li{margin:6px 0}
@@ -286,6 +315,225 @@ transition:opacity .18s;z-index:60}
   .csw{grid-template-columns:1fr}
   .cc{padding:16px 16px}
   .cc .acts a{flex:1;text-align:center}
+}
+/*@theme-dark*/
+html[data-theme="dark"]{--bg:#121922;--card:#182129;--line:#273548;--text:#d9e4ed;--muted:#abb8c4;--p1:#79ace6;--p1s:#1f5fa8;--p1bg:#121821;--p2:#77eed3;--p2s:#0a785f;--p2bg:#12211b;--p3:#eebb77;--p3s:#985a08;--p3bg:#211b12;--danger:#df717e;--dangers:#c02b3d;--dangerbg:#221214;--p3ink:#d7c38e;/* 琥珀底上的正文字，深色下由主题派生提亮 */
+  --r:14px}
+:where(html[data-theme="dark"]) *{box-sizing:border-box}
+html[data-theme="dark"]{scroll-behavior:smooth}
+:where(html[data-theme="dark"]) body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.68}
+:where(html[data-theme="dark"]) .wrap{max-width:1240px;margin:0 auto;padding:0 24px 90px}
+:where(html[data-theme="dark"]) a{color:inherit;text-decoration:none}
+:where(html[data-theme="dark"]) .nav{position:sticky;top:0;z-index:50;background:rgba(18,25,34,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+:where(html[data-theme="dark"]) .nav-in{max-width:1240px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;gap:26px}
+:where(html[data-theme="dark"]) .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px;white-space:nowrap}
+:where(html[data-theme="dark"]) .logo i{width:10px;height:10px;border-radius:3px;background:linear-gradient(135deg,var(--p1),var(--p2));display:block}
+:where(html[data-theme="dark"]) .nav-links{display:flex;gap:20px;flex:1;overflow-x:auto}
+:where(html[data-theme="dark"]) .nav-links a{font-size:14px;color:var(--muted);white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+:where(html[data-theme="dark"]) .nav-links a:hover{color:var(--p1);border-bottom-color:var(--p1)}
+:where(html[data-theme="dark"]) .nav-prog{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .hero{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 30px;background:linear-gradient(135deg,#1f5fa8 0%,#0b785d 100%);padding:52px 52px 44px;color:#fff}
+:where(html[data-theme="dark"]) .hero::after{content:'';position:absolute;right:-90px;bottom:-140px;width:420px;height:420px;border-radius:50%;background:rgba(24,33,41,0.08)}
+:where(html[data-theme="dark"]) .hero>*{position:relative;z-index:1}
+:where(html[data-theme="dark"]) .hsearch{position:relative;display:flex;align-items:center;gap:11px;background:#182129;border:1px solid var(--line);border-radius:12px;padding:0 15px;margin:0 0 30px;box-shadow:0 3px 14px rgba(20,40,70,.05)}
+:where(html[data-theme="dark"]) .hsearch:focus-within{border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.12)}
+:where(html[data-theme="dark"]) .hsearch .lb{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px;white-space:nowrap;display:flex;align-items:center;gap:7px}
+:where(html[data-theme="dark"]) .hsearch .lb::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--p2s)}
+:where(html[data-theme="dark"]) .hsearch input{flex:1;min-width:0;font:inherit;font-size:15px;color:var(--text);background:none;border:none;padding:13px 2px}
+:where(html[data-theme="dark"]) .hsearch input:focus{outline:none}
+:where(html[data-theme="dark"]) .hsearch .hint{font-size:11.5px;color:var(--muted);white-space:nowrap}
+@media(max-width:760px){
+:where(html[data-theme="dark"]) .hsearch .hint,:where(html[data-theme="dark"]) .hsearch .lb{display:none}
+}
+:where(html[data-theme="dark"]) .hres{position:absolute;left:22px;right:22px;top:calc(100% + 6px)}
+:where(html[data-theme="dark"]) .hres{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#182129;border-radius:11px;box-shadow:0 14px 38px rgba(0,20,50,.22);overflow:hidden;display:none;max-height:430px;overflow-y:auto;z-index:30}
+:where(html[data-theme="dark"]) .hres.on{display:block}
+:where(html[data-theme="dark"]) .hres a{display:block;padding:9px 14px;border-bottom:1px solid #29384c;text-decoration:none}
+:where(html[data-theme="dark"]) .hres a:last-child{border-bottom:none}
+:where(html[data-theme="dark"]) .hres a:hover,:where(html[data-theme="dark"]) .hres a.sel{background:#121821}
+:where(html[data-theme="dark"]) .hres .t{font-size:14px;color:#d9e4ed;font-weight:600}
+:where(html[data-theme="dark"]) .hres .s{font-size:12px;color:#a6b2be;margin-top:1px}
+:where(html[data-theme="dark"]) .hres .none{padding:12px 14px;font-size:13px;color:#a6b2be}
+:where(html[data-theme="dark"]) .dash{background:#182129;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 16px}
+:where(html[data-theme="dark"]) .dhead{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+:where(html[data-theme="dark"]) .dhead b{font-size:15px}
+:where(html[data-theme="dark"]) .dhead span{font-size:12px;color:var(--muted)}
+:where(html[data-theme="dark"]) .drow{display:flex;align-items:center;gap:12px;margin:8px 0}
+:where(html[data-theme="dark"]) .dlab{flex:0 0 34px;font-size:12.5px;font-weight:700;color:var(--muted)}
+:where(html[data-theme="dark"]) .dbar{flex:1;height:9px;background:#121821;border-radius:99px;overflow:hidden}
+:where(html[data-theme="dark"]) .dbar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#175cf5,#1a7951);transition:width .25s}
+:where(html[data-theme="dark"]) .dbar.b2 i{background:linear-gradient(90deg,#1f5fa8,#0b785d)}
+:where(html[data-theme="dark"]) .dbar.b3 i{background:linear-gradient(90deg,#975d0e,#9e5900)}
+:where(html[data-theme="dark"]) .dval{flex:0 0 auto;min-width:120px;text-align:right;font-size:12.5px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+:where(html[data-theme="dark"]) .dfoot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+:where(html[data-theme="dark"]) .dfoot .lprog-go{margin:0}
+:where(html[data-theme="dark"]) .lpt{display:flex;gap:8px;margin-left:auto}
+:where(html[data-theme="dark"]) .lpt button{font:inherit;font-size:12px;font-weight:600;color:var(--p1);background:#182129;border:1px solid var(--line);border-radius:7px;padding:4px 11px;cursor:pointer}
+:where(html[data-theme="dark"]) .lpt button:hover{background:var(--p1bg)}
+:where(html[data-theme="dark"]) .badge{display:inline-block;background:var(--p3s);border-radius:6px;padding:6px 15px;font-size:13px;font-weight:700;letter-spacing:1.5px;margin-bottom:20px}
+:where(html[data-theme="dark"]) .hero h1{font-size:44px;margin:0 0 14px;line-height:1.2;letter-spacing:-.5px}
+:where(html[data-theme="dark"]) .hero p{font-size:17px;color:#dcebf7;margin:0 0 30px;max-width:640px;line-height:1.75}
+:where(html[data-theme="dark"]) .stats{display:flex;gap:44px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .stat b{display:block;font-size:34px;font-weight:700;line-height:1.15}
+:where(html[data-theme="dark"]) .stat span{font-size:13px;color:#b9d5ea}
+:where(html[data-theme="dark"]) .stat.hi b{color:var(--p3)}
+:where(html[data-theme="dark"]) section{margin-bottom:44px}
+:where(html[data-theme="dark"]) .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) h2{font-size:24px;margin:0;display:flex;align-items:center;gap:10px}
+:where(html[data-theme="dark"]) h2 i{width:9px;height:9px;border-radius:50%;display:block;flex-shrink:0}
+:where(html[data-theme="dark"]) .sec-sub{font-size:14px;color:var(--muted);margin:0 0 20px}
+:where(html[data-theme="dark"]) .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+:where(html[data-theme="dark"]) .grid{display:grid;gap:14px}
+:where(html[data-theme="dark"]) #unitList{align-items:start}
+:where(html[data-theme="dark"]) .g2{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
+:where(html[data-theme="dark"]) .g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+:where(html[data-theme="dark"]) .g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+:where(html[data-theme="dark"]) .phase{border:1px solid var(--line);border-radius:var(--r);background:var(--card);padding:24px;margin-bottom:16px}
+:where(html[data-theme="dark"]) .phase-h{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .phase-h h3{margin:0;font-size:18px}
+:where(html[data-theme="dark"]) .phase-meta{font-size:13px;color:var(--muted);margin-bottom:18px}
+:where(html[data-theme="dark"]) .phase.p0{border-left:4px solid var(--p2)}
+:where(html[data-theme="dark"]) .phase.p0 h3{color:var(--p2)}
+:where(html[data-theme="dark"]) .phase.p1{border-left:4px solid var(--p1)}
+:where(html[data-theme="dark"]) .phase.p1 h3{color:var(--p1)}
+:where(html[data-theme="dark"]) .phase.p2{border-left:4px solid var(--p3)}
+:where(html[data-theme="dark"]) .phase.p2 h3{color:var(--p3)}
+:where(html[data-theme="dark"]) .uall{margin-left:auto;display:flex;gap:7px}
+:where(html[data-theme="dark"]) .uall button{font:inherit;font-size:12px;font-weight:600;color:var(--p1);background:#182129;border:1px solid var(--line);border-radius:7px;padding:4px 11px;cursor:pointer}
+:where(html[data-theme="dark"]) .uall button:hover{background:var(--p1bg);border-color:var(--p1)}
+:where(html[data-theme="dark"]) .u-head:focus-visible{outline:2px solid var(--p1);outline-offset:-2px}
+:where(html[data-theme="dark"]) .unit{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:border-color .16s,box-shadow .16s}
+:where(html[data-theme="dark"]) .unit:hover{border-color:#233142}
+:where(html[data-theme="dark"]) .unit.done{border-color:#234135;background:#12221c}
+:where(html[data-theme="dark"]) .u-head{display:flex;gap:14px;padding:18px 20px;cursor:pointer;align-items:flex-start}
+:where(html[data-theme="dark"]) .u-num{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:#fff;background:var(--p1s)}
+:where(html[data-theme="dark"]) .u-num.z{background:var(--p2s)}
+:where(html[data-theme="dark"]) .u-num.g{background:var(--p3s)}
+:where(html[data-theme="dark"]) .u-info{flex:1;min-width:0}
+:where(html[data-theme="dark"]) .u-t{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .u-m{font-size:12.5px;color:var(--muted);margin-top:3px}
+:where(html[data-theme="dark"]) .unit.done .u-t{color:#92a1ae}
+:where(html[data-theme="dark"]) .chk{flex-shrink:0;margin-top:12px;width:19px;height:19px;accent-color:var(--p2);cursor:pointer}
+:where(html[data-theme="dark"]) .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.3px}
+:where(html[data-theme="dark"]) .tag.core{background:var(--p1bg);color:var(--p1)}
+:where(html[data-theme="dark"]) .tag.hard{background:var(--p3bg);color:#eebf77}
+:where(html[data-theme="dark"]) .tag.gate{background:var(--dangerbg);color:var(--danger)}
+:where(html[data-theme="dark"]) .gatebtn{display:inline-block;margin-top:9px;font-weight:700;color:#eec577;background:#211b12;border:1px solid #413723;border-radius:7px;padding:5px 12px}
+:where(html[data-theme="dark"]) .gatebtn.g2{color:#77eecf;background:#12211b;border-color:#244237}
+:where(html[data-theme="dark"]) .tag.gate2{background:var(--p2bg);color:#77eed1}
+:where(html[data-theme="dark"]) .caret{flex-shrink:0;margin-top:11px;width:18px;height:18px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin-right:6px}
+:where(html[data-theme="dark"]) .unit.open .caret{transform:rotate(-135deg)}
+:where(html[data-theme="dark"]) .u-body{display:none;padding:0 20px 20px;border-top:1px dashed var(--line)}
+:where(html[data-theme="dark"]) .unit.open .u-body{display:block}
+:where(html[data-theme="dark"]) .u-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px dashed #29384c}
+:where(html[data-theme="dark"]) .u-row:last-of-type{border-bottom:none}
+:where(html[data-theme="dark"]) .u-row b{flex-shrink:0;width:74px;font-size:12.5px;color:var(--muted);font-weight:600;padding-top:2px}
+:where(html[data-theme="dark"]) .u-row div{flex:1;font-size:14px;color:#becdda;line-height:1.7}
+:where(html[data-theme="dark"]) .u-row ul{margin:0;padding-left:17px}
+:where(html[data-theme="dark"]) .u-row li{margin:3px 0}
+:where(html[data-theme="dark"]) .u-row code{background:#121821;border-radius:4px;padding:1px 6px;font-size:12.5px;font-family:Consolas,"SFMono-Regular",monospace;color:#7ce9bf}
+:where(html[data-theme="dark"]) .u-cta{display:flex;gap:10px;flex-wrap:wrap;padding-top:16px;margin-top:14px;border-top:1px solid var(--line)}
+:where(html[data-theme="dark"]) .btn{display:inline-flex;align-items:center;gap:6px;background:var(--p1s);color:#fff;padding:9px 17px;border-radius:8px;font-size:13.5px;font-weight:600;transition:background .15s;border:none;cursor:pointer}
+:where(html[data-theme="dark"]) .btn:hover{background:#1a4e8a}
+:where(html[data-theme="dark"]) .btn.g{background:var(--p2s)}
+:where(html[data-theme="dark"]) .btn.g:hover{background:#0a7a5f}
+:where(html[data-theme="dark"]) .btn.o{background:var(--p3s)}
+:where(html[data-theme="dark"]) .btn.o:hover{background:#975d0c}
+:where(html[data-theme="dark"]) .btn.l{background:#182129;color:var(--text);border:1px solid var(--line)}
+:where(html[data-theme="dark"]) .btn.l:hover{background:#121922}
+:where(html[data-theme="dark"]) .path{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .pstep{flex:1;min-width:150px;background:var(--card);border:1px solid var(--line);padding:18px 16px;position:relative}
+:where(html[data-theme="dark"]) .pstep:first-child{border-radius:var(--r) 0 0 var(--r)}
+:where(html[data-theme="dark"]) .pstep:last-child{border-radius:0 var(--r) var(--r) 0}
+:where(html[data-theme="dark"]) .pstep+.pstep{border-left:none}
+:where(html[data-theme="dark"]) .pstep b{display:block;font-size:14.5px;margin-bottom:5px}
+:where(html[data-theme="dark"]) .pstep span{font-size:12.5px;color:var(--muted);line-height:1.55;display:block}
+:where(html[data-theme="dark"]) .pstep .no{font-size:11px;font-weight:700;color:var(--p3);letter-spacing:1px;margin-bottom:7px;display:block}
+:where(html[data-theme="dark"]) .pstep.on{background:var(--p1bg);border-color:#243243}
+:where(html[data-theme="dark"]) .pstep.done{background:#12221b}
+:where(html[data-theme="dark"]) .lprog{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 20px;margin:0 0 18px}
+:where(html[data-theme="dark"]) .lprog-t{font-size:13.5px;font-weight:600;color:var(--p1)}
+:where(html[data-theme="dark"]) .lprog-bar{flex:1;min-width:160px;height:8px;background:#121821;border-radius:8px;overflow:hidden}
+:where(html[data-theme="dark"]) .lprog-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p1),var(--p2));transition:width .25s}
+:where(html[data-theme="dark"]) .lprog-c{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .lprog-go{padding:7px 15px;border-radius:20px;background:var(--p1s);color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap}
+:where(html[data-theme="dark"]) .lprog-go:hover{background:#1a5296}
+:where(html[data-theme="dark"]) .lprog-go.done{background:var(--p2s)}
+:where(html[data-theme="dark"]) .lib{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);transition:border-color .16s}
+:where(html[data-theme="dark"]) .lib:hover{border-color:var(--p1)}
+:where(html[data-theme="dark"]) .lib-i{width:42px;height:42px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;letter-spacing:.2px}
+:where(html[data-theme="dark"]) .lib h4{margin:0 0 5px;font-size:15.5px}
+:where(html[data-theme="dark"]) .lib p{margin:0;font-size:13px;color:var(--muted);line-height:1.6}
+:where(html[data-theme="dark"]) .lib .go{margin-left:auto;font-size:13px;color:var(--p1);font-weight:600;white-space:nowrap;align-self:center}
+:where(html[data-theme="dark"]) .tip{border-radius:var(--r);padding:20px 22px;font-size:14px;line-height:1.75}
+:where(html[data-theme="dark"]) .tip h4{margin:0 0 10px;font-size:15.5px}
+:where(html[data-theme="dark"]) .tip.blue{background:var(--p1bg)}
+:where(html[data-theme="dark"]) .tip.blue h4{color:var(--p1)}
+:where(html[data-theme="dark"]) .tip.green{background:var(--p2bg)}
+:where(html[data-theme="dark"]) .tip.green h4{color:#77eed1}
+:where(html[data-theme="dark"]) .tip.amber{background:var(--p3bg)}
+:where(html[data-theme="dark"]) .tip.amber h4{color:#eebf77}
+:where(html[data-theme="dark"]) .tip.red{background:var(--dangerbg)}
+:where(html[data-theme="dark"]) .tip.red h4{color:var(--danger)}
+:where(html[data-theme="dark"]) .tip ul{margin:0;padding-left:19px}
+:where(html[data-theme="dark"]) .tip li{margin:5px 0}
+:where(html[data-theme="dark"]) .tip ol{margin:0;padding-left:20px}
+:where(html[data-theme="dark"]) .tip ol li{margin:6px 0}
+:where(html[data-theme="dark"]) kbd{background:#182129;border:1px solid #253345;border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:12px;font-family:Consolas,monospace;color:#becdda}
+:where(html[data-theme="dark"]) .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+:where(html[data-theme="dark"]) table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+:where(html[data-theme="dark"]) th{background:#121921;font-size:12.5px;color:var(--muted);text-align:left;padding:11px 14px;font-weight:600}
+:where(html[data-theme="dark"]) td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top;line-height:1.65}
+:where(html[data-theme="dark"]) td:first-child{white-space:nowrap;font-weight:600;color:var(--p1)}
+:where(html[data-theme="dark"]) td code{background:#121821;border-radius:4px;padding:1px 6px;font-size:12.5px;font-family:Consolas,monospace;color:#7ce9bf}
+:where(html[data-theme="dark"]) footer{border-top:1px solid var(--line);padding-top:22px;font-size:13px;color:var(--muted);line-height:1.8}
+@media(max-width:820px){
+:where(html[data-theme="dark"]) .hero{padding:34px 24px}
+:where(html[data-theme="dark"]) .hero h1{font-size:32px}
+:where(html[data-theme="dark"]) .stats{gap:26px}
+:where(html[data-theme="dark"]) .stat b{font-size:27px}
+:where(html[data-theme="dark"]) .wrap{padding:0 16px 60px}
+:where(html[data-theme="dark"]) .nav-links{gap:14px}
+:where(html[data-theme="dark"]) .pstep,:where(html[data-theme="dark"]) .pstep:first-child,:where(html[data-theme="dark"]) .pstep:last-child{border-radius:0;border-left:1px solid var(--line)}
+:where(html[data-theme="dark"]) .pstep:first-child{border-radius:var(--r) var(--r) 0 0}
+:where(html[data-theme="dark"]) .pstep:last-child{border-radius:0 0 var(--r) var(--r)}
+:where(html[data-theme="dark"]) .u-row{flex-direction:column;gap:3px}
+:where(html[data-theme="dark"]) .u-row b{width:auto}
+}
+:where(html[data-theme="dark"]) #toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
+:where(html[data-theme="dark"]) #toTop.on{opacity:1;pointer-events:auto}
+:where(html[data-theme="dark"]) .nav-switch{font-size:12.5px;font-weight:700;color:#9385d2;background:#151221;border:1px solid #2d2646;border-radius:7px;padding:4px 11px;white-space:nowrap}
+:where(html[data-theme="dark"]) .nav-switch:hover{background:#151120;text-decoration:none}
+@media(max-width:760px){
+:where(html[data-theme="dark"]) .nav-switch{display:none}
+}
+:where(html[data-theme="dark"]) .csw{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 18px}
+:where(html[data-theme="dark"]) .cc{position:relative;background:#182129;border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;gap:15px;align-items:flex-start}
+:where(html[data-theme="dark"]) .cc:hover{border-color:#243143;box-shadow:0 6px 24px rgba(31,95,168,.08)}
+:where(html[data-theme="dark"]) .cc.on{border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.10)}
+:where(html[data-theme="dark"]) .cc .ic{width:44px;height:44px;border-radius:12px;background:var(--p1bg);color:var(--p1);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13.5px;flex-shrink:0;letter-spacing:.5px}
+:where(html[data-theme="dark"]) .cc.fp .ic{background:#151221;color:#9385d2}
+:where(html[data-theme="dark"]) .cc .bd{flex:1;min-width:0}
+:where(html[data-theme="dark"]) .cc .t{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.4}
+:where(html[data-theme="dark"]) .cc .s{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+:where(html[data-theme="dark"]) .cc .pb{margin:14px 0 7px;height:7px;background:#121821;border-radius:99px;overflow:hidden}
+:where(html[data-theme="dark"]) .cc .pb i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--p1),var(--p2));transition:width .3s}
+:where(html[data-theme="dark"]) .cc.fp .pb i{background:linear-gradient(90deg,#4c3a9e,#0b785d)}
+:where(html[data-theme="dark"]) .cc .meta{display:flex;align-items:baseline;gap:9px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .cc .meta b{color:var(--text);font-size:12.5px;font-weight:700}
+:where(html[data-theme="dark"]) .cc .acts{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .cc .acts a{font-size:12.5px;font-weight:700;border-radius:8px;padding:7px 14px;white-space:nowrap}
+:where(html[data-theme="dark"]) .cc .acts .pri{color:#fff;background:var(--p1s)}
+:where(html[data-theme="dark"]) .cc .acts .pri:hover{background:#18528f;text-decoration:none}
+:where(html[data-theme="dark"]) .cc .acts .sec{color:var(--muted);background:#182129;border:1px solid var(--line)}
+:where(html[data-theme="dark"]) .cc .acts .sec:hover{border-color:var(--p1);color:var(--p1);text-decoration:none}
+:where(html[data-theme="dark"]) .cc.fp .acts .pri{background:#4c3a9e}
+:where(html[data-theme="dark"]) .cc.fp .acts .pri:hover{background:#3f3085}
+:where(html[data-theme="dark"]) .cc .here{font-size:11px;font-weight:700;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:2px 9px}
+@media(max-width:760px){
+:where(html[data-theme="dark"]) .csw{grid-template-columns:1fr}
+:where(html[data-theme="dark"]) .cc{padding:16px 16px}
+:where(html[data-theme="dark"]) .cc .acts a{flex:1;text-align:center}
 }
 </style>
 <script src="web/site.js"></script>
@@ -366,26 +614,26 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 总览 ═══ -->
 <section id="overview">
-  <div class="sec-head"><h2><i style="background:var(--p1)"></i>这门课要解决什么</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p1s)"></i>这门课要解决什么</h2></div>
   <p class="sec-sub">不是「学完语法」，是「能独立写出一个别人能接手、能长期改的程序」。</p>
   <div class="grid g3">
     <div class="card">
       <h3 style="margin:0 0 10px;font-size:16px;color:var(--p1)">你现在的状态</h3>
-      <p style="margin:0;font-size:14px;color:#40566b;line-height:1.75">
+      <p style="margin:0;font-size:14px;color:var(--muted);line-height:1.75">
         零基础，没写过代码，或者写过几行就没继续。<br>
         面对报错会懵，看教程能懂但自己动手就卡住。
       </p>
     </div>
     <div class="card">
       <h3 style="margin:0 0 10px;font-size:16px;color:var(--p2)">29 周之后</h3>
-      <p style="margin:0;font-size:14px;color:#40566b;line-height:1.75">
+      <p style="margin:0;font-size:14px;color:var(--muted);line-height:1.75">
         能独立完成并上线一个 Django Web 应用。<br>
         会写测试、会用 Git、管好依赖、读得懂 500 行别人的项目。
       </p>
     </div>
     <div class="card">
       <h3 style="margin:0 0 10px;font-size:16px;color:var(--p3)">怎么保证走到</h3>
-      <p style="margin:0;font-size:14px;color:#40566b;line-height:1.75">
+      <p style="margin:0;font-size:14px;color:var(--muted);line-height:1.75">
         每个单元有产出物和验收标准。<br>
         每阶段末有硬关卡，不达标不进入下一阶段。
       </p>
@@ -395,7 +643,7 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 路径 ═══ -->
 <section id="path">
-  <div class="sec-head"><h2><i style="background:var(--p2)"></i>全程路径</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p2s)"></i>全程路径</h2></div>
   <p class="sec-sub">先打地基（阶段 0–1），再做项目（阶段 2–3）。灰掉的部分需要先通过关卡。</p>
   <div class="path">
     <div class="pstep done">
@@ -424,7 +672,7 @@ transition:opacity .18s;z-index:60}
 <!-- ═══ 单元 ═══ -->
 <section id="units">
   <div class="sec-head">
-    <h2><i style="background:var(--p1)"></i><span data-n="units">22</span> 个单元 · 点开看详情</h2>
+    <h2><i style="background:var(--p1s)"></i><span data-n="units">22</span> 个单元 · 点开看详情</h2>
     <div class="uall">
       <button type="button" data-all="open">全部展开</button>
       <button type="button" data-all="close">全部收起</button>
@@ -436,7 +684,7 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 关卡 ═══ -->
 <section id="gate">
-  <div class="sec-head"><h2><i style="background:var(--p3)"></i>两道关卡 · 不达标不前进</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p3s)"></i>两道关卡 · 不达标不前进</h2></div>
   <p class="sec-sub">关卡是硬性的。某一项不达标，只补那一项并重测，不要整体重学。</p>
 
   <div class="grid g2">
@@ -446,17 +694,15 @@ transition:opacity .18s;z-index:60}
         <h3 style="margin:0;font-size:17px">阶段 0–1 结业测评</h3>
       </div>
       <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted)">限时 2 小时 · 不查资料 · 当场完成</p>
-      <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.85;color:#33475a">
+      <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.85;color:var(--text)">
         <li>手写猜数字游戏 —— while + input + if + 随机数，输入非法不能崩</li>
-        <li>手写一个类 —— 含 <code style="background:#eef1f5;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">__init__</code>、两个实例方法、一个子类，能口述 <code style="background:#eef1f5;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">self</code> 指向什么</li>
+        <li>手写一个类 —— 含 <code style="background:var(--p1bg);border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">__init__</code>、两个实例方法、一个子类，能口述 <code style="background:var(--p1bg);border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">self</code> 指向什么</li>
         <li>给单元 7 的函数写 3 条 pytest 测试（正常 / 边界 / 异常），全部通过</li>
         <li>修复一段 30 行含 3 个 bug 的脚本，能读懂 traceback 定位到行</li>
       </ol>
-      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:#40566b">
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--muted)">
         <b style="color:var(--p3)">4/4 全达标</b> = 准予进入阶段 2<br>
-        <a href="web/gate1.html" style="display:inline-block;margin-top:9px;font-weight:700;
-           color:#8a5a00;background:#fdf3e2;border:1px solid #f0d8a8;border-radius:7px;
-           padding:5px 12px">打开关卡 1 验收清单 →</a>
+        <a class="gatebtn" href="web/gate1.html">打开关卡 1 验收清单 →</a>
       </div>
     </div>
 
@@ -466,18 +712,16 @@ transition:opacity .18s;z-index:60}
         <h3 style="margin:0;font-size:17px">阶段 1–2 结业测评</h3>
       </div>
       <p style="margin:0 0 14px;font-size:13.5px;color:var(--muted)">判定「能独立做项目」</p>
-      <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.85;color:#33475a">
+      <ol style="margin:0;padding-left:20px;font-size:14px;line-height:1.85;color:var(--text)">
         <li>三个项目全部跑通，且已推到公开仓库</li>
-        <li>每个项目都有 README 和 <code style="background:#eef1f5;border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">requirements.txt</code></li>
+        <li>每个项目都有 README 和 <code style="background:var(--p1bg);border-radius:4px;padding:1px 5px;font-family:Consolas,monospace;font-size:12.5px">requirements.txt</code></li>
         <li>「学习笔记」已部署上线，公网可访问，错误页已定制</li>
         <li>能用自己的函数写出 pytest 测试并跑过</li>
         <li>接手一个没写过的 500 行项目，能读懂结构并定位一个 bug</li>
       </ol>
-      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:#40566b">
+      <div style="margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--muted)">
         <b style="color:var(--p2)">5/5 全达标</b> = 可以选方向继续深造<br>
-        <a href="web/gate2.html" style="display:inline-block;margin-top:9px;font-weight:700;
-           color:#0a6b52;background:#e8f6f1;border:1px solid #bfe3d6;border-radius:7px;
-           padding:5px 12px">打开关卡 2 验收清单 →</a>
+        <a class="gatebtn g2" href="web/gate2.html">打开关卡 2 验收清单 →</a>
       </div>
     </div>
   </div>
@@ -485,7 +729,7 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 题库 ═══ -->
 <section id="bank">
-  <div class="sec-head"><h2><i style="background:var(--p2)"></i>练习题库 · 六档递进 <span data-n="bank">120</span> 题</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p2s)"></i>练习题库 · 六档递进 <span data-n="bank">120</span> 题</h2></div>
   <p class="sec-sub">每题含题目 / 完整可运行参考答案 / 解析。卡 15 分钟再看答案，看完必须关掉重写一遍。</p>
   <div class="tw"><table>
     <thead><tr><th style="width:110px">档位</th><th style="width:70px">题量</th><th>覆盖内容</th><th style="width:150px">建议用时</th><th style="width:190px">重点题</th></tr></thead>
@@ -523,7 +767,7 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 资料库 ═══ -->
 <section id="library">
-  <div class="sec-head"><h2><i style="background:var(--p1)"></i>资料库</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p1s)"></i>资料库</h2></div>
   <p class="sec-sub">全部材料都在下面。讲义和题库是 Markdown，浏览器直接打开就能读。</p>
 
   <div class="dash" id="lprog">
@@ -554,7 +798,7 @@ transition:opacity .18s;z-index:60}
     </div>
     <div class="dfoot">
       <a class="lprog-go" id="lgo" href="web/lessons/01.html">继续学习：第 1 节 →</a>
-      <a class="lprog-go" href="web/review.html" style="color:var(--p2)">今日复习计划 →</a>
+      <a class="lprog-go" href="web/review.html" style="color:#fff">今日复习计划 →</a>
       <div class="lpt">
         <button type="button" id="expP">导出进度</button>
         <button type="button" id="impP">导入进度</button>
@@ -570,7 +814,7 @@ transition:opacity .18s;z-index:60}
       <span class="go">从第 1 节开始 →</span>
     </a>
     <a class="lib" href="web/01.html" target="_blank">
-      <div class="lib-i" style="background:var(--p2)">讲义</div>
+      <div class="lib-i" style="background:var(--p2s)">讲义</div>
       <div><h4>单元讲义（22 份，可直接读）</h4>
         <p>每份含知识点讲解、高亮代码示例、动手练习与参考答案 · 带侧边目录与上下单元导航</p></div>
       <span class="go">从单元 0 开始 →</span>
@@ -596,7 +840,7 @@ transition:opacity .18s;z-index:60}
       <span class="go">看对照表 →</span>
     </a>
     <a class="lib" href="python-learning-roadmap.html" target="_blank">
-      <div class="lib-i" style="background:var(--p1)">路线</div>
+      <div class="lib-i" style="background:var(--p1s)">路线</div>
       <div><h4>学习路线图</h4>
         <p>三阶段时间轴 · 每章练习项目 · 关卡验收标准 · 常见卡点表 · 可勾选进度</p></div>
       <span class="go">打开 →</span>
@@ -608,14 +852,14 @@ transition:opacity .18s;z-index:60}
       <span class="go">打开 →</span>
     </a>
     <a class="lib" href="web/review.html" target="_blank">
-      <div class="lib-i" style="background:#c46f00">复习</div>
+      <div class="lib-i" style="background:#9c5800">复习</div>
       <div><h4>复习计划 · 艾宾浩斯遗忘曲线</h4>
         <p>学完一节课就自动排 6 轮复习（当天 / 2 / 4 / 8 / 16 / 31 天）·
            今日待复习、逾期提醒、记忆保持率估算，数据只存本机</p></div>
       <span class="go">打开复习计划 →</span>
     </a>
     <a class="lib" href="web/ppt/u/index.html" target="_blank">
-      <div class="lib-i" style="background:var(--p3)">逐节课件</div>
+      <div class="lib-i" style="background:var(--p3s)">逐节课件</div>
       <div><h4>逐节版讲授课件（22 份 · 每节课 2 页）</h4>
         <p><b>每一节课都有自己的课节页与知识点页</b>：目标 / 实操 / 作业 + 本节要点与代码示例 ·
            讲哪一节就翻哪两页，不用再从大纲里找</p></div>
@@ -642,20 +886,20 @@ transition:opacity .18s;z-index:60}
 
 <!-- ═══ 方法 ═══ -->
 <section id="method">
-  <div class="sec-head"><h2><i style="background:var(--p3)"></i>怎么学才不白学</h2></div>
+  <div class="sec-head"><h2><i style="background:var(--p3s)"></i>怎么学才不白学</h2></div>
   <p class="sec-sub">针对零基础设计的几条硬规矩。</p>
 
   <div class="grid g2" style="margin-bottom:16px">
     <div class="tip blue">
       <h4>每次课 90 分钟怎么花</h4>
       <div style="display:flex;gap:12px;margin:12px 0 14px">
-        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center">
+        <div style="flex:1;background:var(--card);border-radius:9px;padding:12px;text-align:center">
           <b style="font-size:26px;color:var(--p1);display:block">10</b><span style="font-size:12px;color:var(--muted)">复盘</span></div>
-        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center">
+        <div style="flex:1;background:var(--card);border-radius:9px;padding:12px;text-align:center">
           <b style="font-size:26px;color:var(--p1);display:block">30</b><span style="font-size:12px;color:var(--muted)">讲解</span></div>
-        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center;border:2px solid var(--p2)">
+        <div style="flex:1;background:var(--card);border-radius:9px;padding:12px;text-align:center;border:2px solid var(--p2)">
           <b style="font-size:26px;color:var(--p2);display:block">40</b><span style="font-size:12px;color:var(--muted)">实操</span></div>
-        <div style="flex:1;background:#fff;border-radius:9px;padding:12px;text-align:center">
+        <div style="flex:1;background:var(--card);border-radius:9px;padding:12px;text-align:center">
           <b style="font-size:26px;color:var(--p2);display:block">20</b><span style="font-size:12px;color:var(--muted)">讲评</span></div>
       </div>
       <p style="margin:0">实操必须压过讲解。讲得多不等于学得多，<b>跑出输出才算</b>。</p>
@@ -689,13 +933,13 @@ transition:opacity .18s;z-index:60}
 
     <div class="tip amber">
       <h4>零基础的三种假信号</h4>
-      <p style="margin:10px 0 8px;color:#5a4a20">下面这三句话，出现任意一条就等于没学会：</p>
+      <p style="margin:10px 0 8px;color:var(--p3ink)">下面这三句话，出现任意一条就等于没学会：</p>
       <ul style="margin:0 0 10px">
         <li>「我好像看懂了」</li>
         <li>「跟着敲一遍没问题」</li>
         <li>「这段逻辑很清楚」</li>
       </ul>
-      <p style="margin:0;color:#5a4a20">真信号只有一个：<b>不看讲义，从空文件开始敲出来</b>。</p>
+      <p style="margin:0;color:var(--p3ink)">真信号只有一个：<b>不看讲义，从空文件开始敲出来</b>。</p>
     </div>
   </div>
 </section>
@@ -929,7 +1173,7 @@ function unitCard(u){
 document.getElementById('unitList').innerHTML = UNITS.map(unitCard).join('');
 
 document.getElementById('libList').innerHTML = UNITS.map(function(u){
-  var col = u.cls==='z'?'var(--p2)':(u.cls==='g'?'var(--p3)':'var(--p1)');
+  var col = u.cls==='z'?'var(--p2s)':(u.cls==='g'?'var(--p3s)':'var(--p1s)');
   var fn = 'web/' + (u.n<10 ? '0'+u.n : u.n) + '.html';
   return '<a class="lib" style="padding:14px 16px" href="'+fn+'" target="_blank">'+
     '<div class="lib-i" style="background:'+col+';width:34px;height:34px;font-size:13px">'+u.n+'</div>'+
@@ -1339,6 +1583,15 @@ padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
 #pwaTip button{flex:1;border-radius:9px;padding:8px 0;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 #pwaTip .yes{background:var(--p1);color:#fff;border:1px solid var(--p1)}
 #pwaTip .no{background:#fff;color:var(--muted);border:1px solid var(--line)}
+/*@theme-dark*/
+:where(html[data-theme="dark"]) #pwaTip{position:fixed;right:16px;bottom:16px;z-index:80;max-width:300px;background:#182129;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 34px rgba(20,40,70,.22);padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
+:where(html[data-theme="dark"]) #pwaTip.on{display:block}
+:where(html[data-theme="dark"]) #pwaTip b{display:block;font-size:14.5px;margin-bottom:4px}
+:where(html[data-theme="dark"]) #pwaTip p{margin:0 0 10px;color:var(--muted)}
+:where(html[data-theme="dark"]) #pwaTip .row{display:flex;gap:8px}
+:where(html[data-theme="dark"]) #pwaTip button{flex:1;border-radius:9px;padding:8px 0;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+:where(html[data-theme="dark"]) #pwaTip .yes{background:var(--p1s);color:#fff;border:1px solid var(--p1)}
+:where(html[data-theme="dark"]) #pwaTip .no{background:#182129;color:var(--muted);border:1px solid var(--line)}
 </style>
 <div id="pwaTip"><b>装到手机 / 桌面</b><p>安装后离线也能学，学习进度保存在本机。</p>
 <div class="row"><button class="yes" type="button">安装</button><button class="no" type="button">暂不</button></div></div>
@@ -1362,5 +1615,65 @@ padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
 })();
 </script>
 <script src="web/media/bgm.js" defer></script>
+<!--@theme:body-->
+<script>(function(){
+var KEY='py-theme-v1',ORDER=['auto','light','dark'];
+var LABEL={auto:'跟随系统',light:'浅色',dark:'深色'};
+var ICON={
+auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>',
+dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3z"/></svg>'};
+var root=document.documentElement;
+var q=window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)'):null;
+function mode(){var m=root.getAttribute('data-theme-mode');return ORDER.indexOf(m)<0?'auto':m}
+function sync(m){
+  var b=document.getElementById('thBtn');
+  root.setAttribute('data-theme-mode',m);
+  var d=root.getAttribute('data-theme')==='dark';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
+  if(!b)return;
+  b.title='主题：'+LABEL[m]+'　点一下切换（跟随系统 → 浅色 → 深色）';
+  b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
+  var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
+  if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
+}
+function apply(m,save){
+  var d=m==='dark'||(m==='auto'&&q&&q.matches);
+  root.setAttribute('data-theme',d?'dark':'light');
+  if(save){try{localStorage.setItem(KEY,m)}catch(e){}}
+  sync(m);
+}
+function build(){
+  var b=document.createElement('button');
+  b.type='button';b.id='thBtn';b.className='thbtn';
+  b.innerHTML='<span class="thi"></span><span class="thlbl"></span>';
+  var host=document.querySelector('.top-in')||document.querySelector('.nav-in');
+  var mq=window.matchMedia?window.matchMedia('(max-width:640px)'):null;
+  if(host){host.appendChild(b)}else{document.body.appendChild(b)}
+  function home(){
+    var el=document.getElementById('thBtn');if(!el)return;
+    var small=mq&&mq.matches;
+    if(!host||small){
+      if(el.parentElement!==document.body)document.body.appendChild(el);
+      el.classList.add('fixed');
+    }else{
+      if(el.parentElement!==host)host.appendChild(el);
+      el.classList.remove('fixed');
+    }
+  }
+  home();
+  if(mq&&mq.addEventListener)mq.addEventListener('change',home);
+  window.__thHome=home;
+  b.addEventListener('click',function(){apply(ORDER[(ORDER.indexOf(mode())+1)%3],true)});
+  return b;
+}
+build();sync(mode());
+if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
+  q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
+window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
+  set:function(m){apply(m,true)}};
+})();</script>
+<!--/@theme:body-->
 </body>
 </html>

@@ -109,7 +109,6 @@ GATE2 = [
     ("u12", "能读懂一个元类，并判断何时该用 __init_subclass__ 代替它"),
 ]
 
-
 # ────────────────────────────── 解析 ──────────────────────────────
 
 def load_units():
@@ -137,15 +136,12 @@ def load_units():
                 raise SystemExit(f"bookmap.json 缺少第 {g} 课的对照")
     return units
 
-
 CASES = os.path.join(SRC, "cases")
-
 
 def eff_lines(code):
     """有效代码行：非空且非纯注释。"""
     return sum(1 for l in code.splitlines()
                if l.strip() and not l.strip().startswith("#"))
-
 
 def load_cases():
     out = {}
@@ -178,7 +174,6 @@ def load_cases():
         raise SystemExit(f"案例应为 u01–u12 共 12 个，实际 {sorted(out)}")
     return out
 
-
 def attach_cases(units, cases):
     for u in units:
         c = cases[u["no"]]
@@ -186,7 +181,6 @@ def attach_cases(units, cases):
             raise SystemExit(f"单元 {u['no']} 的讲义里仍有旧「## 综合案例」段，请删除")
         head = f'## 综合案例：{c["title"]} {{: #case-u{u["no"]:02d} }}'
         u["outro"] = f"{head}\n\n{c['body']}\n\n" + u["outro"]
-
 
 def parse_unit(md):
     parts = re.split(r"(?m)^## ", md)
@@ -213,7 +207,6 @@ def parse_unit(md):
         L["md"] = L["md"].strip()
     return {"intro": intro, "lessons": lessons, "outro": "".join(outro)}
 
-
 def toc_h2(body_html):
     """单元页目录只取 h2（导入 / 四节课 / 验收），避免侧栏被 h3 撑爆。"""
     items = []
@@ -221,7 +214,6 @@ def toc_h2(body_html):
         txt = re.sub(r"<[^>]+>", "", m.group(2))
         items.append(f'<a class="lv2" href="#{m.group(1)}">{html.escape(txt)}</a>')
     return "\n".join(items)
-
 
 def book_box(g, lesson=None):
     b = BOOK.get(str(g))
@@ -236,7 +228,6 @@ def book_box(g, lesson=None):
             f'<span>{html.escape(b["book"])}</span>'
             f'<em>本节自足，无需回查原书</em></div>{ext}</div>')
 
-
 def md2html(md):
     # 任务清单：python-markdown 没有 task-list 扩展，手动换成可勾选的小方块
     md = re.sub(r"(?m)^(\s*)-\s+\[ \]\s+(.+)$",
@@ -247,21 +238,12 @@ def md2html(md):
         "<table>", '<div class="tblwrap"><table>').replace(
         "</table>", "</table></div>")
 
-
 # ────────────────────────────── 样式 ──────────────────────────────
 
 CSS = """
-:root{--bg:#f7f7fb;--card:#fff;--line:#e4e4ef;--text:#1a1a2b;--muted:#64647a;
---p1:#4c3a9e;--p1bg:#eeebfa;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#d4880c;--p3bg:#fdf3e2;
+:root{--bg:#f7f7fb;--card:#fff;--line:#e4e4ef;--text:#1a1a2b;--muted:#5a5a70;
+--p1:#4c3a9e;--p1bg:#eeebfa;--p2:#0a7d63;--p2bg:#e6f6f0;--p3:#a06009;--p3bg:#fdf3e2;
 --p4:#c8443c;--p4bg:#fbeceb;--r:14px}
-/* 暗色：与入门课同一套做法——覆盖变量，再补写死的浅色块。 */
-@media (prefers-color-scheme: dark){
-:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
---p1:#9d8cf0;--p1bg:#231f3d;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
---p4:#ff8792;--p4bg:#3a1d22}
-body{background:var(--bg);color:var(--text)}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;
@@ -363,7 +345,7 @@ font-family:Consolas,"SFMono-Regular",monospace;color:#0f5a3d}
 position:relative;max-width:100%}
 .main pre code,.wrap pre code{display:block;padding:16px 18px;font-size:13.5px;line-height:1.65;
 font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto}
-.main pre .cl,.wrap pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#8b8fa8;
+.main pre .cl,.wrap pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#a9aec2;
 letter-spacing:.5px;background:rgba(255,255,255,.08);padding:2px 8px;border-radius:4px}
 /* 走读页的「运行输出」：浅底、等宽、可横向滚动，和深色代码块区分开 */
 .main pre.out,.wrap pre.out{background:#f4f6f4;border:1px solid #d6e2d9;border-left:3px solid var(--p2)}
@@ -416,7 +398,7 @@ transition:opacity .18s;z-index:60}
 /* 首页 */
 .wrap{max-width:1200px;margin:0 auto;padding:0 24px 90px}
 .hero{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 22px;
-background:linear-gradient(135deg,#4c3a9e 0%,#0e9b78 100%);padding:46px 48px 40px;
+background:linear-gradient(135deg,#4c3a9e 0%,#0a7d63 100%);padding:46px 48px 40px;
 color:#fff}
 .hero::after{content:'';position:absolute;right:-80px;bottom:-150px;width:420px;
 height:420px;border-radius:50%;background:rgba(255,255,255,.08)}
@@ -451,7 +433,7 @@ padding:16px 18px;margin:0 0 22px}
 .dlab{flex:0 0 42px;font-size:12.5px;font-weight:700;color:var(--muted)}
 .dbar{flex:1;height:9px;background:#e8e8f2;border-radius:99px;overflow:hidden}
 .dbar i{display:block;height:100%;width:0;border-radius:99px;
-background:linear-gradient(90deg,#4c3a9e,#0e9b78);transition:width .25s}
+background:linear-gradient(90deg,#4c3a9e,#0a7d63);transition:width .25s}
 .dval{flex:0 0 auto;min-width:96px;text-align:right;font-size:12.5px;font-weight:700;
 font-variant-numeric:tabular-nums}
 .sec-h{display:flex;align-items:baseline;gap:12px;margin:30px 0 14px}
@@ -602,12 +584,12 @@ padding:14px 16px;margin:14px 0 10px;max-width:100%;overflow:auto;max-height:46v
 font-size:clamp(11px,1.15vw,15px);line-height:1.55;color:#d8d5ea;white-space:pre}
 .slide .sub{margin-top:12px}
 .slide ul li b{color:#fff}
-.dnav a{color:#9b96b8;text-decoration:none;font-size:12.5px;white-space:nowrap}
+.dnav a{color:var(--muted);text-decoration:none;font-size:12.5px;white-space:nowrap}
 .dnav a:hover{color:#fff}
 .slide .big{font-size:clamp(38px,6vw,78px);font-weight:800;color:#fff;line-height:1.1}
 .slide .sub{font-size:clamp(15px,1.8vw,22px);color:#bdb8d8;margin-top:14px}
 .dnav{position:fixed;left:0;right:0;bottom:14px;display:flex;align-items:center;
-justify-content:center;gap:14px;font-size:12.5px;color:#9b96b8;z-index:4}
+justify-content:center;gap:14px;font-size:12.5px;color:var(--muted);z-index:4}
 .dnav button{font:inherit;font-size:13px;font-weight:700;color:#e8e5f7;background:#2a2840;
 border:1px solid #3b3858;border-radius:8px;padding:5px 14px;cursor:pointer}
 .dnav button:hover{background:#353252}
@@ -663,7 +645,7 @@ overflow-wrap:anywhere}
 .ig li a{font-size:11px;color:var(--muted);text-decoration:none;padding:0 2px;
 font-variant-numeric:tabular-nums;border-bottom:1px dotted #c9c4e4}
 .ig li a:hover{color:var(--p1);border-bottom-color:var(--p1)}
-.ig li span{font-size:10.5px;color:#a9a4c4}
+.ig li span{font-size:10.5px;color:#6f6a8a}
 /* 实测数据页 */
 .bnch{background:var(--card);border:1px solid var(--line);border-radius:14px;
 padding:18px 20px;margin:0 0 14px}
@@ -834,7 +816,6 @@ JS = """
 })();
 """
 
-
 def dedupe_ids(h):
     """同一页多次转换时，h2/h3 的 id 可能重名（每节都有「讲解」）。
     注意：源 id 本身可能已带 `-1` 后缀，要逐一看占用，不能只靠计数。"""
@@ -851,14 +832,12 @@ def dedupe_ids(h):
 
     return re.sub(r'id="([^"]+)"', repl, h)
 
-
 HEAD_JS = """
 window.FL = { read: function (k, d) {
   try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; }
   catch (e) { return d; }
 } };
 """
-
 
 def page(title, body, *, where="web", unit=None, extra_head="", extra_body="",
          body_attr=""):
@@ -898,7 +877,6 @@ def page(title, body, *, where="web", unit=None, extra_head="", extra_body="",
 <script>{JS}</script>
 </body>
 </html>"""
-
 
 def side_block(unit, lesson_no=None, toc=""):
     """单元页 / 课节页的侧栏：本单元课节 + 配套入口。"""
@@ -944,7 +922,6 @@ def side_block(unit, lesson_no=None, toc=""):
     <span class="v">单元 {unit['no']} 完整程序 · 逐段讲解</span></a>
 {_ch_link}</div>"""
 
-
 SIDE_PROGRESS_JS = """
 <script>
 (function(){
@@ -965,7 +942,6 @@ SIDE_PROGRESS_JS = """
   document.addEventListener('visibilitychange',paint);
 })();
 </script>"""
-
 
 # ────────────────────────────── 单元页 ──────────────────────────────
 
@@ -1018,7 +994,6 @@ def build_units(units):
         out = page(f"单元 {no} · {u['title']}", body, unit=no,
                    extra_body=SIDE_PROGRESS_JS)
         open(os.path.join(WEB, f"{no:02d}.html"), "w", encoding="utf-8").write(out)
-
 
 # ────────────────────────────── 课节页 ──────────────────────────────
 
@@ -1167,7 +1142,6 @@ def build_lessons(units):
     out = page("课程目录 · 48 节课", body, where="lesson")
     open(os.path.join(WEB, "lessons", "index.html"), "w", encoding="utf-8").write(out)
 
-
 # ────────────────────────────── 题库 ──────────────────────────────
 
 def build_bank(units):
@@ -1314,7 +1288,6 @@ def build_bank(units):
     out = page(f"题库 · {BANK_N} 题", body + bank_js, where="web")
     open(os.path.join(WEB, "bank.html"), "w", encoding="utf-8").write(out)
 
-
 # ────────────────────────────── 关卡 ──────────────────────────────
 
 def build_gates(units):
@@ -1363,7 +1336,6 @@ def build_gates(units):
 </script>"""
     out = page("关卡验收", body, where="web")
     open(os.path.join(WEB, "gates.html"), "w", encoding="utf-8").write(out)
-
 
 # ────────────────────────────── 课件 ──────────────────────────────
 
@@ -1438,7 +1410,6 @@ SLIDES = [
         "回到题库，把「待复习」清零"]),
 ]
 
-
 def build_deck(units):
     slides = []
     for i, (kick, title, items) in enumerate(SLIDES, 1):
@@ -1505,16 +1476,15 @@ def build_deck(units):
 </head><body>
 {body}
 <div style="position:fixed;left:14px;top:12px;z-index:7">
-  <a href="../../index.html" style="color:#9b96b8;font-size:12.5px">← 课程首页</a>
-  <span style="color:#55516e">·</span>
-  <a href="u/index.html" style="color:#9b96b8;font-size:12.5px">逐节课件</a>
+  <a href="../../index.html" style="color:var(--muted);font-size:12.5px">← 课程首页</a>
+  <span style="color:var(--muted)">·</span>
+  <a href="u/index.html" style="color:var(--muted);font-size:12.5px">逐节课件</a>
 </div>
 {extra}
 </body></html>"""
     out = out.replace("18 页", f"{len(SLIDES)} 页")
     os.makedirs(os.path.join(WEB, "ppt"), exist_ok=True)
     open(os.path.join(WEB, "ppt", "index.html"), "w", encoding="utf-8").write(out)
-
 
 # ────────────────────────────── 首页 ──────────────────────────────
 
@@ -1662,8 +1632,6 @@ document.addEventListener('click', function (e) {
 });
 """
 
-
-
 UDECK_JS = r"""
 (function(){
   var cur=1, n=__N__, slides=[].slice.call(document.querySelectorAll('.slide'));
@@ -1694,17 +1662,14 @@ UDECK_JS = r"""
 })();
 """
 
-
 def _section(md, name):
     m = re.search(r"### %s\s*\n(.*?)(?=\n### |\Z)" % name, md, re.S)
     return m.group(1) if m else ""
-
 
 def _plain(s):
     s = re.sub(r"`([^`]*)`", r"\1", s)       # 去掉行内代码的反引号
     s = re.sub(r"\*\*(.+?)\*\*", r"\1", s)  # 去掉粗体标记
     return re.sub(r"\s+", " ", s).strip()
-
 
 def _points(md):
     out = []
@@ -1717,7 +1682,6 @@ def _points(md):
             out.append(("", _plain(line.strip()[2:])))
     return out[:4]
 
-
 def _task(md):
     for line in _section(md, "动手").splitlines():
         t = line.strip()
@@ -1725,7 +1689,6 @@ def _task(md):
         if m:
             return _plain(m.group(1))
     return "把本节的代码重敲一遍，改两处再跑。"
-
 
 def _code(md):
     m = re.search(r"```python\n(.*?)```", md, re.S)
@@ -1736,7 +1699,6 @@ def _code(md):
         lines = lines[:18] + ["# ..."]
     return "\n".join(lines)
 
-
 def _checklist(outro):
     out = []
     for line in outro.splitlines():
@@ -1745,11 +1707,9 @@ def _checklist(outro):
             out.append(_plain(t[5:].strip()))
     return out[:8]
 
-
 def _slide(i, on, kicker, title, body):
     return (f'<section class="slide{" on" if on else ""}" data-s="{i}">'
             f'<div class="sk">{kicker}</div><h2>{title}</h2>{body}</section>')
-
 
 def build_unit_decks(units):
     out_dir = os.path.join(WEB, "ppt", "u")
@@ -1833,7 +1793,6 @@ def build_unit_decks(units):
 </div>
 </body></html>"""
     open(os.path.join(out_dir, "index.html"), "w", encoding="utf-8").write(hub)
-
 
 def build_home(units):
     bank = json.load(open(os.path.join(SRC, "bank.json"), encoding="utf-8"))
@@ -2011,8 +1970,6 @@ def build_home(units):
     out = page("《流畅的 Python》精读课", body, where="home", extra_body=js)
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(out)
 
-
-
 CHAPTER_NAMES = {
     1: "数据模型", 2: "序列构成的数组", 3: "字典与集合", 4: "文本与字节序列",
     5: "数据类构建器", 6: "对象引用、可变性与垃圾回收", 7: "函数是一等对象",
@@ -2022,7 +1979,6 @@ CHAPTER_NAMES = {
     18: "with、match 与其他语法糖", 19: "并发模型", 20: "并发执行器",
     21: "异步编程", 22: "动态属性与特性", 23: "描述符", 24: "类元编程",
 }
-
 
 def _chapters(book):
     m = re.search(r"第\s*([0-9]+(?:\s*[–\-,、]\s*[0-9]+)*)\s*章", book)
@@ -2039,7 +1995,6 @@ def _chapters(book):
         else:
             out.append(int(part))
     return out
-
 
 def build_coverage(units):
     """覆盖矩阵：24 章 × 课节，外加自足性说明。"""
@@ -2181,7 +2136,6 @@ def build_coverage(units):
     open(os.path.join(WEB, "coverage.html"), "w", encoding="utf-8").write(out)
     return total_chars
 
-
 def build_terms(units):
     """术语索引：从讲义行内代码里抽标识符，按首字符分组，替代原书索引。"""
     STOP = {"python", "Python", "True", "False", "None", "self", "cls", "print",
@@ -2263,7 +2217,6 @@ def build_terms(units):
     open(os.path.join(WEB, "terms.html"), "w", encoding="utf-8").write(out)
     return len(index)
 
-
 # 艾宾浩斯复习间隔（学完后的天数）：当天 → 2 → 4 → 8 → 16 → 31 天
 REVIEW_STAGES = [
     (0,  "当天复盘", "合上讲义，凭记忆写下本课 3 个关键点，再自答一遍验收清单"),
@@ -2273,7 +2226,6 @@ REVIEW_STAGES = [
     (15, "第 16 天", "合上资料讲一遍（费曼技巧），卡住的地方记下来回看对应段落"),
     (30, "第 31 天", "只看目录复述本课结构，并过一遍关卡里对应的验收条目"),
 ]
-
 
 def build_syllabus(units):
     """总课表：标准 12 周 / 轻量 24 周两种配速。
@@ -2287,7 +2239,6 @@ def build_syllabus(units):
     out = page(f"总课表 · 标准 {a} 周 / 轻量 {b} 周", body, where="web")
     open(os.path.join(WEB, "syllabus.html"), "w", encoding="utf-8").write(out)
     return len(units)
-
 
 def build_review(units):
     """复习计划页：按艾宾浩斯遗忘曲线排 6 轮复习，全部在本机 localStorage 完成。"""
@@ -2534,9 +2485,7 @@ def build_review(units):
     open(os.path.join(WEB, "review.html"), "w", encoding="utf-8").write(out)
     return len(lessons)
 
-
 BENCH_JSON = os.path.join(ROOT, "bench", "results.json")
-
 
 def _fmt_sec(s):
     if s >= 1:
@@ -2544,7 +2493,6 @@ def _fmt_sec(s):
     if s >= 0.001:
         return f"{s * 1000:.2f} ms"
     return f"{s * 1e6:.1f} µs"
-
 
 def build_bench(units):
     """实测数据页：读 bench/results.json（由 tools/bench_fluent.py 生成）。"""
@@ -2627,7 +2575,6 @@ def build_bench(units):
     open(os.path.join(WEB, "bench.html"), "w", encoding="utf-8").write(out)
     return len(cases)
 
-
 def load_design():
     """读 chapters.json + design/chNN.md，校验 24 章齐全、标题与 CHAPTER_NAMES 一致。"""
     meta = json.load(open(os.path.join(DESIGN, "chapters.json"), encoding="utf-8"))
@@ -2652,7 +2599,6 @@ def load_design():
         out.append({"no": no, "title": title, "unit": r["unit"],
                     "md": body, "file": f"ch{no:02d}.md"})
     return out
-
 
 def build_design(units):
     """设计取舍长文：24 章各一页 + 总览页。"""
@@ -2729,7 +2675,6 @@ def build_design(units):
     open(os.path.join(WEB, "ch", "index.html"), "w", encoding="utf-8").write(out)
     return len(chapters)
 
-
 def load_walk():
     """读 walk/uNN.md：校验 12 篇齐全、首行是「@@uNN|标题」。"""
     out = []
@@ -2760,7 +2705,6 @@ def load_walk():
         out.append({"no": no, "title": m.group(2).strip(), "lead": lead, "md": body,
                     "n_chars": n_chars, "n_lines": n_lines})
     return out
-
 
 def build_walk(units):
     """源码走读：12 篇各一页 + 总览页。"""
@@ -2829,7 +2773,6 @@ def build_walk(units):
     open(os.path.join(WEB, "walk", "index.html"), "w", encoding="utf-8").write(out)
     return len(posts)
 
-
 def main():
     os.makedirs(os.path.join(WEB, "css"), exist_ok=True)
     os.makedirs(os.path.join(WEB, "ch"), exist_ok=True)
@@ -2867,6 +2810,7 @@ def main():
     print(f"单元 {len(units)} 个 | 课节 {sum(len(u['lessons']) for u in units)} 节")
     print(f"输出：{OUT}")
 
-
 if __name__ == "__main__":
     main()
+    import theme  # 主题派生：把浅色样式表翻成深色表并注入切换按钮
+    theme.sweep([OUT])

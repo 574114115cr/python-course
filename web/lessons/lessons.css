@@ -9,21 +9,9 @@ pre{max-width:100%}
   pre{max-width:100%;overflow-x:auto}
 }
 
-:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#e08a15;--p3bg:#fdf3e2;
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p2bg:#e6f6f0;--p3:#a06009;--p3bg:#fdf3e2;
 --r:14px}
-/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
-   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
-@media (prefers-color-scheme: dark){
-:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
---p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
---danger:#ff8792;--dangerbg:#3a1d22}
-body{background:var(--bg);color:var(--text)}
-.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
-.lprog-bar,.dbar,.pbar{background:#22303e}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-a{color:var(--p1)}
-}
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
@@ -93,7 +81,7 @@ text-decoration:none;color:inherit}
 border-radius:4px;text-align:center;line-height:17px}
 .rel a:nth-child(2) .k{background:var(--p3)}
 .rel a:nth-child(3) .k{background:var(--p2)}
-.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(4) .k{background:#5e6f7e}
 .rel .v{font-size:12px;color:var(--text);line-height:1.45}
 .ppt-thumb .go{display:block;margin-top:5px;font-size:11.5px;font-weight:700;color:var(--p1)}
 .sblk h4{margin:0 0 10px;font-size:11.5px;color:var(--muted);letter-spacing:1px;font-weight:700}
@@ -130,20 +118,20 @@ padding:4px 11px;border-radius:20px}
 .blk.recap{background:#f3f0fb;border:1px solid #ddd5f2}
 .blk h3{margin:0 0 13px;font-size:16px;display:flex;align-items:center;gap:9px}
 .blk.live h3{color:#0a7a5f}
-.blk.hw h3{color:#a86a0c}
+.blk.hw h3{color:#8f5a0a}
 .blk.recap h3{color:#5b46a8}
 .blk.review{background:#fdf6ec;border:1px solid #f0dcb4}
-.blk.review h3{color:#a86a0c}
+.blk.review h3{color:#8f5a0a}
 .rv-sum{margin-top:14px;padding:11px 15px;background:rgba(255,255,255,.7);
 border-left:3px solid var(--p3);border-radius:0 8px 8px 0}
-.rv-sum b{display:block;font-size:12px;color:#a86a0c;letter-spacing:.5px;margin-bottom:3px}
+.rv-sum b{display:block;font-size:12px;color:#8f5a0a;letter-spacing:.5px;margin-bottom:3px}
 .rv-sum span{font-size:14.5px;color:#33475a;line-height:1.7}
 .blk ol{margin:0;padding-left:22px}
 .blk ul{margin:0;padding-left:22px}
 .blk li{margin:9px 0;font-size:14.5px;line-height:1.7;color:#33475a}
 .blk.recap li{margin:8px 0}
 .toc a.rc{color:#5b46a8;font-weight:600}
-.toc a.rv{color:#a86a0c;font-weight:600}
+.toc a.rv{color:#8f5a0a;font-weight:600}
 .blk code{background:rgba(255,255,255,.75);border:1px solid rgba(120,110,160,.22);
 border-radius:4px;padding:1px 5px;font-size:12.8px}
 
@@ -177,11 +165,14 @@ color:var(--muted);border:1px solid var(--line);font-weight:600}
 .main td{padding:10px 13px;border:1px solid var(--line);vertical-align:top}
 .main pre{background:#1e2a35;border-radius:10px;padding:0;margin:16px 0;position:relative;overflow:hidden}
 .main pre code{display:block;padding:16px 18px;font-size:13.5px;line-height:1.65;
-font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto}
-.main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#6b7f92;
+font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto;
+/* 代码块底色在两种主题里都是深色终端，所以文字必须显式给浅色：
+   否则会继承 .main code 的深绿，深底深字只剩 1.1:1（曾整站代码块都看不清） */
+color:#e6edf5}
+.main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#a8b6c4;
 background:rgba(255,255,255,.07);padding:2px 8px;border-radius:4px}
 .main pre.broken{border:2px dashed var(--p3)}
-.badge-broken{display:inline-block;background:var(--p3bg);color:#a86a0c;font-size:11.5px;
+.badge-broken{display:inline-block;background:var(--p3bg);color:#8f5a0a;font-size:11.5px;
 font-weight:700;padding:4px 11px;border-radius:5px;margin:4px 0 0}
 
 /* 底部导航 */
@@ -230,19 +221,151 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
  .sched{display:grid;grid-template-columns:1fr 1fr;gap:8px}
  .sc{min-width:0}
 }
-
-/* 课节页还有几处写死的浅色（卡片底、场景卡、上下课节），暗色下必须逐条覆盖 */
-@media (prefers-color-scheme: dark){
-.blk{background:var(--card)}
-.sc,.pn a{background:#1b2733;border-color:var(--line)}
-.head .goal{color:#bac9d8}
-.side,.side a{color:var(--text)}
-code{background:#22303e;color:#dbe7f3}
-th{background:#1e2b36}
-/* 四种内容块的底色/边框在浅色主题里是写死的，暗色要逐个换掉 */
-.blk.live{background:#0f2c26;border-color:#1f5044}
-.blk.hw{background:#2a2213;border-color:#4a3a1c}
-.blk.recap{background:#221d33;border-color:#3a3358}
-.blk.review{background:#2a2318;border-color:#4c3d22}
+/*@theme-dark*/
+:where(html[data-theme="dark"]) .main{min-width:0}
+:where(html[data-theme="dark"]) pre{max-width:100%}
+:where(html[data-theme="dark"]) .top-in{min-width:0}
+:where(html[data-theme="dark"]) .top-in h1{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:1000px){
+:where(html[data-theme="dark"]) .main{width:100%}
+:where(html[data-theme="dark"]) pre{max-width:100%;overflow-x:auto}
 }
-
+html[data-theme="dark"]{--bg:#121922;--card:#182129;--line:#273548;--text:#d9e4ed;--muted:#abb8c4;--p1:#79ace6;--p1s:#1f5fa8;--p1bg:#121821;--p2:#77eed3;--p2s:#0a785f;--p2bg:#12211b;--p3:#eebc77;--p3s:#995c09;--p3bg:#211b12;--r:14px}
+:where(html[data-theme="dark"]) *{box-sizing:border-box}
+:where(html[data-theme="dark"]) body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.75}
+:where(html[data-theme="dark"]) a{color:var(--p1);text-decoration:none}
+:where(html[data-theme="dark"]) a:hover{text-decoration:underline}
+:where(html[data-theme="dark"]) .top{position:sticky;top:0;z-index:40;background:rgba(18,25,34,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+:where(html[data-theme="dark"]) .top-in{max-width:1300px;margin:0 auto;padding:0 22px;height:58px;display:flex;align-items:center;gap:14px}
+:where(html[data-theme="dark"]) .top-in .sp{flex:1}
+:where(html[data-theme="dark"]) .top-in .ppt{font-size:12.5px;font-weight:700;color:#eec577;background:#211b12;border:1px solid #413723;border-radius:6px;padding:4px 10px;white-space:nowrap}
+:where(html[data-theme="dark"]) .top-in .ppt:hover{background:#201a11;text-decoration:none}
+:where(html[data-theme="dark"]) .top-in .rv{font-size:12.5px;font-weight:700;color:#77eecf;background:#12211b;border:1px solid #234135;border-radius:6px;padding:4px 10px;white-space:nowrap}
+:where(html[data-theme="dark"]) .top-in .rv:hover{background:#11201a;text-decoration:none}
+:where(html[data-theme="dark"]) .back{font-size:13.5px;color:var(--muted);white-space:nowrap}
+:where(html[data-theme="dark"]) .top-in .tno{font-size:11.5px;font-weight:700;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .top h1{font-size:15.5px;margin:0;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:where(html[data-theme="dark"]) .pbar{height:4px;background:#121821;position:sticky;top:58px;z-index:39}
+:where(html[data-theme="dark"]) .pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p2))}
+:where(html[data-theme="dark"]) .layout{max-width:1300px;margin:0 auto;padding:24px 22px 80px;display:flex;gap:24px;align-items:flex-start}
+:where(html[data-theme="dark"]) .side{width:250px;flex-shrink:0;position:sticky;top:96px;max-height:calc(100vh - 120px);overflow-y:auto}
+:where(html[data-theme="dark"]) .sblk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 14px;margin-bottom:12px}
+:where(html[data-theme="dark"]) .nall{display:flex;align-items:center;gap:6px;margin-top:8px;padding:8px 9px;border-top:1px dashed var(--line);font-size:12px;font-weight:700;color:var(--p1);text-decoration:none}
+:where(html[data-theme="dark"]) .nall .ar{margin-left:auto;transition:transform .15s}
+:where(html[data-theme="dark"]) .nall:hover{text-decoration:none;color:#7cb1e9}
+:where(html[data-theme="dark"]) .nall:hover .ar{transform:translateX(3px)}
+:where(html[data-theme="dark"]) pre .cp{position:absolute;top:6px;right:10px;font:inherit;font-size:11.5px;font-weight:700;color:var(--p1);background:#182129;border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;opacity:0;transition:opacity .12s}
+:where(html[data-theme="dark"]) pre:hover .cp{opacity:1}
+:where(html[data-theme="dark"]) pre .cp.ok{color:#fff;background:var(--p2s);border-color:var(--p2)}
+:where(html[data-theme="dark"]) .gatebar{display:flex;align-items:center;gap:12px;background:#211b12;border:1px solid #413723;border-radius:12px;padding:12px 15px;margin:0 0 16px;font-size:13.5px;color:#eec677;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .gatebar .gi{font-size:18px;color:var(--p3)}
+:where(html[data-theme="dark"]) .gatebar b{color:#eec577}
+:where(html[data-theme="dark"]) .gatebar span{color:#e1c384}
+:where(html[data-theme="dark"]) .gatebar a{margin-left:auto;font-weight:700;color:#fff;background:var(--p3s);border-radius:7px;padding:5px 12px;white-space:nowrap}
+:where(html[data-theme="dark"]) .pptbox{padding:12px}
+:where(html[data-theme="dark"]) .ppt-thumb{display:block;text-decoration:none;color:inherit}
+:where(html[data-theme="dark"]) .ppt-thumb img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:#182129;transition:border-color .12s}
+:where(html[data-theme="dark"]) .ppt-thumb:hover img{border-color:var(--p1)}
+:where(html[data-theme="dark"]) .ppt-thumb .cap{display:block;margin-top:8px;font-size:12px;color:var(--text);line-height:1.5}
+:where(html[data-theme="dark"]) .ppt-thumb .cap b{color:var(--p3);font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .rel{margin-top:11px;border-top:1px dashed var(--line);padding-top:9px;display:flex;flex-direction:column;gap:2px}
+:where(html[data-theme="dark"]) .rel a{display:flex;gap:8px;align-items:baseline;padding:5px 6px;border-radius:7px;text-decoration:none;color:inherit}
+:where(html[data-theme="dark"]) .rel a:hover{background:#121922}
+:where(html[data-theme="dark"]) .rel .k{flex:0 0 30px;font-size:11px;font-weight:700;color:#fff;background:var(--p1s);border-radius:4px;text-align:center;line-height:17px}
+:where(html[data-theme="dark"]) .rel a:nth-child(2) .k{background:var(--p3s)}
+:where(html[data-theme="dark"]) .rel a:nth-child(3) .k{background:var(--p2s)}
+:where(html[data-theme="dark"]) .rel a:nth-child(4) .k{background:#5e6f7e}
+:where(html[data-theme="dark"]) .rel .v{font-size:12px;color:var(--text);line-height:1.45}
+:where(html[data-theme="dark"]) .ppt-thumb .go{display:block;margin-top:5px;font-size:11.5px;font-weight:700;color:var(--p1)}
+:where(html[data-theme="dark"]) .sblk h4{margin:0 0 10px;font-size:11.5px;color:var(--muted);letter-spacing:1px;font-weight:700}
+:where(html[data-theme="dark"]) .toc a{display:block;padding:5px 7px;border-radius:6px;font-size:13px;color:#b9c6d4;border-left:2px solid transparent;line-height:1.5}
+:where(html[data-theme="dark"]) .toc a:hover{background:#121922;text-decoration:none}
+:where(html[data-theme="dark"]) .toc a.lv3{padding-left:16px;font-size:12.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) .nlist a{display:flex;gap:8px;align-items:flex-start;padding:6px 7px;border-radius:6px;font-size:12.5px;color:#b9c6d4;line-height:1.5}
+:where(html[data-theme="dark"]) .nlist a:hover{background:#121922;text-decoration:none}
+:where(html[data-theme="dark"]) .nlist .no{font-size:10.5px;font-weight:700;color:var(--muted);min-width:19px;flex-shrink:0;padding-top:1px;font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .nlist a.cur{background:var(--p1bg);color:var(--p1);font-weight:600}
+:where(html[data-theme="dark"]) .nlist a.done .no{color:var(--p2)}
+:where(html[data-theme="dark"]) .nlist a.done::after{content:'✓';color:var(--p2);font-weight:700;margin-left:auto;font-size:12px}
+:where(html[data-theme="dark"]) .main{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:32px 38px;overflow-wrap:anywhere}
+:where(html[data-theme="dark"]) .head{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:24px}
+:where(html[data-theme="dark"]) .kicker{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .kno{background:var(--p1s);color:#fff;font-size:12.5px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+:where(html[data-theme="dark"]) .kwk{background:#121821;color:var(--muted);font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:20px}
+:where(html[data-theme="dark"]) .ku{background:var(--p2bg);color:#77eed1;font-size:12.5px;font-weight:600;padding:4px 11px;border-radius:20px}
+:where(html[data-theme="dark"]) .head h1{font-size:29px;margin:0 0 12px;line-height:1.3}
+:where(html[data-theme="dark"]) .head .goal{font-size:15.5px;color:#b4c3d2;margin:0;line-height:1.7}
+:where(html[data-theme="dark"]) .blk{margin:22px 0;padding:20px 22px;border-radius:12px}
+:where(html[data-theme="dark"]) .blk.live{background:var(--p2bg);border:1px solid #244236}
+:where(html[data-theme="dark"]) .blk.hw{background:var(--p3bg);border:1px solid #413823}
+:where(html[data-theme="dark"]) .blk.recap{background:#161222;border:1px solid #2f2647}
+:where(html[data-theme="dark"]) .blk h3{margin:0 0 13px;font-size:16px;display:flex;align-items:center;gap:9px}
+:where(html[data-theme="dark"]) .blk.live h3{color:#77eed1}
+:where(html[data-theme="dark"]) .blk.hw h3{color:#eebf77}
+:where(html[data-theme="dark"]) .blk.recap h3{color:#9b8dcf}
+:where(html[data-theme="dark"]) .blk.review{background:#211b12;border:1px solid #423824}
+:where(html[data-theme="dark"]) .blk.review h3{color:#eebf77}
+:where(html[data-theme="dark"]) .rv-sum{margin-top:14px;padding:11px 15px;background:rgba(24,33,41,0.7);border-left:3px solid var(--p3);border-radius:0 8px 8px 0}
+:where(html[data-theme="dark"]) .rv-sum b{display:block;font-size:12px;color:#eebf77;letter-spacing:.5px;margin-bottom:3px}
+:where(html[data-theme="dark"]) .rv-sum span{font-size:14.5px;color:#becdda;line-height:1.7}
+:where(html[data-theme="dark"]) .blk ol{margin:0;padding-left:22px}
+:where(html[data-theme="dark"]) .blk ul{margin:0;padding-left:22px}
+:where(html[data-theme="dark"]) .blk li{margin:9px 0;font-size:14.5px;line-height:1.7;color:#becdda}
+:where(html[data-theme="dark"]) .blk.recap li{margin:8px 0}
+:where(html[data-theme="dark"]) .toc a.rc{color:#9b8dcf;font-weight:600}
+:where(html[data-theme="dark"]) .toc a.rv{color:#eebf77;font-weight:600}
+:where(html[data-theme="dark"]) .blk code{background:rgba(24,33,41,0.75);border:1px solid rgba(120,110,160,.22);border-radius:4px;padding:1px 5px;font-size:12.8px}
+:where(html[data-theme="dark"]) .sched{display:flex;gap:9px;margin:20px 0 4px}
+:where(html[data-theme="dark"]) .sc{flex:1;background:#121a22;border:1px solid var(--line);border-radius:9px;padding:11px 8px;text-align:center;color:inherit;text-decoration:none}
+:where(html[data-theme="dark"]) a.sc:hover{background:#121921;border-color:var(--p1)}
+:where(html[data-theme="dark"]) .sc b{display:block;font-size:20px;font-weight:700;color:var(--p1);line-height:1.2}
+:where(html[data-theme="dark"]) .sc span{font-size:11.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) .sc.hi{background:var(--p2bg);border-color:#244236}
+:where(html[data-theme="dark"]) .sc.hi b{color:var(--p2)}
+:where(html[data-theme="dark"]) .main h2{font-size:21px;margin:34px 0 13px;padding-left:12px;border-left:4px solid var(--p1);line-height:1.4}
+:where(html[data-theme="dark"]) .main h3{font-size:16.5px;margin:24px 0 9px;color:var(--p1)}
+:where(html[data-theme="dark"]) .main h4{font-size:15px;margin:18px 0 8px;color:#becdda}
+:where(html[data-theme="dark"]) .main p{margin:11px 0}
+:where(html[data-theme="dark"]) .main ul,:where(html[data-theme="dark"]) .main ol{margin:11px 0;padding-left:24px}
+:where(html[data-theme="dark"]) .main li{margin:6px 0}
+:where(html[data-theme="dark"]) .main strong{color:#77b2ee}
+:where(html[data-theme="dark"]) .main hr{border:none;border-top:1px dashed var(--line);margin:26px 0}
+:where(html[data-theme="dark"]) .main blockquote{margin:14px 0;padding:12px 16px;background:var(--p1bg);border-left:4px solid var(--p1);border-radius:0 8px 8px 0;color:#b4cadf;font-size:14px}
+:where(html[data-theme="dark"]) .main blockquote p{margin:4px 0}
+:where(html[data-theme="dark"]) .main code{background:#121821;border-radius:4px;padding:2px 6px;font-size:.88em;font-family:Consolas,"SFMono-Regular",monospace;color:#7ce9bf}
+:where(html[data-theme="dark"]) .main table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+:where(html[data-theme="dark"]) .main th{background:#121921;padding:10px 13px;text-align:left;font-size:13px;color:var(--muted);border:1px solid var(--line);font-weight:600}
+:where(html[data-theme="dark"]) .main td{padding:10px 13px;border:1px solid var(--line);vertical-align:top}
+:where(html[data-theme="dark"]) .main pre{background:#1e2a35;border-radius:10px;padding:0;margin:16px 0;position:relative;overflow:hidden}
+:where(html[data-theme="dark"]) .main pre code{display:block;padding:16px 18px;font-size:13.5px;line-height:1.65;font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto;/* 代码块底色在两种主题里都是深色终端，所以文字必须显式给浅色：
+   否则会继承 .main code 的深绿，深底深字只剩 1.1:1（曾整站代码块都看不清） */
+color:#e6edf5}
+:where(html[data-theme="dark"]) .main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#a8b6c4;background:rgba(24,33,41,0.07);padding:2px 8px;border-radius:4px}
+:where(html[data-theme="dark"]) .main pre.broken{border:2px dashed var(--p3)}
+:where(html[data-theme="dark"]) .badge-broken{display:inline-block;background:var(--p3bg);color:#eebf77;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:5px;margin:4px 0 0}
+:where(html[data-theme="dark"]) .pn{display:flex;gap:12px;margin-top:36px;padding-top:22px;border-top:1px solid var(--line)}
+:where(html[data-theme="dark"]) .pn a{flex:1;background:#121a22;border:1px solid var(--line);border-radius:10px;padding:13px 17px}
+:where(html[data-theme="dark"]) .pn a:hover{background:#121921;border-color:var(--p1);text-decoration:none}
+:where(html[data-theme="dark"]) .pn .nx{text-align:right}
+:where(html[data-theme="dark"]) .pn small{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+:where(html[data-theme="dark"]) .pn b{font-size:14.5px}
+:where(html[data-theme="dark"]) .done-bar{display:flex;align-items:center;gap:12px;margin-top:26px;padding:15px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .done-bar label{display:flex;align-items:center;gap:9px;font-size:14.5px;cursor:pointer;font-weight:600}
+:where(html[data-theme="dark"]) .done-bar input{width:19px;height:19px;accent-color:var(--p2);cursor:pointer}
+:where(html[data-theme="dark"]) .done-bar a{margin-left:auto;font-size:13.5px}
+@page{margin:16mm 14mm}
+@media(max-width:1000px){
+:where(html[data-theme="dark"]) .layout{flex-direction:column-reverse;align-items:stretch;padding:16px 14px 60px}
+:where(html[data-theme="dark"]) .side{position:static;width:100%;max-height:none;margin-top:16px}
+:where(html[data-theme="dark"]) .main{padding:22px 16px}
+:where(html[data-theme="dark"]) .head h1{font-size:22px}
+:where(html[data-theme="dark"]) .sched{flex-wrap:wrap}
+:where(html[data-theme="dark"]) .sc{min-width:80px}
+:where(html[data-theme="dark"]) .pn{flex-direction:column}
+}
+@media(max-width:620px){
+:where(html[data-theme="dark"]) .top-in{gap:10px;padding:0 14px}
+:where(html[data-theme="dark"]) .top-in .tno,:where(html[data-theme="dark"]) .top-in .rv,:where(html[data-theme="dark"]) .top-in .sp{display:none}
+:where(html[data-theme="dark"]) .sched{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+:where(html[data-theme="dark"]) .sc{min-width:0}
+}

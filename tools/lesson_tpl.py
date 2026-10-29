@@ -13,21 +13,9 @@ pre{max-width:100%}
   pre{max-width:100%;overflow-x:auto}
 }
 
-:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#e08a15;--p3bg:#fdf3e2;
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p2bg:#e6f6f0;--p3:#a06009;--p3bg:#fdf3e2;
 --r:14px}
-/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
-   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
-@media (prefers-color-scheme: dark){
-:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
---p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
---danger:#ff8792;--dangerbg:#3a1d22}
-body{background:var(--bg);color:var(--text)}
-.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
-.lprog-bar,.dbar,.pbar{background:#22303e}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-a{color:var(--p1)}
-}
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
@@ -97,7 +85,7 @@ text-decoration:none;color:inherit}
 border-radius:4px;text-align:center;line-height:17px}
 .rel a:nth-child(2) .k{background:var(--p3)}
 .rel a:nth-child(3) .k{background:var(--p2)}
-.rel a:nth-child(4) .k{background:#7a8b9a}
+.rel a:nth-child(4) .k{background:#5e6f7e}
 .rel .v{font-size:12px;color:var(--text);line-height:1.45}
 .ppt-thumb .go{display:block;margin-top:5px;font-size:11.5px;font-weight:700;color:var(--p1)}
 .sblk h4{margin:0 0 10px;font-size:11.5px;color:var(--muted);letter-spacing:1px;font-weight:700}
@@ -134,20 +122,20 @@ padding:4px 11px;border-radius:20px}
 .blk.recap{background:#f3f0fb;border:1px solid #ddd5f2}
 .blk h3{margin:0 0 13px;font-size:16px;display:flex;align-items:center;gap:9px}
 .blk.live h3{color:#0a7a5f}
-.blk.hw h3{color:#a86a0c}
+.blk.hw h3{color:#8f5a0a}
 .blk.recap h3{color:#5b46a8}
 .blk.review{background:#fdf6ec;border:1px solid #f0dcb4}
-.blk.review h3{color:#a86a0c}
+.blk.review h3{color:#8f5a0a}
 .rv-sum{margin-top:14px;padding:11px 15px;background:rgba(255,255,255,.7);
 border-left:3px solid var(--p3);border-radius:0 8px 8px 0}
-.rv-sum b{display:block;font-size:12px;color:#a86a0c;letter-spacing:.5px;margin-bottom:3px}
+.rv-sum b{display:block;font-size:12px;color:#8f5a0a;letter-spacing:.5px;margin-bottom:3px}
 .rv-sum span{font-size:14.5px;color:#33475a;line-height:1.7}
 .blk ol{margin:0;padding-left:22px}
 .blk ul{margin:0;padding-left:22px}
 .blk li{margin:9px 0;font-size:14.5px;line-height:1.7;color:#33475a}
 .blk.recap li{margin:8px 0}
 .toc a.rc{color:#5b46a8;font-weight:600}
-.toc a.rv{color:#a86a0c;font-weight:600}
+.toc a.rv{color:#8f5a0a;font-weight:600}
 .blk code{background:rgba(255,255,255,.75);border:1px solid rgba(120,110,160,.22);
 border-radius:4px;padding:1px 5px;font-size:12.8px}
 
@@ -181,11 +169,14 @@ color:var(--muted);border:1px solid var(--line);font-weight:600}
 .main td{padding:10px 13px;border:1px solid var(--line);vertical-align:top}
 .main pre{background:#1e2a35;border-radius:10px;padding:0;margin:16px 0;position:relative;overflow:hidden}
 .main pre code{display:block;padding:16px 18px;font-size:13.5px;line-height:1.65;
-font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto}
-.main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#6b7f92;
+font-family:Consolas,"SFMono-Regular",monospace;background:none;overflow-x:auto;
+/* 代码块底色在两种主题里都是深色终端，所以文字必须显式给浅色：
+   否则会继承 .main code 的深绿，深底深字只剩 1.1:1（曾整站代码块都看不清） */
+color:#e6edf5}
+.main pre .cl{position:absolute;top:8px;right:12px;font-size:10.5px;color:#a8b6c4;
 background:rgba(255,255,255,.07);padding:2px 8px;border-radius:4px}
 .main pre.broken{border:2px dashed var(--p3)}
-.badge-broken{display:inline-block;background:var(--p3bg);color:#a86a0c;font-size:11.5px;
+.badge-broken{display:inline-block;background:var(--p3bg);color:#8f5a0a;font-size:11.5px;
 font-weight:700;padding:4px 11px;border-radius:5px;margin:4px 0 0}
 
 /* 底部导航 */
@@ -235,21 +226,6 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
  .sc{min-width:0}
 }
 
-/* 课节页还有几处写死的浅色（卡片底、场景卡、上下课节），暗色下必须逐条覆盖 */
-@media (prefers-color-scheme: dark){
-.blk{background:var(--card)}
-.sc,.pn a{background:#1b2733;border-color:var(--line)}
-.head .goal{color:#bac9d8}
-.side,.side a{color:var(--text)}
-code{background:#22303e;color:#dbe7f3}
-th{background:#1e2b36}
-/* 四种内容块的底色/边框在浅色主题里是写死的，暗色要逐个换掉 */
-.blk.live{background:#0f2c26;border-color:#1f5044}
-.blk.hw{background:#2a2213;border-color:#4a3a1c}
-.blk.recap{background:#221d33;border-color:#3a3358}
-.blk.review{background:#2a2318;border-color:#4c3d22}
-}
-
 """
 
 # 复习计划页（web/review.html）专用样式：跟着 unit.css 一起用
@@ -265,12 +241,12 @@ padding:16px 18px;margin:0 0 16px}
 .dbar{flex:1;height:9px;background:#e6ecf3;border-radius:99px;overflow:hidden}
 .dbar i{display:block;height:100%;width:0;border-radius:99px;
 background:linear-gradient(90deg,#2f6df6,#22a06b);transition:width .25s}
-.dbar.b2 i{background:linear-gradient(90deg,#1f5fa8,#0e9b78)}
-.dbar.b3 i{background:linear-gradient(90deg,#e08a15,#c46f00)}
+.dbar.b2 i{background:linear-gradient(90deg,#1f5fa8,#0a7d63)}
+.dbar.b3 i{background:linear-gradient(90deg,#a06009,#c46f00)}
 .dval{flex:0 0 auto;min-width:110px;text-align:right;font-size:12.5px;
 font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
 .top-in .sp{flex:1}
-.rv-hero{background:linear-gradient(135deg,#1f5fa8,#0e9b78);border-radius:16px;
+.rv-hero{background:linear-gradient(135deg,#1f5fa8,#0a7d63);border-radius:16px;
 padding:30px 34px;color:#fff;margin:0 0 20px}
 .rv-hero h1{margin:0 0 8px;font-size:27px;line-height:1.3}
 .rv-hero p{margin:0;font-size:14px;color:#dbe8f5;line-height:1.85;max-width:760px}
@@ -377,7 +353,7 @@ function init(){
   var links=[].slice.call(document.querySelectorAll('.toc a'));
   var tg=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
   function on(){var y=scrollY+150,cur=0;tg.forEach(function(t,i){if(t&&t.offsetTop<=y)cur=i;});
-    links.forEach(function(a,i){a.style.background=(i===cur)?'#eaf1fb':'';
+    links.forEach(function(a,i){a.style.background=(i===cur)?'var(--p1bg)':'';
       a.style.borderLeftColor=(i===cur)?'var(--p1)':'transparent';});}
   on(); addEventListener('scroll',on,{passive:true});
   document.querySelectorAll('.main pre').forEach(function(p){});
@@ -439,7 +415,6 @@ COPY_JS = """
 })();
 """
 
-
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
 import ppt_map
@@ -469,14 +444,12 @@ STAGE_NAME = {
     2: "阶段 2 · 项目实践（教材第 12–20 章）",
 }
 
-
 def toc_html(body):
     items = []
     for m in re.finditer(r'<h([23]) id="([^"]+)">(.*?)</h\1>', body, re.S):
         lvl, aid, txt = m.group(1), m.group(2), re.sub(r"<[^>]+>", "", m.group(3))
         items.append(f'<a class="lv{lvl}" href="#{aid}">{html.escape(txt)}</a>')
     return "\n".join(items)
-
 
 def nav_list(meta, cur):
     """右侧整册 38 节列表。"""
@@ -487,7 +460,6 @@ def nav_list(meta, cur):
             f'<span class="no">{m["no"]:02d}</span>'
             f'<span>{m["title"]}</span></a>')
     return "\n".join(out)
-
 
 def lesson_page(no, total, unit, week, title, goal, live, hw, body,
                 prev_link, next_link, all_meta, recap_head=None, recap_items=None,
@@ -693,7 +665,6 @@ transition:opacity .18s;z-index:60}}
 </body>
 </html>"""
 
-
 # 艾宾浩斯复习间隔（学完后的天数）：当天 → 2 → 4 → 8 → 16 → 31 天
 REVIEW_STAGES = [
     (0,  "当天复盘", "合上讲义，凭记忆写下本节课 3 个要点，再把「课堂实操」的代码重敲一遍"),
@@ -703,7 +674,6 @@ REVIEW_STAGES = [
     (15, "第 16 天", "给别人讲一遍这节课（费曼技巧），卡住的地方记下来回看"),
     (30, "第 31 天", "只看目录复述本节结构，并回顾「讲评」里列出的常见错误"),
 ]
-
 
 def review_page(meta):
     """复习计划页（web/review.html）：按艾宾浩斯曲线给 111 节课排 6 轮复习。"""
@@ -966,7 +936,6 @@ __BODY__
 </body>
 </html>""".replace("__CSS__", REVIEW_CSS).replace("__BODY__", body).replace("__JS__", js)
 
-
 def index_page(meta):
     """课程总目录：按单元分组，按周标注。"""
     by_unit = {}
@@ -1041,8 +1010,8 @@ def index_page(meta):
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
 <style>
-:root{{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#e08a15;--p3bg:#fdf3e2}}
+:root{{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p2bg:#e6f6f0;--p3:#a06009;--p3bg:#fdf3e2}}
 *{{box-sizing:border-box}}
 body{{margin:0;background:var(--bg);color:var(--text);
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.7}}
@@ -1055,7 +1024,7 @@ border-bottom:1px solid var(--line)}}
 .back{{font-size:13.5px;color:var(--muted)}}
 
 .hero{{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 30px;
-background:linear-gradient(135deg,#1f5fa8 0%,#0e9b78 100%);padding:44px 46px;color:#fff}}
+background:linear-gradient(135deg,#1f5fa8 0%,#0a7d63 100%);padding:44px 46px;color:#fff}}
 .hero::after{{content:'';position:absolute;right:-80px;bottom:-130px;width:400px;height:400px;
 border-radius:50%;background:rgba(255,255,255,.08)}}
 .hero>*{{position:relative;z-index:1}}
@@ -1165,21 +1134,6 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
 @page{{margin:14mm}}
 
 @media(max-width:700px){{.wrap{{padding:0 14px 60px}}.hero{{padding:30px 22px}}.hero h1{{font-size:27px}}}}
-/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
-   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
-@media (prefers-color-scheme: dark){{
-.uprog{{background:#1a2632}}
-.uprog .track{{background:#26343f}}
-.bkbx{{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}}
-.bkbx .bk-h b{{background:#243342;color:var(--p1)}}
-.main code{{background:#22303e;color:#dbe7f3}}
-.main th{{background:#1e2b36}}
-.main pre{{background:#0c141c}}
-.toc a:hover{{background:#1b2733}}
-.pn a,.rel,.relbox,.tocbox{{background:#16202b}}
-.card,.goal,.live,.hw,.rbox{{background:var(--card)}}
-input,select,textarea{{background:var(--card);color:var(--text);border-color:var(--line)}}
-}}
 </style>
 </head>
 <body>

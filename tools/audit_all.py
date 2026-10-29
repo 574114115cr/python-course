@@ -11,6 +11,7 @@
   G 占位符残留
   H 代码高亮
   I 前端能力（搜索/筛选/打印/进度）
+  J 主题（每页都带切换脚本/按钮，深色表已派生）
 """
 import os, re, sys, glob, importlib.util
 from datetime import datetime
@@ -454,6 +455,58 @@ except Exception as _e:
 
 info("I", "搜索 / 筛选 / 完成按钮 / 复盘块 / 讲评块 / 键盘翻页 / 续学入口 / 打印样式 已就位")
 
+# ── J 主题切换（每页都要能切深浅，且深色表真的写进去了）────────────
+try:
+    import theme as _theme
+    _htmls = []
+    for _base in ("web", "fluent", "python-course-ppt", "."):
+        _p = os.path.join(ROOT, _base)
+        for _dp, _dns, _fs in os.walk(_p):
+            _dns[:] = [d for d in _dns if d not in (".git", "node_modules", ".cache",
+                                                    "dist", "__pycache__", "www")]
+            for _f in _fs:
+                if _f.endswith(".html"):
+                    _fp = os.path.join(_dp, _f)
+                    if "/android/" in _fp.replace("\\", "/"):
+                        continue
+                    _htmls.append(_fp)
+    _no_head, _no_dark, _no_btn = [], [], []
+    for _fp in _htmls:
+        _s = open(_fp, encoding="utf-8").read()
+        if _theme.HEAD_BEGIN not in _s:
+            _no_head.append(_fp)
+        if "thBtn" not in _s:
+            _no_btn.append(_fp)
+        # 深色表可能写在外链 CSS 里：页内 <style> 有规则就查页内，否则查它引的 css。
+        # 先剔掉 theme 自己注入的那段样式（它本来就不带深色表）。
+        _s2 = re.sub(re.escape(_theme.HEAD_BEGIN) + r".*?" + re.escape(_theme.HEAD_END),
+                     "", _s, flags=re.S)
+        _inline = re.search(r"<style[^>]*>(.*?)</style>", _s2, re.S)
+        _ok_dark = False
+        if _inline and len(_inline.group(1).strip()) > 80:
+            _ok_dark = _theme.CSS_MARK in _s
+        else:
+            for _href in re.findall(r'<link[^>]+rel="stylesheet"[^>]*href="([^"]+)"', _s):
+                _cp = os.path.normpath(os.path.join(os.path.dirname(_fp), _href))
+                if os.path.exists(_cp):
+                    if _theme.CSS_MARK in open(_cp, encoding="utf-8").read():
+                        _ok_dark = True
+                        break
+        if not _ok_dark:
+            _no_dark.append(_fp)
+    _rel = lambda ps: "、".join(os.path.relpath(x, ROOT) for x in ps[:4]) + \
+                      (f" 等 {len(ps)} 个" if len(ps) > 4 else "")
+    if _no_head:
+        bad("J", f"{len(_no_head)} 页没有主题脚本：{_rel(_no_head)}")
+    if _no_dark:
+        bad("J", f"{len(_no_dark)} 页没有深色样式表：{_rel(_no_dark)}")
+    if _no_btn:
+        bad("J", f"{len(_no_btn)} 页没有切换按钮：{_rel(_no_btn)}")
+    if not (_no_head or _no_dark or _no_btn):
+        info("J", f"{len(_htmls)} 个页面均带主题脚本 / 深色表 / 切换按钮")
+except Exception as _e:
+    info("J", f"主题检查跳过：{_e}")
+
 # ── 输出 ──────────────────────────────────────────────────────
 print("=" * 62)
 print(f"全站整体审计  {datetime.now():%Y-%m-%d %H:%M}")
@@ -466,6 +519,6 @@ if problems:
     for p in problems:
         print("  ✗", p)
 else:
-    print("✓ 全部通过：源围栏 / 产物新鲜度 / 切课覆盖 / 复盘 / 结构 / 标题 / 链接 / 占位符 / 前端能力")
+    print("✓ 全部通过：源围栏 / 产物新鲜度 / 切课覆盖 / 复盘 / 结构 / 标题 / 链接 / 占位符 / 前端能力 / 主题")
 print()
 sys.exit(1 if problems else 0)

@@ -1,15 +1,45 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"><!--@theme:head-->
+<style>
+/* 主题切换按钮 + 原生控件配色（由 tools/theme.py 注入，勿手改） */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+/* 强调色的「原色版」：浅色下等于强调色本身，深色下由派生表换成压暗后的实心底色。
+   凡是把强调色当实心底、上面压白字的地方都用 --p1s 这类变量（否则白字会糊）。 */
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;--p1:#1f5fa8;
+--p1s:var(--p1);--p2s:var(--p2);--p3s:var(--p3);--p4s:var(--p4);--dangers:var(--danger)}
+html[data-theme="dark"]{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;
+--muted:#93a6b8;--p1:#63a9ee}
+body{transition:background-color .18s,color .18s}
+::selection{background:rgba(99,169,238,.32)}
+.thbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;
+border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);
+font:inherit;font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;
+white-space:nowrap;flex:0 0 auto}
+.thbtn:hover{color:var(--text);border-color:var(--p1)}
+.thbtn:focus-visible{outline:2px solid var(--p1);outline-offset:2px}
+.thbtn .thi svg{width:15px;height:15px;display:block}
+.thbtn .thlbl{display:inline}
+/* 窄屏顶栏本来就挤（返回 / 标题 / 课件 / 勾选），再塞按钮会横向溢出 14px，
+   所以窄屏由脚本把按钮挪到 body 上变成右下角悬浮（顶栏有 backdrop-filter，
+   直接给它 position:fixed 会被顶栏接管定位，跑到屏幕外）。 */
+.thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
+box-shadow:0 6px 20px rgba(0,0,0,.28)}
+@media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+</style>
+<script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
+<!--/@theme:head-->
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>课程目录 · 111 节课</title>
 <meta name="theme-color" content="#1f5fa8">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
 <style>
-:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e6f6f0;--p3:#e08a15;--p3bg:#fdf3e2}
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p2bg:#e6f6f0;--p3:#a06009;--p3bg:#fdf3e2}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.7}
@@ -22,7 +52,7 @@ border-bottom:1px solid var(--line)}
 .back{font-size:13.5px;color:var(--muted)}
 
 .hero{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 30px;
-background:linear-gradient(135deg,#1f5fa8 0%,#0e9b78 100%);padding:44px 46px;color:#fff}
+background:linear-gradient(135deg,#1f5fa8 0%,#0a7d63 100%);padding:44px 46px;color:#fff}
 .hero::after{content:'';position:absolute;right:-80px;bottom:-130px;width:400px;height:400px;
 border-radius:50%;background:rgba(255,255,255,.08)}
 .hero>*{position:relative;z-index:1}
@@ -132,20 +162,89 @@ footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-si
 @page{margin:14mm}
 
 @media(max-width:700px){.wrap{padding:0 14px 60px}.hero{padding:30px 22px}.hero h1{font-size:27px}}
-/* 暗色补丁：下面这些块在浅色主题里把底色写死了，只覆盖变量会在暗底上留白块。
-   注意：本模板是 f-string，CSS 里的花括号要写双份。 */
-@media (prefers-color-scheme: dark){
-.uprog{background:#1a2632}
-.uprog .track{background:#26343f}
-.bkbx{background:linear-gradient(135deg,#18242f,#141d27);border-color:var(--line)}
-.bkbx .bk-h b{background:#243342;color:var(--p1)}
-.main code{background:#22303e;color:#dbe7f3}
-.main th{background:#1e2b36}
-.main pre{background:#0c141c}
-.toc a:hover{background:#1b2733}
-.pn a,.rel,.relbox,.tocbox{background:#16202b}
-.card,.goal,.live,.hw,.rbox{background:var(--card)}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
+/*@theme-dark*/
+html[data-theme="dark"]{--bg:#121922;--card:#182129;--line:#273548;--text:#d9e4ed;--muted:#abb8c4;--p1:#79ace6;--p1s:#1f5fa8;--p1bg:#121821;--p2:#77eed3;--p2s:#0a785f;--p2bg:#12211b;--p3:#eebc77;--p3s:#995c09;--p3bg:#211b12}
+:where(html[data-theme="dark"]) *{box-sizing:border-box}
+:where(html[data-theme="dark"]) body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.7}
+:where(html[data-theme="dark"]) a{color:inherit;text-decoration:none}
+:where(html[data-theme="dark"]) .wrap{max-width:1160px;margin:0 auto;padding:0 24px 80px}
+:where(html[data-theme="dark"]) .top{position:sticky;top:0;z-index:40;background:rgba(18,25,34,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+:where(html[data-theme="dark"]) .top-in{max-width:1160px;margin:0 auto;padding:0 24px;height:58px;display:flex;align-items:center;gap:16px}
+:where(html[data-theme="dark"]) .top h1{font-size:16px;margin:0;font-weight:700;flex:1}
+:where(html[data-theme="dark"]) .back{font-size:13.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) .hero{position:relative;overflow:hidden;border-radius:20px;margin:26px 0 30px;background:linear-gradient(135deg,#1f5fa8 0%,#0a785f 100%);padding:44px 46px;color:#fff}
+:where(html[data-theme="dark"]) .hero::after{content:'';position:absolute;right:-80px;bottom:-130px;width:400px;height:400px;border-radius:50%;background:rgba(24,33,41,0.08)}
+:where(html[data-theme="dark"]) .hero>*{position:relative;z-index:1}
+:where(html[data-theme="dark"]) .hero .bdg{display:inline-block;background:var(--p3s);border-radius:6px;padding:5px 14px;font-size:12.5px;font-weight:700;letter-spacing:1.5px;margin-bottom:18px}
+:where(html[data-theme="dark"]) .hero h1{font-size:38px;margin:0 0 12px;line-height:1.25}
+:where(html[data-theme="dark"]) .hero p{font-size:16px;color:#dcebf7;margin:0 0 26px;max-width:660px}
+:where(html[data-theme="dark"]) .st{display:flex;gap:40px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .st b{display:block;font-size:30px;font-weight:700;line-height:1.2}
+:where(html[data-theme="dark"]) .st span{font-size:12.5px;color:#b9d5ea}
+:where(html[data-theme="dark"]) .pg{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding:16px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .pg b{font-size:14px;color:var(--muted);font-weight:600}
+:where(html[data-theme="dark"]) .pg .tr{flex:1;min-width:180px;height:8px;background:#121821;border-radius:8px;overflow:hidden}
+:where(html[data-theme="dark"]) .pg .tr i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p2));width:0;transition:width .25s}
+:where(html[data-theme="dark"]) .pg .ct{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) h2{font-size:21px;margin:36px 0 6px;display:flex;align-items:center;gap:10px}
+:where(html[data-theme="dark"]) h2 i{width:9px;height:9px;border-radius:50%;background:var(--p1s);display:block}
+:where(html[data-theme="dark"]) .sub{font-size:13.5px;color:var(--muted);margin:0 0 18px}
+:where(html[data-theme="dark"]) .ug{margin-bottom:26px}
+:where(html[data-theme="dark"]) .ug-h{display:flex;align-items:center;gap:11px;margin-bottom:12px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .ug-n{width:32px;height:32px;border-radius:8px;background:var(--p1s);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+:where(html[data-theme="dark"]) .ug-h h3{margin:0;font-size:17px}
+:where(html[data-theme="dark"]) .ug-ls{display:flex;gap:7px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .ug-l{font-size:12px;font-weight:700;color:var(--p1);background:#182129;border:1px solid var(--line);border-radius:6px;padding:3px 9px;text-decoration:none;white-space:nowrap}
+:where(html[data-theme="dark"]) .ug-l:hover{background:var(--p1bg);border-color:var(--p1);text-decoration:none}
+:where(html[data-theme="dark"]) .ug-m{font-size:12.5px;color:var(--muted);margin-left:auto}
+:where(html[data-theme="dark"]) .lg{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+:where(html[data-theme="dark"]) .lc{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;transition:border-color .15s}
+:where(html[data-theme="dark"]) .lc:hover{border-color:var(--p1);box-shadow:0 2px 12px rgba(31,95,168,.08)}
+:where(html[data-theme="dark"]) .lc.done{border-color:#234135;background:#12221a}
+:where(html[data-theme="dark"]) .lc-h{display:flex;gap:12px;align-items:flex-start;margin-bottom:11px}
+:where(html[data-theme="dark"]) .lc-n{width:36px;height:36px;border-radius:9px;background:var(--p1bg);color:var(--p1);display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:700;flex-shrink:0}
+:where(html[data-theme="dark"]) .lc.done .lc-n{background:var(--p2bg);color:var(--p2)}
+:where(html[data-theme="dark"]) .lc-h h4{margin:0 0 3px;font-size:15.5px;line-height:1.4}
+:where(html[data-theme="dark"]) .lc-h p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+:where(html[data-theme="dark"]) .lc-w{font-size:11.5px;color:var(--muted);font-weight:600;background:#121921;padding:3px 9px;border-radius:20px;flex-shrink:0}
+:where(html[data-theme="dark"]) .lc-f{font-size:12.5px;color:#b4c3d2;line-height:1.6;margin-top:5px}
+:where(html[data-theme="dark"]) .lc-f b{color:var(--p2);font-weight:700}
+:where(html[data-theme="dark"]) .stage-sep{display:flex;align-items:center;gap:14px;margin:44px 0 18px;padding:16px 20px;background:linear-gradient(90deg,var(--p1bg),#121a22);border:1px solid var(--line);border-left:4px solid var(--p1);border-radius:0 12px 12px 0}
+:where(html[data-theme="dark"]) .stage-sep .ss-no{background:var(--p1s);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap}
+:where(html[data-theme="dark"]) .stage-sep h2{margin:0;font-size:19px;color:var(--text)}
+:where(html[data-theme="dark"]) .stage-sep .ss-m{margin-left:auto;font-size:12.5px;color:var(--muted);white-space:nowrap}
+:where(html[data-theme="dark"]) .ujump{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+:where(html[data-theme="dark"]) .ujump a{padding:5px 12px;border:1px solid var(--line);border-radius:16px;background:var(--card);font-size:12px;color:var(--muted);text-decoration:none}
+:where(html[data-theme="dark"]) .ujump a:hover{border-color:var(--p1);color:var(--p1);background:var(--p1bg)}
+:where(html[data-theme="dark"]) .tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+:where(html[data-theme="dark"]) .tools .q{flex:1;min-width:240px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;font-family:inherit;background:var(--card);color:var(--text)}
+:where(html[data-theme="dark"]) .tools .q:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+:where(html[data-theme="dark"]) .tools .fl{display:flex;gap:6px}
+:where(html[data-theme="dark"]) .tools .fb{padding:7px 14px;border:1px solid var(--line);border-radius:20px;background:var(--card);font-size:12.5px;color:var(--muted);cursor:pointer;font-family:inherit}
+:where(html[data-theme="dark"]) .tools .fb:hover{border-color:var(--p1);color:var(--p1)}
+:where(html[data-theme="dark"]) .tools .fb.on{background:var(--p1s);border-color:var(--p1);color:#fff}
+:where(html[data-theme="dark"]) .tools .cnt{font-size:12px;color:var(--muted);white-space:nowrap}
+:where(html[data-theme="dark"]) .pg .resume{padding:7px 15px;border-radius:20px;background:var(--p1s);color:#fff;font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
+:where(html[data-theme="dark"]) .pg .resume:hover{background:#1a5296}
+:where(html[data-theme="dark"]) .pg .resume.all-done{background:var(--p2s)}
+:where(html[data-theme="dark"]) .pg .rvgo{padding:7px 15px;border-radius:20px;background:var(--p2bg);color:#77eecf;border:1px solid #234135;font-size:12.5px;font-weight:600;white-space:nowrap;text-decoration:none}
+:where(html[data-theme="dark"]) .pg .rvgo:hover{background:#11201a}
+:where(html[data-theme="dark"]) .lc{position:relative}
+:where(html[data-theme="dark"]) .lc-a{display:block;color:inherit;text-decoration:none}
+:where(html[data-theme="dark"]) .lc-ck{margin-top:11px;padding:6px 14px;border:1px solid var(--line);border-radius:8px;background:#182129;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;width:100%}
+:where(html[data-theme="dark"]) .lc-ck:hover{border-color:var(--p2);color:var(--p2)}
+:where(html[data-theme="dark"]) .lc-ck.on{background:var(--p2bg);border-color:#234135;color:var(--p2);font-weight:600}
+:where(html[data-theme="dark"]) .tip{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-top:34px;display:flex;gap:14px;align-items:flex-start}
+:where(html[data-theme="dark"]) .tip i{width:4px;align-self:stretch;background:var(--p3s);border-radius:2px;flex-shrink:0}
+:where(html[data-theme="dark"]) .tip h4{margin:0 0 8px;font-size:16px}
+:where(html[data-theme="dark"]) .tip ul{margin:0;padding-left:20px;font-size:14px;color:#b4c3d2}
+:where(html[data-theme="dark"]) .tip li{margin:5px 0}
+:where(html[data-theme="dark"]) footer{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-size:13px;color:var(--muted)}
+@page{margin:14mm}
+@media(max-width:700px){
+:where(html[data-theme="dark"]) .wrap{padding:0 14px 60px}
+:where(html[data-theme="dark"]) .hero{padding:30px 22px}
+:where(html[data-theme="dark"]) .hero h1{font-size:27px}
 }
 </style>
 </head>
@@ -2342,5 +2441,65 @@ document.querySelectorAll('.lc-ck').forEach(function(btn){
 apply();
 </script>
 <script src="../media/bgm.js" defer></script>
+<!--@theme:body-->
+<script>(function(){
+var KEY='py-theme-v1',ORDER=['auto','light','dark'];
+var LABEL={auto:'跟随系统',light:'浅色',dark:'深色'};
+var ICON={
+auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>',
+dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3z"/></svg>'};
+var root=document.documentElement;
+var q=window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)'):null;
+function mode(){var m=root.getAttribute('data-theme-mode');return ORDER.indexOf(m)<0?'auto':m}
+function sync(m){
+  var b=document.getElementById('thBtn');
+  root.setAttribute('data-theme-mode',m);
+  var d=root.getAttribute('data-theme')==='dark';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
+  if(!b)return;
+  b.title='主题：'+LABEL[m]+'　点一下切换（跟随系统 → 浅色 → 深色）';
+  b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
+  var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
+  if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
+}
+function apply(m,save){
+  var d=m==='dark'||(m==='auto'&&q&&q.matches);
+  root.setAttribute('data-theme',d?'dark':'light');
+  if(save){try{localStorage.setItem(KEY,m)}catch(e){}}
+  sync(m);
+}
+function build(){
+  var b=document.createElement('button');
+  b.type='button';b.id='thBtn';b.className='thbtn';
+  b.innerHTML='<span class="thi"></span><span class="thlbl"></span>';
+  var host=document.querySelector('.top-in')||document.querySelector('.nav-in');
+  var mq=window.matchMedia?window.matchMedia('(max-width:640px)'):null;
+  if(host){host.appendChild(b)}else{document.body.appendChild(b)}
+  function home(){
+    var el=document.getElementById('thBtn');if(!el)return;
+    var small=mq&&mq.matches;
+    if(!host||small){
+      if(el.parentElement!==document.body)document.body.appendChild(el);
+      el.classList.add('fixed');
+    }else{
+      if(el.parentElement!==host)host.appendChild(el);
+      el.classList.remove('fixed');
+    }
+  }
+  home();
+  if(mq&&mq.addEventListener)mq.addEventListener('change',home);
+  window.__thHome=home;
+  b.addEventListener('click',function(){apply(ORDER[(ORDER.indexOf(mode())+1)%3],true)});
+  return b;
+}
+build();sync(mode());
+if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
+  q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
+window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
+  set:function(m){apply(m,true)}};
+})();</script>
+<!--/@theme:body-->
 </body>
 </html>

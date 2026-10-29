@@ -105,10 +105,12 @@ def main():
         return 1
 
     if not decks_only:
-        ok = ok and step("5/8 安卓 webDir", [os.path.join("tools", "build_android_www.py")])
+        # 深色表由浅色表派生：打包前必须重跑，否则安卓/便携包里的页面还是上一版配色
+        ok = ok and step("5/8 主题派生（浅色 → 深色）", [os.path.join("tools", "theme.py")])
+        ok = ok and step("6/8 安卓 webDir", [os.path.join("tools", "build_android_www.py")])
         ok = ok and node_step("校验安卓 webDir", "verify_android_www.mjs")
-        ok = ok and step("6/8 便携包", [os.path.join("tools", "build_portable.py")])
-        ok = ok and node_step("7/8 校验便携包", "verify_portable.mjs")
+        ok = ok and step("7/8 便携包", [os.path.join("tools", "build_portable.py")])
+        ok = ok and node_step("校验便携包", "verify_portable.mjs")
         ok = ok and node_step("8/8 PWA", "verify_pwa.mjs")
 
     print("\n=== 末检：站点审计 / 课节 / 输出一致性 / 窄屏")
@@ -117,6 +119,7 @@ def main():
                  ("运行结果一致性", ["tools/check_outputs.py"])):
         step(t, [os.path.join(*a)])
     node_step("390px 无溢出", "verify_mobile_390.mjs")
+    node_step("深浅两套主题对比度", "verify_dark.mjs")
 
     # 备注最容易在重建时被无声抹掉（slidep create 是整份重写），单独核一遍
     import zipfile

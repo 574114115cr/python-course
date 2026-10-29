@@ -57,8 +57,8 @@ TEMPLATE = r"""<!DOCTYPE html>
 <title>逐节版讲授课件 · 22 个单元</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'%3E%3Crect width=\'32\' height=\'32\' rx=\'7\' fill=\'%231f5fa8\'/%3E%3Ctext x=\'16\' y=\'22\' font-size=\'15\' font-family=\'monospace\' fill=\'%23fff\' text-anchor=\'middle\'%3EPy%3C/text%3E%3C/svg%3E">
 <style>
-:root{--bg:#eef2f7;--card:#fff;--line:#d8e3ee;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p2:#0e9b78;--p3:#e08a15}
+:root{--bg:#eef2f7;--card:#fff;--line:#d8e3ee;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p2:#0a7d63;--p3:#a06009}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);line-height:1.7;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
@@ -114,3 +114,5 @@ border-radius:10px;padding:15px 18px;margin-bottom:22px;font-size:14.5px;color:#
 
 if __name__ == "__main__":
     main()
+    import theme  # 主题派生：把浅色样式表翻成深色表并注入切换按钮
+    theme.sweep([os.path.join(ROOT, "web", "ppt")])

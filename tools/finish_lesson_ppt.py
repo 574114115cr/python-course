@@ -178,3 +178,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    import theme  # 这一步会重写总览页，重新注入主题
+    theme.sweep([WEB_U])

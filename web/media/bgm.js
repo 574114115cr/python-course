@@ -103,14 +103,16 @@
   }
 
   var css = document.createElement('style');
+  // 颜色一律走主题变量：写死浅色的话，深色模式下会在左下角留一块白底亮片
   css.textContent =
     '#bgmBtn{position:fixed;left:22px;bottom:22px;z-index:70;display:flex;align-items:center;' +
-    'gap:6px;padding:8px 13px;border-radius:999px;border:1px solid #d8e3ee;background:#fff;' +
-    'color:#1f5fa8;font:600 12.5px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",' +
+    'gap:6px;padding:8px 13px;border-radius:999px;border:1px solid var(--line,#d8e3ee);' +
+    'background:var(--card,#fff);color:var(--p1,#1f5fa8);' +
+    'font:600 12.5px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",' +
     '"Microsoft YaHei",sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(20,40,70,.14);' +
     'opacity:.9;transition:opacity .15s,color .15s}' +
     '#bgmBtn:hover{opacity:1}' +
-    '#bgmBtn.off{color:#8a9aaa}' +
+    '#bgmBtn.off{color:var(--muted,#8a9aaa)}' +
     '#bgmBtn .note{font-size:15px;line-height:1}' +
     '#bgmBtn.playing .note{display:inline-block;animation:bgmBeat 1.2s ease-in-out infinite}' +
     '@keyframes bgmBeat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}' +

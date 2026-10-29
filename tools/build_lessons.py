@@ -481,3 +481,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    import theme  # 主题派生：把浅色样式表翻成深色表并注入切换按钮
+    theme.sweep([os.path.join(ROOT, "web"), os.path.join(ROOT, "fluent")])

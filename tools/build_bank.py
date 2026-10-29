@@ -30,7 +30,6 @@ OUT = os.path.join(ROOT, "web", "bank.html")
 LV_NAME = {1: "基础语法", 2: "循环与条件", 3: "函数", 4: "类",
            5: "文件·异常·测试", 6: "项目与工程"}
 
-
 def parse(md_text):
     """把 md 拆成 [{id, title, body}]，body 内含 题目/答案/解析 三段。"""
     # 先按 `## Lx-y 标题` 切
@@ -48,7 +47,6 @@ def parse(md_text):
         out.append({"id": qid, "title": title, "body": body.strip()})
     return out
 
-
 def split_parts(body):
     """拆出 题目 / 答案 / 解析 三段原文。"""
     keys = re.split(r"\*\*(题目|答案|解析)\*\*\s*[:：]?", body)
@@ -59,13 +57,11 @@ def split_parts(body):
         seg["题目"] = body
     return seg
 
-
 def plain(md):
     """粗略去格式，用于搜索索引与字数统计。"""
     t = re.sub(r"```.*?```", " ", md, flags=re.S)
     t = re.sub(r"[#*`>|_\-\[\]()]", " ", t)
     return re.sub(r"\s+", " ", t).strip()
-
 
 # 题号 → 单元页里的具体小节锚点（由 tools/make_bank_anchor.py 生成，可手改）。
 # 缺映射时退回「单元页顶部」，不要瞎猜。
@@ -75,7 +71,6 @@ try:
     ANCHOR = _json.load(open(_ANCHOR_PATH, encoding="utf-8"))
 except (OSError, ValueError):
     ANCHOR = {}
-
 
 def card(q):
     qid, title = q["id"], q["title"]
@@ -114,22 +109,9 @@ def card(q):
   </details>
 </article>""".strip()
 
-
 CSS = """
-:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;
---p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0e9b78;--p2bg:#e8f6f1;--p3:#e08a15;--p3bg:#fdf3e2}
-/* 暗色模式：两门课的讲义/题库/首页共用一套变量，覆盖变量即可整体生效。
-   额外补几处写死的浅色（顶栏、进度条、输入框），否则会在暗底上留白块。 */
-@media (prefers-color-scheme: dark){
-:root{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;--muted:#93a6b8;
---p1:#63a9ee;--p1bg:#16283b;--p2:#3ecf9e;--p2bg:#0f2c26;--p3:#f0a94a;--p3bg:#33260f;
---danger:#ff8792;--dangerbg:#3a1d22}
-body{background:var(--bg);color:var(--text)}
-.top{background:rgba(15,22,32,.94);border-bottom-color:var(--line)}
-.lprog-bar,.dbar,.pbar{background:#22303e}
-input,select,textarea{background:var(--card);color:var(--text);border-color:var(--line)}
-a{color:var(--p1)}
-}
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#55687a;
+--p1:#1f5fa8;--p1bg:#eaf1fb;--p2:#0a7d63;--p2bg:#e8f6f1;--p3:#a06009;--p3bg:#fdf3e2}
 
 *{box-sizing:border-box}
 /* 120 题一次全排版很贵（12k 节点 / 30k 像素高）。屏幕外的卡片先跳过排版，
@@ -146,7 +128,7 @@ font-family:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace}
 pre{background:#f7f9fc;border:1px solid var(--line);border-radius:9px;padding:12px 14px;
 overflow:auto;position:relative;margin:10px 0}
 pre code{background:none;padding:0;font-size:13px;line-height:1.62}
-.cl{position:absolute;top:6px;right:10px;font-size:11px;color:#8a9aaa;
+.cl{position:absolute;top:6px;right:10px;font-size:11px;color:var(--muted);
 background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 7px}
 pre.broken{border-color:#e8b4b4;background:#fdf6f6}
 .badge-broken{margin:-4px 0 10px;padding:7px 11px;border-radius:7px;background:#fdecec;
@@ -341,7 +323,6 @@ document.querySelectorAll('.sb').forEach(function(b){
   }
 })();
 
-
 /* 长页回到顶部 */
 (function(){
   var b=document.createElement('button');
@@ -354,7 +335,6 @@ document.querySelectorAll('.sb').forEach(function(b){
 
 paint();
 """
-
 
 def build():
     md = open(MD, encoding="utf-8").read()
@@ -430,7 +410,8 @@ def build():
     open(OUT, "w", encoding="utf-8").write(page)
     return len(qs), len(page)
 
-
 if __name__ == "__main__":
     n, size = build()
     print(f"题库已生成：{n} 题，{size} 字节 -> {os.path.relpath(OUT, ROOT)}")
+    import theme  # 主题派生：把浅色样式表翻成深色表并注入切换按钮
+    theme.sweep([os.path.join(ROOT, "web")])
