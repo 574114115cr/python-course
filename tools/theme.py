@@ -481,7 +481,8 @@ def css(sheet, want_dark=True):
     light = _strip_generated(_strip_old_dark(sheet)).rstrip()
     if not want_dark:
         return light + "\n"
-    dark = _dark_body(light)
+    # 整张深色表只在屏幕生效：打印/另存 PDF 时自动回到浅色，省墨也好读
+    dark = "@media screen{\n" + _dark_body(light) + "\n}"
     return light + "\n" + CSS_MARK + "\n" + dark + "\n"
 
 
@@ -514,6 +515,14 @@ white-space:nowrap;flex:0 0 auto}
 .thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
 box-shadow:0 6px 20px rgba(0,0,0,.28)}
 @media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+/* 白底课件图（幻灯片截图）在深色下是一片刺眼的亮块：压一点亮度当「纸面」看。
+   只压这三类课件图，普通插图/头像不受影响；进入全屏放映时恢复原亮度，
+   保证放映颜色和下载的 pptx 一致。 */
+html[data-theme="dark"] .stage-img,html[data-theme="dark"] .cell img,
+html[data-theme="dark"] .ppt-thumb img{filter:brightness(.9)}
+:fullscreen .stage-img,:fullscreen .cell img{filter:none}
+html[data-theme="dark"] :fullscreen .stage-img,
+html[data-theme="dark"] :fullscreen .cell img{filter:none}
 </style>"""
 
 BODY_JS = """<script>(function(){
@@ -533,7 +542,7 @@ function sync(m){
   var meta=document.querySelector('meta[name="theme-color"]');
   if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
   if(!b)return;
-  b.title='主题：'+LABEL[m]+'　点一下切换（跟随系统 → 浅色 → 深色）';
+  b.title='主题：'+LABEL[m]+'　点一下或按 Shift+T 切换（跟随系统 → 浅色 → 深色）';
   b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
   var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
   if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
@@ -573,6 +582,14 @@ if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
   q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
 window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
   set:function(m){apply(m,true)}};
+/* Shift+T：不碰鼠标也能换主题（输入框聚焦时让位给打字） */
+document.addEventListener('keydown',function(e){
+  if(e.shiftKey&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&(e.key==='T'||e.key==='t')){
+    var a=document.activeElement;
+    if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+    apply(ORDER[(ORDER.indexOf(mode())+1)%3],true);e.preventDefault();
+  }
+});
 })();</script>"""
 
 

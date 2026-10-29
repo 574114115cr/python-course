@@ -107,6 +107,7 @@ background:#f2f5f9;border-radius:10px;border:1px solid var(--line)}
  .pn{flex-direction:column}
 }
 /*@theme-dark*/
+@media screen{
 :where(html[data-theme="dark"]) .main{min-width:0}
 :where(html[data-theme="dark"]) pre{max-width:100%}
 :where(html[data-theme="dark"]) .main pre,:where(html[data-theme="dark"]) .main .tblwrap{content-visibility:auto;contain-intrinsic-size:auto 220px}
@@ -176,4 +177,5 @@ color:#e6edf5}
 :where(html[data-theme="dark"]) .main h1{font-size:23px}
 :where(html[data-theme="dark"]) .main h2{font-size:19px}
 :where(html[data-theme="dark"]) .pn{flex-direction:column}
+}
 }

@@ -28,6 +28,14 @@ white-space:nowrap;flex:0 0 auto}
 .thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
 box-shadow:0 6px 20px rgba(0,0,0,.28)}
 @media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+/* 白底课件图（幻灯片截图）在深色下是一片刺眼的亮块：压一点亮度当「纸面」看。
+   只压这三类课件图，普通插图/头像不受影响；进入全屏放映时恢复原亮度，
+   保证放映颜色和下载的 pptx 一致。 */
+html[data-theme="dark"] .stage-img,html[data-theme="dark"] .cell img,
+html[data-theme="dark"] .ppt-thumb img{filter:brightness(.9)}
+:fullscreen .stage-img,:fullscreen .cell img{filter:none}
+html[data-theme="dark"] :fullscreen .stage-img,
+html[data-theme="dark"] :fullscreen .cell img{filter:none}
 </style>
 <script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
 <!--/@theme:head-->
@@ -44,8 +52,10 @@ transition:opacity .18s;z-index:60}
 #toTop.on{opacity:1;pointer-events:auto}
 @media print{#toTop{display:none}}
 /*@theme-dark*/
+@media screen{
 :where(html[data-theme="dark"]) #toTop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;background:#1f5fa8;color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;box-shadow:0 6px 18px rgba(20,40,70,.22);opacity:0;pointer-events:none;transition:opacity .18s;z-index:60}
 :where(html[data-theme="dark"]) #toTop.on{opacity:1;pointer-events:auto}
+}
 </style>
 </head>
 <body data-lesson="26">
@@ -734,7 +744,7 @@ function sync(m){
   var meta=document.querySelector('meta[name="theme-color"]');
   if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
   if(!b)return;
-  b.title='主题：'+LABEL[m]+'　点一下切换（跟随系统 → 浅色 → 深色）';
+  b.title='主题：'+LABEL[m]+'　点一下或按 Shift+T 切换（跟随系统 → 浅色 → 深色）';
   b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
   var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
   if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
@@ -774,6 +784,14 @@ if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
   q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
 window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
   set:function(m){apply(m,true)}};
+/* Shift+T：不碰鼠标也能换主题（输入框聚焦时让位给打字） */
+document.addEventListener('keydown',function(e){
+  if(e.shiftKey&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&(e.key==='T'||e.key==='t')){
+    var a=document.activeElement;
+    if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+    apply(ORDER[(ORDER.indexOf(mode())+1)%3],true);e.preventDefault();
+  }
+});
 })();</script>
 <!--/@theme:body-->
 </body>

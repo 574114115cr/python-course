@@ -222,6 +222,7 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
  .sc{min-width:0}
 }
 /*@theme-dark*/
+@media screen{
 :where(html[data-theme="dark"]) .main{min-width:0}
 :where(html[data-theme="dark"]) pre{max-width:100%}
 :where(html[data-theme="dark"]) .top-in{min-width:0}
@@ -368,4 +369,5 @@ color:#e6edf5}
 :where(html[data-theme="dark"]) .top-in .tno,:where(html[data-theme="dark"]) .top-in .rv,:where(html[data-theme="dark"]) .top-in .sp{display:none}
 :where(html[data-theme="dark"]) .sched{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 :where(html[data-theme="dark"]) .sc{min-width:0}
+}
 }

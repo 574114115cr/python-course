@@ -688,6 +688,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .wrap pre .vm { color: #F8F8F2 } /* Name.Variable.Magic */
 .wrap pre .il { color: #AE81FF } /* Literal.Number.Integer.Long */
 /*@theme-dark*/
+@media screen{
 html[data-theme="dark"]{--bg:#121222;--card:#182129;--line:#272749;--text:#dbdbe9;--muted:#b2b2c1;--p1:#9385d2;--p1s:#4c3a9e;--p1bg:#151221;--p2:#77eed3;--p2s:#0a785f;--p2bg:#12211b;--p3:#eebc77;--p3s:#995c09;--p3bg:#211b12;--p4:#d6756f;--p4s:#bd3d35;--p4bg:#211312;--r:14px}
 :where(html[data-theme="dark"]) *{box-sizing:border-box}
 :where(html[data-theme="dark"]) body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.75}
@@ -1226,3 +1227,4 @@ html[data-theme="dark"]{--bg:#121222;--card:#182129;--line:#272749;--text:#dbdbe
 :where(html[data-theme="dark"]) .wrap pre .vi{color:#F8F8F2}
 :where(html[data-theme="dark"]) .wrap pre .vm{color:#F8F8F2}
 :where(html[data-theme="dark"]) .wrap pre .il{color:#AE81FF}
+}

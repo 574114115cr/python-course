@@ -263,6 +263,13 @@ h1{font-size:23px;margin:6px 0 4px}
 .stage{background:var(--card);border:1px solid var(--line);border-radius:14px;
 box-shadow:0 2px 12px rgba(22,35,46,.06);overflow:hidden}
 .stage-img{display:block;width:100%;height:auto;background:#fff}
+/* 全屏放映：整个 stage 占满屏幕，图片按高度适配、居中（Esc 或再按 F 退出） */
+.stage:fullscreen{display:flex;align-items:center;justify-content:center;
+background:#0d141c;border-radius:0;padding:18px}
+.stage:fullscreen .stage-img{width:auto;max-width:100%;max-height:calc(100vh - 36px)}
+.stage:-webkit-full-screen{display:flex;align-items:center;justify-content:center;
+background:#0d141c;padding:18px}
+.stage:-webkit-full-screen .stage-img{width:auto;max-width:100%;max-height:calc(100vh - 36px)}
 .bar{display:flex;align-items:center;gap:12px;padding:12px 16px;
 border-top:1px solid var(--line);flex-wrap:wrap}
 .bar .t{font-size:15px;font-weight:700}
@@ -294,14 +301,15 @@ border-radius:5px;padding:1px 6px;font-size:12.5px;font-family:inherit}
   <a class="btn" href="../../lessons/index.html#u__UNIT__">本单元课节</a>
   <a class="btn" href="../../__UNITPAD__.html">单元讲义</a>
   <a class="btn" href="../index.html">课程总课件</a>
-  <a class="btn" href="#" id="fsBtn" title="全屏放映（Esc 退出）">全屏</a>
+  <a class="btn" href="#" id="fsBtn" title="全屏放映（F 进入 / Esc 退出）">全屏</a>
   __DLBTN__
 </div></div>
 
 <div class="wrap">
   <h1>单元 __UNIT__ · __UTITLE__</h1>
   <p class="sub">每一节课都有两页：<b>课节页</b>（目标 / 实操 / 作业）与
-     <b>知识点页</b>（本节要点 + 代码示例）。按 <kbd>←</kbd> <kbd>→</kbd> 翻页。</p>
+     <b>知识点页</b>（本节要点 + 代码示例）。按 <kbd>←</kbd> <kbd>→</kbd> 翻页，
+     按 <kbd>F</kbd> 全屏放映。</p>
 
   <div class="stage">
     <img class="stage-img" id="img" alt="课件页">
@@ -349,9 +357,23 @@ S.forEach(function(s,i){
 });
 document.getElementById('prev').onclick=function(){ show(cur-1); };
 document.getElementById('next').onclick=function(){ show(cur+1); };
+/* 全屏放映：全屏按钮原来只有样式没有 JS，点了没反应（真 bug）。
+   全屏 .stage 而不是整个页面，翻页条还在，Esc / F 都能退出。 */
+var stage=document.querySelector('.stage');
+function toggleFs(){
+  if(document.fullscreenElement||document.webkitFullscreenElement){
+    (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);
+  } else if(stage){
+    var rq=stage.requestFullscreen||stage.webkitRequestFullscreen;
+    if(rq)rq.call(stage);
+  }
+}
+var fsBtn=document.getElementById('fsBtn');
+if(fsBtn){fsBtn.addEventListener('click',function(e){e.preventDefault();toggleFs();});}
 document.addEventListener('keydown',function(e){
   if(e.key==='ArrowLeft'||e.key==='PageUp'){ show(cur-1); e.preventDefault(); }
   else if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ show(cur+1); e.preventDefault(); }
+  else if(e.key==='f'||e.key==='F'){ toggleFs(); e.preventDefault(); }
 });
 function fromHash(){
   var m=/^#s(\d+)$/.exec(location.hash||''); if(!m) return 0;
@@ -370,7 +392,9 @@ show(fromHash(),false);
 
 
 def main():
-    only = [int(x) for x in sys.argv[1:]] if len(sys.argv) > 1 else None
+    args = sys.argv[1:]
+    html_only = "--html" in args          # 只重写播放器页面（改模板后用，不碰 pptx/图）
+    only = [int(x) for x in args if x.isdigit()] or None
     sys.path.insert(0, TOOLS)
     import build_lesson_ppt as G
     import lesson_tpl
@@ -390,7 +414,12 @@ def main():
         if only and unit not in only:
             continue
         slides = manifest[str(unit)]
-        info = build_unit(unit, {"slides": slides})
+        if html_only:
+            # 不跑 pptx/截图管线，直接按 manifest 重写播放器页面
+            info = {"unit": unit, "pptx": f"Python讲授课件-单元{unit:02d}.pptx",
+                    "slides": slides}
+        else:
+            info = build_unit(unit, {"slides": slides})
         if not info:
             continue
         build_html(unit, info, lesson_tpl.UNIT_TITLE.get(unit, ""),

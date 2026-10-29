@@ -28,6 +28,14 @@ white-space:nowrap;flex:0 0 auto}
 .thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
 box-shadow:0 6px 20px rgba(0,0,0,.28)}
 @media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+/* 白底课件图（幻灯片截图）在深色下是一片刺眼的亮块：压一点亮度当「纸面」看。
+   只压这三类课件图，普通插图/头像不受影响；进入全屏放映时恢复原亮度，
+   保证放映颜色和下载的 pptx 一致。 */
+html[data-theme="dark"] .stage-img,html[data-theme="dark"] .cell img,
+html[data-theme="dark"] .ppt-thumb img{filter:brightness(.9)}
+:fullscreen .stage-img,:fullscreen .cell img{filter:none}
+html[data-theme="dark"] :fullscreen .stage-img,
+html[data-theme="dark"] :fullscreen .cell img{filter:none}
 </style>
 <script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
 <!--/@theme:head-->
@@ -317,6 +325,7 @@ transition:opacity .18s;z-index:60}
   .cc .acts a{flex:1;text-align:center}
 }
 /*@theme-dark*/
+@media screen{
 html[data-theme="dark"]{--bg:#121922;--card:#182129;--line:#273548;--text:#d9e4ed;--muted:#abb8c4;--p1:#79ace6;--p1s:#1f5fa8;--p1bg:#121821;--p2:#77eed3;--p2s:#0a785f;--p2bg:#12211b;--p3:#eebb77;--p3s:#985a08;--p3bg:#211b12;--danger:#df717e;--dangers:#c02b3d;--dangerbg:#221214;--p3ink:#d7c38e;/* 琥珀底上的正文字，深色下由主题派生提亮 */
   --r:14px}
 :where(html[data-theme="dark"]) *{box-sizing:border-box}
@@ -534,6 +543,7 @@ html[data-theme="dark"]{scroll-behavior:smooth}
 :where(html[data-theme="dark"]) .csw{grid-template-columns:1fr}
 :where(html[data-theme="dark"]) .cc{padding:16px 16px}
 :where(html[data-theme="dark"]) .cc .acts a{flex:1;text-align:center}
+}
 }
 </style>
 <script src="web/site.js"></script>
@@ -1584,6 +1594,7 @@ padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
 #pwaTip .yes{background:var(--p1);color:#fff;border:1px solid var(--p1)}
 #pwaTip .no{background:#fff;color:var(--muted);border:1px solid var(--line)}
 /*@theme-dark*/
+@media screen{
 :where(html[data-theme="dark"]) #pwaTip{position:fixed;right:16px;bottom:16px;z-index:80;max-width:300px;background:#182129;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 34px rgba(20,40,70,.22);padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
 :where(html[data-theme="dark"]) #pwaTip.on{display:block}
 :where(html[data-theme="dark"]) #pwaTip b{display:block;font-size:14.5px;margin-bottom:4px}
@@ -1592,6 +1603,7 @@ padding:14px 16px;font-size:13.5px;line-height:1.6;display:none}
 :where(html[data-theme="dark"]) #pwaTip button{flex:1;border-radius:9px;padding:8px 0;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
 :where(html[data-theme="dark"]) #pwaTip .yes{background:var(--p1s);color:#fff;border:1px solid var(--p1)}
 :where(html[data-theme="dark"]) #pwaTip .no{background:#182129;color:var(--muted);border:1px solid var(--line)}
+}
 </style>
 <div id="pwaTip"><b>装到手机 / 桌面</b><p>安装后离线也能学，学习进度保存在本机。</p>
 <div class="row"><button class="yes" type="button">安装</button><button class="no" type="button">暂不</button></div></div>
@@ -1633,7 +1645,7 @@ function sync(m){
   var meta=document.querySelector('meta[name="theme-color"]');
   if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
   if(!b)return;
-  b.title='主题：'+LABEL[m]+'　点一下切换（跟随系统 → 浅色 → 深色）';
+  b.title='主题：'+LABEL[m]+'　点一下或按 Shift+T 切换（跟随系统 → 浅色 → 深色）';
   b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
   var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
   if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
@@ -1673,6 +1685,14 @@ if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
   q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
 window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
   set:function(m){apply(m,true)}};
+/* Shift+T：不碰鼠标也能换主题（输入框聚焦时让位给打字） */
+document.addEventListener('keydown',function(e){
+  if(e.shiftKey&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&(e.key==='T'||e.key==='t')){
+    var a=document.activeElement;
+    if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+    apply(ORDER[(ORDER.indexOf(mode())+1)%3],true);e.preventDefault();
+  }
+});
 })();</script>
 <!--/@theme:body-->
 </body>

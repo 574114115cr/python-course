@@ -502,8 +502,17 @@ try:
         bad("J", f"{len(_no_dark)} 页没有深色样式表：{_rel(_no_dark)}")
     if _no_btn:
         bad("J", f"{len(_no_btn)} 页没有切换按钮：{_rel(_no_btn)}")
-    if not (_no_head or _no_dark or _no_btn):
-        info("J", f"{len(_htmls)} 个页面均带主题脚本 / 深色表 / 切换按钮")
+    # 播放器页必须有可用的全屏接线（曾有按钮只有样式没有 JS，点了没反应）
+    _u_dir = os.path.join(ROOT, "web", "ppt", "u")
+    _no_fs = [f for f in sorted(os.listdir(_u_dir))
+              if f.endswith(".html") and f != "index.html"
+              and "toggleFs" not in open(os.path.join(_u_dir, f),
+                                         encoding="utf-8").read()]
+    if _no_fs:
+        bad("J", f"{len(_no_fs)} 个播放器没有全屏接线：{_no_fs}")
+    if not (_no_head or _no_dark or _no_btn or _no_fs):
+        info("J", f"{len(_htmls)} 个页面均带主题脚本 / 深色表 / 切换按钮，"
+                  f"22 个播放器全屏可用")
 except Exception as _e:
     info("J", f"主题检查跳过：{_e}")
 
