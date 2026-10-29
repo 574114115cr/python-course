@@ -137,16 +137,43 @@ async function main() {
   })()`);
   expect('开关 重新打开恢复绘制', onBack > 200, `${onBack} px`);
 
-  /* ───── 3. 密度三档 ───── */
+  /* ───── 3. 密度四档 ───── */
   const cnt = {};
-  for (const d of ['low', 'mid', 'high']) {
+  for (const d of ['low', 'mid', 'high', 'ultra']) {
     await evaluate(`window.__neuron.set('dense','${d}')`);
     await sleep(150);
     cnt[d] = await evaluate(`window.__neuron.count()`);
   }
-  expect('密度 低 < 中 < 高', cnt.low < cnt.mid && cnt.mid < cnt.high,
-    `${cnt.low} / ${cnt.mid} / ${cnt.high}`);
+  expect('密度 低 < 中 < 高 < 极', cnt.low < cnt.mid && cnt.mid < cnt.high && cnt.high < cnt.ultra,
+    `${cnt.low} / ${cnt.mid} / ${cnt.high} / ${cnt.ultra}`);
   await evaluate(`window.__neuron.set('dense','mid')`);
+
+  /* ───── 3b. 动效四档（速度真的递增） ───── */
+  // 采样同一节点两帧之间的位移：只比对档位名没意义，要验速度值真的分档
+  const spd = {};
+  for (const s of ['slow', 'mid', 'fast', 'rush']) {
+    await evaluate(`window.__neuron.set('speed','${s}')`);
+    await sleep(200);
+    // 固定墙钟间隔内量节点平均位移，比对比档位名有意义
+    spd[s] = Number(await evaluate(`(() => {
+      const p0 = window.__neuron.pos().split(';');
+      return new Promise(res => setTimeout(() => {
+        const p1 = window.__neuron.pos().split(';');
+        let sum = 0, n = 0;
+        for (let i = 0; i < Math.min(p0.length, p1.length); i++) {
+          const a = p0[i].split(','), b = p1[i].split(',');
+          const dx = +b[0] - +a[0], dy = +b[1] - +a[1];
+          if (Math.abs(dx) > 100 || Math.abs(dy) > 100) continue;   // 跳过环绕跳变
+          sum += Math.sqrt(dx * dx + dy * dy); n++;
+        }
+        res(n ? (sum / n).toFixed(3) : '0');
+      }, 400));
+    })()`, true));
+  }
+  expect('动效 静 < 缓 < 快 < 疾（位移递增）',
+    spd.slow < spd.mid && spd.mid < spd.fast && spd.fast < spd.rush,
+    `${spd.slow} / ${spd.mid} / ${spd.fast} / ${spd.rush} px`);
+  await evaluate(`window.__neuron.set('speed','mid')`);
 
   /* ───── 4. 鼠标跟随 ───── */
   await evaluate(`window.__neuron.set('speed','slow')`);
@@ -200,7 +227,8 @@ async function main() {
       else res(n);
     })();
   }))()`;
-  await evaluate(`window.__neuron.set('dense','high')`);
+  // 拿最坏情况测：最高档 221 个节点 + 每条线一次渐变
+  await evaluate(`window.__neuron.set('dense','ultra')`);
   await evaluate(`window.__theme.set('light')`);
   await evaluate(`window.__neuron.set('color','multi')`);
   await sleep(700);
@@ -284,6 +312,26 @@ async function main() {
     `right=${mob.nr.right}/${mob.innerW}`);
   expect('390px 与主题/音乐按钮不重叠', !mob.ovTh && !mob.ovBg,
     `th=${JSON.stringify(mob.th)} bg=${JSON.stringify(mob.bg)}`);
+  // 档位变多后按钮组不能被挤出面板：任何 seg 的右边缘都不能越过 panel 内容区
+  await evaluate(`document.getElementById('nrPanel').classList.add('open')`);
+  await sleep(120);
+  const segFit = JSON.parse(await evaluate(`(() => {
+    const p = document.getElementById('nrPanel').getBoundingClientRect();
+    const cs = getComputedStyle(document.getElementById('nrPanel'));
+    const padR = parseFloat(cs.paddingRight) || 0;
+    let worst = 0, who = '';
+    for (const s of document.querySelectorAll('#nrPanel .seg')) {
+      const r = s.getBoundingClientRect();
+      const over = r.right - (p.right - padR);
+      if (over > worst) { worst = over; who = s.getAttribute('data-k'); }
+    }
+    return JSON.stringify({ worst: +worst.toFixed(1), who,
+      rows: document.querySelectorAll('#nrPanel .row').length });
+  })()`));
+  expect('面板 按钮组不溢出（四档挤得下）', segFit.worst <= 0.5,
+    `最大越界 ${segFit.worst}px（${segFit.who || '无'}）`);
+  expect('面板 五行选项齐全', segFit.rows === 5, `${segFit.rows} 行`);
+  await evaluate(`document.getElementById('nrPanel').classList.remove('open')`);
   await send('Emulation.setDeviceMetricsOverride',
     { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
 

@@ -802,8 +802,8 @@ document.addEventListener('keydown',function(e){
 <script>(function(){
 var KEY='py-neuron-v1';
 var DEF={on:1,dense:'mid',follow:1,speed:'mid',color:'multi'};
-var DENSE={low:.55,mid:1,high:1.75};
-var SPEED={slow:.35,mid:1,fast:1.9};
+var DENSE={low:.55,mid:1,high:1.75,ultra:2.9};
+var SPEED={slow:.35,mid:1,fast:1.9,rush:3.4};
 // 六色神经元调色板。浅色档是压深的饱和色（白底上要能看清），
 // 深色档是高亮色（深底上才透得出来）——两套不能共用，共用必有一边糊掉。
 var PAL={
@@ -879,7 +879,8 @@ var W=0,H=0,nodes=[],mx=-1,my=-1,hasM=false,raf=0;
 
 function target(){
   var n=Math.round(W*H/17000*DENSE[cfg.dense]);
-  return Math.max(16,Math.min(150,n));
+  // 上限要盖住最高档：1440×900 下 ultra 约 221 个节点，卡在 150 会让最高档形同没加
+  return Math.max(16,Math.min(230,n));
 }
 function seed(){
   var n=target(),i,pc=PAL.l.length;
@@ -1004,13 +1005,15 @@ panel.innerHTML=
  '<div class="row"><span class="lb">密度</span><span class="seg" data-k="dense">'+
  '<button type="button" data-v="low">低</button>'+
  '<button type="button" data-v="mid">中</button>'+
- '<button type="button" data-v="high">高</button></span></div>'+
+ '<button type="button" data-v="high">高</button>'+
+ '<button type="button" data-v="ultra">极</button></span></div>'+
  '<div class="row"><span class="lb">鼠标跟随</span>'+
  '<button type="button" class="sw" data-k="follow"></button></div>'+
  '<div class="row"><span class="lb">动效</span><span class="seg" data-k="speed">'+
  '<button type="button" data-v="slow">静</button>'+
  '<button type="button" data-v="mid">缓</button>'+
- '<button type="button" data-v="fast">快</button></span></div>';
+ '<button type="button" data-v="fast">快</button>'+
+ '<button type="button" data-v="rush">疾</button></span></div>';
 document.body.appendChild(btn);document.body.appendChild(panel);
 
 function paint(){
@@ -1080,7 +1083,9 @@ document.addEventListener('visibilitychange',function(){
 
 resize();apply();
 window.__neuron={get cfg(){return cfg},set:function(k,v){cfg[k]=v;save();apply()},
-  count:function(){return nodes.length}};
+  count:function(){return nodes.length},
+  // 只读坐标快照，给验证脚本量各档速度用（不暴露可写引用，避免外部改动画状态）
+  pos:function(){var r=[],i;for(i=0;i<nodes.length;i++)r.push(nodes[i].x+','+nodes[i].y);return r.join(';')}};
 })();</script>
 <!-- neuron:end -->
 </body>
