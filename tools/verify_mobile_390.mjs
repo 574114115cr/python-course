@@ -19,6 +19,7 @@ const others = [
   `${ROOT}/web/lessons/index.html`, `${ROOT}/web/bank.html`, `${ROOT}/web/gate1.html`,
   `${ROOT}/web/gate2.html`, `${ROOT}/web/ppt/index.html`, `${ROOT}/web/ppt/u/index.html`,
   `${ROOT}/web/review.html`, `${ROOT}/web/terms.html`, `${ROOT}/web/coverage.html`,
+  `${ROOT}/web/plan.html`,
 ];
 const ALL = [...lessons, ...units, ...players, ...others];
 

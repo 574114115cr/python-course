@@ -68,34 +68,33 @@ def build_plan():
     wk_list = list(range(0, max_wk + 1))
     total_weeks = len(wk_list)
 
+    # 轻量档周次映射要在阶段卡之前算好（阶段卡也要按档位显示周次）
+    light_weeks = total_weeks * 2
+    wk2 = {r["no"]: (r["no"] - 1) * light_weeks // len(rows) for r in rows}
+
     # ── 三阶段统计（节数 / 小时 / 覆盖周次）─────────────────────────
-    stage_html = []
-    for lo, hi, name, desc in STAGES:
+    def stage_card(lo, hi, name, desc, wmap):
         rs = [r for r in rows if lo <= r["unit"] <= hi]
-        ws = sorted({r["wk"] for r in rs})
+        ws = sorted({wmap[r["no"]] for r in rs})
         h = len(rs) * PER_LESSON_H
         gate = ""
         if hi == 11:
             gate = '<div class="gate">结束接 <a href="gate1.html">关卡 1 验收</a></div>'
         elif hi == 21:
             gate = '<div class="gate">结束接 <a href="gate2.html">关卡 2 验收</a></div>'
-        stage_html.append(
+        return (
             f'<div class="st">'
             f'<div class="sth"><span class="stn">{html.escape(name)}</span>'
             f'<span class="stw">第 {ws[0]}–{ws[-1]} 周</span></div>'
             f'<div class="stm">{len(rs)} 节 · 约 {h:.0f} 小时 · 单元 {lo}–{hi}</div>'
             f'<p class="std">{desc}</p>{gate}</div>')
-    stages = "".join(stage_html)
+
+    std_wmap = {r["no"]: r["wk"] for r in rows}
+    stages = "".join(stage_card(lo, hi, n, d, std_wmap) for lo, hi, n, d in STAGES)
+    stages2 = "".join(stage_card(lo, hi, n, d, wk2) for lo, hi, n, d in STAGES)
 
     # ── 每周表 ────────────────────────────────────────────────────
-    trs = []
-    for w in wk_list:
-        rs = weeks.get(w, [])
-        # 空周（只有跨周课节）：显示它承接的上周内容，不能留空行
-        carry = []
-        if not rs:
-            carry = [r for r in rows if w in week_span(r["wk_raw"]) and r["wk"] != w]
-        shown = rs or carry
+    def week_tr(w, shown, carry, prefix="w"):
         units = sorted({r["unit"] for r in shown})
         unames = " / ".join(f'单元 {u} · {html.escape(lesson_tpl.UNIT_TITLE.get(u, ""))}'
                             for u in units)
@@ -115,20 +114,38 @@ def build_plan():
         mhtml = "".join(f'<span class="mk">{html.escape(m)}</span>' for m in marks)
         note = '<span class="cr">接着上周的跨周内容</span>' if carry else \
             ('<span class="cr">跨周</span>' if cross else "")
-        trs.append(
-            f'<tr id="w{w}" data-w="{w}"{" class=carry" if carry else ""}>'
+        return (
+            f'<tr id="{prefix}{w}" data-w="{w}"{" class=carry" if carry else ""}>'
             f'<td class="cw"><b>第 {w} 周</b>{note}</td>'
             f'<td class="cu">{unames}</td>'
             f'<td class="cl">{links}</td>'
             f'<td class="cn">{len(shown)} 节</td>'
             f'<td class="ch">{len(shown) * PER_LESSON_H:.1f} h</td>'
             f'<td class="cm">{mhtml}</td></tr>')
+
+    trs = []
+    for w in wk_list:
+        rs = weeks.get(w, [])
+        # 空周（只有跨周课节）：显示它承接的上周内容，不能留空行
+        carry = []
+        if not rs:
+            carry = [r for r in rows if w in week_span(r["wk_raw"]) and r["wk"] != w]
+        trs.append(week_tr(w, rs or carry, bool(carry)))
     table = "".join(trs)
+
+    # 轻量档：同一门课按课节顺序重新切成两倍周数（每周约 TOTAL/2W 节）。
+    # 必须真的产出 2× 周数的行——按钮写着 60 周，表格却只有 30 行会让人以为没生效。
+    trs2 = []
+    for g in range(light_weeks):
+        shown = [r for r in rows if wk2[r["no"]] == g]
+        trs2.append(week_tr(g, shown, False, prefix="lw"))
+    table2 = "".join(trs2)
 
     body = f"""
 <div class="wrap">
   <p class="lead">入门课 <b>{len(rows)} 节课</b>按每周一节一节往下排，共
-    <b>{total_weeks} 周</b>（第 0 周是环境准备）。周次直接来自每节课的排期，
+    <b>{total_weeks} 周</b>（第 0 周是环境准备）；赶时间就切轻量档，
+    <b>{light_weeks} 周</b>学完同一门课。周次直接来自每节课的排期，
     和课节页、讲义页是同一份数据，不会各说各话。</p>
 
   <div class="you" id="you">
@@ -143,13 +160,15 @@ def build_plan():
   </div>
 
   <h2>三个阶段</h2>
-  <div class="sts">{stages}</div>
+  <div class="sts" id="sts1">{stages}</div>
+  <div class="sts" id="sts2" style="display:none">{stages2}</div>
 
   <h2>每周安排</h2>
   <div class="tblwrap"><table class="wk">
     <thead><tr><th>周次</th><th>单元</th><th>课节（点进去直接学）</th>
     <th>节数</th><th>课时</th><th>里程碑</th></tr></thead>
-    <tbody>{table}</tbody>
+    <tbody id="tb1">{table}</tbody>
+    <tbody id="tb2" style="display:none">{table2}</tbody>
   </table></div>
 
   <div class="foot">
@@ -162,12 +181,24 @@ def build_plan():
     js = f"""
 var TOTAL={len(rows)}, WEEKS={total_weeks}, DAY={DAY};
 var WKOF={{{",".join(f'{r["no"]}:{r["wk"]}' for r in rows)}}};
+var WKOF2={{{",".join(f'{r["no"]}:{wk2[r["no"]]}' for r in rows)}}};
 var TITLE={{{",".join(f'{r["no"]}:{json_str(r["title"])}' for r in rows)}}};
-var PACE={{1:{total_weeks},2:{total_weeks * 2}}};
+var PACE={{1:{total_weeks},2:{light_weeks}}};
 var pace=1;
 function read(k){{try{{return JSON.parse(localStorage.getItem(k)||'{{}}')}}catch(e){{return {{}}}}}}
 function mid(t){{var d=new Date(t);d.setHours(0,0,0,0);return d.getTime()}}
-function wkOf(n){{return WKOF[n]||0}}
+function wmap(){{return pace===2?WKOF2:WKOF}}
+function wkOf(n){{return wmap()[n]||0}}
+// 档位不只是改一句说明：周表本身要换成对应周数的那一份，否则点了 60 周却还是 30 行的表
+function showPace(){{
+  var two=pace===2;
+  var t1=document.getElementById('tb1'), t2=document.getElementById('tb2');
+  var s1=document.getElementById('sts1'), s2=document.getElementById('sts2');
+  if(t1) t1.style.display=two?'none':'';
+  if(t2) t2.style.display=two?'':'none';
+  if(s1) s1.style.display=two?'none':'';
+  if(s2) s2.style.display=two?'':'none';
+}}
 function done(){{var L=read('lesson-done-v1'),a=[],k;for(k in L){{if(L[k])a.push([+k,L[k]===true?Date.now():L[k]])}}return a}}
 function pad(n){{return (n<10?'0':'')+n}}
 function fmt(d){{return d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate()}}
@@ -228,12 +259,14 @@ function esc(s){{return String(s).replace(/[&<>]/g,function(c){{return {{'&':'&a
 var bs=document.querySelectorAll('.pb');
 for(var i=0;i<bs.length;i++){{bs[i].onclick=function(){{
   for(var j=0;j<bs.length;j++)bs[j].classList.remove('on');
-  this.classList.add('on'); pace=+this.getAttribute('data-pace'); render();
+  this.classList.add('on'); pace=+this.getAttribute('data-pace'); showPace(); render();
 }}}}
+showPace();
 render();
 window.addEventListener('storage',render);"""
 
-    return IP.SHELL.format(title="总课表 · 30 周", css=IP.CSS + PLAN_CSS,
+    return IP.SHELL.format(title=f"总课表 · {total_weeks} / {light_weeks} 周",
+                          css=IP.CSS + PLAN_CSS,
                           body=body, js=js)
 
 

@@ -120,6 +120,7 @@ def main():
         step(t, [os.path.join(*a)])
     node_step("390px 无溢出", "verify_mobile_390.mjs")
     node_step("深浅两套主题对比度", "verify_dark.mjs")
+    node_step("补强项实测（周计划/ETA/答案按需/打印）", "verify_extras.mjs")
 
     # 备注最容易在重建时被无声抹掉（slidep create 是整份重写），单独核一遍
     import zipfile

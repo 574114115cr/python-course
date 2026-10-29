@@ -39,6 +39,7 @@ const PAGES = [
   'web/gate1.html',
   'web/terms.html',
   'web/coverage.html',
+  'web/plan.html',
   'web/review.html',
   'web/ppt/index.html',
   'fluent/index.html',
