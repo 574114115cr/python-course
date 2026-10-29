@@ -29,8 +29,12 @@ CACHE = os.path.join(ROOT, ".cache", "tts")
 OUT_WAV = os.path.join(CACHE, "lesson01-audio.wav")
 OUT_JSON = os.path.join(CACHE, "lesson01-narr.json")
 
-VOICE = "zh-CN-XiaoxiaoNeural"   # 女声，讲解类最常用；男声换 zh-CN-YunxiNeural
-RATE = "+10%"                    # 教学视频略快一点，拖沓会走神
+# 讲解员是「女仆鲸鱼娘」拟人形象，声音要贴角色：二次元少女——甜、亮、
+# 语速稍快、音调偏高。XiaoyiNeural 是 edge-tts 中文里最贴近的（活泼少女感）；
+# 备选：zh-CN-XiaoxiaoNeural（温柔，偏播音）/ zh-CN-YunxiaNeural（少年音）
+VOICE = "zh-CN-XiaoyiNeural"
+RATE = "+10%"
+PITCH = "+12Hz"                  # 明显抬调，少女感的关键就在这一档
 SR = 24000                       # edge-tts 原生 24 kHz 单声道
 GAP = 0.34                       # 句间停顿
 TAIL = 0.80                      # 幕末句念完后的留白
@@ -123,7 +127,7 @@ def _wav_len(path):
 
 async def _say(text, mp3):
     import edge_tts
-    c = edge_tts.Communicate(text, VOICE, rate=RATE)
+    c = edge_tts.Communicate(text, VOICE, rate=RATE, pitch=PITCH)
     await c.save(mp3)
 
 

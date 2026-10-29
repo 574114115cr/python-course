@@ -394,10 +394,10 @@ def scene_interp():
     for i, (p, tc, dc) in enumerate(pts):
         d0 = .45 + i * .6
         els.append(el(dot_bullet(13, dc), 84, y + 9, d0, .35))
-        els.append(el(text_block(p, font(F_REG, 30), tc, 1000), 118, y, d0, .5, "left"))
+        els.append(el(text_block(p, font(F_REG, 30), tc, 830), 118, y, d0, .5, "left"))
         y += 56
 
-    boxes = [(96, 436, 366, 556), (466, 436, 736, 556), (836, 436, 1106, 556)]
+    boxes = [(96, 436, 346, 556), (376, 436, 626, 556), (656, 436, 906, 556)]
     labels = ["hello.py", "python", "Hello, Python!"]
     colors = [C_OR, C_HI, C_GR]
     for i, ((x0, y0, x1, y1), lab, col) in enumerate(zip(boxes, labels, colors)):
@@ -452,10 +452,10 @@ def scene_term():
     for i, (p, tc, dc) in enumerate(pts):
         d0 = .4 + i * .6
         els.append(el(dot_bullet(13, dc), 84, y + 9, d0, .35))
-        els.append(el(text_block(p, font(F_REG, 30), tc, 1010), 118, y, d0, .5, "left"))
+        els.append(el(text_block(p, font(F_REG, 30), tc, 830), 118, y, d0, .5, "left"))
         y += 56
 
-    box = (110, 402, 1170, 638)
+    box = (110, 402, 950, 638)
     f_m = font(F_MONO, 29)
     f_t = font(F_BOLD, 23)
 
@@ -492,10 +492,10 @@ def scene_vscode():
     for i, (p, tc, dc) in enumerate(pts):
         d0 = .4 + i * .6
         els.append(el(dot_bullet(13, dc), 84, y + 9, d0, .35))
-        els.append(el(text_block(p, font(F_REG, 30), tc, 1010), 118, y, d0, .5, "left"))
+        els.append(el(text_block(p, font(F_REG, 30), tc, 830), 118, y, d0, .5, "left"))
         y += 56
 
-    box = (110, 420, 1170, 618)
+    box = (110, 420, 950, 618)
     f_m = font(F_MONO, 29)
     f_t = font(F_BOLD, 23)
 
@@ -532,8 +532,8 @@ def scene_practice():
     els = head("04", "跟着敲：hello.py")
     f_m = font(F_MONO, 29)
     f_t = font(F_BOLD, 23)
-    box = (110, 242, 1170, 442)
-    obox = (110, 466, 1170, 588)
+    box = (110, 242, 950, 442)
+    obox = (110, 466, 950, 588)
 
     def draw(img, d, lt):
         broken = lt > 7.2
@@ -589,7 +589,7 @@ def scene_summary():
     for i, (txt, col) in enumerate(items):
         d0 = .5 + i * .8
         els.append(el(check_bullet(22, col, 1.0), 84, y + 2, d0, .5, "pop"))
-        els.append(el(text_block(txt, font(F_REG, 31), C_TXT, 1000), 130, y, d0, .55, "left"))
+        els.append(el(text_block(txt, font(F_REG, 31), C_TXT, 900), 130, y, d0, .55, "left"))
         y += 68
 
     nxt = card(600, 96, radius=16)
@@ -615,6 +615,124 @@ def build_scenes():
     for i, (dur, els, cus) in enumerate(sc):
         out.append((dur, els, cus, dur / BASE_DUR[i]))
     return out
+
+
+# ── 讲解员：DeepSeek 女仆鲸鱼娘（立绘贴片）──────────────────────
+# 右侧 950 之后是讲解员栏，正文区一律不越过这条线（见各幕 box）。
+# 立绘用 ImageGen 按官方形象生成（tools/assets/whale-girl.png，透明底），
+# 动画三件套：整体浮动、轻微摇摆、说话时按语音包络弹跳 + 头侧音波——
+# 立绘的嘴太小画不动口型，用「跟着声音蹦」表达在说话，这是虚拟主播的常规做法。
+WHALE_X, WHALE_Y, WHALE_W, WHALE_H = 972, 336, 274, 304
+CHAR_PATH = os.path.join(ROOT, "tools", "assets", "whale-girl.png")
+CHAR_H = 280            # 立绘显示高度
+# 立绘原图里嘴的中心（按肤色掩码+两眼定位量出，原图 461×620）
+MOUTH_ASSET = (204, 276)
+MOUTH_ASSET_H = 620.0
+_CHAR = {}
+
+
+def char_frames():
+    """按显示高度缩放立绘，预生成 ±6° 摇摆帧（逐帧 rotate 太浪费）。
+
+    立绘先贴到带透明边距的统一画布里再 rotate(expand=False)：
+    expand 会让每个角度的帧尺寸都不一样，之后无论怎么对齐，
+    脚底都会随角度漂移（悬浮 / 下沉）。
+    """
+    if "frames" not in _CHAR:
+        im = Image.open(CHAR_PATH).convert("RGBA")
+        w = max(1, round(im.width * CHAR_H / im.height))
+        im = im.resize((w, CHAR_H), Image.LANCZOS)
+        pad = 28
+        cv = layer(w + pad * 2, CHAR_H + pad * 2)
+        cv.alpha_composite(im, (pad, pad))
+        frames = {a: cv.rotate(a, resample=Image.BICUBIC)
+                  for a in range(-6, 7, 2)}
+        _CHAR["frames"] = (im, frames, pad)
+    return _CHAR["frames"]
+
+
+def draw_char(canvas, t, mouth, dx=0):
+    im, frames, pad = char_frames()
+    # 说话时摇摆快而小、还带小幅蹦跳；安静时慢摆
+    if mouth > .12:
+        ang = 2 * int(round(math.sin(t * 6.5) * 2))
+        hop = -abs(math.sin(t * 9)) * 6 * mouth
+    else:
+        ang = 2 * int(round(math.sin(t * 1.4) * 3))
+        hop = 0.0
+    cim = frames.get(ang, frames[0])
+    bob = math.sin(t * 1.7) * 4
+    # 帧尺寸统一：脚底 = 帧内 (pad + CHAR_H)，对齐到讲解员栏底边
+    x = int(WHALE_X + dx + WHALE_W / 2.0 - cim.width / 2.0)
+    y = int(WHALE_Y + WHALE_H - CHAR_H - pad + bob + hop)
+    canvas.alpha_composite(cim, (x, y))
+    # 口型：在原画嘴的位置叠一个随语音开合的小嘴（张嘴露舌，闭嘴微笑线）。
+    # 帧是旋转过的，嘴的锚点要跟帧一起转（角度 ≤6°，椭圆本身不转，误差 <2px）。
+    sc = CHAR_H / MOUTH_ASSET_H
+    mx0 = pad + MOUTH_ASSET[0] * sc
+    my0 = pad + MOUTH_ASSET[1] * sc
+    th = math.radians(ang)
+    cxf, cyf = cim.width / 2.0, cim.height / 2.0
+    ddx, ddy = mx0 - cxf, my0 - cyf
+    mpx = x + cxf + ddx * math.cos(th) + ddy * math.sin(th)
+    mpy = y + cyf - ddx * math.sin(th) + ddy * math.cos(th)
+    mw = 13.5
+    oh = 1.8 + mouth * 7.6
+    d2 = ImageDraw.Draw(canvas)
+    if mouth > .08:
+        d2.ellipse([mpx - mw / 2, mpy - oh, mpx + mw / 2, mpy + oh],
+                   fill=(96, 34, 52))
+        d2.ellipse([mpx - mw * .32, mpy + oh * .2, mpx + mw * .32, mpy + oh * .92],
+                   fill=(216, 110, 120))
+    else:
+        d2.arc([mpx - mw / 2, mpy - 4, mpx + mw / 2, mpy + 5], start=25, end=155,
+               fill=(122, 54, 68), width=2)
+    # 说话音波：头侧三条弧，开度越大越亮
+    if mouth > .1:
+        d2 = ImageDraw.Draw(canvas)
+        hx = x + cim.width + 2
+        hy = y + int(cim.height * .16)
+        for k in range(3):
+            r = 9 + k * 8
+            col = (int(100 + 70 * mouth + k * 12), 195, 255)
+            d2.arc([hx + k * 7, hy - r, hx + k * 7 + 2 * r, hy + r],
+                   start=-52, end=52, fill=col, width=3)
+
+
+def load_env(path, total):
+    """从音轨算出每帧的音量包络（0..1），拿来驱动嘴的开合。"""
+    if not path or not os.path.exists(path):
+        return None
+    try:
+        import array
+        import wave
+        with wave.open(path, "rb") as wf:
+            sr = wf.getframerate()
+            pcm = array.array("h")
+            pcm.frombytes(wf.readframes(wf.getnframes()))
+    except Exception:
+        return None
+    if not pcm:
+        return None
+    win = int(sr * 0.055)
+    raw = []
+    for f in range(int(total * FPS) + 2):
+        c = int(f / FPS * sr)
+        a, b = max(0, c - win), min(len(pcm), c + win)
+        if b <= a:
+            raw.append(0.0)
+            continue
+        step = 3
+        s = 0
+        for i in range(a, b, step):
+            v = pcm[i]
+            s += v * v
+        raw.append(math.sqrt(s / max(1.0, (b - a) / step)))
+    mx = max(raw) or 1.0
+    # 55% 峰值算「满嘴」，再滑动平均抹掉逐帧抖动
+    env = [min(1.0, v / (mx * 0.55)) for v in raw]
+    return [sum(env[max(0, i - 1):i + 2]) / len(env[max(0, i - 1):i + 2])
+            for i in range(len(env))]
 
 
 # ── HUD ─────────────────────────────────────────────────────────
@@ -648,6 +766,8 @@ def render():
 
     bg = make_bg()
     nodes = seed_nodes(58)
+    env = load_env(AUDIO_WAV, total) if NARR else None
+    print("嘴型驱动：" + ("语音音量包络 %d 帧" % len(env) if env else "无（静音则闭嘴）"))
     lay_n = layer(W, H)
     lay_c = layer(W, H)
     dn = ImageDraw.Draw(lay_n)
@@ -706,6 +826,11 @@ def render():
 
             bimg = chapter_badge(badges[bidx])
             canvas.alpha_composite(bimg, (W - bimg.width - 46, 30))
+
+            # 讲解员：开场 0.9 秒从右侧滑入，之后常驻右下角
+            mouth = env[f] if env and f < len(env) else 0.0
+            slide = 0 if t > .9 else int((1 - ease(t / .9)) * 330)
+            draw_char(canvas, t, mouth, slide)
 
             rgb = canvas.convert("RGB")
             d2 = ImageDraw.Draw(rgb)
