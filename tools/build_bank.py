@@ -12,6 +12,7 @@
 """
 
 import html
+import json
 import os
 import re
 import sys
@@ -72,6 +73,9 @@ try:
 except (OSError, ValueError):
     ANCHOR = {}
 
+ANS = {}          # 题号 → 答案+解析的 HTML（最后写成 web/bank-ans.js）
+
+
 def card(q):
     qid, title = q["id"], q["title"]
     lv = int(qid[1])
@@ -87,6 +91,9 @@ def card(q):
 
     ut = html.escape(LT.UNIT_TITLE[unit]) if unit is not None else ""
     key = plain(q["title"] + " " + seg["题目"] + " " + exp_src)[:180].lower()
+    # 答案与解析不内联到页面：120 题的答案约 290 KB，占整页七成，
+    # 但一次通常只看几题。存进 ANS，最后统一写成 bank-ans.js 按需加载。
+    ANS[qid] = ans + exp
 
     return f"""
 <article class="q" id="{qid}" data-lv="{lv}" data-u="{unit if unit is not None else ''}"
@@ -105,7 +112,7 @@ def card(q):
   </header>
   <div class="stem">{stem}</div>
   <details class="ans"><summary>看答案与解析 <i>（先自己写，卡住 15 分钟再看）</i></summary>
-    <div class="ac">{ans}{exp}</div>
+    <div class="ac" data-ans="{qid}"><i class="ld">答案加载中…</i></div>
   </details>
 </article>""".strip()
 
@@ -333,6 +340,50 @@ document.querySelectorAll('.sb').forEach(function(b){
   b.addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
 })();
 
+/* 答案按需加载：120 题的答案+解析约 290 KB（占整页七成），但一次通常只看几题，
+   所以拆到 bank-ans.js，点「看答案与解析」时才加载。
+   不用 fetch——便携版是 file://，fetch 会被当成跨域直接拦掉，只能用 script src。 */
+(function(){
+  var ready=false, loading=false;
+  function fill(d){
+    if(!d) return;
+    var box=d.querySelector('.ac[data-ans]');
+    if(!box || box.getAttribute('data-done')) return;
+    var h=(window.BANK_ANS||{})[box.getAttribute('data-ans')];
+    if(!h) return;
+    box.innerHTML=h; box.setAttribute('data-done','1');
+    var dl=d.querySelector('.ld'); if(dl) dl.remove();
+  }
+  function fillAllOpen(){
+    var ds=document.querySelectorAll('details.ans[open]');
+    for(var i=0;i<ds.length;i++) fill(ds[i]);
+  }
+  function load(){
+    if(ready||loading) return; loading=true;
+    var s=document.createElement('script');
+    s.src='bank-ans.js';
+    s.onload=function(){ ready=true; loading=false; fillAllOpen(); };
+    s.onerror=function(){ loading=false;
+      var xs=document.querySelectorAll('.ac[data-ans] .ld');
+      for(var i=0;i<xs.length;i++)
+        xs[i].textContent='答案文件没加载到（bank-ans.js 要和 bank.html 放同一目录）';
+    };
+    document.head.appendChild(s);
+  }
+  document.addEventListener('click',function(e){
+    var n=e.target, sum=null;
+    while(n && n!==document){ if(n.tagName==='SUMMARY'){ sum=n; break; } n=n.parentNode; }
+    if(!sum) return;
+    var d=sum.parentNode;
+    if(!d || d.className.indexOf('ans')<0) return;
+    if(ready) setTimeout(function(){ fill(d); },0);
+    else { load(); setTimeout(function(){ fill(d); },0); }
+  },true);
+  // 深链展开（如题库回链点进来直接开答案）时也要能填
+  window.addEventListener('hashchange',function(){ if(ready) fillAllOpen(); });
+  window.__bankAns={load:load, fillAllOpen:fillAllOpen};
+})();
+
 paint();
 """
 
@@ -408,6 +459,12 @@ def build():
 </html>
 """
     open(OUT, "w", encoding="utf-8").write(page)
+    # 答案分册：和 bank.html 同目录，点开答案时才加载
+    ans_js = ("/* 由 tools/build_bank.py 生成，勿手改：题库答案与解析（按需加载） */\n"
+              "window.BANK_ANS=" + json.dumps(ANS, ensure_ascii=False,
+                                              separators=(",", ":")) + ";\n")
+    ans_path = os.path.join(os.path.dirname(OUT), "bank-ans.js")
+    open(ans_path, "w", encoding="utf-8").write(ans_js)
     return len(qs), len(page)
 
 if __name__ == "__main__":

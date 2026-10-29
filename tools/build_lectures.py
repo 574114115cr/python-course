@@ -168,6 +168,19 @@ background:#f2f5f9;border-radius:10px;border:1px solid var(--line)}
  .pn{flex-direction:column}
 }
 
+/* 打印 / 导出 PDF：代码块在屏幕上一直是深色终端底（浅色主题也是），
+   直接打印就是一整页黑底还费墨。翻成白底深字——.main pre 的优先级更高，
+   这里必须加 !important，否则翻不过来（踩过：只写 pre{background:#fff} 没生效）。 */
+@media print{
+ .top,.side,.pn,.uprog{display:none!important}
+ body{background:#fff}
+ .main pre{background:#fff!important;color:#16232e!important;border:1px solid #ccc;
+  break-inside:avoid}
+ .main pre code{color:#16232e!important;white-space:pre-wrap;word-break:break-all}
+ .main pre .cl{color:#55687a!important;background:none!important}
+ .main pre.broken{border:2px dashed #999!important}
+}
+
 """
 
 JS = """
@@ -462,6 +475,11 @@ def page_shell(title, unit_no, body_html, toc_html, prev_link, next_link, done_b
                      '<span class="v">总课表与阶段安排</span></a>')
         _rows.append('<a href="review.html"><span class="k">复习</span>'
                      '<span class="v">艾宾浩斯复习计划 · 6 轮</span></a>')
+        # 本单元落在第几周：取该单元第一节课的 W 标记（和周计划页同一份数据）
+        _wks = [x[2] for x in site_data.lessons() if x[0] == unit_no and x[2]]
+        _wk = int(re.findall(r"\d+", _wks[0])[0]) if _wks else 0
+        _rows.append(f'<a href="plan.html#w{_wk}"><span class="k">周次</span>'
+                     f'<span class="v">本单元在第 {_wk} 周 · 看配速偏差</span></a>')
         _lo, _hi = site_data.unit_lesson_range(unit_no)
         _uprog = (f'<div class="uprog" data-from="{_lo}" data-to="{_hi}">'
                   f'<div class="uprog-h"><b>已学 0 / {_hi - _lo + 1} 节</b>'

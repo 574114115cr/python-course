@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><!--@theme:head-->
+<style>
+/* 主题切换按钮 + 原生控件配色（由 tools/theme.py 注入，勿手改） */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+/* 强调色的「原色版」：浅色下等于强调色本身，深色下由派生表换成压暗后的实心底色。
+   凡是把强调色当实心底、上面压白字的地方都用 --p1s 这类变量（否则白字会糊）。 */
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;--p1:#1f5fa8;
+--p1s:var(--p1);--p2s:var(--p2);--p3s:var(--p3);--p4s:var(--p4);--dangers:var(--danger)}
+html[data-theme="dark"]{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;
+--muted:#93a6b8;--p1:#63a9ee}
+body{transition:background-color .18s,color .18s}
+::selection{background:rgba(99,169,238,.32)}
+.thbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;
+border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);
+font:inherit;font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;
+white-space:nowrap;flex:0 0 auto}
+.thbtn:hover{color:var(--text);border-color:var(--p1)}
+.thbtn:focus-visible{outline:2px solid var(--p1);outline-offset:2px}
+.thbtn .thi svg{width:15px;height:15px;display:block}
+.thbtn .thlbl{display:inline}
+/* 窄屏顶栏本来就挤（返回 / 标题 / 课件 / 勾选），再塞按钮会横向溢出 14px，
+   所以窄屏由脚本把按钮挪到 body 上变成右下角悬浮（顶栏有 backdrop-filter，
+   直接给它 position:fixed 会被顶栏接管定位，跑到屏幕外）。 */
+.thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
+box-shadow:0 6px 20px rgba(0,0,0,.28)}
+@media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+/* 白底课件图（幻灯片截图）在深色下是一片刺眼的亮块：压一点亮度当「纸面」看。
+   只压这三类课件图，普通插图/头像不受影响；进入全屏放映时恢复原亮度，
+   保证放映颜色和下载的 pptx 一致。 */
+html[data-theme="dark"] .stage-img,html[data-theme="dark"] .cell img,
+html[data-theme="dark"] .ppt-thumb img{filter:brightness(.9)}
+:fullscreen .stage-img,:fullscreen .cell img{filter:none}
+html[data-theme="dark"] :fullscreen .stage-img,
+html[data-theme="dark"] :fullscreen .cell img{filter:none}
+</style>
+<script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
+<!--/@theme:head-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>总课表 · 30 周 · Python 入门课</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+.hero{background:linear-gradient(135deg,#f4f8fd,#eef4fb);border:1px solid var(--line);
+border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+.hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;
+color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+.hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+.hero p{margin:0;font-size:14px;color:#41505f;line-height:1.8;max-width:74ch}
+.hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+.hero .st div{display:flex;flex-direction:column}
+.hero .st b{font-size:20px;color:var(--p1)}
+.hero .st span{font-size:11.5px;color:var(--muted)}
+h2{font-size:17px;margin:34px 0 8px}
+h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1);
+border-radius:2px;margin-right:9px;vertical-align:-2px}
+.sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+.fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+.fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);
+border-radius:10px;background:#fff}
+.fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+.fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+.ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+.ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+.ig code{background:#f2f6fb;border-radius:4px;padding:1px 5px;font-size:12px}
+.ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;
+background:var(--p1bg);border-radius:4px;padding:1px 5px}
+.ig a:hover{background:#dbe9f8}
+.ig span{font-size:10.5px;color:var(--muted)}
+.empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+.cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.cb b{display:block;font-size:14px;margin-bottom:6px}
+.cb p{margin:0;font-size:13px;color:#44515e;line-height:1.75}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+table.cov th{background:#f5f8fc;text-align:left;padding:9px 12px;font-size:12px;
+color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+table.cov td{padding:9px 12px;border-bottom:1px solid #eef2f6;vertical-align:top;line-height:1.65}
+table.cov tr:last-child td{border-bottom:none}
+table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.cov td.s{font-size:12px;color:#5a6875}
+table.cov tr[id]{scroll-margin-top:70px}
+table.cov tr:target td{background:#f3f8ff}
+table.cov tr.miss td{background:#fdf7f7;color:#8a5a5a}
+table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+table.cov a:hover{text-decoration:underline}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+.tag.ok{background:#e6f6f0;color:#0b6e54}
+.tag.part{background:#fdf3e2;color:#8a5a00}
+.tag.no{background:#fdeaea;color:#a33}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;
+color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+ .hero{padding:24px 20px}
+ .wrap{padding:0 14px 50px}
+ .hero .st{gap:18px}
+}
+
+/* 周计划页样式（和 terms/coverage 同壳，只补这一页要用的） */
+.wrap{max-width:1180px;margin:0 auto;padding:22px 22px 60px}
+.lead{color:var(--muted);font-size:14.5px;line-height:1.8;margin:0 0 18px}
+.you{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--p1);
+border-radius:12px;padding:16px 18px;margin-bottom:20px}
+.yh{font-weight:700;font-size:15px;margin-bottom:8px}
+.yrow{display:flex;flex-wrap:wrap;gap:18px;font-size:14px;margin-bottom:8px}
+.yrow b{color:var(--p1);font-size:16px}
+.yrow2{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;margin-top:6px}
+.yrow2 .ok{color:var(--p2);font-weight:700}
+.yrow2 .bad{color:var(--danger);font-weight:700}
+.yrow2 .ye{color:var(--muted)}
+.yg{margin:10px 0 0}.yg a{font-weight:700}
+.y0{font-size:14px;margin:0 0 6px}.yt{font-size:13.5px;color:var(--muted);margin:0}
+.pac{margin:0 0 22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pb{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);
+background:var(--card);color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+.pb.on{background:var(--p1s);border-color:var(--p1s);color:#fff}
+.pn{font-size:12.5px;color:var(--muted)}
+h2{font-size:18px;margin:26px 0 12px}
+.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.sth{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.stn{font-weight:700;font-size:15px}
+.stw{font-size:12.5px;color:var(--p1);font-weight:700}
+.stm{font-size:12.5px;color:var(--muted);margin-top:4px}
+.std{font-size:13.5px;line-height:1.75;margin:8px 0 0}
+.gate{margin-top:10px;font-size:13px}
+.gate a{font-weight:700}
+.tblwrap{overflow-x:auto}
+.wk{width:100%;border-collapse:collapse;font-size:13.5px}
+.wk th,.wk td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.wk th{background:var(--p1bg);font-size:12.5px}
+.cw{white-space:nowrap;font-variant-numeric:tabular-nums}
+.cr{display:block;font-size:11px;color:var(--muted)}
+.cu{color:var(--muted);font-size:12.5px;min-width:150px}
+.cl{display:flex;flex-direction:column;gap:4px;min-width:220px}
+.lk{display:flex;gap:6px;font-size:13px}
+.lk .n{color:var(--muted);font-variant-numeric:tabular-nums;min-width:20px}
+.cn,.ch{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted)}
+.wk tr.carry{background:none}
+.wk tr.carry .cl{color:var(--muted)}
+.mk{display:inline-block;background:var(--p3bg);color:var(--p3ink);
+border-radius:5px;padding:1px 7px;font-size:11.5px;font-weight:700;margin:0 4px 4px 0}
+.foot{margin-top:24px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+@media(max-width:640px){.wrap{padding:16px 14px 48px}.wk{font-size:12.5px}}
+@media print{.pac,.foot{display:none}}
+/*@theme-dark*/
+@media screen{
+:where(html[data-theme="dark"]) .wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+:where(html[data-theme="dark"]) .hero{background:linear-gradient(135deg,#121922,#121921);border:1px solid var(--line);border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+:where(html[data-theme="dark"]) .hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+:where(html[data-theme="dark"]) .hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+:where(html[data-theme="dark"]) .hero p{margin:0;font-size:14px;color:#bcc6d1;line-height:1.8;max-width:74ch}
+:where(html[data-theme="dark"]) .hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+:where(html[data-theme="dark"]) .hero .st div{display:flex;flex-direction:column}
+:where(html[data-theme="dark"]) .hero .st b{font-size:20px;color:var(--p1)}
+:where(html[data-theme="dark"]) .hero .st span{font-size:11.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) h2{font-size:17px;margin:34px 0 8px}
+:where(html[data-theme="dark"]) h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1s);border-radius:2px;margin-right:9px;vertical-align:-2px}
+:where(html[data-theme="dark"]) .sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+:where(html[data-theme="dark"]) .fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+:where(html[data-theme="dark"]) .fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#182129}
+:where(html[data-theme="dark"]) .fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+:where(html[data-theme="dark"]) .fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+:where(html[data-theme="dark"]) .idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+:where(html[data-theme="dark"]) .ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+:where(html[data-theme="dark"]) .ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+:where(html[data-theme="dark"]) .ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+:where(html[data-theme="dark"]) .ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .ig code{background:#121922;border-radius:4px;padding:1px 5px;font-size:12px}
+:where(html[data-theme="dark"]) .ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;background:var(--p1bg);border-radius:4px;padding:1px 5px}
+:where(html[data-theme="dark"]) .ig a:hover{background:#111920}
+:where(html[data-theme="dark"]) .ig span{font-size:10.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) .empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+:where(html[data-theme="dark"]) .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+:where(html[data-theme="dark"]) .cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+:where(html[data-theme="dark"]) .cb b{display:block;font-size:14px;margin-bottom:6px}
+:where(html[data-theme="dark"]) .cb p{margin:0;font-size:13px;color:#bcc6cf;line-height:1.75}
+:where(html[data-theme="dark"]) .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#182129}
+:where(html[data-theme="dark"]) table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+:where(html[data-theme="dark"]) table.cov th{background:#121922;text-align:left;padding:9px 12px;font-size:12px;color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+:where(html[data-theme="dark"]) table.cov td{padding:9px 12px;border-bottom:1px solid #293a4b;vertical-align:top;line-height:1.65}
+:where(html[data-theme="dark"]) table.cov tr:last-child td{border-bottom:none}
+:where(html[data-theme="dark"]) table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+:where(html[data-theme="dark"]) table.cov td.s{font-size:12px;color:#aeb8c1}
+:where(html[data-theme="dark"]) table.cov tr[id]{scroll-margin-top:70px}
+:where(html[data-theme="dark"]) table.cov tr:target td{background:#121922}
+:where(html[data-theme="dark"]) table.cov tr.miss td{background:#221212;color:#c2a1a1}
+:where(html[data-theme="dark"]) table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+:where(html[data-theme="dark"]) table.cov a:hover{text-decoration:underline}
+:where(html[data-theme="dark"]) .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+:where(html[data-theme="dark"]) .tag.ok{background:#12211b;color:#77eecf}
+:where(html[data-theme="dark"]) .tag.part{background:#211b12;color:#eec577}
+:where(html[data-theme="dark"]) .tag.no{background:#211212;color:#d87e7e}
+:where(html[data-theme="dark"]) .foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+:where(html[data-theme="dark"]) .hero{padding:24px 20px}
+:where(html[data-theme="dark"]) .wrap{padding:0 14px 50px}
+:where(html[data-theme="dark"]) .hero .st{gap:18px}
+}
+:where(html[data-theme="dark"]) .wrap{max-width:1180px;margin:0 auto;padding:22px 22px 60px}
+:where(html[data-theme="dark"]) .lead{color:var(--muted);font-size:14.5px;line-height:1.8;margin:0 0 18px}
+:where(html[data-theme="dark"]) .you{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--p1);border-radius:12px;padding:16px 18px;margin-bottom:20px}
+:where(html[data-theme="dark"]) .yh{font-weight:700;font-size:15px;margin-bottom:8px}
+:where(html[data-theme="dark"]) .yrow{display:flex;flex-wrap:wrap;gap:18px;font-size:14px;margin-bottom:8px}
+:where(html[data-theme="dark"]) .yrow b{color:var(--p1);font-size:16px}
+:where(html[data-theme="dark"]) .yrow2{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;margin-top:6px}
+:where(html[data-theme="dark"]) .yrow2 .ok{color:var(--p2);font-weight:700}
+:where(html[data-theme="dark"]) .yrow2 .bad{color:var(--danger);font-weight:700}
+:where(html[data-theme="dark"]) .yrow2 .ye{color:var(--muted)}
+:where(html[data-theme="dark"]) .yg{margin:10px 0 0}
+:where(html[data-theme="dark"]) .yg a{font-weight:700}
+:where(html[data-theme="dark"]) .y0{font-size:14px;margin:0 0 6px}
+:where(html[data-theme="dark"]) .yt{font-size:13.5px;color:var(--muted);margin:0}
+:where(html[data-theme="dark"]) .pac{margin:0 0 22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .pb{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+:where(html[data-theme="dark"]) .pb.on{background:var(--p1s);border-color:var(--p1s);color:#fff}
+:where(html[data-theme="dark"]) .pn{font-size:12.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) h2{font-size:18px;margin:26px 0 12px}
+:where(html[data-theme="dark"]) .sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+:where(html[data-theme="dark"]) .st{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+:where(html[data-theme="dark"]) .sth{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+:where(html[data-theme="dark"]) .stn{font-weight:700;font-size:15px}
+:where(html[data-theme="dark"]) .stw{font-size:12.5px;color:var(--p1);font-weight:700}
+:where(html[data-theme="dark"]) .stm{font-size:12.5px;color:var(--muted);margin-top:4px}
+:where(html[data-theme="dark"]) .std{font-size:13.5px;line-height:1.75;margin:8px 0 0}
+:where(html[data-theme="dark"]) .gate{margin-top:10px;font-size:13px}
+:where(html[data-theme="dark"]) .gate a{font-weight:700}
+:where(html[data-theme="dark"]) .tblwrap{overflow-x:auto}
+:where(html[data-theme="dark"]) .wk{width:100%;border-collapse:collapse;font-size:13.5px}
+:where(html[data-theme="dark"]) .wk th,:where(html[data-theme="dark"]) .wk td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+:where(html[data-theme="dark"]) .wk th{background:var(--p1bg);font-size:12.5px}
+:where(html[data-theme="dark"]) .cw{white-space:nowrap;font-variant-numeric:tabular-nums}
+:where(html[data-theme="dark"]) .cr{display:block;font-size:11px;color:var(--muted)}
+:where(html[data-theme="dark"]) .cu{color:var(--muted);font-size:12.5px;min-width:150px}
+:where(html[data-theme="dark"]) .cl{display:flex;flex-direction:column;gap:4px;min-width:220px}
+:where(html[data-theme="dark"]) .lk{display:flex;gap:6px;font-size:13px}
+:where(html[data-theme="dark"]) .lk .n{color:var(--muted);font-variant-numeric:tabular-nums;min-width:20px}
+:where(html[data-theme="dark"]) .cn,:where(html[data-theme="dark"]) .ch{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted)}
+:where(html[data-theme="dark"]) .wk tr.carry{background:none}
+:where(html[data-theme="dark"]) .wk tr.carry .cl{color:var(--muted)}
+:where(html[data-theme="dark"]) .mk{display:inline-block;background:var(--p3bg);color:var(--p3ink);border-radius:5px;padding:1px 7px;font-size:11.5px;font-weight:700;margin:0 4px 4px 0}
+:where(html[data-theme="dark"]) .foot{margin-top:24px;display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+@media(max-width:640px){
+:where(html[data-theme="dark"]) .wrap{padding:16px 14px 48px}
+:where(html[data-theme="dark"]) .wk{font-size:12.5px}
+}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>总课表 · 30 周</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="lessons/index.html">课程目录</a>
+</div></div>
+
+<div class="wrap">
+  <p class="lead">入门课 <b>111 节课</b>按每周一节一节往下排，共
+    <b>30 周</b>（第 0 周是环境准备）。周次直接来自每节课的排期，
+    和课节页、讲义页是同一份数据，不会各说各话。</p>
+
+  <div class="you" id="you">
+    <div class="yh">你的位置</div>
+    <div class="yb" id="youBody">统计中…</div>
+  </div>
+
+  <div class="pac">
+    <button class="pb on" data-pace="1" type="button">标准 · 30 周</button>
+    <button class="pb" data-pace="2" type="button">轻量 · 60 周</button>
+    <span class="pn" id="paceNote"></span>
+  </div>
+
+  <h2>三个阶段</h2>
+  <div class="sts"><div class="st"><div class="sth"><span class="stn">环境准备</span><span class="stw">第 0–0 周</span></div><div class="stm">5 节 · 约 8 小时 · 单元 0–0</div><p class="std">把工具链装好、跑通第一个脚本、学会给代码拍快照（git）。这一段不产出项目，但没有它后面每一节都卡在环境上。</p></div><div class="st"><div class="sth"><span class="stn">阶段 1 · 语言地基</span><span class="stw">第 1–13 周</span></div><div class="stm">59 节 · 约 88 小时 · 单元 1–11</div><p class="std">变量到测试，把 Python 的骨架过一遍。结束时有<b>关卡 1</b>：过不了就别进项目段，回头补这一段的验收清单。</p><div class="gate">结束接 <a href="gate1.html">关卡 1 验收</a></div></div><div class="st"><div class="sth"><span class="stn">阶段 2 · 三个项目</span><span class="stw">第 14–29 周</span></div><div class="stm">47 节 · 约 70 小时 · 单元 12–21</div><p class="std">Pygame 外星人入侵 → 数据可视化 → Django 学习笔记，最后一个单元是<b>关卡 2</b>综合验收。这一段靠项目把前面的零散知识串起来。</p><div class="gate">结束接 <a href="gate2.html">关卡 2 验收</a></div></div></div>
+
+  <h2>每周安排</h2>
+  <div class="tblwrap"><table class="wk">
+    <thead><tr><th>周次</th><th>单元</th><th>课节（点进去直接学）</th>
+    <th>节数</th><th>课时</th><th>里程碑</th></tr></thead>
+    <tbody><tr id="w0" data-w="0"><td class="cw"><b>第 0 周</b></td><td class="cu">单元 0 · 环境与工具链</td><td class="cl"><a class="lk" href="lessons/01.html" data-n="1"><span class="n">1</span>装好 Python 与 VS Code</a><a class="lk" href="lessons/02.html" data-n="2"><span class="n">2</span>第一个报错与 Git 拍快照</a><a class="lk" href="lessons/03.html" data-n="3"><span class="n">3</span>目录结构、print 与注释</a><a class="lk" href="lessons/04.html" data-n="4"><span class="n">4</span>动手实战与答案讲评</a><a class="lk" href="lessons/05.html" data-n="5"><span class="n">5</span>单元 0 验收复盘</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w1" data-w="1"><td class="cw"><b>第 1 周</b></td><td class="cu">单元 1 · 变量与简单数据类型</td><td class="cl"><a class="lk" href="lessons/06.html" data-n="6"><span class="n">6</span>变量、命名与第一段文字</a><a class="lk" href="lessons/07.html" data-n="7"><span class="n">7</span>字符串、数值、布尔与类型转换</a><a class="lk" href="lessons/08.html" data-n="8"><span class="n">8</span>动手实战与答案讲评</a><a class="lk" href="lessons/09.html" data-n="9"><span class="n">9</span>单元 1 验收复盘</a></td><td class="cn">4 节</td><td class="ch">6.0 h</td><td class="cm"></td></tr><tr id="w2" data-w="2"><td class="cw"><b>第 2 周</b></td><td class="cu">单元 2 · 列表简介</td><td class="cl"><a class="lk" href="lessons/10.html" data-n="10"><span class="n">10</span>列表是什么、索引为什么从 0 开始</a><a class="lk" href="lessons/11.html" data-n="11"><span class="n">11</span>增删改查、引用共享与排序</a><a class="lk" href="lessons/12.html" data-n="12"><span class="n">12</span>动手实战与答案讲评</a><a class="lk" href="lessons/13.html" data-n="13"><span class="n">13</span>单元 2 验收复盘</a></td><td class="cn">4 节</td><td class="ch">6.0 h</td><td class="cm"></td></tr><tr id="w3" data-w="3"><td class="cw"><b>第 3 周</b></td><td class="cu">单元 3 · 操作列表</td><td class="cl"><a class="lk" href="lessons/14.html" data-n="14"><span class="n">14</span>for 循环：把重复交给机器</a><a class="lk" href="lessons/15.html" data-n="15"><span class="n">15</span>range() 与列表推导式</a><a class="lk" href="lessons/16.html" data-n="16"><span class="n">16</span>切片、元组与 PEP 8 排版</a><a class="lk" href="lessons/17.html" data-n="17"><span class="n">17</span>动手实战与答案讲评</a><a class="lk" href="lessons/18.html" data-n="18"><span class="n">18</span>单元 3 验收复盘</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w4" data-w="4"><td class="cw"><b>第 4 周</b></td><td class="cu">单元 4 · if 语句</td><td class="cl"><a class="lk" href="lessons/19.html" data-n="19"><span class="n">19</span>条件测试与比较运算</a><a class="lk" href="lessons/20.html" data-n="20"><span class="n">20</span>三分支结构与逻辑运算符</a><a class="lk" href="lessons/21.html" data-n="21"><span class="n">21</span>链式比较、is 与条件表达式</a><a class="lk" href="lessons/22.html" data-n="22"><span class="n">22</span>动手实战、答案与验收</a></td><td class="cn">4 节</td><td class="ch">6.0 h</td><td class="cm"></td></tr><tr id="w5" data-w="5"><td class="cw"><b>第 5 周</b></td><td class="cu">单元 5 · 字典</td><td class="cl"><a class="lk" href="lessons/23.html" data-n="23"><span class="n">23</span>字典：按名字找数据</a><a class="lk" href="lessons/24.html" data-n="24"><span class="n">24</span>三种遍历与 get() 安全取值</a><a class="lk" href="lessons/25.html" data-n="25"><span class="n">25</span>遍历时修改与嵌套结构</a><a class="lk" href="lessons/26.html" data-n="26"><span class="n">26</span>动手实战与答案讲评</a><a class="lk" href="lessons/27.html" data-n="27"><span class="n">27</span>单元 5 验收复盘</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w6" data-w="6"><td class="cw"><b>第 6 周</b></td><td class="cu">单元 6 · 用户输入与 while 循环</td><td class="cl"><a class="lk" href="lessons/28.html" data-n="28"><span class="n">28</span>input() 的铁律与 for/while 之争</a><a class="lk" href="lessons/29.html" data-n="29"><span class="n">29</span>break / continue / while-else</a><a class="lk" href="lessons/30.html" data-n="30"><span class="n">30</span>交互程序的骨架与收尾</a><a class="lk" href="lessons/31.html" data-n="31"><span class="n">31</span>动手实战与答案讲评</a><a class="lk" href="lessons/32.html" data-n="32"><span class="n">32</span>单元 6 验收复盘</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w7" data-w="7"><td class="cw"><b>第 7 周</b><span class="cr">跨周</span></td><td class="cu">单元 7 · 函数</td><td class="cl"><a class="lk" href="lessons/33.html" data-n="33"><span class="n">33</span>定义函数与 return</a><a class="lk" href="lessons/34.html" data-n="34"><span class="n">34</span>三种参数写法与★ 参数传递的副本语义</a><a class="lk" href="lessons/35.html" data-n="35"><span class="n">35</span>作用域与函数是一等公民</a><a class="lk" href="lessons/36.html" data-n="36"><span class="n">36</span>七个示例串讲与拆模块</a><a class="lk" href="lessons/37.html" data-n="37"><span class="n">37</span>动手实战与答案讲评</a><a class="lk" href="lessons/38.html" data-n="38"><span class="n">38</span>★ 六个常见错误逐条自查</a><a class="lk" href="lessons/39.html" data-n="39"><span class="n">39</span>单元 7 验收复盘</a></td><td class="cn">7 节</td><td class="ch">10.5 h</td><td class="cm"></td></tr><tr id="w8" data-w="8" class=carry><td class="cw"><b>第 8 周</b><span class="cr">接着上周的跨周内容</span></td><td class="cu">单元 7 · 函数</td><td class="cl"><a class="lk" href="lessons/35.html" data-n="35"><span class="n">35</span>作用域与函数是一等公民</a><a class="lk" href="lessons/36.html" data-n="36"><span class="n">36</span>七个示例串讲与拆模块</a><a class="lk" href="lessons/37.html" data-n="37"><span class="n">37</span>动手实战与答案讲评</a><a class="lk" href="lessons/38.html" data-n="38"><span class="n">38</span>★ 六个常见错误逐条自查</a><a class="lk" href="lessons/39.html" data-n="39"><span class="n">39</span>单元 7 验收复盘</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w9" data-w="9"><td class="cw"><b>第 9 周</b></td><td class="cu">单元 8 · 类</td><td class="cl"><a class="lk" href="lessons/40.html" data-n="40"><span class="n">40</span>类、实例与 self</a><a class="lk" href="lessons/41.html" data-n="41"><span class="n">41</span>__init__、属性方法与 __str__</a></td><td class="cn">2 节</td><td class="ch">3.0 h</td><td class="cm"></td></tr><tr id="w10" data-w="10"><td class="cw"><b>第 10 周</b></td><td class="cu">单元 8 · 类</td><td class="cl"><a class="lk" href="lessons/42.html" data-n="42"><span class="n">42</span>继承与方法重写</a><a class="lk" href="lessons/43.html" data-n="43"><span class="n">43</span>类的组合与示例串讲</a><a class="lk" href="lessons/44.html" data-n="44"><span class="n">44</span>动手实战与答案讲评</a><a class="lk" href="lessons/45.html" data-n="45"><span class="n">45</span>★ 六个常见错误逐条自查</a><a class="lk" href="lessons/46.html" data-n="46"><span class="n">46</span>单元 8 验收复盘</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w11" data-w="11"><td class="cw"><b>第 11 周</b></td><td class="cu">单元 9 · 文件与异常</td><td class="cl"><a class="lk" href="lessons/47.html" data-n="47"><span class="n">47</span>open() 与三种模式</a><a class="lk" href="lessons/48.html" data-n="48"><span class="n">48</span>with 语句与四种读取方式</a><a class="lk" href="lessons/49.html" data-n="49"><span class="n">49</span>写文件与异常处理</a><a class="lk" href="lessons/50.html" data-n="50"><span class="n">50</span>JSON / CSV 与持久化实战</a><a class="lk" href="lessons/51.html" data-n="51"><span class="n">51</span>动手实战、答案与验收</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w12" data-w="12"><td class="cw"><b>第 12 周</b></td><td class="cu">单元 10 · 测试代码</td><td class="cl"><a class="lk" href="lessons/52.html" data-n="52"><span class="n">52</span>为什么需要测试与三条命名规则</a><a class="lk" href="lessons/53.html" data-n="53"><span class="n">53</span>assert 与测试用例设计</a><a class="lk" href="lessons/54.html" data-n="54"><span class="n">54</span>parametrize、测试类与运行命令</a><a class="lk" href="lessons/55.html" data-n="55"><span class="n">55</span>测试夹具与示例串讲</a><a class="lk" href="lessons/56.html" data-n="56"><span class="n">56</span>动手实战、答案与验收</a></td><td class="cn">5 节</td><td class="ch">7.5 h</td><td class="cm"></td></tr><tr id="w13" data-w="13"><td class="cw"><b>第 13 周</b></td><td class="cu">单元 11 · 阶段 1 总复习 + 关卡验收</td><td class="cl"><a class="lk" href="lessons/57.html" data-n="57"><span class="n">57</span>知识串讲与能力地图</a><a class="lk" href="lessons/58.html" data-n="58"><span class="n">58</span>排错思路与项目骨架</a><a class="lk" href="lessons/59.html" data-n="59"><span class="n">59</span>四个复习示例串讲</a><a class="lk" href="lessons/60.html" data-n="60"><span class="n">60</span>★ 综合项目 1：待办管理器</a><a class="lk" href="lessons/61.html" data-n="61"><span class="n">61</span>★ 综合项目 2：成绩分析器</a><a class="lk" href="lessons/62.html" data-n="62"><span class="n">62</span>★ 综合项目 3：文本统计工具</a><a class="lk" href="lessons/63.html" data-n="63"><span class="n">63</span>★ 关卡 1 现场测评</a><a class="lk" href="lessons/64.html" data-n="64"><span class="n">64</span>结业检查与下一阶段</a></td><td class="cn">8 节</td><td class="ch">12.0 h</td><td class="cm"><span class="mk">关卡 1</span></td></tr><tr id="w14" data-w="14"><td class="cw"><b>第 14 周</b><span class="cr">跨周</span></td><td class="cu">单元 12 · Pygame 起步与飞船驾驶</td><td class="cl"><a class="lk" href="lessons/65.html" data-n="65"><span class="n">65</span>项目规划与安装 Pygame</a><a class="lk" href="lessons/66.html" data-n="66"><span class="n">66</span>主循环、帧率与事件驱动</a><a class="lk" href="lessons/67.html" data-n="67"><span class="n">67</span>Settings 类与屏幕矩形</a><a class="lk" href="lessons/68.html" data-n="68"><span class="n">68</span>驾驶飞船：标志位与边界</a></td><td class="cn">4 节</td><td class="ch">6.0 h</td><td class="cm"><span class="mk">项目一 · 外星人入侵</span></td></tr><tr id="w15" data-w="15"><td class="cw"><b>第 15 周</b><span class="cr">跨周</span></td><td class="cu">单元 12 · Pygame 起步与飞船驾驶 / 单元 13 · 射击与外星舰队</td><td class="cl"><a class="lk" href="lessons/69.html" data-n="69"><span class="n">69</span>重构、错误自查与验收</a><a class="lk" href="lessons/70.html" data-n="70"><span class="n">70</span>编组 Group 与精灵 Sprite</a><a class="lk" href="lessons/71.html" data-n="71"><span class="n">71</span>射击：Bullet 类与开火</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"><span class="mk">项目一 · 外星人入侵</span></td></tr><tr id="w16" data-w="16"><td class="cw"><b>第 16 周</b><span class="cr">跨周</span></td><td class="cu">单元 13 · 射击与外星舰队 / 单元 14 · Play 按钮与记分</td><td class="cl"><a class="lk" href="lessons/72.html" data-n="72"><span class="n">72</span>外星舰队与整体移动</a><a class="lk" href="lessons/73.html" data-n="73"><span class="n">73</span>碰撞检测与游戏结束</a><a class="lk" href="lessons/74.html" data-n="74"><span class="n">74</span>实战、答案与验收复盘</a><a class="lk" href="lessons/75.html" data-n="75"><span class="n">75</span>游戏状态机与 Button 类</a></td><td class="cn">4 节</td><td class="ch">6.0 h</td><td class="cm"></td></tr><tr id="w17" data-w="17"><td class="cw"><b>第 17 周</b></td><td class="cu">单元 14 · Play 按钮与记分</td><td class="cl"><a class="lk" href="lessons/76.html" data-n="76"><span class="n">76</span>记分牌与数据格式化</a><a class="lk" href="lessons/77.html" data-n="77"><span class="n">77</span>动态难度与余下飞船数</a><a class="lk" href="lessons/78.html" data-n="78"><span class="n">78</span>实战、答案与自查</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"></td></tr><tr id="w18" data-w="18"><td class="cw"><b>第 18 周</b><span class="cr">跨周</span></td><td class="cu">单元 15 · Matplotlib 生成数据</td><td class="cl"><a class="lk" href="lessons/79.html" data-n="79"><span class="n">79</span>Matplotlib 入门与折线图</a><a class="lk" href="lessons/80.html" data-n="80"><span class="n">80</span>散点图与自动计算数据</a><a class="lk" href="lessons/81.html" data-n="81"><span class="n">81</span>★ 校正绘图、刻度与颜色映射</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"><span class="mk">项目二 · 数据可视化</span></td></tr><tr id="w19" data-w="19"><td class="cw"><b>第 19 周</b><span class="cr">跨周</span></td><td class="cu">单元 15 · Matplotlib 生成数据 / 单元 16 · 下载真实数据</td><td class="cl"><a class="lk" href="lessons/82.html" data-n="82"><span class="n">82</span>随机游走 RandomWalk 类</a><a class="lk" href="lessons/83.html" data-n="83"><span class="n">83</span>Plotly 掷骰子与动手实战</a><a class="lk" href="lessons/84.html" data-n="84"><span class="n">84</span>CSV 与 datetime</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"><span class="mk">项目二 · 数据可视化</span></td></tr><tr id="w20" data-w="20"><td class="cw"><b>第 20 周</b><span class="cr">跨周</span></td><td class="cu">单元 16 · 下载真实数据</td><td class="cl"><a class="lk" href="lessons/85.html" data-n="85"><span class="n">85</span>缺失值与温度图</a><a class="lk" href="lessons/86.html" data-n="86"><span class="n">86</span>GeoJSON 与地震散点图</a><a class="lk" href="lessons/87.html" data-n="87"><span class="n">87</span>实战、答案与验收复盘</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"></td></tr><tr id="w21" data-w="21"><td class="cw"><b>第 21 周</b><span class="cr">跨周</span></td><td class="cu">单元 17 · 使用 API 与 Plotly</td><td class="cl"><a class="lk" href="lessons/88.html" data-n="88"><span class="n">88</span>API 概念与 Requests</a><a class="lk" href="lessons/89.html" data-n="89"><span class="n">89</span>GitHub API 与速率限制</a></td><td class="cn">2 节</td><td class="ch">3.0 h</td><td class="cm"></td></tr><tr id="w22" data-w="22"><td class="cw"><b>第 22 周</b><span class="cr">跨周</span></td><td class="cu">单元 17 · 使用 API 与 Plotly / 单元 18 · Django 入门</td><td class="cl"><a class="lk" href="lessons/90.html" data-n="90"><span class="n">90</span>Plotly 可视化与可点击链接</a><a class="lk" href="lessons/91.html" data-n="91"><span class="n">91</span>Hacker News API 与动手实战</a><a class="lk" href="lessons/92.html" data-n="92"><span class="n">92</span>★ 虚拟环境与 Django 项目</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"><span class="mk">项目三 · 学习笔记网站</span></td></tr><tr id="w23" data-w="23"><td class="cw"><b>第 23 周</b><span class="cr">跨周</span></td><td class="cu">单元 18 · Django 入门</td><td class="cl"><a class="lk" href="lessons/93.html" data-n="93"><span class="n">93</span>★ 应用、模型与迁移三步曲</a><a class="lk" href="lessons/94.html" data-n="94"><span class="n">94</span>★ 一次请求的旅程：URL → 视图 → 模板</a></td><td class="cn">2 节</td><td class="ch">3.0 h</td><td class="cm"><span class="mk">项目三 · 学习笔记网站</span></td></tr><tr id="w24" data-w="24"><td class="cw"><b>第 24 周</b></td><td class="cu">单元 18 · Django 入门</td><td class="cl"><a class="lk" href="lessons/95.html" data-n="95"><span class="n">95</span>模板语法与模板继承</a><a class="lk" href="lessons/96.html" data-n="96"><span class="n">96</span>Django shell 与 404</a><a class="lk" href="lessons/97.html" data-n="97"><span class="n">97</span>实战、答案与验收复盘</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"><span class="mk">项目三 · 学习笔记网站</span></td></tr><tr id="w25" data-w="25"><td class="cw"><b>第 25 周</b><span class="cr">跨周</span></td><td class="cu">单元 19 · 用户账户</td><td class="cl"><a class="lk" href="lessons/98.html" data-n="98"><span class="n">98</span>表单与数据归属三段式</a><a class="lk" href="lessons/99.html" data-n="99"><span class="n">99</span>登录、注销与注册三件套</a><a class="lk" href="lessons/100.html" data-n="100"><span class="n">100</span>★ @login_required 与数据隔离红线</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"></td></tr><tr id="w26" data-w="26"><td class="cw"><b>第 26 周</b><span class="cr">跨周</span></td><td class="cu">单元 19 · 用户账户 / 单元 20 · 样式与部署</td><td class="cl"><a class="lk" href="lessons/101.html" data-n="101"><span class="n">101</span>edit_entry 的双重保护</a><a class="lk" href="lessons/102.html" data-n="102"><span class="n">102</span>动手实战、答案与验收复盘</a><a class="lk" href="lessons/103.html" data-n="103"><span class="n">103</span>django-bootstrap5 与页面改造</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"></td></tr><tr id="w27" data-w="27"><td class="cw"><b>第 27 周</b><span class="cr">跨周</span></td><td class="cu">单元 20 · 样式与部署</td><td class="cl"><a class="lk" href="lessons/104.html" data-n="104"><span class="n">104</span>部署是什么与 requirements.txt</a><a class="lk" href="lessons/105.html" data-n="105"><span class="n">105</span>★ platformshconfig 与本地线上双环境</a><a class="lk" href="lessons/106.html" data-n="106"><span class="n">106</span>★ 三大部署坑</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"></td></tr><tr id="w28" data-w="28"><td class="cw"><b>第 28 周</b><span class="cr">跨周</span></td><td class="cu">单元 20 · 样式与部署 / 单元 21 · 阶段 2 综合 + 关卡 2 验收</td><td class="cl"><a class="lk" href="lessons/107.html" data-n="107"><span class="n">107</span>部署上线、错误页与实战</a><a class="lk" href="lessons/108.html" data-n="108"><span class="n">108</span>工程流程回顾与技术地图</a><a class="lk" href="lessons/109.html" data-n="109"><span class="n">109</span>能力跃迁与工程问题速查</a></td><td class="cn">3 节</td><td class="ch">4.5 h</td><td class="cm"><span class="mk">关卡 2</span></td></tr><tr id="w29" data-w="29"><td class="cw"><b>第 29 周</b></td><td class="cu">单元 21 · 阶段 2 综合 + 关卡 2 验收</td><td class="cl"><a class="lk" href="lessons/110.html" data-n="110"><span class="n">110</span>★ 关卡 2 五项逐条自测</a><a class="lk" href="lessons/111.html" data-n="111"><span class="n">111</span>综合项目与阶段 2 收尾</a></td><td class="cn">2 节</td><td class="ch">3.0 h</td><td class="cm"><span class="mk">关卡 2</span></td></tr></tbody>
+  </table></div>
+
+  <div class="foot">
+    <a href="review.html">今日复习计划 →</a>
+    <a href="lessons/index.html">全部 111 节目录 →</a>
+    <a href="../python-course-syllabus.html">课程大纲 →</a>
+  </div>
+</div>
+<script>
+var TOTAL=111, WEEKS=30, DAY=86400000;
+var WKOF={1:0,2:0,3:0,4:0,5:0,6:1,7:1,8:1,9:1,10:2,11:2,12:2,13:2,14:3,15:3,16:3,17:3,18:3,19:4,20:4,21:4,22:4,23:5,24:5,25:5,26:5,27:5,28:6,29:6,30:6,31:6,32:6,33:7,34:7,35:7,36:7,37:7,38:7,39:7,40:9,41:9,42:10,43:10,44:10,45:10,46:10,47:11,48:11,49:11,50:11,51:11,52:12,53:12,54:12,55:12,56:12,57:13,58:13,59:13,60:13,61:13,62:13,63:13,64:13,65:14,66:14,67:14,68:14,69:15,70:15,71:15,72:16,73:16,74:16,75:16,76:17,77:17,78:17,79:18,80:18,81:18,82:19,83:19,84:19,85:20,86:20,87:20,88:21,89:21,90:22,91:22,92:22,93:23,94:23,95:24,96:24,97:24,98:25,99:25,100:25,101:26,102:26,103:26,104:27,105:27,106:27,107:28,108:28,109:28,110:29,111:29};
+var TITLE={1:"装好 Python 与 VS Code",2:"第一个报错与 Git 拍快照",3:"目录结构、print 与注释",4:"动手实战与答案讲评",5:"单元 0 验收复盘",6:"变量、命名与第一段文字",7:"字符串、数值、布尔与类型转换",8:"动手实战与答案讲评",9:"单元 1 验收复盘",10:"列表是什么、索引为什么从 0 开始",11:"增删改查、引用共享与排序",12:"动手实战与答案讲评",13:"单元 2 验收复盘",14:"for 循环：把重复交给机器",15:"range() 与列表推导式",16:"切片、元组与 PEP 8 排版",17:"动手实战与答案讲评",18:"单元 3 验收复盘",19:"条件测试与比较运算",20:"三分支结构与逻辑运算符",21:"链式比较、is 与条件表达式",22:"动手实战、答案与验收",23:"字典：按名字找数据",24:"三种遍历与 get() 安全取值",25:"遍历时修改与嵌套结构",26:"动手实战与答案讲评",27:"单元 5 验收复盘",28:"input() 的铁律与 for/while 之争",29:"break / continue / while-else",30:"交互程序的骨架与收尾",31:"动手实战与答案讲评",32:"单元 6 验收复盘",33:"定义函数与 return",34:"三种参数写法与★ 参数传递的副本语义",35:"作用域与函数是一等公民",36:"七个示例串讲与拆模块",37:"动手实战与答案讲评",38:"★ 六个常见错误逐条自查",39:"单元 7 验收复盘",40:"类、实例与 self",41:"__init__、属性方法与 __str__",42:"继承与方法重写",43:"类的组合与示例串讲",44:"动手实战与答案讲评",45:"★ 六个常见错误逐条自查",46:"单元 8 验收复盘",47:"open() 与三种模式",48:"with 语句与四种读取方式",49:"写文件与异常处理",50:"JSON / CSV 与持久化实战",51:"动手实战、答案与验收",52:"为什么需要测试与三条命名规则",53:"assert 与测试用例设计",54:"parametrize、测试类与运行命令",55:"测试夹具与示例串讲",56:"动手实战、答案与验收",57:"知识串讲与能力地图",58:"排错思路与项目骨架",59:"四个复习示例串讲",60:"★ 综合项目 1：待办管理器",61:"★ 综合项目 2：成绩分析器",62:"★ 综合项目 3：文本统计工具",63:"★ 关卡 1 现场测评",64:"结业检查与下一阶段",65:"项目规划与安装 Pygame",66:"主循环、帧率与事件驱动",67:"Settings 类与屏幕矩形",68:"驾驶飞船：标志位与边界",69:"重构、错误自查与验收",70:"编组 Group 与精灵 Sprite",71:"射击：Bullet 类与开火",72:"外星舰队与整体移动",73:"碰撞检测与游戏结束",74:"实战、答案与验收复盘",75:"游戏状态机与 Button 类",76:"记分牌与数据格式化",77:"动态难度与余下飞船数",78:"实战、答案与自查",79:"Matplotlib 入门与折线图",80:"散点图与自动计算数据",81:"★ 校正绘图、刻度与颜色映射",82:"随机游走 RandomWalk 类",83:"Plotly 掷骰子与动手实战",84:"CSV 与 datetime",85:"缺失值与温度图",86:"GeoJSON 与地震散点图",87:"实战、答案与验收复盘",88:"API 概念与 Requests",89:"GitHub API 与速率限制",90:"Plotly 可视化与可点击链接",91:"Hacker News API 与动手实战",92:"★ 虚拟环境与 Django 项目",93:"★ 应用、模型与迁移三步曲",94:"★ 一次请求的旅程：URL → 视图 → 模板",95:"模板语法与模板继承",96:"Django shell 与 404",97:"实战、答案与验收复盘",98:"表单与数据归属三段式",99:"登录、注销与注册三件套",100:"★ @login_required 与数据隔离红线",101:"edit_entry 的双重保护",102:"动手实战、答案与验收复盘",103:"django-bootstrap5 与页面改造",104:"部署是什么与 requirements.txt",105:"★ platformshconfig 与本地线上双环境",106:"★ 三大部署坑",107:"部署上线、错误页与实战",108:"工程流程回顾与技术地图",109:"能力跃迁与工程问题速查",110:"★ 关卡 2 五项逐条自测",111:"综合项目与阶段 2 收尾"};
+var PACE={1:30,2:60};
+var pace=1;
+function read(k){try{return JSON.parse(localStorage.getItem(k)||'{}')}catch(e){return {}}}
+function mid(t){var d=new Date(t);d.setHours(0,0,0,0);return d.getTime()}
+function wkOf(n){return WKOF[n]||0}
+function done(){var L=read('lesson-done-v1'),a=[],k;for(k in L){if(L[k])a.push([+k,L[k]===true?Date.now():L[k]])}return a}
+function pad(n){return (n<10?'0':'')+n}
+function fmt(d){return d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate()}
+
+function render(){
+  var a=done(), n=a.length, box=document.getElementById('youBody');
+  var today=mid(Date.now());
+  if(!n){
+    box.innerHTML='<p class="y0">还没有开始。第 1 节是「'+esc(TITLE[1]||'')+
+      '」——<a href="lessons/01.html">从第 1 节开始 →</a></p>'+
+      '<p class="yt">选一档配速再开工：标准是每周 3–4 节，轻量是每周 1–2 节。'+
+      '先选能坚持的那条，再谈进度。</p>';
+    paceNote(); return;
+  }
+  var wks=PACE[pace];
+  // 开课日 = 最早一次完成的时间；用它算「应该到第几周」
+  var first=today, last=0, i;
+  for(i=0;i<a.length;i++){var t=a[i][1];if(t<first)first=t;if(t>last)last=t}
+  first=mid(first);
+  var days=Math.max(1,Math.round((today-first)/DAY)+1);
+  var perWeek=TOTAL/wks;
+  var should=Math.min(TOTAL,Math.round(days/7*perWeek));   // 按日历应完成的节数
+  var curW=wkOf(n), shouldW=wkOf(should)||0;
+  // 近 14 天速度 → ETA
+  var cut=today-13*DAY, recent=0, sum=0;
+  for(i=0;i<a.length;i++){if(mid(a[i][1])>=cut){recent++;}}
+  var speed=recent/14;
+  var left=TOTAL-n, eta='';
+  if(speed>0 && left>0){
+    var need=Math.ceil(left/speed);
+    eta='<span class="ye">按最近两周的速度（'+speed.toFixed(1)+' 节/天），还剩 '+left+
+      ' 节 ≈ '+need+' 天，预计 <b>'+fmt(new Date(today+need*DAY))+'</b> 学完</span>';
+  } else if(left===0){
+    eta='<span class="ye">全部 '+TOTAL+' 节已完成 ✓ 去做 <a href="gate2.html">关卡 2 验收</a></span>';
+  } else {
+    eta='<span class="ye">最近两周没有学习记录，算不出预计完成日期——先补一节再来看</span>';
+  }
+  var diff=curW-shouldW, dev='';
+  if(diff>=1) dev='<span class="ok">比 '+wks+' 周配速快约 '+diff+' 周</span>';
+  else if(diff<=-1) dev='<span class="bad">落后约 '+(-diff)+' 周：本周多补 '+Math.min(left,Math.ceil((-diff)*perWeek))+
+    ' 节就能追回</span>';
+  else dev='<span class="ok">正好卡在配速上</span>';
+  var next=0; for(i=1;i<=TOTAL;i++){if(!read('lesson-done-v1')[String(i)]){next=i;break}}
+  box.innerHTML=
+    '<div class="yrow"><span>已学 <b>'+n+'</b> / '+TOTAL+' 节</span>'+
+    '<span>实际第 <b>'+curW+'</b> 周</span>'+
+    '<span>开课第 '+days+' 天 · 配速应到第 '+shouldW+' 周</span></div>'+
+    '<div class="yrow2">'+dev+eta+'</div>'+
+    (next?'<p class="yg"><a href="lessons/'+pad(next)+'.html">继续学习：第 '+next+' 节 →</a></p>':'');
+  paceNote();
+}
+function paceNote(){
+  var wks=PACE[pace], el=document.getElementById('paceNote');
+  el.textContent=(pace===1? ('每周 '+(TOTAL/wks).toFixed(1)+' 节 · 约 '+((TOTAL/wks)*1.5).toFixed(1)+' 小时')
+                          : ('每周 '+(TOTAL/wks).toFixed(1)+' 节 · 约 '+((TOTAL/wks)*1.5).toFixed(1)+' 小时，配速减半'));
+}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+var bs=document.querySelectorAll('.pb');
+for(var i=0;i<bs.length;i++){bs[i].onclick=function(){
+  for(var j=0;j<bs.length;j++)bs[j].classList.remove('on');
+  this.classList.add('on'); pace=+this.getAttribute('data-pace'); render();
+}}
+render();
+window.addEventListener('storage',render);</script>
+<script src="media/bgm.js" defer></script>
+<!--@theme:body-->
+<script>(function(){
+var KEY='py-theme-v1',ORDER=['auto','light','dark'];
+var LABEL={auto:'跟随系统',light:'浅色',dark:'深色'};
+var ICON={
+auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>',
+dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3z"/></svg>'};
+var root=document.documentElement;
+var q=window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)'):null;
+function mode(){var m=root.getAttribute('data-theme-mode');return ORDER.indexOf(m)<0?'auto':m}
+function sync(m){
+  var b=document.getElementById('thBtn');
+  root.setAttribute('data-theme-mode',m);
+  var d=root.getAttribute('data-theme')==='dark';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
+  if(!b)return;
+  b.title='主题：'+LABEL[m]+'　点一下或按 Shift+T 切换（跟随系统 → 浅色 → 深色）';
+  b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
+  var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
+  if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
+}
+function apply(m,save){
+  var d=m==='dark'||(m==='auto'&&q&&q.matches);
+  root.setAttribute('data-theme',d?'dark':'light');
+  if(save){try{localStorage.setItem(KEY,m)}catch(e){}}
+  sync(m);
+}
+function build(){
+  var b=document.createElement('button');
+  b.type='button';b.id='thBtn';b.className='thbtn';
+  b.innerHTML='<span class="thi"></span><span class="thlbl"></span>';
+  var host=document.querySelector('.top-in')||document.querySelector('.nav-in');
+  var mq=window.matchMedia?window.matchMedia('(max-width:640px)'):null;
+  if(host){host.appendChild(b)}else{document.body.appendChild(b)}
+  function home(){
+    var el=document.getElementById('thBtn');if(!el)return;
+    var small=mq&&mq.matches;
+    if(!host||small){
+      if(el.parentElement!==document.body)document.body.appendChild(el);
+      el.classList.add('fixed');
+    }else{
+      if(el.parentElement!==host)host.appendChild(el);
+      el.classList.remove('fixed');
+    }
+  }
+  home();
+  if(mq&&mq.addEventListener)mq.addEventListener('change',home);
+  window.__thHome=home;
+  b.addEventListener('click',function(){apply(ORDER[(ORDER.indexOf(mode())+1)%3],true)});
+  return b;
+}
+build();sync(mode());
+if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
+  q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
+window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
+  set:function(m){apply(m,true)}};
+/* Shift+T：不碰鼠标也能换主题（输入框聚焦时让位给打字） */
+document.addEventListener('keydown',function(e){
+  if(e.shiftKey&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&(e.key==='T'||e.key==='t')){
+    var a=document.activeElement;
+    if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+    apply(ORDER[(ORDER.indexOf(mode())+1)%3],true);e.preventDefault();
+  }
+});
+})();</script>
+<!--/@theme:body-->
+</body>
+</html>

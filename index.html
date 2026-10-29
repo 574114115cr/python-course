@@ -118,6 +118,11 @@ background:linear-gradient(90deg,#2f6df6,#22a06b);transition:width .25s}
 .dbar.b3 i{background:linear-gradient(90deg,#e08a15,#c46f00)}
 .dval{flex:0 0 auto;min-width:120px;text-align:right;font-size:12.5px;
 font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+/* 节奏那格要放 ETA 与偏差提示，比别的格子长，得允许换行（整体是 nowrap，
+   390px 下会被这一句撑出横向滚动条） */
+#stk{flex:1 1 auto;min-width:0;white-space:normal;line-height:1.55}
+#stk .late{color:var(--danger)}
+#stk .ahead{color:var(--p2)}
 .dfoot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;
 padding-top:12px;border-top:1px dashed var(--line)}
 .dfoot .lprog-go{margin:0}
@@ -374,6 +379,9 @@ html[data-theme="dark"]{scroll-behavior:smooth}
 :where(html[data-theme="dark"]) .dbar.b2 i{background:linear-gradient(90deg,#1f5fa8,#0b785d)}
 :where(html[data-theme="dark"]) .dbar.b3 i{background:linear-gradient(90deg,#975d0e,#9e5900)}
 :where(html[data-theme="dark"]) .dval{flex:0 0 auto;min-width:120px;text-align:right;font-size:12.5px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--text)}
+:where(html[data-theme="dark"]) #stk{flex:1 1 auto;min-width:0;white-space:normal;line-height:1.55}
+:where(html[data-theme="dark"]) #stk .late{color:var(--danger)}
+:where(html[data-theme="dark"]) #stk .ahead{color:var(--p2)}
 :where(html[data-theme="dark"]) .dfoot{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 :where(html[data-theme="dark"]) .dfoot .lprog-go{margin:0}
 :where(html[data-theme="dark"]) .lpt{display:flex;gap:8px;margin-left:auto}
@@ -593,6 +601,7 @@ html[data-theme="dark"]{scroll-behavior:smooth}
       <div class="meta"><b id="txPy">已学 0 / 111 节</b><span id="pcPy">0%</span></div>
       <div class="acts">
         <a class="pri" id="goPy" href="web/lessons/01.html">开始第 1 节 →</a>
+        <a class="sec" href="web/plan.html">30 周总课表</a>
         <a class="sec" href="web/lessons/index.html">全部 111 节</a>
       </div>
     </div>
@@ -860,6 +869,13 @@ html[data-theme="dark"]{scroll-behavior:smooth}
       <div><h4>课程大纲</h4>
         <p>22 单元总课表 · 每次课 90 分钟四段式 · 教学三原则 · 综合项目 · 可勾选进度</p></div>
       <span class="go">打开 →</span>
+    </a>
+    <a class="lib" href="web/plan.html" target="_blank">
+      <div class="lib-i" style="background:var(--p1s)">周表</div>
+      <div><h4>周计划 · 30 周排期 + 配速偏差</h4>
+        <p>每一周学哪几节直接点进去 · 按你的完成记录算出「实际第几周 / 配速应到第几周」，
+           落后几周就告诉你本周该补几节 · 标准 30 周与轻量 60 周两档可切</p></div>
+      <span class="go">打开周计划 →</span>
     </a>
     <a class="lib" href="web/review.html" target="_blank">
       <div class="lib-i" style="background:#9c5800">复习</div>
@@ -1310,7 +1326,29 @@ readOpen().forEach(function(n){
     var now=new Date(t0), dow=(now.getDay()+6)%7;   // 0=周一
     var monday=t0-dow*DAY, weekN=0, t;
     for(i=0;i<stamps.length;i++){ t=stamps[i]; if(t>=monday && t<t0+DAY) weekN++; }
-    el.textContent='连续 '+streak+' 天 · 本周约 '+(weekN*HOURLY).toFixed(1).replace(/\.0$/,'')+' 小时';
+    var txt='连续 '+streak+' 天 · 本周约 '+(weekN*HOURLY).toFixed(1).replace(/\.0$/,'')+' 小时';
+
+    // 进度预测 + 配速偏差：有速度才算 ETA，落后必须直说（不能只报「学了几天」）
+    var WEEKS=30, perWeek=TOTAL/WEEKS;               // 入门课 111 节 / 30 周
+    var first=Math.min.apply(null,stamps);
+    var days=Math.max(1,Math.round((t0-mid(first))/DAY)+1);
+    var recent=0;
+    for(i=0;i<stamps.length;i++){ if(mid(stamps[i])>=t0-13*DAY) recent++; }
+    var speed=recent/14, left=TOTAL-n;
+    if(left>0 && speed>0){
+      var need=Math.ceil(left/speed), d=new Date(t0+need*DAY);
+      txt+=' · 剩 '+left+' 节，按近期速度约 '+need+' 天（'+(d.getMonth()+1)+' 月 '+
+           d.getDate()+' 日）学完';
+    } else if(left===0){ txt+=' · 全部 '+TOTAL+' 节学完 ✓'; }
+    else { txt+=' · 最近两周没有记录，先补一节'; }
+    if(left>0){
+      var should=Math.min(TOTAL,Math.round(days/7*perWeek));
+      var diff=Math.round((n-should)/perWeek);
+      if(diff<=-1) txt+=' · <b class="late">落后约 '+(-diff)+' 周，本周补 '+
+        Math.min(left,Math.ceil((-diff)*perWeek))+' 节追回</b>';
+      else if(diff>=1) txt+=' · <b class="ahead">比 30 周配速快约 '+diff+' 周</b>';
+    }
+    el.innerHTML=txt;
   })();
 })();
 

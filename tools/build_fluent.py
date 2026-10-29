@@ -744,6 +744,11 @@ border:1px solid #ecc9c6;border-radius:7px;padding:5px 11px;cursor:pointer}
  .layout{display:block;padding:0}
  .main{border:none;padding:0}
  .main pre{white-space:pre-wrap}
+ /* 代码块两种主题都是深色底，打印出来一整页黑还费墨 → 打印翻白底深字 */
+ .main pre,.wrap pre{background:#fff!important;color:#1a1a2b!important;
+  border:1px solid #ccc;break-inside:avoid}
+ .main pre code,.wrap pre code{color:#1a1a2b!important}
+ .main pre .cl,.wrap pre .cl{color:#55687a!important;background:none!important}
 }
 @media(max-width:1000px){
  .layout{flex-direction:column;align-items:stretch;padding:16px 14px 60px}

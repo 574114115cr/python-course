@@ -201,8 +201,12 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
   .main{padding:0;max-width:none}
   .head h1{font-size:24px}
   .blk{border:1px solid #ccc;background:#fff;break-inside:avoid}
-  pre{border:1px solid #ccc;background:#fff;break-inside:avoid;font-size:10.5pt}
-  pre code{white-space:pre-wrap;word-break:break-all}
+  /* 代码块屏幕上一直是深色终端底，直接打印就是一片黑还费墨 → 打印翻白底深字。
+     .main pre 优先级比 pre 高，不加 !important 翻不过来（原来就是这么漏的）。 */
+  .main pre,pre{background:#fff!important;color:#16232e!important;
+   border:1px solid #ccc;break-inside:avoid;font-size:10.5pt}
+  .main pre code,pre code{color:#16232e!important;white-space:pre-wrap;word-break:break-all}
+  .main pre .cl,pre .cl{color:#55687a!important;background:none!important}
   h2{break-after:avoid}
   a{color:#000;text-decoration:none}
   .tip{break-inside:avoid}

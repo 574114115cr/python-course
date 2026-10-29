@@ -106,6 +106,19 @@ background:#f2f5f9;border-radius:10px;border:1px solid var(--line)}
  .main h1{font-size:23px}.main h2{font-size:19px}
  .pn{flex-direction:column}
 }
+
+/* 打印 / 导出 PDF：代码块在屏幕上一直是深色终端底（浅色主题也是），
+   直接打印就是一整页黑底还费墨。翻成白底深字——.main pre 的优先级更高，
+   这里必须加 !important，否则翻不过来（踩过：只写 pre{background:#fff} 没生效）。 */
+@media print{
+ .top,.side,.pn,.uprog{display:none!important}
+ body{background:#fff}
+ .main pre{background:#fff!important;color:#16232e!important;border:1px solid #ccc;
+  break-inside:avoid}
+ .main pre code{color:#16232e!important;white-space:pre-wrap;word-break:break-all}
+ .main pre .cl{color:#55687a!important;background:none!important}
+ .main pre.broken{border:2px dashed #999!important}
+}
 /*@theme-dark*/
 @media screen{
 :where(html[data-theme="dark"]) .main{min-width:0}
