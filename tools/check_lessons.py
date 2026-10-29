@@ -98,3 +98,22 @@ if problems:
         print("  -", p)
 else:
     print("\n全部通过：无空课、无遗漏、无重叠、体量均衡。")
+
+# ── 代码密度：讲得多、能跑的少，读起来最像「讲义」而不是「教程」 ──
+import pathlib as _pl
+import re as _re
+
+_low = []
+for _p in sorted(_pl.Path(__file__).resolve().parent.parent.joinpath("course").glob("*.md")):
+    _s = _p.read_text(encoding="utf-8")
+    _chars = len(_re.sub(r"\s+", "", _re.sub(r"```.*?```", "", _s, flags=_re.S)))
+    _blocks = len(_re.findall(r"^```python", _s, _re.M))
+    if _chars and _blocks / (_chars / 1000) < 1.6:
+        _low.append((_p.name[:2], _chars, _blocks, _blocks / (_chars / 1000)))
+
+if _low:
+    print("\n!! 代码密度偏低（每千字 < 1.6 个 python 块）：")
+    for _no, _c, _b, _d in _low:
+        print(f"   单元 {_no}：{_c/1000:.1f} 千字 / {_b} 块 = {_d:.2f}")
+else:
+    print("\n代码密度：22 个单元全部 ≥ 1.6")

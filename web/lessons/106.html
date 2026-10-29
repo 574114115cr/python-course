@@ -40,6 +40,13 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-4-collectstatic-到底在搬什么-static_collect">示例 4：collectstatic 到底在搬什么（static_collector.py）</a>
 <a class="lv3" href="#示例-5-推送到-platform-sh-之前的最后一遍自查-deploy_ch">示例 5：推送到 Platform.sh 之前的最后一遍自查（deploy_checklist.py）</a>
 <a class="lv3" href="#示例-6-上线前-8-道闸门-静态文件清单-deploy_gate-py">示例 6：上线前 8 道闸门 + 静态文件清单（deploy_gate.py）</a>
+<a class="lv3" href="#示例-7-环境变量-从字符串到配置对象">示例 7：环境变量：从字符串到配置对象</a>
+<a class="lv3" href="#示例-8-解析-pip-freeze-输出比对依赖">示例 8：解析 pip freeze 输出比对依赖</a>
+<a class="lv3" href="#示例-9-collectstatic-到底在做什么">示例 9：collectstatic 到底在做什么</a>
+<a class="lv3" href="#示例-10-从日志里算-5xx-比例">示例 10：从日志里算 5xx 比例</a>
+<a class="lv3" href="#示例-11-gzip-能把静态资源压到多少">示例 11：gzip 能把静态资源压到多少</a>
+<a class="lv3" href="#示例-12-部署前的结构自检">示例 12：部署前的结构自检</a>
+<a class="lv3" href="#示例-13-静态资源指纹-让缓存失效可控">示例 13：静态资源指纹：让缓存失效可控</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
     <div class="sblk">
@@ -584,6 +591,150 @@ transition:opacity .18s;z-index:60}
 <li><strong><code>static_inventory()</code> 让你在 push 之前就知道网上会有几个 CSS</strong>：它遍历每个应用的 <code>static/</code> 目录，把相对路径打出来。<strong>线上样式丢失时，第一个该问的就是「这个数是不是 0」</strong>；如果清单是 2 个、线上还是白脸，问题在 <code>/static</code> 路由或 <code>STATIC_ROOT</code>，不在文件本身。</li>
 <li><strong>把 <code>templates/500.html</code> 补上会怎样</strong>：第 7 项立刻从 <code>✗</code> 变 <code>✓</code>，汇总行变成「通过 8/8 项，可以 platform push」。反过来，把 <code>requirements_remote.txt</code> 里的 <code>psycopg2</code> 删掉再跑，第 2 项会变 <code>✗</code> 并提示「线上依赖齐全」不通过——<strong>每条检查都能被构造出的错误单独触发，这才叫测试过。</strong></li>
 </ol>
+<hr>
+<h3 id="示例-7-环境变量-从字符串到配置对象">示例 7：环境变量：从字符串到配置对象</h3>
+<p>部署最常见的坑是把 <code>DEBUG=False</code> 写成字符串——<code>bool("False")</code> 其实是 True。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">env</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"DEBUG"</span><span class="p">:</span> <span class="s2">"False"</span><span class="p">,</span> <span class="s2">"ALLOWED_HOSTS"</span><span class="p">:</span> <span class="s2">"example.com, www.example.com"</span><span class="p">,</span>
+       <span class="s2">"SECRET_KEY"</span><span class="p">:</span> <span class="s2">"s3cr3t"</span><span class="p">}</span>
+
+<span class="n">debug</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"DEBUG"</span><span class="p">,</span> <span class="s2">"True"</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"1"</span><span class="p">,</span> <span class="s2">"true"</span><span class="p">,</span> <span class="s2">"yes"</span><span class="p">)</span>
+<span class="n">hosts</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ALLOWED_HOSTS"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span> <span class="k">if</span> <span class="n">h</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"DEBUG:"</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">debug</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"ALLOWED_HOSTS:"</span><span class="p">,</span> <span class="n">hosts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"密钥长度合格:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SECRET_KEY"</span><span class="p">,</span> <span class="s2">""</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>DEBUG: False bool
+ALLOWED_HOSTS: ['example.com', 'www.example.com']
+密钥长度合格: True
+</code></pre>
+<h3 id="示例-8-解析-pip-freeze-输出比对依赖">示例 8：解析 pip freeze 输出比对依赖</h3>
+<p>requirements.txt 就是一份纯文本清单；解析它、找重复，不需要联网。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">freeze</span> <span class="o">=</span> <span class="s2">"""django==5.0.2</span>
+<span class="s2">requests==2.31.0</span>
+<span class="s2">Django==5.0.2</span>
+<span class="s2">"""</span>
+
+<span class="n">pairs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"=="</span><span class="p">)</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">freeze</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="k">if</span> <span class="s2">"=="</span> <span class="ow">in</span> <span class="n">ln</span><span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">]</span>
+<span class="n">dups</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">({</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span> <span class="k">if</span> <span class="n">names</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"依赖条数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pairs</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"规范化后:"</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"重复项:"</span><span class="p">,</span> <span class="n">dups</span> <span class="ow">or</span> <span class="s2">"无"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>依赖条数: 3
+规范化后: ['django', 'django', 'requests']
+重复项: ['django']
+</code></pre>
+<h3 id="示例-9-collectstatic-到底在做什么">示例 9：collectstatic 到底在做什么</h3>
+<p>它就是把散在各 app 里的静态文件复制到一个目录；这里用临时目录模拟一遍。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"blog"</span><span class="p">,</span> <span class="s2">"accounts"</span><span class="p">):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="s2">"static"</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">"style.css"</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"body</span><span class="si">{}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">"staticfiles"</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">STATIC_ROOT</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">cur</span><span class="p">,</span> <span class="n">_dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s2">"staticfiles"</span> <span class="ow">in</span> <span class="n">cur</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cur</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">STATIC_ROOT</span><span class="p">,</span> <span class="n">rel</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">f</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"收集结果:"</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">STATIC_ROOT</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"文件数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">STATIC_ROOT</span><span class="p">)))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>收集结果: ['accounts_static_accounts_style.css', 'blog_static_blog_style.css']
+文件数: 2
+</code></pre>
+<h3 id="示例-10-从日志里算-5xx-比例">示例 10：从日志里算 5xx 比例</h3>
+<p>上线后第一件事是看错误率；给几行访问日志，算出成功率与是否超阈值。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">logs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"GET / 200"</span><span class="p">,</span> <span class="s2">"GET /notes 200"</span><span class="p">,</span> <span class="s2">"POST /notes 500"</span><span class="p">,</span>
+    <span class="s2">"GET /static/app.css 200"</span><span class="p">,</span> <span class="s2">"GET /notes/1 404"</span><span class="p">,</span>
+    <span class="s2">"GET /health 200"</span><span class="p">,</span> <span class="s2">"POST /notes 502"</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ln</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">]</span>
+<span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes</span><span class="p">)</span>
+<span class="n">err5</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">codes</span> <span class="k">if</span> <span class="n">c</span> <span class="o">&gt;=</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">err4</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">codes</span> <span class="k">if</span> <span class="mi">400</span> <span class="o">&lt;=</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">ok</span> <span class="o">=</span> <span class="n">total</span> <span class="o">-</span> <span class="n">err5</span> <span class="o">-</span> <span class="n">err4</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"总请求 </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> | 成功 </span><span class="si">{</span><span class="n">ok</span><span class="si">}</span><span class="s2"> | 4xx </span><span class="si">{</span><span class="n">err4</span><span class="si">}</span><span class="s2"> | 5xx </span><span class="si">{</span><span class="n">err5</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"5xx 比例 </span><span class="si">{</span><span class="n">err5</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"是否该告警（&gt;2%）:"</span><span class="p">,</span> <span class="n">err5</span> <span class="o">/</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="mf">0.02</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>总请求 7 | 成功 4 | 4xx 1 | 5xx 2
+5xx 比例 28.6%
+是否该告警（&gt;2%）: True
+</code></pre>
+<h3 id="示例-11-gzip-能把静态资源压到多少">示例 11：gzip 能把静态资源压到多少</h3>
+<p>部署前心里有个数：文本类资源 gzip 通常压到 1/3 以下，图片基本压不动。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">gzip</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">zlib</span>
+
+<span class="n">css</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"body{margin:0;background:#f6f8fb;color:#16232e}"</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">css</span><span class="p">)</span>
+<span class="n">gz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">gzip</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">css</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"原始 </span><span class="si">{</span><span class="n">raw</span><span class="si">}</span><span class="s2"> B → gzip </span><span class="si">{</span><span class="n">gz</span><span class="si">}</span><span class="s2"> B（</span><span class="si">{</span><span class="n">gz</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">raw</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2">）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"压缩有意义（&lt;35%）:"</span><span class="p">,</span> <span class="n">gz</span> <span class="o">/</span> <span class="n">raw</span> <span class="o">&lt;</span> <span class="mf">0.35</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"zlib 快速压缩:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">zlib</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">css</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="s2">"B"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>原始 1880 B → gzip 85 B（5%）
+压缩有意义（&lt;35%）: True
+zlib 快速压缩: 77 B
+</code></pre>
+<hr>
+<h3 id="示例-12-部署前的结构自检">示例 12：部署前的结构自检</h3>
+<p>上线失败有一半是「文件没带上去」；把必须存在的清单写成列表，一条命令就能查。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="n">need</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"manage.py"</span><span class="p">,</span> <span class="s2">"requirements.txt"</span><span class="p">,</span> <span class="s2">"README.md"</span><span class="p">,</span> <span class="s2">"mysite/settings.py"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">need</span><span class="p">[:</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">f</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">"mysite"</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">need</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">f</span><span class="p">))]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"必须存在的文件:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">need</span><span class="p">),</span> <span class="s2">"个"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"缺失:"</span><span class="p">,</span> <span class="n">missing</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"能上线（缺 0 个）:"</span><span class="p">,</span> <span class="ow">not</span> <span class="n">missing</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>必须存在的文件: 4 个
+缺失: ['README.md', 'mysite/settings.py']
+能上线（缺 0 个）: False
+</code></pre>
+<h3 id="示例-13-静态资源指纹-让缓存失效可控">示例 13：静态资源指纹：让缓存失效可控</h3>
+<p>改了 CSS 用户却看到旧样式，是因为文件名没变；加内容指纹就能强制刷新。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fingerprint</span><span class="p">(</span><span class="n">path_like</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">path_like</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="n">size</span><span class="p">]</span>
+
+
+<span class="n">assets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"style.css"</span><span class="p">,</span> <span class="s2">"app.js"</span><span class="p">,</span> <span class="s2">"style.css"</span><span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="n">fingerprint</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">assets</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"style.css 加指纹后:"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"style.</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="s1">'style.css'</span><span class="p">]</span><span class="si">}</span><span class="s2">.css"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"内容相同 → 指纹相同:"</span><span class="p">,</span> <span class="n">fingerprint</span><span class="p">(</span><span class="s2">"style.css"</span><span class="p">)</span> <span class="o">==</span> <span class="n">fingerprint</span><span class="p">(</span><span class="s2">"style.css"</span><span class="p">))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>{'style.css': 'da232d78', 'app.js': '0364f57f'}
+style.css 加指纹后: style.da232d78.css
+内容相同 → 指纹相同: True
+</code></pre>
 <hr>
 
     <div class="blk hw">

@@ -46,6 +46,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-6-两个-urls-py-项目文件-完整版">示例 6：两个 urls.py（项目文件，完整版）</a>
 <a class="lv3" href="#示例-7-learning_logs-views-py-项目文件-完整版">示例 7：learning_logs/views.py（项目文件，完整版）</a>
 <a class="lv3" href="#示例-8-四份模板-项目文件-完整版">示例 8：四份模板（项目文件，完整版）</a>
+<a class="lv3" href="#示例-9-模板继承其实就是-块替换">示例 9：模板继承其实就是「块替换」</a>
+<a class="lv3" href="#示例-10-模型字段与-asdict">示例 10：模型字段与 asdict</a>
 <a class="lv2" href="#四-动手练习">四、动手练习</a>
 <a class="lv3" href="#基础档">基础档</a>
 <a class="lv3" href="#进阶档">进阶档</a>
@@ -762,6 +764,50 @@ python<span class="w"> </span>manage.py<span class="w"> </span>shell
   <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
 
 {% endblock content %}
+</code></pre>
+<hr>
+<h3 id="示例-9-模板继承其实就是-块替换">示例 9：模板继承其实就是「块替换」</h3>
+<p>Django 的 block 标签可以先用字典模拟：子模板只覆盖它重写的那几块。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">base</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"学习笔记"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"（默认内容）"</span><span class="p">,</span> <span class="s2">"footer"</span><span class="p">:</span> <span class="s2">"© 2026"</span><span class="p">}</span>
+<span class="n">child</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"全部笔记"</span><span class="p">}</span>
+
+<span class="n">page</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>                 <span class="c1"># 子模板只覆盖自己写的块</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"标题:"</span><span class="p">,</span> <span class="n">page</span><span class="p">[</span><span class="s2">"title"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"正文是否继承:"</span><span class="p">,</span> <span class="n">page</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="o">==</span> <span class="n">base</span><span class="p">[</span><span class="s2">"content"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"页脚是否继承:"</span><span class="p">,</span> <span class="n">page</span><span class="p">[</span><span class="s2">"footer"</span><span class="p">]</span> <span class="o">==</span> <span class="n">base</span><span class="p">[</span><span class="s2">"footer"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"合并后键数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">page</span><span class="p">))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>标题: 全部笔记
+正文是否继承: True
+页脚是否继承: True
+合并后键数: 3
+</code></pre>
+<h3 id="示例-10-模型字段与-asdict">示例 10：模型字段与 asdict</h3>
+<p>模型 = 字段定义 + 约束；用 dataclass 写一遍，就能在没装 Django 的机器上测它的序列化。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">asdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Entry</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">created</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">owner</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"alice"</span>
+
+
+<span class="n">e</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"第一条笔记"</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"字段数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="s2">"| owner:"</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="s2">"owner"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"日期仍是 datetime 对象:"</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"created"</span><span class="p">],</span> <span class="n">datetime</span><span class="p">))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>{'id': 1, 'text': '第一条笔记', 'created': datetime.datetime(2026, 10, 29, 9, 0), 'owner': 'alice'}
+字段数: 4 | owner: alice
+日期仍是 datetime 对象: True
 </code></pre>
 <hr>
 <h2 id="四-动手练习">四、动手练习</h2>

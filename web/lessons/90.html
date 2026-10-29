@@ -40,6 +40,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-4-plotly-条形图-悬停提示-颜色-可点击链接">示例 4：Plotly 条形图——悬停提示、颜色、可点击链接</a>
 <a class="lv3" href="#示例-5-hacker-news-两段式调用">示例 5：Hacker News 两段式调用</a>
 <a class="lv3" href="#示例-6-把-请求-json-取字段-拆成纯函数-api_pipeline-py">示例 6：把「请求 → JSON → 取字段」拆成纯函数（api_pipeline.py）</a>
+<a class="lv3" href="#示例-7-查询串与响应的最小闭环">示例 7：查询串与响应的最小闭环</a>
+<a class="lv3" href="#示例-8-plotly-的-data-结构长什么样">示例 8：Plotly 的 data 结构长什么样</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
     <div class="sblk">
@@ -551,6 +553,37 @@ https://hacker-news.firebaseio.com/v0/item/{id}.json      ← 单篇文章的详
 <li><strong>「重试」和「限速」是两件事，不能混</strong>。<code>get_json_with_retry</code> 处理的是「这次调用意外失败」（网络抖动、超时），所以连试 3 次；而 403 是<strong>确定性失败</strong>，重试只会继续消耗已经为 0 的配额。把两者混成一个大 <code>while</code> 循环，就是新手最常见的「死循环轰炸 API」。</li>
 <li><strong>把 <code>pages=2</code> 改成 <code>pages=6</code> 会怎样</strong>：<code>FAKE_PAGES</code> 只有两页，第 3–6 页会依次打印「第 N 页失败，跳过」，<code>merged</code> 仍是 3 条——<strong>这正是真实翻页到底后该有的行为</strong>：不该崩，也不该静默。若把 <code>per_page</code> 改成 100，<code>page_params</code> 里应同步检查「超过 100 会被 API 截断」。</li>
 </ol>
+<hr>
+<h3 id="示例-7-查询串与响应的最小闭环">示例 7：查询串与响应的最小闭环</h3>
+<p>没有网也能验证「发什么、收什么」：把 URL 与响应都写成字符串，先测解析，再谈请求。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlencode</span><span class="p">,</span> <span class="n">parse_qs</span><span class="p">,</span> <span class="n">urlparse</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"q"</span><span class="p">:</span> <span class="s2">"python 课程"</span><span class="p">,</span> <span class="s2">"sort"</span><span class="p">:</span> <span class="s2">"stars"</span><span class="p">,</span> <span class="s2">"per_page"</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://api.example.com/search?"</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"请求 URL:"</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"解析回来:"</span><span class="p">,</span> <span class="n">parse_qs</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">)[</span><span class="s2">"q"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"参数个数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">parse_qs</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">query</span><span class="p">)))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>请求 URL: https://api.example.com/search?q=python+%E8%AF%BE%E7%A8%8B&amp;sort=stars&amp;per_page=5
+解析回来: python 课程
+参数个数: 3
+</code></pre>
+<h3 id="示例-8-plotly-的-data-结构长什么样">示例 8：Plotly 的 data 结构长什么样</h3>
+<p>Plotly 的图本质就是一个字典列表；先在本地把结构拼对、断言长度一致，再交给库去画。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">data</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"bar"</span><span class="p">,</span> <span class="s2">"orientation"</span><span class="p">:</span> <span class="s2">"h"</span><span class="p">,</span>
+         <span class="s2">"x"</span><span class="p">:</span> <span class="p">[</span><span class="mi">68000</span><span class="p">,</span> <span class="mi">12000</span><span class="p">],</span> <span class="s2">"y"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"flask"</span><span class="p">,</span> <span class="s2">"django"</span><span class="p">]}]</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Star 数对比"</span><span class="p">,</span> <span class="s2">"xaxis"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"stars"</span><span class="p">}}</span>
+
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"bar"</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"x"</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"y"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"系列数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s2">"| 数据点:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"x"</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"标题:"</span><span class="p">,</span> <span class="n">layout</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="s2">"| 轴标题:"</span><span class="p">,</span> <span class="n">layout</span><span class="p">[</span><span class="s2">"xaxis"</span><span class="p">][</span><span class="s2">"title"</span><span class="p">])</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>系列数: 1 | 数据点: 2
+标题: Star 数对比 | 轴标题: stars
+</code></pre>
 <hr>
 
     <div class="blk hw">

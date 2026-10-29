@@ -753,6 +753,52 @@ print("  说明：403 不要重试（配额已空，重试只会更糟），网�
 
 ---
 
+### 示例 7：查询串与响应的最小闭环
+
+没有网也能验证「发什么、收什么」：把 URL 与响应都写成字符串，先测解析，再谈请求。
+
+```python
+from urllib.parse import urlencode, parse_qs, urlparse
+
+params = {"q": "python 课程", "sort": "stars", "per_page": 5}
+url = "https://api.example.com/search?" + urlencode(params)
+print("请求 URL:", url)
+print("解析回来:", parse_qs(urlparse(url).query)["q"][0])
+print("参数个数:", len(parse_qs(urlparse(url).query)))
+```
+
+运行结果：
+
+```text
+请求 URL: https://api.example.com/search?q=python+%E8%AF%BE%E7%A8%8B&sort=stars&per_page=5
+解析回来: python 课程
+参数个数: 3
+```
+
+### 示例 8：Plotly 的 data 结构长什么样
+
+Plotly 的图本质就是一个字典列表；先在本地把结构拼对、断言长度一致，再交给库去画。
+
+```python
+data = [{"type": "bar", "orientation": "h",
+         "x": [68000, 12000], "y": ["flask", "django"]}]
+layout = {"title": "Star 数对比", "xaxis": {"title": "stars"}}
+
+assert data[0]["type"] == "bar"
+assert len(data[0]["x"]) == len(data[0]["y"])
+print("系列数:", len(data), "| 数据点:", len(data[0]["x"]))
+print("标题:", layout["title"], "| 轴标题:", layout["xaxis"]["title"])
+```
+
+运行结果：
+
+```text
+系列数: 1 | 数据点: 2
+标题: Star 数对比 | 轴标题: stars
+```
+
+---
+
 ## 四、动手练习
 
 ### 基础档

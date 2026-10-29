@@ -40,6 +40,12 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#示例-4-统一日志配置模板-logging_setup-py">示例 4：统一日志配置模板（logging_setup.py）</a>
 <a class="lv3" href="#示例-5-陌生项目结构速读-explorer-py">示例 5：陌生项目结构速读（explorer.py）</a>
 <a class="lv3" href="#示例-6-三期项目各抽一个纯函数-用-assert-自测-three_proje">示例 6：三期项目各抽一个纯函数，用 assert 自测（three_projects_core.py）</a>
+<a class="lv3" href="#示例-7-命令行入口-argparse-三件套">示例 7：命令行入口：argparse 三件套</a>
+<a class="lv3" href="#示例-8-用-dataclass-管项目配置">示例 8：用 dataclass 管项目配置</a>
+<a class="lv3" href="#示例-9-logging-比-print-好在哪">示例 9：logging 比 print 好在哪</a>
+<a class="lv3" href="#示例-10-用-perf_counter-比较两种写法">示例 10：用 perf_counter 比较两种写法</a>
+<a class="lv3" href="#示例-11-把-现在几点-变成参数-测试才稳定">示例 11：把「现在几点」变成参数，测试才稳定</a>
+<a class="lv3" href="#示例-12-统计一个项目有多少行代码">示例 12：统计一个项目有多少行代码</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
     <div class="sblk">
@@ -771,6 +777,155 @@ transition:opacity .18s;z-index:60}
 <li><strong><code>rects_hit</code> 的四个不等号方向最容易写反</strong>：<code>a[0] &lt; b[0] + b[2]</code>（a 的左 &lt; b 的右）与 <code>a[0] + a[2] &gt; b[0]</code>（a 的右 &gt; b 的左）<strong>必须同时成立</strong>才算横向重叠，纵向同理。少写一个就把「相交」判成「只要挨着就算」，游戏里表现为「子弹离外星人还有半个身位就爆炸」。</li>
 <li><strong>把 <code>yearly_max</code> 的 <code>try/except</code> 去掉会怎样</strong>：<code>int(None)</code> 抛 <code>TypeError</code>、<code>int("")</code> 抛 <code>ValueError</code>，整个函数在第 4 行数据上崩掉——<strong>而这份数据里确实有两个坏值</strong>。这正是单元 16 讲的「真实数据有缺失」，也是「测试必须覆盖空值」的原因：<code>assert yearly_max([]) == {}</code> 这一条就专门守这个边界。</li>
 </ol>
+<hr>
+<h3 id="示例-7-命令行入口-argparse-三件套">示例 7：命令行入口：argparse 三件套</h3>
+<p>三个项目最终都要「一条命令跑起来」：子命令 + 参数 + 默认值。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shlex</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="s2">"ledger"</span><span class="p">)</span>
+<span class="n">sub</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s2">"cmd"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">sub</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">"add"</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"amount"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--note"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
+<span class="n">sub</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s2">"total"</span><span class="p">)</span>
+
+<span class="n">ns</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"add 35.5 --note 午饭"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"子命令:"</span><span class="p">,</span> <span class="n">ns</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="s2">"| 金额:"</span><span class="p">,</span> <span class="n">ns</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">"| 备注:"</span><span class="p">,</span> <span class="n">ns</span><span class="o">.</span><span class="n">note</span><span class="p">)</span>
+<span class="n">ns2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"total"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"total 有没有 note 字段:"</span><span class="p">,</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ns2</span><span class="p">,</span> <span class="s2">"note"</span><span class="p">))</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>子命令: add | 金额: 35.5 | 备注: 午饭
+total 有没有 note 字段: False
+</code></pre>
+<h3 id="示例-8-用-dataclass-管项目配置">示例 8：用 dataclass 管项目配置</h3>
+<p>配置散在十几个变量里最容易写错；收进一个对象，默认值与校验都在一起。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
+    <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"data"</span>
+    <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"page_size 必须为正"</span><span class="p">)</span>
+
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"python"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两个实例共用同一个 tags 吗:"</span><span class="p">,</span> <span class="n">Config</span><span class="p">()</span><span class="o">.</span><span class="n">tags</span> <span class="ow">is</span> <span class="n">c</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">Config</span><span class="p">(</span><span class="n">page_size</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"拦住了:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>Config(data_dir='data', page_size=20, tags=['python'])
+两个实例共用同一个 tags 吗: False
+拦住了: page_size 必须为正
+</code></pre>
+<h3 id="示例-9-logging-比-print-好在哪">示例 9：logging 比 print 好在哪</h3>
+<p>同一个 logger 换一个 handler 就能进文件或控制台，格式统一、级别可调。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">buf</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">"</span><span class="si">%(levelname)s</span><span class="s2"> </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">))</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"app"</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"开始导入"</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">"第 3 行缺少日期，已跳过"</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"完成，共 42 条"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>INFO 开始导入
+WARNING 第 3 行缺少日期，已跳过
+INFO 完成，共 42 条
+</code></pre>
+<h3 id="示例-10-用-perf_counter-比较两种写法">示例 10：用 perf_counter 比较两种写法</h3>
+<p>「哪个快」不靠感觉：同一份数据跑两种实现，比耗时，也比结果是否一致。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20001</span><span class="p">))</span>
+
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+<span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">t3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+<span class="c1"># 耗时不要直接写进结论：同一台机器跑两次都能差一倍，只报「谁更快」也会翻车。</span>
+<span class="c1"># 正确做法：跑 5 次取中位数再比——这里只验证两种写法结果一致。</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"条数:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="s2">"| 结果一致:"</span><span class="p">,</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两种写法的结果集合相同:"</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"耗时需多次取中位数，别用单次结果下结论"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>条数: 6666 | 结果一致: True
+两种写法的结果集合相同: True
+耗时需多次取中位数，别用单次结果下结论
+</code></pre>
+<h3 id="示例-11-把-现在几点-变成参数-测试才稳定">示例 11：把「现在几点」变成参数，测试才稳定</h3>
+<p>依赖 datetime.now() 的代码没法断言；把时间当参数传进来，测试就固定了（这比 mock 更省事）。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greeting</span><span class="p">(</span><span class="n">now</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">now</span> <span class="ow">or</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s2">"上午好"</span> <span class="k">if</span> <span class="n">now</span><span class="o">.</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="mi">12</span> <span class="k">else</span> <span class="s2">"下午好"</span>
+
+
+<span class="k">assert</span> <span class="n">greeting</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span><span class="p">))</span> <span class="o">==</span> <span class="s2">"上午好"</span>
+<span class="k">assert</span> <span class="n">greeting</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="s2">"下午好"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">greeting</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">30</span><span class="p">)),</span> <span class="s2">"/"</span><span class="p">,</span> <span class="n">greeting</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"两条断言通过：把时间注入进来就能测"</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>上午好 / 下午好
+两条断言通过：把时间注入进来就能测
+</code></pre>
+<h3 id="示例-12-统计一个项目有多少行代码">示例 12：统计一个项目有多少行代码</h3>
+<p>接手陌生项目第一步：数清楚规模，别上来就读。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="n">NL</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>          <span class="c1"># 避免在示例代码里出现真正的换行转义，读起来也更直观</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"main.py"</span><span class="p">:</span> <span class="n">NL</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">"print(1)"</span><span class="p">,</span> <span class="s2">"print(2)"</span><span class="p">])</span> <span class="o">+</span> <span class="n">NL</span><span class="p">,</span>
+         <span class="s2">"utils.py"</span><span class="p">:</span> <span class="n">NL</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">"# 工具"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"def f():"</span><span class="p">,</span> <span class="s2">"    return 1"</span><span class="p">])</span> <span class="o">+</span> <span class="n">NL</span><span class="p">,</span>
+         <span class="s2">"README.md"</span><span class="p">:</span> <span class="n">NL</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">"# 项目"</span><span class="p">,</span> <span class="s2">"说明"</span><span class="p">])</span> <span class="o">+</span> <span class="n">NL</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+<span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">root</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".py"</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="n">ln</span> <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">)]</span>
+    <span class="n">total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="si">}</span><span class="s2"> 行（有效 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="si">}</span><span class="s2"> 行）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"python 有效代码合计:"</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-text"><span class="cl">示例</span>main.py: 2 行（有效 2 行）
+utils.py: 4 行（有效 2 行）
+python 有效代码合计: 4
+</code></pre>
 <hr>
 
     <div class="blk hw">

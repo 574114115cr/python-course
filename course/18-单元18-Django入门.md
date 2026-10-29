@@ -670,6 +670,65 @@ def topic(request, topic_id):
 
 ---
 
+### 示例 9：模板继承其实就是「块替换」
+
+Django 的 block 标签可以先用字典模拟：子模板只覆盖它重写的那几块。
+
+```python
+base = {"title": "学习笔记", "content": "（默认内容）", "footer": "© 2026"}
+child = {"title": "全部笔记"}
+
+page = dict(base)
+page.update(child)                 # 子模板只覆盖自己写的块
+print("标题:", page["title"])
+print("正文是否继承:", page["content"] == base["content"])
+print("页脚是否继承:", page["footer"] == base["footer"])
+print("合并后键数:", len(page))
+```
+
+运行结果：
+
+```text
+标题: 全部笔记
+正文是否继承: True
+页脚是否继承: True
+合并后键数: 3
+```
+
+### 示例 10：模型字段与 asdict
+
+模型 = 字段定义 + 约束；用 dataclass 写一遍，就能在没装 Django 的机器上测它的序列化。
+
+```python
+from dataclasses import dataclass, field, asdict
+from datetime import datetime
+
+
+@dataclass
+class Entry:
+    id: int
+    text: str
+    created: datetime = field(default_factory=lambda: datetime(2026, 10, 29, 9, 0))
+    owner: str = "alice"
+
+
+e = Entry(1, "第一条笔记")
+d = asdict(e)
+print(d)
+print("字段数:", len(d), "| owner:", d["owner"])
+print("日期仍是 datetime 对象:", isinstance(d["created"], datetime))
+```
+
+运行结果：
+
+```text
+{'id': 1, 'text': '第一条笔记', 'created': datetime.datetime(2026, 10, 29, 9, 0), 'owner': 'alice'}
+字段数: 4 | owner: alice
+日期仍是 datetime 对象: True
+```
+
+---
+
 ## 四、动手练习
 
 ### 基础档
