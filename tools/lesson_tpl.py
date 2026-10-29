@@ -193,9 +193,18 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
 .done-bar input{width:19px;height:19px;accent-color:var(--p2);cursor:pointer}
 .done-bar a{margin-left:auto;font-size:13.5px}
 
+/* ── 本节讲解视频（PIL 逐帧合成，深色底与站点深色模式同源）── */
+.vidblk{padding:16px 18px 18px}
+.vidblk h3{margin:0 0 12px}
+.vidblk video{width:100%;max-width:860px;display:block;border-radius:12px;
+background:#0b1220;box-shadow:0 8px 26px rgba(10,20,40,.26);
+/* video 内的 fallback 文字：底色恒为深蓝，字色不能跟随主题，否则深底深字 */
+color:#dce6f2}
+.vidblk .vnote{margin:10px 0 0;font-size:13.5px;color:var(--muted,#5f7183)}
+
 /* ── 打印：只留正文，去掉侧栏/导航/交互件 ── */
 @media print{
-  .top,.side,.done-bar,.pn,.lc-ck,.tools{display:none!important}
+  .top,.side,.done-bar,.pn,.lc-ck,.tools,.vidblk{display:none!important}
   body{background:#fff}
   .layout{display:block;padding:0}
   .main{padding:0;max-width:none}
@@ -443,6 +452,11 @@ UNIT_TITLE = {
 
 # 每单元属于哪个阶段（用于目录页分组标题）
 STAGE_OF = {u: (1 if u <= 11 else 2) for u in UNIT_TITLE}
+
+# 带讲解视频的课节：课节号 -> (视频, 封面)，路径相对 web/lessons/。
+# 视频由 tools/make_lesson_video.py 生成（PIL 逐帧合成 → libx264）。
+# 不进 SW 预缓存：1.6 MB 的视频按需加载就好，别占离线配额。
+LESSON_VIDEOS = {1: ("../media/lesson01.mp4", "../media/lesson01-poster.jpg")}
 STAGE_NAME = {
     1: "阶段 1 · 语法基础（教材第 1–11 章）",
     2: "阶段 2 · 项目实践（教材第 12–20 章）",
@@ -574,6 +588,18 @@ def lesson_page(no, total, unit, week, title, goal, live, hw, body,
     else:
         review_html = ''
 
+    # 讲解视频块（目前只有第 1 节有；有视频的课节自动带上）
+    vid = LESSON_VIDEOS.get(no)
+    video_html = ''
+    if vid:
+        video_html = (f'<div class="blk vidblk" id="video">'
+                      f'<h3>◆ 本节讲解视频（约 1 分钟 · 无声带字幕）</h3>'
+                      f'<video controls preload="metadata" playsinline '
+                      f'poster="{vid[1]}"><source src="{vid[0]}" type="video/mp4">'
+                      f'你的浏览器不支持 video 标签，请直接看下面的图文讲解。</video>'
+                      f'<p class="vnote">节奏与正文一致：先分清解释器、终端、编辑器三个角色，'
+                      f'再跟着敲 hello.py。声音版以后会补。</p></div>')
+
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -628,6 +654,8 @@ transition:opacity .18s;z-index:60}}
       <p class="goal">{html.escape(goal)}</p>
     </div>
     {gate_banner}
+
+    {video_html}
 
     <div class="sched">
       <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
