@@ -273,6 +273,23 @@ cv.id='neuronCv';cv.setAttribute('aria-hidden','true');
 if(document.body)document.body.insertBefore(cv,document.body.firstChild);
 else document.addEventListener('DOMContentLoaded',function(){
   document.body.insertBefore(cv,document.body.firstChild);});
+// canvas 是 fixed 定位，天然绘制在普通流内容之上——正文、视频都会压出线条。
+// 把 body 的直系内容容器抬一层（z-index:1），canvas 就只在卡片缝隙和页边透出。
+// 只动 position:static 且没定过 z-index 的元素：fixed/absolute 的一碰就跑位。
+function lift(){try{
+  var ks=document.body.children,i,el,cs;
+  for(i=0;i<ks.length;i++){
+    el=ks[i];
+    if(el===cv||el.id==='nrBtn'||el.id==='nrPanel')continue;
+    if(el.tagName==='SCRIPT'||el.tagName==='STYLE'||el.tagName==='LINK')continue;
+    cs=getComputedStyle(el);
+    if(cs.position!=='static'||cs.zIndex!=='auto')continue;
+    el.style.position='relative';el.style.zIndex='1';
+  }
+}catch(e){}}
+if(document.body)lift();
+else document.addEventListener('DOMContentLoaded',lift);
+window.addEventListener('load',lift);   // 兜住 JS 后插入的顶层节点
 var ctx=cv.getContext('2d');
 var W=0,H=0,nodes=[],mx=-1,my=-1,hasM=false,raf=0;
 

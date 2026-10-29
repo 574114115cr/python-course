@@ -126,7 +126,7 @@ transition:opacity .18s;z-index:60}
     </div>
     
 
-    <div class="blk vidblk" id="video"><h3>◆ 本节讲解视频（约 1 分钟 · 无声带字幕）</h3><video controls preload="metadata" playsinline poster="../media/lesson01-poster.jpg"><source src="../media/lesson01.mp4" type="video/mp4">你的浏览器不支持 video 标签，请直接看下面的图文讲解。</video><p class="vnote">节奏与正文一致：先分清解释器、终端、编辑器三个角色，再跟着敲 hello.py。声音版以后会补。</p></div>
+    <div class="blk vidblk" id="video"><h3>◆ 本节讲解视频（约 1 分钟 · 含语音讲解）</h3><video controls preload="metadata" playsinline poster="../media/lesson01-poster.jpg"><source src="../media/lesson01.mp4" type="video/mp4">你的浏览器不支持 video 标签，请直接看下面的图文讲解。</video><p class="vnote">有配音，点开就有声音。节奏与正文一致：先分清解释器、终端、编辑器三个角色，再跟着敲 hello.py。</p></div>
 
     <div class="sched">
       <a class="sc" href="#recap"><b>10</b><span>复盘 min</span></a>
@@ -434,6 +434,23 @@ cv.id='neuronCv';cv.setAttribute('aria-hidden','true');
 if(document.body)document.body.insertBefore(cv,document.body.firstChild);
 else document.addEventListener('DOMContentLoaded',function(){
   document.body.insertBefore(cv,document.body.firstChild);});
+// canvas 是 fixed 定位，天然绘制在普通流内容之上——正文、视频都会压出线条。
+// 把 body 的直系内容容器抬一层（z-index:1），canvas 就只在卡片缝隙和页边透出。
+// 只动 position:static 且没定过 z-index 的元素：fixed/absolute 的一碰就跑位。
+function lift(){try{
+  var ks=document.body.children,i,el,cs;
+  for(i=0;i<ks.length;i++){
+    el=ks[i];
+    if(el===cv||el.id==='nrBtn'||el.id==='nrPanel')continue;
+    if(el.tagName==='SCRIPT'||el.tagName==='STYLE'||el.tagName==='LINK')continue;
+    cs=getComputedStyle(el);
+    if(cs.position!=='static'||cs.zIndex!=='auto')continue;
+    el.style.position='relative';el.style.zIndex='1';
+  }
+}catch(e){}}
+if(document.body)lift();
+else document.addEventListener('DOMContentLoaded',lift);
+window.addEventListener('load',lift);   // 兜住 JS 后插入的顶层节点
 var ctx=cv.getContext('2d');
 var W=0,H=0,nodes=[],mx=-1,my=-1,hasM=false,raf=0;
 

@@ -27,6 +27,17 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 配音时间轴（可选）：有 make_lesson_audio 产出的音轨时，字幕起止和各幕时长
+# 都由真实语音时长决定；没有就退回写死的节奏，视频照常生成（静音）。
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import make_lesson_audio as _NA
+    NARR = _NA.load()
+    AUDIO_WAV = _NA.OUT_WAV
+except Exception:
+    _NA, NARR, AUDIO_WAV = None, None, None
+
 W, H, FPS = 1280, 720, 30
 OUT_DIR = os.path.join(ROOT, "web", "media")
 OUT_MP4 = os.path.join(OUT_DIR, "lesson01.mp4")
@@ -188,6 +199,38 @@ def foot(text):
     return im
 
 
+# ── 配音驱动的字幕 / 幕长 ───────────────────────────────────────
+def _tl(idx):
+    """该幕每句的 (开始, 时长)；无配音时返回 None。"""
+    if NARR and idx < len(NARR["scenes"]):
+        return [(x["t"], x["d"]) for x in NARR["scenes"][idx]["subs"]]
+    return None
+
+
+def sub_els(idx, y=646, base=.25, step=1.7, with_bar=True):
+    """按配音时间轴铺字幕条：说到哪句亮哪句，说完淡出。
+
+    with_bar=False 用于片头——那里已有大标题和副标题，只念不重复出字幕条。
+    """
+    texts = _NA.sub_texts(idx) if _NA else []
+    tl = _tl(idx)
+    els = []
+    if not with_bar:
+        return els
+    for i, s in enumerate(texts):
+        st, du = (tl[i][0], tl[i][1]) if tl and i < len(tl) else (base + i * step, step)
+        out = None if i == len(texts) - 1 else st + du + .12
+        els.append(el(foot(s), 0, y, st, .45, out=out))
+    return els
+
+
+def scene_dur(idx, base):
+    """幕长取「动画需要的时间」和「念完需要的时间」里更大的那个。"""
+    if NARR and idx < len(NARR["scenes"]):
+        return max(base, NARR["scenes"][idx]["dur"])
+    return base
+
+
 # ── 背景：神经元 ────────────────────────────────────────────────
 def make_bg():
     im = Image.new("RGB", (W, H))
@@ -336,7 +379,7 @@ def scene_intro():
         el(text_block("90 分钟 · 先把三个角色分清：编辑器、终端、解释器",
                       font(F_REG, 29), C_DIM, 1040), 130, 410, .7, .6, "up"),
     ]
-    return 4.6, els, None
+    return scene_dur(0, 4.6), els, None
 
 
 # ══════════════ 第二幕：解释器 ══════════════
@@ -383,13 +426,8 @@ def scene_interp():
                 d.polygon([(x1, yy), (x1 - 10, yy - 7), (x1 - 10, yy + 7)],
                          fill=col + (a,))
 
-    subs = ["先记住一件事：代码文件自己不会跑。",
-            "解释器才是那个真正干活的程序。",
-            "所以第一步，一定是把 Python 装好。"]
-    for i, s in enumerate(subs):
-        els.append(el(foot(s), 0, 640, .3 + i * 1.7, .45,
-                      out=None if i == len(subs) - 1 else 2.0 + i * 1.7))
-    return 11.4, els, arrows
+    els += sub_els(1, y=640, base=.3, step=1.7)
+    return scene_dur(1, 11.4), els, arrows
 
 
 # ══════════════ 第三幕：终端 ══════════════
@@ -429,14 +467,8 @@ def scene_term():
         if p < 1:
             cursor(d, cx, cy, lt)
 
-    for i, s in enumerate([
-        "装没装好，用 python --version 一句话验证。",
-        "看到 Python 3.12.x，就说明可以开工了。",
-        "cd 进入目录，dir 或 ls 看看里面有什么。",
-    ]):
-        els.append(el(foot(s), 0, 646, .25 + i * 1.7, .45,
-                      out=None if i == 2 else 1.95 + i * 1.7))
-    return 11.2, els, draw
+    els += sub_els(2, y=646, base=.25, step=1.7)
+    return scene_dur(2, 11.2), els, draw
 
 
 # ══════════════ 第四幕：VS Code ══════════════
@@ -488,13 +520,8 @@ def scene_vscode():
         d.polygon([(cx2 - 5, cy2 - 9), (cx2 - 5, cy2 + 9), (cx2 + 9, cy2)],
                   fill=C_GR + (240,))
 
-    subs = ["先装 VS Code，再在扩展里搜 Python。",
-            "装完扩展，右上角就多了一个 ▶ 运行按钮。",
-            "红波浪线是好事——它替你提前发现错。"]
-    for i, s in enumerate(subs):
-        els.append(el(foot(s), 0, 646, .25 + i * 1.7, .45,
-                      out=None if i == len(subs) - 1 else 1.95 + i * 1.7))
-    return 11.2, els, draw
+    els += sub_els(3, y=646, base=.25, step=1.7)
+    return scene_dur(3, 11.2), els, draw
 
 
 # ══════════════ 第五幕：跟着敲 ══════════════════════════════════
@@ -546,13 +573,8 @@ def scene_practice():
             sub.putalpha(sub.getchannel("A").point(lambda v: int(v * q)))
             img.alpha_composite(sub, (obox[0], obox[1] + int((1 - q) * 20)))
 
-    subs = ["新建 hello.py，先写这三行。",
-            "f 开头 + 花括号 = 把变量塞进字符串。",
-            "故意少一个右括号：报错会明确指到第 3 行。"]
-    for i, s in enumerate(subs):
-        els.append(el(foot(s), 0, 646, .25 + i * 2.5, .45,
-                      out=None if i == len(subs) - 1 else 2.75 + i * 2.5))
-    return 13.0, els, draw
+    els += sub_els(4, y=646, base=.25, step=2.5)
+    return scene_dur(4, 13.0), els, draw
 
 
 # ══════════════ 第六幕：小结 ══════════════
@@ -578,18 +600,21 @@ def scene_summary():
     nxt.alpha_composite(t2, (30, 50))
     els.append(el(nxt, 110, 504, 3.6, .7, "up"))
 
-    subs = ["这三条都能点头，就可以往下走了。",
-            "任何一条卡住，回到对应小节重看一遍。",
-            "下一课我们给数据贴上名字。"]
-    for i, s in enumerate(subs):
-        els.append(el(foot(s), 0, 646, .3 + i * 2.0, .45,
-                      out=None if i == len(subs) - 1 else 2.3 + i * 2.0))
-    return 11.5, els, None
+    els += sub_els(5, y=646, base=.3, step=2.0)
+    return scene_dur(5, 11.5), els, None
+
+
+# 各幕动画的「设计时长」：配音更长时按比例把动画放慢，避免画面演完干等
+BASE_DUR = [4.6, 11.4, 11.2, 11.2, 13.0, 11.5]
 
 
 def build_scenes():
-    return [scene_intro(), scene_interp(), scene_term(),
-            scene_vscode(), scene_practice(), scene_summary()]
+    sc = [scene_intro(), scene_interp(), scene_term(),
+          scene_vscode(), scene_practice(), scene_summary()]
+    out = []
+    for i, (dur, els, cus) in enumerate(sc):
+        out.append((dur, els, cus, dur / BASE_DUR[i]))
+    return out
 
 
 # ── HUD ─────────────────────────────────────────────────────────
@@ -617,7 +642,7 @@ def render():
     if not os.path.isdir(OUT_DIR):
         os.makedirs(OUT_DIR, exist_ok=True)
     scenes = build_scenes()
-    total = sum(d for d, _, _ in scenes)
+    total = sum(d for d, _, _, _ in scenes)
     nframes = int(round(total * FPS))
     print("时长 %.1fs / %d 帧 / %d 幕" % (total, nframes, len(scenes)))
 
@@ -638,9 +663,19 @@ def render():
         return 1
 
     cmd = [exe, "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
-           "-s", "%dx%d" % (W, H), "-r", str(FPS), "-i", "-",
-           "-an", "-c:v", "libx264", "-preset", "medium", "-crf", "26",
-           "-pix_fmt", "yuv420p", "-movflags", "+faststart", OUT_MP4]
+           "-s", "%dx%d" % (W, H), "-r", str(FPS), "-i", "-"]
+    if NARR:
+        cmd += ["-i", AUDIO_WAV]
+    cmd += ["-map", "0:v:0", "-c:v", "libx264", "-preset", "medium", "-crf", "26",
+            "-pix_fmt", "yuv420p"]
+    if NARR:
+        # 音轨长度由时间轴算出，画面只会更长（幕长取 max），所以不会截断语音
+        cmd += ["-map", "1:a:0", "-c:a", "aac", "-b:a", "96k", "-shortest"]
+    else:
+        cmd += ["-an"]
+    cmd += ["-movflags", "+faststart", OUT_MP4]
+    print("配音：" + (("%s · %.1fs" % (NARR["voice"], NARR["total"])) if NARR
+                      else "无（静音，跑 make_lesson_audio.py 可加旁白）"))
     proc = subprocess.Popen(cmd, stdin=subprocess.PIPE,
                             stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
@@ -649,9 +684,9 @@ def render():
         for f in range(nframes):
             t = f / FPS
             acc = 0.0
-            for si, (dur, els, cus) in enumerate(scenes):
+            for si, (dur, els, cus, scale) in enumerate(scenes):
                 if t < acc + dur or si == len(scenes) - 1:
-                    lt = t - acc
+                    lt = (t - acc) / scale      # 动画时间按配音拉长的比例放慢
                     bidx = si
                     break
                 acc += dur

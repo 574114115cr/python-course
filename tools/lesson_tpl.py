@@ -194,7 +194,9 @@ background:var(--card);border:1px solid var(--line);border-radius:12px;flex-wrap
 .done-bar a{margin-left:auto;font-size:13.5px}
 
 /* ── 本节讲解视频（PIL 逐帧合成，深色底与站点深色模式同源）── */
-.vidblk{padding:16px 18px 18px}
+/* position/z-index：不依赖 JS 也要盖住全站那层 fixed 的神经元 canvas，
+   否则连线会划在视频画面上 */
+.vidblk{padding:16px 18px 18px;position:relative;z-index:1}
 .vidblk h3{margin:0 0 12px}
 .vidblk video{width:100%;max-width:860px;display:block;border-radius:12px;
 background:#0b1220;box-shadow:0 8px 26px rgba(10,20,40,.26);
@@ -593,12 +595,12 @@ def lesson_page(no, total, unit, week, title, goal, live, hw, body,
     video_html = ''
     if vid:
         video_html = (f'<div class="blk vidblk" id="video">'
-                      f'<h3>◆ 本节讲解视频（约 1 分钟 · 无声带字幕）</h3>'
+                      f'<h3>◆ 本节讲解视频（约 1 分钟 · 含语音讲解）</h3>'
                       f'<video controls preload="metadata" playsinline '
                       f'poster="{vid[1]}"><source src="{vid[0]}" type="video/mp4">'
                       f'你的浏览器不支持 video 标签，请直接看下面的图文讲解。</video>'
-                      f'<p class="vnote">节奏与正文一致：先分清解释器、终端、编辑器三个角色，'
-                      f'再跟着敲 hello.py。声音版以后会补。</p></div>')
+                      f'<p class="vnote">有配音，点开就有声音。节奏与正文一致：先分清解释器、'
+                      f'终端、编辑器三个角色，再跟着敲 hello.py。</p></div>')
 
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
