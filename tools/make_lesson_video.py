@@ -18,6 +18,7 @@
 """
 
 import argparse
+import json
 import math
 import os
 import random
@@ -617,60 +618,89 @@ def build_scenes():
     return out
 
 
-# ── 讲解员：DeepSeek 女仆鲸鱼娘（立绘贴片）──────────────────────
-# 右侧 950 之后是讲解员栏，正文区一律不越过这条线（见各幕 box）。
-# 立绘用 ImageGen 按官方形象生成（tools/assets/whale-girl.png，透明底），
-# 动画三件套：整体浮动、轻微摇摆、说话时按语音包络弹跳 + 头侧音波——
-# 立绘的嘴太小画不动口型，用「跟着声音蹦」表达在说话，这是虚拟主播的常规做法。
-WHALE_X, WHALE_Y, WHALE_W, WHALE_H = 972, 336, 274, 304
-CHAR_PATH = os.path.join(ROOT, "tools", "assets", "whale-girl.png")
-CHAR_H = 280            # 立绘显示高度
-# 立绘原图里嘴的中心（视觉实测：微笑弧线中心，原图 523×620；两眼 y≈284）
-MOUTH_ASSET = (252, 332)
-MOUTH_ASSET_H = 620.0
+# ── 讲解员：DeepSeek 女仆鲸鱼娘（多动作立绘）────────────────────
+# 13 张姿势素材由 tools/make_pose_assets.py 产出（已抠背景、脸尺度归一化），
+# poses.json 记每张的脸/嘴锚点。定位靠「脸对齐屏幕固定点」：各图头身比
+# 略有差别，若按脚底或画布中心对齐，换姿势时头会跳几十像素、视线发飘。
+POSE_DIR = os.path.join(ROOT, "tools", "assets", "pose")
+CHAR_H = 280            # 立绘显示高度（角色本体，换算与单图时代一致）
+# 脸在帧坐标系里的屏幕锚点：单图时代 523×620 的图在 (252,292) 有脸，
+# 显示后落到这里。所有姿势都往这里对。
+FACE_ANCHOR = (1105.0, 492.0)
+_ROT = (-4, -2, 0, 2, 4)     # 摇摆档位（±4°，比单图时代的 ±6° 收敛些）
+_POSE_META = None
 _CHAR = {}
 
+# 每幕的姿势时间表（幕内真实秒 → 姿势）。切换点落在两句台词之间的留白，
+# 时间取自 make_lesson_audio.py --check 的句子起止。
+POSE_CUES = {
+    0: [(0.0, "wave")],                                        # 片头打招呼
+    1: [(0.0, "guide"), (4.65, "present"), (8.35, "fist")],    # 解释器 → 该动手了
+    2: [(0.0, "pointdown"), (4.85, "nod"), (9.75, "guide")],   # 终端 → 验证/进目录
+    3: [(0.0, "present"), (5.00, "guide"), (8.95, "shrug")],   # VS Code → 红波浪线别怕
+    4: [(0.0, "think"), (4.35, "wow"), (9.05, "confuse")],     # 跟敲 → 强调 → 报错
+    5: [(0.0, "nod"), (4.05, "guide"), (8.35, "wave")],        # 小结 → 告别
+}
 
-def char_frames():
-    """按显示高度缩放立绘，预生成 ±6° 摇摆帧（逐帧 rotate 太浪费）。
 
-    立绘先贴到带透明边距的统一画布里再 rotate(expand=False)：
-    expand 会让每个角度的帧尺寸都不一样，之后无论怎么对齐，
-    脚底都会随角度漂移（悬浮 / 下沉）。
-    """
-    if "frames" not in _CHAR:
-        im = Image.open(CHAR_PATH).convert("RGBA")
-        w = max(1, round(im.width * CHAR_H / im.height))
+def pose_meta():
+    global _POSE_META
+    if _POSE_META is None:
+        with open(os.path.join(POSE_DIR, "poses.json"), encoding="utf-8") as f:
+            _POSE_META = json.load(f)
+    return _POSE_META
+
+
+def pose_frames(name):
+    """按显示高度缩放某姿势、预生成摇摆帧（懒加载缓存，全片约 8 个姿势）。"""
+    if name not in _CHAR:
+        m = pose_meta()[name]
+        im = Image.open(os.path.join(POSE_DIR, m["file"])).convert("RGBA")
+        sc = CHAR_H / float(im.height)
+        w = max(1, round(im.width * sc))
         im = im.resize((w, CHAR_H), Image.LANCZOS)
-        pad = 28
+        pad = 18                      # 旋转出界的余量（资产自带 12px）
         cv = layer(w + pad * 2, CHAR_H + pad * 2)
         cv.alpha_composite(im, (pad, pad))
-        frames = {a: cv.rotate(a, resample=Image.BICUBIC)
-                  for a in range(-6, 7, 2)}
-        _CHAR["frames"] = (im, frames, pad)
-    return _CHAR["frames"]
+        frames = {a: cv.rotate(a, resample=Image.BICUBIC) for a in _ROT}
+        # 帧内锚点（未旋转坐标系）
+        _CHAR[name] = (frames, pad,
+                       (m["face"][0] * sc + pad, m["face"][1] * sc + pad),
+                       (m["mouth"][0] * sc + pad, m["mouth"][1] * sc + pad))
+    return _CHAR[name]
 
 
-def draw_char(canvas, t, mouth, dx=0):
-    im, frames, pad = char_frames()
+def pose_at(bidx, rel):
+    """当前该用哪个姿势，以及进入这个姿势多久了。"""
+    cues = POSE_CUES.get(bidx) or POSE_CUES[0]
+    name, since = cues[0][1], rel
+    for t0, p in cues:
+        if rel >= t0:
+            name, since = p, rel - t0
+    return name, since
+
+
+def draw_char(canvas, t, mouth, bidx, rel, dx=0):
+    name, since = pose_at(bidx, rel)
+    frames, pad, (fx, fy), (mx0, my0) = pose_frames(name)
     # 说话时摇摆快而小、还带小幅蹦跳；安静时慢摆
     if mouth > .12:
-        ang = 2 * int(round(math.sin(t * 6.5) * 2))
+        ang = _ROT[2 + int(round(math.sin(t * 6.5) * 2))]
         hop = -abs(math.sin(t * 9)) * 6 * mouth
     else:
-        ang = 2 * int(round(math.sin(t * 1.4) * 3))
+        ang = _ROT[2 + int(round(math.sin(t * 1.4) * 1.6))]
         hop = 0.0
-    cim = frames.get(ang, frames[0])
+    # 换姿势后 0.35 秒补一次小弹跳：切换不生硬，像换了个动作站稳
+    if since < .35:
+        hop -= abs(math.sin(since / .35 * math.pi)) * 9
+    cim = frames.get(ang, frames[_ROT[2]])
     bob = math.sin(t * 1.7) * 4
-    # 帧尺寸统一：脚底 = 帧内 (pad + CHAR_H)，对齐到讲解员栏底边
-    x = int(WHALE_X + dx + WHALE_W / 2.0 - cim.width / 2.0)
-    y = int(WHALE_Y + WHALE_H - CHAR_H - pad + bob + hop)
+    # 脸对齐屏幕锚点：帧尺寸统一，位移直接相减即可
+    x = int(round(FACE_ANCHOR[0] - fx + dx))
+    y = int(round(FACE_ANCHOR[1] - fy + bob + hop))
     canvas.alpha_composite(cim, (x, y))
-    # 口型：在原画嘴的位置叠一个随语音开合的小嘴（张嘴露舌，闭嘴微笑线）。
-    # 帧是旋转过的，嘴的锚点要跟帧一起转（角度 ≤6°，椭圆本身不转，误差 <2px）。
-    sc = CHAR_H / MOUTH_ASSET_H
-    mx0 = pad + MOUTH_ASSET[0] * sc
-    my0 = pad + MOUTH_ASSET[1] * sc
+    # 口型：说话时在嘴锚点叠张开的口腔+舌（原画自带微笑线，闭嘴不画）
+    # 帧是旋转过的，锚点要跟帧一起转（绕帧中心）
     th = math.radians(ang)
     cxf, cyf = cim.width / 2.0, cim.height / 2.0
     ddx, ddy = mx0 - cxf, my0 - cyf
@@ -679,18 +709,15 @@ def draw_char(canvas, t, mouth, dx=0):
     mw = 14.0
     oh = 1.5 + mouth * 7.5
     d2 = ImageDraw.Draw(canvas)
-    # 新立绘自带微笑弧线：闭嘴时不叠任何东西（画 arc 会与原线重影），
-    # 只在说话时叠张开的口腔+舌
     if mouth > .08:
         d2.ellipse([mpx - mw / 2, mpy - oh, mpx + mw / 2, mpy + oh],
                    fill=(96, 34, 52))
         d2.ellipse([mpx - mw * .32, mpy + oh * .2, mpx + mw * .32, mpy + oh * .92],
                    fill=(216, 110, 120))
-    # 说话音波：头侧三条弧，开度越大越亮
+    # 说话音波：脸右侧三条弧，开度越大越亮
     if mouth > .1:
-        d2 = ImageDraw.Draw(canvas)
-        hx = x + cim.width + 2
-        hy = y + int(cim.height * .16)
+        hx = x + fx + 46
+        hy = y + fy - 34
         for k in range(3):
             r = 9 + k * 8
             col = (int(100 + 70 * mouth + k * 12), 195, 255)
@@ -829,7 +856,7 @@ def render():
             # 讲解员：开场 0.9 秒从右侧滑入，之后常驻右下角
             mouth = env[f] if env and f < len(env) else 0.0
             slide = 0 if t > .9 else int((1 - ease(t / .9)) * 330)
-            draw_char(canvas, t, mouth, slide)
+            draw_char(canvas, t, mouth, bidx, t - acc, slide)
 
             rgb = canvas.convert("RGB")
             d2 = ImageDraw.Draw(rgb)

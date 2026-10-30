@@ -124,12 +124,11 @@ def face_center(im):
 
 
 # 生成图的角色大小有 ±5% 漂移（ImageGen 固有），直接用会「忽大忽小」。
-# 以 idle 的脸尺度（√肤色面积）为基准把所有姿势归一化，再统一画布。
-# 对齐锚点用「脸」而不是脚底：各图头身比不同，脚底对齐时头会跳 50px，
-# 换姿势时视线跟着跳；以脸为锚脚底略有出入但视线稳定（虚拟主播换
-# 立绘的做法）。ANCHOR_Y = idle 归一化后的脸 y。
-CANVAS_W, CANVAS_H = 560, 680
-ANCHOR_Y = 292.0
+# 以 idle 的脸尺度（√肤色面积）为基准把所有姿势归一化，再裁到角色包围盒
+# （留 PAD 透明边距给摇摆旋转用）。
+# 不统一画布：裁边后各图宽度不同，定位靠「脸锚点」——draw_char 把每张的
+# 脸对齐到屏幕同一个点，换姿势时视线不跳（脚底略有出入但看不出来）。
+PAD = 12
 
 
 def main():
@@ -165,7 +164,7 @@ def main():
     # 乘各图缩放系数换算过去
     off = (MOUTH_REF[0] - fcs["idle"][0], MOUTH_REF[1] - fcs["idle"][1])
 
-    # 第二遍：归一化缩放 + 统一画布（脸为锚）
+    # 第二遍：归一化缩放 + 裁边（脸/嘴锚点随之平移）
     meta = {}
     for name, title, _ in jobs:
         im = cut[name]
@@ -176,23 +175,21 @@ def main():
                             max(1, round(im.height * sc))), Image.LANCZOS)
         bbox = im.getchannel("A").getbbox()
         im = im.crop(bbox)
-        fcx = (fcs[name][0] - bbox[0]) * sc
-        fcy = (fcs[name][1] - bbox[1]) * sc
-        cv = Image.new("RGBA", (CANVAS_W, CANVAS_H))
-        px = (CANVAS_W - im.width) // 2               # 身体水平居中
-        py = int(round(ANCHOR_Y - fcy))               # 脸 y 对齐锚点
-        cv.alpha_composite(im, (px, py))
+        fcx = (fcs[name][0] - bbox[0]) * sc + PAD
+        fcy = (fcs[name][1] - bbox[1]) * sc + PAD
+        cv = Image.new("RGBA", (im.width + PAD * 2, im.height + PAD * 2))
+        cv.alpha_composite(im, (PAD, PAD))
         dst = os.path.join(OUT_DIR, "%02d-%s.png" % (len(meta) + 1, name))
         cv.save(dst)
-        face = (fcx + px, fcy + py)
         meta[name] = {"title": title, "file": os.path.basename(dst),
-                      "face": [round(face[0], 1), round(face[1], 1)],
-                      "mouth": [round(face[0] + off[0] * sc, 1),
-                                round(face[1] + off[1] * sc, 1)],
-                      "scale": round(sc, 3), "size": [CANVAS_W, CANVAS_H]}
-        print("%-10s %-6s 缩放%.3f 脸(%.0f,%.0f) 嘴(%.0f,%.0f)"
-              % (name, title, sc, face[0], face[1],
-                 face[0] + off[0] * sc, face[1] + off[1] * sc))
+                      "face": [round(fcx, 1), round(fcy, 1)],
+                      # off 量自 idle（归一化后 sc=1），而所有图归一化后处在
+                      # 同一尺度，所以偏移直接相加，不能再乘各自 sc
+                      "mouth": [round(fcx + off[0], 1), round(fcy + off[1], 1)],
+                      "scale": round(sc, 3), "size": list(cv.size)}
+        print("%-10s %-6s 缩放%.3f %dx%d 脸(%.0f,%.0f) 嘴(%.0f,%.0f)"
+              % (name, title, sc, cv.size[0], cv.size[1], fcx, fcy,
+                 fcx + off[0], fcy + off[1]))
 
     with open(os.path.join(OUT_DIR, "poses.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=1)
