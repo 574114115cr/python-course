@@ -628,6 +628,7 @@ CHAR_H = 280            # 立绘显示高度（角色本体，换算与单图时
 # 显示后落到这里。所有姿势都往这里对。
 FACE_ANCHOR = (1105.0, 492.0)
 _ROT = (-4, -2, 0, 2, 4)     # 摇摆档位（±4°，比单图时代的 ±6° 收敛些）
+FADE = 0.28                  # 姿势切换的交叉淡入时长（秒）
 _POSE_META = None
 _CHAR = {}
 
@@ -671,18 +672,47 @@ def pose_frames(name):
 
 
 def pose_at(bidx, rel):
-    """当前该用哪个姿势，以及进入这个姿势多久了。"""
+    """当前该用哪个姿势、上一个姿势是什么、进入多久了。"""
     cues = POSE_CUES.get(bidx) or POSE_CUES[0]
-    name, since = cues[0][1], rel
-    for t0, p in cues:
+    name, prev, since = cues[0][1], None, rel
+    for i, (t0, p) in enumerate(cues):
         if rel >= t0:
             name, since = p, rel - t0
-    return name, since
+            prev = cues[i - 1][1] if i > 0 else None
+    return name, prev, since
+
+
+def faded(im, a):
+    """给 RGBA 图乘一个全局 alpha（复合位图的 out = src + dst(1-alpha)，
+    要半透只能改 src 的 alpha 通道）。LUT 比逐像素 python 回调快得多。"""
+    if a >= .995:
+        return im
+    if a <= .005:
+        return None
+    out = im.copy()
+    out.putalpha(im.getchannel("A").point([int(v * a) for v in range(256)]))
+    return out
+
+
+def draw_pose(canvas, name, ang, bob, hop, dy, alpha, dx):
+    """把一个姿势贴到画布上，返回嘴锚点的屏幕坐标（供口型/音波用）。"""
+    frames, pad, (fx, fy), (mx0, my0) = pose_frames(name)
+    cim = frames.get(ang) or frames[_ROT[2]]
+    x = int(round(FACE_ANCHOR[0] - fx + dx))
+    y = int(round(FACE_ANCHOR[1] - fy + bob + hop + dy))
+    sim = faded(cim, alpha)
+    if sim is not None:
+        canvas.alpha_composite(sim, (x, y))
+    # 锚点要跟帧一起旋转（绕帧中心）
+    th = math.radians(ang)
+    cxf, cyf = cim.width / 2.0, cim.height / 2.0
+    ddx, ddy = mx0 - cxf, my0 - cyf
+    return (x + cxf + ddx * math.cos(th) + ddy * math.sin(th),
+            y + cyf - ddx * math.sin(th) + ddy * math.cos(th))
 
 
 def draw_char(canvas, t, mouth, bidx, rel, dx=0):
-    name, since = pose_at(bidx, rel)
-    frames, pad, (fx, fy), (mx0, my0) = pose_frames(name)
+    name, prev, since = pose_at(bidx, rel)
     # 说话时摇摆快而小、还带小幅蹦跳；安静时慢摆
     if mouth > .12:
         ang = _ROT[2 + int(round(math.sin(t * 6.5) * 2))]
@@ -693,19 +723,18 @@ def draw_char(canvas, t, mouth, bidx, rel, dx=0):
     # 换姿势后 0.35 秒补一次小弹跳：切换不生硬，像换了个动作站稳
     if since < .35:
         hop -= abs(math.sin(since / .35 * math.pi)) * 9
-    cim = frames.get(ang, frames[_ROT[2]])
     bob = math.sin(t * 1.7) * 4
-    # 脸对齐屏幕锚点：帧尺寸统一，位移直接相减即可
-    x = int(round(FACE_ANCHOR[0] - fx + dx))
-    y = int(round(FACE_ANCHOR[1] - fy + bob + hop))
-    canvas.alpha_composite(cim, (x, y))
+    # 过渡：切换的头 FADE 秒做交叉淡入——旧姿势下沉淡出、新姿势上浮淡入。
+    # 这样做自然的前提是「所有姿势的脸都对齐同一屏幕点」：两图重叠时
+    # 头部完全重合，只有手臂和身躯在渐变，不会出现错位双影。
+    if prev is not None and since < FADE:
+        k = ease(since / FADE)
+        draw_pose(canvas, prev, ang, bob, hop, 7 * k, 1 - k, dx)          # 旧：下沉淡出
+        mpx, mpy = draw_pose(canvas, name, ang, bob, hop, -9 * (1 - k), k, dx)  # 新：上浮淡入
+    else:
+        mpx, mpy = draw_pose(canvas, name, ang, bob, hop, 0.0, 1.0, dx)
     # 口型：说话时在嘴锚点叠张开的口腔+舌（原画自带微笑线，闭嘴不画）
-    # 帧是旋转过的，锚点要跟帧一起转（绕帧中心）
-    th = math.radians(ang)
-    cxf, cyf = cim.width / 2.0, cim.height / 2.0
-    ddx, ddy = mx0 - cxf, my0 - cyf
-    mpx = x + cxf + ddx * math.cos(th) + ddy * math.sin(th)
-    mpy = y + cyf - ddx * math.sin(th) + ddy * math.cos(th)
+    # 两姿势的脸/嘴锚点基本重合，过渡期直接跟着新姿势走
     mw = 14.0
     oh = 1.5 + mouth * 7.5
     d2 = ImageDraw.Draw(canvas)
@@ -716,12 +745,12 @@ def draw_char(canvas, t, mouth, bidx, rel, dx=0):
                    fill=(216, 110, 120))
     # 说话音波：脸右侧三条弧，开度越大越亮
     if mouth > .1:
-        hx = x + fx + 46
-        hy = y + fy - 34
-        for k in range(3):
-            r = 9 + k * 8
-            col = (int(100 + 70 * mouth + k * 12), 195, 255)
-            d2.arc([hx + k * 7, hy - r, hx + k * 7 + 2 * r, hy + r],
+        hx = FACE_ANCHOR[0] + dx + 46
+        hy = FACE_ANCHOR[1] + hop - 34
+        for k2 in range(3):
+            r = 9 + k2 * 8
+            col = (int(100 + 70 * mouth + k2 * 12), 195, 255)
+            d2.arc([hx + k2 * 7, hy - r, hx + k2 * 7 + 2 * r, hy + r],
                    start=-52, end=52, fill=col, width=3)
 
 
