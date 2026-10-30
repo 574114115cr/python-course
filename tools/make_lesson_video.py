@@ -671,14 +671,35 @@ def pose_frames(name):
     return _CHAR[name]
 
 
-def pose_at(bidx, rel):
-    """当前该用哪个姿势、上一个姿势是什么、进入多久了。"""
-    cues = POSE_CUES.get(bidx) or POSE_CUES[0]
-    name, prev, since = cues[0][1], None, rel
-    for i, (t0, p) in enumerate(cues):
-        if rel >= t0:
-            name, since = p, rel - t0
-            prev = cues[i - 1][1] if i > 0 else None
+_GCUES = []          # 全局时间轴：[(全局秒, 姿势名)]，跨幕展开
+
+
+def build_global_cues(scenes):
+    """把分幕的 POSE_CUES 展开成一条全局时间轴。
+
+    必须全局：按幕查表时新幕首帧的 prev 是 None，幕与幕之间的 5 个边界
+    就还是硬切（只有幕内 cue 切换有过渡）。展开后边界自动被覆盖——
+    上一幕最后的姿势淡出 → 新幕第一个姿势淡入。
+    """
+    global _GCUES
+    acc, out = 0.0, []
+    for si, (dur, _, _, _) in enumerate(scenes):
+        for t0, p in (POSE_CUES.get(si) or POSE_CUES[0]):
+            out.append((acc + t0, p))
+        acc += dur
+    _GCUES = out
+    return out
+
+
+def pose_at(t):
+    """全局秒 t 处该用哪个姿势、上一个姿势是什么、进入多久了。"""
+    if not _GCUES:
+        build_global_cues(build_scenes())
+    name, prev, since = _GCUES[0][1], None, t - _GCUES[0][0]
+    for i, (t0, p) in enumerate(_GCUES):
+        if t >= t0:
+            name, since = p, t - t0
+            prev = _GCUES[i - 1][1] if i > 0 else None
     return name, prev, since
 
 
@@ -711,8 +732,8 @@ def draw_pose(canvas, name, ang, bob, hop, dy, alpha, dx):
             y + cyf - ddx * math.sin(th) + ddy * math.cos(th))
 
 
-def draw_char(canvas, t, mouth, bidx, rel, dx=0):
-    name, prev, since = pose_at(bidx, rel)
+def draw_char(canvas, t, mouth, dx=0):
+    name, prev, since = pose_at(t)
     # 说话时摇摆快而小、还带小幅蹦跳；安静时慢摆
     if mouth > .12:
         ang = _ROT[2 + int(round(math.sin(t * 6.5) * 2))]
@@ -815,6 +836,7 @@ def render():
     if not os.path.isdir(OUT_DIR):
         os.makedirs(OUT_DIR, exist_ok=True)
     scenes = build_scenes()
+    build_global_cues(scenes)
     total = sum(d for d, _, _, _ in scenes)
     nframes = int(round(total * FPS))
     print("时长 %.1fs / %d 帧 / %d 幕" % (total, nframes, len(scenes)))
@@ -885,7 +907,7 @@ def render():
             # 讲解员：开场 0.9 秒从右侧滑入，之后常驻右下角
             mouth = env[f] if env and f < len(env) else 0.0
             slide = 0 if t > .9 else int((1 - ease(t / .9)) * 330)
-            draw_char(canvas, t, mouth, bidx, t - acc, slide)
+            draw_char(canvas, t, mouth, slide)
 
             rgb = canvas.convert("RGB")
             d2 = ImageDraw.Draw(rgb)
