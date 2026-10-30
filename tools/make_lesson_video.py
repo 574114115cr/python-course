@@ -25,7 +25,7 @@ import random
 import subprocess
 import sys
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -627,8 +627,10 @@ CHAR_H = 280            # 立绘显示高度（角色本体，换算与单图时
 # 脸在帧坐标系里的屏幕锚点：单图时代 523×620 的图在 (252,292) 有脸，
 # 显示后落到这里。所有姿势都往这里对。
 FACE_ANCHOR = (1105.0, 492.0)
-_ROT = (-4, -2, 0, 2, 4)     # 摇摆档位（±4°，比单图时代的 ±6° 收敛些）
-FADE = 0.28                  # 姿势切换的交叉淡入时长（秒）
+_ROT = (0,)                  # 不摇摆：左右旋转会让角色看着站不稳
+FADE = 0.5                   # 姿势切换的交叉淡入时长（30fps = 15 帧）
+PREP = 0.22                  # 切换前的「预备」：先沉一下再起身
+_ROI = (940, 320, 1280, 680)  # 角色活动范围，交叉溶解只在这块做像素运算
 _POSE_META = None
 _CHAR = {}
 
@@ -715,63 +717,94 @@ def faded(im, a):
     return out
 
 
-def draw_pose(canvas, name, ang, bob, hop, dy, alpha, dx):
-    """把一个姿势贴到画布上，返回嘴锚点的屏幕坐标（供口型/音波用）。"""
+def next_cue(t):
+    """t 之后下一个切换时刻（用于预备动作），没有就返回 None。"""
+    for t0, _ in _GCUES:
+        if t0 > t:
+            return t0
+    return None
+
+
+def pose_layer(name, bob, dy, dx, sc=1.0):
+    """摆好一个姿势，返回 (图, 左上角, 嘴锚点在图内坐标)。
+
+    不直接贴画布，是为了让 crossfade 能把两张先合成再贴——直接叠两张半透明
+    图会让重叠区透出背景（见 crossfade 的说明）。
+    """
     frames, pad, (fx, fy), (mx0, my0) = pose_frames(name)
-    cim = frames.get(ang) or frames[_ROT[2]]
+    cim = frames[_ROT[0]]
+    if abs(sc - 1.0) > 0.004:
+        cim = cim.resize((max(1, round(cim.width * sc)),
+                          max(1, round(cim.height * sc))), Image.LANCZOS)
+        fx, fy, mx0, my0 = fx * sc, fy * sc, mx0 * sc, my0 * sc
     x = int(round(FACE_ANCHOR[0] - fx + dx))
-    y = int(round(FACE_ANCHOR[1] - fy + bob + hop + dy))
-    sim = faded(cim, alpha)
-    if sim is not None:
-        canvas.alpha_composite(sim, (x, y))
-    # 锚点要跟帧一起旋转（绕帧中心）
-    th = math.radians(ang)
-    cxf, cyf = cim.width / 2.0, cim.height / 2.0
-    ddx, ddy = mx0 - cxf, my0 - cyf
-    return (x + cxf + ddx * math.cos(th) + ddy * math.sin(th),
-            y + cyf - ddx * math.sin(th) + ddy * math.cos(th))
+    y = int(round(FACE_ANCHOR[1] - fy + bob + dy))
+    return cim, (x, y), (mx0, my0)
+
+
+def crossfade(canvas, A, B, k, posA, posB):
+    """真正的交叉溶解 out = A*(1-k) + B*k。
+
+    PIL 的 alpha_composite 是 src-over：把两张半透明图一前一后叠上去，重叠区
+    （头/身体，两张都有）的 alpha 会变成 k+(1-k)(1-k)——k=0.5 时只剩 0.75，
+    头部半透明、背景神经元线条透出来，看着就是在闪。正确做法是先合到一张
+    临时层：A 实心打底、B 按 k 淡入（重叠区恒不透明），再把「只有 A 有的
+    那一块」（旧手臂）单独按 k 淡出。
+    """
+    rx0, ry0, rx1, ry1 = _ROI
+    w, h = rx1 - rx0, ry1 - ry0
+    la = layer(w, h)
+    la.alpha_composite(A, (posA[0] - rx0, posA[1] - ry0))
+    lb = layer(w, h)
+    lb.alpha_composite(B, (posB[0] - rx0, posB[1] - ry0))
+    only = ImageChops.subtract(la.getchannel("A"), lb.getchannel("A"))
+    fb = faded(lb, k)
+    if fb is not None:
+        la.alpha_composite(fb, (0, 0))
+    la.putalpha(ImageChops.subtract(
+        la.getchannel("A"), only.point([int(v * k) for v in range(256)])))
+    canvas.alpha_composite(la, (rx0, ry0))
 
 
 def draw_char(canvas, t, mouth, dx=0):
     name, prev, since = pose_at(t)
-    # 说话时摇摆快而小、还带小幅蹦跳；安静时慢摆
-    if mouth > .12:
-        ang = _ROT[2 + int(round(math.sin(t * 6.5) * 2))]
-        hop = -abs(math.sin(t * 9)) * 6 * mouth
-    else:
-        ang = _ROT[2 + int(round(math.sin(t * 1.4) * 1.6))]
-        hop = 0.0
-    # 换姿势后 0.35 秒补一次小弹跳：切换不生硬，像换了个动作站稳
-    if since < .35:
-        hop -= abs(math.sin(since / .35 * math.pi)) * 9
-    bob = math.sin(t * 1.7) * 4
-    # 过渡：切换的头 FADE 秒做交叉淡入——旧姿势下沉淡出、新姿势上浮淡入。
-    # 这样做自然的前提是「所有姿势的脸都对齐同一屏幕点」：两图重叠时
-    # 头部完全重合，只有手臂和身躯在渐变，不会出现错位双影。
+    bob = math.sin(t * 1.35) * 3                    # 缓慢呼吸，不再左右摇摆
+    hop = -abs(math.sin(t * 3.2)) * 2.5 * mouth     # 说话时低频小幅起伏
+    nxt = next_cue(t)
+    if nxt is not None:
+        d = nxt - t
+        if d < PREP:                                # 预备：先沉一下再换动作
+            hop += (1 - d / PREP) * 3.0
     if prev is not None and since < FADE:
-        k = ease(since / FADE)
-        draw_pose(canvas, prev, ang, bob, hop, 7 * k, 1 - k, dx)          # 旧：下沉淡出
-        mpx, mpy = draw_pose(canvas, name, ang, bob, hop, -9 * (1 - k), k, dx)  # 新：上浮淡入
+        k = ease_inout(since / FADE)
+        A, pa, _ = pose_layer(prev, bob, hop + 6 * k, dx=dx)          # 旧：下沉
+        B, pb, (bmx, bmy) = pose_layer(name, bob, hop - 9 * (1 - k), dx=dx)  # 新：上浮到位
+        crossfade(canvas, A, B, k, pa, pb)
+        mpx, mpy = pb[0] + bmx, pb[1] + bmy
     else:
-        mpx, mpy = draw_pose(canvas, name, ang, bob, hop, 0.0, 1.0, dx)
-    # 口型：说话时在嘴锚点叠张开的口腔+舌（原画自带微笑线，闭嘴不画）
-    # 两姿势的脸/嘴锚点基本重合，过渡期直接跟着新姿势走
-    mw = 14.0
-    oh = 1.5 + mouth * 7.5
+        B, pb, (bmx, bmy) = pose_layer(name, bob, hop, dx=dx)
+        canvas.alpha_composite(B, pb)
+        mpx, mpy = pb[0] + bmx, pb[1] + bmy
+    # 口型：以原画的微笑线当「上唇」，随音量向下张开（下颌下降的自然形态）。
+    # 尺寸必须贴着原画嘴——原画嘴在屏幕上只有约 13x2 px，之前那版 14x18 的
+    # 贴片一路顶到下巴，看着就是「嘴画错地方了」。
+    mw = 11.0
+    oh = 0.7 + mouth * 3.8
     d2 = ImageDraw.Draw(canvas)
     if mouth > .08:
-        d2.ellipse([mpx - mw / 2, mpy - oh, mpx + mw / 2, mpy + oh],
-                   fill=(96, 34, 52))
-        d2.ellipse([mpx - mw * .32, mpy + oh * .2, mpx + mw * .32, mpy + oh * .92],
-                   fill=(216, 110, 120))
-    # 说话音波：脸右侧三条弧，开度越大越亮
+        top = mpy - 1.5
+        d2.ellipse([mpx - mw / 2, top, mpx + mw / 2, top + 2 * oh],
+                   fill=(104, 40, 58))
+        if mouth > .32:
+            d2.ellipse([mpx - mw * .27, top + oh * .4,
+                        mpx + mw * .27, top + oh * 1.3], fill=(222, 118, 128))
+    # 说话音波：嘴右侧三条弧，开度越大越亮
     if mouth > .1:
-        hx = FACE_ANCHOR[0] + dx + 46
-        hy = FACE_ANCHOR[1] + hop - 34
-        for k2 in range(3):
-            r = 9 + k2 * 8
-            col = (int(100 + 70 * mouth + k2 * 12), 195, 255)
-            d2.arc([hx + k2 * 7, hy - r, hx + k2 * 7 + 2 * r, hy + r],
+        hx, hy = mpx + 26, mpy - 24
+        for i in range(3):
+            r = 8 + i * 7
+            col = (int(100 + 70 * mouth + i * 12), 195, 255)
+            d2.arc([hx + i * 6, hy - r, hx + i * 6 + 2 * r, hy + r],
                    start=-52, end=52, fill=col, width=3)
 
 
