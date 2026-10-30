@@ -36,9 +36,18 @@ POSES = [
     ("listen", "俯身倾听"),
 ]
 
-# idle 图上视觉实测的嘴中心相对脸中心的偏移（原图 523×620 坐标系）
-# 脸中心由 face_center() 给出，实测嘴 (252, 332)
-MOUTH_REF = (252.0, 332.0)
+# 嘴锚点：逐张视觉实测（裁脸放大 5 倍人工读数，写入 .cache/face_*.png 核对）。
+# 不能用「脸中心 + 固定偏移」——12/13 张是侧脸/歪头姿势，嘴在脸中心
+# 左上方而非正下方，固定偏移会把锚点画到领结上。
+# 也不能靠唇色掩码自动检测——嘴线是 2-3px 抗锯齿细线，阈值稍动就碎，
+# 且手/腮红/眼线颜色相近，误判率太高。重建资产后必须重新目测核对。
+MOUTH_MANUAL = {
+    "idle": (264.0, 344.0), "wave": (216.0, 333.0), "guide": (224.0, 342.0),
+    "think": (232.0, 351.0), "wow": (213.0, 326.0), "confuse": (228.0, 353.0),
+    "fist": (242.0, 356.0), "present": (226.0, 348.0),
+    "pointdown": (231.0, 352.0), "nod": (227.0, 346.0),
+    "shrug": (223.0, 341.0), "clap": (238.0, 354.0), "listen": (232.0, 359.0),
+}
 
 
 def is_bg(p):
@@ -160,9 +169,6 @@ def main():
         if fcs[name] is None:
             raise SystemExit("%s 没找到肤色域" % name)
     ref_scale = fcs["idle"][2] ** 0.5
-    # 嘴相对脸的偏移在 idle 原资产坐标系里量（MOUTH_REF 与 fcs 同坐标系），
-    # 乘各图缩放系数换算过去
-    off = (MOUTH_REF[0] - fcs["idle"][0], MOUTH_REF[1] - fcs["idle"][1])
 
     # 第二遍：归一化缩放 + 裁边（脸/嘴锚点随之平移）
     meta = {}
@@ -181,15 +187,17 @@ def main():
         cv.alpha_composite(im, (PAD, PAD))
         dst = os.path.join(OUT_DIR, "%02d-%s.png" % (len(meta) + 1, name))
         cv.save(dst)
+        # 嘴锚点用逐张目测值。MOUTH_MANUAL 的量测基准就是这批源图归一化后的
+        # 坐标（sc 见 poses.json），源图不变则直接可用；若换了源图导致
+        # scale 明显变化，必须重新目测——侧脸/歪头下没有任何自动方法可靠。
+        mm = MOUTH_MANUAL[name]
+        mx, my = mm
         meta[name] = {"title": title, "file": os.path.basename(dst),
                       "face": [round(fcx, 1), round(fcy, 1)],
-                      # off 量自 idle（归一化后 sc=1），而所有图归一化后处在
-                      # 同一尺度，所以偏移直接相加，不能再乘各自 sc
-                      "mouth": [round(fcx + off[0], 1), round(fcy + off[1], 1)],
+                      "mouth": [round(mx, 1), round(my, 1)],
                       "scale": round(sc, 3), "size": list(cv.size)}
         print("%-10s %-6s 缩放%.3f %dx%d 脸(%.0f,%.0f) 嘴(%.0f,%.0f)"
-              % (name, title, sc, cv.size[0], cv.size[1], fcx, fcy,
-                 fcx + off[0], fcy + off[1]))
+              % (name, title, sc, cv.size[0], cv.size[1], fcx, fcy, mx, my))
 
     with open(os.path.join(OUT_DIR, "poses.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=1)

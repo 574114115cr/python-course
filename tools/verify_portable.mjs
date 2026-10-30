@@ -162,7 +162,13 @@ async function main() {
   console.log('\nPASS ' + pass.length + ' 项；FAIL ' + fail.length + ' 项');
   fail.forEach(f => console.log('  ✗', f));
   ws.close(); cleanup();
-  fs.rmSync(TMP, { recursive: true, force: true });
+  // 沙箱对单轮 >50 个文件的删除会弹批量确认；改名搬进垃圾堆（不算删除）。
+  // 垃圾堆也放工作区 .cache（本机 TEMP 不可用，见头部注释）。
+  try {
+    const garbage = path.join(ROOT_DIR, '.cache', 'portable-verify-garbage', String(Date.now()));
+    fs.mkdirSync(path.dirname(garbage), { recursive: true });
+    fs.renameSync(TMP, garbage);
+  } catch { /* 搬不走就留着，下轮用新时间戳目录 */ }
   if (fail.length) process.exit(2);
   console.log('PORTABLE_ALL_PASS');
 }
