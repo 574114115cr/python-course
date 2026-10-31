@@ -623,14 +623,15 @@ def build_scenes():
 #   · standalone 帧序列（RGBA 透明 webp，11 个动作）
 #   · 插件本体黑底 webm → 亮度键抠图（6 个动作）
 # 每个动作 241 帧 / 10s @24fps，非循环；pet_meta.json 存每帧脸框
-# （肤色连通域逐帧跟踪）与嘴锚点。对齐用「动作第 1 帧的脸框中心」，
+# （肤色连通域逐帧跟踪）。对齐用「动作第 1 帧的脸框中心」，
 # 动作内部帧不校正——保住官方动画里跳跃/移动的表现力。
+# 画面里的一切都来自官方动画本身：不叠口型、不叠音波、不加呼吸/起伏
+# 位移。官方动画没有说话口型，硬贴一个只会越看越假。
 PET_DIR = os.path.join(ROOT, "tools", "assets", "pet")
 CHAR_H = 330            # 角色显示高度（角色本体，Q 版显小所以比立绘时代大）
 # 脸在帧坐标系里的屏幕锚点（沿用立绘时代的视觉位置）
 FACE_ANCHOR = (1105.0, 492.0)
 FADE = 0.5                   # 动作切换的交叉淡入时长（30fps = 15 帧）
-PREP = 0.22                  # 切换前的「预备」：先沉一下再起身
 _ROI = (940, 320, 1280, 680)  # 角色活动范围，交叉溶解只在这块做像素运算
 _PET_META = None
 _PET_CLIP = {}               # 动作名 → 缩放后整帧缓存（仅当前用到的动作）
@@ -671,26 +672,20 @@ def pet_clip(name):
         # 动作内部的跳跃/移动全部保留（这是官方动画的表现力所在）
         _PET_CLIP[name] = {"dir": os.path.join(PET_DIR, m["dir"]),
                            "n": m["frames"], "sc": sc, "boxes": m["boxes"],
-                           "mrel": m["mouth_rel"],
                            "off": (FACE_ANCHOR[0] - fx * sc,
                                    FACE_ANCHOR[1] - fy * sc)}
     return _PET_CLIP[name]
 
 
 def pet_frame(name, idx, dx=0.0, dy=0.0):
-    """取动作第 idx 帧解码缩放，返回 (图, 左上角屏幕坐标, 嘴屏幕坐标)。"""
+    """取动作第 idx 帧解码缩放，返回 (图, 左上角屏幕坐标)。"""
     c = pet_clip(name)
     idx = max(0, min(idx, c["n"] - 1))
     im = Image.open(os.path.join(c["dir"], "f_%04d.webp" % idx)).convert("RGBA")
     if abs(c["sc"] - 1.0) > 0.004:
         im = im.resize((max(1, round(im.width * c["sc"])),
                         max(1, round(im.height * c["sc"]))), Image.LANCZOS)
-    bb = c["boxes"][idx]
-    mx = bb[0] + c["mrel"][0] * (bb[2] - bb[0])
-    my = bb[1] + c["mrel"][1] * (bb[3] - bb[1])
-    pos = (int(round(c["off"][0] + dx)), int(round(c["off"][1] + dy)))
-    mpos = (mx * c["sc"] + c["off"][0] + dx, my * c["sc"] + c["off"][1] + dy)
-    return im, pos, mpos
+    return im, (int(round(c["off"][0] + dx)), int(round(c["off"][1] + dy)))
 
 
 _GCUES = []          # 全局时间轴：[(全局秒, 姿势名)]，跨幕展开
@@ -739,14 +734,6 @@ def faded(im, a):
     return out
 
 
-def next_cue(t):
-    """t 之后下一个切换时刻（用于预备动作），没有就返回 None。"""
-    for t0, _ in _GCUES:
-        if t0 > t:
-            return t0
-    return None
-
-
 def crossfade(canvas, A, posA, B, posB, k):
     """真正的交叉溶解 out = A*(1-k) + B*k。
 
@@ -771,86 +758,25 @@ def crossfade(canvas, A, posA, B, posB, k):
     canvas.alpha_composite(la, (rx0, ry0))
 
 
-def draw_char(canvas, t, mouth, dx=0):
+def draw_char(canvas, t, dx=0):
+    """只按全局秒取官方动画帧，不做任何程序化叠加。
+
+    之前叠过：呼吸上下浮动、说话起伏、切换前的「预备下沉」、口型贴片、
+    嘴边音波。全部去掉——官方动画自带呼吸和动作节奏，额外位移反而让它
+    看着在摇晃；官方动画没有说话口型，硬贴一个只会越看越假。
+    """
     name, prev, since, prev_el = pose_at(t)
     fps = 24.0
-    hop = -abs(math.sin(t * 3.2)) * 2.5 * mouth     # 说话时低频小幅起伏
-    nxt = next_cue(t)
-    if nxt is not None:
-        d = nxt - t
-        if d < PREP:                                # 预备：先沉一下再换动作
-            hop += (1 - d / PREP) * 3.0
     if prev is not None and since < FADE:
-        k = ease_inout(since / FADE)
-        # 旧动作帧停在切换瞬间；新动作从 0 帧开始播
-        A, pa, _ = pet_frame(prev, int(prev_el * fps), dx, hop + 6 * k)
-        B, pb, mpos = pet_frame(name, int(since * fps), dx, hop - 9 * (1 - k))
-        crossfade(canvas, A, pa, B, pb, k)
-        mpx, mpy = mpos
+        # 旧动作帧停在切换瞬间；新动作从第 0 帧开始播，两者纯交叉溶解
+        A, pa = pet_frame(prev, int(prev_el * fps), dx)
+        B, pb = pet_frame(name, int(since * fps), dx)
+        crossfade(canvas, A, pa, B, pb, ease_inout(since / FADE))
     else:
-        B, pb, mpos = pet_frame(name, int(since * fps), dx, hop)
+        B, pb = pet_frame(name, int(since * fps), dx)
         canvas.alpha_composite(B, pb)
-        mpx, mpy = mpos
-    # 口型：官方动画没有说话口型，按脸框宽度自适应画一个小开合贴片
-    # （Q 版嘴原画只有 ~3px，贴片略放大到脸宽 15%，配合音波示意说话）
-    c = pet_clip(name)
-    idx = max(0, min(int(since * fps), c["n"] - 1))
-    bb = c["boxes"][idx]
-    face_w = max(20.0, (bb[2] - bb[0]) * c["sc"])
-    mw = face_w * 0.15
-    oh = 0.7 + mouth * 3.2
-    d2 = ImageDraw.Draw(canvas)
-    if mouth > .08:
-        top = mpy - 1.0
-        d2.ellipse([mpx - mw / 2, top, mpx + mw / 2, top + 2 * oh],
-                   fill=(104, 40, 58))
-        if mouth > .32:
-            d2.ellipse([mpx - mw * .27, top + oh * .4,
-                        mpx + mw * .27, top + oh * 1.3], fill=(222, 118, 128))
-    # 说话音波：嘴右侧两条弧，开度越大越亮
-    if mouth > .1:
-        hx, hy = mpx + face_w * 0.42, mpy - face_w * 0.30
-        for i in range(2):
-            r = 5 + i * 5
-            col = (int(100 + 70 * mouth + i * 12), 195, 255)
-            d2.arc([hx + i * 5, hy - r, hx + i * 5 + 2 * r, hy + r],
-                   start=-52, end=52, fill=col, width=2)
 
 
-def load_env(path, total):
-    """从音轨算出每帧的音量包络（0..1），拿来驱动嘴的开合。"""
-    if not path or not os.path.exists(path):
-        return None
-    try:
-        import array
-        import wave
-        with wave.open(path, "rb") as wf:
-            sr = wf.getframerate()
-            pcm = array.array("h")
-            pcm.frombytes(wf.readframes(wf.getnframes()))
-    except Exception:
-        return None
-    if not pcm:
-        return None
-    win = int(sr * 0.055)
-    raw = []
-    for f in range(int(total * FPS) + 2):
-        c = int(f / FPS * sr)
-        a, b = max(0, c - win), min(len(pcm), c + win)
-        if b <= a:
-            raw.append(0.0)
-            continue
-        step = 3
-        s = 0
-        for i in range(a, b, step):
-            v = pcm[i]
-            s += v * v
-        raw.append(math.sqrt(s / max(1.0, (b - a) / step)))
-    mx = max(raw) or 1.0
-    # 55% 峰值算「满嘴」，再滑动平均抹掉逐帧抖动
-    env = [min(1.0, v / (mx * 0.55)) for v in raw]
-    return [sum(env[max(0, i - 1):i + 2]) / len(env[max(0, i - 1):i + 2])
-            for i in range(len(env))]
 
 
 # ── HUD ─────────────────────────────────────────────────────────
@@ -885,8 +811,6 @@ def render():
 
     bg = make_bg()
     nodes = seed_nodes(58)
-    env = load_env(AUDIO_WAV, total) if NARR else None
-    print("嘴型驱动：" + ("语音音量包络 %d 帧" % len(env) if env else "无（静音则闭嘴）"))
     lay_n = layer(W, H)
     lay_c = layer(W, H)
     dn = ImageDraw.Draw(lay_n)
@@ -947,9 +871,8 @@ def render():
             canvas.alpha_composite(bimg, (W - bimg.width - 46, 30))
 
             # 讲解员：开场 0.9 秒从右侧滑入，之后常驻右下角
-            mouth = env[f] if env and f < len(env) else 0.0
             slide = 0 if t > .9 else int((1 - ease(t / .9)) * 330)
-            draw_char(canvas, t, mouth, slide)
+            draw_char(canvas, t, slide)
 
             rgb = canvas.convert("RGB")
             d2 = ImageDraw.Draw(rgb)
