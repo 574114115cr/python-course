@@ -1175,6 +1175,8 @@ footer{{border-top:1px solid var(--line);padding-top:20px;margin-top:36px;font-s
   <a class="back" href="../../index.html">← 学习主页</a>
   <h1>课程目录 · {len(meta)} 节课</h1>
   <span class="sp"></span>
+  <a class="rv" href="../debug.html">排错速查</a>
+  <a class="rv" href="../help.html">求助手册</a>
   <a class="rv" href="../terms.html">术语索引</a>
   <a class="rv" href="../coverage.html">覆盖对照</a>
   <a class="rv" href="../review.html">复习计划</a>

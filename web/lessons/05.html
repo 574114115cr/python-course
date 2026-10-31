@@ -81,6 +81,9 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-3-pip-install-requests-成功-import-requ">错误 3：pip install requests 成功，import requests 却 ModuleNotFoundError</a>
 <a class="lv3" href="#错误-4-改了代码-运行结果没变">错误 4：改了代码，运行结果没变</a>
 <a class="lv3" href="#错误-5-git-checkout-之后代码没了">错误 5：git checkout 之后代码没了</a>
+<a class="lv3" href="#错误-6-powershell-里-activate-报-禁止运行脚本">错误 6：PowerShell 里 activate 报「禁止运行脚本」</a>
+<a class="lv3" href="#错误-7-把自己的文件命名成-python-py-random-py-strin">错误 7：把自己的文件命名成 python.py / random.py / string.py</a>
+<a class="lv3" href="#错误-8-windows-上打印中文报-unicodeencodeerror-或">错误 8：Windows 上打印中文报 UnicodeEncodeError，或者文件里读出来是乱码</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
@@ -192,6 +195,24 @@ transition:opacity .18s;z-index:60}
 <p><strong>症状</strong>：想撤销修改，结果改的内容被覆盖。
 <strong>原因</strong>：<code>git checkout -- 文件</code> 是「用最近一次提交覆盖工作区」，不是「撤销上一次 checkout」。
 <strong>改法</strong>：先 <code>git status</code> 看清改了什么；只想临时回退就先 <code>git stash</code>（可 <code>git stash pop</code> 找回），别直接 checkout。</p>
+<h3 id="错误-6-powershell-里-activate-报-禁止运行脚本">错误 6：PowerShell 里 <code>activate</code> 报「禁止运行脚本」</h3>
+<p><strong>症状</strong>：创建虚拟环境后执行 <code>.\venv\Scripts\activate</code>，红色报错说此系统上禁止运行脚本。
+<strong>原因</strong>：Windows PowerShell 默认的执行策略（Restricted）不允许运行 <code>.ps1</code> 脚本，<code>activate</code> 正是这种脚本。
+<strong>改法</strong>：二选一——① 换成 <strong>cmd</strong> 或 <strong>Git Bash</strong> 终端，执行 <code>venv\Scripts\activate.bat</code>；② 仍用 PowerShell 就以管理员身份执行一次
+<code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>，然后重开终端。
+（这不是 Python 的问题，是 Windows 的安全策略，放宽到 <code>RemoteSigned</code> 只影响当前用户。）</p>
+<h3 id="错误-7-把自己的文件命名成-python-py-random-py-strin">错误 7：把自己的文件命名成 <code>python.py</code> / <code>random.py</code> / <code>string.py</code></h3>
+<p><strong>症状</strong>：<code>import random</code> 之后行为怪异，或者报 <code>AttributeError: module 'random' has no attribute 'xxx'</code>。
+<strong>原因</strong>：你的文件名和标准库同名，Python 会<strong>优先导入你这个文件</strong>，把真正的标准库挡住了。
+<strong>改法</strong>：立刻改名（如 <code>my_random_demo.py</code>），并删掉同目录下生成的 <code>__pycache__</code> 文件夹。
+<strong>规则</strong>：文件名永远不要用标准库名、也不要用 <code>test.py</code>（会和测试工具抢名字）。</p>
+<h3 id="错误-8-windows-上打印中文报-unicodeencodeerror-或">错误 8：Windows 上打印中文报 <code>UnicodeEncodeError</code>，或者文件里读出来是乱码</h3>
+<p><strong>症状</strong>：<code>print("中文")</code> 直接崩，或者读 CSV 时中文变成 <code>\xc4\xe3</code> 之类。
+<strong>原因</strong>：Windows 控制台默认编码是 GBK，而文件用的是 UTF-8，两边对不上。
+<strong>改法</strong>：
+1. 终端里先执行 <code>chcp 65001</code> 切到 UTF-8（或在「设置 → 时间和语言 → 语言 → 管理语言设置」里勾上 Beta UTF-8）。
+2. 读写文件<strong>永远显式写编码</strong>：<code>open(path, encoding="utf-8")</code>，这是根治办法，别依赖系统默认。
+3. VS Code 右下角看到编码不是 <code>UTF-8</code> 时，点它 → 「通过编码保存」→ 选 UTF-8。</p>
 <hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <p>学完本单元，你手上应该有：</p>

@@ -78,6 +78,10 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-5-布尔值-bool-只有两个取值">2.5 布尔值 bool：只有两个取值</a>
 <a class="lv3" href="#2-6-类型转换-把一种类型的标签换成另一种">2.6 类型转换：把一种类型的标签换成另一种</a>
 <a class="lv3" href="#2-7-字符串方法全家桶-拆分-拼接与去掉前后缀">2.7 字符串方法全家桶：拆分、拼接与去掉前后缀</a>
+<a class="lv3" href="#2-8-三个容易漏掉的运算符">2.8 三个容易漏掉的运算符：//、%、**</a>
+<a class="lv3" href="#2-9-浮点数的精度陷阱-为什么-0-1-0-2-0-3">2.9 浮点数的精度陷阱：为什么 0.1 + 0.2 != 0.3</a>
+<a class="lv3" href="#2-10-f-string-格式化进阶-小数位-千分位-对齐">2.10 f-string 格式化进阶：小数位、千分位、对齐</a>
+<a class="lv3" href="#2-11-一次给多个变量赋值-以及-常量-的约定">2.11 一次给多个变量赋值，以及「常量」的约定</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-四种类型与-type">示例 1：四种类型与 type()</a>
 <a class="lv3" href="#示例-2-变量重新赋值与命名规范">示例 2：变量重新赋值与命名规范</a>
@@ -229,6 +233,115 @@ transition:opacity .18s;z-index:60}
 - 这几个方法都<strong>返回新字符串</strong>，原字符串不变（同 2.3 的「复印纸条」模型）。
 - <code>find()</code> 找不到返回 <code>-1</code>，<code>index()</code> 找不到才抛 <code>ValueError</code>——判断「有没有」优先用 <code>in</code>。</p>
 </blockquote>
+<hr>
+<h3 id="2-8-三个容易漏掉的运算符">2.8 三个容易漏掉的运算符：<code>//</code>、<code>%</code>、<code>**</code></h3>
+<p>只有 <code>+ - * /</code> 是不够用的，下面这三个在真实代码里出现频率极高：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 四种运算放一起看差别</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"7 / 2  ="</span><span class="p">,</span> <span class="mi">7</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>     <span class="c1"># 3.5   ← / 永远是浮点，哪怕能整除</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"7 // 2 ="</span><span class="p">,</span> <span class="mi">7</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>    <span class="c1"># 3     ← 地板除：只要整数部分，向下取整</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"7 % 2  ="</span><span class="p">,</span> <span class="mi">7</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>     <span class="c1"># 1     ← 取余：7 除以 2 余 1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2 ** 10 ="</span><span class="p">,</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 1024  ← 幂（不是异或！很多语言的 ^ 才是幂）</span>
+
+<span class="c1"># 地板除对负数是「向下」而不是「向零」——这是最容易踩的一处</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-7 // 2 ="</span><span class="p">,</span> <span class="o">-</span><span class="mi">7</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># -4（不是 -3：-3.5 向下取整是 -4）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"7 // -2 ="</span><span class="p">,</span> <span class="mi">7</span> <span class="o">//</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># -4</span>
+</code></pre>
+<p><strong><code>%</code> 取余有什么用？</strong> 三件高频的事：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ① 判断奇偶：能被 2 整除就是偶数</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">kind</span> <span class="o">=</span> <span class="s2">"偶"</span> <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"奇"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+
+<span class="c1"># ② 判断"每隔 N 个做一次"（分页、进度打印都靠它）</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"第 </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> 次：每 3 次执行一次"</span><span class="p">)</span>
+
+<span class="c1"># ③ 把总秒数拆成时分秒（单位换算的经典写法）</span>
+<span class="n">total</span> <span class="o">=</span> <span class="mi">3725</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">total</span> <span class="o">//</span> <span class="mi">3600</span>
+<span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">total</span> <span class="o">%</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">//</span> <span class="mi">60</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">total</span> <span class="o">%</span> <span class="mi">60</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2"> 秒 = </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2"> 小时 </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> 分 </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2"> 秒"</span><span class="p">)</span>
+</code></pre>
+<p>顺带记住两条规则：<strong><code>/</code> 的结果永远是浮点数</strong>（<code>4 / 2</code> 是 <code>2.0</code> 不是 <code>2</code>）；
+<code>**</code> 的优先级高于 <code>*</code> 和 <code>-</code>，所以 <code>-2 ** 2</code> 是 <code>-4</code> 而不是 <code>4</code>（它等于 <code>-(2**2)</code>）。</p>
+<h3 id="2-9-浮点数的精度陷阱-为什么-0-1-0-2-0-3">2.9 浮点数的精度陷阱：为什么 <code>0.1 + 0.2 != 0.3</code></h3>
+<p>这是每个 Python 初学者都会被吓一跳的地方：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nb">print</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span><span class="p">)</span>              <span class="c1"># 0.30000000000000004</span>
+<span class="nb">print</span><span class="p">(</span><span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">==</span> <span class="mf">0.3</span><span class="p">)</span>       <span class="c1"># False  ← 不是 Python 的 bug，所有语言都这样</span>
+<span class="nb">print</span><span class="p">(</span><span class="mf">1.1</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>                <span class="c1"># 3.3000000000000003</span>
+</code></pre>
+<p><strong>为什么</strong>：计算机用二进制存小数，而 <code>0.1</code> 在二进制里是<strong>无限循环小数</strong>（就像十进制里的 1/3 = 0.333...）。
+存不下就必然有误差，误差在计算中会累积。</p>
+<p><strong>因此：永远不要用 <code>==</code> 比较两个浮点数的计算结果。</strong> 三种正确写法：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">+</span> <span class="mf">0.2</span>
+
+<span class="c1"># 写法 1：看差值是不是足够小（最常用）</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="mf">0.3</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span><span class="p">)</span>          <span class="c1"># True</span>
+
+<span class="c1"># 写法 2：用标准库的 isclose（语义最清楚）</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">))</span>          <span class="c1"># True</span>
+
+<span class="c1"># 写法 3：先四舍五入到需要的位数再比</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.3</span><span class="p">)</span>            <span class="c1"># True</span>
+</code></pre>
+<p><strong>涉及钱的时候不要 float</strong>，用 <code>Decimal</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span>
+<span class="n">price</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">"19.99"</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>                         <span class="c1"># 59.97（精确，不是 59.97000000000001）</span>
+</code></pre>
+<blockquote>
+<p>经验法则：计数、数量用 <code>int</code>；科学计算、比例、平均值用 <code>float</code>；
+<strong>金额、需要精确对账的数字用 <code>Decimal</code></strong>。</p>
+</blockquote>
+<h3 id="2-10-f-string-格式化进阶-小数位-千分位-对齐">2.10 f-string 格式化进阶：小数位、千分位、对齐</h3>
+<p><code>f"{变量}"</code> 只是基础用法。在冒号后面加<strong>格式说明符</strong>，能让输出直接可用：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14159265</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">1234567</span>
+<span class="n">ratio</span> <span class="o">=</span> <span class="mf">0.256</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">pi</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>        <span class="c1"># 3.14        保留 2 位小数</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">pi</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>        <span class="c1"># 3.1416      保留 4 位（会四舍五入）</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>           <span class="c1"># 1,234,567   千分位分隔符</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">ratio</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 25.6%       转成百分比</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">&gt;12,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>        <span class="c1"># '   1,234,567'  右对齐，总宽 12</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'OK'</span><span class="si">:</span><span class="s2">^10</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>      <span class="c1"># '    OK    '    居中，总宽 10</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">7</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>         <span class="c1"># 007         左边补 0 到 3 位</span>
+
+<span class="c1"># 组合起来：一行做一个像样的报表行</span>
+<span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">qty</span> <span class="o">=</span> <span class="s2">"笔记本"</span><span class="p">,</span> <span class="mf">12.5</span><span class="p">,</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2"> 单价 </span><span class="si">{</span><span class="n">price</span><span class="si">:</span><span class="s2">&gt;6.2f</span><span class="si">}</span><span class="s2"> × </span><span class="si">{</span><span class="n">qty</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">price</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">qty</span><span class="si">:</span><span class="s2">&gt;7.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p>调试时还有个省事的写法（<code>3.8+</code>）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">y</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>           <span class="c1"># x=10 y=20  ← 连名字一起打印，比 print(x, y) 清楚</span>
+</code></pre>
+<h3 id="2-11-一次给多个变量赋值-以及-常量-的约定">2.11 一次给多个变量赋值，以及「常量」的约定</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># ① 多重赋值：一行给多个变量（元组的自动拆包）</span>
+<span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">city</span> <span class="o">=</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="s2">"成都"</span>
+
+<span class="c1"># ② 交换两个变量——Python 里不需要临时变量</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>                   <span class="c1"># 2 1</span>
+
+<span class="c1"># ③ 链式赋值：多个名字指向同一个值</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre>
+<p>第 ③ 条有个坑：<strong>对数字没事，对列表有事</strong>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">p</span> <span class="o">=</span> <span class="n">q</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>                      <span class="c1"># [1, 2, 3, 4]  ← q 也跟着变了！</span>
+</code></pre>
+<p>因为 <code>p = q = [1, 2, 3]</code> 是"两个名字指向同一个列表"，不是"两个列表"。
+想要两份独立的就分开写：<code>p = [1, 2, 3]</code> 与 <code>q = [1, 2, 3]</code>（或用 <code>q = p.copy()</code>，单元 2 会细讲）。</p>
+<p><strong>常量</strong>：Python 没有真正的常量（谁都能改），<strong>约定</strong>是用全大写表示"不要改我"：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">MAX_RETRY</span> <span class="o">=</span> <span class="mi">3</span>          <span class="c1"># 全大写 = 约定上的常量，看到就别赋值</span>
+<span class="n">TAX_RATE</span> <span class="o">=</span> <span class="mf">0.13</span>
+</code></pre>
+<p>这只是君子协定——Python 不会拦你，但所有 Python 程序员都遵守它。</p>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-四种类型与-type">示例 1：四种类型与 type()</h3>

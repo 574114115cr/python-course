@@ -106,6 +106,9 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#错误-3-pip-install-requests-成功-import-requ">错误 3：pip install requests 成功，import requests 却 ModuleNotFoundError</a>
 <a class="lv3" href="#错误-4-改了代码-运行结果没变">错误 4：改了代码，运行结果没变</a>
 <a class="lv3" href="#错误-5-git-checkout-之后代码没了">错误 5：git checkout 之后代码没了</a>
+<a class="lv3" href="#错误-6-powershell-里-activate-报-禁止运行脚本">错误 6：PowerShell 里 activate 报「禁止运行脚本」</a>
+<a class="lv3" href="#错误-7-把自己的文件命名成-python-py-random-py-strin">错误 7：把自己的文件命名成 python.py / random.py / string.py</a>
+<a class="lv3" href="#错误-8-windows-上打印中文报-unicodeencodeerror-或">错误 8：Windows 上打印中文报 UnicodeEncodeError，或者文件里读出来是乱码</a>
 <a class="lv2" href="#本单元小结与产出检查">本单元小结与产出检查</a></nav>
       <div class="sidetag">
         <b>学习提醒</b><br>
@@ -152,6 +155,65 @@ transition:opacity .18s;z-index:60}
 <li>错误提示：你在当前文件还没运行之前，就能看到红波浪线告诉你哪里写错了</li>
 </ul>
 <p>记住这个分工：<strong>编辑器负责"写"，解释器负责"跑"，终端负责"把两者连起来"。</strong></p>
+<h4>2.3.1 编辑器与 IDE 怎么选（教材附录 B）</h4>
+<p>本课程全程用 VS Code，但你迟早会想知道"还有别的选择吗"。下面这张表按<strong>你现在的阶段</strong>给出建议，而不是按功能多少排名：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>是什么</th>
+<th>适合谁</th>
+<th>一句话评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VS Code</strong></td>
+<td>编辑器 + 装扩展变 IDE</td>
+<td>本课程默认，适合所有人</td>
+<td>轻、快、免费，装 Python 扩展就够用到阶段 2 结束</td>
+</tr>
+<tr>
+<td><strong>IDLE</strong></td>
+<td>Python 自带的极简编辑器</td>
+<td>只想立刻试两行代码</td>
+<td>装完 Python 就有，交互窗口随手试；写项目不够用</td>
+</tr>
+<tr>
+<td><strong>Thonny</strong></td>
+<td>为教学设计的编辑器</td>
+<td>完全零基础、怕命令行的人</td>
+<td>内置变量面板和单步调试，能把"变量变了什么"直接画出来</td>
+</tr>
+<tr>
+<td><strong>PyCharm</strong></td>
+<td>完整的 Python IDE</td>
+<td>以后做大型项目</td>
+<td>功能最强也最重：启动慢、占内存，初学容易被界面淹没</td>
+</tr>
+<tr>
+<td><strong>Jupyter Notebook</strong></td>
+<td>浏览器里一格一格跑代码</td>
+<td>阶段 2 的数据可视化单元</td>
+<td>画图表、看中间结果极方便；但不是一个"程序"，不适合写游戏/网站</td>
+</tr>
+<tr>
+<td><strong>在线编辑器</strong>（Colab / Replit 等）</td>
+<td>浏览器里跑，不用装环境</td>
+<td>临时在别人电脑上写代码</td>
+<td>不装环境就能跑，但依赖网络、文件保存在云端</td>
+</tr>
+</tbody>
+</table>
+<p><strong>三条选型建议</strong>：</p>
+<ol>
+<li><strong>初学不要纠结工具</strong>。VS Code 装上就能学完本书全部内容，来回换工具只会消耗你的注意力。</li>
+<li><strong>什么时候该换</strong>：等你明确觉得"现在的工具碍事了"再换。比如开始画图表（第 15 章）是 Jupyter 的主场；开始做 Django 网站（第 18 章）时 PyCharm 的提示更完整。</li>
+<li><strong>不要为了"看起来专业"选重的</strong>。PyCharm 的调试器确实更强，但你在单元 0 只需要一个能运行脚本的窗口。</li>
+</ol>
+<blockquote>
+<p>记住：工具之间<strong>不冲突</strong>。你完全可以 VS Code 写项目、Jupyter 画图表、IDLE 随手试一行。</p>
+</blockquote>
 <h3 id="2-4-第一个报错-报错是你的朋友">2.4 第一个报错：报错是你的朋友</h3>
 <p>几乎每个人第一天都会遇到这个：</p>
 <pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="nb">print</span><span class="p">(</span><span class="s2">"Hello, Python!"</span>   <span class="c1"># ← 结尾少了一个右括号</span>
@@ -581,6 +643,24 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 <p><strong>症状</strong>：想撤销修改，结果改的内容被覆盖。
 <strong>原因</strong>：<code>git checkout -- 文件</code> 是「用最近一次提交覆盖工作区」，不是「撤销上一次 checkout」。
 <strong>改法</strong>：先 <code>git status</code> 看清改了什么；只想临时回退就先 <code>git stash</code>（可 <code>git stash pop</code> 找回），别直接 checkout。</p>
+<h3 id="错误-6-powershell-里-activate-报-禁止运行脚本">错误 6：PowerShell 里 <code>activate</code> 报「禁止运行脚本」</h3>
+<p><strong>症状</strong>：创建虚拟环境后执行 <code>.\venv\Scripts\activate</code>，红色报错说此系统上禁止运行脚本。
+<strong>原因</strong>：Windows PowerShell 默认的执行策略（Restricted）不允许运行 <code>.ps1</code> 脚本，<code>activate</code> 正是这种脚本。
+<strong>改法</strong>：二选一——① 换成 <strong>cmd</strong> 或 <strong>Git Bash</strong> 终端，执行 <code>venv\Scripts\activate.bat</code>；② 仍用 PowerShell 就以管理员身份执行一次
+<code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>，然后重开终端。
+（这不是 Python 的问题，是 Windows 的安全策略，放宽到 <code>RemoteSigned</code> 只影响当前用户。）</p>
+<h3 id="错误-7-把自己的文件命名成-python-py-random-py-strin">错误 7：把自己的文件命名成 <code>python.py</code> / <code>random.py</code> / <code>string.py</code></h3>
+<p><strong>症状</strong>：<code>import random</code> 之后行为怪异，或者报 <code>AttributeError: module 'random' has no attribute 'xxx'</code>。
+<strong>原因</strong>：你的文件名和标准库同名，Python 会<strong>优先导入你这个文件</strong>，把真正的标准库挡住了。
+<strong>改法</strong>：立刻改名（如 <code>my_random_demo.py</code>），并删掉同目录下生成的 <code>__pycache__</code> 文件夹。
+<strong>规则</strong>：文件名永远不要用标准库名、也不要用 <code>test.py</code>（会和测试工具抢名字）。</p>
+<h3 id="错误-8-windows-上打印中文报-unicodeencodeerror-或">错误 8：Windows 上打印中文报 <code>UnicodeEncodeError</code>，或者文件里读出来是乱码</h3>
+<p><strong>症状</strong>：<code>print("中文")</code> 直接崩，或者读 CSV 时中文变成 <code>\xc4\xe3</code> 之类。
+<strong>原因</strong>：Windows 控制台默认编码是 GBK，而文件用的是 UTF-8，两边对不上。
+<strong>改法</strong>：
+1. 终端里先执行 <code>chcp 65001</code> 切到 UTF-8（或在「设置 → 时间和语言 → 语言 → 管理语言设置」里勾上 Beta UTF-8）。
+2. 读写文件<strong>永远显式写编码</strong>：<code>open(path, encoding="utf-8")</code>，这是根治办法，别依赖系统默认。
+3. VS Code 右下角看到编码不是 <code>UTF-8</code> 时，点它 → 「通过编码保存」→ 选 UTF-8。</p>
 <hr>
 <h2 id="本单元小结与产出检查">本单元小结与产出检查</h2>
 <p>学完本单元，你手上应该有：</p>

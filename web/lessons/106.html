@@ -76,6 +76,7 @@ transition:opacity .18s;z-index:60}
       <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
 <a class="lv3" href="#2-7-三大部署坑-allowed_hosts-collectstatic-de">2.7 三大部署坑：ALLOWED_HOSTS、collectstatic、DEBUG（对应教材 20.2）</a>
 <a class="lv3" href="#2-8-定制错误页面与-继续开发-对应教材-20-2">2.8 定制错误页面与「继续开发」（对应教材 20.2）</a>
+<a class="lv3" href="#2-9-上线之后出问题怎么办-部署故障排除-教材附录-e">2.9 上线之后出问题怎么办：部署故障排除（教材附录 E）</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-同一份代码-两个环境-config_switcher-py">示例 1：同一份代码，两个环境（config_switcher.py）</a>
 <a class="lv3" href="#示例-2-给-requirements-txt-做入职体检-requiremen">示例 2：给 requirements.txt 做入职体检（requirements_tools.py）</a>
@@ -254,6 +255,236 @@ transition:opacity .18s;z-index:60}
 </code></pre>
 <p><strong>你的代码库里同时住着两个环境，git 提交是本地唯一的真相来源，platform push 是把真相同步到云上的仪式。</strong> 项目不想要了，删除分两步：<code>platform project:delete</code> 删除平台上的项目（交互式确认），再 <code>git remote remove platform</code> 删掉本地 git 里指向平台的 remote——线上删了，本地仓库还留着。</p>
 <hr>
+<h3 id="2-9-上线之后出问题怎么办-部署故障排除-教材附录-e">2.9 上线之后出问题怎么办：部署故障排除（教材附录 E）</h3>
+<p>本地一切正常，推到线上就白屏——这是部署的常态，不是你的代码烂。差别在于：<strong>线上你看不到 traceback</strong>。所以排查的第一件事不是改代码，而是<strong>把日志拿出来</strong>。</p>
+<h4>2.9.1 先学会看日志</h4>
+<pre><code class="language-bash"><span class="cl">终端命令</span><span class="c1"># Platform.sh 看最近的应用日志</span>
+platform<span class="w"> </span>log<span class="w"> </span>-p<span class="w"> </span>&lt;项目ID&gt;<span class="w"> </span>--lines<span class="w"> </span><span class="m">200</span>
+
+<span class="c1"># 其他平台的等价操作都差不多：找「Logs」面板，或用各自的 CLI tail</span>
+</code></pre>
+<p>日志里真正有用的是 <strong>Traceback 的最后几行</strong>——和本地报错一模一样，读法完全一致（见单元 11 的 2.4）。
+如果日志里只有一行 <code>500 Internal Server Error</code> 而没有 traceback，说明 <code>DEBUG=False</code> 时 Django 把错误<strong>只写进日志、不发到页面</strong>——这正是"线上白屏、本地正常"的原因。</p>
+<blockquote>
+<p>一条硬规矩：<strong>线上永远不要靠 <code>DEBUG=True</code> 来"看一眼报错"</strong>。那会把数据库配置、密钥全暴露给访问者。要看报错就看日志。</p>
+</blockquote>
+<p>日志动辄几百行，真正要找的只有 traceback 的最后一行。写个小工具把这一行挑出来：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># log_extract.py —— 从一坨日志里挑出「该拿去搜的那一行」</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">last_error</span><span class="p">(</span><span class="n">log_text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回日志里最后一条 traceback 的**最后一行**——那才是该拿去搜的一行。</span>
+
+<span class="sd">    不能简单找「含 Error 的最后一行」：日志里常有</span>
+<span class="sd">    `Internal Server Error: /topics/1/` 这种 HTTP 状态行，它只是说"挂了"，</span>
+<span class="sd">    没说为什么挂。真正的原因在 Traceback 块的**最后一行**。</span>
+<span class="sd">    """</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">log_text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ln</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"Traceback"</span><span class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>                                  <span class="c1"># 取最后一个 Traceback 块</span>
+    <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>                                  <span class="c1"># 没有 traceback 就退回模糊找</span>
+        <span class="k">for</span> <span class="n">ln</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s2">"Error"</span> <span class="ow">in</span> <span class="n">ln</span> <span class="ow">or</span> <span class="s2">"Exception"</span> <span class="ow">in</span> <span class="n">ln</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ln</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># 块内逐行：跳过 File "..." 栈帧行，遇到 [web] 这类新日志段就停，</span>
+    <span class="c1"># 剩下的最后一行就是异常行（注意它可能是顶格的，不能靠缩进来判断）</span>
+    <span class="n">hit</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"["</span><span class="p">):</span>                          <span class="c1"># 新的日志段落，traceback 结束</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'File "'</span><span class="p">):</span>                     <span class="c1"># 栈帧行，不是原因</span>
+            <span class="k">continue</span>
+        <span class="n">hit</span> <span class="o">=</span> <span class="n">s</span>
+    <span class="k">return</span> <span class="n">hit</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">search_query</span><span class="p">(</span><span class="n">err_line</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把报错行变成搜索词：去掉自己的路径和变量名，只留异常类型 + 关键信息。"""</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">err_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">": "</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s2">": "</span> <span class="ow">in</span> <span class="n">err_line</span> <span class="k">else</span> <span class="n">err_line</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"File </span><span class="se">\"</span><span class="s2">[^</span><span class="se">\"</span><span class="s2">]+</span><span class="se">\"</span><span class="s2">"</span><span class="p">,</span> <span class="s1">'File "..."'</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>   <span class="c1"># 抹掉本机路径</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"'[^']*'"</span><span class="p">,</span> <span class="s2">"'...'"</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>                <span class="c1"># 抹掉具体的值</span>
+    <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="n">SAMPLE</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="s2">[web] Starting gunicorn 21.2.0</span>
+<span class="s2">[web] Listening at: http://0.0.0.0:8888</span>
+<span class="s2">Internal Server Error: /topics/1/</span>
+<span class="s2">Traceback (most recent call last):</span>
+<span class="s2">  File "/app/learning_logs/views.py", line 42, in topic</span>
+<span class="s2">    entry = topic.entry_set.get(id=entry_id)</span>
+<span class="s2">  File "/app/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 637, in get</span>
+<span class="s2">    raise self.model.DoesNotExist(</span>
+<span class="s2">learning_logs.models.Entry.DoesNotExist: Entry matching query does not exist.</span>
+<span class="s2">[web] 10.0.3.7 - - "GET /topics/1/ HTTP/1.1" 500</span>
+<span class="s2">"""</span>
+
+<span class="n">err</span> <span class="o">=</span> <span class="n">last_error</span><span class="p">(</span><span class="n">SAMPLE</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"报错行："</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"该搜的是："</span><span class="p">,</span> <span class="n">search_query</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"★ 看清楚：日志里唯一的线索是最后那行 DoesNotExist，"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"  而原因在它上面两行——get() 没找到匹配的记录，要换成 get_object_or_404 或先 exists() 判断。"</span><span class="p">)</span>
+</code></pre>
+<h4>2.9.2 症状对照表</h4>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>最可能的原因</th>
+<th>怎么确认 / 怎么修</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开就是 <code>400 Bad Request</code></td>
+<td><code>ALLOWED_HOSTS</code> 不含当前域名</td>
+<td>看日志有没有 <code>Invalid HTTP_HOST</code>；补上域名（见 2.6）</td>
+</tr>
+<tr>
+<td>页面能开，<strong>样式全丢</strong>（素颜白脸）</td>
+<td>没跑 <code>collectstatic</code>，或 Web 服务器没配 <code>/static</code></td>
+<td>直接访问 <code>/static/css/styles.css</code>，404 就是没收集到</td>
+</tr>
+<tr>
+<td>页面 500，日志有 <code>DisallowedHost</code></td>
+<td>同上，只是触发点不同</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>500，日志有 <code>OperationalError: no such table</code> / <code>relation does not exist</code></td>
+<td>线上没跑 <code>migrate</code></td>
+<td>部署钩子或 SSH 里补 <code>python manage.py migrate</code></td>
+</tr>
+<tr>
+<td>500，日志有 <code>ModuleNotFoundError: No module named 'xxx'</code></td>
+<td><code>requirements.txt</code> 漏了这个包</td>
+<td>本地 <code>pip freeze &gt; requirements.txt</code> 重新生成（见 2.4）</td>
+</tr>
+<tr>
+<td>提交表单 403，提示 CSRF 失败</td>
+<td><code>CSRF_TRUSTED_ORIGINS</code> 没配，或用了 http 访问 https 站点</td>
+<td>加上 <code>CSRF_TRUSTED_ORIGINS = ['https://你的域名']</code></td>
+</tr>
+<tr>
+<td>改了代码推上去，<strong>线上没变化</strong></td>
+<td>平台没重新构建，或浏览器缓存了旧静态文件</td>
+<td>看部署日志的 build 步骤有没有跑；静态文件用指纹名（见示例 13）</td>
+</tr>
+<tr>
+<td>静态文件 404，但 <code>collectstatic</code> 明明跑了</td>
+<td><code>STATIC_ROOT</code> 与 Web 服务器读的目录不是同一个</td>
+<td>打印 <code>STATIC_ROOT</code> 的实际路径对比服务器配置</td>
+</tr>
+</tbody>
+</table>
+<p><strong>八条里有五条是配置问题，不是代码问题。</strong> 部署排错的绝大部分时间应该花在"两边配置是否一致"上。</p>
+<p>把上面这张表写成脚本，就是一份<strong>上线前的配置体检</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># deploy_doctor.py —— 上线前跑一遍，把配置类问题一次性挑出来</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">static_ready</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""cfg 是 settings 里的关键项；返回 [(级别, 问题, 怎么改)]。"""</span>
+    <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"DEBUG"</span><span class="p">):</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"严重"</span><span class="p">,</span> <span class="s2">"DEBUG 还是 True，报错会连同密钥一起显示在页面上"</span><span class="p">,</span>
+                       <span class="s2">"线上改成 False"</span><span class="p">))</span>
+        <span class="c1"># DEBUG=True 时 Django 自动放行 localhost / 127.0.0.1 / [::1]，</span>
+        <span class="c1"># 所以本地怎么访问都不会 400——这个坑只有到了线上才暴露</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"提示"</span><span class="p">,</span> <span class="s2">"DEBUG=True 时 ALLOWED_HOSTS 被自动放行，本地试不出来"</span><span class="p">,</span>
+                       <span class="s2">"把 ALLOWED_HOSTS 的问题留到线上前单独确认"</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">host</span> <span class="o">==</span> <span class="n">h</span> <span class="ow">or</span> <span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span> <span class="ow">and</span> <span class="n">host</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+                 <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ALLOWED_HOSTS"</span><span class="p">,</span> <span class="p">[])):</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"严重"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"ALLOWED_HOSTS 不含 </span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">，访问会被 400 拦下"</span><span class="p">,</span>
+                       <span class="sa">f</span><span class="s2">"ALLOWED_HOSTS.append('</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s2">')"</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"STATIC_ROOT"</span><span class="p">):</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"警告"</span><span class="p">,</span> <span class="s2">"没设 STATIC_ROOT，collectstatic 不知道往哪汇总"</span><span class="p">,</span>
+                       <span class="s2">"STATIC_ROOT = BASE_DIR / 'staticfiles'"</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">static_ready</span><span class="p">:</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"警告"</span><span class="p">,</span> <span class="s2">"STATIC_ROOT 是空的，线上会变成没样式的白脸页面"</span><span class="p">,</span>
+                       <span class="s2">"python manage.py collectstatic --noinput"</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SECRET_KEY"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"django-insecure"</span><span class="p">):</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"严重"</span><span class="p">,</span> <span class="s2">"还在用开发用的 SECRET_KEY，会话和签名可被伪造"</span><span class="p">,</span>
+                       <span class="s2">"从环境变量读一个随机长字符串"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">issues</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">issues</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">issues</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"配置体检通过：没发现致命项</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">how</span> <span class="ow">in</span> <span class="n">issues</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="se">\n</span><span class="s2">      改法：</span><span class="si">{</span><span class="n">how</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">lv</span> <span class="o">==</span> <span class="s2">"严重"</span> <span class="k">for</span> <span class="n">lv</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">issues</span><span class="p">)</span>
+
+
+<span class="c1"># 三种典型现场</span>
+<span class="n">cases</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">"本地开发"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"DEBUG"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"ALLOWED_HOSTS"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"SECRET_KEY"</span><span class="p">:</span> <span class="s2">"django-insecure-xxx"</span><span class="p">},</span>
+     <span class="s2">"127.0.0.1:8000"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"刚推上线（忘了改配置）"</span><span class="p">,</span>
+     <span class="p">{</span><span class="s2">"DEBUG"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"ALLOWED_HOSTS"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"SECRET_KEY"</span><span class="p">:</span> <span class="s2">"django-insecure-xxx"</span><span class="p">},</span>
+     <span class="s2">"abc.us-3.platformsh.site"</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"配置齐全"</span><span class="p">,</span> <span class="p">{</span><span class="s2">"DEBUG"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">"ALLOWED_HOSTS"</span><span class="p">:</span> <span class="p">[</span><span class="s2">".platformsh.site"</span><span class="p">],</span>
+                 <span class="s2">"STATIC_ROOT"</span><span class="p">:</span> <span class="s2">"/app/staticfiles"</span><span class="p">,</span> <span class="s2">"SECRET_KEY"</span><span class="p">:</span> <span class="s2">"a9f3...c21"</span><span class="p">},</span>
+     <span class="s2">"abc.us-3.platformsh.site"</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">cfg</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">ready</span> <span class="ow">in</span> <span class="n">cases</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"── </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> ──"</span><span class="p">)</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="n">report</span><span class="p">(</span><span class="n">check_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">ready</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"结论：</span><span class="si">{</span><span class="s1">'可以上线'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">'先修完再上线'</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"★ 注意第二种：本地全绿，上线全红——差别只在于配置，不在代码。"</span><span class="p">)</span>
+</code></pre>
+<h4>2.9.3 用 WhiteNoise 让 Django 自己发静态文件</h4>
+<p>如果你的平台配 Web 服务器路由（routes）比较麻烦，有个省事得多的办法：装 <code>whitenoise</code>，让 Django 应用<strong>自己</strong>发静态文件。</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>pip<span class="w"> </span>install<span class="w"> </span>whitenoise
+pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+</code></pre>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># settings.py —— 三处改动</span>
+<span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"django.middleware.security.SecurityMiddleware"</span><span class="p">,</span>
+    <span class="s2">"whitenoise.middleware.WhiteNoiseMiddleware"</span><span class="p">,</span>   <span class="c1"># ① 紧跟 SecurityMiddleware，在其他中间件之前</span>
+    <span class="c1"># ... 其余中间件</span>
+<span class="p">]</span>
+
+<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"staticfiles"</span>              <span class="c1"># ② collectstatic 汇总到这里</span>
+
+<span class="n">STORAGES</span> <span class="o">=</span> <span class="p">{</span>                                        <span class="c1"># ③ Django 4.2+ 的写法</span>
+    <span class="s2">"default"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"BACKEND"</span><span class="p">:</span> <span class="s2">"django.core.files.storage.FileSystemStorage"</span><span class="p">},</span>
+    <span class="s2">"staticfiles"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"BACKEND"</span><span class="p">:</span> <span class="s2">"whitenoise.storage.CompressedManifestStaticFilesStorage"</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</code></pre>
+<blockquote>
+<p>Django 4.2 之前没有 <code>STORAGES</code>，老写法是单独一行
+<code>STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"</code>。</p>
+</blockquote>
+<p>第 ③ 步那个存储后端会做两件事：<strong>压缩</strong>（gzip/brotli）和<strong>给文件名加内容哈希</strong>（<code>base.a4ef2389.css</code>）。有了哈希名就可以放心让浏览器永久缓存，文件内容一变名字就变，缓存自动失效——这就是示例 13 说的"静态资源指纹"。</p>
+<p><strong>怎么确认装好了</strong>：本地把 <code>DEBUG</code> 改成 <code>False</code>，跑 <code>collectstatic</code> 再 <code>runserver</code>，静态文件照样能加载就是成功了：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic
+<span class="c1"># settings.py: DEBUG = False</span>
+python<span class="w"> </span>manage.py<span class="w"> </span>runserver
+</code></pre>
+<p>这一步能在<strong>推上云之前</strong>就把"线上没样式"这个最常见的坑消灭掉。</p>
+<h4>2.9.4 四步排查法与「先回滚」</h4>
+<p>线上出问题时按顺序来，不要上来就改代码：</p>
+<ol>
+<li><strong>看日志</strong>，拿到真正的 traceback（没有 traceback 就先把日志级别调详细）</li>
+<li><strong>本地用线上配置复现</strong>：<code>DEBUG=False</code> + 线上同样的环境变量，看能不能重现</li>
+<li><strong>对比两边差异</strong>：Python 版本、包版本、环境变量、<code>ALLOWED_HOSTS</code>、数据库是不是同一个</li>
+<li><strong>只改一处就重新部署一次</strong>，确认这一处有没有效果——一次改五处等于没改</li>
+</ol>
+<p>如果站点已经不能对外服务，<strong>先把服务恢复，再慢慢修</strong>：</p>
+<pre><code class="language-bash"><span class="cl">终端命令</span>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-5<span class="w">          </span><span class="c1"># 找到上一个能用的提交</span>
+git<span class="w"> </span>revert<span class="w"> </span>&lt;出问题的提交&gt;<span class="w">      </span><span class="c1"># 生成一个"撤销"提交（不要 reset，团队协作要保留历史）</span>
+git<span class="w"> </span>push<span class="w">                      </span><span class="c1"># 重新部署，服务先恢复</span>
+</code></pre>
+<p>回滚之后再从容排查。这跟单元 0 的 Git 是同一套思路：<strong>代码有版本，就有退路</strong>。</p>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <p>以下示例都不需要 Django 环境，用标准库把本单元的抽象概念「演」给你看。涉及写文件的示例统一写到 <code>data/</code> 目录，跑完可以整个删掉。</p>
 <h3 id="示例-1-同一份代码-两个环境-config_switcher-py">示例 1：同一份代码，两个环境（config_switcher.py）</h3>

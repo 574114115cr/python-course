@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><!--@theme:head-->
+<style>
+/* 主题切换按钮 + 原生控件配色（由 tools/theme.py 注入，勿手改） */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+/* 强调色的「原色版」：浅色下等于强调色本身，深色下由派生表换成压暗后的实心底色。
+   凡是把强调色当实心底、上面压白字的地方都用 --p1s 这类变量（否则白字会糊）。 */
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;--p1:#1f5fa8;
+--p1s:var(--p1);--p2s:var(--p2);--p3s:var(--p3);--p4s:var(--p4);--dangers:var(--danger)}
+html[data-theme="dark"]{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;
+--muted:#93a6b8;--p1:#63a9ee}
+body{transition:background-color .18s,color .18s}
+::selection{background:rgba(99,169,238,.32)}
+.thbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;
+border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);
+font:inherit;font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;
+white-space:nowrap;flex:0 0 auto}
+.thbtn:hover{color:var(--text);border-color:var(--p1)}
+.thbtn:focus-visible{outline:2px solid var(--p1);outline-offset:2px}
+.thbtn .thi svg{width:15px;height:15px;display:block}
+.thbtn .thlbl{display:inline}
+/* 窄屏顶栏本来就挤（返回 / 标题 / 课件 / 勾选），再塞按钮会横向溢出 14px，
+   所以窄屏由脚本把按钮挪到 body 上变成右下角悬浮（顶栏有 backdrop-filter，
+   直接给它 position:fixed 会被顶栏接管定位，跑到屏幕外）。 */
+.thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
+box-shadow:0 6px 20px rgba(0,0,0,.28)}
+@media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+/* 白底课件图（幻灯片截图）在深色下是一片刺眼的亮块：压一点亮度当「纸面」看。
+   只压这三类课件图，普通插图/头像不受影响；进入全屏放映时恢复原亮度，
+   保证放映颜色和下载的 pptx 一致。 */
+html[data-theme="dark"] .stage-img,html[data-theme="dark"] .cell img,
+html[data-theme="dark"] .ppt-thumb img{filter:brightness(.9)}
+:fullscreen .stage-img,:fullscreen .cell img{filter:none}
+html[data-theme="dark"] :fullscreen .stage-img,
+html[data-theme="dark"] :fullscreen .cell img{filter:none}
+</style>
+<script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
+<!--/@theme:head-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>排错速查 · Python 入门课</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+.hero{background:linear-gradient(135deg,#f4f8fd,#eef4fb);border:1px solid var(--line);
+border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+.hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;
+color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+.hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+.hero p{margin:0;font-size:14px;color:#41505f;line-height:1.8;max-width:74ch}
+.hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+.hero .st div{display:flex;flex-direction:column}
+.hero .st b{font-size:20px;color:var(--p1)}
+.hero .st span{font-size:11.5px;color:var(--muted)}
+h2{font-size:17px;margin:34px 0 8px}
+h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1);
+border-radius:2px;margin-right:9px;vertical-align:-2px}
+.sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+.fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+.fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);
+border-radius:10px;background:#fff}
+.fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+.fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+.ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+.ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+.ig code{background:#f2f6fb;border-radius:4px;padding:1px 5px;font-size:12px}
+.ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;
+background:var(--p1bg);border-radius:4px;padding:1px 5px}
+.ig a:hover{background:#dbe9f8}
+.ig span{font-size:10.5px;color:var(--muted)}
+.empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+.cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.cb b{display:block;font-size:14px;margin-bottom:6px}
+.cb p{margin:0;font-size:13px;color:#44515e;line-height:1.75}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+table.cov th{background:#f5f8fc;text-align:left;padding:9px 12px;font-size:12px;
+color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+table.cov td{padding:9px 12px;border-bottom:1px solid #eef2f6;vertical-align:top;line-height:1.65}
+table.cov tr:last-child td{border-bottom:none}
+table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.cov td.s{font-size:12px;color:#5a6875}
+table.cov tr[id]{scroll-margin-top:70px}
+table.cov tr:target td{background:#f3f8ff}
+table.cov tr.miss td{background:#fdf7f7;color:#8a5a5a}
+table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+table.cov a:hover{text-decoration:underline}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+.tag.ok{background:#e6f6f0;color:#0b6e54}
+.tag.part{background:#fdf3e2;color:#8a5a00}
+.tag.no{background:#fdeaea;color:#a33}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;
+color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+ .hero{padding:24px 20px}
+ .wrap{padding:0 14px 50px}
+ .hero .st{gap:18px}
+}
+/*@theme-dark*/
+@media screen{
+:where(html[data-theme="dark"]) .wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+:where(html[data-theme="dark"]) .hero{background:linear-gradient(135deg,#121922,#121921);border:1px solid var(--line);border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+:where(html[data-theme="dark"]) .hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+:where(html[data-theme="dark"]) .hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+:where(html[data-theme="dark"]) .hero p{margin:0;font-size:14px;color:#bcc6d1;line-height:1.8;max-width:74ch}
+:where(html[data-theme="dark"]) .hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+:where(html[data-theme="dark"]) .hero .st div{display:flex;flex-direction:column}
+:where(html[data-theme="dark"]) .hero .st b{font-size:20px;color:var(--p1)}
+:where(html[data-theme="dark"]) .hero .st span{font-size:11.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) h2{font-size:17px;margin:34px 0 8px}
+:where(html[data-theme="dark"]) h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1s);border-radius:2px;margin-right:9px;vertical-align:-2px}
+:where(html[data-theme="dark"]) .sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+:where(html[data-theme="dark"]) .fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+:where(html[data-theme="dark"]) .fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#182129}
+:where(html[data-theme="dark"]) .fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+:where(html[data-theme="dark"]) .fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+:where(html[data-theme="dark"]) .idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+:where(html[data-theme="dark"]) .ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+:where(html[data-theme="dark"]) .ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+:where(html[data-theme="dark"]) .ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+:where(html[data-theme="dark"]) .ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .ig code{background:#121922;border-radius:4px;padding:1px 5px;font-size:12px}
+:where(html[data-theme="dark"]) .ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;background:var(--p1bg);border-radius:4px;padding:1px 5px}
+:where(html[data-theme="dark"]) .ig a:hover{background:#111920}
+:where(html[data-theme="dark"]) .ig span{font-size:10.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) .empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+:where(html[data-theme="dark"]) .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+:where(html[data-theme="dark"]) .cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+:where(html[data-theme="dark"]) .cb b{display:block;font-size:14px;margin-bottom:6px}
+:where(html[data-theme="dark"]) .cb p{margin:0;font-size:13px;color:#bcc6cf;line-height:1.75}
+:where(html[data-theme="dark"]) .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#182129}
+:where(html[data-theme="dark"]) table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+:where(html[data-theme="dark"]) table.cov th{background:#121922;text-align:left;padding:9px 12px;font-size:12px;color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+:where(html[data-theme="dark"]) table.cov td{padding:9px 12px;border-bottom:1px solid #293a4b;vertical-align:top;line-height:1.65}
+:where(html[data-theme="dark"]) table.cov tr:last-child td{border-bottom:none}
+:where(html[data-theme="dark"]) table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+:where(html[data-theme="dark"]) table.cov td.s{font-size:12px;color:#aeb8c1}
+:where(html[data-theme="dark"]) table.cov tr[id]{scroll-margin-top:70px}
+:where(html[data-theme="dark"]) table.cov tr:target td{background:#121922}
+:where(html[data-theme="dark"]) table.cov tr.miss td{background:#221212;color:#c2a1a1}
+:where(html[data-theme="dark"]) table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+:where(html[data-theme="dark"]) table.cov a:hover{text-decoration:underline}
+:where(html[data-theme="dark"]) .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+:where(html[data-theme="dark"]) .tag.ok{background:#12211b;color:#77eecf}
+:where(html[data-theme="dark"]) .tag.part{background:#211b12;color:#eec577}
+:where(html[data-theme="dark"]) .tag.no{background:#211212;color:#d87e7e}
+:where(html[data-theme="dark"]) .foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+:where(html[data-theme="dark"]) .hero{padding:24px 20px}
+:where(html[data-theme="dark"]) .wrap{padding:0 14px 50px}
+:where(html[data-theme="dark"]) .hero .st{gap:18px}
+}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>排错速查</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="lessons/index.html">课程目录</a>
+</div></div>
+<div class="wrap">
+  <div class="hero">
+    <span class="bdg">DEBUG · 排错速查</span>
+    <h1>报错了怎么办 · 124 条实战清单</h1>
+    <p>上面那张表是「异常名 → 先查哪里」，下面是 22 个单元讲义里
+       <b>常见错误清单</b>的全部条目，可搜索、可按单元筛选。
+       数据源就是讲义本身，改了讲义重跑构建即同步。</p>
+    <div class="st">
+      <div><b>124</b><span>条错误清单</span></div>
+      <div><b>20</b><span>种异常类型</span></div>
+      <div><b>22</b><span>个单元</span></div>
+    </div>
+  </div>
+
+  <h2>先认异常名：它直接告诉你问题属于哪一类</h2>
+  <div class="tblwrap"><table class="exc">
+    <thead><tr><th>异常</th><th>含义</th><th>最常见的原因</th><th>先查这里</th></tr></thead>
+    <tbody><tr><td><code>SyntaxError</code></td><td>语法不合规则，代码没跑起来</td><td>def/if/for 行末漏冒号；括号没配对；用了中文标点</td><td>看报错箭头 ^ 指的那一行的**上一行**</td></tr><tr><td><code>IndentationError</code></td><td>缩进层级不对</td><td>该缩进的没缩进；混用空格和 Tab；缩进格数不一致</td><td>4 个空格一级；让编辑器把 Tab 自动转空格</td></tr><tr><td><code>TabError</code></td><td>空格和 Tab 混着用了</td><td>从网页复制代码进来最容易中招</td><td>整段重新缩进（VS Code：全选 → 转换缩进为空格）</td></tr><tr><td><code>NameError</code></td><td>这个名字没定义过</td><td>拼写错 / 大小写错 / 定义写在使用之后</td><td>搜索这个名字是在哪定义的，看顺序对不对</td></tr><tr><td><code>UnboundLocalError</code></td><td>函数里先用了、后面才赋值</td><td>函数内给全局变量赋值却没写 global</td><td>要么加 global，要么改成参数传进去</td></tr><tr><td><code>TypeError</code></td><td>类型不对</td><td>str 和 int 相加；input() 没转类型；对 None 调用方法</td><td>print 出两边的 type()，看哪个不是你以为的类型</td></tr><tr><td><code>ValueError</code></td><td>类型对，但值不合法</td><td>int(&#x27;abc&#x27;)；int(&#x27;3.5&#x27;)；列表里没有要找的值却用了 index()</td><td>把那个值 print 出来看一眼（常用 repr()）</td></tr><tr><td><code>IndexError</code></td><td>下标越界</td><td>空列表还取 [0]；循环到 len 却写成了 len+1</td><td>print(len(列表)) 和你用的下标</td></tr><tr><td><code>KeyError</code></td><td>字典里没有这个键</td><td>键名拼错；数据源里有的项缺这个字段</td><td>print(字典.keys()) 看看实际有哪些键</td></tr><tr><td><code>AttributeError</code></td><td>对象没有这个属性/方法</td><td>方法名拼错；把字符串当列表用；Python 版本太低没这个方法</td><td>print(type(对象)) 确认它到底是个啥</td></tr><tr><td><code>ZeroDivisionError</code></td><td>除以 0</td><td>分母是变量，某次刚好是 0（常见于求平均）</td><td>先判断分母：if len(x) else 给个默认值</td></tr><tr><td><code>FileNotFoundError</code></td><td>文件不存在</td><td>相对路径的基准目录不是你以为的那个</td><td>print(Path.cwd()) 与 Path(&#x27;文件&#x27;).exists()</td></tr><tr><td><code>PermissionError</code></td><td>没权限读写</td><td>Windows 上文件被别的程序开着；往系统目录写</td><td>关掉占用文件的程序；换到用户目录下写</td></tr><tr><td><code>ModuleNotFoundError</code></td><td>import 的模块找不到</td><td>没装；装到了另一个解释器；自己的文件名撞了标准库名</td><td>用 python -m pip install；检查文件名别叫 random.py</td></tr><tr><td><code>UnicodeDecodeError</code></td><td>读文件时编码对不上</td><td>文件是 UTF-8 却按 GBK 读（Windows 默认）</td><td>open(..., encoding=&#x27;utf-8&#x27;) 永远显式写编码</td></tr><tr><td><code>UnicodeEncodeError</code></td><td>输出时编码对不上</td><td>Windows 控制台是 GBK，print 中文就崩</td><td>终端执行 chcp 65001，或写文件代替 print</td></tr><tr><td><code>RecursionError</code></td><td>递归没停下来</td><td>递归函数忘了写终止条件，或条件永远不成立</td><td>确认每次递归都在接近终止条件</td></tr><tr><td><code>StopIteration</code></td><td>迭代器被手动 next() 取空了</td><td>一般不会出现——出现了说明用错了迭代方式</td><td>改用 for 循环，别手动 next()</td></tr><tr><td><code>400 Bad Request（Django）</code></td><td>Django 拒了这个请求的 Host</td><td>ALLOWED_HOSTS 里没有当前访问的域名</td><td>把域名加进 ALLOWED_HOSTS（见单元 20）</td></tr><tr><td><code>DisallowedHost（Django）</code></td><td>同上，只是触发点不同</td><td>线上部署后第一件事就是这个</td><td>同上；看日志确认实际传进来的 Host 是什么</td></tr></tbody>
+  </table></div>
+
+  <h2>全部错误清单</h2>
+  <div class="fbar">
+    <input id="dq" type="search" autocomplete="off" spellcheck="false"
+      placeholder="搜索：缩进、KeyError、encoding、ALLOWED_HOSTS …" aria-label="错误过滤">
+    <select id="du" aria-label="按单元筛选"><option value="">全部单元</option><option value="0">单元 0 · 环境搭建与工具链</option><option value="1">单元 1 · 变量与简单数据类型</option><option value="2">单元 2 · 列表简介</option><option value="3">单元 3 · 操作列表</option><option value="4">单元 4 · if 语句</option><option value="5">单元 5 · 字典</option><option value="6">单元 6 · 用户输入和 while 循环</option><option value="7">单元 7 · 函数</option><option value="8">单元 8 · 类</option><option value="9">单元 9 · 文件和异常</option><option value="10">单元 10 · 测试代码</option><option value="11">单元 11 · 阶段 1 总复习与关卡验收</option><option value="12">单元 12 · Pygame 起步与飞船驾驶</option><option value="13">单元 13 · 射击与外星舰队</option><option value="14">单元 14 · Play 按钮、难度与记分牌</option><option value="15">单元 15 · Matplotlib 生成数据</option><option value="16">单元 16 · 下载真实数据</option><option value="17">单元 17 · 使用 API 与 Plotly</option><option value="18">单元 18 · Django 入门</option><option value="19">单元 19 · 用户账户</option><option value="20">单元 20 · 设置应用程序的样式并部署</option><option value="21">单元 21 · 阶段 2 综合与关卡 2 验收</option></select>
+    <span id="dqn"></span>
+  </div>
+  <div id="dlist"><details class="ec" data-u="0" data-t="&#x27;python&#x27; 不是内部或外部命令"><summary><span class="ub">单元 0</span><b>&#x27;python&#x27; 不是内部或外部命令</b></summary><div class="eb"><p><strong>症状</strong>：终端里敲 <code>python --version</code> 报这一句，但明明装过了。
+<strong>原因</strong>：安装时没勾「Add Python to PATH」，系统找不到解释器。
+<strong>改法</strong>：重新运行安装包选 Modify 勾上 PATH，或手动把 <code>...\Python312\</code> 与 <code>...\Scripts\</code> 加进环境变量，然后<strong>重开终端</strong>（旧窗口不会刷新 PATH）。</p></div></details><details class="ec" data-u="0" data-t="按 3.12 的教程写，`removeprefix` 却报 attributeerror"><summary><span class="ub">单元 0</span><b>按 3.12 的教程写，`removeprefix` 却报 AttributeError</b></summary><div class="eb"><p><strong>症状</strong>：<code>str</code> 没有 <code>removeprefix</code>。
+<strong>原因</strong>：装的是 3.8/3.9，这个方法是 3.9 才有的（<code>match</code> 语法是 3.10）。
+<strong>改法</strong>：<code>python --version</code> 确认版本；低于 3.12 就升级——本课程按 3.12 写，前面的单元还能凑合，到单元 8 之后会到处踩坑。</p></div></details><details class="ec" data-u="0" data-t="pip install requests` 成功，`import requests` 却 modulenotfounderror"><summary><span class="ub">单元 0</span><b>pip install requests` 成功，`import requests` 却 ModuleNotFoundError</b></summary><div class="eb"><p><strong>症状</strong>：装完导不进来。
+<strong>原因</strong>：机器上有两个 Python，<code>pip</code> 属于另一个，VS Code 用的又是第三个。
+<strong>改法</strong>：一律用 <code>python -m pip install 包名</code>（跟着当前解释器走）；VS Code 里 <code>Ctrl+Shift+P</code> → <code>Python: Select Interpreter</code> 选同一个解释器。</p></div></details><details class="ec" data-u="0" data-t="改了代码，运行结果没变"><summary><span class="ub">单元 0</span><b>改了代码，运行结果没变</b></summary><div class="eb"><p><strong>症状</strong>：明明保存了，输出还是旧的。
+<strong>原因</strong>：跑的是另一个文件（同目录下有同名 <code>.py</code>），或终端里跑的是缓存的 <code>.pyc</code>。
+<strong>改法</strong>：看 VS Code 标题栏的文件名与路径；终端里用 <code>python 完整路径/文件名.py</code>，或先 <code>cd</code> 到文件所在目录。</p></div></details><details class="ec" data-u="0" data-t="git checkout` 之后代码没了"><summary><span class="ub">单元 0</span><b>git checkout` 之后代码没了</b></summary><div class="eb"><p><strong>症状</strong>：想撤销修改，结果改的内容被覆盖。
+<strong>原因</strong>：<code>git checkout -- 文件</code> 是「用最近一次提交覆盖工作区」，不是「撤销上一次 checkout」。
+<strong>改法</strong>：先 <code>git status</code> 看清改了什么；只想临时回退就先 <code>git stash</code>（可 <code>git stash pop</code> 找回），别直接 checkout。</p></div></details><details class="ec" data-u="0" data-t="powershell 里 `activate` 报「禁止运行脚本」"><summary><span class="ub">单元 0</span><b>PowerShell 里 `activate` 报「禁止运行脚本」</b></summary><div class="eb"><p><strong>症状</strong>：创建虚拟环境后执行 <code>.\venv\Scripts\activate</code>，红色报错说此系统上禁止运行脚本。
+<strong>原因</strong>：Windows PowerShell 默认的执行策略（Restricted）不允许运行 <code>.ps1</code> 脚本，<code>activate</code> 正是这种脚本。
+<strong>改法</strong>：二选一——① 换成 <strong>cmd</strong> 或 <strong>Git Bash</strong> 终端，执行 <code>venv\Scripts\activate.bat</code>；② 仍用 PowerShell 就以管理员身份执行一次
+<code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>，然后重开终端。
+（这不是 Python 的问题，是 Windows 的安全策略，放宽到 <code>RemoteSigned</code> 只影响当前用户。）</p></div></details><details class="ec" data-u="0" data-t="把自己的文件命名成 `python.py` / `random.py` / `string.py"><summary><span class="ub">单元 0</span><b>把自己的文件命名成 `python.py` / `random.py` / `string.py</b></summary><div class="eb"><p><strong>症状</strong>：<code>import random</code> 之后行为怪异，或者报 <code>AttributeError: module 'random' has no attribute 'xxx'</code>。
+<strong>原因</strong>：你的文件名和标准库同名，Python 会<strong>优先导入你这个文件</strong>，把真正的标准库挡住了。
+<strong>改法</strong>：立刻改名（如 <code>my_random_demo.py</code>），并删掉同目录下生成的 <code>__pycache__</code> 文件夹。
+<strong>规则</strong>：文件名永远不要用标准库名、也不要用 <code>test.py</code>（会和测试工具抢名字）。</p></div></details><details class="ec" data-u="0" data-t="windows 上打印中文报 `unicodeencodeerror`，或者文件里读出来是乱码"><summary><span class="ub">单元 0</span><b>Windows 上打印中文报 `UnicodeEncodeError`，或者文件里读出来是乱码</b></summary><div class="eb"><p><strong>症状</strong>：<code>print("中文")</code> 直接崩，或者读 CSV 时中文变成 <code>\xc4\xe3</code> 之类。
+<strong>原因</strong>：Windows 控制台默认编码是 GBK，而文件用的是 UTF-8，两边对不上。
+<strong>改法</strong>：
+1. 终端里先执行 <code>chcp 65001</code> 切到 UTF-8（或在「设置 → 时间和语言 → 语言 → 管理语言设置」里勾上 Beta UTF-8）。
+2. 读写文件<strong>永远显式写编码</strong>：<code>open(path, encoding="utf-8")</code>，这是根治办法，别依赖系统默认。
+3. VS Code 右下角看到编码不是 <code>UTF-8</code> 时，点它 → 「通过编码保存」→ 选 UTF-8。</p>
+<hr></div></details><details class="ec" data-u="1" data-t="syntaxerror: unterminated string literal"><summary><span class="ub">单元 1</span><b>SyntaxError: unterminated string literal</b></summary><div class="eb"><p><strong>症状</strong>：字符串那行报「未闭合」。
+<strong>原因</strong>：引号不成对——常见是中文引号 <code>“”</code>，或字符串里本身有引号没转义。
+<strong>改法</strong>：统一用英文 <code>"</code> <code>'</code>；字符串里要引号就用另一种，或 <code>\"</code>。</p></div></details><details class="ec" data-u="1" data-t="int(&quot;3.9&quot;)` 报 valueerror"><summary><span class="ub">单元 1</span><b>int(&quot;3.9&quot;)` 报 ValueError</b></summary><div class="eb"><p><strong>症状</strong>：把用户输入转整数崩了。
+<strong>原因</strong>：<code>int()</code> 只认整数字面量，<code>"3.9"</code> 是浮点写法。
+<strong>改法</strong>：先 <code>float("3.9")</code> 再 <code>int(...)</code>（会截断成 3）；要四舍五入用 <code>round()</code>，别指望 <code>int()</code>。</p></div></details><details class="ec" data-u="1" data-t="bool(&quot;0&quot;)` 竟然是 `true"><summary><span class="ub">单元 1</span><b>bool(&quot;0&quot;)` 竟然是 `True</b></summary><div class="eb"><p><strong>症状</strong>：以为 <code>"0"</code> 是假值。
+<strong>原因</strong>：<code>bool()</code> 对字符串只看「空不空」，非空字符串一律为真。
+<strong>改法</strong>：要判断「是不是数字 0」得先转换：<code>int(s) == 0</code>；或用 <code>s in ("0", "")</code> 这类显式判断。</p></div></details><details class="ec" data-u="1" data-t="if x = 1:` 语法错误"><summary><span class="ub">单元 1</span><b>if x = 1:` 语法错误</b></summary><div class="eb"><p><strong>症状</strong>：<code>SyntaxError: invalid syntax</code> 指向等号。
+<strong>原因</strong>：<code>=</code> 是赋值，<code>==</code> 才是比较。
+<strong>改法</strong>：条件里一律 <code>==</code>；想同时赋值用海象运算符 <code>if (n := len(s)) &gt; 3:</code>（3.8+）。</p></div></details><details class="ec" data-u="1" data-t="变量名 `class` / `2myvar` 报错"><summary><span class="ub">单元 1</span><b>变量名 `class` / `2myvar` 报错</b></summary><div class="eb"><p><strong>症状</strong>：<code>SyntaxError</code> 或变量莫名其妙是别的东西。
+<strong>原因</strong>：<code>class</code> 是关键字；标识符不能以数字开头。
+<strong>改法</strong>：避开 Python 关键字（<code>import keyword; print(keyword.kwlist)</code> 可查），名字用 <code>my_var</code> 这种下划线风格。</p>
+<hr></div></details><details class="ec" data-u="2" data-t="indexerror: list index out of range"><summary><span class="ub">单元 2</span><b>IndexError: list index out of range</b></summary><div class="eb"><p><strong>症状</strong>：<code>cars[3]</code> 崩了，列表明明有 3 个元素。
+<strong>原因</strong>：下标从 0 开始，3 个元素的下标是 0/1/2。
+<strong>改法</strong>：最后一项用 <code>cars[-1]</code>；要按下标循环就 <code>range(len(cars))</code>，别手写上限。</p></div></details><details class="ec" data-u="2" data-t="空列表上 `x[-1]` 也崩"><summary><span class="ub">单元 2</span><b>空列表上 `x[-1]` 也崩</b></summary><div class="eb"><p><strong>症状</strong>：<code>IndexError</code> 出现在取最后一项时。
+<strong>原因</strong>：空列表没有任何元素，<code>-1</code> 一样越界。
+<strong>改法</strong>：先判 <code>if cars:</code>（空列表为假），或用 <code>cars[-1] if cars else None</code>。</p></div></details><details class="ec" data-u="2" data-t="cars = cars.sort()` 之后列表变成 none"><summary><span class="ub">单元 2</span><b>cars = cars.sort()` 之后列表变成 None</b></summary><div class="eb"><p><strong>症状</strong>：排序后再用就 <code>TypeError: 'NoneType' object is not subscriptable</code>。
+<strong>原因</strong>：<code>sort()</code> 原地排序、返回 <code>None</code>；<code>sorted()</code> 才返回新列表。
+<strong>改法</strong>：<code>cars.sort()</code> 单独一行；要保留原列表就 <code>new = sorted(cars)</code>。</p></div></details><details class="ec" data-u="2" data-t="b = a` 之后改 b，a 也变了"><summary><span class="ub">单元 2</span><b>b = a` 之后改 b，a 也变了</b></summary><div class="eb"><p><strong>症状</strong>：明明只改了副本。
+<strong>原因</strong>：<code>b = a</code> 只是给同一个列表起了个别名，不是复制。
+<strong>改法</strong>：<code>b = a.copy()</code> 或 <code>b = a[:]</code>（浅复制）；列表里还套列表时要用 <code>copy.deepcopy(a)</code>。</p></div></details><details class="ec" data-u="2" data-t="cars.remove(&quot;bmw&quot;)` 只删掉一个"><summary><span class="ub">单元 2</span><b>cars.remove(&quot;bmw&quot;)` 只删掉一个</b></summary><div class="eb"><p><strong>症状</strong>：列表里有两个 <code>"bmw"</code>，只少了一个。
+<strong>原因</strong>：<code>remove()</code> 只删第一个匹配项，且没有返回值。
+<strong>改法</strong>：要删干净用循环 <code>while "bmw" in cars: cars.remove("bmw")</code>，或列表推导 <code>cars = [c for c in cars if c != "bmw"]</code>。</p>
+<hr></div></details><details class="ec" data-u="3" data-t="边 `for` 边 `remove`，元素漏删"><summary><span class="ub">单元 3</span><b>边 `for` 边 `remove`，元素漏删</b></summary><div class="eb"><p><strong>症状</strong>：列表里 3 个 <code>"x"</code>，循环后还剩 1 个。
+<strong>原因</strong>：删除会让后面的元素前移，而循环下标继续往后走，正好跳过下一个。
+<strong>改法</strong>：<code>while "x" in items: items.remove("x")</code>，或倒序遍历 <code>for i in reversed(range(len(items)))</code>，或直接列表推导。</p></div></details><details class="ec" data-u="3" data-t="切片越界却不报错"><summary><span class="ub">单元 3</span><b>切片越界却不报错</b></summary><div class="eb"><p><strong>症状</strong>：<code>nums[2:99]</code> 没崩，但结果比预期短。
+<strong>原因</strong>：切片是「容错」的，越界只截到末尾。
+<strong>改法</strong>：这是特性不是 bug；要严格校验长度就自己 <code>if len(nums) &lt; 3: raise ValueError</code>。</p></div></details><details class="ec" data-u="3" data-t="for i in range(len(x))` 里 `append"><summary><span class="ub">单元 3</span><b>for i in range(len(x))` 里 `append</b></summary><div class="eb"><p><strong>症状</strong>：循环次数比预期多，甚至死循环。
+<strong>原因</strong>：<code>range(len(x))</code> 在循环开始时就把长度算好了；若在循环里删除，下标与元素就错位。
+<strong>改法</strong>：不要在遍历时改长度；需要新列表就新建 <code>out = []</code> 再 <code>out.append(...)</code>。</p></div></details><details class="ec" data-u="3" data-t="sorted(x, reverse=true)` 与 `x[::-1]` 混用"><summary><span class="ub">单元 3</span><b>sorted(x, reverse=True)` 与 `x[::-1]` 混用</b></summary><div class="eb"><p><strong>症状</strong>：以为两者等价，结果顺序不同。
+<strong>原因</strong>：<code>sorted(reverse=True)</code> 是<strong>按大小降序</strong>；<code>[::-1]</code> 只是<strong>把原顺序倒过来</strong>。
+<strong>改法</strong>：要排序用 <code>sorted()</code>；只想倒序用 <code>reversed(x)</code> 或 <code>x[::-1]</code>。</p></div></details><details class="ec" data-u="3" data-t="t[0] = 1` 报 typeerror"><summary><span class="ub">单元 3</span><b>t[0] = 1` 报 TypeError</b></summary><div class="eb"><p><strong>症状</strong>：<code>'tuple' object does not support item assignment</code>。
+<strong>原因</strong>：元组不可变，创建后不能改元素。
+<strong>改法</strong>：要改就换成列表；确实要「改一个值」就重建：<code>t = t[:1] + (9,) + t[2:]</code>。</p>
+<hr></div></details><details class="ec" data-u="4" data-t="indentationerror: expected an indented block"><summary><span class="ub">单元 4</span><b>IndentationError: expected an indented block</b></summary><div class="eb"><p><strong>症状</strong>：<code>if</code> 后面那行没缩进。
+<strong>原因</strong>：Python 用缩进表示代码块，<code>if</code>/<code>for</code>/<code>def</code> 后面必须缩进一层。
+<strong>改法</strong>：统一 4 个空格（不要混 Tab）；VS Code 里开 <code>Render Whitespace</code> 能看见空格与 Tab 的区别。</p></div></details><details class="ec" data-u="4" data-t="if x = 1:` 或 `elif` 写成 `else if"><summary><span class="ub">单元 4</span><b>if x = 1:` 或 `elif` 写成 `else if</b></summary><div class="eb"><p><strong>症状</strong>：<code>SyntaxError</code>。
+<strong>原因</strong>：条件用 <code>==</code>；Python 没有 <code>else if</code>，是 <code>elif</code>。
+<strong>改法</strong>：<code>if x == 1:</code>；多分支写 <code>if / elif / else</code>。</p></div></details><details class="ec" data-u="4" data-t="if answer == &quot;yes&quot;` 对 `&quot;yes&quot;` 不成立"><summary><span class="ub">单元 4</span><b>if answer == &quot;Yes&quot;` 对 `&quot;yes&quot;` 不成立</b></summary><div class="eb"><p><strong>症状</strong>：用户输入 <code>yes</code> 却走了 else。
+<strong>原因</strong>：字符串比较区分大小写。
+<strong>改法</strong>：比较前统一 <code>answer.strip().lower()</code>；需要更宽松就用 <code>answer.lower() in ("y", "yes")</code>。</p></div></details><details class="ec" data-u="4" data-t="elif` 顺序写反，永远进第一个分支"><summary><span class="ub">单元 4</span><b>elif` 顺序写反，永远进第一个分支</b></summary><div class="eb"><p><strong>症状</strong>：分数 95 只拿到「及格」。
+<strong>原因</strong>：<code>if score &gt; 60: ... elif score &gt; 90: ...</code>——90 分也满足 <code>&gt; 60</code>，第一个分支就截住了。
+<strong>改法</strong>：从窄到宽排：先 <code>&gt;= 90</code>，再 <code>&gt;= 60</code>，最后 <code>else</code>。</p></div></details><details class="ec" data-u="4" data-t="if items:` 判空却把 0 当成空"><summary><span class="ub">单元 4</span><b>if items:` 判空却把 0 当成空</b></summary><div class="eb"><p><strong>症状</strong>：数量是 0 时走了「没有数据」分支，但 0 是合法值。
+<strong>原因</strong>：<code>0</code>、<code>""</code>、<code>[]</code>、<code>None</code> 在条件里都为假。
+<strong>改法</strong>：要区分「没有」和「是 0」就显式判：<code>if items is None:</code>、<code>if len(items) == 0:</code>。</p>
+<hr></div></details><details class="ec" data-u="5" data-t="keyerror: &#x27;name&#x27;"><summary><span class="ub">单元 5</span><b>KeyError: &#x27;name&#x27;</b></summary><div class="eb"><p><strong>症状</strong>：取一个不存在的键就崩。
+<strong>原因</strong>：<code>d["name"]</code> 在键缺失时抛异常（这是设计，不是 bug）。
+<strong>改法</strong>：可能缺的键用 <code>d.get("name", "默认值")</code>；确实必须有就让它崩，但要在上层 <code>try/except KeyError</code> 给出可读提示。</p></div></details><details class="ec" data-u="5" data-t="遍历字典时增删键 → runtimeerror"><summary><span class="ub">单元 5</span><b>遍历字典时增删键 → RuntimeError</b></summary><div class="eb"><p><strong>症状</strong>：<code>dictionary changed size during iteration</code>。
+<strong>原因</strong>：迭代器依赖内部结构，边遍历边改会让它失效。
+<strong>改法</strong>：先取快照 <code>for k in list(d):</code>，再改 <code>d</code>；或先用推导式算出要删的键，循环外统一删。</p></div></details><details class="ec" data-u="5" data-t="拿列表当键 → typeerror: unhashable type"><summary><span class="ub">单元 5</span><b>拿列表当键 → TypeError: unhashable type</b></summary><div class="eb"><p><strong>症状</strong>：<code>d[[1, 2]] = "x"</code> 报不可哈希。
+<strong>原因</strong>：字典靠 hash 定位，键必须不可变。
+<strong>改法</strong>：用元组 <code>d[(1, 2)]</code>，或把列表 <code>tuple(lst)</code> 转一下。</p></div></details><details class="ec" data-u="5" data-t="以为 `d.keys()` 是列表，能下标"><summary><span class="ub">单元 5</span><b>以为 `d.keys()` 是列表，能下标</b></summary><div class="eb"><p><strong>症状</strong>：<code>d.keys()[0]</code> 报 <code>'dict_keys' object is not subscriptable</code>。
+<strong>原因</strong>：<code>keys()</code>/<code>values()</code>/<code>items()</code> 返回的是<strong>视图</strong>，不是列表。
+<strong>改法</strong>：要下标就 <code>list(d.keys())[0]</code>；只是遍历直接用 <code>for k in d:</code>。</p></div></details><details class="ec" data-u="5" data-t="嵌套字典层层 `[]`，中间缺一层就崩"><summary><span class="ub">单元 5</span><b>嵌套字典层层 `[]`，中间缺一层就崩</b></summary><div class="eb"><p><strong>症状</strong>：<code>d["a"]["b"]["c"]</code> 里 <code>d["a"]</code> 不存在时 KeyError。
+<strong>改法</strong>：逐层 <code>get</code>：<code>d.get("a", {}).get("b", {}).get("c")</code>；层次深就写个小函数或用 <code>defaultdict</code>。</p>
+<hr></div></details><details class="ec" data-u="6" data-t="input()` 拿到的数字当数字用"><summary><span class="ub">单元 6</span><b>input()` 拿到的数字当数字用</b></summary><div class="eb"><p><strong>症状</strong>：<code>if age &gt; 18:</code> 报 <code>TypeError: '&gt;' not supported between 'str' and 'int'</code>。
+<strong>原因</strong>：<code>input()</code> 永远返回<strong>字符串</strong>，<code>"18" &gt; 18</code> 不成立。
+<strong>改法</strong>：<code>age = int(input("年龄："))</code>；不确定输入合法就先 <code>try: age = int(s) except ValueError:</code> 提示重输。</p></div></details><details class="ec" data-u="6" data-t="while` 忘了改条件，死循环"><summary><span class="ub">单元 6</span><b>while` 忘了改条件，死循环</b></summary><div class="eb"><p><strong>症状</strong>：程序卡住不动，CPU 占满。
+<strong>原因</strong>：<code>while i &lt; 5:</code> 里没写 <code>i += 1</code>，条件永远成立。
+<strong>改法</strong>：循环体里必须有能让条件变假的语句；临时排查在循环里加 <code>print(i)</code>（<code>Ctrl+C</code> 停）。</p></div></details><details class="ec" data-u="6" data-t="while &quot;x&quot; in items: items.remove(&quot;x&quot;)` 写成 `if"><summary><span class="ub">单元 6</span><b>while &quot;x&quot; in items: items.remove(&quot;x&quot;)` 写成 `if</b></summary><div class="eb"><p><strong>症状</strong>：删了一个还剩俩。
+<strong>原因</strong>：<code>if</code> 只判断一次；要删干净得反复判断。
+<strong>改法</strong>：用 <code>while ... in ...</code>；或 <code>items = [i for i in items if i != "x"]</code>。</p></div></details><details class="ec" data-u="6" data-t="break` 只跳出最内层"><summary><span class="ub">单元 6</span><b>break` 只跳出最内层</b></summary><div class="eb"><p><strong>症状</strong>：两层循环里 <code>break</code> 之后外层还在跑。
+<strong>原因</strong>：<code>break</code> 只结束它所在的那一层。
+<strong>改法</strong>：用标志位 <code>done = True</code> 让外层也退出，或把内层抽成函数 <code>return</code>。</p></div></details><details class="ec" data-u="6" data-t="while true:` 里没留退出路径"><summary><span class="ub">单元 6</span><b>while True:` 里没留退出路径</b></summary><div class="eb"><p><strong>症状</strong>：必须强制关窗口。
+<strong>原因</strong>：只写了 <code>break</code> 的条件永远不会满足（比如没处理「退出」关键字）。
+<strong>改法</strong>：明确列出所有结束条件；<code>while True</code> 里至少有一条 <code>break</code> 与用户输入相关。</p>
+<hr></div></details><details class="ec" data-u="7" data-t="忘记写冒号，或缩进错误"><summary><span class="ub">单元 7</span><b>忘记写冒号，或缩进错误</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>      <span class="c1"># 错误 1a：括号后面漏了冒号</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet2</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>           <span class="c1"># 错误 1b：函数体没有缩进</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet3</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>       <span class="c1"># 错误 1c：缩进用了 Tab 而不是 4 个空格</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"这里是函数外的代码"</span><span class="p">)</span>  <span class="c1"># 错误 1d：函数体提前结束了，缩进不一致</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">greet4</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"多缩进了"</span><span class="p">)</span>   <span class="c1"># 错误 1e：同一块内缩进不一致 -&gt; IndentationError</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>SyntaxError: expected ':'</code> / <code>IndentationError: expected an indented block</code>
+<strong>原因</strong>：<code>def</code> 行末必须有 <code>:</code>；函数体所有行必须用<strong>一致的 4 个空格</strong>缩进。
+<strong>修法</strong>：VS Code 里按 Tab 会自动插入 4 空格，不要混用 Tab。报错信息里的 <code>^</code> 会指到出问题的位置。</p></div></details><details class="ec" data-u="7" data-t="★ 函数修改列表，会改到原列表"><summary><span class="ub">单元 7</span><b>★ 函数修改列表，会改到原列表</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>      <span class="c1"># 这一行直接改掉了调用方的列表</span>
+
+
+<span class="n">fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"苹果"</span><span class="p">]</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fruits</span><span class="p">)</span>      <span class="c1"># ['苹果', '新元素']  ← 原数据被污染了</span>
+</code></pre>
+<p><strong>症状</strong>：函数返回后，原列表莫名其妙多了东西；或者多个函数调用之间数据互相串味。
+<strong>原因</strong>：列表是<strong>可变对象</strong>，Python 传的是"地址"，函数里改的就是原件。
+<strong>修法</strong>（三选一）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 修法1：函数内造副本（推荐）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">items</span><span class="p">[:]</span>        <span class="c1"># 先复制</span>
+    <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"新元素"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+<span class="c1"># 修法2：调用时传副本</span>
+<span class="n">add_item</span><span class="p">(</span><span class="n">fruits</span><span class="p">[:])</span>
+
+<span class="c1"># 修法3：用 + 产生新列表</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">items</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"新元素"</span><span class="p">]</span>
+</code></pre></div></details><details class="ec" data-u="7" data-t="默认参数用了可变对象"><summary><span class="ub">单元 7</span><b>默认参数用了可变对象</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="p">[]):</span>     <span class="c1"># 错误：默认值是列表！</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"买菜"</span><span class="p">))</span>     <span class="c1"># ['买菜']</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"做饭"</span><span class="p">))</span>     <span class="c1"># ['买菜', '做饭']  ← 上次的"买菜"莫名出现！</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">add_task</span><span class="p">(</span><span class="s2">"睡觉"</span><span class="p">))</span>     <span class="c1"># ['买菜', '做饭', '睡觉']</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：单独调用正常，反复调用时结果里出现了前面调用的数据。
+<strong>原因</strong>：默认参数在<strong>函数定义时</strong>只求值一次，那个列表被所有调用共享。
+<strong>修法</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">todo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>     <span class="c1"># 默认值用 None</span>
+    <span class="k">if</span> <span class="n">todo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">todo</span> <span class="o">=</span> <span class="p">[]</span>                 <span class="c1"># 每次调用时新建</span>
+    <span class="n">todo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">todo</span>
+</code></pre></div></details><details class="ec" data-u="7" data-t="忘记 return，函数等于白写"><summary><span class="ub">单元 7</span><b>忘记 return，函数等于白写</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">add_score</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+    <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>      <span class="c1"># 列表确实被改了，但函数本身返回 None</span>
+
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">add_score</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>      <span class="c1"># None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>TypeError: 'NoneType' object is not subscriptable</code> 或者结果莫名是 <code>None</code>。
+<strong>原因</strong>：没有 <code>return</code> 的函数默认返回 <code>None</code>。修改外部数据 ≠ 返回新结果。
+<strong>修法</strong>：明确写出 <code>return</code>。如果函数只是"做事"不改返回值（比如写文件、打印），就把 <code>def f():</code> 写成 <code>def f():</code> 并在文档里说明它没有返回值。</p></div></details><details class="ec" data-u="7" data-t="参数顺序或数量不对"><summary><span class="ub">单元 7</span><b>参数顺序或数量不对</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">make_pizza</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">with_cheese</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""有默认值的参数必须写在没有默认值的参数后面。"""</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2"> 英寸，芝士=</span><span class="si">{</span><span class="n">with_cheese</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="c1"># INTENTIONALLY-BROKEN 演示 3 类调用错误</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>       <span class="c1"># 合法：16 英寸，芝士=False</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">make_pizza</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>           <span class="c1"># 陷阱：False 被当成了 size！</span>
+<span class="c1"># print(make_pizza(16, 18, 20))    # 错误：Too many positional arguments</span>
+<span class="c1"># print(make_pizza(size=16, cheese=True))   # 错误：参数名写错，应为 with_cheese</span>
+
+<span class="c1"># 报错信息里有个高频拼写错误：cheese 不是 with_cheese</span>
+<span class="c1"># TypeError: make_pizza() got an unexpected keyword argument 'cheese'</span>
+</code></pre>
+<p><strong>症状</strong>：<code>TypeError: got an unexpected keyword argument</code> 或结果莫名其妙。
+<strong>原因</strong>：位置参数按顺序匹配；关键字参数按名字匹配；参数个数或名字不对。
+<strong>修法</strong>：多个参数时<strong>优先用关键字参数</strong>，比如 <code>make_pizza(size=16, with_cheese=False)</code>，顺序和意图一目了然，也不用担心位置搞混。</p></div></details><details class="ec" data-u="7" data-t="局部变量遮蔽全局变量"><summary><span class="ub">单元 7</span><b>局部变量遮蔽全局变量</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">reset_counter</span><span class="p">():</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>       <span class="c1"># 错误：这是新建了一个局部变量，全局 count 没变</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 打印 100</span>
+
+
+<span class="n">reset_counter</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 0  ← 你以为改了，其实没改</span>
+</code></pre>
+<p><strong>症状</strong>：函数里改了变量，函数外"莫名其妙"没变；或者函数里想读全局值却报 <code>NameError</code>。
+<strong>原因</strong>：函数内只要出现赋值，Python 就认定这个名字是<strong>局部</strong>的，不会去读全局的那个。
+<strong>修法</strong>（推荐第一种）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 修法1（最佳）：把数据传进去，把结果返回出来</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_to_count</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">current</span> <span class="o">+</span> <span class="n">amount</span>
+
+
+<span class="n">count</span> <span class="o">=</span> <span class="n">add_to_count</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 100</span>
+
+<span class="c1"># 修法2：确实需要改全局时用 global（官方不推荐）</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">reset_counter</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">count</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">100</span>
+</code></pre>
+<hr></div></details><details class="ec" data-u="8" data-t="★ 方法忘记写 `self"><summary><span class="ub">单元 8</span><b>★ 方法忘记写 `self</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># INTENTIONALLY-BROKEN 演示 3 种相关错误</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">increment_bad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 错误 1a：赋值时左边忘了 self —— 这行创建了一个"局部变量"，</span>
+        <span class="c1"># 函数一结束就没了，self.count 完全没变</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>      <span class="c1"># 打印 1，但 self.count 永远是 0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">increment_worse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># 错误 1b：右边用 self，左边不用 —— 局部变量，出了函数就没了</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="n">value</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">increment_wrong</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 错误 1c：干脆忘了加 1，结果永远不变</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre>
+<p><strong>症状</strong>：
+- <code>NameError: name 'count' is not defined</code>（左边忘了写）
+- 属性值永远不变 / 方法结束后"数据丢了"
+- 属性变成 None 或 0</p>
+<p><strong>原因</strong>：<code>self.</code> 前缀是"把值存到<strong>这个对象</strong>身上"；漏了它就是在函数内部建了个临时变量。
+<strong>修法</strong>：<strong>给每一处属性读写都加上 <code>self.</code></strong>，然后检查这个类里有没有"出现了属性名但前面没有 <code>self.</code>"的地方。</p></div></details><details class="ec" data-u="8" data-t="方法定义时忘了第一个参数 `self"><summary><span class="ub">单元 8</span><b>方法定义时忘了第一个参数 `self</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Rectangle</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+
+    <span class="c1"># INTENTIONALLY-BROKEN 演示：忘了 self 参数</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">():</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>     <span class="c1"># NameError: name 'self' is not defined</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">perimeter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                    <span class="c1"># 这个是对的</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">perimeter</span><span class="p">())</span>     <span class="c1"># 14</span>
+<span class="c1"># print(r.area())        # TypeError: area() takes 0 positional arguments but 1 was given</span>
+</code></pre>
+<p><strong>症状</strong>：<code>TypeError: area() takes 0 positional arguments but 1 was given</code>，或 <code>NameError: name 'self' is not defined</code>
+<strong>原因</strong>：定义时少写了 <code>self</code>，但调用时 Python 会自动传入对象，结果参数数量对不上。
+<strong>修法</strong>：<strong>每个方法（除了 <code>__init__</code>、<code>__str__</code> 等双下划线方法）定义时，第一个参数必须是 <code>self</code></strong>。判断标准很简单——方法体内如果出现了 <code>self.</code>，定义时必须有 <code>self</code> 参数。</p></div></details><details class="ec" data-u="8" data-t="忘记冒号或缩进（和函数一样，但更隐蔽）"><summary><span class="ub">单元 8</span><b>忘记冒号或缩进（和函数一样，但更隐蔽）</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="c1"># 错误 3a：冒号后面必须有函数体，这里直接换了行</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>          <span class="c1"># 错误 3b：括号后漏冒号</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"汪汪"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>    <span class="c1"># 错误 3c：属性赋给了参数名，写成了 self.name = ...</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>SyntaxError: expected ':'</code> / <code>IndentationError: expected an indented block</code>
+<strong>原因</strong>：<code>def</code> 行末必须有 <code>:</code>；<code>class</code> 体内所有代码（包括方法）必须有缩进。
+<strong>修法</strong>：注意 <code>class</code> 层级比 <code>def</code> 层级多一层缩进——<code>class</code> 体是 4 空格，方法 <code>def</code> 也是 4 空格，但<strong>方法体</strong>是 8 空格：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>   <span class="c1"># 4 空格（属于 class 体）</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>        <span class="c1"># 8 空格（属于 def 体）</span>
+</code></pre></div></details><details class="ec" data-u="8" data-t="属性名和方法名重名"><summary><span class="ub">单元 8</span><b>属性名和方法名重名</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Rectangle</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="c1"># INTENTIONALLY-BROKEN 演示属性名冲突</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perimeter</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>   <span class="c1"># 错误：perimeter 是属性</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">perimeter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>       <span class="c1"># 错误：同名方法把属性覆盖了</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">perimeter</span><span class="p">)</span>       <span class="c1"># 输出 &lt;bound method...&gt;  拿到的是方法不是数字</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">perimeter</span><span class="p">())</span>     <span class="c1"># 报错：用了 width 属性，但width 不存在 -&gt; AttributeError</span>
+</code></pre>
+<p><strong>症状</strong>：拿到的是 <code>&lt;bound method ...&gt;</code> 而不是期望的数值；或者 <code>AttributeError: 'Rectangle' object has no attribute 'width'</code>（因为 <code>__init__</code> 里的属性被同名方法覆盖了）
+<strong>原因</strong>：属性和方法都存在实例的命名空间里，<strong>同名会互相覆盖</strong>。后定义的 <code>def perimeter</code> 在类体里把之前的赋值干掉了。
+<strong>修法</strong>：让名字有区分度：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="bp">self</span><span class="o">.</span><span class="n">_perimeter_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">height</span><span class="p">)</span>   <span class="c1"># 属性加下划线前缀</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">perimeter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                            <span class="c1"># 方法保持好读的短名</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perimeter_value</span>
+</code></pre></div></details><details class="ec" data-u="8" data-t="__init__` 里赋值目标写错（赋值给了参数，不是属性）"><summary><span class="ub">单元 8</span><b>__init__` 里赋值目标写错（赋值给了参数，不是属性）</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">:</span>
+    <span class="c1"># INTENTIONALLY-BROKEN 演示三种常见笔误</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">age</span> <span class="o">=</span> <span class="n">age</span>        <span class="c1"># 错误 5a：漏了 self.，age 只是个局部变量</span>
+                          <span class="c1"># 后果：user.age 会 AttributeError</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age1</span> <span class="o">=</span> <span class="n">age</span>  <span class="c1"># 错误 5b：属性名打错（age1），user.age 依然不存在</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nmae</span> <span class="o">=</span> <span class="n">name</span> <span class="c1"># 错误 5c：属性名拼写颠倒</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>     <span class="c1"># 这里就崩了</span>
+
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+<span class="c1"># print(u.age)      # AttributeError: 'User' object has no attribute 'age'</span>
+<span class="n">u</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>             <span class="c1"># 同样崩在这里</span>
+</code></pre>
+<p><strong>症状</strong>：<code>AttributeError: 'User' object has no attribute 'age'</code>
+<strong>原因</strong>：<code>age = age</code> 只是让局部变量 <code>age</code> 指向了自己的值，什么也没存进对象。
+<strong>修法</strong>：<code>__init__</code> 里<strong>每一行赋值左边必须有 <code>self.</code></strong>。养成习惯后可以这样自查——读完 <code>__init__</code>，检查"哪些属性应该存在"，然后在类的其他地方确认它们都能通过 <code>self.xxx</code> 访问到。</p></div></details><details class="ec" data-u="8" data-t="子类忘了调 `super().__init__()"><summary><span class="ub">单元 8</span><b>子类忘了调 `super().__init__()</b></summary><div class="eb"><pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>          <span class="c1"># 名字是父类设置的</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> 发出声音"</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="p">(</span><span class="n">Animal</span><span class="p">):</span>
+    <span class="c1"># INTENTIONALLY-BROKEN 演示：忘了 super().__init__()</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">breed</span><span class="p">):</span>
+        <span class="c1"># 如果这里不调用 super().__init__(name)，</span>
+        <span class="c1"># 父类的 self.name 永远不会被设置</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">breed</span> <span class="o">=</span> <span class="n">breed</span>
+        <span class="c1"># 正确写法应该是在这一行：</span>
+        <span class="c1"># super().__init__(name)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> 说：汪汪"</span><span class="p">)</span>    <span class="c1"># 这里访问 self.name 会崩</span>
+
+
+<span class="c1"># d = Dog("旺财", "柴犬")</span>
+<span class="c1"># d.speak()        # AttributeError: 'Dog' object has no attribute 'name'</span>
+</code></pre>
+<p><strong>症状</strong>：<code>AttributeError: 'Dog' object has no attribute 'name'</code> —— 属性明明在父类的 <code>__init__</code> 里设置了，为什么没有？
+<strong>原因</strong>：父类的 <code>__init__</code> <strong>不会自动执行</strong>。你必须在子类的 <code>__init__</code> 里显式调用 <code>super().__init__(...)</code>，父类的代码才会跑。
+<strong>修法</strong>：子类的 <code>__init__</code> 第一件事就是 <code>super().__init__(需要传给父类的参数)</code>，然后再设置子类自己的属性。顺序上<strong>先 super 再自己的</strong>，这是稳妥的习惯。</p>
+<hr></div></details><details class="ec" data-u="9" data-t="open()` 之后忘了 `close()"><summary><span class="ub">单元 9</span><b>open()` 之后忘了 `close()</b></summary><div class="eb"><p><strong>症状</strong>：文件写完是空的，或 Windows 上删不掉。
+<strong>原因</strong>：没关闭时缓冲区没刷盘。
+<strong>改法</strong>：一律 <code>with open(...) as f:</code>——退出代码块自动关闭，异常时也关。</p></div></details><details class="ec" data-u="9" data-t="unicodedecodeerror: &#x27;gbk&#x27; codec can&#x27;t decode"><summary><span class="ub">单元 9</span><b>UnicodeDecodeError: &#x27;gbk&#x27; codec can&#x27;t decode</b></summary><div class="eb"><p><strong>症状</strong>：读中文文本崩。
+<strong>原因</strong>：Windows 默认用 GBK 打开，文件是 UTF-8。
+<strong>改法</strong>：显式 <code>open(path, encoding="utf-8")</code>；写文件也一样加。</p></div></details><details class="ec" data-u="9" data-t="except:` 裸捕获吞掉了所有 bug"><summary><span class="ub">单元 9</span><b>except:` 裸捕获吞掉了所有 bug</b></summary><div class="eb"><p><strong>症状</strong>：程序不报错了，但结果不对，也查不出原因。
+<strong>原因</strong>：<code>except:</code> 连 <code>KeyboardInterrupt</code> 和拼写错误都吃掉。
+<strong>改法</strong>：只捕你处理得了的类型（<code>except (ValueError, KeyError) as e:</code>），其余让它崩。</p></div></details><details class="ec" data-u="9" data-t="相对路径在人家的机器上找不到文件"><summary><span class="ub">单元 9</span><b>相对路径在人家的机器上找不到文件</b></summary><div class="eb"><p><strong>症状</strong>：<code>FileNotFoundError</code>，本机却跑得好好的。
+<strong>原因</strong>：相对路径是按「当前工作目录」算的，从别的目录启动就变了。
+<strong>改法</strong>：用 <code>pathlib.Path(__file__).parent / "data.txt"</code> 锚定脚本所在目录。</p></div></details><details class="ec" data-u="9" data-t="json.load()` 在空文件上崩"><summary><span class="ub">单元 9</span><b>json.load()` 在空文件上崩</b></summary><div class="eb"><p><strong>症状</strong>：<code>json.decoder.JSONDecodeError: Expecting value: line 1 column 1</code>。
+<strong>原因</strong>：文件是空的或不是 JSON（比如写了一半）。
+<strong>改法</strong>：读之前判空，或 <code>try/except (json.JSONDecodeError, OSError)</code> 兜底给默认值。</p>
+<hr></div></details><details class="ec" data-u="10" data-t="pytest` 报 `no tests ran"><summary><span class="ub">单元 10</span><b>pytest` 报 `no tests ran</b></summary><div class="eb"><p><strong>症状</strong>：明明写了测试，一条都没跑。
+<strong>原因</strong>：文件名不是 <code>test_*.py</code>，或函数名不是 <code>test_</code> 开头。
+<strong>改法</strong>：文件 <code>test_xxx.py</code>、函数 <code>def test_xxx():</code>；<code>pytest -q --collect-only</code> 先看有没有被收集到。</p></div></details><details class="ec" data-u="10" data-t="断言写反"><summary><span class="ub">单元 10</span><b>断言写反</b></summary><div class="eb"><p><strong>症状</strong>：代码明明有 bug，测试却绿了。
+<strong>原因</strong>：<code>assert 结果 == 3</code> 里条件为真才通过；写成 <code>assert 结果 != 3</code> 就是反的。
+<strong>改法</strong>：写完故意改坏一行实现，确认测试<strong>变红</strong>——不会红的就是无效测试。</p></div></details><details class="ec" data-u="10" data-t="浮点数直接用 `=="><summary><span class="ub">单元 10</span><b>浮点数直接用 `==</b></summary><div class="eb"><p><strong>症状</strong>：<code>0.1 + 0.2 == 0.3</code> 是 False。
+<strong>原因</strong>：二进制浮点有精度误差。
+<strong>改法</strong>：<code>math.isclose(a, b)</code> 或 <code>abs(a-b) &lt; 1e-9</code>；金额用 <code>Decimal</code>。</p></div></details><details class="ec" data-u="10" data-t="测试之间互相依赖"><summary><span class="ub">单元 10</span><b>测试之间互相依赖</b></summary><div class="eb"><p><strong>症状</strong>：单独跑通过，一起跑失败（或反过来）。
+<strong>原因</strong>：共用了全局变量/同一个文件，执行顺序变了结果就变。
+<strong>改法</strong>：每个测试自己准备数据（fixture 里创建临时目录），不依赖别的测试留下的状态。</p></div></details><details class="ec" data-u="10" data-t="只测「正常路径」"><summary><span class="ub">单元 10</span><b>只测「正常路径」</b></summary><div class="eb"><p><strong>症状</strong>：覆盖率挺高，但用户一输入空值就崩。
+<strong>原因</strong>：只测了理想输入，没测边界与非法值。
+<strong>改法</strong>：每个函数至少三条：正常、边界（空/0/最大）、非法（类型错/负数）——用 <code>pytest.raises</code> 测异常。</p>
+<hr></div></details><details class="ec" data-u="11" data-t="报错只看第一行"><summary><span class="ub">单元 11</span><b>报错只看第一行</b></summary><div class="eb"><p><strong>症状</strong>：对着 <code>Traceback (most recent call last)</code> 发呆。
+<strong>原因</strong>：真正的原因在<strong>最后一行</strong>（异常类型 + 消息），中间是调用链。
+<strong>改法</strong>：从下往上读：最后一行说什么错，倒数第二段指出哪一行、哪个文件。</p></div></details><details class="ec" data-u="11" data-t="一次写 200 行再运行"><summary><span class="ub">单元 11</span><b>一次写 200 行再运行</b></summary><div class="eb"><p><strong>症状</strong>：一跑几十个错，不知道从哪改。
+<strong>原因</strong>：错误叠加，后面的报错往往是前面的连锁反应。
+<strong>改法</strong>：写 10–20 行就跑一次；每加一个函数先单独调用验证，再拼进主流程。</p></div></details><details class="ec" data-u="11" data-t="靠注释掉代码来找 bug"><summary><span class="ub">单元 11</span><b>靠注释掉代码来找 bug</b></summary><div class="eb"><p><strong>症状</strong>：越注释越乱，最后不知道哪版是对的。
+<strong>原因</strong>：没有可回退的基线。
+<strong>改法</strong>：先 <code>git commit</code> 一次；用 <code>git diff</code> 看改了什么；二分法定位（注释一半）。</p></div></details><details class="ec" data-u="11" data-t="把「能跑」当成「对了」"><summary><span class="ub">单元 11</span><b>把「能跑」当成「对了」</b></summary><div class="eb"><p><strong>症状</strong>：程序不报错，但结果算错。
+<strong>原因</strong>：没写断言，只看了输出「像那么回事」。
+<strong>改法</strong>：给关键函数写 2–3 条 <code>assert</code>（或 pytest）；用一组已知答案的输入验证。</p></div></details><details class="ec" data-u="11" data-t="项目换台机器就跑不起来"><summary><span class="ub">单元 11</span><b>项目换台机器就跑不起来</b></summary><div class="eb"><p><strong>症状</strong>：<code>ModuleNotFoundError</code>，或者版本不兼容。
+<strong>原因</strong>：依赖没记录。
+<strong>改法</strong>：<code>python -m pip freeze &gt; requirements.txt</code>；README 里写清 Python 版本与启动命令。</p>
+<hr></div></details><details class="ec" data-u="12" data-t="★ 忘了 `import sys` 就调用 `sys.exit()"><summary><span class="ub">单元 12</span><b>★ 忘了 `import sys` 就调用 `sys.exit()</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+<span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：点关闭按钮时程序崩溃并甩出 <code>NameError</code>，而不是干净退出。<strong>处方</strong>：文件开头补上 <code>import sys</code>。</p></div></details><details class="ec" data-u="12" data-t="忘了调用 `pygame.event.get()"><summary><span class="ub">单元 12</span><b>忘了调用 `pygame.event.get()</b></summary><div class="eb"><p><strong>症状</strong>：窗口打开后整个界面卡住，标题栏写着「未响应」，鼠标转圈。原因：不取事件，队列就会积压爆满，操作系统认为你的程序「装死」。<strong>处方</strong>：主循环第一步永远是 <code>for event in pygame.event.get():</code>，哪怕什么都不处理，也要把事件取走。</p></div></details><details class="ec" data-u="12" data-t="在 `keydown` 里直接改位置，而不是置标志位"><summary><span class="ub">单元 12</span><b>在 `KEYDOWN` 里直接改位置，而不是置标志位</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="n">ship_x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+            <span class="n">ship_x</span> <span class="o">+=</span> <span class="mi">2</span>      <span class="c1"># 错：KEYDOWN 只在按下瞬间触发一次</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：按住右方向键，飞船「跳」一格就停。<strong>处方</strong>：<code>KEYDOWN</code> 里只置 <code>moving_right = True</code>，移动写在每帧都执行的 <code>update()</code> 里。<strong>这是本单元最重要的知识点。</strong></p></div></details><details class="ec" data-u="12" data-t="rect.x` 是整数，小数速度被取整"><summary><span class="ub">单元 12</span><b>rect.x` 是整数，小数速度被取整</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">48</span><span class="p">)</span>
+<span class="n">rect</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">1.5</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"rect.x ="</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>      <span class="c1"># 输出 2 —— 1.5 被四舍五入成 2，速度失真</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：自己维护浮点坐标 <code>self.x = float(self.rect.x)</code>，每帧 <code>self.rect.x = self.x</code> 同步回矩形——累积值保持精确，只有显示时取整。</p></div></details><details class="ec" data-u="12" data-t="忘了在 `keyup` 里把标志位置回 `false"><summary><span class="ub">单元 12</span><b>忘了在 `KEYUP` 里把标志位置回 `False</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="n">ship_moving_right</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+            <span class="n">ship_moving_right</span> <span class="o">=</span> <span class="kc">True</span>      <span class="c1"># 开了灯</span>
+    <span class="c1"># 漏掉了对应的 KEYUP 处理：找不到关灯的地方，标志位永远是 True</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：按一下右方向键，飞船径直飞出屏幕外。<strong>处方</strong>：<code>KEYDOWN</code> 和 <code>KEYUP</code> 必须成对处理。</p></div></details><details class="ec" data-u="12" data-t="moving_right` 和 `moving_left` 写成 `elif"><summary><span class="ub">单元 12</span><b>moving_right` 和 `moving_left` 写成 `elif</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="n">moving_right</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">moving_left</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_RIGHT</span><span class="p">:</span>
+            <span class="n">moving_right</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_LEFT</span><span class="p">:</span>      <span class="c1"># 同一时刻只有一个分支能进</span>
+            <span class="n">moving_left</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：左右（以及上下）的判断各自独立，用并列的 <code>if</code>，同时按下时互相抵消。</p>
+<hr></div></details><details class="ec" data-u="13" data-t="碰撞检测前没更新位置"><summary><span class="ub">单元 13</span><b>碰撞检测前没更新位置</b></summary><div class="eb"><p><strong>症状</strong>：子弹明明打中了，却不算命中（或反过来）。
+<strong>原因</strong>：改了 <code>self.x</code> 但没同步到 <code>rect</code>；<code>sprite.rect</code> 才是碰撞用的。
+<strong>改法</strong>：移动后执行 <code>self.rect.x = self.x</code>（或直接用 <code>self.rect.x += speed</code>）。</p></div></details><details class="ec" data-u="13" data-t="遍历 `bullets` 时 `remove` → 漏删或跳过"><summary><span class="ub">单元 13</span><b>遍历 `bullets` 时 `remove` → 漏删或跳过</b></summary><div class="eb"><p><strong>症状</strong>：子弹飞出屏幕后还剩一两个，越积越多。
+<strong>原因</strong>：和列表删除同一个坑——删除让后面的元素前移。
+<strong>改法</strong>：用 <code>pygame.sprite.Group</code> 的 <code>for b in bullets.copy():</code>，或倒序遍历。</p></div></details><details class="ec" data-u="13" data-t="外星人出屏不删，内存一直涨"><summary><span class="ub">单元 13</span><b>外星人出屏不删，内存一直涨</b></summary><div class="eb"><p><strong>症状</strong>：跑几分钟越来越卡。
+<strong>原因</strong>：只移出屏幕，没从 group 里删。
+<strong>改法</strong>：<code>if alien.rect.bottom &gt;= screen_height: alien.kill()</code>；<code>Group</code> 会自动清理。</p></div></details><details class="ec" data-u="13" data-t="新建的 sprite 没 `add` 进 group，画不出来"><summary><span class="ub">单元 13</span><b>新建的 sprite 没 `add` 进 group，画不出来</b></summary><div class="eb"><p><strong>症状</strong>：逻辑在跑，屏幕上看不见。
+<strong>原因</strong>：忘了 <code>self.aliens.add(alien)</code>，绘制循环遍历不到它。
+<strong>改法</strong>：创建后立刻 <code>group.add(...)</code>；调试时 <code>print(len(group))</code> 确认数量。</p></div></details><details class="ec" data-u="13" data-t="边界判断没减飞船宽度，卡在屏幕外"><summary><span class="ub">单元 13</span><b>边界判断没减飞船宽度，卡在屏幕外</b></summary><div class="eb"><p><strong>症状</strong>：飞船右半边能开出屏幕。
+<strong>原因</strong>：只判了 <code>rect.right &lt; screen_width</code>，用的是左上角坐标。
+<strong>改法</strong>：用 <code>rect.right</code>/<code>rect.bottom</code> 判断，或 <code>x = min(x, screen_w - ship_w)</code>。</p>
+<hr></div></details><details class="ec" data-u="14" data-t="★ 改了 score 忘了 prep_score()"><summary><span class="ub">单元 14</span><b>★ 改了 score 忘了 prep_score()</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">alien_points</span>
+<span class="c1"># 忘了 self.sb.prep_score()</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：<code>print(stats.score)</code> 明明在涨，屏幕上永远显示旧数字。
+<strong>处方</strong>：记住公式——<strong>数据变，prep 调用</strong>。<code>score</code> → <code>prep_score()</code>，<code>high_score</code> → <code>prep_high_score()</code>，<code>level</code> → <code>prep_level()</code>，<code>ships_left</code> → <code>prep_ships()</code>。</p></div></details><details class="ec" data-u="14" data-t="★ 把 high_score = 0 写进了 reset_stats()"><summary><span class="ub">单元 14</span><b>★ 把 high_score = 0 写进了 reset_stats()</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">def</span><span class="w"> </span><span class="nf">reset_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ships_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ship_limit</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="mi">0</span>        <span class="c1"># 大错特错！</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：<code>high_score</code> 只在 <code>GameStats.__init__</code> 里初始化一次；要持久化就连同文件读取一起放那里。</p></div></details><details class="ec" data-u="14" data-t="font.render() 参数写错"><summary><span class="ub">单元 14</span><b>font.render() 参数写错</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_color</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">button_color</span><span class="p">)</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：<code>render(text, antialias, color, background=None)</code> 四个参数各有其位：<strong>文字、抗锯齿（True/False）、前景色、（背景色可省）</strong>。</p></div></details><details class="ec" data-u="14" data-t="button 里存错了对象"><summary><span class="ub">单元 14</span><b>Button 里存错了对象</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ai_game</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">screen_rect</span> <span class="o">=</span> <span class="n">ai_game</span><span class="o">.</span><span class="n">get_rect</span><span class="p">()</span>   <span class="c1"># AttributeError！</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>处方</strong>：写 <code>self.screen = ai_game.screen</code> 和 <code>self.screen_rect = ai_game.screen.get_rect()</code>，两个 <code>ai_game.screen</code> 一个都不能省——<code>get_rect()</code> 是 Surface 的方法。</p></div></details><details class="ec" data-u="14" data-t="increase_speed() 里 alien_points 忘了 int()"><summary><span class="ub">单元 14</span><b>increase_speed() 里 alien_points 忘了 int()</b></summary><div class="eb"><p><strong>症状</strong>：玩到第 3 级，得分变成 112.5，屏幕显示「112.5 分」。
+<strong>处方</strong>：<code>self.alien_points = int(self.alien_points * self.score_scale)</code>，<code>int()</code> 是保险丝。</p></div></details><details class="ec" data-u="14" data-t="点 play 没加 not game_active 条件"><summary><span class="ub">单元 14</span><b>点 Play 没加 not game_active 条件</b></summary><div class="eb"><pre class="broken"><code class="language-python"><span class="cl">故意写错 · 先跑一遍看报错</span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">play_button</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">collidepoint</span><span class="p">(</span><span class="n">mouse_pos</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">reset_stats</span><span class="p">()</span>
+</code></pre><div class="badge-broken">这是故意写错的示例——先自己跑一遍看报错，再对照下面的解析弄清错在哪</div>
+<p><strong>症状</strong>：游戏中手滑点了一下屏幕正中间，分数等级全部清零，玩家想砸键盘。
+<strong>处方</strong>：<code>if self.play_button.rect.collidepoint(mouse_pos) and not self.stats.game_active:</code>——「点了按钮」和「游戏没在运行」两个条件同时满足才生效。</p>
+<hr></div></details><details class="ec" data-u="15" data-t="★ 忘记校正绘图，点被边框切掉"><summary><span class="ub">单元 15</span><b>★ 忘记校正绘图，点被边框切掉</b></summary><div class="eb"><p>数据范围正好等于坐标轴范围时，最边缘的点被裁掉一半，像「数据少了两头」。修法：<code>ax.axis([0, x_max * 1.05, 0, y_max * 1.05])</code>，四个数顺序是 <code>[xmin, xmax, ymin, ymax]</code>，写反会出现「图空白」。</p></div></details><details class="ec" data-u="15" data-t="★ `fill_walk()` 里把 `and` 写成 `or"><summary><span class="ub">单元 15</span><b>★ `fill_walk()` 里把 `and` 写成 `or</b></summary><div class="eb"><p>写成 <code>if x_step == 0 or y_step == 0: continue</code>，等于要求「每一步必须同时改变 x 和 y」，图会退化成一条直线——不报错，只是图很怪。正确条件是两个都不动才重来，必须用 <code>and</code>。</p></div></details><details class="ec" data-u="15" data-t="c=` 传了数字却忘了 `cmap="><summary><span class="ub">单元 15</span><b>c=` 传了数字却忘了 `cmap=</b></summary><div class="eb"><p>所有点画成同一种默认蓝色，渐变根本没出现，<strong>却不报错</strong>。传数字必须配 <code>cmap</code>。</p></div></details><details class="ec" data-u="15" data-t="set_xticklabels` 不配 `set_xticks"><summary><span class="ub">单元 15</span><b>set_xticklabels` 不配 `set_xticks</b></summary><div class="eb"><p>标签被硬贴在默认刻度上，数量一多就叠成团。<strong>位置和文字必须配套调用。</strong></p></div></details><details class="ec" data-u="15" data-t="样式名写老版本，报 `valueerror: style &#x27;seaborn&#x27; is not in available styles"><summary><span class="ub">单元 15</span><b>样式名写老版本，报 `ValueError: style &#x27;seaborn&#x27; is not in available styles</b></summary><div class="eb"><p>matplotlib 0.13 之后 seaborn 系列加了版本后缀，写 <code>"seaborn-v0_8"</code> 而不是 <code>"seaborn"</code>；拿不准就先 <code>print(plt.style.available)</code> 看现装的。样式只是皮肤。</p></div></details><details class="ec" data-u="15" data-t="matplotlib.use(&quot;agg&quot;)` 写在 `import matplotlib.pyplot` 之后"><summary><span class="ub">单元 15</span><b>matplotlib.use(&quot;Agg&quot;)` 写在 `import matplotlib.pyplot` 之后</b></summary><div class="eb"><p>会报 <code>RuntimeError: Cannot switch to Agg after importing pyplot</code>，因为后端在导入 pyplot 时就定死了。顺序必须先 <code>matplotlib.use</code>、后 <code>import pyplot</code>。</p></div></details><details class="ec" data-u="15" data-t="忘了 `assert sum(frequencies) == len(results)"><summary><span class="ub">单元 15</span><b>忘了 `assert sum(frequencies) == len(results)</b></summary><div class="eb"><h2><code>range(1, die.num_sides + 1)</code> 少写 <code>+ 1</code>，最后一个面的频次永远是 0，图上少一根柱子，程序一声不吭。凡「按类别统计」都该加这行断言。</h2></div></details><details class="ec" data-u="16" data-t="★ 把 `coordinates[1]` 当成经度（经纬度写反）"><summary><span class="ub">单元 16</span><b>★ 把 `coordinates[1]` 当成经度（经纬度写反）</b></summary><div class="eb"><p>GeoJSON 的坐标是 <code>[经度, 纬度, 深度]</code>。写成 <code>lat = coordinates[0]</code>、<code>lon = coordinates[1]</code>，程序不报错，但所有点跑到镜像位置。自检方法：纬度绝对值不应超过 90。每次写完 coordinates，默念「先 lon 后 lat」。</p></div></details><details class="ec" data-u="16" data-t="★ 硬编码列号 `row[4]"><summary><span class="ub">单元 16</span><b>★ 硬编码列号 `row[4]</b></summary><div class="eb"><p>数据源一更新（列顺序变了、多了几列），程序要么 <code>IndexError</code>，要么安静地取错列。正确做法：先 <code>enumerate</code> 打印表头，按列名建字典 <code>{name: index}</code>，再取数。</p></div></details><details class="ec" data-u="16" data-t="strptime` 格式码和字符串不匹配"><summary><span class="ub">单元 16</span><b>strptime` 格式码和字符串不匹配</b></summary><div class="eb"><p><code>"2021-07-01"</code> 配 <code>"%Y/%m/%d"</code>、<code>"2021/7/1"</code> 配 <code>"%Y-%m-%d"</code>（少前导零也麻烦），都会抛 <code>ValueError: time data ... does not match format</code>。排查方法：把字符串和格式码并排写在纸上，一个字符一个字符对。</p></div></details><details class="ec" data-u="16" data-t="把 `append` 写进 `try` 块"><summary><span class="ub">单元 16</span><b>把 `append` 写进 `try` 块</b></summary><div class="eb"><p>某天 TMAX 缺失时，<code>int("")</code> 抛异常，但异常前的 <code>dates.append</code> 已经执行，<code>lows</code> 也可能转换成功——三个列表错位，画图时报一个看不懂的错，或者更糟：画出一张安静的错图。记住：append 放 <code>else</code>，保证「要么三个都进，要么都不进」。</p></div></details><details class="ec" data-u="16" data-t="plt.show()` 在无图形界面的环境卡住"><summary><span class="ub">单元 16</span><b>plt.show()` 在无图形界面的环境卡住</b></summary><div class="eb"><p>远程服务器、WSL、某些 IDE 里 <code>plt.show()</code> 会报错或让程序挂起。本讲义统一用 <code>plt.savefig("图.png", dpi=150, bbox_inches="tight")</code> 存文件，哪里都能跑。教材未涉及，补充说明。</p></div></details><details class="ec" data-u="16" data-t="细节两件套——样式名和 csv 参数"><summary><span class="ub">单元 16</span><b>细节两件套——样式名和 CSV 参数</b></summary><div class="eb"><p><code>plt.style.use("seaborn")</code> 在新版 matplotlib 会报 <code>ValueError</code>，要写 <code>"seaborn-v0_8"</code>（样式只是皮肤，删掉也行）；写 CSV 忘加 <code>newline=""</code> 会在 Windows 上多出空行，忘加 <code>encoding="utf-8"</code> 中文可能变乱码。</p>
+<hr></div></details><details class="ec" data-u="17" data-t="不检查状态码就 `.json()"><summary><span class="ub">单元 17</span><b>不检查状态码就 `.json()</b></summary><div class="eb"><p><strong>症状</strong>：<code>JSONDecodeError</code>，或者拿到 <code>{"message": "rate limit"}</code> 还在解析。
+<strong>原因</strong>：4xx/5xx 的响应体不是你要的数据。
+<strong>改法</strong>：先 <code>if r.status_code != 200:</code> 打印状态与响应前 200 字，再决定是否解析；或 <code>r.raise_for_status()</code>。</p></div></details><details class="ec" data-u="17" data-t="没设超时，程序一直挂着"><summary><span class="ub">单元 17</span><b>没设超时，程序一直挂着</b></summary><div class="eb"><p><strong>症状</strong>：脚本卡住不动，也不报错。
+<strong>原因</strong>：<code>requests.get(url)</code> 默认不超时（可能等几分钟）。
+<strong>改法</strong>：<code>requests.get(url, timeout=10)</code>；批量抓取时循环里加 <code>time.sleep(0.5)</code>。</p></div></details><details class="ec" data-u="17" data-t="只取了第一页"><summary><span class="ub">单元 17</span><b>只取了第一页</b></summary><div class="eb"><p><strong>症状</strong>：明明有 1000 条，只拿到 30 条。
+<strong>原因</strong>：分页参数没处理。
+<strong>改法</strong>：看响应里的 <code>next</code>/<code>Link</code> 头或 <code>page</code> 字段，循环取到没有下一页为止。</p></div></details><details class="ec" data-u="17" data-t="直接 `data[&quot;items&quot;]` → 偶尔 keyerror"><summary><span class="ub">单元 17</span><b>直接 `data[&quot;items&quot;]` → 偶尔 KeyError</b></summary><div class="eb"><p><strong>症状</strong>：平时正常，偶尔崩一次。
+<strong>原因</strong>：接口在出错/限流时返回的字段不一样。
+<strong>改法</strong>：<code>data.get("items", [])</code>；每个 item 也用 <code>.get("name", "?")</code>。</p></div></details><details class="ec" data-u="17" data-t="被 403/429 拦了还继续打"><summary><span class="ub">单元 17</span><b>被 403/429 拦了还继续打</b></summary><div class="eb"><p><strong>症状</strong>：越跑越慢，最后全 429。
+<strong>原因</strong>：请求太密，触发限流。
+<strong>改法</strong>：读 <code>Retry-After</code> 头、加 <code>time.sleep</code> 退避（1s→2s→4s）；带上 <code>User-Agent</code>，别裸奔。</p>
+<hr></div></details><details class="ec" data-u="18" data-t="★ 忘了激活虚拟环境"><summary><span class="ub">单元 18</span><b>★ 忘了激活虚拟环境</b></summary><div class="eb"><p>症状：<code>ModuleNotFoundError: No module named 'django'</code>；或者 Django 装是装上了，但换个终端就消失。诊断方法只有一个——<strong>看提示符前面有没有 <code>(ll_env)</code></strong>。没有就重新激活：<code>source ll_env/bin/activate</code>（Windows 用 <code>ll_env\Scripts\activate</code>）。记住：每开一个新终端，就要重新激活一次。</p></div></details><details class="ec" data-u="18" data-t="★ 搞混 `learning_log/`、`ll_project/`、`learning_logs/"><summary><span class="ub">单元 18</span><b>★ 搞混 `learning_log/`、`ll_project/`、`learning_logs/</b></summary><div class="eb"><p>三个名字长得像，角色完全不同：<code>learning_log/</code> 是你的工作目录（<code>manage.py</code> 在这），<code>ll_project/</code> 是项目配置的家（<code>settings.py</code>、总 <code>urls.py</code> 在这），<code>learning_logs/</code> 是干活的 app（<code>models.py</code>、<code>views.py</code> 在这）。<strong>改错文件是新手最贵的浪费</strong>——在 <code>ll_project</code> 里找 <code>models.py</code> 当然找不到，因为模型在 <code>learning_logs</code> 里。拿不准就 <code>ls</code> 看一眼。</p></div></details><details class="ec" data-u="18" data-t="改了 `models.py` 不迁移"><summary><span class="ub">单元 18</span><b>改了 `models.py` 不迁移</b></summary><div class="eb"><p>加完字段直接刷新网页，报 <code>OperationalError: no such table</code> 或「no such column」。原因：只改了图纸没施工。记住三步曲一个都不能少：改 <code>models.py</code> → <code>makemigrations</code> → <code>migrate</code>。反过来也要警惕：<code>makemigrations</code> 之后忘了 <code>migrate</code>，同样是图纸没施工。</p></div></details><details class="ec" data-u="18" data-t="新 app 忘了在 `installed_apps` 登记"><summary><span class="ub">单元 18</span><b>新 app 忘了在 `INSTALLED_APPS` 登记</b></summary><div class="eb"><p>症状：<code>migrate</code> 不给你的模型建表；管理网站里看不到模型；报 <code>LookupError: No installed app with label 'xxx'</code>。类比：新生不来注册学籍，学校花名册上就没这人，食堂不给他开饭。<code>startapp</code> 之后第一件事，就是去 <code>settings.py</code> 登记。</p></div></details><details class="ec" data-u="18" data-t="startproject` 末尾忘了写句点"><summary><span class="ub">单元 18</span><b>startproject` 末尾忘了写句点</b></summary><div class="eb"><p><code>django-admin startproject ll_project</code>（没有 <code>.</code>）会多套一层目录，<code>manage.py</code> 被埋进子目录，部署时各种配置问题。教材特意用「注意」框强调：<strong>千万别忘了这个句点</strong>。真忘了也别慌——删掉刚生成的目录（保留 <code>ll_env</code>），带上句点重跑。</p></div></details><details class="ec" data-u="18" data-t="模板里 `{% url %}` 写错"><summary><span class="ub">单元 18</span><b>模板里 `{% url %}` 写错</b></summary><div class="eb"><p><code>NoReverseMatch: Reverse for 'index' not found</code>——十有八九是漏了命名空间。正确写法是 <code>{% url 'learning_logs:index' %}</code>（app 名 + 冒号 + URL 模式名）。另外注意教材的提醒：模板里用对象的 <code>topic.id</code> 取 ID 值，视图里的形参叫 <code>topic_id</code>，两者别混。</p>
+<hr></div></details><details class="ec" data-u="19" data-t="★ 视图里用 `.all()`，忘了按用户过滤"><summary><span class="ub">单元 19</span><b>★ 视图里用 `.all()`，忘了按用户过滤</b></summary><div class="eb"><p>症状：登录 A 账号，能看到 B 账号的全部主题和条目——<strong>数据裸奔</strong>，本单元最严重的事故。自查方法：搜索项目里所有 <code>objects.all()</code>，逐个问「这里该不该按 <code>owner=request.user</code> 过滤」。涉及用户私有数据的查询，一个都不能漏。</p></div></details><details class="ec" data-u="19" data-t="★ `fields` 白名单里写了 `owner"><summary><span class="ub">单元 19</span><b>★ `fields` 白名单里写了 `owner</b></summary><div class="eb"><p><code>fields = ["text", "owner"]</code> 等于把「归属」这一列的控制权交给用户——提交表单时塞个别人的用户 ID，数据就归了别人。归属信息只有一个合法来源：<code>request.user</code>，由系统在 <code>save(commit=False)</code> 之后盖章。表单白名单里永远不要出现 owner。</p></div></details><details class="ec" data-u="19" data-t="忘了写 `@login_required"><summary><span class="ub">单元 19</span><b>忘了写 `@login_required</b></summary><div class="eb"><p>未登录用户访问该视图时，<code>request.user</code> 是 <code>AnonymousUser</code>，<code>filter(owner=AnonymousUser)</code> 直接 500。装饰器就一行，漏写整个页面裸奔。建议：除了主页和注册页，<strong>其他视图全部加</strong>，加错了顶多严格一点，漏加了是事故。</p></div></details><details class="ec" data-u="19" data-t="save(commit=false)` 之后忘了 `save()"><summary><span class="ub">单元 19</span><b>save(commit=False)` 之后忘了 `save()</b></summary><div class="eb"><p><code>new_topic = form.save(commit=False)</code> 只是拿到一个没入库的实例；不补 owner、不调用 <code>save()</code>，数据就永远停在内存里。最阴险的是页面照常跳转、用户毫无察觉——静默丢数据。记住三段式是一个整体：<code>commit=False</code> → 补 <code>owner</code> → <code>save()</code>。</p></div></details><details class="ec" data-u="19" data-t="登录模板放错位置"><summary><span class="ub">单元 19</span><b>登录模板放错位置</b></summary><div class="eb"><p><code>TemplateDoesNotExist at registration/login.html</code>——默认登录视图只认 <code>registration/login.html</code> 这个路径，且要从某个 app 的 <code>templates/</code> 目录下找。正确位置：<code>accounts/templates/registration/login.html</code>。差一个单词都不行，这是 Django 的约定，没有为什么，记住即可。</p></div></details><details class="ec" data-u="19" data-t="edit_entry` 只查了条目，没查主题归属"><summary><span class="ub">单元 19</span><b>edit_entry` 只查了条目，没查主题归属</b></summary><div class="eb"><p><code>entry = Entry.objects.get(id=entry_id)</code> 之后直接用，等于放任用户 A 通过 <code>/edit_entry/别人的条目ID/</code> 编辑用户 B 的条目。Entry 自己没有 owner，归属要从 <code>entry.topic.owner</code> 往上追一层——这就是「双重保护」：既确认条目存在，也确认条目的主题属于当前用户。</p>
+<hr></div></details><details class="ec" data-u="20" data-t="★ allowed_hosts 没加平台域名，线上 400"><summary><span class="ub">单元 20</span><b>★ ALLOWED_HOSTS 没加平台域名，线上 400</b></summary><div class="eb"><p><strong>现象</strong>：部署成功、日志没报错，但一打开网址就是 <code>400 Bad Request</code>。<strong>原因</strong>：Django 校验每个请求的 <code>Host</code> 头，不在 <code>ALLOWED_HOSTS</code> 就直接 400，视图根本不执行。<strong>修复</strong>：settings.py 的 Platform.sh 段加 <code>ALLOWED_HOSTS.append('.platformsh.site')</code>，提交后重新 push。</p></div></details><details class="ec" data-u="20" data-t="忘了注册 django_bootstrap5，模板报 invalid block tag"><summary><span class="ub">单元 20</span><b>忘了注册 django_bootstrap5，模板报 Invalid block tag</b></summary><div class="eb"><p><strong>现象</strong>：页面 500，报 <code>TemplateSyntaxError: Invalid block tag: 'bootstrap_form'</code>。<strong>原因</strong>：<code>{% load %}</code> 只是「打开工具包」，包本身要在 <code>INSTALLED_APPS</code> 注册。<strong>修复</strong>：<code>INSTALLED_APPS</code> 加 <code>'django_bootstrap5'</code>。</p></div></details><details class="ec" data-u="20" data-t="debug 关了却没收静态文件，白脸页面"><summary><span class="ub">单元 20</span><b>DEBUG 关了却没收静态文件，白脸页面</b></summary><div class="eb"><p><strong>现象</strong>：线上页面结构都在，但没有样式。<strong>原因</strong>：<code>DEBUG = False</code> 后 Django 不再代发静态文件；collectstatic 没跑，或 <code>STATIC_ROOT</code> 没设置。<strong>修复</strong>：build 钩子确保有 <code>python manage.py collectstatic --noinput</code>，云上段设置 <code>STATIC_ROOT</code>。</p></div></details><details class="ec" data-u="20" data-t="requirements.txt 漏了 gunicorn 或 psycopg2"><summary><span class="ub">单元 20</span><b>requirements.txt 漏了 gunicorn 或 psycopg2</b></summary><div class="eb"><p><strong>现象</strong>：部署日志 <code>ModuleNotFoundError: No module named 'gunicorn'</code>，或连不上数据库。<strong>原因</strong>：本地用 <code>runserver</code> + SQLite，这两个包本地没装过，<code>pip freeze</code> 不会列出来。<strong>修复</strong>：建 <code>requirements_remote.txt</code> 写上两者，并在 build 钩子里 <code>pip install -r requirements_remote.txt</code>。</p></div></details><details class="ec" data-u="20" data-t=".gitignore 缺失，虚拟环境和本地数据库被推上云"><summary><span class="ub">单元 20</span><b>.gitignore 缺失，虚拟环境和本地数据库被推上云</b></summary><div class="eb"><p><strong>现象</strong>：push 奇慢，仓库几百 MB；甚至线上用了你本地带数据的 SQLite 文件。<strong>原因</strong>：没有 <code>.gitignore</code>，<code>git add .</code> 把 <code>ll_env/</code>、<code>__pycache__/</code>、<code>db.sqlite3</code> 全提交了。<strong>修复</strong>：补写 <code>.gitignore</code>，用 <code>git rm -r --cached</code> 把已跟踪文件撤出索引，再提交。</p></div></details><details class="ec" data-u="20" data-t="新文件忘了 git add，推送后线上缺东西"><summary><span class="ub">单元 20</span><b>新文件忘了 git add，推送后线上缺东西</b></summary><div class="eb"><p><strong>现象</strong>：本地明明建了 <code>templates/404.html</code>，线上还是默认错误页。<strong>原因</strong>：<code>git commit -am</code> 只提交<strong>已跟踪</strong>文件的修改，新文件必须先 <code>git add</code>。<strong>修复</strong>：只要产生了新文件（包括 <code>makemigrations</code> 生成的迁移文件），先 <code>git add .</code> 再 commit。</p>
+<hr></div></details><details class="ec" data-u="21" data-t="★ 没有 .gitignore 就 `git add .`，虚拟环境和数据库进了仓库"><summary><span class="ub">单元 21</span><b>★ 没有 .gitignore 就 `git add .`，虚拟环境和数据库进了仓库</b></summary><div class="eb"><p><strong>现象</strong>：<code>git push</code> 传了 400MB。<strong>原因</strong>：没有 <code>.gitignore</code>，<code>git add .</code> 把一切都加进去了。<strong>修复</strong>：补写 <code>.gitignore</code>，再 <code>git rm -r --cached ll_env</code> 把已跟踪文件撤出索引（只删索引，不删本地文件），然后提交。</p></div></details><details class="ec" data-u="21" data-t="pip freeze` 在全局环境执行，清单长到没法看"><summary><span class="ub">单元 21</span><b>pip freeze` 在全局环境执行，清单长到没法看</b></summary><div class="eb"><p><strong>现象</strong>：requirements.txt 有 80 行，大部分是本项目没用到的包。<strong>原因</strong>：没建虚拟环境就 <code>pip freeze</code>，冻的是全局环境。<strong>修复</strong>：<code>python -m venv venv</code> → 激活 → 只装项目需要的包 → <code>pip freeze &gt; requirements.txt</code>。</p></div></details><details class="ec" data-u="21" data-t="★ 测试全是抄教材的，自己一条没写"><summary><span class="ub">单元 21</span><b>★ 测试全是抄教材的，自己一条没写</b></summary><div class="eb"><p><strong>现象</strong>：关卡 2 第 3 条过不了。<strong>原因</strong>：<code>test_game_functions.py</code> 里全是照抄的用例，没有一条针对你自己写的代码。<strong>修复</strong>：挑 3 个自己的纯逻辑函数，各写 2 条断言具体数值的测试（练习 21-2）。<strong>判断标准</strong>：关掉讲义后还能写出来，才算真的会。</p></div></details><details class="ec" data-u="21" data-t="把 secret_key 硬编码在 settings.py 里，还推上了公开仓库"><summary><span class="ub">单元 21</span><b>把 SECRET_KEY 硬编码在 settings.py 里，还推上了公开仓库</b></summary><div class="eb"><p><strong>现象</strong>：仓库公开后被人 issue 提醒。<strong>原因</strong>：<code>SECRET_KEY = "django-insecure-…"</code> 直接写在代码里。<strong>修复</strong>：改成 <code>os.environ["DJANGO_SECRET_KEY"]</code>，<strong>立刻去平台后台重置旧密钥</strong>（删记录没用，克隆里已经有了），把 <code>.env</code> 加进 <code>.gitignore</code>、提交 <code>.env.example</code> 说明要配哪些变量。</p></div></details><details class="ec" data-u="21" data-t="代码里全是魔法数字，改一个参数要翻 8 个文件"><summary><span class="ub">单元 21</span><b>代码里全是魔法数字，改一个参数要翻 8 个文件</b></summary><div class="eb"><p><strong>现象</strong>：「敌人快一点」这个需求改了半小时。<strong>原因</strong>：<code>alien.rect.top += 1</code> 这种数字散落在各处。<strong>修复</strong>：按 2.3 标准二抽到 <code>settings.py</code>，用有名字的常量替换；改完再搜一遍那个数字，确认没有漏网。</p></div></details><details class="ec" data-u="21" data-t="所有代码堆在一个文件里，两千行"><summary><span class="ub">单元 21</span><b>所有代码堆在一个文件里，两千行</b></summary><div class="eb"><p><strong>现象</strong>：想加个功能要读 500 行才敢动手；pytest 一导入就把 pygame 窗口开起来了。<strong>原因</strong>：没拆文件（2.3 标准一）。<strong>修复</strong>：按「谁调用它」拆，<strong>先把纯逻辑挑出来——这一步顺带就解决了测试要开窗口的问题</strong>。</p>
+<hr></div></details></div>
+  <p class="empty" id="dempty">没有匹配的条目</p>
+  <div class="foot">
+    <a href="../index.html">主页</a> ·
+    <a href="lessons/index.html">课程目录</a> ·
+    <a href="help.html">求助手册</a> ·
+    <a href="terms.html">术语索引</a> ·
+    <a href="coverage.html">覆盖与自足性</a>
+  </div>
+</div>
+<style>
+.fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 16px}
+.fbar input[type=search]{flex:1 1 260px;min-width:0}
+.fbar select{height:34px;border:1px solid var(--line);border-radius:8px;
+background:var(--card);color:var(--text);font:inherit;font-size:13px;padding:0 8px}
+.ec{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}
+.ec summary{cursor:pointer;padding:11px 14px;font-size:14px;line-height:1.6;
+display:flex;gap:10px;align-items:baseline}
+.ec summary b{font-weight:600}
+.ec .ub{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--p1);
+background:var(--p1bg);border-radius:20px;padding:2px 8px}
+.ec .eb{padding:0 16px 14px;font-size:13.5px;line-height:1.85;color:var(--text)}
+.ec .eb p{margin:6px 0}
+.ec .eb pre{margin:8px 0}
+table.exc td{font-size:13px;line-height:1.7;vertical-align:top}
+table.exc td:first-child{white-space:nowrap}
+/*@theme-dark*/
+@media screen{
+:where(html[data-theme="dark"]) .fbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 16px}
+:where(html[data-theme="dark"]) .fbar input[type=search]{flex:1 1 260px;min-width:0}
+:where(html[data-theme="dark"]) .fbar select{height:34px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font:inherit;font-size:13px;padding:0 8px}
+:where(html[data-theme="dark"]) .ec{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}
+:where(html[data-theme="dark"]) .ec summary{cursor:pointer;padding:11px 14px;font-size:14px;line-height:1.6;display:flex;gap:10px;align-items:baseline}
+:where(html[data-theme="dark"]) .ec summary b{font-weight:600}
+:where(html[data-theme="dark"]) .ec .ub{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:2px 8px}
+:where(html[data-theme="dark"]) .ec .eb{padding:0 16px 14px;font-size:13.5px;line-height:1.85;color:var(--text)}
+:where(html[data-theme="dark"]) .ec .eb p{margin:6px 0}
+:where(html[data-theme="dark"]) .ec .eb pre{margin:8px 0}
+:where(html[data-theme="dark"]) table.exc td{font-size:13px;line-height:1.7;vertical-align:top}
+:where(html[data-theme="dark"]) table.exc td:first-child{white-space:nowrap}
+}
+</style>
+<script>
+var q=document.getElementById('dq'),sel=document.getElementById('du'),
+    list=document.getElementById('dlist'),n=document.getElementById('dqn'),
+    emp=document.getElementById('dempty');
+function filt(){
+  var s=q.value.trim().toLowerCase(),u=sel.value,c=0;
+  [].forEach.call(list.children,function(d){
+    var ok=(!s||d.dataset.t.indexOf(s)>=0||d.textContent.toLowerCase().indexOf(s)>=0)
+           &&(!u||d.dataset.u===u);
+    d.style.display=ok?'':'none'; if(ok)c++;
+  });
+  n.textContent=c+' / '+list.children.length;
+  emp.style.display=c?'none':'';
+}
+q.addEventListener('input',filt); sel.addEventListener('change',filt); filt();
+</script>
+<script src="media/bgm.js" defer></script>
+<!--@theme:body-->
+<script>(function(){
+var KEY='py-theme-v1',ORDER=['auto','light','dark'];
+var LABEL={auto:'跟随系统',light:'浅色',dark:'深色'};
+var ICON={
+auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>',
+dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3z"/></svg>'};
+var root=document.documentElement;
+var q=window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)'):null;
+function mode(){var m=root.getAttribute('data-theme-mode');return ORDER.indexOf(m)<0?'auto':m}
+function sync(m){
+  var b=document.getElementById('thBtn');
+  root.setAttribute('data-theme-mode',m);
+  var d=root.getAttribute('data-theme')==='dark';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
+  if(!b)return;
+  b.title='主题：'+LABEL[m]+'　点一下或按 Shift+T 切换（跟随系统 → 浅色 → 深色）';
+  b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
+  var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
+  if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
+}
+function apply(m,save){
+  var d=m==='dark'||(m==='auto'&&q&&q.matches);
+  root.setAttribute('data-theme',d?'dark':'light');
+  if(save){try{localStorage.setItem(KEY,m)}catch(e){}}
+  sync(m);
+}
+function build(){
+  var b=document.createElement('button');
+  b.type='button';b.id='thBtn';b.className='thbtn';
+  b.innerHTML='<span class="thi"></span><span class="thlbl"></span>';
+  var host=document.querySelector('.top-in')||document.querySelector('.nav-in');
+  var mq=window.matchMedia?window.matchMedia('(max-width:640px)'):null;
+  if(host){host.appendChild(b)}else{document.body.appendChild(b)}
+  function home(){
+    var el=document.getElementById('thBtn');if(!el)return;
+    var small=mq&&mq.matches;
+    if(!host||small){
+      if(el.parentElement!==document.body)document.body.appendChild(el);
+      el.classList.add('fixed');
+    }else{
+      if(el.parentElement!==host)host.appendChild(el);
+      el.classList.remove('fixed');
+    }
+  }
+  home();
+  if(mq&&mq.addEventListener)mq.addEventListener('change',home);
+  window.__thHome=home;
+  b.addEventListener('click',function(){apply(ORDER[(ORDER.indexOf(mode())+1)%3],true)});
+  return b;
+}
+build();sync(mode());
+if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
+  q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
+window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
+  set:function(m){apply(m,true)}};
+/* Shift+T：不碰鼠标也能换主题（输入框聚焦时让位给打字） */
+document.addEventListener('keydown',function(e){
+  if(e.shiftKey&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&(e.key==='T'||e.key==='t')){
+    var a=document.activeElement;
+    if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+    apply(ORDER[(ORDER.indexOf(mode())+1)%3],true);e.preventDefault();
+  }
+});
+})();</script>
+<!--/@theme:body-->
+<!-- neuron:begin -->
+<script>(function(){
+var KEY='py-neuron-v1';
+var DEF={on:1,dense:'mid',follow:1,speed:'mid',color:'multi'};
+var DENSE={low:.55,mid:1,high:1.75,ultra:2.9};
+var SPEED={slow:.35,mid:1,fast:1.9,rush:3.4};
+// 六色神经元调色板。浅色档是压深的饱和色（白底上要能看清），
+// 深色档是高亮色（深底上才透得出来）——两套不能共用，共用必有一边糊掉。
+var PAL={
+ l:[[21,101,192],[0,130,124],[109,58,178],[206,81,29],[190,26,93],[46,125,50]],
+ d:[[117,183,255],[72,222,205],[186,148,255],[255,170,112],[255,132,178],[138,226,138]]
+};
+// 预生成 11 档透明度的 rgba 串：每帧几百条线拼字符串会明显掉帧
+var LUT={l:[],d:[]};
+(function(){
+ for(var t=0;t<2;t++){
+  var key=t?'d':'l',pal=PAL[key],arr=LUT[key],i,a;
+  for(i=0;i<pal.length;i++){
+   var row=[];
+   for(a=0;a<=10;a++)
+    row.push('rgba('+pal[i][0]+','+pal[i][1]+','+pal[i][2]+','+(a/10).toFixed(2)+')');
+   arr.push(row);
+  }
+ }
+})();
+var raw=null,cfg={};
+try{raw=localStorage.getItem(KEY)}catch(e){}
+try{cfg=raw?JSON.parse(raw):{}}catch(e){cfg={}}
+for(var k in DEF){if(typeof cfg[k]!==typeof DEF[k])cfg[k]=DEF[k]}
+if(!DENSE[cfg.dense])cfg.dense='mid';
+if(!SPEED[cfg.speed])cfg.speed='mid';
+// 系统开了「减少动效」且用户没自己选过：默认不铺背景，别跟系统设置对着干
+var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+if(!raw&&rm&&rm.matches)cfg.on=0;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(cfg))}catch(e){}}
+
+var CSS=
+'#neuronCv{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;'+
+'pointer-events:none;opacity:.95}'+
+'#nrBtn{position:fixed;right:18px;bottom:22px;z-index:70;display:inline-flex;'+
+'align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;'+
+'border:1px solid var(--line,#e3e8ef);background:var(--card,#fff);'+
+'color:var(--muted,#5f7183);font:inherit;font-size:12.5px;font-weight:700;'+
+'line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(20,40,70,.13);'+
+'opacity:.92;transition:opacity .15s,color .15s}'+
+'#nrBtn:hover{opacity:1;color:var(--text,#16232e);border-color:var(--p1,#1f5fa8)}'+
+'#nrBtn.on{color:var(--p1,#1f5fa8)}'+
+'#nrBtn svg{width:15px;height:15px;display:block}'+
+'#nrPanel{position:fixed;right:18px;bottom:62px;z-index:71;width:224px;'+
+'background:var(--card,#fff);border:1px solid var(--line,#e3e8ef);'+
+'border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px rgba(20,40,70,.18);'+
+'font:inherit;font-size:13px;color:var(--text,#16232e);display:none}'+
+'#nrPanel.open{display:block}'+
+'#nrPanel .row{display:flex;align-items:center;justify-content:space-between;'+
+'gap:10px;padding:6px 0}'+
+'#nrPanel .row+.row{border-top:1px solid var(--line,#e3e8ef)}'+
+'#nrPanel .lb{font-size:12.5px;color:var(--muted,#5f7183);white-space:nowrap}'+
+'#nrPanel .seg{display:flex;gap:4px}'+
+'#nrPanel button{font:inherit;font-size:12px;font-weight:700;cursor:pointer;'+
+'border:1px solid var(--line,#e3e8ef);background:transparent;'+
+'color:var(--muted,#5f7183);border-radius:7px;padding:4px 8px;line-height:1}'+
+'#nrPanel button.sel{background:var(--p1s,var(--p1,#1f5fa8));'+
+'border-color:var(--p1s,var(--p1,#1f5fa8));color:#fff}'+
+'#nrPanel .sw{min-width:44px}'+
+'#nrPanel .sw.on{background:var(--p1s,var(--p1,#1f5fa8));'+
+'border-color:var(--p1s,var(--p1,#1f5fa8));color:#fff}'+
+'@media print{#neuronCv,#nrBtn,#nrPanel{display:none!important}}'+
+'@media(max-width:640px){#nrBtn{right:14px;bottom:14px;height:30px;padding:0 10px}'+
+'#nrPanel{right:14px;bottom:52px;width:calc(100vw - 28px);max-width:250px}}';
+var st=document.createElement('style');st.textContent=CSS;document.head.appendChild(st);
+
+var cv=document.createElement('canvas');
+cv.id='neuronCv';cv.setAttribute('aria-hidden','true');
+if(document.body)document.body.insertBefore(cv,document.body.firstChild);
+else document.addEventListener('DOMContentLoaded',function(){
+  document.body.insertBefore(cv,document.body.firstChild);});
+// canvas 是 fixed 定位，天然绘制在普通流内容之上——正文、视频都会压出线条。
+// 把 body 的直系内容容器抬一层（z-index:1），canvas 就只在卡片缝隙和页边透出。
+// 只动 position:static 且没定过 z-index 的元素：fixed/absolute 的一碰就跑位。
+function lift(){try{
+  var ks=document.body.children,i,el,cs;
+  for(i=0;i<ks.length;i++){
+    el=ks[i];
+    if(el===cv||el.id==='nrBtn'||el.id==='nrPanel')continue;
+    if(el.tagName==='SCRIPT'||el.tagName==='STYLE'||el.tagName==='LINK')continue;
+    cs=getComputedStyle(el);
+    if(cs.position!=='static'||cs.zIndex!=='auto')continue;
+    el.style.position='relative';el.style.zIndex='1';
+  }
+}catch(e){}}
+if(document.body)lift();
+else document.addEventListener('DOMContentLoaded',lift);
+window.addEventListener('load',lift);   // 兜住 JS 后插入的顶层节点
+var ctx=cv.getContext('2d');
+var W=0,H=0,nodes=[],mx=-1,my=-1,hasM=false,raf=0;
+
+function target(){
+  var n=Math.round(W*H/17000*DENSE[cfg.dense]);
+  // 上限要盖住「最高档 × 常见最大屏」：1920×1080 下 ultra 约 354 个节点。
+  // 卡太紧（150/230）会让高档与极档在大屏上撞上限而趋同，加了档却看不出差别。
+  // 再往上（1440p/4K）仍会截断，属刻意的性能兜底：O(n²) 距离计算会掉帧。
+  return Math.max(16,Math.min(360,n));
+}
+function seed(){
+  var n=target(),i,pc=PAL.l.length;
+  while(nodes.length>n)nodes.pop();
+  while(nodes.length<n)nodes.push({x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.24,vy:(Math.random()-.5)*.24,r:Math.random()*1.3+1.1,
+    c:(Math.random()*pc)|0});
+  for(i=0;i<nodes.length;i++){
+    if(nodes[i].x>W)nodes[i].x=Math.random()*W;
+    if(nodes[i].y>H)nodes[i].y=Math.random()*H;
+  }
+}
+function resize(){
+  var dpr=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth;H=window.innerHeight;
+  if(!W||!H)return;
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  seed();
+}
+var lastDark=null;
+function frame(){
+  raf=requestAnimationFrame(frame);
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  // 整层透明度只在主题切换时改：放在每帧里写 style 会触发多余的重排
+  if(dark!==lastDark){lastDark=dark;cv.style.opacity=dark?'.85':'.95';}
+  var lt=dark?LUT.d:LUT.l;
+  var dot=dark?'150,196,240':'31,95,168';
+  var lin=dark?'99,169,238':'52,92,126';
+  var multi=cfg.color!=='mono';
+  // 浅底上线条要更实才看得清，深底上可以留点余量免得盖住正文
+  var LA=dark?.58:.68,DA=dark?.92:.88;
+  ctx.clearRect(0,0,W,H);
+  var sp=SPEED[cfg.speed],i,j,a,b,dx,dy,d2,s,k,ai,g;
+  // 密度越高连线越短：否则节点一多就糊成一片网，看不出「神经元」
+  var LINK=132/Math.sqrt(DENSE[cfg.dense]),L2=LINK*LINK;
+  var MR=150,MR2=MR*MR;
+  for(i=0;i<nodes.length;i++){
+    a=nodes[i];
+    a.x+=a.vx*sp;a.y+=a.vy*sp;
+    if(a.x<-24)a.x=W+24;else if(a.x>W+24)a.x=-24;
+    if(a.y<-24)a.y=H+24;else if(a.y>H+24)a.y=-24;
+    if(hasM&&cfg.follow){
+      dx=mx-a.x;dy=my-a.y;d2=dx*dx+dy*dy;
+      if(d2<MR2&&d2>1){
+        s=Math.sqrt(d2);
+        a.vx+=dx/s*(1-s/MR)*.03;a.vy+=dy/s*(1-s/MR)*.03;
+      }
+    }
+    // 限速：鼠标一直吸着会让节点越飞越快，最后整屏乱窜
+    s=a.vx*a.vx+a.vy*a.vy;
+    if(s>.36){s=Math.sqrt(s);a.vx=a.vx/s*.6;a.vy=a.vy/s*.6;}
+  }
+  ctx.lineWidth=1;
+  for(i=0;i<nodes.length;i++){
+    a=nodes[i];
+    for(j=i+1;j<nodes.length;j++){
+      b=nodes[j];dx=a.x-b.x;dy=a.y-b.y;d2=dx*dx+dy*dy;
+      if(d2>L2)continue;
+      k=1-Math.sqrt(d2)/LINK;
+      ai=(k*LA*10+.5)|0;
+      if(ai<1)continue;            // 淡到看不见的线不画，省一次 stroke
+      else if(ai>10)ai=10;
+      if(multi){
+        // 渐变让每条线两端各自带色，比单一取色更像「信号传导」
+        g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
+        g.addColorStop(0,lt[a.c][ai]);g.addColorStop(1,lt[b.c][ai]);
+        ctx.strokeStyle=g;
+      }else{
+        ctx.strokeStyle='rgba('+lin+','+(ai/10).toFixed(2)+')';
+      }
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+    }
+  }
+  if(hasM&&cfg.follow){
+    for(i=0;i<nodes.length;i++){
+      a=nodes[i];dx=a.x-mx;dy=a.y-my;d2=dx*dx+dy*dy;
+      if(d2>MR2)continue;
+      k=1-Math.sqrt(d2)/MR;
+      ai=(k*.66*10+.5)|0;
+      if(ai<1)ai=1;else if(ai>10)ai=10;
+      ctx.strokeStyle=multi?lt[a.c][ai]:'rgba('+dot+','+(ai/10).toFixed(2)+')';
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(mx,my);ctx.stroke();
+    }
+    ctx.fillStyle=multi?lt[0][9]:'rgba('+dot+',.6)';
+    ctx.beginPath();ctx.arc(mx,my,2.8,0,6.284);ctx.fill();
+  }
+  for(i=0;i<nodes.length;i++){
+    a=nodes[i];
+    // 先铺一层很淡的光晕，再画实心点：多彩色在白底上才有「活」的感觉
+    if(multi){
+      ctx.fillStyle=lt[a.c][1];
+      ctx.beginPath();ctx.arc(a.x,a.y,a.r*2.8,0,6.284);ctx.fill();
+    }
+    ctx.fillStyle=multi?lt[a.c][(DA*10)|0]:'rgba('+dot+','+DA.toFixed(2)+')';
+    ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,6.284);ctx.fill();
+  }
+}
+function start(){if(!raf){raf=requestAnimationFrame(frame)}}
+function stop(){if(raf){cancelAnimationFrame(raf);raf=0}ctx.clearRect(0,0,W,H)}
+
+var ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"'+
+ 'stroke-linecap="round"><circle cx="5" cy="6.5" r="1.9"/><circle cx="19" cy="8.5" r="1.9"/>'+
+ '<circle cx="9" cy="18" r="1.9"/><circle cx="17.5" cy="17.5" r="1.4"/>'+
+ '<path d="M5 6.5 19 8.5 9 18 5 6.5M19 8.5 17.5 17.5 9 18"/></svg>';
+var btn=document.createElement('button');
+btn.type='button';btn.id='nrBtn';
+btn.innerHTML=ICON+'<span class="nrbt"></span>';
+btn.setAttribute('aria-haspopup','true');
+btn.setAttribute('aria-expanded','false');
+var panel=document.createElement('div');
+panel.id='nrPanel';
+panel.setAttribute('role','group');
+panel.setAttribute('aria-label','神经元背景设置');
+panel.innerHTML=
+ '<div class="row"><span class="lb">神经元背景</span>'+
+ '<button type="button" class="sw" data-k="on"></button></div>'+
+ '<div class="row"><span class="lb">配色</span><span class="seg" data-k="color">'+
+ '<button type="button" data-v="multi">多彩</button>'+
+ '<button type="button" data-v="mono">单色</button></span></div>'+
+ '<div class="row"><span class="lb">密度</span><span class="seg" data-k="dense">'+
+ '<button type="button" data-v="low">低</button>'+
+ '<button type="button" data-v="mid">中</button>'+
+ '<button type="button" data-v="high">高</button>'+
+ '<button type="button" data-v="ultra">极</button></span></div>'+
+ '<div class="row"><span class="lb">鼠标跟随</span>'+
+ '<button type="button" class="sw" data-k="follow"></button></div>'+
+ '<div class="row"><span class="lb">动效</span><span class="seg" data-k="speed">'+
+ '<button type="button" data-v="slow">静</button>'+
+ '<button type="button" data-v="mid">缓</button>'+
+ '<button type="button" data-v="fast">快</button>'+
+ '<button type="button" data-v="rush">疾</button></span></div>';
+document.body.appendChild(btn);document.body.appendChild(panel);
+
+function paint(){
+  btn.classList.toggle('on',!!cfg.on);
+  btn.querySelector('.nrbt').textContent=cfg.on?'背景 开':'背景 关';
+  btn.setAttribute('aria-pressed',cfg.on?'true':'false');
+  btn.title=cfg.on?'神经元背景：开（点击调整）':'神经元背景：关（点击调整）';
+  var sw=panel.querySelectorAll('.sw');
+  for(var i=0;i<sw.length;i++){
+    var k=sw[i].getAttribute('data-k');
+    sw[i].classList.toggle('on',!!cfg[k]);
+    sw[i].textContent=cfg[k]?'开':'关';
+    sw[i].setAttribute('aria-pressed',cfg[k]?'true':'false');
+  }
+  var sg=panel.querySelectorAll('.seg');
+  for(i=0;i<sg.length;i++){
+    var kk=sg[i].getAttribute('data-k'),bs=sg[i].querySelectorAll('button');
+    for(var j=0;j<bs.length;j++)
+      bs[j].classList.toggle('sel',bs[j].getAttribute('data-v')===cfg[kk]);
+  }
+}
+function apply(){
+  if(!W||!H)resize();
+  cv.style.display=cfg.on?'':'none';
+  if(cfg.on&&!document.hidden){seed();start()}else stop();
+  paint();
+}
+btn.addEventListener('click',function(e){
+  e.stopPropagation();
+  panel.classList.toggle('open');
+  btn.setAttribute('aria-expanded',panel.classList.contains('open')?'true':'false');
+});
+panel.addEventListener('click',function(e){
+  var t=e.target;
+  while(t&&t!==panel){
+    if(t.getAttribute){
+      var v=t.getAttribute('data-v');
+      if(v){cfg[t.parentNode.getAttribute('data-k')]=v;save();apply();return}
+      var k=t.getAttribute('data-k');
+      if(k&&t.className.indexOf('sw')>=0){cfg[k]=cfg[k]?0:1;save();apply();return}
+    }
+    t=t.parentNode;
+  }
+});
+document.addEventListener('click',function(e){
+  if(!panel.classList.contains('open'))return;
+  if(panel.contains(e.target)||btn.contains(e.target))return;
+  panel.classList.remove('open');btn.setAttribute('aria-expanded','false');
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&panel.classList.contains('open')){
+    panel.classList.remove('open');btn.setAttribute('aria-expanded','false');
+    btn.focus();
+  }
+});
+window.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;hasM=true},{passive:true});
+document.addEventListener('mouseleave',function(){hasM=false});
+window.addEventListener('blur',function(){hasM=false});
+window.addEventListener('touchmove',function(e){
+  var t=e.touches&&e.touches[0];if(t){mx=t.clientX;my=t.clientY;hasM=true}},{passive:true});
+window.addEventListener('touchend',function(){hasM=false});
+var rt=0;
+window.addEventListener('resize',function(){
+  clearTimeout(rt);rt=setTimeout(function(){if(cfg.on)resize()},180)});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden)stop();else if(cfg.on)start()});
+
+resize();apply();
+window.__neuron={get cfg(){return cfg},set:function(k,v){cfg[k]=v;save();apply()},
+  count:function(){return nodes.length},
+  // 只读坐标快照，给验证脚本量各档速度用（不暴露可写引用，避免外部改动画状态）
+  pos:function(){var r=[],i;for(i=0;i<nodes.length;i++)r.push(nodes[i].x+','+nodes[i].y);return r.join(';')}};
+})();</script>
+<!-- neuron:end -->
+</body>
+</html>
