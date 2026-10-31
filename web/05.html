@@ -80,6 +80,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-5-get-不-crash-的取值方式">2.5 .get()：不 crash 的取值方式</a>
 <a class="lv3" href="#2-6-遍历时能修改字典吗">2.6 遍历时能修改字典吗</a>
 <a class="lv3" href="#2-7-嵌套结构-字典的真正威力">2.7 嵌套结构：字典的真正威力</a>
+<a class="lv3" href="#2-8-按顺序遍历与排序-字典本身不保证顺序">2.8 按顺序遍历与排序：字典本身不保证顺序</a>
+<a class="lv3" href="#2-9-计数与合并-两个绕不开的实用技巧">2.9 计数与合并：两个绕不开的实用技巧</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-创建与基本访问">示例 1：创建与基本访问</a>
 <a class="lv3" href="#示例-2-新增-修改-删除">示例 2：新增、修改、删除</a>
@@ -261,6 +263,75 @@ transition:opacity .18s;z-index:60}
 <span class="nb">print</span><span class="p">(</span><span class="n">python_users</span><span class="p">)</span>     <span class="c1"># ['小明']</span>
 </code></pre>
 <p>这一段代码就是单元 11 那个"投票分析器"的核心结构。现在多花点时间理解它，后面会省很多力气。</p>
+<h3 id="2-8-按顺序遍历与排序-字典本身不保证顺序">2.8 按顺序遍历与排序：字典本身不保证顺序</h3>
+<p>字典的键是<strong>按插入顺序</strong>保存的（3.7+ 的特性），但它<strong>不会自动排序</strong>。要按值或按键排好再遍历，得自己排：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"小明"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">:</span> <span class="mi">72</span><span class="p">}</span>
+
+<span class="c1"># 按键排序遍历（拼音/字母序）</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">scores</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
+
+<span class="c1"># 按值排序遍历（分数从高到低）—— key 参数指定"按第几项排"</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<p><code>key=lambda kv: kv[1]</code> 的意思是"每个元素（<code>(键, 值)</code> 元组）拿去比较的是第 2 项"。
+这是第 8 章 lambda 最常见的实战场景，现在会抄就行，单元 8 会讲透。</p>
+<p>如果嫌 lambda 绕，<code>operator.itemgetter</code> 更快也更易读：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">itemgetter</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"小明"</span><span class="p">:</span> <span class="mi">88</span><span class="p">,</span> <span class="s2">"小红"</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span> <span class="s2">"小刚"</span><span class="p">:</span> <span class="mi">72</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre>
+<h3 id="2-9-计数与合并-两个绕不开的实用技巧">2.9 计数与合并：两个绕不开的实用技巧</h3>
+<p><strong>① 计数：字典最常见的用途</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"banana"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">,</span> <span class="s2">"cherry"</span><span class="p">,</span> <span class="s2">"apple"</span><span class="p">]</span>
+
+<span class="c1"># 朴素写法：先判有没有，再累加</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">counts</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+<span class="c1"># 用 .get() 省掉 if（最常用）</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="n">counts</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+<span class="c1"># 用 setdefault 也行（键不存在时先放个默认值）</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+    <span class="n">counts</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">counts</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+<span class="c1"># 标准库直接给答案（单元 17 之后会常用）</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">words</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>     <span class="c1"># [('apple', 3), ('banana', 1)]</span>
+</code></pre>
+<p><strong>② 合并两个字典</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">base</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+<span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"age"</span><span class="p">:</span> <span class="mi">19</span><span class="p">,</span> <span class="s2">"city"</span><span class="p">:</span> <span class="s2">"成都"</span><span class="p">}</span>
+
+<span class="c1"># 老写法：update 原地合并（会改 base）</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">merged</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">merged</span><span class="p">)</span>                 <span class="c1"># {'name': '小明', 'age': 19, 'city': '成都'}</span>
+
+<span class="c1"># Python 3.9+：| 合并成一个新字典，不改原来的（推荐）</span>
+<span class="n">merged</span> <span class="o">=</span> <span class="n">base</span> <span class="o">|</span> <span class="n">extra</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">merged</span><span class="p">)</span>                 <span class="c1"># {'name': '小明', 'age': 19, 'city': '成都'}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">base</span><span class="p">[</span><span class="s2">"age"</span><span class="p">])</span>            <span class="c1"># 18 ← base 没被改</span>
+
+<span class="c1"># 反向：右边的字典优先，所以 extra 的 age 覆盖了 base 的</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">extra</span> <span class="o">|</span> <span class="n">base</span><span class="p">)</span>           <span class="c1"># age 变成 18</span>
+</code></pre>
+<p>注意合并时<strong>右边的覆盖左边的</strong>，这跟"后写的配置覆盖先写的默认值"是同一个直觉。</p>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-创建与基本访问">示例 1：创建与基本访问</h3>

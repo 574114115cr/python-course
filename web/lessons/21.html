@@ -77,6 +77,9 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-5-链式比较-python-的贴心语法">2.5 链式比较：Python 的贴心语法</a>
 <a class="lv3" href="#2-6-还是-is">2.6 == 还是 is？</a>
 <a class="lv3" href="#2-7-条件表达式-把-5-行压成-1-行">2.7 条件表达式：把 5 行压成 1 行</a>
+<a class="lv3" href="#2-8-in-与-not-in-检查-在不在里面">2.8 in 与 not in：检查&quot;在不在里面&quot;</a>
+<a class="lv3" href="#2-9-什么在-if-里算-假-真假值-truthy-falsy">2.9 什么在 if 里算&quot;假&quot;：真假值（truthy / falsy）</a>
+<a class="lv3" href="#2-10-all-与-any-把一串条件收成一句">2.10 all() 与 any()：把一串条件收成一句</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-if-单分支">示例 1：if 单分支</a>
 <a class="lv3" href="#示例-2-if-elif-else-三分支">示例 2：if / elif / else 三分支</a>
@@ -198,6 +201,110 @@ transition:opacity .18s;z-index:60}
 <blockquote>
 <p><strong>超过一层嵌套的条件表达式就该拆开用普通 <code>if</code>。</strong> 写成 <code>a if x else b if y else c</code> 虽然合法，但没人能一眼读懂——为了少打两行而牺牲可读性，是很不划算的交换。</p>
 </blockquote>
+<h3 id="2-8-in-与-not-in-检查-在不在里面">2.8 <code>in</code> 与 <code>not in</code>：检查"在不在里面"</h3>
+<p>前面的条件都是比较两个值。<code>in</code> 换了个角度：<strong>判断某个值在不在一个容器里</strong>。这是"校验用户输入"最常用的写法。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># in：在里面吗？</span>
+<span class="n">banned</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"脏话1"</span><span class="p">,</span> <span class="s2">"脏话2"</span><span class="p">,</span> <span class="s2">"广告"</span><span class="p">]</span>
+<span class="n">word</span> <span class="o">=</span> <span class="s2">"广告"</span>
+<span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">banned</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"已拦截：命中禁用词"</span><span class="p">)</span>
+
+<span class="c1"># not in：不在里面吗？（等价于 not (x in 容器)，但读起来更顺）</span>
+<span class="n">allowed</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"jpg"</span><span class="p">,</span> <span class="s2">"png"</span><span class="p">,</span> <span class="s2">"gif"</span><span class="p">]</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s2">"photo.bmp"</span>
+<span class="k">if</span> <span class="s2">"."</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"文件名没有扩展名"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">filename</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"不支持的格式：</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 字符串也能用（判断子串）</span>
+<span class="n">email</span> <span class="o">=</span> <span class="s2">"user@example.com"</span>
+<span class="k">if</span> <span class="s2">"@"</span> <span class="ow">in</span> <span class="n">email</span> <span class="ow">and</span> <span class="s2">"."</span> <span class="ow">in</span> <span class="n">email</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"@"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"看起来像个邮箱"</span><span class="p">)</span>
+</code></pre>
+<p><code>in</code> 对列表、字符串、字典、元组都能用。对字典来说是<strong>查键</strong>，不是查值：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"name"</span> <span class="ow">in</span> <span class="n">user</span><span class="p">)</span>      <span class="c1"># True  ← 查的是键</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"小明"</span> <span class="ow">in</span> <span class="n">user</span><span class="p">)</span>      <span class="c1"># False ← 不是查值</span>
+</code></pre>
+<blockquote>
+<p>为什么 <code>not in</code> 值得单独记：新手常写 <code>if not word in banned:</code>，语法上能跑，
+但读起来是"不是（word 在里面）"，绕了一下。<strong><code>word not in banned</code> 才是标准写法。</strong></p>
+</blockquote>
+<h3 id="2-9-什么在-if-里算-假-真假值-truthy-falsy">2.9 什么在 <code>if</code> 里算"假"：真假值（truthy / falsy）</h3>
+<p><code>if</code> 后面的东西不一定要是 <code>True</code>/<code>False</code> 比较出来的<strong>布尔值</strong>——Python 会把任何值都当成"真或假"来判断：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 这六种都是「假」，其余一律为真</span>
+<span class="n">falsy</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="p">[],</span> <span class="p">{},</span> <span class="kc">None</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">falsy</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="s2">"-&gt;"</span><span class="p">,</span> <span class="s2">"假"</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="k">else</span> <span class="s2">"真"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="c1"># 这些是「真」，包括负数、字符串 "0"、"False"</span>
+<span class="n">truthy</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">,</span> <span class="s2">"False"</span><span class="p">,</span> <span class="s2">" "</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}]</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">truthy</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="s2">"-&gt;"</span><span class="p">,</span> <span class="s2">"真"</span> <span class="k">if</span> <span class="n">v</span> <span class="k">else</span> <span class="s2">"假"</span><span class="p">)</span>
+</code></pre>
+<p>这条规则让代码能写得非常简洁：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># 啰嗦写法</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"有数据"</span><span class="p">)</span>
+
+<span class="c1"># 惯用写法：空列表本身就当假</span>
+<span class="k">if</span> <span class="n">items</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"有数据"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"没有数据"</span><span class="p">)</span>
+
+<span class="c1"># 判空字符串 / None 同理</span>
+<span class="n">name</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"名字为空"</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>          <span class="c1"># 注意：判断 None 要用 is not，不要用 != </span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"有数据"</span><span class="p">)</span>
+</code></pre>
+<p><strong>两个必须记住的坑</strong>：</p>
+<ol>
+<li><code>"0"</code> 和 <code>"False"</code> 是<strong>真</strong>——非空字符串永远为真。判断数字先转类型。</li>
+<li>判 <code>None</code> 用 <code>is</code> / <code>is not</code>，不用 <code>==</code>。<code>0 == False</code> 是 True，<code>0 is False</code> 是 False，两者语义不同。</li>
+</ol>
+<h3 id="2-10-all-与-any-把一串条件收成一句">2.10 <code>all()</code> 与 <code>any()</code>：把一串条件收成一句</h3>
+<p>当条件多到写不下时（比如"这五个字段都不能为空"），用 <code>all()</code> / <code>any()</code> 比连写 <code>and</code> 清楚得多：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"小明"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="s2">"成都"</span><span class="p">,</span> <span class="s2">"138"</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span>          <span class="c1"># False ← 全都不为空才 True</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span>          <span class="c1"># True  ← 有一个非空就 True</span>
+
+<span class="c1"># 等价于 all() 的啰嗦写法</span>
+<span class="n">ok</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="ow">and</span> <span class="nb">bool</span><span class="p">(</span><span class="n">fields</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="c1"># 配合生成器表达式：判断"所有分数都及格"</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">88</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">60</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">))</span>     <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="mi">95</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">))</span>     <span class="c1"># False</span>
+
+<span class="c1"># 找第一个不及格的分</span>
+<span class="n">first_fail</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"第一个不及格："</span><span class="p">,</span> <span class="n">first_fail</span><span class="p">)</span>      <span class="c1"># None</span>
+</code></pre>
+<p><code>all([])</code> 是 <code>True</code>、<code>any([])</code> 是 <code>False</code>（空集合的"全员满足"天然成立）——这是个常考的小细节。</p>
+<p><strong>短路求值</strong>：<code>and</code> / <code>or</code> 一旦能确定结果就不再往下算，所以可以把"可能出错"的检查放在前面：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="c1"># 先判空再取字符：不会 IndexError</span>
+<span class="k">if</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"a"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"以 a 开头"</span><span class="p">)</span>
+
+<span class="c1"># or 常用来给默认值（注意：0 和 "" 也会被替换掉，要小心）</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">count</span> <span class="ow">or</span> <span class="mi">10</span>            <span class="c1"># 10 ← 因为 0 是假</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># 只想在 None 时给默认值，用这个写法更准确</span>
+<span class="n">n2</span> <span class="o">=</span> <span class="n">count</span> <span class="k">if</span> <span class="n">count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">10</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">n2</span><span class="p">)</span>                  <span class="c1"># 0</span>
+</code></pre>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-if-单分支">示例 1：if 单分支</h3>
