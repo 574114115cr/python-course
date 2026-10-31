@@ -887,7 +887,7 @@ platform<span class="w"> </span>log<span class="w"> </span>-p<span class="w"> </
 <pre><code class="language-bash"><span class="cl">终端命令</span>pip<span class="w"> </span>install<span class="w"> </span>whitenoise
 pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
 </code></pre>
-<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># settings.py —— 三处改动</span>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># settings.py（片段）—— 三处改动</span>
 <span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">"django.middleware.security.SecurityMiddleware"</span><span class="p">,</span>
     <span class="s2">"whitenoise.middleware.WhiteNoiseMiddleware"</span><span class="p">,</span>   <span class="c1"># ① 紧跟 SecurityMiddleware，在其他中间件之前</span>

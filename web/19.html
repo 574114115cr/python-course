@@ -914,7 +914,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>makemigrations<sp
 <span class="c1">#   Please enter the default value now: 1        &lt;- 填用户 ID（如 1）</span>
 python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 </code></pre>
-<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py —— topics() 加门禁 + 数据隔离</span>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py（片段）—— topics() 加门禁 + 数据隔离</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">login_required</span>
 
 
@@ -932,7 +932,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 </code></pre>
 <p>为什么 <code>owner</code> 不设默认值？归属必须是「当前登录用户」，这是运行时才知道的信息，写死在任何文件里都是错的——所以视图里用 <code>commit=False</code> 当场补。</p>
 <h3 id="参考答案-19-4">参考答案 19-4</h3>
-<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py —— 提取 check_topic_owner()（教材练习 19.3）</span>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py（片段）—— 提取 check_topic_owner()（教材练习 19.3）</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.shortcuts</span><span class="w"> </span><span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth.decorators</span><span class="w"> </span><span class="kn">import</span> <span class="n">login_required</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.http</span><span class="w"> </span><span class="kn">import</span> <span class="n">Http404</span>
@@ -978,7 +978,7 @@ python<span class="w"> </span>manage.py<span class="w"> </span>migrate
 </code></pre>
 <p>重构的好处：规则只有一份。将来想改规则（比如允许管理员看别人的主题），只动 <code>check_topic_owner()</code> 一处。</p>
 <h3 id="参考答案-19-5">参考答案 19-5</h3>
-<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py —— new_entry() 加归属检查（教材练习 19.4）</span>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># learning_logs/views.py（片段）—— new_entry() 加归属检查（教材练习 19.4）</span>
 <span class="nd">@login_required</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">new_entry</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">topic_id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""在特定主题中添加新条目。"""</span>

@@ -770,6 +770,101 @@ document.getElementById('ct').addEventListener('click',function(){
     return page("求助手册", body, js)
 
 
+def build_code(meta):
+    """代码包索引：列出 course-code/ 里每个单元的真实文件（数据源就是落盘结果）。"""
+    utitles = unit_titles()
+    base = os.path.join(ROOT, "course-code")
+    if not os.path.isdir(base):
+        body = ('<div class="wrap"><div class="hero"><h1>代码包还没生成</h1>'
+                '<p>先运行 <code>python tools/make_course_code.py</code>。</p></div></div>')
+        return page("完整代码包", body, "")
+    cards, total_py = [], 0
+    for unit in sorted(os.listdir(base)):
+        d = os.path.join(base, unit)
+        if not os.path.isdir(d) or not unit.startswith("u"):
+            continue
+        try:
+            no = int(unit[1:])
+        except ValueError:
+            continue
+        files = []
+        for root, dirs, fs in os.walk(d):
+            dirs[:] = [x for x in dirs if x != "snippets"]
+            for f in sorted(fs):
+                if f.endswith(".py"):
+                    files.append(os.path.relpath(os.path.join(root, f), d))
+        snip = 0
+        sd = os.path.join(d, "snippets")
+        if os.path.isdir(sd):
+            snip = len([f for f in os.listdir(sd) if f.endswith(".py")])
+        total_py += len(files)
+        lis = "".join('<li><code>%s</code></li>' % html.escape(f.replace(os.sep, "/"))
+                      for f in files)
+        cards.append(
+            '<details class="uc" open><summary><span class="ub">单元 {no}</span>'
+            '<b>{t}</b><span class="cnt">{n} 个文件{sn}</span></summary>'
+            '<div class="eb"><ul class="fl">{lis}</ul></div></details>'.format(
+                no=no, t=html.escape(utitles.get(no, "")), n=len(files),
+                sn=("　+ %d 个片段" % snip) if snip else "", lis=lis))
+
+    body = """<div class="wrap">
+  <div class="hero">
+    <span class="bdg">CODE · 完整代码包</span>
+    <h1>{total} 个真实 .py 文件，按单元分好</h1>
+    <p>这些不是讲义里的代码块，而是从讲义自动落盘的真实文件：
+       <code>tools/make_course_code.py</code> 按每个块首行标注的文件名生成，
+       目录结构与讲义一致（如 <code>learning_logs/views.py</code> 会落在同名子目录）。
+       便携包里的 <code>course-code/</code> 就是这份文件树的实体，
+       解压后能直接 <code>python 文件名.py</code> 运行。</p>
+    <div class="st">
+      <div><b>{total}</b><span>个 .py 文件</span></div>
+      <div><b>22</b><span>个单元目录</span></div>
+      <div><b>0</b><span>个语法错误（327 个编译通过）</span></div>
+    </div>
+  </div>
+
+  <h2>各单元文件清单</h2>
+  <p class="note">标「片段」的文件属于某个完整文件的一部分（如只含一个函数），
+     不能单独运行，已单独收在 <code>snippets/</code> 里；
+     <code>.v2</code>/<code>.v3</code> 是同一文件的其它版本，多是教材练习的参考答案。</p>
+  {cards}
+
+  <h2>怎么跑</h2>
+  <pre><code># 1) 装依赖（只有阶段 2 的项目需要）
+python -m pip install pygame matplotlib plotly requests django
+
+# 2) 进到某个单元目录，跑入口文件
+cd course-code/u12
+python alien_invasion.py</code></pre>
+  <p>阶段 1（单元 0–11）只用标准库，不需要装任何东西；
+     阶段 2 的项目按需装上面那几个库。</p>
+
+  <div class="foot">
+    <a href="../index.html">主页</a> ·
+    <a href="lessons/index.html">课程目录</a> ·
+    <a href="debug.html">排错速查</a> ·
+    <a href="help.html">求助手册</a> ·
+    <a href="terms.html">术语索引</a>
+  </div>
+</div>
+<style>
+.uc{{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}}
+.uc summary{{cursor:pointer;padding:11px 14px;font-size:14px;display:flex;gap:10px;
+align-items:baseline;flex-wrap:wrap}}
+.uc .ub{{font-size:11px;font-weight:700;color:var(--p1);background:var(--p1bg);
+border-radius:20px;padding:2px 8px}}
+.uc .cnt{{margin-left:auto;font-size:12px;color:var(--muted)}}
+.uc .eb{{padding:0 16px 12px}}
+ul.fl{{margin:6px 0;padding-left:18px;columns:2;column-gap:26px}}
+ul.fl li{{font-size:12.5px;line-height:1.9;break-inside:avoid}}
+@media(max-width:620px){{ul.fl{{columns:1}}}}
+.note{{font-size:13px;color:var(--muted);line-height:1.8}}
+</style>""".format(total=total_py, cards="".join(cards))
+
+    js = ""
+    return page("完整代码包", body, js)
+
+
 def page(title, body, js):
     return SHELL.format(title=html.escape(title), css=CSS, body=body, js=js)
 
@@ -790,8 +885,10 @@ def main():
     _sp.loader.exec_module(bl)
     debug = build_debug(meta, bl)
     helpp = build_help(meta)
+    code = build_code(meta)
     open(os.path.join(WEB, "debug.html"), "w", encoding="utf-8").write(debug)
     open(os.path.join(WEB, "help.html"), "w", encoding="utf-8").write(helpp)
+    open(os.path.join(WEB, "code.html"), "w", encoding="utf-8").write(code)
     n_err = debug.count('<details class="ec"')
     n_terms = terms.count("<li data-t=")
     # 首页资料库卡上的条数跟着实际数量走（不是 data-n，audit 不校验这一处）

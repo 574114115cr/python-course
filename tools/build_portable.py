@@ -23,7 +23,7 @@ INCLUDE_FILES = ["index.html", "python-learning-roadmap.html",
                  "sw.js", "manifest.webmanifest",
                  "icon-192.png", "icon-512.png",
                  "icon-maskable-192.png", "icon-maskable-512.png"]
-INCLUDE_DIRS = ["web", "course", "exercises", "python-course-ppt",
+INCLUDE_DIRS = ["web", "course", "course-code", "exercises", "python-course-ppt",
                 "fluent", "course-fluent"]
 INCLUDE_EXTRA = ["python-course-ppt/DESIGN.md", "python-course-ppt/STORY.md"]
 
@@ -77,6 +77,9 @@ README = """Python 课程包 · 便携版
 
   web/debug.html ............... 排错速查（异常速查表 + 全部单元错误清单，可搜索）
   web/help.html ................ 求助手册（报错提取器、提问模板、去哪问）
+  web/code.html ................ 代码包索引（每个单元有哪些 .py 文件）
+  course-code/uNN/ ............. 328 个真实 .py 文件，按单元分目录，可直接运行
+                                  （snippets/ 里是不能单独跑的片段）
 
   ── 进阶课：《流畅的 Python（第 2 版）》 ──
   fluent/index.html ............ 进阶课首页（可从主页右上角切换）

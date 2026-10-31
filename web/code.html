@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><!--@theme:head-->
+<style>
+/* 主题切换按钮 + 原生控件配色（由 tools/theme.py 注入，勿手改） */
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="light"]{color-scheme:light}
+/* 强调色的「原色版」：浅色下等于强调色本身，深色下由派生表换成压暗后的实心底色。
+   凡是把强调色当实心底、上面压白字的地方都用 --p1s 这类变量（否则白字会糊）。 */
+:root{--bg:#f6f8fb;--card:#fff;--line:#e3e8ef;--text:#16232e;--muted:#5f7183;--p1:#1f5fa8;
+--p1s:var(--p1);--p2s:var(--p2);--p3s:var(--p3);--p4s:var(--p4);--dangers:var(--danger)}
+html[data-theme="dark"]{--bg:#0f1620;--card:#16202b;--line:#243342;--text:#e6edf5;
+--muted:#93a6b8;--p1:#63a9ee}
+body{transition:background-color .18s,color .18s}
+::selection{background:rgba(99,169,238,.32)}
+.thbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;
+border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);
+font:inherit;font-size:12.5px;font-weight:700;line-height:1;cursor:pointer;
+white-space:nowrap;flex:0 0 auto}
+.thbtn:hover{color:var(--text);border-color:var(--p1)}
+.thbtn:focus-visible{outline:2px solid var(--p1);outline-offset:2px}
+.thbtn .thi svg{width:15px;height:15px;display:block}
+.thbtn .thlbl{display:inline}
+/* 窄屏顶栏本来就挤（返回 / 标题 / 课件 / 勾选），再塞按钮会横向溢出 14px，
+   所以窄屏由脚本把按钮挪到 body 上变成右下角悬浮（顶栏有 backdrop-filter，
+   直接给它 position:fixed 会被顶栏接管定位，跑到屏幕外）。 */
+.thbtn.fixed{position:fixed;right:18px;bottom:74px;z-index:70;height:40px;padding:0 14px;
+box-shadow:0 6px 20px rgba(0,0,0,.28)}
+@media(max-width:640px){.thbtn.fixed{right:14px;bottom:74px;height:36px;padding:0 12px}}
+/* 白底课件图（幻灯片截图）在深色下是一片刺眼的亮块：压一点亮度当「纸面」看。
+   只压这三类课件图，普通插图/头像不受影响；进入全屏放映时恢复原亮度，
+   保证放映颜色和下载的 pptx 一致。 */
+html[data-theme="dark"] .stage-img,html[data-theme="dark"] .cell img,
+html[data-theme="dark"] .ppt-thumb img{filter:brightness(.9)}
+:fullscreen .stage-img,:fullscreen .cell img{filter:none}
+html[data-theme="dark"] :fullscreen .stage-img,
+html[data-theme="dark"] :fullscreen .cell img{filter:none}
+</style>
+<script>(function(){var m='auto';try{m=localStorage.getItem('py-theme-v1')||'auto'}catch(e){}if(m!=='light'&&m!=='dark')m='auto';var q=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)');var d=m==='dark'||(m==='auto'&&q&&q.matches);var r=document.documentElement;r.setAttribute('data-theme-mode',m);r.setAttribute('data-theme',d?'dark':'light');})();</script>
+<!--/@theme:head-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>完整代码包 · Python 入门课</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/unit.css">
+<style>
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+.hero{background:linear-gradient(135deg,#f4f8fd,#eef4fb);border:1px solid var(--line);
+border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+.hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;
+color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+.hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+.hero p{margin:0;font-size:14px;color:#41505f;line-height:1.8;max-width:74ch}
+.hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+.hero .st div{display:flex;flex-direction:column}
+.hero .st b{font-size:20px;color:var(--p1)}
+.hero .st span{font-size:11.5px;color:var(--muted)}
+h2{font-size:17px;margin:34px 0 8px}
+h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1);
+border-radius:2px;margin-right:9px;vertical-align:-2px}
+.sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+.fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+.fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);
+border-radius:10px;background:#fff}
+.fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+.fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+.idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+.ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+.ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+.ig code{background:#f2f6fb;border-radius:4px;padding:1px 5px;font-size:12px}
+.ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;
+background:var(--p1bg);border-radius:4px;padding:1px 5px}
+.ig a:hover{background:#dbe9f8}
+.ig span{font-size:10.5px;color:var(--muted)}
+.empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+.cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.cb b{display:block;font-size:14px;margin-bottom:6px}
+.cb p{margin:0;font-size:13px;color:#44515e;line-height:1.75}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
+table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+table.cov th{background:#f5f8fc;text-align:left;padding:9px 12px;font-size:12px;
+color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+table.cov td{padding:9px 12px;border-bottom:1px solid #eef2f6;vertical-align:top;line-height:1.65}
+table.cov tr:last-child td{border-bottom:none}
+table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.cov td.s{font-size:12px;color:#5a6875}
+table.cov tr[id]{scroll-margin-top:70px}
+table.cov tr:target td{background:#f3f8ff}
+table.cov tr.miss td{background:#fdf7f7;color:#8a5a5a}
+table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+table.cov a:hover{text-decoration:underline}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+.tag.ok{background:#e6f6f0;color:#0b6e54}
+.tag.part{background:#fdf3e2;color:#8a5a00}
+.tag.no{background:#fdeaea;color:#a33}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;
+color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+ .hero{padding:24px 20px}
+ .wrap{padding:0 14px 50px}
+ .hero .st{gap:18px}
+}
+/*@theme-dark*/
+@media screen{
+:where(html[data-theme="dark"]) .wrap{max-width:1100px;margin:0 auto;padding:0 22px 70px}
+:where(html[data-theme="dark"]) .hero{background:linear-gradient(135deg,#121922,#121921);border:1px solid var(--line);border-radius:16px;padding:34px 36px;margin:26px 0 22px}
+:where(html[data-theme="dark"]) .hero .bdg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+:where(html[data-theme="dark"]) .hero h1{margin:0 0 10px;font-size:clamp(22px,3.4vw,30px);line-height:1.3}
+:where(html[data-theme="dark"]) .hero p{margin:0;font-size:14px;color:#bcc6d1;line-height:1.8;max-width:74ch}
+:where(html[data-theme="dark"]) .hero .st{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px}
+:where(html[data-theme="dark"]) .hero .st div{display:flex;flex-direction:column}
+:where(html[data-theme="dark"]) .hero .st b{font-size:20px;color:var(--p1)}
+:where(html[data-theme="dark"]) .hero .st span{font-size:11.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) h2{font-size:17px;margin:34px 0 8px}
+:where(html[data-theme="dark"]) h2::before{content:"";display:inline-block;width:4px;height:15px;background:var(--p1s);border-radius:2px;margin-right:9px;vertical-align:-2px}
+:where(html[data-theme="dark"]) .sub{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.7}
+:where(html[data-theme="dark"]) .fbar{display:flex;gap:10px;align-items:center;margin:0 0 18px}
+:where(html[data-theme="dark"]) .fbar input{flex:1;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#182129}
+:where(html[data-theme="dark"]) .fbar input:focus{outline:none;border-color:var(--p1);box-shadow:0 0 0 3px rgba(31,95,168,.1)}
+:where(html[data-theme="dark"]) .fbar span{font-size:12px;color:var(--muted);white-space:nowrap}
+:where(html[data-theme="dark"]) .idx{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+:where(html[data-theme="dark"]) .ig{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+:where(html[data-theme="dark"]) .ih{font-size:12px;font-weight:700;color:var(--p1);letter-spacing:1px;margin-bottom:8px}
+:where(html[data-theme="dark"]) .ig ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+:where(html[data-theme="dark"]) .ig li{display:flex;align-items:center;gap:6px;font-size:12.5px;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .ig code{background:#121922;border-radius:4px;padding:1px 5px;font-size:12px}
+:where(html[data-theme="dark"]) .ig a{font-size:11px;font-weight:700;color:var(--p1);text-decoration:none;background:var(--p1bg);border-radius:4px;padding:1px 5px}
+:where(html[data-theme="dark"]) .ig a:hover{background:#111920}
+:where(html[data-theme="dark"]) .ig span{font-size:10.5px;color:var(--muted)}
+:where(html[data-theme="dark"]) .empty{display:none;text-align:center;color:var(--muted);font-size:13px;padding:30px}
+:where(html[data-theme="dark"]) .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:14px}
+:where(html[data-theme="dark"]) .cb{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+:where(html[data-theme="dark"]) .cb b{display:block;font-size:14px;margin-bottom:6px}
+:where(html[data-theme="dark"]) .cb p{margin:0;font-size:13px;color:#bcc6cf;line-height:1.75}
+:where(html[data-theme="dark"]) .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#182129}
+:where(html[data-theme="dark"]) table.cov{border-collapse:collapse;width:100%;min-width:660px;font-size:13px}
+:where(html[data-theme="dark"]) table.cov th{background:#121922;text-align:left;padding:9px 12px;font-size:12px;color:var(--muted);font-weight:700;border-bottom:1px solid var(--line);white-space:nowrap}
+:where(html[data-theme="dark"]) table.cov td{padding:9px 12px;border-bottom:1px solid #293a4b;vertical-align:top;line-height:1.65}
+:where(html[data-theme="dark"]) table.cov tr:last-child td{border-bottom:none}
+:where(html[data-theme="dark"]) table.cov td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+:where(html[data-theme="dark"]) table.cov td.s{font-size:12px;color:#aeb8c1}
+:where(html[data-theme="dark"]) table.cov tr[id]{scroll-margin-top:70px}
+:where(html[data-theme="dark"]) table.cov tr:target td{background:#121922}
+:where(html[data-theme="dark"]) table.cov tr.miss td{background:#221212;color:#c2a1a1}
+:where(html[data-theme="dark"]) table.cov a{color:var(--p1);text-decoration:none;font-weight:600}
+:where(html[data-theme="dark"]) table.cov a:hover{text-decoration:underline}
+:where(html[data-theme="dark"]) .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap}
+:where(html[data-theme="dark"]) .tag.ok{background:#12211b;color:#77eecf}
+:where(html[data-theme="dark"]) .tag.part{background:#211b12;color:#eec577}
+:where(html[data-theme="dark"]) .tag.no{background:#211212;color:#d87e7e}
+:where(html[data-theme="dark"]) .foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){
+:where(html[data-theme="dark"]) .hero{padding:24px 20px}
+:where(html[data-theme="dark"]) .wrap{padding:0 14px 50px}
+:where(html[data-theme="dark"]) .hero .st{gap:18px}
+}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <a class="back" href="../index.html">← 主页</a>
+  <h1>完整代码包</h1>
+  <span class="sp"></span>
+  <a class="ppt" href="lessons/index.html">课程目录</a>
+</div></div>
+<div class="wrap">
+  <div class="hero">
+    <span class="bdg">CODE · 完整代码包</span>
+    <h1>328 个真实 .py 文件，按单元分好</h1>
+    <p>这些不是讲义里的代码块，而是从讲义自动落盘的真实文件：
+       <code>tools/make_course_code.py</code> 按每个块首行标注的文件名生成，
+       目录结构与讲义一致（如 <code>learning_logs/views.py</code> 会落在同名子目录）。
+       便携包里的 <code>course-code/</code> 就是这份文件树的实体，
+       解压后能直接 <code>python 文件名.py</code> 运行。</p>
+    <div class="st">
+      <div><b>328</b><span>个 .py 文件</span></div>
+      <div><b>22</b><span>个单元目录</span></div>
+      <div><b>0</b><span>个语法错误（327 个编译通过）</span></div>
+    </div>
+  </div>
+
+  <h2>各单元文件清单</h2>
+  <p class="note">标「片段」的文件属于某个完整文件的一部分（如只含一个函数），
+     不能单独运行，已单独收在 <code>snippets/</code> 里；
+     <code>.v2</code>/<code>.v3</code> 是同一文件的其它版本，多是教材练习的参考答案。</p>
+  <details class="uc" open><summary><span class="ub">单元 0</span><b>环境搭建与工具链</b><span class="cnt">12 个文件</span></summary><div class="eb"><ul class="fl"><li><code>ask_name.py</code></li><li><code>calc_demo.py</code></li><li><code>fix_me.py</code></li><li><code>fstring_demo.py</code></li><li><code>hello.py</code></li><li><code>intro.py</code></li><li><code>me.py</code></li><li><code>order_demo.py</code></li><li><code>practice.py</code></li><li><code>print_demo.py</code></li><li><code>type_demo.py</code></li><li><code>types.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 1</span><b>变量与简单数据类型</b><span class="cnt">18 个文件</span></summary><div class="eb"><ul class="fl"><li><code>bmi.py</code></li><li><code>clean_names.py</code></li><li><code>code_analyzer.py</code></li><li><code>comments.py</code></li><li><code>convert.py</code></li><li><code>convert_quiz.py</code></li><li><code>data_types.py</code></li><li><code>fstring.py</code></li><li><code>kv.py</code></li><li><code>log_line.py</code></li><li><code>multiline.py</code></li><li><code>naming.py</code></li><li><code>profile.py</code></li><li><code>receipt.py</code></li><li><code>report.py</code></li><li><code>string_methods.py</code></li><li><code>text_pipeline.py</code></li><li><code>truthy.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 2</span><b>列表简介</b><span class="cnt">17 个文件</span></summary><div class="eb"><ul class="fl"><li><code>cart.py</code></li><li><code>copy_demo.py</code></li><li><code>copy_semantics.py</code></li><li><code>dedupe_analysis.py</code></li><li><code>hobbies.py</code></li><li><code>indexes.py</code></li><li><code>list_add.py</code></li><li><code>list_basics.py</code></li><li><code>list_modify.py</code></li><li><code>list_order.py</code></li><li><code>list_remove.py</code></li><li><code>matrix.py</code></li><li><code>matrix_demo.py</code></li><li><code>reference_demo.py</code></li><li><code>scores_report.py</code></li><li><code>sort_compare.py</code></li><li><code>stack_sim.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 3</span><b>操作列表</b><span class="cnt">17 个文件</span></summary><div class="eb"><ul class="fl"><li><code>choose_type.py</code></li><li><code>comprehension.py</code></li><li><code>data_cleaning.py</code></li><li><code>fibonacci.py</code></li><li><code>for_basics.py</code></li><li><code>loop_helpers.py</code></li><li><code>palindrome.py</code></li><li><code>range_demo.py</code></li><li><code>ranges.py</code></li><li><code>rewrite_comprehension.py</code></li><li><code>score_loop.py</code></li><li><code>shopping_total.py</code></li><li><code>slice_predict.py</code></li><li><code>slice_step.py</code></li><li><code>slices.py</code></li><li><code>slicing.py</code></li><li><code>tuples.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 4</span><b>if 语句</b><span class="cnt">18 个文件</span></summary><div class="eb"><ul class="fl"><li><code>bmi_advice.py</code></li><li><code>comparisons.py</code></li><li><code>conditional_expression.py</code></li><li><code>door.py</code></li><li><code>eq_vs_is.py</code></li><li><code>grade_if.py</code></li><li><code>grade_level.py</code></li><li><code>if_single.py</code></li><li><code>leap_year.py</code></li><li><code>list_if.py</code></li><li><code>logic_ops.py</code></li><li><code>login.py</code></li><li><code>max_min.py</code></li><li><code>odd_even.py</code></li><li><code>order_matters.py</code></li><li><code>short_circuit.py</code></li><li><code>ticket.py</code></li><li><code>triangle.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 5</span><b>字典</b><span class="cnt">17 个文件</span></summary><div class="eb"><ul class="fl"><li><code>class_data.py</code></li><li><code>contacts.py</code></li><li><code>dict_basics.py</code></li><li><code>dict_crud.py</code></li><li><code>dict_get.py</code></li><li><code>dict_methods.py</code></li><li><code>dict_modify.py</code></li><li><code>dict_traverse.py</code></li><li><code>inventory.py</code></li><li><code>login_system.py</code></li><li><code>me_dict.py</code></li><li><code>nested_dict.py</code></li><li><code>reverse_lookup.py</code></li><li><code>score_report.py</code></li><li><code>scores.py</code></li><li><code>users.py</code></li><li><code>word_count.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 6</span><b>用户输入和 while 循环</b><span class="cnt">18 个文件</span></summary><div class="eb"><ul class="fl"><li><code>break_continue.py</code></li><li><code>clean_scores.py</code></li><li><code>countdown.py</code></li><li><code>find_first.py</code></li><li><code>flag_demo.py</code></li><li><code>guess_number.py</code></li><li><code>input_demo.py</code></li><li><code>input_practice.py</code></li><li><code>input_validation.py</code></li><li><code>interactive_skeleton.py</code></li><li><code>multiples.py</code></li><li><code>multiplication_table.py</code></li><li><code>password_retry.py</code></li><li><code>signup.py</code></li><li><code>sum_to_n.py</code></li><li><code>todo_move.py</code></li><li><code>while_basics.py</code></li><li><code>while_else.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 7</span><b>函数</b><span class="cnt">16 个文件　+ 3 个片段</span></summary><div class="eb"><ul class="fl"><li><code>average.py</code></li><li><code>copy_experiment.py</code></li><li><code>copy_semantics.py</code></li><li><code>first_class.py</code></li><li><code>function_basics.py</code></li><li><code>longest_word.py</code></li><li><code>make_profile.py</code></li><li><code>module_demo.py</code></li><li><code>multi_return.py</code></li><li><code>mutable_default.py</code></li><li><code>parameters.py</code></li><li><code>return_demo.py</code></li><li><code>scope_demo.py</code></li><li><code>temperature.py</code></li><li><code>text_analyzer.py</code></li><li><code>timer_decorator.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 8</span><b>类</b><span class="cnt">17 个文件　+ 2 个片段</span></summary><div class="eb"><ul class="fl"><li><code>bank_system.py</code></li><li><code>car_class.py</code></li><li><code>class_basics.py</code></li><li><code>class_vs_instance.py</code></li><li><code>composition.py</code></li><li><code>dog_class.py</code></li><li><code>hierarchy.py</code></li><li><code>inheritance.py</code></li><li><code>library.py</code></li><li><code>lottery.py</code></li><li><code>polymorphism.py</code></li><li><code>rectangle_class.py</code></li><li><code>roll_call.py</code></li><li><code>self_demo.py</code></li><li><code>shapes.py</code></li><li><code>str_demo.py</code></li><li><code>student_class.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 9</span><b>文件和异常</b><span class="cnt">15 个文件</span></summary><div class="eb"><ul class="fl"><li><code>csv_demo.py</code></li><li><code>exceptions_demo.py</code></li><li><code>file_basics.py</code></li><li><code>json_demo.py</code></li><li><code>modes_demo.py</code></li><li><code>notepad.py</code></li><li><code>patterns.py</code></li><li><code>read_ways.py</code></li><li><code>read_ways.v2.py</code></li><li><code>robust_input.py</code></li><li><code>safe_int.py</code></li><li><code>score_file.py</code></li><li><code>score_manager.py</code></li><li><code>settings_json.py</code></li><li><code>todo.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 10</span><b>测试代码</b><span class="cnt">24 个文件</span></summary><div class="eb"><ul class="fl"><li><code>book.py</code></li><li><code>buggy.py</code></li><li><code>buggy_fixed.py</code></li><li><code>calculator.py</code></li><li><code>cart.py</code></li><li><code>divider.py</code></li><li><code>test_00_version.py</code></li><li><code>test_assertions.py</code></li><li><code>test_bank.py</code></li><li><code>test_book.py</code></li><li><code>test_buggy.py</code></li><li><code>test_calc.py</code></li><li><code>test_calculator.py</code></li><li><code>test_cart.py</code></li><li><code>test_divider.py</code></li><li><code>test_feature.py</code></li><li><code>test_fixture.py</code></li><li><code>test_parametrize.py</code></li><li><code>test_parametrize_demo.py</code></li><li><code>test_text_utils.py</code></li><li><code>test_vote_analyzer.py</code></li><li><code>text_utils.py</code></li><li><code>tip.py</code></li><li><code>vote_analyzer.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 11</span><b>阶段 1 总复习与关卡验收</b><span class="cnt">16 个文件</span></summary><div class="eb"><ul class="fl"><li><code>broken_script.py</code></li><li><code>check_ledger.py</code></li><li><code>class_review.py</code></li><li><code>file_review.py</code></li><li><code>fixed_script.py</code></li><li><code>ledger.py</code></li><li><code>main.py</code></li><li><code>score_analyzer.py</code></li><li><code>self_check.py</code></li><li><code>test_review.py</code></li><li><code>test_score_analyzer.py</code></li><li><code>test_text_analyzer.py</code></li><li><code>test_vehicle.py</code></li><li><code>text_analyzer.py</code></li><li><code>todo_manager.py</code></li><li><code>vehicle.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 12</span><b>Pygame 起步与飞船驾驶</b><span class="cnt">12 个文件</span></summary><div class="eb"><ul class="fl"><li><code>alien_invasion.py</code></li><li><code>alien_invasion.v2.py</code></li><li><code>alien_invasion.v3.py</code></li><li><code>alien_invasion.v4.py</code></li><li><code>alien_invasion.v5.py</code></li><li><code>event_observer.py</code></li><li><code>frame_rate_demo.py</code></li><li><code>settings.py</code></li><li><code>settings.v2.py</code></li><li><code>ship.py</code></li><li><code>ship.v2.py</code></li><li><code>ship_demo.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 13</span><b>射击与外星舰队</b><span class="cnt">13 个文件</span></summary><div class="eb"><ul class="fl"><li><code>alien.py</code></li><li><code>alien_invasion.py</code></li><li><code>bullet.py</code></li><li><code>edge_check.py</code></li><li><code>fleet_layout.py</code></li><li><code>game_stats.py</code></li><li><code>group_basic.py</code></li><li><code>group_demo.py</code></li><li><code>iteration_bug.py</code></li><li><code>lives.py</code></li><li><code>settings.py</code></li><li><code>ship.py</code></li><li><code>speedup.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 14</span><b>Play 按钮、难度与记分牌</b><span class="cnt">10 个文件</span></summary><div class="eb"><ul class="fl"><li><code>button_demo.py</code></li><li><code>dynamic_settings.py</code></li><li><code>high_score_json.py</code></li><li><code>high_score_persist.py</code></li><li><code>place_rect.py</code></li><li><code>play_button_visibility.py</code></li><li><code>scoreboard_demo.py</code></li><li><code>ships_demo.py</code></li><li><code>state_machine_demo.py</code></li><li><code>stats_lifecycle.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 15</span><b>Matplotlib 生成数据</b><span class="cnt">12 个文件</span></summary><div class="eb"><ul class="fl"><li><code>axis_fix.py</code></li><li><code>axis_fix_demo.py</code></li><li><code>die_lab.py</code></li><li><code>die_plotly.py</code></li><li><code>line_demo.py</code></li><li><code>line_three.py</code></li><li><code>random_walk_demo.py</code></li><li><code>scatter_demo.py</code></li><li><code>scatter_trio.py</code></li><li><code>walk_and_dice.py</code></li><li><code>walk_compare.py</code></li><li><code>walk_reproducible.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 16</span><b>下载真实数据</b><span class="cnt">12 个文件</span></summary><div class="eb"><ul class="fl"><li><code>csv_stringio.py</code></li><li><code>date_converter.py</code></li><li><code>datetime_demo.py</code></li><li><code>death_valley_year.py</code></li><li><code>eq_explorer.py</code></li><li><code>eq_map_final.py</code></li><li><code>eq_world_map.py</code></li><li><code>extract_with_missing.py</code></li><li><code>header_locator.py</code></li><li><code>make_weather_csv.py</code></li><li><code>missing_stats.py</code></li><li><code>plot_temperatures.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 17</span><b>使用 API 与 Plotly</b><span class="cnt">10 个文件</span></summary><div class="eb"><ul class="fl"><li><code>api_basics.py</code></li><li><code>api_pipeline.py</code></li><li><code>api_url_parser.py</code></li><li><code>api_watchtower.py</code></li><li><code>bar_chart.py</code></li><li><code>clickable_chart.py</code></li><li><code>hacker_news.py</code></li><li><code>hn_digest.py</code></li><li><code>parse_response.py</code></li><li><code>rate_limit_guard.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 18</span><b>Django 入门</b><span class="cnt">14 个文件　+ 1 个片段</span></summary><div class="eb"><ul class="fl"><li><code>fk_simulation.py</code></li><li><code>mini_template.py</code></li><li><code>request_chain_simulation.py</code></li><li><code>template_inheritance_simulation.py</code></li><li><code>learning_logs/admin.py</code></li><li><code>learning_logs/models.py</code></li><li><code>learning_logs/models.v2.py</code></li><li><code>learning_logs/urls.py</code></li><li><code>learning_logs/urls.v2.py</code></li><li><code>learning_logs/views.py</code></li><li><code>learning_logs/views.v2.py</code></li><li><code>ll_project/urls.py</code></li><li><code>pizzas/admin.py</code></li><li><code>pizzas/models.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 19</span><b>用户账户</b><span class="cnt">20 个文件　+ 1 个片段</span></summary><div class="eb"><ul class="fl"><li><code>current_user_simulation.py</code></li><li><code>data_isolation_simulation.py</code></li><li><code>isolated_notebook.py</code></li><li><code>login_required_simulation.py</code></li><li><code>whitelist_simulation.py</code></li><li><code>accounts/urls.py</code></li><li><code>accounts/urls.v2.py</code></li><li><code>accounts/urls.v3.py</code></li><li><code>accounts/urls.v4.py</code></li><li><code>accounts/views.py</code></li><li><code>accounts/views.v2.py</code></li><li><code>learning_logs/forms.py</code></li><li><code>learning_logs/forms.v2.py</code></li><li><code>learning_logs/models.py</code></li><li><code>learning_logs/views.py</code></li><li><code>ll_project/settings.py</code></li><li><code>ll_project/settings.v2.py</code></li><li><code>ll_project/settings.v3.py</code></li><li><code>ll_project/settings.v4.py</code></li><li><code>ll_project/urls.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 20</span><b>设置应用程序的样式并部署</b><span class="cnt">11 个文件　+ 1 个片段</span></summary><div class="eb"><ul class="fl"><li><code>config_switcher.py</code></li><li><code>deploy_checklist.py</code></li><li><code>deploy_doctor.py</code></li><li><code>deploy_gate.py</code></li><li><code>env_switch.py</code></li><li><code>host_check.py</code></li><li><code>log_extract.py</code></li><li><code>requirements_tools.py</code></li><li><code>settings_snippet.py</code></li><li><code>static_collector.py</code></li><li><code>ll_project/urls.py</code></li></ul></div></details><details class="uc" open><summary><span class="ub">单元 21</span><b>阶段 2 综合与关卡 2 验收</b><span class="cnt">9 个文件</span></summary><div class="eb"><ul class="fl"><li><code>buggy_code.py</code></li><li><code>code_metrics.py</code></li><li><code>explorer.py</code></li><li><code>high_score_buggy.py</code></li><li><code>logging_setup.py</code></li><li><code>make_requirements.py</code></li><li><code>project_doctor.py</code></li><li><code>test_game_functions.py</code></li><li><code>three_projects_core.py</code></li></ul></div></details>
+
+  <h2>怎么跑</h2>
+  <pre><code># 1) 装依赖（只有阶段 2 的项目需要）
+python -m pip install pygame matplotlib plotly requests django
+
+# 2) 进到某个单元目录，跑入口文件
+cd course-code/u12
+python alien_invasion.py</code></pre>
+  <p>阶段 1（单元 0–11）只用标准库，不需要装任何东西；
+     阶段 2 的项目按需装上面那几个库。</p>
+
+  <div class="foot">
+    <a href="../index.html">主页</a> ·
+    <a href="lessons/index.html">课程目录</a> ·
+    <a href="debug.html">排错速查</a> ·
+    <a href="help.html">求助手册</a> ·
+    <a href="terms.html">术语索引</a>
+  </div>
+</div>
+<style>
+.uc{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}
+.uc summary{cursor:pointer;padding:11px 14px;font-size:14px;display:flex;gap:10px;
+align-items:baseline;flex-wrap:wrap}
+.uc .ub{font-size:11px;font-weight:700;color:var(--p1);background:var(--p1bg);
+border-radius:20px;padding:2px 8px}
+.uc .cnt{margin-left:auto;font-size:12px;color:var(--muted)}
+.uc .eb{padding:0 16px 12px}
+ul.fl{margin:6px 0;padding-left:18px;columns:2;column-gap:26px}
+ul.fl li{font-size:12.5px;line-height:1.9;break-inside:avoid}
+@media(max-width:620px){ul.fl{columns:1}}
+.note{font-size:13px;color:var(--muted);line-height:1.8}
+/*@theme-dark*/
+@media screen{
+:where(html[data-theme="dark"]) .uc{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:var(--card)}
+:where(html[data-theme="dark"]) .uc summary{cursor:pointer;padding:11px 14px;font-size:14px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+:where(html[data-theme="dark"]) .uc .ub{font-size:11px;font-weight:700;color:var(--p1);background:var(--p1bg);border-radius:20px;padding:2px 8px}
+:where(html[data-theme="dark"]) .uc .cnt{margin-left:auto;font-size:12px;color:var(--muted)}
+:where(html[data-theme="dark"]) .uc .eb{padding:0 16px 12px}
+:where(html[data-theme="dark"]) ul.fl{margin:6px 0;padding-left:18px;columns:2;column-gap:26px}
+:where(html[data-theme="dark"]) ul.fl li{font-size:12.5px;line-height:1.9;break-inside:avoid}
+@media(max-width:620px){
+:where(html[data-theme="dark"]) ul.fl{columns:1}
+}
+:where(html[data-theme="dark"]) .note{font-size:13px;color:var(--muted);line-height:1.8}
+}
+</style>
+<script></script>
+<script src="media/bgm.js" defer></script>
+<!--@theme:body-->
+<script>(function(){
+var KEY='py-theme-v1',ORDER=['auto','light','dark'];
+var LABEL={auto:'跟随系统',light:'浅色',dark:'深色'};
+var ICON={
+auto:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" stroke="none"/></svg>',
+light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.1M12 19.3v2.1M4.6 4.6l1.5 1.5M17.9 17.9l1.5 1.5M2.6 12h2.1M19.3 12h2.1M4.6 19.4l1.5-1.5M17.9 6.1l1.5-1.5"/></svg>',
+dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.8A8.6 8.6 0 0 1 9.2 3.5a8.6 8.6 0 1 0 11.3 11.3z"/></svg>'};
+var root=document.documentElement;
+var q=window.matchMedia?window.matchMedia('(prefers-color-scheme:dark)'):null;
+function mode(){var m=root.getAttribute('data-theme-mode');return ORDER.indexOf(m)<0?'auto':m}
+function sync(m){
+  var b=document.getElementById('thBtn');
+  root.setAttribute('data-theme-mode',m);
+  var d=root.getAttribute('data-theme')==='dark';
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',d?'#0f1620':'#1f5fa8');
+  if(!b)return;
+  b.title='主题：'+LABEL[m]+'　点一下或按 Shift+T 切换（跟随系统 → 浅色 → 深色）';
+  b.setAttribute('aria-label','主题：'+LABEL[m]+'，点击切换');
+  var i=b.querySelector('.thi'),t=b.querySelector('.thlbl');
+  if(i)i.innerHTML=ICON[m];if(t)t.textContent=LABEL[m];
+}
+function apply(m,save){
+  var d=m==='dark'||(m==='auto'&&q&&q.matches);
+  root.setAttribute('data-theme',d?'dark':'light');
+  if(save){try{localStorage.setItem(KEY,m)}catch(e){}}
+  sync(m);
+}
+function build(){
+  var b=document.createElement('button');
+  b.type='button';b.id='thBtn';b.className='thbtn';
+  b.innerHTML='<span class="thi"></span><span class="thlbl"></span>';
+  var host=document.querySelector('.top-in')||document.querySelector('.nav-in');
+  var mq=window.matchMedia?window.matchMedia('(max-width:640px)'):null;
+  if(host){host.appendChild(b)}else{document.body.appendChild(b)}
+  function home(){
+    var el=document.getElementById('thBtn');if(!el)return;
+    var small=mq&&mq.matches;
+    if(!host||small){
+      if(el.parentElement!==document.body)document.body.appendChild(el);
+      el.classList.add('fixed');
+    }else{
+      if(el.parentElement!==host)host.appendChild(el);
+      el.classList.remove('fixed');
+    }
+  }
+  home();
+  if(mq&&mq.addEventListener)mq.addEventListener('change',home);
+  window.__thHome=home;
+  b.addEventListener('click',function(){apply(ORDER[(ORDER.indexOf(mode())+1)%3],true)});
+  return b;
+}
+build();sync(mode());
+if(q){var f=function(){if(mode()==='auto')apply('auto',false)};
+  q.addEventListener?q.addEventListener('change',f):q.addListener(f)}
+window.__theme={get mode(){return mode()},get dark(){return root.getAttribute('data-theme')==='dark'},
+  set:function(m){apply(m,true)}};
+/* Shift+T：不碰鼠标也能换主题（输入框聚焦时让位给打字） */
+document.addEventListener('keydown',function(e){
+  if(e.shiftKey&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&(e.key==='T'||e.key==='t')){
+    var a=document.activeElement;
+    if(a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable))return;
+    apply(ORDER[(ORDER.indexOf(mode())+1)%3],true);e.preventDefault();
+  }
+});
+})();</script>
+<!--/@theme:body-->
+<!-- neuron:begin -->
+<script>(function(){
+var KEY='py-neuron-v1';
+var DEF={on:1,dense:'mid',follow:1,speed:'mid',color:'multi'};
+var DENSE={low:.55,mid:1,high:1.75,ultra:2.9};
+var SPEED={slow:.35,mid:1,fast:1.9,rush:3.4};
+// 六色神经元调色板。浅色档是压深的饱和色（白底上要能看清），
+// 深色档是高亮色（深底上才透得出来）——两套不能共用，共用必有一边糊掉。
+var PAL={
+ l:[[21,101,192],[0,130,124],[109,58,178],[206,81,29],[190,26,93],[46,125,50]],
+ d:[[117,183,255],[72,222,205],[186,148,255],[255,170,112],[255,132,178],[138,226,138]]
+};
+// 预生成 11 档透明度的 rgba 串：每帧几百条线拼字符串会明显掉帧
+var LUT={l:[],d:[]};
+(function(){
+ for(var t=0;t<2;t++){
+  var key=t?'d':'l',pal=PAL[key],arr=LUT[key],i,a;
+  for(i=0;i<pal.length;i++){
+   var row=[];
+   for(a=0;a<=10;a++)
+    row.push('rgba('+pal[i][0]+','+pal[i][1]+','+pal[i][2]+','+(a/10).toFixed(2)+')');
+   arr.push(row);
+  }
+ }
+})();
+var raw=null,cfg={};
+try{raw=localStorage.getItem(KEY)}catch(e){}
+try{cfg=raw?JSON.parse(raw):{}}catch(e){cfg={}}
+for(var k in DEF){if(typeof cfg[k]!==typeof DEF[k])cfg[k]=DEF[k]}
+if(!DENSE[cfg.dense])cfg.dense='mid';
+if(!SPEED[cfg.speed])cfg.speed='mid';
+// 系统开了「减少动效」且用户没自己选过：默认不铺背景，别跟系统设置对着干
+var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+if(!raw&&rm&&rm.matches)cfg.on=0;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(cfg))}catch(e){}}
+
+var CSS=
+'#neuronCv{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;'+
+'pointer-events:none;opacity:.95}'+
+'#nrBtn{position:fixed;right:18px;bottom:22px;z-index:70;display:inline-flex;'+
+'align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;'+
+'border:1px solid var(--line,#e3e8ef);background:var(--card,#fff);'+
+'color:var(--muted,#5f7183);font:inherit;font-size:12.5px;font-weight:700;'+
+'line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(20,40,70,.13);'+
+'opacity:.92;transition:opacity .15s,color .15s}'+
+'#nrBtn:hover{opacity:1;color:var(--text,#16232e);border-color:var(--p1,#1f5fa8)}'+
+'#nrBtn.on{color:var(--p1,#1f5fa8)}'+
+'#nrBtn svg{width:15px;height:15px;display:block}'+
+'#nrPanel{position:fixed;right:18px;bottom:62px;z-index:71;width:224px;'+
+'background:var(--card,#fff);border:1px solid var(--line,#e3e8ef);'+
+'border-radius:12px;padding:12px 14px;box-shadow:0 10px 30px rgba(20,40,70,.18);'+
+'font:inherit;font-size:13px;color:var(--text,#16232e);display:none}'+
+'#nrPanel.open{display:block}'+
+'#nrPanel .row{display:flex;align-items:center;justify-content:space-between;'+
+'gap:10px;padding:6px 0}'+
+'#nrPanel .row+.row{border-top:1px solid var(--line,#e3e8ef)}'+
+'#nrPanel .lb{font-size:12.5px;color:var(--muted,#5f7183);white-space:nowrap}'+
+'#nrPanel .seg{display:flex;gap:4px}'+
+'#nrPanel button{font:inherit;font-size:12px;font-weight:700;cursor:pointer;'+
+'border:1px solid var(--line,#e3e8ef);background:transparent;'+
+'color:var(--muted,#5f7183);border-radius:7px;padding:4px 8px;line-height:1}'+
+'#nrPanel button.sel{background:var(--p1s,var(--p1,#1f5fa8));'+
+'border-color:var(--p1s,var(--p1,#1f5fa8));color:#fff}'+
+'#nrPanel .sw{min-width:44px}'+
+'#nrPanel .sw.on{background:var(--p1s,var(--p1,#1f5fa8));'+
+'border-color:var(--p1s,var(--p1,#1f5fa8));color:#fff}'+
+'@media print{#neuronCv,#nrBtn,#nrPanel{display:none!important}}'+
+'@media(max-width:640px){#nrBtn{right:14px;bottom:14px;height:30px;padding:0 10px}'+
+'#nrPanel{right:14px;bottom:52px;width:calc(100vw - 28px);max-width:250px}}';
+var st=document.createElement('style');st.textContent=CSS;document.head.appendChild(st);
+
+var cv=document.createElement('canvas');
+cv.id='neuronCv';cv.setAttribute('aria-hidden','true');
+if(document.body)document.body.insertBefore(cv,document.body.firstChild);
+else document.addEventListener('DOMContentLoaded',function(){
+  document.body.insertBefore(cv,document.body.firstChild);});
+// canvas 是 fixed 定位，天然绘制在普通流内容之上——正文、视频都会压出线条。
+// 把 body 的直系内容容器抬一层（z-index:1），canvas 就只在卡片缝隙和页边透出。
+// 只动 position:static 且没定过 z-index 的元素：fixed/absolute 的一碰就跑位。
+function lift(){try{
+  var ks=document.body.children,i,el,cs;
+  for(i=0;i<ks.length;i++){
+    el=ks[i];
+    if(el===cv||el.id==='nrBtn'||el.id==='nrPanel')continue;
+    if(el.tagName==='SCRIPT'||el.tagName==='STYLE'||el.tagName==='LINK')continue;
+    cs=getComputedStyle(el);
+    if(cs.position!=='static'||cs.zIndex!=='auto')continue;
+    el.style.position='relative';el.style.zIndex='1';
+  }
+}catch(e){}}
+if(document.body)lift();
+else document.addEventListener('DOMContentLoaded',lift);
+window.addEventListener('load',lift);   // 兜住 JS 后插入的顶层节点
+var ctx=cv.getContext('2d');
+var W=0,H=0,nodes=[],mx=-1,my=-1,hasM=false,raf=0;
+
+function target(){
+  var n=Math.round(W*H/17000*DENSE[cfg.dense]);
+  // 上限要盖住「最高档 × 常见最大屏」：1920×1080 下 ultra 约 354 个节点。
+  // 卡太紧（150/230）会让高档与极档在大屏上撞上限而趋同，加了档却看不出差别。
+  // 再往上（1440p/4K）仍会截断，属刻意的性能兜底：O(n²) 距离计算会掉帧。
+  return Math.max(16,Math.min(360,n));
+}
+function seed(){
+  var n=target(),i,pc=PAL.l.length;
+  while(nodes.length>n)nodes.pop();
+  while(nodes.length<n)nodes.push({x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.24,vy:(Math.random()-.5)*.24,r:Math.random()*1.3+1.1,
+    c:(Math.random()*pc)|0});
+  for(i=0;i<nodes.length;i++){
+    if(nodes[i].x>W)nodes[i].x=Math.random()*W;
+    if(nodes[i].y>H)nodes[i].y=Math.random()*H;
+  }
+}
+function resize(){
+  var dpr=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth;H=window.innerHeight;
+  if(!W||!H)return;
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+  cv.style.width=W+'px';cv.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  seed();
+}
+var lastDark=null;
+function frame(){
+  raf=requestAnimationFrame(frame);
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  // 整层透明度只在主题切换时改：放在每帧里写 style 会触发多余的重排
+  if(dark!==lastDark){lastDark=dark;cv.style.opacity=dark?'.85':'.95';}
+  var lt=dark?LUT.d:LUT.l;
+  var dot=dark?'150,196,240':'31,95,168';
+  var lin=dark?'99,169,238':'52,92,126';
+  var multi=cfg.color!=='mono';
+  // 浅底上线条要更实才看得清，深底上可以留点余量免得盖住正文
+  var LA=dark?.58:.68,DA=dark?.92:.88;
+  ctx.clearRect(0,0,W,H);
+  var sp=SPEED[cfg.speed],i,j,a,b,dx,dy,d2,s,k,ai,g;
+  // 密度越高连线越短：否则节点一多就糊成一片网，看不出「神经元」
+  var LINK=132/Math.sqrt(DENSE[cfg.dense]),L2=LINK*LINK;
+  var MR=150,MR2=MR*MR;
+  for(i=0;i<nodes.length;i++){
+    a=nodes[i];
+    a.x+=a.vx*sp;a.y+=a.vy*sp;
+    if(a.x<-24)a.x=W+24;else if(a.x>W+24)a.x=-24;
+    if(a.y<-24)a.y=H+24;else if(a.y>H+24)a.y=-24;
+    if(hasM&&cfg.follow){
+      dx=mx-a.x;dy=my-a.y;d2=dx*dx+dy*dy;
+      if(d2<MR2&&d2>1){
+        s=Math.sqrt(d2);
+        a.vx+=dx/s*(1-s/MR)*.03;a.vy+=dy/s*(1-s/MR)*.03;
+      }
+    }
+    // 限速：鼠标一直吸着会让节点越飞越快，最后整屏乱窜
+    s=a.vx*a.vx+a.vy*a.vy;
+    if(s>.36){s=Math.sqrt(s);a.vx=a.vx/s*.6;a.vy=a.vy/s*.6;}
+  }
+  ctx.lineWidth=1;
+  for(i=0;i<nodes.length;i++){
+    a=nodes[i];
+    for(j=i+1;j<nodes.length;j++){
+      b=nodes[j];dx=a.x-b.x;dy=a.y-b.y;d2=dx*dx+dy*dy;
+      if(d2>L2)continue;
+      k=1-Math.sqrt(d2)/LINK;
+      ai=(k*LA*10+.5)|0;
+      if(ai<1)continue;            // 淡到看不见的线不画，省一次 stroke
+      else if(ai>10)ai=10;
+      if(multi){
+        // 渐变让每条线两端各自带色，比单一取色更像「信号传导」
+        g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
+        g.addColorStop(0,lt[a.c][ai]);g.addColorStop(1,lt[b.c][ai]);
+        ctx.strokeStyle=g;
+      }else{
+        ctx.strokeStyle='rgba('+lin+','+(ai/10).toFixed(2)+')';
+      }
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+    }
+  }
+  if(hasM&&cfg.follow){
+    for(i=0;i<nodes.length;i++){
+      a=nodes[i];dx=a.x-mx;dy=a.y-my;d2=dx*dx+dy*dy;
+      if(d2>MR2)continue;
+      k=1-Math.sqrt(d2)/MR;
+      ai=(k*.66*10+.5)|0;
+      if(ai<1)ai=1;else if(ai>10)ai=10;
+      ctx.strokeStyle=multi?lt[a.c][ai]:'rgba('+dot+','+(ai/10).toFixed(2)+')';
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(mx,my);ctx.stroke();
+    }
+    ctx.fillStyle=multi?lt[0][9]:'rgba('+dot+',.6)';
+    ctx.beginPath();ctx.arc(mx,my,2.8,0,6.284);ctx.fill();
+  }
+  for(i=0;i<nodes.length;i++){
+    a=nodes[i];
+    // 先铺一层很淡的光晕，再画实心点：多彩色在白底上才有「活」的感觉
+    if(multi){
+      ctx.fillStyle=lt[a.c][1];
+      ctx.beginPath();ctx.arc(a.x,a.y,a.r*2.8,0,6.284);ctx.fill();
+    }
+    ctx.fillStyle=multi?lt[a.c][(DA*10)|0]:'rgba('+dot+','+DA.toFixed(2)+')';
+    ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,6.284);ctx.fill();
+  }
+}
+function start(){if(!raf){raf=requestAnimationFrame(frame)}}
+function stop(){if(raf){cancelAnimationFrame(raf);raf=0}ctx.clearRect(0,0,W,H)}
+
+var ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"'+
+ 'stroke-linecap="round"><circle cx="5" cy="6.5" r="1.9"/><circle cx="19" cy="8.5" r="1.9"/>'+
+ '<circle cx="9" cy="18" r="1.9"/><circle cx="17.5" cy="17.5" r="1.4"/>'+
+ '<path d="M5 6.5 19 8.5 9 18 5 6.5M19 8.5 17.5 17.5 9 18"/></svg>';
+var btn=document.createElement('button');
+btn.type='button';btn.id='nrBtn';
+btn.innerHTML=ICON+'<span class="nrbt"></span>';
+btn.setAttribute('aria-haspopup','true');
+btn.setAttribute('aria-expanded','false');
+var panel=document.createElement('div');
+panel.id='nrPanel';
+panel.setAttribute('role','group');
+panel.setAttribute('aria-label','神经元背景设置');
+panel.innerHTML=
+ '<div class="row"><span class="lb">神经元背景</span>'+
+ '<button type="button" class="sw" data-k="on"></button></div>'+
+ '<div class="row"><span class="lb">配色</span><span class="seg" data-k="color">'+
+ '<button type="button" data-v="multi">多彩</button>'+
+ '<button type="button" data-v="mono">单色</button></span></div>'+
+ '<div class="row"><span class="lb">密度</span><span class="seg" data-k="dense">'+
+ '<button type="button" data-v="low">低</button>'+
+ '<button type="button" data-v="mid">中</button>'+
+ '<button type="button" data-v="high">高</button>'+
+ '<button type="button" data-v="ultra">极</button></span></div>'+
+ '<div class="row"><span class="lb">鼠标跟随</span>'+
+ '<button type="button" class="sw" data-k="follow"></button></div>'+
+ '<div class="row"><span class="lb">动效</span><span class="seg" data-k="speed">'+
+ '<button type="button" data-v="slow">静</button>'+
+ '<button type="button" data-v="mid">缓</button>'+
+ '<button type="button" data-v="fast">快</button>'+
+ '<button type="button" data-v="rush">疾</button></span></div>';
+document.body.appendChild(btn);document.body.appendChild(panel);
+
+function paint(){
+  btn.classList.toggle('on',!!cfg.on);
+  btn.querySelector('.nrbt').textContent=cfg.on?'背景 开':'背景 关';
+  btn.setAttribute('aria-pressed',cfg.on?'true':'false');
+  btn.title=cfg.on?'神经元背景：开（点击调整）':'神经元背景：关（点击调整）';
+  var sw=panel.querySelectorAll('.sw');
+  for(var i=0;i<sw.length;i++){
+    var k=sw[i].getAttribute('data-k');
+    sw[i].classList.toggle('on',!!cfg[k]);
+    sw[i].textContent=cfg[k]?'开':'关';
+    sw[i].setAttribute('aria-pressed',cfg[k]?'true':'false');
+  }
+  var sg=panel.querySelectorAll('.seg');
+  for(i=0;i<sg.length;i++){
+    var kk=sg[i].getAttribute('data-k'),bs=sg[i].querySelectorAll('button');
+    for(var j=0;j<bs.length;j++)
+      bs[j].classList.toggle('sel',bs[j].getAttribute('data-v')===cfg[kk]);
+  }
+}
+function apply(){
+  if(!W||!H)resize();
+  cv.style.display=cfg.on?'':'none';
+  if(cfg.on&&!document.hidden){seed();start()}else stop();
+  paint();
+}
+btn.addEventListener('click',function(e){
+  e.stopPropagation();
+  panel.classList.toggle('open');
+  btn.setAttribute('aria-expanded',panel.classList.contains('open')?'true':'false');
+});
+panel.addEventListener('click',function(e){
+  var t=e.target;
+  while(t&&t!==panel){
+    if(t.getAttribute){
+      var v=t.getAttribute('data-v');
+      if(v){cfg[t.parentNode.getAttribute('data-k')]=v;save();apply();return}
+      var k=t.getAttribute('data-k');
+      if(k&&t.className.indexOf('sw')>=0){cfg[k]=cfg[k]?0:1;save();apply();return}
+    }
+    t=t.parentNode;
+  }
+});
+document.addEventListener('click',function(e){
+  if(!panel.classList.contains('open'))return;
+  if(panel.contains(e.target)||btn.contains(e.target))return;
+  panel.classList.remove('open');btn.setAttribute('aria-expanded','false');
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&panel.classList.contains('open')){
+    panel.classList.remove('open');btn.setAttribute('aria-expanded','false');
+    btn.focus();
+  }
+});
+window.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;hasM=true},{passive:true});
+document.addEventListener('mouseleave',function(){hasM=false});
+window.addEventListener('blur',function(){hasM=false});
+window.addEventListener('touchmove',function(e){
+  var t=e.touches&&e.touches[0];if(t){mx=t.clientX;my=t.clientY;hasM=true}},{passive:true});
+window.addEventListener('touchend',function(){hasM=false});
+var rt=0;
+window.addEventListener('resize',function(){
+  clearTimeout(rt);rt=setTimeout(function(){if(cfg.on)resize()},180)});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden)stop();else if(cfg.on)start()});
+
+resize();apply();
+window.__neuron={get cfg(){return cfg},set:function(k,v){cfg[k]=v;save();apply()},
+  count:function(){return nodes.length},
+  // 只读坐标快照，给验证脚本量各档速度用（不暴露可写引用，避免外部改动画状态）
+  pos:function(){var r=[],i;for(i=0;i<nodes.length;i++)r.push(nodes[i].x+','+nodes[i].y);return r.join(';')}};
+})();</script>
+<!-- neuron:end -->
+</body>
+</html>
