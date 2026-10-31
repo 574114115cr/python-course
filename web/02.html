@@ -79,6 +79,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-4-增删改方法-五个主力">2.4 增删改方法：五个主力</a>
 <a class="lv3" href="#2-5-remove-与-pop-一个删-值-一个删-位置">2.5 .remove() 与 .pop()：一个删&quot;值&quot;，一个删&quot;位置&quot;</a>
 <a class="lv3" href="#2-6-引用共享-最反直觉的一课">2.6 引用共享：最反直觉的一课</a>
+<a class="lv3" href="#2-7-list-把别的类型变成列表">2.7 list()：把别的类型变成列表</a>
+<a class="lv3" href="#2-8-嵌套列表-二维表格怎么存取">2.8 嵌套列表：二维表格怎么存取</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-创建列表与基本访问">示例 1：创建列表与基本访问</a>
 <a class="lv3" href="#示例-2-修改元素-列表可变的体现">示例 2：修改元素（列表可变的体现）</a>
@@ -232,6 +234,85 @@ transition:opacity .18s;z-index:60}
 <blockquote>
 <p><strong>给变量重新起个名字 ≠ 复制数据。</strong></p>
 </blockquote>
+<h3 id="2-7-list-把别的类型变成列表">2.7 <code>list()</code>：把别的类型变成列表</h3>
+<p>列表不是只能手写方括号——<code>list()</code> 能把任何"一串东西"转成列表：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 字符串 → 列表：按单个字符拆开</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">"abc"</span><span class="p">))</span>            <span class="c1"># ['a', 'b', 'c']</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="s2">"你好"</span><span class="p">))</span>            <span class="c1"># ['你', '好']</span>
+
+<span class="c1"># range → 列表：造一串数字（单元 3 会细讲 range）</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>          <span class="c1"># [0, 1, 2, 3, 4]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)))</span>       <span class="c1"># [1, 2, 3, 4, 5]</span>
+
+<span class="c1"># 元组 → 列表（元组不能改，转成列表就能改了）</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>                 <span class="c1"># [1, 2, 3]</span>
+
+<span class="c1"># 字典 → 列表：拿到的只有键</span>
+<span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"a"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>                 <span class="c1"># ['a', 'b']</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>        <span class="c1"># [1, 2]</span>
+
+<span class="c1"># 空列表有两种写法</span>
+<span class="nb">print</span><span class="p">([],</span> <span class="nb">list</span><span class="p">())</span>              <span class="c1"># [] []</span>
+</code></pre>
+<p><strong>为什么要转换？</strong> 因为字符串是<strong>不可变</strong>的，列表是<strong>可变的</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">s</span> <span class="o">=</span> <span class="s2">"hello"</span>
+<span class="c1"># s[0] = "H"                   # TypeError: 'str' object does not support item assignment</span>
+
+<span class="n">chars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>                <span class="c1"># 先转成列表</span>
+<span class="n">chars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"H"</span>                 <span class="c1"># 现在能改了</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chars</span><span class="p">))</span>          <span class="c1"># Hello  ← 再用 join 拼回字符串</span>
+</code></pre>
+<p><code>"".join(列表)</code> 是 <code>list()</code> 的反向操作，把字符列表拼成一个字符串。<strong>拆分 → 修改 → 拼回</strong>，这是处理文本最常用的一组操作。</p>
+<p><code>list()</code> 还有个妙用：<strong>造一份真正的副本</strong>（比切片 <code>[:]</code> 更直白）：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>          <span class="c1"># 新列表，不是同一个对象</span>
+<span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>          <span class="c1"># [1, 2, 3] [1, 2, 3, 4]  ← a 没被影响</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>        <span class="c1"># False</span>
+</code></pre>
+<h3 id="2-8-嵌套列表-二维表格怎么存取">2.8 嵌套列表：二维表格怎么存取</h3>
+<p>列表里装列表，就成了"表格"——外层是行，内层是列：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 3 行 2 列的成绩表：每行是 [姓名, 分数]</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">88</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"小红"</span><span class="p">,</span> <span class="mi">95</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">"小刚"</span><span class="p">,</span> <span class="mi">72</span><span class="p">],</span>
+<span class="p">]</span>
+
+<span class="c1"># 取值：先取行，再取列——两个方括号，从左往右</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>          <span class="c1"># ['小明', 88]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>       <span class="c1"># 小明</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>       <span class="c1"># 95</span>
+
+<span class="c1"># 负索引照样能用</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>      <span class="c1"># 72  ← 最后一行的分数</span>
+
+<span class="c1"># 修改：一样是两级索引</span>
+<span class="n">scores</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>          <span class="c1"># ['小刚', 80]</span>
+
+<span class="c1"># 遍历：外层拿行，内层拿列</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">row</span>          <span class="c1"># 拆包：两个元素正好两个名字</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 只要一列：列表推导式（单元 3 会讲）或循环</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>              <span class="c1"># ['小明', '小红', '小刚']</span>
+</code></pre>
+<p><strong>矩形的坑</strong>：用 <code>[[0] * 3] * 3</code> 造"3×3 全零矩阵"是错的，因为 <code>*</code> 复制的是<strong>引用</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="n">bad</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">bad</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bad</span><span class="p">)</span>                <span class="c1"># [[9,0,0], [9,0,0], [9,0,0]] ← 三行是同一个列表！</span>
+
+<span class="c1"># 正确写法：每行单独造</span>
+<span class="n">good</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+<span class="n">good</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">good</span><span class="p">)</span>               <span class="c1"># [[9,0,0], [0,0,0], [0,0,0]]</span>
+</code></pre>
+<p>这就是 2.6 那条规则在嵌套场景下的体现：<strong><code>*</code> 和 <code>=</code> 都只是复制"标签"，不复制数据。</strong></p>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-创建列表与基本访问">示例 1：创建列表与基本访问</h3>

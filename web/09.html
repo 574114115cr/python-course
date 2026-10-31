@@ -82,6 +82,8 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-7-异常处理的实用模式">2.7 异常处理的实用模式</a>
 <a class="lv3" href="#2-8-json-让数据能被记住">2.8 JSON：让数据能被记住</a>
 <a class="lv3" href="#2-9-csv-读写表格">2.9 CSV：读写表格</a>
+<a class="lv3" href="#2-10-写-csv-dictwriter-与两个必写参数">2.10 写 CSV：DictWriter 与两个必写参数</a>
+<a class="lv3" href="#2-11-pathlib-路径也是一个值-教材第-3-版新增">2.11 pathlib：路径也是一个值（教材第 3 版新增）</a>
 <a class="lv2" href="#三-可运行代码示例">三、可运行代码示例</a>
 <a class="lv3" href="#示例-1-with-open-读写">示例 1：with open 读写</a>
 <a class="lv3" href="#示例-2-三种模式的区别">示例 2：三种模式的区别</a>
@@ -493,6 +495,121 @@ transition:opacity .18s;z-index:60}
 <p><strong>两个必写的参数</strong>：
 - <code>newline=""</code>：没有它，Windows 上会写出空行（Python 会在 <code>\r\n</code> 之间再加一个 <code>\n</code>）。这是标准写法，记住就行。
 - <code>encoding="utf-8"</code>：同上，中文必需。</p>
+<h3 id="2-10-写-csv-dictwriter-与两个必写参数">2.10 写 CSV：<code>DictWriter</code> 与两个必写参数</h3>
+<p><code>csv.writer</code> 按"一行一个列表"写，但真实数据通常有表头、字段还可能乱序。<code>DictWriter</code> 用字典写，靠字段名对齐，不会因为列序搞错：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">88</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小红"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">95</span><span class="p">},</span>
+<span class="p">]</span>
+
+<span class="c1"># newline="" 必写：否则 Windows 上每行之间会多一个空行</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"scores.csv"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">])</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>          <span class="c1"># 先写表头</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>        <span class="c1"># 再写数据行</span>
+
+<span class="c1"># 读回来配合 DictReader，拿到的就是字典</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"scores.csv"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">"score"</span><span class="p">])</span>
+</code></pre>
+<p><code>fieldnames</code> 决定了列的顺序和表头文字。<strong>字典的键必须都在 fieldnames 里</strong>，多出来的键会抛 <code>ValueError</code>（这是好事——它逼你发现字段不一致）。</p>
+<p>想追加而不是覆盖，把 <code>"w"</code> 换成 <code>"a"</code>，并且<strong>不要再写表头</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"scores.csv"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">])</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"小刚"</span><span class="p">,</span> <span class="s2">"score"</span><span class="p">:</span> <span class="mi">72</span><span class="p">})</span>      <span class="c1"># 没有 writeheader()</span>
+</code></pre>
+<h3 id="2-11-pathlib-路径也是一个值-教材第-3-版新增">2.11 <code>pathlib</code>：路径也是一个值（教材第 3 版新增）</h3>
+<p>以前拼路径靠字符串相加，分隔符、父子目录、后缀都得自己处理，还容易在 Windows 上写错斜杠。<code>pathlib</code> 把路径变成一个<strong>对象</strong>，用 <code>/</code> 运算就能拼接：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># 拼接：用 / 而不是 +</span>
+<span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span>
+<span class="n">file</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="s2">"users.json"</span>          <span class="c1"># data/users.json（Windows 上也对）</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>                             <span class="c1"># data\users.json</span>
+
+<span class="c1"># 常用属性：拆解路径</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data/reports/2026-10.csv"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>        <span class="c1"># 2026-10.csv      文件名</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>        <span class="c1"># 2026-10          去掉后缀</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>      <span class="c1"># .csv             后缀</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>      <span class="c1"># data/reports     上级目录</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>       <span class="c1"># ('data', 'reports', '2026-10.csv')</span>
+</code></pre>
+<p>路径的检查和创建，一行一个：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span>
+<span class="n">data_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># 递归建目录，已存在也不报错</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">data_dir</span> <span class="o">/</span> <span class="s2">"note.txt"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>                              <span class="c1"># False（还没建）</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">"你好"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>          <span class="c1"># 写文本，不用 open/with</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>           <span class="c1"># 你好</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span><span class="p">)</span>                        <span class="c1"># 6  ← 字节数</span>
+
+<span class="c1"># 找文件：glob 支持通配符</span>
+<span class="k">for</span> <span class="n">csv_file</span> <span class="ow">in</span> <span class="n">data_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.csv"</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">csv_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+<span class="c1"># 递归找</span>
+<span class="k">for</span> <span class="n">py</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">"*.py"</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">py</span><span class="p">)</span>
+</code></pre>
+<p><code>read_text</code> / <code>write_text</code> 是 <code>open</code> + <code>with</code> 的简写，<strong>适合小的配置和文本</strong>；大文件、需要逐行处理时还是用 <code>with open(...)</code>。</p>
+<p><strong>相对路径的基准是"当前工作目录"，不是你想象的那个目录</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">())</span>          <span class="c1"># 程序实际在哪个目录跑</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>   <span class="c1"># 相对路径展开成绝对路径后长什么样</span>
+</code></pre>
+<p>这是"我本地能跑、换台机器就 FileNotFoundError"的头号原因（单元 0 的错误清单里也提过）。</p>
+<p><strong><code>pathlib</code> 与 <code>os.path</code> 对照</strong>（新代码推荐用 <code>pathlib</code>，老代码里会见到 <code>os.path</code>）：</p>
+<table>
+<thead>
+<tr>
+<th>要做的事</th>
+<th><code>os.path</code> 老写法</th>
+<th><code>pathlib</code> 新写法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拼路径</td>
+<td><code>os.path.join("data", "a.csv")</code></td>
+<td><code>Path("data") / "a.csv"</code></td>
+</tr>
+<tr>
+<td>判断存在</td>
+<td><code>os.path.exists(p)</code></td>
+<td><code>Path(p).exists()</code></td>
+</tr>
+<tr>
+<td>文件名</td>
+<td><code>os.path.basename(p)</code></td>
+<td><code>Path(p).name</code></td>
+</tr>
+<tr>
+<td>去掉后缀</td>
+<td><code>os.path.splitext(p)[0]</code></td>
+<td><code>Path(p).stem</code></td>
+</tr>
+<tr>
+<td>后缀</td>
+<td><code>os.path.splitext(p)[1]</code></td>
+<td><code>Path(p).suffix</code></td>
+</tr>
+<tr>
+<td>建目录</td>
+<td><code>os.makedirs(d, exist_ok=True)</code></td>
+<td><code>Path(d).mkdir(parents=True, exist_ok=True)</code></td>
+</tr>
+</tbody>
+</table>
 <hr>
 <h2 id="三-可运行代码示例">三、可运行代码示例</h2>
 <h3 id="示例-1-with-open-读写">示例 1：<code>with open</code> 读写</h3>

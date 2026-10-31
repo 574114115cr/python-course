@@ -76,6 +76,8 @@ transition:opacity .18s;z-index:60}
       <nav class="toc"><a class="lv2 rc" href="#recap">◆ 复盘上一节</a>
 <a class="lv3" href="#2-7-parametrize-一次测很多组数据">2.7 parametrize：一次测很多组数据</a>
 <a class="lv3" href="#2-8-运行-pytest-的常用命令">2.8 运行 pytest 的常用命令</a>
+<a class="lv3" href="#2-9-fixture-准备代码只写一遍">2.9 fixture：准备代码只写一遍</a>
+<a class="lv3" href="#2-10-两个内置-fixture-tmp_path-与-capsys">2.10 两个内置 fixture：tmp_path 与 capsys</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
     <div class="sblk">
@@ -170,6 +172,121 @@ pytest<span class="w"> </span>-x<span class="w">                   </span><span 
 pytest<span class="w"> </span>--tb<span class="o">=</span>short<span class="w">           </span><span class="c1"># 缩短错误堆栈的显示</span>
 </code></pre>
 <p><code>-v</code> 是你用得最多的一个参数，因为它会告诉你<strong>哪个测试失败了、哪个通过了</strong>。</p>
+<h3 id="2-9-fixture-准备代码只写一遍">2.9 fixture：准备代码只写一遍</h3>
+<p>先看没 fixture 时的样子——每个测试都把准备工作抄一遍：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># 重复的准备代码：三个测试，三次 new 购物车、三次加同样的商品</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_total_of_two</span><span class="p">():</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">8.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_of_two</span><span class="p">():</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>          <span class="c1"># ← 又抄一遍</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_remove_one</span><span class="p">():</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>          <span class="c1"># ← 再抄一遍</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+</code></pre>
+<p>问题很实在：准备逻辑一变（比如以后要给购物车加个税率参数），三个测试都得改。</p>
+<p><strong>fixture 就是"把准备代码写成一个函数，需要的时候按名字取"</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cart</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoppingCart</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">filled_cart</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""一个已经装了两件商品的购物车。每个测试都会拿到全新的一份。"""</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+    <span class="n">cart</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"香蕉"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cart</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_total_of_two</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">):</span>          <span class="c1"># ← 参数名就是 fixture 名</span>
+    <span class="k">assert</span> <span class="n">filled_cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span> <span class="o">==</span> <span class="mf">8.0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_count_of_two</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">filled_cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_remove_one</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">filled_cart</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"苹果"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="k">assert</span> <span class="n">filled_cart</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre>
+<p>三条要记住的规则：</p>
+<ol>
+<li><strong>fixture 的名字就是测试函数的参数名</strong>，pytest 靠这个自动注入，不需要 import。</li>
+<li><strong>每个测试拿到的是全新实例</strong>：<code>test_remove_one</code> 删了苹果，不会影响 <code>test_count_of_two</code>。这个隔离性正是测试能互相信任的前提。</li>
+<li><strong>准备工作有"副作用"要清理时，用 <code>yield</code> 代替 <code>return</code></strong>，yield 之后的代码在测试结束后执行：</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">temp_db</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""测试前建一个临时库，测试后删掉。"""</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">"test_shop.db"</span>
+    <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>          <span class="c1"># 准备：建文件</span>
+    <span class="k">yield</span> <span class="n">path</span>                        <span class="c1"># ← 把值交给测试</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>                   <span class="c1"># 清理：测试跑完再执行</span>
+</code></pre>
+<p><strong>跨文件共享</strong>：把 fixture 放进 <code>conftest.py</code>（和测试文件同目录），同目录下所有测试文件都能直接用，不用 import 任何东西：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="c1"># conftest.py —— pytest 会自动发现这个文件里的 fixture</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cart</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShoppingCart</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">empty_cart</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">ShoppingCart</span><span class="p">()</span>
+</code></pre>
+<blockquote>
+<p>判断标准很简单：<strong>同一段准备代码在两个以上的测试里出现过，就该抽成 fixture。</strong></p>
+</blockquote>
+<h3 id="2-10-两个内置-fixture-tmp_path-与-capsys">2.10 两个内置 fixture：<code>tmp_path</code> 与 <code>capsys</code></h3>
+<p>pytest 自带一批 fixture，最常用的两个能解决"测写文件"和"测 print"这两个老难题。</p>
+<p><strong>① <code>tmp_path</code>：一个用完自动删的临时目录</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">save_total</span><span class="p">(</span><span class="n">cart</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""把总价写进文件——注意它接受路径参数，而不是写死文件名。"""</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="n">path</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_save_total</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>        <span class="c1"># ← tmp_path 由 pytest 注入</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">"total.txt"</span>                    <span class="c1"># 这是一个 pathlib.Path</span>
+    <span class="n">save_total</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"8.0"</span>
+</code></pre>
+<p>好处是<strong>测试之间不会互相踩文件</strong>：每个测试拿到的是不同的临时目录，跑完自动清理。
+（注意被测函数要接受路径参数——写死 <code>"total.txt"</code> 的函数很难测，这本身也是"可测性"的设计原则。）</p>
+<p><strong>② <code>capsys</code>：抓走 print 的内容</strong></p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">def</span><span class="w"> </span><span class="nf">print_report</span><span class="p">(</span><span class="n">cart</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""打印一张小票。"""</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cart</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">item</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">item</span><span class="p">[</span><span class="s1">'price'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"合计  </span><span class="si">{</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_print_report</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">,</span> <span class="n">capsys</span><span class="p">):</span>
+    <span class="n">print_report</span><span class="p">(</span><span class="n">filled_cart</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">capsys</span><span class="o">.</span><span class="n">readouterr</span><span class="p">()</span><span class="o">.</span><span class="n">out</span>          <span class="c1"># 拿回这段时间里所有 print 的内容</span>
+    <span class="k">assert</span> <span class="s2">"苹果"</span> <span class="ow">in</span> <span class="n">out</span>
+    <span class="k">assert</span> <span class="s2">"合计  8.00"</span> <span class="ow">in</span> <span class="n">out</span>
+    <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>            <span class="c1"># 两件商品 + 一行合计</span>
+</code></pre>
+<p><code>capsys.readouterr()</code> 会<strong>清空并返回</strong>到目前为止的输出（<code>.out</code> 是标准输出，<code>.err</code> 是标准错误）。
+测"程序有没有把该说的说出来"时，这是标准做法——不用把 print 改成 return 再改回来。</p>
+<p><strong>什么时候该用哪个</strong>：能用返回值断言的，就别去抓输出。
+<code>print</code> 抓取是给"输出本身就是产品"的场景（命令行工具、报表脚本）用的。</p>
 <hr>
 
     <div class="blk hw">
