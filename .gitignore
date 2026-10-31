@@ -19,3 +19,4 @@ __pycache__/
 .sweep*.mjs
 .exp_*.mjs
 .sweep_result.json
+tools/assets/pet/

@@ -618,59 +618,79 @@ def build_scenes():
     return out
 
 
-# ── 讲解员：DeepSeek 女仆鲸鱼娘（多动作立绘）────────────────────
-# 13 张姿势素材由 tools/make_pose_assets.py 产出（已抠背景、脸尺度归一化），
-# poses.json 记每张的脸/嘴锚点。定位靠「脸对齐屏幕固定点」：各图头身比
-# 略有差别，若按脚底或画布中心对齐，换姿势时头会跳几十像素、视线发飘。
-POSE_DIR = os.path.join(ROOT, "tools", "assets", "pose")
-CHAR_H = 280            # 立绘显示高度（角色本体，换算与单图时代一致）
-# 脸在帧坐标系里的屏幕锚点：单图时代 523×620 的图在 (252,292) 有脸，
-# 显示后落到这里。所有姿势都往这里对。
+# ── 讲解员：DeepSeek 官方 Q 版鲸鱼娘动画（dsh-pet 桌宠素材）──────
+# 素材由 tools/make_pet_assets.py 从 DSH 桌宠插件提取：
+#   · standalone 帧序列（RGBA 透明 webp，11 个动作）
+#   · 插件本体黑底 webm → 亮度键抠图（6 个动作）
+# 每个动作 241 帧 / 10s @24fps，非循环；pet_meta.json 存每帧脸框
+# （肤色连通域逐帧跟踪）与嘴锚点。对齐用「动作第 1 帧的脸框中心」，
+# 动作内部帧不校正——保住官方动画里跳跃/移动的表现力。
+PET_DIR = os.path.join(ROOT, "tools", "assets", "pet")
+CHAR_H = 330            # 角色显示高度（角色本体，Q 版显小所以比立绘时代大）
+# 脸在帧坐标系里的屏幕锚点（沿用立绘时代的视觉位置）
 FACE_ANCHOR = (1105.0, 492.0)
-_ROT = (0,)                  # 不摇摆：左右旋转会让角色看着站不稳
-FADE = 0.5                   # 姿势切换的交叉淡入时长（30fps = 15 帧）
+FADE = 0.5                   # 动作切换的交叉淡入时长（30fps = 15 帧）
 PREP = 0.22                  # 切换前的「预备」：先沉一下再起身
 _ROI = (940, 320, 1280, 680)  # 角色活动范围，交叉溶解只在这块做像素运算
-_POSE_META = None
-_CHAR = {}
+_PET_META = None
+_PET_CLIP = {}               # 动作名 → 缩放后整帧缓存（仅当前用到的动作）
 
-# 每幕的姿势时间表（幕内真实秒 → 姿势）。切换点落在两句台词之间的留白，
-# 时间取自 make_lesson_audio.py --check 的句子起止。
+# 每幕的姿势时间表（幕内真实秒 → 官方动画动作）。切换点落在两句台词
+# 之间的留白，时间取自 make_lesson_audio.py --check 的句子起止。
+# wave=元气挥手 idle=待机呼吸 code=写代码 type=忙碌点按 happy=开心跃动
+# think=思考冒泡 shy=害羞惊讶 angry=傲娇生气 sigh=垂头叹气 party=雀跃庆祝
+# bow=女仆屈膝礼仪（告别鞠躬）
 POSE_CUES = {
     0: [(0.0, "wave")],                                        # 片头打招呼
-    1: [(0.0, "guide"), (4.65, "present"), (8.35, "fist")],    # 解释器 → 该动手了
-    2: [(0.0, "pointdown"), (4.85, "nod"), (9.75, "guide")],   # 终端 → 验证/进目录
-    3: [(0.0, "present"), (5.00, "guide"), (8.95, "shrug")],   # VS Code → 红波浪线别怕
-    4: [(0.0, "think"), (4.35, "wow"), (9.05, "confuse")],     # 跟敲 → 强调 → 报错
-    5: [(0.0, "nod"), (4.05, "guide"), (8.35, "wave")],        # 小结 → 告别
+    1: [(0.0, "idle"), (4.65, "code"), (8.35, "happy")],       # 解释器 → 该动手了
+    2: [(0.0, "type"), (4.85, "happy"), (9.75, "code")],       # 终端 → 验证/进目录
+    3: [(0.0, "idle"), (5.00, "code"), (8.95, "sigh")],        # VS Code → 红波浪线别怕
+    4: [(0.0, "think"), (4.35, "shy"), (9.05, "angry")],       # 跟敲 → 强调 → 报错
+    5: [(0.0, "happy"), (4.05, "party"), (8.35, "bow")],       # 小结 → 告别屈膝礼
 }
 
 
-def pose_meta():
-    global _POSE_META
-    if _POSE_META is None:
-        with open(os.path.join(POSE_DIR, "poses.json"), encoding="utf-8") as f:
-            _POSE_META = json.load(f)
-    return _POSE_META
+def pet_meta():
+    global _PET_META
+    if _PET_META is None:
+        with open(os.path.join(PET_DIR, "pet_meta.json"), encoding="utf-8") as f:
+            _PET_META = json.load(f)
+    return _PET_META
 
 
-def pose_frames(name):
-    """按显示高度缩放某姿势、预生成摇摆帧（懒加载缓存，全片约 8 个姿势）。"""
-    if name not in _CHAR:
-        m = pose_meta()[name]
-        im = Image.open(os.path.join(POSE_DIR, m["file"])).convert("RGBA")
-        sc = CHAR_H / float(im.height)
-        w = max(1, round(im.width * sc))
-        im = im.resize((w, CHAR_H), Image.LANCZOS)
-        pad = 18                      # 旋转出界的余量（资产自带 12px）
-        cv = layer(w + pad * 2, CHAR_H + pad * 2)
-        cv.alpha_composite(im, (pad, pad))
-        frames = {a: cv.rotate(a, resample=Image.BICUBIC) for a in _ROT}
-        # 帧内锚点（未旋转坐标系）
-        _CHAR[name] = (frames, pad,
-                       (m["face"][0] * sc + pad, m["face"][1] * sc + pad),
-                       (m["mouth"][0] * sc + pad, m["mouth"][1] * sc + pad))
-    return _CHAR[name]
+def pet_clip(name):
+    """某动作的渲染常量：缩放系数、对齐偏移、脸框表。懒加载缓存。"""
+    if name not in _PET_CLIP:
+        m = pet_meta()[name]
+        im0 = Image.open(os.path.join(PET_DIR, m["dir"], "f_0000.webp")).convert("RGBA")
+        bb = im0.getchannel("A").getbbox()
+        sc = CHAR_H / float(bb[3] - bb[1])
+        fx = (m["face0"][0] + m["face0"][2]) / 2.0
+        fy = (m["face0"][1] + m["face0"][3]) / 2.0
+        # 动作第 1 帧的脸框中心对齐到 FACE_ANCHOR：换动作时角色不跳，
+        # 动作内部的跳跃/移动全部保留（这是官方动画的表现力所在）
+        _PET_CLIP[name] = {"dir": os.path.join(PET_DIR, m["dir"]),
+                           "n": m["frames"], "sc": sc, "boxes": m["boxes"],
+                           "mrel": m["mouth_rel"],
+                           "off": (FACE_ANCHOR[0] - fx * sc,
+                                   FACE_ANCHOR[1] - fy * sc)}
+    return _PET_CLIP[name]
+
+
+def pet_frame(name, idx, dx=0.0, dy=0.0):
+    """取动作第 idx 帧解码缩放，返回 (图, 左上角屏幕坐标, 嘴屏幕坐标)。"""
+    c = pet_clip(name)
+    idx = max(0, min(idx, c["n"] - 1))
+    im = Image.open(os.path.join(c["dir"], "f_%04d.webp" % idx)).convert("RGBA")
+    if abs(c["sc"] - 1.0) > 0.004:
+        im = im.resize((max(1, round(im.width * c["sc"])),
+                        max(1, round(im.height * c["sc"]))), Image.LANCZOS)
+    bb = c["boxes"][idx]
+    mx = bb[0] + c["mrel"][0] * (bb[2] - bb[0])
+    my = bb[1] + c["mrel"][1] * (bb[3] - bb[1])
+    pos = (int(round(c["off"][0] + dx)), int(round(c["off"][1] + dy)))
+    mpos = (mx * c["sc"] + c["off"][0] + dx, my * c["sc"] + c["off"][1] + dy)
+    return im, pos, mpos
 
 
 _GCUES = []          # 全局时间轴：[(全局秒, 姿势名)]，跨幕展开
@@ -694,15 +714,17 @@ def build_global_cues(scenes):
 
 
 def pose_at(t):
-    """全局秒 t 处该用哪个姿势、上一个姿势是什么、进入多久了。"""
+    """全局秒 t 处该用哪个姿势、上一个姿势是什么、各自已播多久。"""
     if not _GCUES:
         build_global_cues(build_scenes())
     name, prev, since = _GCUES[0][1], None, t - _GCUES[0][0]
+    prev_el = 0.0
     for i, (t0, p) in enumerate(_GCUES):
         if t >= t0:
+            prev_el = t - _GCUES[i - 1][0] if i > 0 else 0.0
             name, since = p, t - t0
             prev = _GCUES[i - 1][1] if i > 0 else None
-    return name, prev, since
+    return name, prev, since, prev_el
 
 
 def faded(im, a):
@@ -725,24 +747,7 @@ def next_cue(t):
     return None
 
 
-def pose_layer(name, bob, dy, dx, sc=1.0):
-    """摆好一个姿势，返回 (图, 左上角, 嘴锚点在图内坐标)。
-
-    不直接贴画布，是为了让 crossfade 能把两张先合成再贴——直接叠两张半透明
-    图会让重叠区透出背景（见 crossfade 的说明）。
-    """
-    frames, pad, (fx, fy), (mx0, my0) = pose_frames(name)
-    cim = frames[_ROT[0]]
-    if abs(sc - 1.0) > 0.004:
-        cim = cim.resize((max(1, round(cim.width * sc)),
-                          max(1, round(cim.height * sc))), Image.LANCZOS)
-        fx, fy, mx0, my0 = fx * sc, fy * sc, mx0 * sc, my0 * sc
-    x = int(round(FACE_ANCHOR[0] - fx + dx))
-    y = int(round(FACE_ANCHOR[1] - fy + bob + dy))
-    return cim, (x, y), (mx0, my0)
-
-
-def crossfade(canvas, A, B, k, posA, posB):
+def crossfade(canvas, A, posA, B, posB, k):
     """真正的交叉溶解 out = A*(1-k) + B*k。
 
     PIL 的 alpha_composite 是 src-over：把两张半透明图一前一后叠上去，重叠区
@@ -767,8 +772,8 @@ def crossfade(canvas, A, B, k, posA, posB):
 
 
 def draw_char(canvas, t, mouth, dx=0):
-    name, prev, since = pose_at(t)
-    bob = math.sin(t * 1.35) * 3                    # 缓慢呼吸，不再左右摇摆
+    name, prev, since, prev_el = pose_at(t)
+    fps = 24.0
     hop = -abs(math.sin(t * 3.2)) * 2.5 * mouth     # 说话时低频小幅起伏
     nxt = next_cue(t)
     if nxt is not None:
@@ -777,35 +782,39 @@ def draw_char(canvas, t, mouth, dx=0):
             hop += (1 - d / PREP) * 3.0
     if prev is not None and since < FADE:
         k = ease_inout(since / FADE)
-        A, pa, _ = pose_layer(prev, bob, hop + 6 * k, dx=dx)          # 旧：下沉
-        B, pb, (bmx, bmy) = pose_layer(name, bob, hop - 9 * (1 - k), dx=dx)  # 新：上浮到位
-        crossfade(canvas, A, B, k, pa, pb)
-        mpx, mpy = pb[0] + bmx, pb[1] + bmy
+        # 旧动作帧停在切换瞬间；新动作从 0 帧开始播
+        A, pa, _ = pet_frame(prev, int(prev_el * fps), dx, hop + 6 * k)
+        B, pb, mpos = pet_frame(name, int(since * fps), dx, hop - 9 * (1 - k))
+        crossfade(canvas, A, pa, B, pb, k)
+        mpx, mpy = mpos
     else:
-        B, pb, (bmx, bmy) = pose_layer(name, bob, hop, dx=dx)
+        B, pb, mpos = pet_frame(name, int(since * fps), dx, hop)
         canvas.alpha_composite(B, pb)
-        mpx, mpy = pb[0] + bmx, pb[1] + bmy
-    # 口型：以原画的微笑线当「上唇」，随音量向下张开（下颌下降的自然形态）。
-    # 尺寸必须贴着原画嘴——原画嘴在屏幕上只有约 13x2 px，之前那版 14x18 的
-    # 贴片一路顶到下巴，看着就是「嘴画错地方了」。
-    mw = 11.0
-    oh = 0.7 + mouth * 3.8
+        mpx, mpy = mpos
+    # 口型：官方动画没有说话口型，按脸框宽度自适应画一个小开合贴片
+    # （Q 版嘴原画只有 ~3px，贴片略放大到脸宽 15%，配合音波示意说话）
+    c = pet_clip(name)
+    idx = max(0, min(int(since * fps), c["n"] - 1))
+    bb = c["boxes"][idx]
+    face_w = max(20.0, (bb[2] - bb[0]) * c["sc"])
+    mw = face_w * 0.15
+    oh = 0.7 + mouth * 3.2
     d2 = ImageDraw.Draw(canvas)
     if mouth > .08:
-        top = mpy - 1.5
+        top = mpy - 1.0
         d2.ellipse([mpx - mw / 2, top, mpx + mw / 2, top + 2 * oh],
                    fill=(104, 40, 58))
         if mouth > .32:
             d2.ellipse([mpx - mw * .27, top + oh * .4,
                         mpx + mw * .27, top + oh * 1.3], fill=(222, 118, 128))
-    # 说话音波：嘴右侧三条弧，开度越大越亮
+    # 说话音波：嘴右侧两条弧，开度越大越亮
     if mouth > .1:
-        hx, hy = mpx + 26, mpy - 24
-        for i in range(3):
-            r = 8 + i * 7
+        hx, hy = mpx + face_w * 0.42, mpy - face_w * 0.30
+        for i in range(2):
+            r = 5 + i * 5
             col = (int(100 + 70 * mouth + i * 12), 195, 255)
-            d2.arc([hx + i * 6, hy - r, hx + i * 6 + 2 * r, hy + r],
-                   start=-52, end=52, fill=col, width=3)
+            d2.arc([hx + i * 5, hy - r, hx + i * 5 + 2 * r, hy + r],
+                   start=-52, end=52, fill=col, width=2)
 
 
 def load_env(path, total):
