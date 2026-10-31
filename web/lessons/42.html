@@ -41,7 +41,7 @@ html[data-theme="dark"] :fullscreen .cell img{filter:none}
 <!--/@theme:head-->
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>第 42 节 · 继承与方法重写</title>
+<title>第 42 节 · 继承、对象进阶与魔术方法</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5fa8'/%3E%3Ctext x='16' y='22' font-size='15' font-family='monospace' fill='%23fff' text-anchor='middle'%3EPy%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="lessons.css">
 <style>
@@ -62,7 +62,7 @@ transition:opacity .18s;z-index:60}
 <div class="top"><div class="top-in">
   <a class="back" href="index.html">← 课程目录</a>
   <span class="tno">第 42 节</span>
-  <h1>继承与方法重写</h1>
+  <h1>继承、对象进阶与魔术方法</h1>
   <span class="sp"></span>
   <a class="rv" href="../review.html">复习</a>
   <a class="ppt" href="../ppt/u/08.html#s6" title="本课节对应的课件">本课课件 u8·p6</a>
@@ -77,13 +77,17 @@ transition:opacity .18s;z-index:60}
 <a class="lv3" href="#2-6-继承-不重复造轮子">2.6 继承：不重复造轮子</a>
 <a class="lv3" href="#2-7-方法重写与多态">2.7 方法重写与多态</a>
 <a class="lv3" href="#2-8-导入类与-python-标准库-教材-9-4-9-5">2.8 导入类与 Python 标准库（教材 9.4 / 9.5）</a>
+<a class="lv3" href="#2-9-__repr__-给开发者看的那个字符串">2.9 __repr__：给开发者看的那个字符串</a>
+<a class="lv3" href="#2-10-property-把方法当属性用">2.10 @property：把方法当属性用</a>
+<a class="lv3" href="#2-11-classmethod-与-staticmethod">2.11 @classmethod 与 @staticmethod</a>
+<a class="lv3" href="#2-12-__eq__-为什么两个-看起来一样-的对象不相等">2.12 __eq__：为什么两个&quot;看起来一样&quot;的对象不相等</a>
 <a class="lv2 rv" href="#review">◆ 讲评与本节总结</a></nav>
     </div>
     <div class="sblk">
       <h4>单元 8 · 共 7 节</h4>
       <nav class="nlist"><a href="40.html" data-n="40"><span class="no">40</span><span>类、实例与 self</span></a>
 <a href="41.html" data-n="41"><span class="no">41</span><span>__init__、属性方法与 __str__</span></a>
-<a href="42.html" data-n="42"><span class="no">42</span><span>继承与方法重写</span></a>
+<a href="42.html" data-n="42"><span class="no">42</span><span>继承、对象进阶与魔术方法</span></a>
 <a href="43.html" data-n="43"><span class="no">43</span><span>类的组合与示例串讲</span></a>
 <a href="44.html" data-n="44"><span class="no">44</span><span>动手实战与答案讲评</span></a>
 <a href="45.html" data-n="45"><span class="no">45</span><span>★ 六个常见错误逐条自查</span></a>
@@ -121,8 +125,8 @@ transition:opacity .18s;z-index:60}
         <span class="kwk">W10</span>
         <span class="ku">单元 8 · 类</span>
       </div>
-      <h1>继承与方法重写</h1>
-      <p class="goal">会用 super().__init__()，理解重写与多态</p>
+      <h1>继承、对象进阶与魔术方法</h1>
+      <p class="goal">会用 super()，理解重写与多态；会用 __repr__ / @property / classmethod 写像样的类</p>
     </div>
     
 
@@ -139,7 +143,7 @@ transition:opacity .18s;z-index:60}
 
     <div class="blk live">
       <h3>◆ 课堂实操（40 分钟，全程不许看答案）</h3>
-      <ol><li>现场演示子类忘记 super() 会怎样</li><li>把 Dog 和 Car 改成继承关系</li></ol>
+      <ol><li>现场演示子类忘记 super() 会怎样</li><li>把 Dog 和 Car 改成继承关系</li><li>给类加一个带校验的 @property</li></ol>
     </div>
 
     <h3 id="2-6-继承-不重复造轮子">2.6 继承：不重复造轮子</h3>
@@ -315,6 +319,259 @@ transition:opacity .18s;z-index:60}
 - <code>random</code> 是<strong>伪随机</strong>，可预测；做密码、令牌、抽奖公证要用 <code>secrets</code> 模块。
 - <code>sample(seq, k)</code> 在 <code>k</code> 大于序列长度时抛 <code>ValueError</code>，<code>choices</code> 不会。
 - 标准库清单看官方文档「The Python Standard Library」，不用背，知道「大概有什么」就够查。</p>
+</blockquote>
+<h3 id="2-9-__repr__-给开发者看的那个字符串">2.9 <code>__repr__</code>：给开发者看的那个字符串</h3>
+<p>2.5 讲的 <code>__str__</code> 是给<strong>用户</strong>看的（"2024 款比亚迪 汉"）。还有一个 <code>__repr__</code>，是给<strong>开发者</strong>看的，它的目标是：</p>
+<blockquote>
+<p>理想情况下，把它复制粘贴回代码里，能重建出同一个对象。</p>
+</blockquote>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Car</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brand</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">year</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">brand</span> <span class="o">=</span> <span class="n">brand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">year</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2"> 款</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">brand</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 注意：字符串要带引号，否则重建不出来</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Car(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">brand</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">!r}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="si">!r}</span><span class="s2">)"</span>
+
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Car</span><span class="p">(</span><span class="s2">"比亚迪"</span><span class="p">,</span> <span class="s2">"汉"</span><span class="p">,</span> <span class="mi">2024</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>          <span class="c1"># 2024 款比亚迪 汉          ← 调 __str__</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>    <span class="c1"># Car('比亚迪', '汉', 2024)  ← 调 __repr__</span>
+
+<span class="c1"># 关键差别在这里：容器里打印用的是 repr</span>
+<span class="n">garage</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">garage</span><span class="p">)</span>     <span class="c1"># [Car('比亚迪', '汉', 2024)]  ← 不是"2024 款比亚迪 汉"</span>
+</code></pre>
+<p><code>!r</code> 是 f-string 的"用 repr 格式化"，对字符串来说就是<strong>加上引号</strong>。少了引号你写出来的就是 <code>Car(比亚迪, 汉, 2024)</code>，那已经不是一个能运行的表达式了。</p>
+<p><strong>只写 <code>__repr__</code> 不写 <code>__str__</code> 也可以</strong>：这时 <code>print</code> 会自动用 <code>__repr__</code>。所以有个省事的策略：</p>
+<blockquote>
+<p>小类只写 <code>__repr__</code>（调试时更实用）；需要给用户看漂亮文字时，再加 <code>__str__</code>。</p>
+</blockquote>
+<p>调试时你几乎总是看 <code>repr</code>——列表里、字典里、pdb 里、日志里。<strong><code>__str__</code> 只影响 <code>print</code> 和 <code>str()</code>，<code>__repr__</code> 影响所有"顺带打印对象"的地方。</strong></p>
+<h3 id="2-10-property-把方法当属性用">2.10 <code>@property</code>：把方法当属性用</h3>
+<p>先把问题摆出来。这个类允许把年龄改成负数：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Person</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>          <span class="c1"># 在 __init__ 里检查过，但之后呢？</span>
+
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span>                      <span class="c1"># 没人拦得住</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>                    <span class="c1"># -5</span>
+</code></pre>
+<p><code>__init__</code> 里加判断没用，因为<strong>属性是可直接赋值的</strong>。老办法是改成方法 <code>set_age()</code>，但那样调用就变成 <code>p.get_age()</code>——用起来别扭，而且老代码 <code>p.age</code> 全得改。</p>
+<p><code>@property</code> 的解法：<strong>对外看起来还是属性，内部走的却是方法</strong>。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Person</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">age</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>              <span class="c1"># 走下面的 setter</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""读的时候执行这里。"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_age</span>
+
+    <span class="nd">@age</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""写的时候执行这里——校验就放在这。"""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"年龄必须是整数"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">150</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"年龄必须在 0–150 之间"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_age</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s2">"小明"</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>            <span class="c1"># 18        ← 看起来是属性，其实调了方法</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">20</span>              <span class="c1"># 合法，正常写入</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">age</span><span class="p">)</span>            <span class="c1"># 20</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span>          <span class="c1"># 非法，被 setter 拦住</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"拦住了："</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+</code></pre>
+<p>三个要点：</p>
+<ol>
+<li><strong>内部用 <code>self._age</code></strong>（一个下划线表示"内部用，别直接动"）。如果 setter 里写 <code>self.age = value</code>，会无限递归调用自己。</li>
+<li><strong><code>@property</code> 同名定义两次</strong>：先 <code>@property</code> 定义 getter，再 <code>@age.setter</code> 定义 setter。</li>
+<li><strong>只写 <code>@property</code> 不写 setter，就是只读属性</strong>——赋值会抛 <code>AttributeError: can't set attribute</code>。这在配置类、常量类里特别有用：</li>
+</ol>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Circle</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""面积是算出来的，不该被赋值。"""</span>
+        <span class="k">return</span> <span class="mf">3.14159</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">**</span> <span class="mi">2</span>
+
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">area</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>     <span class="c1"># 12.57</span>
+<span class="c1"># c.area = 100             # AttributeError: property 'area' has no setter</span>
+</code></pre>
+<p><strong>什么时候该用 property</strong>：属性之间有关系（面积由半径算）、需要校验、或者以后可能要从"存字段"改成"算出来"。
+<strong>什么时候别用</strong>：只是 <code>return self.x</code> / <code>self.x = x</code> 的转发——那不叫封装，只叫多打几行字（单元 8 的 2.4 讲过：Python 不做私有字段，直接暴露属性是常态）。</p>
+<h3 id="2-11-classmethod-与-staticmethod">2.11 <code>@classmethod</code> 与 <code>@staticmethod</code></h3>
+<p>类里能定义三种方法，区别就在第一个参数：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>第一个参数</th>
+<th>能访问什么</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>普通方法</td>
+<td><code>self</code>（实例）</td>
+<td>实例属性 + 类属性</td>
+<td>绝大多数情况</td>
+</tr>
+<tr>
+<td><code>@classmethod</code></td>
+<td><code>cls</code>（类本身）</td>
+<td>类属性，拿不到实例</td>
+<td><strong>替代构造函数</strong></td>
+</tr>
+<tr>
+<td><code>@staticmethod</code></td>
+<td>没有</td>
+<td>什么都不自动给</td>
+<td>与类相关但不需要对象的工具函数</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>@classmethod</code> 最实用的场景是"从别的格式造对象"</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Date</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""从 '2026-10-31' 造一个 Date——cls 就是 Date 本身。"""</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>      <span class="c1"># 用 cls 而不是写死 Date</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Date(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="n">d1</span> <span class="o">=</span> <span class="n">Date</span><span class="p">(</span><span class="mi">2026</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<span class="n">d2</span> <span class="o">=</span> <span class="n">Date</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"2026-10-31"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>          <span class="c1"># Date(2026, 10, 31) Date(2026, 10, 31)</span>
+</code></pre>
+<p>写 <code>cls(...)</code> 而不是 <code>Date(...)</code>，好处是<strong>子类继承时自动用子类</strong>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Date</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">y</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Holiday</span><span class="p">(</span><span class="n">Date</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">Holiday</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"2027-01-01"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>     <span class="c1"># Holiday ← 不是 Date</span>
+</code></pre>
+<p><strong><code>@staticmethod</code> 就是"放在类里的普通函数"</strong>，不自动传 self 或 cls。它的价值只是<strong>归属清晰</strong>：这个函数逻辑上属于这个类，就放进来。</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Temperature</span><span class="p">:</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">c_to_f</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""摄氏转华氏——不需要任何实例数据。"""</span>
+        <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">32</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Temperature</span><span class="o">.</span><span class="n">c_to_f</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>      <span class="c1"># 212.0</span>
+</code></pre>
+<p><strong>判断顺序</strong>：需要实例数据 → 普通方法；需要类本身（造对象、读类属性）→ classmethod；都不需要 → staticmethod。
+新手最常见的错误是<strong>所有方法都写成普通方法，连不需要 self 的也强塞一个 self</strong>。</p>
+<h3 id="2-12-__eq__-为什么两个-看起来一样-的对象不相等">2.12 <code>__eq__</code>：为什么两个"看起来一样"的对象不相等</h3>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span>          <span class="c1"># False  ← 坐标一模一样，却说不等</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>          <span class="c1"># False</span>
+</code></pre>
+<p><strong>因为默认的 <code>==</code> 比较的是"是不是同一个对象"</strong>（等价于 <code>is</code>），而不是"内容是否相同"。
+列表、字符串、数字能比内容，是因为它们都实现了 <code>__eq__</code>。你自己写的类没有，就退化成比身份。</p>
+<p>想按内容比较，自己定义：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Point</span><span class="p">):</span>        <span class="c1"># 类型不同就别硬比</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>               <span class="c1"># 让 Python 去试对方的 __eq__</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Point(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>     <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="n">Point</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>     <span class="c1"># False</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>          <span class="c1"># False（类型不同，不报错）</span>
+</code></pre>
+<p><strong>这里有个必须知道的连带后果</strong>：一旦你定义了 <code>__eq__</code>，这个类就<strong>不能再当字典的键或放进集合</strong>了：</p>
+<pre><code class="language-text"><span class="cl">示例</span>TypeError: unhashable type: 'Point'
+</code></pre>
+<p>原因是 Python 要求"相等的对象必须有相同的哈希值"，而自定义 <code>__eq__</code> 之后默认的哈希实现就不敢用了，于是把 <code>__hash__</code> 设成 <code>None</code>。要修就一起定义：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Point</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">NotImplemented</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>       <span class="c1"># 用同样的字段算哈希</span>
+
+
+<span class="n">cache</span> <span class="o">=</span> <span class="p">{</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="s2">"值"</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cache</span><span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>                   <span class="c1"># 值  ← 能当键了，且按内容找得到</span>
+</code></pre>
+<p>顺带一提，想让对象能排序（<code>sorted()</code> 或 <code>&lt;</code>），就实现 <code>__lt__</code>：</p>
+<pre><code class="language-python"><span class="cl">Python</span><span class="k">class</span><span class="w"> </span><span class="nc">Point</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""先比 x，x 相同再比 y。"""</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Point(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]))</span>
+<span class="c1"># [Point(1, 2), Point(1, 5), Point(2, 1)]</span>
+</code></pre>
+<blockquote>
+<p>如果你只是想要一个"存数据、自动带 <code>__init__</code>/<code>__repr__</code>/<code>__eq__</code>"的类，标准库有个现成的
+<code>dataclasses.dataclass</code> 装饰器，一条装饰器就把上面这些都生成好。
+阶段 1 不用急着用，但值得知道它存在——单元 21 会用到。</p>
 </blockquote>
 <hr>
 
